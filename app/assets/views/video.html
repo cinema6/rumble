@@ -1,0 +1,16 @@
+<div>
+    <p> This is the video page </p>
+    <div class="player-info">
+        <p> 
+            <span>VideoPlayer:</span>
+            <span> {{AppCtrl.playList[AppCtrl.currentItem].player}}</span>
+        </p>
+
+        <p> 
+            <span>VideoId:</span>
+            <span> {{AppCtrl.playList[AppCtrl.currentItem].videoId}}</span>
+        </p>
+    </div>
+    <rumble-player class="player" x-config="AppCtrl.playList[AppCtrl.currentItem]"> 
+    </rumble-player>
+</div>

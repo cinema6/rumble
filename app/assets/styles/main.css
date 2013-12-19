@@ -1,0 +1,11 @@
+/* overall css stylesheet */
+html { height: 100%; width: 100%;}
+
+.player {
+    position: absolute;
+    top: 10%;
+    left: 12.5%;
+    width: 75%;
+    height: 75%;
+    z-index: 1;
+}

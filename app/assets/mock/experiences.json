@@ -1,0 +1,21 @@
+[
+    {
+        "id": "e-80fcd03196b3d2",
+        "uri": "rumble",
+        "appUriPrefix": "<%= settings.appUrl %>",
+        "appUri": "rumble",
+        "title": "Rumble Video",
+        "subtitle": "You choose",
+        "summary": "Pick the best",
+        "img": {
+            "hero": "experiences/rumble/assets/rumble__hero.jpg",
+            "tag": null
+        },
+        "landingPageContent": {
+            "middle": "experiences/rumble/middle.html",
+            "right": "experiences/rumble/right.html",
+            "stylesheet": "experiences/rumble/assets/styles.css"
+        },
+        "data": {}
+    }
+]
