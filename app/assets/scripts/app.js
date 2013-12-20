@@ -99,16 +99,16 @@
                     end     : 31
                 },
                 {
+                    player  : 'vimeo',
+                    videoId : '27855315'
+                },
+                {
                     player  : 'youtube',
                     videoId : 'Cn9yJrrm2tk'
                 },
                 {
                     player  : 'dailymotion',
                     videoId : 'x18b09a'
-                },
-                {
-                    player  : 'vimeo',
-                    videoId : '27855315'
                 }
             ];
 

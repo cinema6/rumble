@@ -17,6 +17,7 @@
     c6.kLocal = true;
     c6.kDebug = true;
     c6.kHasKarma = true;
+    c6.kLogFormats = true;
     c6.kLogLevels = ['error','warn','log','info'];
     c6.kVideoUrls = {
         local: 'assets/media',
@@ -77,6 +78,12 @@
                 },
                 app: {
                     deps: ['angular', 'angularMocks', 'modernizr', 'timelinemax', 'uirouter', 'c6ui', 'c6log']
+                },
+                iframe: {
+                    deps: ['angular', 'angularMocks', 'c6ui', 'c6log', 'app']
+                },
+                vimeo: {
+                    deps: ['angular', 'angularMocks', 'c6ui', 'c6log', 'app']
                 }
             },
 
@@ -88,5 +95,6 @@
 
             callback: $window.__karma__.start
         });
+
     };
 }(window));

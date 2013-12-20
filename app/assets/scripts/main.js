@@ -35,7 +35,11 @@
             } else {
                 return [
                     'scripts/app',
-                    'scripts/rumble'
+                    'scripts/dailymotion',
+                    'scripts/iframe',
+                    'scripts/rumble',
+                    'scripts/vimeo',
+                    'scripts/youtube'
                 ];
             }
         }()),

@@ -6,6 +6,7 @@
             var $rootScope,
                 $scope,
                 $q,
+                $log,
                 $timeout,
                 AppCtrl;
 
@@ -84,19 +85,22 @@
                     $provide.value('c6ImagePreloader', c6ImagePreloader);
                 });
 
-                module('c6.stub', function($provide) {
+                module('c6.rumble', function($provide) {
                     $provide.value('gsap', gsap);
                     $provide.value('googleAnalytics', googleAnalytics);
                 });
 
-                inject(function(_$rootScope_, _$q_, _$timeout_, $controller, c6EventEmitter) {
+                inject(function(_$rootScope_, _$q_, _$timeout_, _$log_, $controller, c6EventEmitter) {
                     $rootScope = _$rootScope_;
                     $q = _$q_;
+                    $log = _$log_;
                     $timeout = _$timeout_;
                     $scope = _$rootScope_.$new();
+                    $log.context = function() { return $log; };
 
                     AppCtrl = $controller('AppController', {
-                        $scope: $scope
+                        $scope: $scope,
+                        $log: $log
                     });
 
                     siteSession = c6EventEmitter({});
@@ -170,7 +174,7 @@
 
                 beforeEach(function() {
                     spyOn(AppCtrl, 'goto').andCallFake(function(state) {
-                        $rootScope.$broadcast('$stateChangeStart', { name: state }, {}, { name: fromState });
+                        $rootScope.$broadcast('$stateChangeStart', { name: state }, {}, { name: fromState }, {});
                     });
                 });
 
@@ -179,7 +183,7 @@
                         $scope.$new().$on('$stateChangeStart', function(event) {
                             expect(event.defaultPrevented).toBe(false);
                         });
-                        $rootScope.$broadcast('$stateChangeStart', { name: 'landing' }, {},  { name: '' });
+                        $rootScope.$broadcast('$stateChangeStart', { name: 'landing' }, {},  { name: '' }, {});
                     });
 
                     it('should do nothing', function() {
@@ -200,7 +204,8 @@
                         unregister = $scope.$new().$on('$stateChangeStart', function(event) {
                             expect(event.defaultPrevented).toBe(true);
                         });
-                        $rootScope.$broadcast('$stateChangeStart', { name: 'experience' }, {}, { name: 'landing' });
+                        $rootScope.$broadcast('$stateChangeSuccess', { name: 'landing' }, {},  { name: '' }, {});
+                        $rootScope.$broadcast('$stateChangeStart',{ name:'experience' },{},{ name:'landing' }, {});
                     });
 
                     it('should requestTransitionState(true) from the site', function() {
@@ -219,7 +224,7 @@
                         });
 
                         it('should transition to the state', function() {
-                            expect(AppCtrl.goto).toHaveBeenCalledWith('experience');
+                            expect(AppCtrl.goto).toHaveBeenCalledWith('experience', {});
                         });
 
                         it('should requestTransitionState(false) from the site', function() {
@@ -229,14 +234,14 @@
                         it('should rerun this whole procedure during the next transisition', function() {
                             unregister();
 
-                            $timeout.flush();
-
                             unregister = $scope.$new().$on('$stateChangeStart', function(event) {
                                 expect(event.defaultPrevented).toBe(true);
                             });
 
                             fromState = 'experience';
-                            AppCtrl.goto('landing');
+                            $rootScope.$broadcast('$stateChangeSuccess',
+                                { name: 'experience' }, { item : 0 },  { name: 'experience' }, { item : 1 });
+                            AppCtrl.goto('landing',{});
                         });
                     });
                 });
@@ -244,13 +249,13 @@
 
             describe('when $stateChangeSuccess is fired', function() {
                 beforeEach(function() {
-                    $rootScope.$broadcast('$stateChangeSuccess', { name: 'landing' }, {}, { name: '' });
+                    $rootScope.$broadcast('$stateChangeSuccess', { name: 'landing' }, {}, { name: '' }, {});
                 });
 
                 it('should send an event to Google Analytics', function() {
                     expect(googleAnalytics).toHaveBeenCalledWith('send', 'event', '$state', 'changed', 'landing');
 
-                    $rootScope.$broadcast('$stateChangeSuccess', { name: 'experience' }, {}, { name: 'landing' });
+                    $rootScope.$broadcast('$stateChangeSuccess', { name:'experience' }, {}, { name:'landing' }, {});
 
                     expect(googleAnalytics).toHaveBeenCalledWith('send', 'event', '$state', 'changed', 'experience');
                 });
@@ -262,7 +267,7 @@
                         it('should proxy to $state.go(state)', function() {
                             AppCtrl.goto('experience');
 
-                            expect($state.go).toHaveBeenCalledWith('experience');
+                            expect($state.go).toHaveBeenCalledWith('experience',undefined);
                         });
                     });
 

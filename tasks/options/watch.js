@@ -8,12 +8,13 @@
                 '<%= settings.appDir %>/assets/views/**/*.html',
                 '<%= settings.appDir %>/assets/styles/**/*.css',
                 '<%= settings.appDir %>/assets/scripts/**/*.js',
-                '<%= settings.appDir %>/assets/img/**/*.{png,jpg,jpeg,gif,webp,svg}'
+                '<%= settings.appDir %>/assets/img/**/*.{png,jpg,jpeg,gif,webp,svg}',
+                'test/spec/**/*.js'
             ],
             options: {
                 livereload: true
             },
-            tasks: ['jshint:all']
+            tasks: ['jshint:all', 'test:unit']
         },
         e2e: {
             files: [
