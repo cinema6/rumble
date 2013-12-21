@@ -2,14 +2,14 @@
     'use strict';
 
     angular.module('c6.rumble')
-    .animation('videoView-enter', ['$log', 'c6AniCache','TimelineLite',
-        function($log, aniCache,TimelineLite) {
+    .animation('videoView-enter', ['$log', 'c6AniCache','gsap',
+        function($log, aniCache, gsap) {
         $log = $log.context('videoView-enter');
         return aniCache({
             id : 'videoView-enter',
             setup: function(element) {
                 $log.log('setup');
-                var timeline        = new TimelineLite({paused:true});
+                var timeline        = new gsap.TimelineLite({paused:true});
 
                 //reset states
                 element.css({ opacity : 0, visibility : 'hidden' });
@@ -26,14 +26,14 @@
             }
         });
     }])
-    .animation('videoView-leave', ['$log', 'c6AniCache','TimelineLite',
-        function($log, aniCache, TimelineLite) {
+    .animation('videoView-leave', ['$log', 'c6AniCache','gsap',
+        function($log, aniCache, gsap) {
         $log = $log.context('videoView-leave');
         return aniCache({
             id : 'videoView-leave',
             setup: function(element) {
                 $log.log('setup');
-                var timeline        = new TimelineLite({paused:true});
+                var timeline        = new gsap.TimelineLite({paused:true});
 
                 //reset states
                 element.css({ opacity : 1, visibility : 'visible' });
@@ -62,8 +62,8 @@
                     inner += ' ' + key.toLowerCase() + '="' + scope.config[key] + '"';
                 }
             }
-            scope.playerWidth  = $element.css('width').replace(/px/,'');
-            scope.playerHeight = $element.css('height').replace(/px/,'');
+            scope.playerWidth  = $element.css('width');
+            scope.playerHeight = $element.css('height');
 
             inner += ' width="{{playerWidth}}" height="{{playerHeight}}"';
 
@@ -72,8 +72,8 @@
             $element.append(player$);
 
             $window.addEventListener('resize',function(){
-                scope.playerWidth   = $element.css('width').replace(/px/,'');
-                scope.playerHeight  = $element.css('height').replace(/px/,'');
+                scope.playerWidth   = $element.css('width');
+                scope.playerHeight  = $element.css('height');
                 scope.$digest();
             });
         }

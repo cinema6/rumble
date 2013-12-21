@@ -31,8 +31,9 @@
             src = this.formatPlayerSrc(config.videoId, playerId, config.params);
 
             newElt$ = angular.element(iframe.create(playerId,src,{
-                width   : config.width,
-                height  : config.height
+                width       : config.width,
+                height      : config.height,
+                frameborder : config.frameborder
             }));
 
             angular.element(oldElt$).replaceWith(newElt$[0]);
@@ -40,6 +41,7 @@
             function VimeoPlayer(iframe$,playerId,$win){
                 var _iframe$ = iframe$,_playerId = playerId,
                     _url =  _iframe$.attr('src').split('?')[0],
+                    _val = 'VimeoPlayer#' + _playerId,
                     self = this;
 
                 c6EventEmitter(self);
@@ -79,8 +81,16 @@
                 };
 
                 self.on('newListener',function(eventName){
-                    self.post('addEventListener',eventName);
+                    // ready does not need a listener
+                    if ( (eventName !== 'ready') &&
+                         (eventName !== 'newListener') ) {
+                        self.post('addEventListener',eventName);
+                    }
                 });
+
+                self.toString = function() {
+                    return _val;
+                };
 
                 function onMessageReceived(event){
                     if (event.origin !== service.origin) {
@@ -94,7 +104,7 @@
                         return;
                     }
 
-                    self.emit(data.event,self);
+                    self.emit(data.event,self,data.data);
                 }
 
                 $win.addEventListener('message', onMessageReceived, false);
@@ -128,25 +138,33 @@
 
 
             function createPlayer(){
-                return vimeo.createPlayer($attr.videoid,{
+                player = vimeo.createPlayer($attr.videoid,{
                     videoId     : $attr.videoid,
                     width       : $attr.width,
                     height      : $attr.height,
+                    frameborder : 0,
                     params  : {
                         autoplay        : 1
-                    }/*,
-                    events: {
-                        'onApiChange'   : onApiChange,
-                        'onError'       : onError,
-                        'onReady'       : onPlayerReady,
-                        'onStateChange' : onPlayerStateChange
-                    }*/
+                    }
                 });
+
+                player.on('ready',function(p){
+                    $log.info('[%1] - I am ready',p);
+                    
+                    player.on('finish',function(p){
+                        $log.info('[%1] - I am finished',p);
+                    });
+
+                    player.on('playProgress',function(p,data){
+                        $log.info('[%1] - playProgress: %2 (%3)',p,data.seconds,data.percent);
+                    });
+
+                });
+
+                
             }
 
-            $timeout(function(){
-                player = createPlayer();
-            },250);
+            $timeout(createPlayer,0);
 
             scope.$on('$destroy',function(){
                 if (player){

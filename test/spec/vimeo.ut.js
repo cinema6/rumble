@@ -136,6 +136,10 @@
                     });
 
                     describe('method', function(){
+                        it('toString',function(){
+                            expect(player.toString()).toEqual('VimeoPlayer#player1');
+                        });
+
                         it('getPlayerId',function(){
                             expect(player.getPlayerId()).toEqual('player1');
                         });
