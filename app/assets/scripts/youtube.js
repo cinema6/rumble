@@ -1,4 +1,3 @@
-/* jshint -W106 */
 (function(){
     'use strict';
 
@@ -75,13 +74,13 @@
                 });
             }
 
-            $attr.$observe('width',function(newWidth){
+            $attr.$observe('width',function(){
                 if (player){
                     player.setSize($attr.width, $attr.height);
                 }
             });
 
-            $attr.$observe('height',function(newWidth){
+            $attr.$observe('height',function(){
                 if (player){
                     player.setSize($attr.width, $attr.height);
                 }

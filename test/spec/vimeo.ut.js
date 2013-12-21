@@ -41,19 +41,29 @@
             });
 
             describe('createPlayer', function(){
-                var angularElementMock;
+                var angularElementMock, msgListener;
 
                 beforeEach(function(){
                     angular._element = angular.element;
-                    angularElementMock = {
-                        css         : jasmine.createSpy('elt.css'),
-                        replaceWith : jasmine.createSpy('elt.replaceWith'),
-                        remove      : jasmine.createSpy('elt.remove')
-                    };
+                    angularElementMock = [ {
+                        contentWindow : {
+                            postMessage : jasmine.createSpy('elt.contentWindow.postMessage')
+                        }
+                    }];
                     
+                    angularElementMock.css         = jasmine.createSpy('elt.css');
+                    angularElementMock.replaceWith = jasmine.createSpy('elt.replaceWith');
+                    angularElementMock.remove      = jasmine.createSpy('elt.remove');
+                    angularElementMock.attr        = function (name) { return name; };
+
                     spyOn(angular,'element').andCallFake(function(elt){
-                            return angularElementMock; 
+                        return angularElementMock; 
                     });
+
+                    spyOn($window,'addEventListener').andCallFake(function(ename,listener){
+                        msgListener = listener;       
+                    });
+                    spyOn($window,'removeEventListener');
                 });
 
                 afterEach(function(){
@@ -101,14 +111,21 @@
                             .toHaveBeenCalledWith('x123','player1',undefined);
                         expect(angular.element.calls[0].args[0]).toEqual('<iframe id="player1" src="http://player.vimeo.com/x123?api=1&player_id=player1" width="100" height="100"></iframe>');
                         expect(angular.element.calls[1].args[0]).toEqual(angularElementMock);
+
+                        expect($window.addEventListener.calls[0].args[0]).toEqual('message');
                     });
                 });
 
-                describe('returns a VimeoPlayer that',function(){
+                describe('returns a VimeoPlayer with',function(){
                     var player;
                     beforeEach(function(){
                         spyOn($document[0], 'getElementById').andCallFake(function(id) {
                             return 'oldElt';
+                        });
+                    
+                        spyOn(angularElementMock,'attr').andCallFake(function(name){
+                            return (name === 'src') ? 
+                                'http://player.vimeo.com/x123?api=1&player_id=player1' : '';
                         });
 
                         player = vimeo.createPlayer('player1',{
@@ -118,29 +135,84 @@
                         });
                     });
 
-                    it('has a getPlayerId method',function(){
-                        expect(player.getPlayerId()).toEqual('player1');
+                    describe('method', function(){
+                        it('getPlayerId',function(){
+                            expect(player.getPlayerId()).toEqual('player1');
+                        });
+
+                        it('getIframe', function(){
+                            expect(player.getIframe()).toEqual(angularElementMock);
+                        });
+
+                        it('getUrl', function(){
+                            expect(player.getUrl()).toEqual('http://player.vimeo.com/x123');
+                        });
+
+                        it('setSize', function(){
+                            player.setSize(200,200);
+                            expect(angularElementMock.css)
+                                .toHaveBeenCalledWith({ width: 200, height: 200});
+
+                        });
+
+                        it('post', function(){
+                            player.post('addEventListener','pause');
+                            expect(angularElementMock[0].contentWindow.postMessage)
+                                .toHaveBeenCalledWith(
+                                    '{"method":"addEventListener","value":"pause"}',
+                                    'http://player.vimeo.com/x123'
+                                );
+                        });
+
+                        it('on', function(){
+                            player.on('finish',function(){ });
+                            expect(angularElementMock[0].contentWindow.postMessage)
+                                .toHaveBeenCalledWith(
+                                    '{"method":"addEventListener","value":"finish"}',
+                                    'http://player.vimeo.com/x123'
+                                );
+                        });
+
+                        it('destroy', function(){
+                            player.destroy();
+                            expect(angular.element.calls[2].args[0]).toEqual('oldElt');
+                           
+                            expect(angularElementMock.replaceWith).toHaveBeenCalled();
+                            expect(angularElementMock.remove).toHaveBeenCalled();
+                            
+                            expect($window.removeEventListener.calls[0].args[0]).toEqual('message');
+                        });
                     });
 
-                    it('has a getIframe method', function(){
-                        expect(player.getIframe()).toEqual(angularElementMock);
+                    describe('event', function(){
+                        var readySpy;
+                        beforeEach(function(){
+                            readySpy = jasmine.createSpy('readySpy');
+                            player.on('ready',readySpy);
+                        });
+
+                        it('filters on origin',function(){
+                            msgListener({
+                                origin : 'https://www.youtube.com',
+                                data : '{ "event" : "ready", "player_id" : "player1" }'
+                            });
+                            expect(readySpy).not.toHaveBeenCalled();
+                        });
+                        it('filters on player',function(){
+                            msgListener({
+                                origin : 'http://player.vimeo.com',
+                                data : '{ "event" : "ready"}'
+                            });
+                            expect(readySpy).not.toHaveBeenCalled();
+                        });
+                        it('ready', function(){
+                            msgListener({
+                                origin : 'http://player.vimeo.com',
+                                data : '{ "event" : "ready", "player_id" : "player1" }'
+                            });
+                            expect(readySpy).toHaveBeenCalled();
+                        });
                     });
-
-                    it('has a setSize method', function(){
-                        player.setSize(200,200);
-                        expect(angularElementMock.css)
-                            .toHaveBeenCalledWith({ width: 200, height: 200});
-
-                    });
-
-                    it('has a destroy method', function(){
-                        player.destroy();
-                        expect(angular.element.calls[2].args[0]).toEqual('oldElt');
-                       
-                        expect(angularElementMock.replaceWith).toHaveBeenCalled();
-                        expect(angularElementMock.remove).toHaveBeenCalled();
-                    });
-
                 });
             });
         });

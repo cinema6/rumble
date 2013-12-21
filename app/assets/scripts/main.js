@@ -1,5 +1,4 @@
 (function(){
-    /*jshint -W080 */
     'use strict';
 
     var __C6_BUILD_VERSION__ = window.__C6_BUILD_VERSION__ = undefined,

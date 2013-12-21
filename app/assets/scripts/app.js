@@ -1,5 +1,4 @@
 (function(window$){
-    /* jshint -W106 */
     'use strict';
 
     angular.module('c6.rumble', window$.c6.kModDeps)

@@ -1,4 +1,3 @@
-/* jshint -W106 */
 (function(){
     'use strict';
 
@@ -10,13 +9,13 @@
             $log.info('link: videoId=%1, start=%2, end=%3',
                 $attr.videoid, $attr.start, $attr.end);
             $element.append(angular.element('<div id="' + $attr.videoid + '"> </div>'));
-            $attr.$observe('width',function(newWidth){
+            $attr.$observe('width',function(){
                 if (player){
                     player.setSize($attr.width, $attr.height);
                 }
             });
 
-            $attr.$observe('height',function(newWidth){
+            $attr.$observe('height',function(){
                 if (player){
                     player.setSize($attr.width, $attr.height);
                 }

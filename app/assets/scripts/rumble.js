@@ -1,9 +1,9 @@
-/* jshint -W106 */
 (function(){
     'use strict';
 
     angular.module('c6.rumble')
-    .animation('videoView-enter', ['$log', 'c6AniCache', function($log, aniCache) {
+    .animation('videoView-enter', ['$log', 'c6AniCache','TimelineLite',
+        function($log, aniCache,TimelineLite) {
         $log = $log.context('videoView-enter');
         return aniCache({
             id : 'videoView-enter',
@@ -26,7 +26,8 @@
             }
         });
     }])
-    .animation('videoView-leave', ['$log', 'c6AniCache', function($log, aniCache) {
+    .animation('videoView-leave', ['$log', 'c6AniCache','TimelineLite',
+        function($log, aniCache, TimelineLite) {
         $log = $log.context('videoView-leave');
         return aniCache({
             id : 'videoView-leave',
@@ -51,7 +52,7 @@
     }])
     .directive('rumblePlayer',['$log','$compile','$window',function($log,$compile,$window){
         $log = $log.context('rumblePlayer');
-        function fnLink(scope,$element,$attr){
+        function fnLink(scope,$element/*,$attr*/){
             $log.info('link:',scope.config);
             $log.info('width: %1',$element.css('width'));
 
@@ -70,7 +71,7 @@
             var player$ = $compile(inner)(scope);
             $element.append(player$);
 
-            $window.addEventListener('resize',function(event){
+            $window.addEventListener('resize',function(){
                 scope.playerWidth   = $element.css('width').replace(/px/,'');
                 scope.playerHeight  = $element.css('height').replace(/px/,'');
                 scope.$digest();
