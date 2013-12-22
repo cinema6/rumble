@@ -167,7 +167,7 @@
                     height      : $attr.height,
                     frameborder : 0,
                     params  : {
-                        autoplay        : 0,
+                        autoplay        : 1,
                         badge           : 0,
                         byline          : 0,
                         portrait        : 0,
@@ -182,8 +182,8 @@
 
                     player.on('finish',function(p){
                         $log.info('[%1] - I am finished',p);
-                        player.destroy();
-                        $timeout(createPlayer);
+//                        player.destroy();
+//                        $timeout(createPlayer);
                     });
 
                     if (!isNaN(videoStart)){

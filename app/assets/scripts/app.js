@@ -98,6 +98,12 @@
                     end     : 37
                 },
                 {
+                    player  : 'vimeo',
+                    videoId : '81766071',
+                    start   : 35,
+                    end     : 45
+                },
+                {
                     player  : 'youtube',
                     videoId : 'sgF7uWZMSdE',
                     start   : 7,
