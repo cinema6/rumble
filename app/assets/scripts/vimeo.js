@@ -3,8 +3,8 @@
     'use strict';
 
     angular.module('c6.rumble')
-    .factory('vimeo',['$log','$window','$document','c6EventEmitter','iframe',
-        function($log,$window,$document,c6EventEmitter,iframe){
+    .factory('vimeo',['$log','$window','c6EventEmitter','iframe',
+        function($log,$window,c6EventEmitter,iframe){
         $log = $log.context('vimeo');
         var service = {};
 
@@ -22,21 +22,24 @@
             return src;
         };
 
-        service.createPlayer = function(playerId,config) {
-            var oldElt$ = $document[0].getElementById(playerId),newElt$,src;
-            if (oldElt$ === null){
-                throw new Error('Invalid tag id: ' + playerId);
+        service.createPlayer = function(playerId,config,$parentElement) {
+            var $playerElement,src,params;
+            if (!$parentElement){
+                throw new Error('Parent element is required for vimeo.createPlayer');
             }
 
             src = this.formatPlayerSrc(config.videoId, playerId, config.params);
-
-            newElt$ = angular.element(iframe.create(playerId,src,{
+            params = {
                 width       : config.width,
-                height      : config.height,
-                frameborder : config.frameborder
-            }));
+                height      : config.height
+            };
 
-            angular.element(oldElt$).replaceWith(newElt$[0]);
+            if (config.frameborder !== undefined){
+                params.frameborder = config.frameborder;
+            }
+            $playerElement = angular.element(iframe.create(playerId,src,params));
+            
+            $parentElement.append($playerElement);
 
             function VimeoPlayer(iframe$,playerId,$win){
                 var _iframe$ = iframe$,_playerId = playerId,
@@ -58,6 +61,18 @@
                     return _iframe$;
                 };
 
+                self.play = function(){
+                    return self.post('play');
+                };
+
+                self.pause = function(){
+                    return self.post('pause');
+                };
+
+                self.getDuration = function(){
+                    return self.post('getDuration');
+                };
+
                 self.post = function(action, value){
                     var data = { method : action };
                     if (value){
@@ -65,6 +80,7 @@
                     }
 
                     _iframe$[0].contentWindow.postMessage(angular.toJson(data), _url);
+                    return self;
                 };
 
                 self.destroy = function(){
@@ -80,10 +96,15 @@
                     });
                 };
 
+                self.seekTo = function(seconds){
+                    self.post('seekTo',seconds);
+                };
+
                 self.on('newListener',function(eventName){
                     // ready does not need a listener
                     if ( (eventName !== 'ready') &&
-                         (eventName !== 'newListener') ) {
+                         (eventName !== 'newListener') &&
+                         (eventName !== 'removeListener') ) {
                         self.post('addEventListener',eventName);
                     }
                 });
@@ -112,7 +133,7 @@
                 $log.info('[%1] - created',_playerId);
             }
 
-            return new VimeoPlayer(newElt$,playerId,$window);
+            return new VimeoPlayer($playerElement,playerId,$window);
         };
 
         return service;
@@ -123,7 +144,6 @@
             var player;
             $log.info('link: videoId=%1, start=%2, end=%3',
                 $attr.videoid, $attr.start, $attr.end);
-            $element.append(angular.element('<div id="' + $attr.videoid + '"> </div>'));
             $attr.$observe('width',function(){
                 if (player){
                     player.setSize($attr.width, $attr.height);
@@ -138,33 +158,62 @@
 
 
             function createPlayer(){
+                var videoStart = parseInt($attr.start,10),
+                    videoEnd = parseInt($attr.end,10);
+                
                 player = vimeo.createPlayer($attr.videoid,{
                     videoId     : $attr.videoid,
                     width       : $attr.width,
                     height      : $attr.height,
                     frameborder : 0,
                     params  : {
-                        autoplay        : 1
+                        autoplay        : 0,
+                        badge           : 0,
+                        byline          : 0,
+                        portrait        : 0,
+                        title           : 0
                     }
-                });
+                },$element);
 
                 player.on('ready',function(p){
                     $log.info('[%1] - I am ready',p);
-                    
+
+                    p.getDuration();
+
                     player.on('finish',function(p){
                         $log.info('[%1] - I am finished',p);
+                        player.destroy();
+                        $timeout(createPlayer);
                     });
 
-                    player.on('playProgress',function(p,data){
-                        $log.info('[%1] - playProgress: %2 (%3)',p,data.seconds,data.percent);
-                    });
+                    if (!isNaN(videoStart)){
+                        player.once('loadProgress',function(p,data){
+                            $log.info('[%1] - loaded %1 percent',data.percent);
+                            player.seekTo($attr.start);
+                            player.post('removeEventListener','loadProgress');
+                        });
+                    }
 
+                    if (!isNaN(videoEnd)){
+                        player.on('playProgress',function(p,data){
+                            var self = this;
+                            $log.info('[%1] - playProgress: %2 (%3)',p,data.seconds,data.percent);
+                            if (data.seconds >= videoEnd){
+                                player.pause();
+                                $timeout(function(){
+                                    player.post('removeEventListener','playProgress');
+                                    player.removeListener('playProgress',self);
+                                    $timeout(function(){
+                                        player.emit('finish',player);
+                                    });
+                                });
+                            }
+                        });
+                    }
                 });
-
-                
             }
 
-            $timeout(createPlayer,0);
+            $timeout(createPlayer);
 
             scope.$on('$destroy',function(){
                 if (player){

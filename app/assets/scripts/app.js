@@ -92,14 +92,16 @@
 
             this.playList  = [
                 {
+                    player  : 'vimeo',
+                    videoId : '27855315',
+                    start   : 27,
+                    end     : 37
+                },
+                {
                     player  : 'youtube',
                     videoId : 'sgF7uWZMSdE',
                     start   : 7,
                     end     : 31
-                },
-                {
-                    player  : 'vimeo',
-                    videoId : '27855315'
                 },
                 {
                     player  : 'youtube',
