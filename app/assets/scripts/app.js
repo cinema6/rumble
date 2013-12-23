@@ -93,13 +93,7 @@
             this.playList  = [
                 {
                     player  : 'dailymotion',
-                    videoId : 'xorbb7',
-                    start   : 10,
-                    end     : 20,
-                    autoplay : 1,
-                    related : 0,
-                    startscreen : 'html',
-                    html        : 1
+                    videoId : 'xorbb7'
                 },
                 {
                     player  : 'vimeo',

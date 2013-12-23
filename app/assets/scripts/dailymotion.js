@@ -97,27 +97,6 @@
                     return self.post('pause');
                 };
 
-                self.getDurationAsync = function(){
-                    var deferred = $q.defer();
-                    self.post('getDuration');
-                    getPromises('getDuration').push(deferred);
-                    return deferred.promise;
-                };
-
-                self.getCurrentTimeAsync = function(){
-                    var deferred = $q.defer();
-                    self.post('getCurrentTime');
-                    getPromises('getCurrentTime').push(deferred);
-                    return deferred.promise;
-                };
-
-                self.getPausedAsync = function(){
-                    var deferred = $q.defer();
-                    self.post('paused');
-                    getPromises('paused').push(deferred);
-                    return deferred.promise;
-                };
-
                 self.post = function(action, value){
                     var data = action;
                     if (value){
@@ -218,9 +197,7 @@
 
 
             function createPlayer(){
-                var videoStart = parseInt($attr.start,10),
-                    videoEnd = parseInt($attr.end,10),
-                    vparams  = { };
+                var vparams  = { };
 
                 ['startscreen','related','html','info','autoplay'].forEach(function(prop){
                     if ($attr[prop]) {
@@ -246,30 +223,7 @@
                             $timeout(createPlayer);
                         }
                     });
-/*
-                    if (!isNaN(videoStart)){
-                        player.once('durationchange',function(p,data){
-                            $log.info('[%1] - loaded %1',data.duration);
-                            player.seekTo($attr.start);
-                        });
-                    }
 
-                    if (!isNaN(videoEnd)){
-                        player.on('timeupdate',function(p,data){
-                            var self = this;
-                            $log.info('[%1] - timeupdate: %2',p,data.time);
-                            if (data.time >= videoEnd){
-                                player.pause();
-                                $timeout(function(){
-                                    player.removeListener('timeupdate',self);
-                                    $timeout(function(){
-                                        player.emit('ended',player);
-                                    });
-                                });
-                            }
-                        });
-                    }
-*/
                 });
             }
 
