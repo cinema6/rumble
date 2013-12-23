@@ -3,8 +3,8 @@
     'use strict';
 
     angular.module('c6.rumble')
-    .factory('vimeo',['$log','$window','c6EventEmitter','iframe',
-        function($log,$window,c6EventEmitter,iframe){
+    .factory('vimeo',['$log','$window','$q','c6EventEmitter','iframe',
+        function($log,$window,$q,c6EventEmitter,iframe){
         $log = $log.context('vimeo');
         var service = {};
 
@@ -45,9 +45,22 @@
                 var _iframe$ = iframe$,_playerId = playerId,
                     _url =  _iframe$.attr('src').split('?')[0],
                     _val = 'VimeoPlayer#' + _playerId,
+                    _promises = {},
                     self = this;
 
                 c6EventEmitter(self);
+
+                function getPromises(id){
+                    if (!id){
+                        return _promises;
+                    }
+
+                    if (!_promises[id]){
+                        _promises[id] = [];
+                    }
+
+                    return _promises[id];
+                }
 
                 self.getPlayerId = function(){
                     return _playerId;
@@ -69,8 +82,25 @@
                     return self.post('pause');
                 };
 
-                self.getDuration = function(){
-                    return self.post('getDuration');
+                self.getDurationAsync = function(){
+                    var deferred = $q.defer();
+                    self.post('getDuration');
+                    getPromises('getDuration').push(deferred);
+                    return deferred.promise;
+                };
+
+                self.getCurrentTimeAsync = function(){
+                    var deferred = $q.defer();
+                    self.post('getCurrentTime');
+                    getPromises('getCurrentTime').push(deferred);
+                    return deferred.promise;
+                };
+
+                self.getPausedAsync = function(){
+                    var deferred = $q.defer();
+                    self.post('paused');
+                    getPromises('paused').push(deferred);
+                    return deferred.promise;
                 };
 
                 self.post = function(action, value){
@@ -84,8 +114,15 @@
                 };
 
                 self.destroy = function(){
+                    var err, deferred;
                     _iframe$.remove();
                     $win.removeEventListener('message',onMessageReceived,false);
+                    for (var id in _promises){
+                        err = new Error('Player destroyed, cannot resolve ' + id);
+                        while ( (deferred = _promises[id].shift()) ){
+                            deferred.reject(err);
+                        }
+                    }
                     $log.info('[%1] - destroyed',_playerId);
                 };
 
@@ -119,9 +156,17 @@
                     }
 
                     $log.info('[%1] - messageReceived: [%2]',_playerId, event.data);
-                    var data = angular.fromJson(event.data);
+                    var data = angular.fromJson(event.data), deferreds, deferred;
 
                     if (data.player_id !== _playerId){
+                        return;
+                    }
+
+                    if (data.method){
+                        deferreds = getPromises(data.method);
+                        while((deferred = deferreds.shift())){
+                            deferred.resolve(data);
+                        }
                         return;
                     }
 
@@ -142,8 +187,13 @@
         $log = $log.context('vimeoPlayer');
         function fnLink(scope,$element,$attr){
             var player;
-            $log.info('link: videoId=%1, start=%2, end=%3',
-                $attr.videoid, $attr.start, $attr.end);
+            $log.info('link: videoId=%1, start=%2, end=%3, autoPlay=%4',
+                $attr.videoid, $attr.start, $attr.end, $attr.autoplay);
+
+            if ($attr.autoplay === undefined){
+                $attr.autoplay = 0;
+            }
+
             $attr.$observe('width',function(){
                 if (player){
                     player.setSize($attr.width, $attr.height);
@@ -159,31 +209,33 @@
 
             function createPlayer(){
                 var videoStart = parseInt($attr.start,10),
-                    videoEnd = parseInt($attr.end,10);
-                
+                    videoEnd = parseInt($attr.end,10),
+                    vparams  = { },
+                    player;
+
+                ['badge','byline','portrait','title','autoplay'].forEach(function(prop){
+                    if ($attr[prop]) {
+                        vparams[prop] = $attr[prop];
+                    }
+                });
+
                 player = vimeo.createPlayer($attr.videoid,{
                     videoId     : $attr.videoid,
                     width       : $attr.width,
                     height      : $attr.height,
                     frameborder : 0,
-                    params  : {
-                        autoplay        : 1,
-                        badge           : 0,
-                        byline          : 0,
-                        portrait        : 0,
-                        title           : 0
-                    }
+                    params      : vparams
                 },$element);
 
                 player.on('ready',function(p){
                     $log.info('[%1] - I am ready',p);
 
-                    p.getDuration();
-
                     player.on('finish',function(p){
                         $log.info('[%1] - I am finished',p);
-//                        player.destroy();
-//                        $timeout(createPlayer);
+                        if ($attr.regenerate){
+                            player.destroy();
+                            $timeout(createPlayer);
+                        }
                     });
 
                     if (!isNaN(videoStart)){

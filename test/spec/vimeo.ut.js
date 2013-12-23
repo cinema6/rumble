@@ -2,14 +2,17 @@
     'use strict';
     
     define(['vimeo'], function() {
-        var $log, $window, vimeo;
+        var $log, $window, $q, $rootScope, vimeo;
                 
         describe('vimeo', function() {
             beforeEach(function(){
                 module('c6.rumble');
                 
-                inject(['$log','$window',function(_$log,_$window) {
+                inject(['$log','$window','$q','$rootScope',
+                    function(_$log,_$window,_$q,_$rootScope) {
                     $window      = _$window;
+                    $q           = _$q;
+                    $rootScope   = _$rootScope;
                     $log         = _$log;
                     $log.context = function() { return $log; };
                 }]);
@@ -40,8 +43,8 @@
             });
 
             describe('createPlayer', function(){
-                var angularElementMock, msgListener;
-
+                var angularElementMock, msgListener ;
+                
                 beforeEach(function(){
                     angular._element = angular.element;
                     angularElementMock = [ {
@@ -55,7 +58,7 @@
                     angularElementMock.replaceWith = jasmine.createSpy('elt.replaceWith');
                     angularElementMock.remove      = jasmine.createSpy('elt.remove');
                     angularElementMock.attr        = function (name) { return name; };
-
+                    
                     spyOn(angular,'element').andCallFake(function(elt){
                         return angularElementMock; 
                     });
@@ -63,6 +66,7 @@
                     spyOn($window,'addEventListener').andCallFake(function(ename,listener){
                         msgListener = listener;       
                     });
+
                     spyOn($window,'removeEventListener');
                 });
 
@@ -143,6 +147,7 @@
                         it('getUrl', function(){
                             expect(player.getUrl()).toEqual('http://player.vimeo.com/x123');
                         });
+                        
 
                         it('setSize', function(){
                             player.setSize(200,200);
@@ -192,6 +197,81 @@
                             expect(angularElementMock.remove).toHaveBeenCalled();
                             expect($window.removeEventListener.calls[0].args[0]).toEqual('message');
                         });
+                    });
+
+                    describe('async method',function(){
+                        it('getDurationAsync',function(){
+                            var d1, d2, p1, p2;
+                            p1 = player.getDurationAsync();
+                            p2 = player.getDurationAsync();
+                            expect(p1).not.toBe(p2);
+                            p1.then(function(v){ d1 = v.value; });
+                            p2.then(function(v){ d2 = v.value; });
+                            msgListener({
+                                origin : 'http://player.vimeo.com',
+                                data : '{ "method":"getDuration","value":120,"player_id":"player1"}'
+                            });
+                            $rootScope.$apply();
+                            expect(d1).toEqual(120);
+                            expect(d2).toEqual(120);
+                        });
+                        
+                        it('getCurrentTimeAsync',function(){
+                            var data = {
+                                method      : 'getCurrentTime',
+                                value       : 5,
+                                player_id   : 'player1'
+                            },
+                            currentTimeSpy = jasmine.createSpy('currentTime');
+                            player.getCurrentTimeAsync().then(currentTimeSpy);
+
+                            msgListener({
+                                origin : 'http://player.vimeo.com',
+                                data : angular.toJson(data)
+                            });
+
+                            $rootScope.$apply();
+                            expect(currentTimeSpy).toHaveBeenCalledWith(data);
+                        });
+
+                        it('getPausedAsync',function(){
+                            var data = {
+                                method      : 'paused',
+                                value       : true,
+                                player_id   : 'player1'
+                            },
+                            pausedSpy = jasmine.createSpy('paused');
+                            player.getPausedAsync().then(pausedSpy);
+
+                            msgListener({
+                                origin : 'http://player.vimeo.com',
+                                data : angular.toJson(data)
+                            });
+
+                            $rootScope.$apply();
+                            expect(pausedSpy).toHaveBeenCalledWith(data);
+                        });
+
+                        it('that cleans up when destroyed',function(){
+                            var successSpy = jasmine.createSpy('success'),
+                                failedSpy = jasmine.createSpy('failed');
+
+                            player.getDurationAsync().then(     successSpy,failedSpy);
+                            player.getCurrentTimeAsync().then(  successSpy,failedSpy);
+                            player.getPausedAsync().then(       successSpy,failedSpy);
+
+                            player.destroy();
+                            $rootScope.$apply();
+                            expect(successSpy).not.toHaveBeenCalled();
+                            expect(failedSpy.callCount).toEqual(3);
+                            expect(failedSpy.argsForCall[0][0].message)
+                                .toEqual('Player destroyed, cannot resolve getDuration');
+                            expect(failedSpy.argsForCall[1][0].message)
+                                .toEqual('Player destroyed, cannot resolve getCurrentTime');
+                            expect(failedSpy.argsForCall[2][0].message)
+                                .toEqual('Player destroyed, cannot resolve paused');
+                        });
+
                     });
 
                     describe('event', function(){

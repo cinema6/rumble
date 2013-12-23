@@ -11,6 +11,7 @@
             <span> {{AppCtrl.playList[AppCtrl.currentItem].videoId}}</span>
         </p>
     </div>
-    <rumble-player class="player" x-config="AppCtrl.playList[AppCtrl.currentItem]"> 
+    <rumble-player class="player" 
+        x-config="AppCtrl.playList[AppCtrl.currentItem]" x-profile="AppCtrl.profile"> 
     </rumble-player>
 </div>

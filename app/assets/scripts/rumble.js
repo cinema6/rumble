@@ -62,10 +62,16 @@
                     inner += ' ' + key.toLowerCase() + '="' + scope.config[key] + '"';
                 }
             }
+
             scope.playerWidth  = $element.css('width');
             scope.playerHeight = $element.css('height');
 
             inner += ' width="{{playerWidth}}" height="{{playerHeight}}"';
+            
+            if (!scope.profile.inlineVideo){
+                $log.info('Will need to regenerate the player');
+                inner += ' regenerate="1"'
+            }
 
             inner += '></'  + scope.config.player + '-player' + '>';
             var player$ = $compile(inner)(scope);
@@ -82,7 +88,8 @@
             restrict : 'E',
             link     : fnLink,
             scope    : {
-                config  : '='
+                config  : '=',
+                profile : '='
             }
         };
 
