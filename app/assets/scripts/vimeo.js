@@ -268,7 +268,7 @@
 
             scope.$on('$destroy',function(){
                 if (player){
-                    player.destroy();
+                    //player.destroy();
                 }
             });
         }

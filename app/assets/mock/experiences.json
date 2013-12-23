@@ -16,6 +16,41 @@
             "right": "experiences/rumble/right.html",
             "stylesheet": "experiences/rumble/assets/styles.css"
         },
-        "data": {}
+        "data": {
+            "playList" : [
+                {
+                    "player"  : "dailymotion",
+                    "videoid" : "xorbb7",
+                    "related" : 0
+                },
+                {
+                    "player"  : "vimeo",
+                    "videoid" : "27855315",
+                    "start"   : 27,
+                    "end"     : 37
+                },
+                {
+                    "player"  : "vimeo",
+                    "videoid" : "81766071",
+                    "start"   : 35,
+                    "end"     : 45
+                },
+                {
+                    "player"  : "youtube",
+                    "videoid" : "sgF7uWZMSdE",
+                    "start"   : 7,
+                    "end"     : 31
+                },
+                {
+                    "player"  : "youtube",
+                    "videoid" : "Cn9yJrrm2tk"
+                },
+                {
+                    "player"  : "dailymotion",
+                    "videoid" : "x18b09a",
+                    "related" : 0
+                }
+            ]
+        }
     }
 ]

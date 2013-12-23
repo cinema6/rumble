@@ -71,6 +71,7 @@
                 })
                 .state('experience', {
                     templateUrl: c6UrlMakerProvider.makeUrl('views/experience.html'),
+                    controller: 'RumbleController',
                     url: '/experience'
                 })
                 .state('experience.video', {
@@ -89,39 +90,6 @@
                 readyToLand = true;
 
             $log.info('loaded.');
-
-            this.playList  = [
-                {
-                    player  : 'dailymotion',
-                    videoId : 'xorbb7'
-                },
-                {
-                    player  : 'vimeo',
-                    videoId : '27855315',
-                    start   : 27,
-                    end     : 37
-                },
-                {
-                    player  : 'vimeo',
-                    videoId : '81766071',
-                    start   : 35,
-                    end     : 45
-                },
-                {
-                    player  : 'youtube',
-                    videoId : 'sgF7uWZMSdE',
-                    start   : 7,
-                    end     : 31
-                },
-                {
-                    player  : 'youtube',
-                    videoId : 'Cn9yJrrm2tk'
-                },
-                {
-                    player  : 'dailymotion',
-                    videoId : 'x18b09a'
-                }
-            ];
 
             this.currentItem = 0;
 
@@ -162,6 +130,8 @@
                 setup: function(appData) {
                     self.experience = appData.experience;
                     self.profile = appData.profile;
+
+                    self.playList = self.experience.data.playList;
 
                     gsap.TweenLite.ticker.useRAF(self.profile.raf);
 
@@ -207,8 +177,10 @@
                 $log.info('State Change Success: %1 (%2) ===> %3 (%4)',
                     fromState.name,fromParams.item,toState.name,toParams.item);
 
-                self.currentItem = parseInt(toParams.item,10);
-
+                if (toState.name === 'experience.video'){
+                    self.currentItem = parseInt(toParams.item,10);
+                    $scope.$broadcast('newVideo',self.currentItem);
+                }
                 googleAnalytics('send', 'event', '$state', 'changed', toState.name);
                 
                 readyToLand = false;

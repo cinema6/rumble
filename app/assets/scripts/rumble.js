@@ -37,7 +37,7 @@
 
                 //reset states
                 element.css({ opacity : 1, visibility : 'visible' });
-                timeline.to(element, 2, { opacity: 0, visibility: 'hidden' });
+                timeline.to(element, 2, { opacity: 0 });
                 return timeline;
             },
             start: function(element, done, timeline) {
@@ -50,11 +50,28 @@
             }
         });
     }])
+    .controller('RumbleController',['$log','$scope',function($log,$scope){
+        $log = $log.context('RumbleCtrl');
+        var theApp = $scope.AppCtrl;
+
+        $scope.userProfile  = theApp.profile;
+        $scope.playList     = theApp.experience.data.playList;
+        $scope.currentIndex = theApp.currentItem;
+        $scope.currentVideo = $scope.playList[$scope.AppCtrl.currentItem];
+
+        $scope.$on('newVideo',function(event,newVal){
+            $log.info('newVideo index:',newVal);
+            $scope.currentVideo = $scope.playList[newVal];
+            $scope.currentIndex = newVal;
+        });
+
+        $log.log('Rumble Controller is initialized!',$scope.playList);
+    }])
     .directive('rumblePlayer',['$log','$compile','$window',function($log,$compile,$window){
         $log = $log.context('rumblePlayer');
         function fnLink(scope,$element/*,$attr*/){
             $log.info('link:',scope.config);
-            $log.info('width: %1',$element.css('width'));
+            $log.info('config:',scope.config);
 
             var inner = '<' + scope.config.player + '-player';
             for (var key in scope.config){

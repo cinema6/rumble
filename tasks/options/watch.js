@@ -8,6 +8,7 @@
                 '<%= settings.appDir %>/assets/views/**/*.html',
                 '<%= settings.appDir %>/assets/styles/**/*.css',
                 '<%= settings.appDir %>/assets/scripts/**/*.js',
+                '<%= settings.appDir %>/assets/mock/**/*.json',
                 '<%= settings.appDir %>/assets/img/**/*.{png,jpg,jpeg,gif,webp,svg}',
                 'test/spec/**/*.js'
             ],

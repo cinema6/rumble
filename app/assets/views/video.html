@@ -3,15 +3,15 @@
     <div class="player-info">
         <p> 
             <span>VideoPlayer:</span>
-            <span> {{AppCtrl.playList[AppCtrl.currentItem].player}}</span>
+            <span> {{currentVideo.player}}</span>
         </p>
 
         <p> 
             <span>VideoId:</span>
-            <span> {{AppCtrl.playList[AppCtrl.currentItem].videoId}}</span>
+            <span> {{currentVideo.videoId}}</span>
         </p>
     </div>
     <rumble-player class="player" 
-        x-config="AppCtrl.playList[AppCtrl.currentItem]" x-profile="AppCtrl.profile"> 
+        x-config="currentVideo" x-profile="userProfile"> 
     </rumble-player>
 </div>

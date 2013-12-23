@@ -126,6 +126,7 @@
                     spyOn(AppCtrl, 'src').andReturn(srcResult);
 
                     appData.experience.img.hero = {};
+                    appData.experience.data = { playList : [] };
 
                     setupResult = setup(appData);
                 });

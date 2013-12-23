@@ -200,7 +200,7 @@
                 var vparams  = { };
 
                 ['startscreen','related','html','info','autoplay'].forEach(function(prop){
-                    if ($attr[prop]) {
+                    if ($attr[prop] !== undefined) {
                         vparams[prop] = $attr[prop];
                     }
                 });
@@ -231,7 +231,7 @@
 
             scope.$on('$destroy',function(){
                 if (player){
-                    player.destroy();
+                    //player.destroy();
                 }
             });
         }
