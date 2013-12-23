@@ -1,4 +1,5 @@
-var grunt = require('grunt');
+var settings = require('../settings.json');
+
 
 module.exports = function(config) {
     // Karma configuration
@@ -7,13 +8,13 @@ module.exports = function(config) {
     config.set({
         // base path, that will be used to resolve files and exclude
         basePath: '..',
-
+    
         frameworks: ['requirejs', 'jasmine'],
 
         // list of files / patterns to load in the browser
         files: [
             { pattern: 'settings.json', included: false },
-            { pattern: grunt.template.process('<%= settings.appDir %>/assets/scripts/**/*.js'), included: false },
+            { pattern:  settings.appDir + '/assets/scripts/**/*.js', included: false },
             { pattern: '.tmp/templates.js', included: false },
             { pattern: 'test/spec/*.js', included: false },
             'test/test-main.js'
@@ -21,7 +22,7 @@ module.exports = function(config) {
 
         // list of files to exclude
         exclude: [
-            '<%= settings.appDir %>/assets/scripts/main.js'
+            settings.appDir + '/assets/scripts/main.js'
         ],
 
         // test results reporter to use

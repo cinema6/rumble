@@ -7,7 +7,7 @@
   ],
   "dependencies": {},
   "devDependencies": {
-    "grunt": "~0.4.1",
+    "grunt": "~0.4.2",
     "load-grunt-config": "git://github.com/firstandthird/load-grunt-config",
     "grunt-git-assist": "git+ssh://git@github.com:cinema6/grunt-git-assist",
     "c6-sandbox": "git+ssh://git@github.com:cinema6/sandbox",

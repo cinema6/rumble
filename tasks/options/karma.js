@@ -5,11 +5,11 @@
         options: {
             configFile: 'test/karma.conf.js'
         },
-        unit: {},
+        unit: { },
         debug: {
             options: {
                 singleRun: false,
-                autoWatch: true
+                background: true
             }
         }
     };

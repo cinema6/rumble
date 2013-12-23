@@ -14,7 +14,7 @@
             options: {
                 livereload: true
             },
-            tasks: ['jshint:all', 'test:unit']
+            tasks: ['jshint:all', 'karma:debug:run']
         },
         e2e: {
             files: [
