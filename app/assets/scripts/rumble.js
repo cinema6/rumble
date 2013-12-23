@@ -63,14 +63,14 @@
                 }
             }
 
-            scope.playerWidth  = $element.css('width');
-            scope.playerHeight = $element.css('height');
+            scope.playerWidth  = $element.css('width').replace(/px/,'');
+            scope.playerHeight = $element.css('height').replace(/px/,'');
 
             inner += ' width="{{playerWidth}}" height="{{playerHeight}}"';
             
             if (!scope.profile.inlineVideo){
                 $log.info('Will need to regenerate the player');
-                inner += ' regenerate="1"'
+                inner += ' regenerate="1"';
             }
 
             inner += '></'  + scope.config.player + '-player' + '>';
@@ -78,8 +78,8 @@
             $element.append(player$);
 
             $window.addEventListener('resize',function(){
-                scope.playerWidth   = $element.css('width');
-                scope.playerHeight  = $element.css('height');
+                scope.playerWidth   = $element.css('width').replace(/px/,'');
+                scope.playerHeight  = $element.css('height').replace(/px/,'');
                 scope.$digest();
             });
         }

@@ -210,8 +210,7 @@
             function createPlayer(){
                 var videoStart = parseInt($attr.start,10),
                     videoEnd = parseInt($attr.end,10),
-                    vparams  = { },
-                    player;
+                    vparams  = { };
 
                 ['badge','byline','portrait','title','autoplay'].forEach(function(prop){
                     if ($attr[prop]) {
