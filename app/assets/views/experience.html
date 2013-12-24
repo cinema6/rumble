@@ -1,12 +1,11 @@
 <div>
     <p>This is the experience, Item={{AppCtrl.currentItem}}</p>
     <div ui-view ng-animate="'videoView'"></div>
-    <div>
-        <a href="#/experience/video/{{AppCtrl.currentItem}}" ng-click="AppCtrl.goBack()" title="Prev Video">
+    <div class="navigation">
+        <a class="prev" href="#/experience/video/{{AppCtrl.currentItem}}" ng-click="AppCtrl.goBack()" title="Prev Video">
             <span> Prev</span>
         </a>
-        <br/>
-        <a href="#/experience/video/{{AppCtrl.currentItem + 1}}" title="Next Video">
+        <a class="next" href="#/experience/video/{{AppCtrl.currentItem + 1}}" title="Next Video">
             <span> Next</span>
         </a>
     </div>
