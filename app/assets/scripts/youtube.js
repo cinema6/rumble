@@ -162,7 +162,7 @@
                 self.toString = function() {
                     return _val;
                 };
-
+                
                 $log.info('[%1] - created',_playerId);
             }
 
@@ -172,57 +172,17 @@
         return service;
 
     }])
-    .directive('youtubePlayer',['$log','$timeout','youtube',function($log,$timeout,youtube){
+    .directive('youtubePlayer',['$log','$timeout','youtube','_default',
+        function($log,$timeout,youtube,_default){
         $log = $log.context('youtubePlayer');
         function fnLink(scope,$element,$attr){
             var player;
             $log.info('link: videoId=%1, start=%2, end=%3',
                 $attr.videoid, $attr.start, $attr.end);
-            $element.append(angular.element('<div id="' + $attr.videoid + '"> </div>'));
-
-            function onPlayerReady(event){
-                $log.info('onPlayerReady %1 - %2',$attr.id,event.data);
-            }
-
-            function onApiChange(event){
-                $log.info('onApiChange %1 - %2',$attr.id,event.data);
-            }
-
-            function onError(event){
-                $log.info('onError %1 - %2',$attr.id,event.data);
-            }
-
-            function onPlayerStateChange(event){
-                $log.info('onPlayerStateChange %1 - %2',$attr.id,event.data);
-
-                if (event.data === 0){
-                    //var elt$ = angular.element(player.getIframe());
-                    //elt$.css('display','none');
-                    //player = createPlayer();
-                }
-            }
-
-            function createPlayer(){
-                return youtube.createPlayer($attr.videoid,{
-                    videoId     : $attr.videoid,
-                    width       : $attr.width,
-                    height      : $attr.height,
-                    playerVars  : {
-                        autoplay        : 1,
-                        start           : $attr.start,
-                        end             : $attr.end,
-                        controls        : 1,
-                        modestbranding  : 1,
-                        rel             : 0
-                    },
-                    events: {
-                        'onApiChange'   : onApiChange,
-                        'onError'       : onError,
-                        'onReady'       : onPlayerReady,
-                        'onStateChange' : onPlayerStateChange
-                    }
-                });
-            }
+           
+            _default($attr,'autoplay'       ,1);
+            _default($attr,'rel'            ,0);
+            _default($attr,'modestbranding' ,1);
 
             $attr.$observe('width',function(){
                 if (player){
@@ -236,9 +196,44 @@
                 }
             });
 
-            $timeout(function(){
-                player = createPlayer();
-            },250);
+            function createPlayer(){
+                var vparams     = { };
+
+                ['start','end','controls','rel','modestbranding','autoplay']
+                .forEach(function(prop){
+                    if ($attr[prop]) {
+                        vparams[prop] = $attr[prop];
+                    }
+                });
+
+                player = youtube.createPlayer($attr.videoid,{
+                    videoId     : $attr.videoid,
+                    width       : $attr.width,
+                    height      : $attr.height,
+                    frameborder : 0,
+                    params      : vparams
+                },$element);
+
+                player.on('ready',function(p){
+                    $log.info('[%1] - I am ready',p);
+
+                    player.on('ended',function(p){
+                        $log.info('[%1] - I am finished',p);
+                        if ($attr.regenerate){
+                            player.destroy();
+                            $timeout(createPlayer);
+                        }
+                    });
+                });
+            }
+
+            $timeout(createPlayer);
+
+            scope.$on('$destroy',function(){
+                if (player){
+                    //player.destroy();
+                }
+            });
         }
 
         return {

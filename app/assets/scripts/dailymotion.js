@@ -140,7 +140,7 @@
                         return;
                     }
 
-                    $log.info('[%1] - messageReceived: [%2]',_playerId, event.data);
+//                    $log.info('[%1] - messageReceived: [%2]',_playerId, event.data);
                     var data = service.parseEventData(event.data), deferreds, deferred;
 
                     if (data.id !== _playerId){
@@ -172,16 +172,16 @@
 
         return service;
     }])
-    .directive('dailymotionPlayer',['$log','$timeout','dailymotion',function($log,$timeout,dailymotion){
+    .directive('dailymotionPlayer',['$log','$timeout','dailymotion','_default',
+        function($log,$timeout,dailymotion,_default){
         $log = $log.context('dailymotionPlayer');
         function fnLink(scope,$element,$attr){
             var player;
             $log.info('link: videoId=%1, start=%2, end=%3, autoPlay=%4',
                 $attr.videoid, $attr.start, $attr.end, $attr.autoplay);
-
-            if ($attr.autoplay === undefined){
-                $attr.autoplay = 0;
-            }
+            
+            _default($attr,'autoplay'   ,1);
+            _default($attr,'related'    ,0);
 
             $attr.$observe('width',function(){
                 if (player){

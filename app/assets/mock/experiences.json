@@ -19,15 +19,17 @@
         "data": {
             "playList" : [
                 {
-                    "player"  : "dailymotion",
-                    "videoid" : "xorbb7",
-                    "related" : 0
+                    "player"  : "youtube",
+                    "videoid" : "sgF7uWZMSdE",
+                    "start"   : 7,
+                    "end"     : 31,
+                    "rel"     : 0,
+                    "modestbranding" : 1
                 },
                 {
-                    "player"  : "vimeo",
-                    "videoid" : "27855315",
-                    "start"   : 27,
-                    "end"     : 37
+                    "player"  : "dailymotion",
+                    "videoid" : "x18b09a",
+                    "related" : 0
                 },
                 {
                     "player"  : "vimeo",
@@ -37,17 +39,19 @@
                 },
                 {
                     "player"  : "youtube",
-                    "videoid" : "sgF7uWZMSdE",
-                    "start"   : 7,
-                    "end"     : 31
+                    "videoid" : "Cn9yJrrm2tk",
+                    "rel"     : 0,
+                    "modestbranding" : 1
                 },
                 {
-                    "player"  : "youtube",
-                    "videoid" : "Cn9yJrrm2tk"
+                    "player"  : "vimeo",
+                    "videoid" : "27855315",
+                    "start"   : 27,
+                    "end"     : 37
                 },
                 {
                     "player"  : "dailymotion",
-                    "videoid" : "x18b09a",
+                    "videoid" : "xorbb7",
                     "related" : 0
                 }
             ]

@@ -183,16 +183,15 @@
 
         return service;
     }])
-    .directive('vimeoPlayer',['$log','$timeout','vimeo',function($log,$timeout,vimeo){
+    .directive('vimeoPlayer',['$log','$timeout','vimeo','_default',
+        function($log,$timeout,vimeo,_default){
         $log = $log.context('vimeoPlayer');
         function fnLink(scope,$element,$attr){
             var player;
             $log.info('link: videoId=%1, start=%2, end=%3, autoPlay=%4',
                 $attr.videoid, $attr.start, $attr.end, $attr.autoplay);
 
-            if ($attr.autoplay === undefined){
-                $attr.autoplay = 0;
-            }
+            _default($attr,'autoplay',1);
 
             $attr.$observe('width',function(){
                 if (player){

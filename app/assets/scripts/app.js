@@ -83,6 +83,9 @@
                     url: '/result/:item'
                 });
         }])
+        .factory('_default',[function(){
+            return function _default(a,s,v){ if (a[s] === undefined){ a[s] = v; } };
+        }])
         .controller('AppController', ['$scope','$state', '$window', '$log', 'site', 'c6ImagePreloader', 'gsap', '$timeout', 'googleAnalytics', 'c6AniCache',
         function                     ( $scope , $state, $window , $log ,  site ,  c6ImagePreloader ,  gsap ,  $timeout ,  googleAnalytics, c6AniCache ) {
             $log = $log.context('AppCtrl');
