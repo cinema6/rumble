@@ -85,6 +85,9 @@
                 dailymotion: {
                     deps: ['angular', 'angularMocks', 'c6ui', 'c6log', 'app']
                 },
+                youtube: {
+                    deps: ['angular', 'angularMocks', 'c6ui', 'c6log', 'app']
+                },
                 vimeo: {
                     deps: ['angular', 'angularMocks', 'c6ui', 'c6log', 'app']
                 }
