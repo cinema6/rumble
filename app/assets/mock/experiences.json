@@ -17,6 +17,17 @@
             "stylesheet": "experiences/rumble/assets/styles.css"
         },
         "data": {
+            "ballot" : [
+                {
+                    "vote" : "lame"
+                },
+                {
+                    "vote" : "not lame"
+                },
+                {
+                    "vote" : "undecided"
+                }
+            ],
             "playList" : [
                 {
                     "player"  : "youtube",

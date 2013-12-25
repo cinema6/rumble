@@ -71,7 +71,20 @@
         $log = $log.context('rumblePlayer');
         function fnLink(scope,$element/*,$attr*/){
             $log.info('link:',scope.config);
-            $log.info('config:',scope.config);
+
+            function resize(event,noDigest){
+                var pw = Math.round($window.innerWidth * 0.75),
+                    ph = Math.round(pw * 0.5625);
+                $element.css({
+                    width : pw,
+                    height: ph
+                });
+                scope.playerWidth   = pw;
+                scope.playerHeight  = ph;
+                if(!noDigest){
+                    scope.$digest();
+                }
+            }
 
             var inner = '<' + scope.config.player + '-player';
             for (var key in scope.config){
@@ -79,9 +92,6 @@
                     inner += ' ' + key.toLowerCase() + '="' + scope.config[key] + '"';
                 }
             }
-
-            scope.playerWidth  = $element.css('width').replace(/px/,'');
-            scope.playerHeight = $element.css('height').replace(/px/,'');
 
             inner += ' width="{{playerWidth}}" height="{{playerHeight}}"';
             
@@ -94,11 +104,8 @@
             var player$ = $compile(inner)(scope);
             $element.append(player$);
 
-            $window.addEventListener('resize',function(){
-                scope.playerWidth   = $element.css('width').replace(/px/,'');
-                scope.playerHeight  = $element.css('height').replace(/px/,'');
-                scope.$digest();
-            });
+            $window.addEventListener('resize',resize);
+            resize({},true);
         }
 
         return {
