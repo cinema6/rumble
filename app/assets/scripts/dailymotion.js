@@ -217,6 +217,7 @@
 
                     player.on('ended',function(p){
                         $log.info('[%1] - I am finished',p);
+                        scope.$emit('videoEnded','dailymotion',$attr.videoid);
                         if ($attr.regenerate){
                             player.destroy();
                             $timeout(createPlayer);

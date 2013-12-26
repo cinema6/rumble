@@ -19,51 +19,81 @@
         "data": {
             "ballot" : [
                 {
-                    "vote" : "lame"
+                    "button" : "Good",
+                    "most"   : "The Goodest video"
                 },
                 {
-                    "vote" : "not lame"
+                    "button" : "Bad",
+                    "most"   : "The Badest video"
                 },
                 {
-                    "vote" : "undecided"
+                    "button" : "Ugly",
+                    "most"   : "The Ugliest video"
                 }
             ],
             "playList" : [
                 {
-                    "player"  : "youtube",
-                    "videoid" : "sgF7uWZMSdE",
-                    "start"   : 7,
-                    "end"     : 31,
-                    "rel"     : 0,
-                    "modestbranding" : 1
+                    "id"     : "rv-22119a8cf9f755",
+                    "caption": "60% of the time it works 100% of the time",
+                    "note"   : "I love lamp!",
+                    "voting" : [ 100, 50, 10 ],
+                    "video"  : {
+                        "player"  : "youtube",
+                        "videoid" : "sgF7uWZMSdE",
+                        "start"   : 7,
+                        "end"     : 31,
+                        "rel"     : 0,
+                        "modestbranding" : 1
+                    }
+                    
                 },
                 {
-                    "player"  : "dailymotion",
-                    "videoid" : "x18b09a",
-                    "related" : 0
+                    "id"     : "rv-4770a2d7f85ce0",
+                    "voting" : [ 200, 50, 10 ],
+                    "video"  : {
+                        "player"  : "dailymotion",
+                        "videoid" : "x18b09a",
+                        "related" : 0
+                    }
                 },
                 {
-                    "player"  : "vimeo",
-                    "videoid" : "81766071",
-                    "start"   : 35,
-                    "end"     : 45
+                    "id"     : "rv-e489d1c6359fb3",
+                    "voting" : [ 300, 50, 10 ],
+                    "video"  : {
+                        "player"  : "vimeo",
+                        "videoid" : "81766071",
+                        "start"   : 35,
+                        "end"     : 45
+                    }
                 },
                 {
-                    "player"  : "youtube",
-                    "videoid" : "Cn9yJrrm2tk",
-                    "rel"     : 0,
-                    "modestbranding" : 1
+                    "id"     : "rv-e2947c9bec017e",
+                    "voting" : [ 400, 50, 10 ],
+                    "video"  : {
+                        "player"  : "youtube",
+                        "videoid" : "Cn9yJrrm2tk",
+                        "rel"     : 0,
+                        "modestbranding" : 1
+                    }
                 },
                 {
-                    "player"  : "vimeo",
-                    "videoid" : "27855315",
-                    "start"   : 27,
-                    "end"     : 37
+                    "id"     : "rv-d30678e2c0fe1f",
+                    "voting" : [ 500, 50, 10 ],
+                    "video"  : {
+                        "player"  : "vimeo",
+                        "videoid" : "27855315",
+                        "start"   : 27,
+                        "end"     : 37
+                    }
                 },
                 {
-                    "player"  : "dailymotion",
-                    "videoid" : "xorbb7",
-                    "related" : 0
+                    "id"     : "rv-99b87ea709d7ac",
+                    "voting" : [ 600, 50, 10 ],
+                    "video"  : {
+                        "player"  : "dailymotion",
+                        "videoid" : "xorbb7",
+                        "related" : 0
+                    }
                 }
             ]
         }

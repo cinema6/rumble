@@ -50,20 +50,84 @@
             }
         });
     }])
-    .controller('RumbleController',['$log','$scope',function($log,$scope){
+    .controller('RumbleController',['$log','$scope','$window',function($log,$scope,$window){
         $log = $log.context('RumbleCtrl');
-        var theApp = $scope.AppCtrl;
+        var theApp = $scope.AppCtrl, self = this;
 
         $scope.userProfile  = theApp.profile;
         $scope.playList     = theApp.experience.data.playList;
-        $scope.currentIndex = theApp.currentItem;
-        $scope.currentVideo = $scope.playList[$scope.AppCtrl.currentItem];
+        $scope.ballot       = theApp.experience.data.ballot;
+
+        $scope.currentIndex = theApp.currentIndex;
+        $scope.currentItem  = $scope.playList[$scope.currentIndex];
+
+        $scope.userHistory  = [];
+        $scope.playList.forEach(function(item){
+            $scope.userHistory.push({
+                id      : item.id,
+                viewed  : false,
+                vote    : -1
+            });
+        });
 
         $scope.$on('newVideo',function(event,newVal){
             $log.info('newVideo index:',newVal);
-            $scope.currentVideo = $scope.playList[newVal];
+            $scope.currentItem = $scope.playList[newVal];
             $scope.currentIndex = newVal;
         });
+
+        $scope.$on('videoEnded',function(event,player,videoId){
+            $log.log('Video %1::%2 has ended!',player,videoId);
+            var historyItem = self.findUserHistoryForItem(
+                self.findItemByVideo(player,videoId)
+            );
+            if (!historyItem){
+                $log.error('Unable to locate user history for %1::%2',player,videoId);
+                return;
+            }
+            $scope.$apply(function(){
+                historyItem.viewed = true;
+            });
+        });
+
+        this.vote = function(v){
+            $scope.userHistory[$scope.currentIndex].vote = v;
+            console.log('HISTORY:',$scope.userHistory);
+        };
+
+        this.findUserHistoryForItem = function(item){
+            var userHistory = $scope.userHistory, result;
+            if (!angular.isString(item)){
+                item = item.id;
+            }
+            userHistory.some(function(history){
+                if (history.id === item){
+                    result = history;
+                    return true;
+                }
+            });
+            return result;
+        };
+        this.findItemByVideo = function(player,videoId){
+            var playList = $scope.playList, result;
+            playList.some(function(item){
+                if ((item.video.player === player) && (item.video.videoid === videoId)){
+                    result = item;
+                    return true;
+                }
+            });
+            return result;
+        };
+
+        this.goBack = function(){
+            $window.history.back();
+        };
+
+        this.goForward = function(){
+            theApp.goto('experience.video',{item : ($scope.currentIndex + 1) });
+        };
+
+        $scope.RumbleCtrl = this;
 
         $log.log('Rumble Controller is initialized!',$scope.playList);
     }])
@@ -102,7 +166,6 @@
             }
 
             inner += '></'  + scope.config.player + '-player' + '>';
-            $log.info('INNER:',inner);
 
             var player$ = $compile(inner)(scope);
             $element.append(player$);

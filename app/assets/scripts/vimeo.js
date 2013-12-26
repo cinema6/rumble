@@ -231,6 +231,7 @@
 
                     player.on('finish',function(p){
                         $log.info('[%1] - I am finished',p);
+                        scope.$emit('videoEnded','vimeo',$attr.videoid);
                         if ($attr.regenerate){
                             player.destroy();
                             $timeout(createPlayer);

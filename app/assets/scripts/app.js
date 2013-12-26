@@ -94,11 +94,7 @@
 
             $log.info('loaded.');
 
-            this.currentItem = 0;
-
-            this.goBack = function(){
-                $window.history.back();
-            };
+            this.currentIndex = 0;
 
             this.src = function(src) {
                 var profile = self.profile,
@@ -125,8 +121,8 @@
                 }
             };
 
-            this.goto = function(state,toParams) {
-                $state.go(state,toParams);
+            this.goto = function(state,toParams,options) {
+                $state.go(state,toParams,options);
             };
 
             site.init({
@@ -181,8 +177,8 @@
                     fromState.name,fromParams.item,toState.name,toParams.item);
 
                 if (toState.name === 'experience.video'){
-                    self.currentItem = parseInt(toParams.item,10);
-                    $scope.$broadcast('newVideo',self.currentItem);
+                    self.currentIndex = parseInt(toParams.item,10);
+                    $scope.$broadcast('newVideo',self.currentIndex);
                 }
                 googleAnalytics('send', 'event', '$state', 'changed', toState.name);
                 

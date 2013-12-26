@@ -1,40 +1,41 @@
 /* overall css stylesheet */
-html { height: 100%; width: 100%;}
+html {
+    height: 100%;
+    overflow: auto;
+}
+
+body {
+    height: 100%;
+    overflow: auto;
+}
+
+.experience {
+    position: relative;
+    width: 100%;
+}
 
 .player {
     position: absolute;
-    top: 15%;
+    top: 50px;
     left: 12.5%;
-    width: 75%;
-    height: 55%;
     z-index: 1;
 }
 
-.navigation {
-    position: absolute;
+.control-panel {
     width: 100%;
-    top: 85%;
+    height: 100px;
+    margin-top: 50%;
 }
-    .navigation>.prev {
-        position: absolute;
-        background: rgb(216,216,216);
-        width: 60px;
-        height: 40px;
-        left: 8%;
-    }
-    
-    .navigation>.next {
-        position: absolute;
-        background: rgb(216,216,216);
-        width: 60px;
-        height: 40px;
-        right: 8%;
-    }
-    
-    .navigation span{
-        margin-top: 8px;
-        display: block;
-        width: 100%;
-        height: 100%;
-        text-align: center;
-    }
+.navigation>.prev {
+    position: absolute;
+    width: 60px;
+    height: 40px;
+    left: 7%;
+}
+
+.navigation>.next {
+    position: absolute;
+    width: 60px;
+    height: 40px;
+    right: 7%;
+}

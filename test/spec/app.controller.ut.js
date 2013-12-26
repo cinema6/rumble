@@ -268,7 +268,7 @@
                         it('should proxy to $state.go(state)', function() {
                             AppCtrl.goto('experience');
 
-                            expect($state.go).toHaveBeenCalledWith('experience',undefined);
+                            expect($state.go).toHaveBeenCalledWith('experience',undefined,undefined);
                         });
                     });
 

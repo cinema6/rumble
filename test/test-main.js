@@ -79,6 +79,9 @@
                 app: {
                     deps: ['angular', 'angularMocks', 'modernizr', 'timelinemax', 'uirouter', 'c6ui', 'c6log']
                 },
+                rumble: {
+                    deps: ['angular', 'angularMocks', 'c6ui', 'c6log', 'app']
+                },
                 iframe: {
                     deps: ['angular', 'angularMocks', 'c6ui', 'c6log', 'app']
                 },
