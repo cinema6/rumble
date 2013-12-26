@@ -180,7 +180,6 @@
             $log.info('link: videoId=%1, start=%2, end=%3',
                 $attr.videoid, $attr.start, $attr.end);
            
-            _default($attr,'autoplay'       ,1);
             _default($attr,'rel'            ,0);
             _default($attr,'modestbranding' ,1);
 

@@ -155,7 +155,7 @@
                         return;
                     }
 
-                    $log.info('[%1] - messageReceived: [%2]',_playerId, event.data);
+//                    $log.info('[%1] - messageReceived: [%2]',_playerId, event.data);
                     var data = angular.fromJson(event.data), deferreds, deferred;
 
                     if (data.player_id !== _playerId){
@@ -191,7 +191,8 @@
             $log.info('link: videoId=%1, start=%2, end=%3, autoPlay=%4',
                 $attr.videoid, $attr.start, $attr.end, $attr.autoplay);
 
-            _default($attr,'autoplay',1);
+            _default($attr,'badge',0);
+            _default($attr,'portrait',0);
 
             $attr.$observe('width',function(){
                 if (player){

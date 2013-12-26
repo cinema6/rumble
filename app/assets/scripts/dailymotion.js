@@ -180,7 +180,6 @@
             $log.info('link: videoId=%1, start=%2, end=%3, autoPlay=%4',
                 $attr.videoid, $attr.start, $attr.end, $attr.autoplay);
             
-            _default($attr,'autoplay'   ,1);
             _default($attr,'related'    ,0);
 
             $attr.$observe('width',function(){

@@ -36,7 +36,7 @@ module.exports = function(grunt) {
     });
 
     grunt.loadTasks('tasks');
-
+    
     /*********************************************************************************************
      *
      * SERVER TASKS
@@ -47,7 +47,7 @@ module.exports = function(grunt) {
         'connect:sandbox',
         'open:server',
         'karma:debug',
-        'watch:livereload'
+        'watch'
     ]);
 
     /*********************************************************************************************

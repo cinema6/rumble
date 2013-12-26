@@ -17,7 +17,7 @@ html { height: 100%; width: 100%;}
 }
     .navigation>.prev {
         position: absolute;
-        background: gray;
+        background: rgb(216,216,216);
         width: 60px;
         height: 40px;
         left: 8%;
@@ -25,7 +25,7 @@ html { height: 100%; width: 100%;}
     
     .navigation>.next {
         position: absolute;
-        background: gray;
+        background: rgb(216,216,216);
         width: 60px;
         height: 40px;
         right: 8%;

@@ -69,8 +69,8 @@
     }])
     .directive('rumblePlayer',['$log','$compile','$window',function($log,$compile,$window){
         $log = $log.context('rumblePlayer');
-        function fnLink(scope,$element/*,$attr*/){
-            $log.info('link:',scope.config);
+        function fnLink(scope,$element,$attr){
+            $log.info('link:',scope);
 
             function resize(event,noDigest){
                 var pw = Math.round($window.innerWidth * 0.75),
@@ -94,6 +94,7 @@
             }
 
             inner += ' width="{{playerWidth}}" height="{{playerHeight}}"';
+            inner += ' autoplay="' + $attr.autoplay + '"';
             
             if (!scope.profile.inlineVideo){
                 $log.info('Will need to regenerate the player');
@@ -101,6 +102,8 @@
             }
 
             inner += '></'  + scope.config.player + '-player' + '>';
+            $log.info('INNER:',inner);
+
             var player$ = $compile(inner)(scope);
             $element.append(player$);
 
