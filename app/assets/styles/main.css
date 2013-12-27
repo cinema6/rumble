@@ -2,11 +2,17 @@
 html {
     height: 100%;
     overflow: auto;
+    background: black;
+    color: white;
 }
 
 body {
     height: 100%;
     overflow: auto;
+}
+
+.hidden {
+    visibility: hidden;
 }
 
 .experience {
@@ -16,26 +22,99 @@ body {
 
 .player {
     position: absolute;
-    top: 50px;
+    top: 64px;
     left: 12.5%;
     z-index: 1;
 }
-
-.control-panel {
+.title-bar {
     width: 100%;
     height: 100px;
-    margin-top: 50%;
+    margin-top: 0%;
 }
-.navigation>.prev {
+    .title-bar>h1 {
+        font-size: 24px;
+        margin: 0px;
+    }
+
+    .title-bar>h2 {
+        font-size: 14px;
+        margin: 0px;
+    }
+
+.progress {
     position: absolute;
-    width: 60px;
+    top: -10px;
+    right: 12.5%;
+}
+    
+.navigation {
+    width: 100%;
     height: 40px;
-    left: 7%;
+    margin-top: 42%;
+}
+    .navigation>.prev {
+        left: 12.5%;
+    }
+
+    .navigation>.next {
+        right: 12.5%;
+    }
+
+    .navigation>button{
+        position: absolute;
+        background-color:#486699;
+        color: #ffffff;
+        cursor: pointer;
+        font-family: arial;
+        font-size: 14px;
+        -moz-border-radius:8px;
+        -webkit-border-radius:8px;
+        border-radius:8px;
+        border: 0px;
+        padding: 12px 20px;
+    }
+
+.ballot {
+    margin-left: 25%;
+    margin-top: -4%;
+    width: 50%;
 }
 
-.navigation>.next {
-    position: absolute;
-    width: 60px;
-    height: 40px;
-    right: 7%;
-}
+    .ballot ul {
+        list-style-type: none;
+        padding: 0px;
+        margin: 0px;
+    }
+
+    .ballot li {
+        display: inline-block;
+        padding-left: 14%;
+    }
+
+    .ballot button {
+        background-color:#fb9e25;
+        color: #ffffff;
+        cursor: pointer;
+        font-family: arial;
+        font-size: 17px;
+        -moz-border-radius:18px;
+        -webkit-border-radius:18px;
+        border-radius:18px;
+        border: 0px;
+        padding: 12px 20px;
+    }
+
+    .ballot button.selected {
+        -webkit-box-shadow: 0 0 40px white;
+        box-shadow: 0 0 40px white;
+    }
+
+    span.returns {
+        display: block;
+        width: 100%;
+        text-align: center;
+        margin-top: 8px;
+        font-family: arial;
+        font-size: 24px;
+    }
+

@@ -1,40 +1,35 @@
 <div class="experience">
-    <p>This is the experience! Item={{AppCtrl.currentIndex}}</p>
+    <div class="title-bar">
+        <h1>{{currentItem.title}}</h1>
+        <h2>{{currentItem.note}}</h2>
+    </div>
+    <div class="progress">
+        <h1> {{currentIndex + 1}} of {{playList.length}} </h1>
+    </div>
     <div ui-view ng-animate="'videoView'"></div>
-    <div class="control-panel" ng-show="userHistory[currentIndex].viewed">
-        <div class="vote">
-            <ul>
-                <li ng-repeat="item in ballot">
-                    <button ng-click="RumbleCtrl.vote($index)">{{item.button}}</button> 
-                </li>
-            </ul>
-        </div>
-        <div class="voted" ng-show="userHistory[currentIndex].vote > -1">
-            <p> You voted for {{ballot[userHistory[currentIndex].vote].button}}</p>
-            <p> Other votes</p>
-            <table>
-                <tr ng-repeat="item in ballot">
-                    <td>{{item.button}}</td>
-                    <td>{{currentItem.voting[$index]}}</td>
-                </tr>
-            </table>
-        </div>
-        <div class="navigation" ng-show="userHistory[currentIndex].vote > -1">
-            <!--
-            <a class="prev" href="#/experience/video/{{currentIndex - 1}}" title="Next Video">
-                <span> Next</span>
-            </a>
-            <a class="prev" href="#" ng-click="AppCtrl.goBack()" title="Prev Video">
-                <span> Prev</span>
-            </a>
-            -->
-            <button class="prev" ng-click="RumbleCtrl.goBack()"> Prev Video</button>
-            <button class="next" ng-click="RumbleCtrl.goForward()"> Next Video</button>
-            <!--
-            <a class="next" href="#/experience/video/{{currentIndex + 1}}" title="Next Video">
-                <span> Next</span>
-            </a>
-            -->
-        </div>
+    <div class="navigation" ng-class="{hidden : (currentVote.vote < 0)}">
+        <!--
+        <a class="prev" href="#/experience/video/{{currentIndex - 1}}" title="Next Video">
+            <span> Next</span>
+        </a>
+        <a class="prev" href="#" ng-click="AppCtrl.goBack()" title="Prev Video">
+            <span> Prev</span>
+        </a>
+        -->
+        <button class="prev" ng-hide="atHead" ng-click="RumbleCtrl.goBack()"> Prev Video</button>
+        <button class="next" ng-hide="atTail" ng-click="RumbleCtrl.goForward()"> Next Video</button>
+        <!--
+        <a class="next" href="#/experience/video/{{currentIndex + 1}}" title="Next Video">
+            <span> Next</span>
+        </a>
+        -->
+    </div>
+    <div class="ballot" ng-show="currentVote.viewed">
+        <ul>
+            <li ng-repeat="item in ballot">
+            <button ng-click="RumbleCtrl.vote($index)" ng-class="{ selected : (currentVote.vote === $index)}">{{item.button}}</button> 
+            <span class="returns" ng-show="currentVote.vote > -1" > {{currentItem.voting[$index]}} </span>
+            </li>
+        </ul>
     </div>
 </div>

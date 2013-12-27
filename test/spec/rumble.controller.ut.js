@@ -70,7 +70,7 @@
                 }]);
             });
             describe('initialization',function(){
-                it('properly has proper dependencies',function(){
+                it('has proper dependencies',function(){
                     expect(RumbleCtrl).toBeDefined();
                     expect($scope.userProfile).toBe(AppCtrl.profile);
                     
@@ -78,8 +78,9 @@
                     expect($scope.currentIndex).toEqual(0);
                     expect($scope.currentItem).toEqual(playList[0]);
 
-                    expect($scope.userHistory).toBeDefined();
-                    expect($scope.userHistory.length).toEqual(3);
+                    expect($scope.voteList).toBeDefined();
+                    expect($scope.voteList.length).toEqual(3);
+                    expect($scope.currentVote).toBe($scope.voteList[0]);
                 });
             });
             describe('findItemByVideo',function(){
@@ -90,17 +91,17 @@
                     expect(RumbleCtrl.findItemByVideo('x','y')).not.toBeDefined();
                 });
             });
-            describe('findUserHistoryForItem',function(){
-                it('returns history with a valid item',function(){
-                    expect(RumbleCtrl.findUserHistoryForItem(playList[1]))
-                        .toBe($scope.userHistory[1]);
+            describe('findVoteForItem',function(){
+                it('returns a valid item',function(){
+                    expect(RumbleCtrl.findVoteForItem(playList[1]))
+                        .toBe($scope.voteList[1]);
                 });
-                it('returns history with a valid item id',function(){
-                    expect(RumbleCtrl.findUserHistoryForItem(playList[1].id))
-                        .toBe($scope.userHistory[1]);
+                it('returns vote from a valid item id',function(){
+                    expect(RumbleCtrl.findVoteForItem(playList[1].id))
+                        .toBe($scope.voteList[1]);
                 });
                 it('returns undefined with an invalid id',function(){
-                    expect(RumbleCtrl.findUserHistoryForItem('xx')).not.toBeDefined();
+                    expect(RumbleCtrl.findVoteForItem('xx')).not.toBeDefined();
                 });
             });
             describe('navigation',function(){
@@ -126,7 +127,8 @@
                     $scope.$digest();
                     expect($scope.currentIndex).toEqual(2);
                     expect($scope.currentItem).toBe(playList[2]);
-                    expect($scope.userHistory[2].id).toEqual(playList[2].id);
+                    expect($scope.currentVote).toBe($scope.voteList[2]);
+                    expect($scope.voteList[2].id).toEqual(playList[2].id);
                 });
                 
                 it('handles newVideo event moving backward',function(){
@@ -136,15 +138,17 @@
                     $scope.$digest();
                     expect($scope.currentIndex).toEqual(0);
                     expect($scope.currentItem).toBe(playList[0]);
-                    expect($scope.userHistory[0].id).toEqual(playList[0].id);
+                    expect($scope.currentVote).toBe($scope.voteList[0]);
+                    expect($scope.voteList[0].id).toEqual(playList[0].id);
                 });
             });
             describe('videoEnded event',function(){
                 it('sets the viewed to true',function(){
-                    expect($scope.userHistory[0].viewed).toEqual(false);
+                    expect($scope.currentVote).toBe($scope.voteList[0]);
+                    expect($scope.currentVote.viewed).toEqual(false);
                     $scope.$emit('videoEnded',playList[0].video.player,playList[0].video.videoid);
                     $scope.$digest();
-                    expect($scope.userHistory[0].viewed).toEqual(true);
+                    expect($scope.currentVote.viewed).toEqual(true);
                 });
             });
         });

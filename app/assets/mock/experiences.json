@@ -34,8 +34,8 @@
             "playList" : [
                 {
                     "id"     : "rv-22119a8cf9f755",
-                    "caption": "60% of the time it works 100% of the time",
-                    "note"   : "I love lamp!",
+                    "title"  : "Ron Burgundy for ESPN",
+                    "note"   : "60% of the time it works 100% of the time",
                     "voting" : [ 100, 50, 10 ],
                     "video"  : {
                         "player"  : "youtube",
@@ -49,6 +49,8 @@
                 },
                 {
                     "id"     : "rv-4770a2d7f85ce0",
+                    "title"  : "Kristen Stewart for Channel",
+                    "note"   : "Psychotic glamour",
                     "voting" : [ 200, 50, 10 ],
                     "video"  : {
                         "player"  : "dailymotion",
@@ -58,6 +60,8 @@
                 },
                 {
                     "id"     : "rv-e489d1c6359fb3",
+                    "title"  : "Randome music video",
+                    "note"   : "Sounds nice",
                     "voting" : [ 300, 50, 10 ],
                     "video"  : {
                         "player"  : "vimeo",
@@ -68,6 +72,8 @@
                 },
                 {
                     "id"     : "rv-e2947c9bec017e",
+                    "title"  : "Geek cool",
+                    "note"   : "Doctor Who #11 meets #4",
                     "voting" : [ 400, 50, 10 ],
                     "video"  : {
                         "player"  : "youtube",
@@ -77,18 +83,10 @@
                     }
                 },
                 {
-                    "id"     : "rv-d30678e2c0fe1f",
-                    "voting" : [ 500, 50, 10 ],
-                    "video"  : {
-                        "player"  : "vimeo",
-                        "videoid" : "27855315",
-                        "start"   : 27,
-                        "end"     : 37
-                    }
-                },
-                {
                     "id"     : "rv-99b87ea709d7ac",
-                    "voting" : [ 600, 50, 10 ],
+                    "title"  : "Farting dogs",
+                    "note"   : "Enough said",
+                    "voting" : [ 500, 50, 10 ],
                     "video"  : {
                         "player"  : "dailymotion",
                         "videoid" : "xorbb7",

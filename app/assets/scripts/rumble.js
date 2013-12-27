@@ -57,28 +57,35 @@
         $scope.userProfile  = theApp.profile;
         $scope.playList     = theApp.experience.data.playList;
         $scope.ballot       = theApp.experience.data.ballot;
-
-        $scope.currentIndex = theApp.currentIndex;
-        $scope.currentItem  = $scope.playList[$scope.currentIndex];
-
-        $scope.userHistory  = [];
+        
+        $scope.voteList  = [];
         $scope.playList.forEach(function(item){
-            $scope.userHistory.push({
+            $scope.voteList.push({
                 id      : item.id,
                 viewed  : false,
                 vote    : -1
             });
         });
 
+
+        $scope.currentIndex   = theApp.currentIndex;
+        $scope.currentItem    = $scope.playList[$scope.currentIndex];
+        $scope.currentVote    = $scope.voteList[$scope.currentIndex];
+        $scope.atHead         = $scope.currentIndex === 0;
+        $scope.atTail         = $scope.currentIndex === ($scope.playList.length -1);
+
         $scope.$on('newVideo',function(event,newVal){
             $log.info('newVideo index:',newVal);
             $scope.currentItem = $scope.playList[newVal];
+            $scope.currentVote = $scope.voteList[newVal];
             $scope.currentIndex = newVal;
+            $scope.atHead         = $scope.currentIndex === 0;
+            $scope.atTail         = $scope.currentIndex === ($scope.playList.length -1);
         });
 
         $scope.$on('videoEnded',function(event,player,videoId){
             $log.log('Video %1::%2 has ended!',player,videoId);
-            var historyItem = self.findUserHistoryForItem(
+            var historyItem = self.findVoteForItem(
                 self.findItemByVideo(player,videoId)
             );
             if (!historyItem){
@@ -91,16 +98,15 @@
         });
 
         this.vote = function(v){
-            $scope.userHistory[$scope.currentIndex].vote = v;
-            console.log('HISTORY:',$scope.userHistory);
+            $scope.voteList[$scope.currentIndex].vote = v;
         };
 
-        this.findUserHistoryForItem = function(item){
-            var userHistory = $scope.userHistory, result;
+        this.findVoteForItem = function(item){
+            var voteList = $scope.voteList, result;
             if (!angular.isString(item)){
                 item = item.id;
             }
-            userHistory.some(function(history){
+            voteList.some(function(history){
                 if (history.id === item){
                     result = history;
                     return true;
