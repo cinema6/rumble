@@ -7,28 +7,15 @@
         <h1> {{currentIndex + 1}} of {{playList.length}} </h1>
     </div>
     <div ui-view ng-animate="'videoView'"></div>
-    <div class="navigation" ng-class="{hidden : (currentVote.vote < 0)}">
-        <!--
-        <a class="prev" href="#/experience/video/{{currentIndex - 1}}" title="Next Video">
-            <span> Next</span>
-        </a>
-        <a class="prev" href="#" ng-click="AppCtrl.goBack()" title="Prev Video">
-            <span> Prev</span>
-        </a>
-        -->
+    <div class="navigation" ng-class="{hidden : (currentItem.state.vote < 0)}">
         <button class="prev" ng-hide="atHead" ng-click="RumbleCtrl.goBack()"> Prev Video</button>
         <button class="next" ng-hide="atTail" ng-click="RumbleCtrl.goForward()"> Next Video</button>
-        <!--
-        <a class="next" href="#/experience/video/{{currentIndex + 1}}" title="Next Video">
-            <span> Next</span>
-        </a>
-        -->
     </div>
-    <div class="ballot" ng-show="currentVote.viewed">
+    <div class="ballot" ng-show="currentItem.state.viewed">
         <ul>
             <li ng-repeat="item in ballot">
-            <button ng-click="RumbleCtrl.vote($index)" ng-class="{ selected : (currentVote.vote === $index)}">{{item.button}}</button> 
-            <span class="returns" ng-show="currentVote.vote > -1" > {{currentItem.voting[$index]}} </span>
+            <button ng-click="RumbleCtrl.vote($index)" ng-class="{ selected : (currentItem.state.vote === $index)}">{{item.button}}</button> 
+            <span class="returns" ng-show="currentItem.state.vote > -1" > {{currentReturns[$index] | percent }} </span>
             </li>
         </ul>
     </div>

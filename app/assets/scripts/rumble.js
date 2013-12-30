@@ -50,81 +50,142 @@
             }
         });
     }])
-    .controller('RumbleController',['$log','$scope','$window',function($log,$scope,$window){
+    .factory('rumbleVotes',['$log','$q','$timeout',function($log,$q,$timeout){
+        $log = $log.context('rumbleVotes');
+        var service = {}, mocks = {};
+
+        service.mockReturnsData = function(rumbleId,itemId,votes, delay){
+            $log.warn('Setting Mock Data');
+            if (mocks[rumbleId] === undefined){
+                mocks[rumbleId] = {};
+            }
+
+            if (delay === undefined){
+                delay = 1000;
+            }
+
+            mocks[rumbleId][itemId] = {
+                'votes' : votes,
+                'delay' : delay
+            };
+
+            return this;
+        };
+
+        service.getReturnsForItem = function(rumbleId, itemId){
+            var deferred = $q.defer(), mock;
+            if (mocks[rumbleId] === undefined){
+                $timeout(function(){
+                    deferred.reject(
+                        new Error('Unable to locate rumble [' + rumbleId + ']')
+                    );
+                },250);
+                return deferred.promise;
+            }
+            
+            if (mocks[rumbleId][itemId] === undefined){
+                $timeout(function(){
+                    deferred.reject(
+                        new Error('Unable to locate item [' + itemId + ']')
+                    );
+                },250);
+                return deferred.promise;
+            }
+            
+            mock = mocks[rumbleId][itemId];
+            $timeout(function(){
+                deferred.resolve(mock.votes);
+            }, mock.delay);
+
+            return deferred.promise;
+        };
+
+        return service;
+    }])
+    .controller('RumbleController',['$log','$scope','$window','rumbleVotes',
+        function($log,$scope,$window,rumbleVotes){
         $log = $log.context('RumbleCtrl');
-        var theApp = $scope.AppCtrl, self = this;
+        var theApp  = $scope.AppCtrl,
+            self    = this;
 
-        $scope.userProfile  = theApp.profile;
-        $scope.playList     = theApp.experience.data.playList;
-        $scope.ballot       = theApp.experience.data.ballot;
+        $scope.deviceProfile    = theApp.profile;
+        $scope.ballot           = theApp.experience.data.ballot;
+        $scope.rumbleId         = theApp.experience.data.rumbleId;
         
-        $scope.voteList  = [];
-        $scope.playList.forEach(function(item){
-            $scope.voteList.push({
-                id      : item.id,
-                viewed  : false,
-                vote    : -1
-            });
+        $scope.playList         = [];
+        $scope.currentIndex     = null;
+        $scope.currentItem      = null;
+        $scope.atHead           = null;
+        $scope.atTail           = null;
+        $scope.currentReturns   = null;
+        
+        theApp.experience.data.playList.forEach(function(item){
+            var newItem = angular.copy(item);
+            newItem.state = {
+                viewed : false,
+                vote   : -1
+            };
+            $scope.playList.push(newItem);
+            //TODO: remove this when the service works for real
+            rumbleVotes.mockReturnsData($scope.rumbleId,item.id,item.voting);
         });
-
-
-        $scope.currentIndex   = theApp.currentIndex;
-        $scope.currentItem    = $scope.playList[$scope.currentIndex];
-        $scope.currentVote    = $scope.voteList[$scope.currentIndex];
-        $scope.atHead         = $scope.currentIndex === 0;
-        $scope.atTail         = $scope.currentIndex === ($scope.playList.length -1);
 
         $scope.$on('newVideo',function(event,newVal){
             $log.info('newVideo index:',newVal);
-            $scope.currentItem = $scope.playList[newVal];
-            $scope.currentVote = $scope.voteList[newVal];
-            $scope.currentIndex = newVal;
-            $scope.atHead         = $scope.currentIndex === 0;
-            $scope.atTail         = $scope.currentIndex === ($scope.playList.length -1);
+            self.setPosition(newVal);
         });
 
         $scope.$on('videoEnded',function(event,player,videoId){
             $log.log('Video %1::%2 has ended!',player,videoId);
-            var historyItem = self.findVoteForItem(
-                self.findItemByVideo(player,videoId)
-            );
-            if (!historyItem){
-                $log.error('Unable to locate user history for %1::%2',player,videoId);
-                return;
+            if ((player === $scope.currentItem.video.player) &&
+                (videoId === $scope.currentItem.video.videoid)){
+                $scope.$apply(function(){
+                    $scope.currentItem.state.viewed = true;
+                });
             }
-            $scope.$apply(function(){
-                historyItem.viewed = true;
-            });
         });
 
         this.vote = function(v){
-            $scope.voteList[$scope.currentIndex].vote = v;
+            $scope.currentItem.state.vote = v;
         };
 
-        this.findVoteForItem = function(item){
-            var voteList = $scope.voteList, result;
-            if (!angular.isString(item)){
-                item = item.id;
+        this.getVotePercent = function(votes,index){
+            var tally = 0;
+            votes.forEach(function(v){
+                tally += v;
+            });
+            
+            if (index === undefined){
+                return votes.map(function(v){
+                    return (tally < 1) ? 0 : Math.round((v / tally)* 100) / 100;
+                });
             }
-            voteList.some(function(history){
-                if (history.id === item){
-                    result = history;
-                    return true;
-                }
-            });
-            return result;
-        };
-        this.findItemByVideo = function(player,videoId){
-            var playList = $scope.playList, result;
-            playList.some(function(item){
-                if ((item.video.player === player) && (item.video.videoid === videoId)){
-                    result = item;
-                    return true;
-                }
-            });
-            return result;
+
+            if ((tally < 1) || (votes[index] === undefined)){
+                return 0;
+            }
+
+            return Math.round((votes[index] / tally)* 100) / 100;
         };
 
+        this.setPosition = function(i){
+            $scope.currentReturns = null;
+            $scope.currentIndex   = i;
+            $scope.currentItem    = $scope.playList[$scope.currentIndex];
+            $scope.atHead         = $scope.currentIndex === 0;
+            $scope.atTail         = $scope.currentIndex === ($scope.playList.length -1);
+            rumbleVotes.getReturnsForItem($scope.rumbleId,$scope.currentItem.id)
+                .then(
+                    function onVotes(votes){
+                        $log.info('getReturns returned with: ',votes);
+                        $scope.currentReturns = self.getVotePercent(votes);
+                    },
+                    function onErr(err){
+                        $log.error('getReturnsErr: %1',err.message);
+                    }
+                );
+        };
+        
         this.goBack = function(){
             $window.history.back();
         };
@@ -134,6 +195,8 @@
         };
 
         $scope.RumbleCtrl = this;
+
+        this.setPosition(theApp.currentIndex);
 
         $log.log('Rumble Controller is initialized!',$scope.playList);
     }])

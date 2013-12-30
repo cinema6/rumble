@@ -17,6 +17,7 @@
             "stylesheet": "experiences/rumble/assets/styles.css"
         },
         "data": {
+            "rumbleId" : "r-738c2403d83ddc",
             "ballot" : [
                 {
                     "button" : "Good",

@@ -5,6 +5,7 @@
             var $rootScope,
                 $scope,
                 $window,
+                $timeout,
                 $log,
                 RumbleCtrl,
                 playList = [
@@ -52,8 +53,9 @@
             beforeEach(function() {
                 module('c6.rumble');
 
-                inject(['$rootScope','$log','$window','$controller',
-                    function(_$rootScope,  _$log, _$window, _$controller) {
+                inject(['$timeout','$rootScope','$log','$window','$controller',
+                    function(_$timeout,_$rootScope,  _$log, _$window, _$controller) {
+                    $timeout    = _$timeout;
                     $rootScope  = _$rootScope;
                     $log        = _$log;
                     $window     = _$window;
@@ -72,39 +74,65 @@
             describe('initialization',function(){
                 it('has proper dependencies',function(){
                     expect(RumbleCtrl).toBeDefined();
-                    expect($scope.userProfile).toBe(AppCtrl.profile);
+                    expect($scope.deviceProfile).toBe(AppCtrl.profile);
                     
-                    expect($scope.playList).toBe(AppCtrl.experience.data.playList);
+                    expect($scope.playList.length)
+                        .toEqual(AppCtrl.experience.data.playList.length);
                     expect($scope.currentIndex).toEqual(0);
-                    expect($scope.currentItem).toEqual(playList[0]);
+                    expect($scope.currentItem.id).toEqual(playList[0].id);
+                    expect($scope.currentItem.caption).toEqual(playList[0].caption);
+                    expect($scope.currentItem.note).toEqual(playList[0].note);
+                    expect($scope.currentItem.voting).toEqual(playList[0].voting);
+                    expect($scope.currentItem.video.player).toEqual(playList[0].video.player);
+                    expect($scope.currentItem.video.videoid).toEqual(playList[0].video.videoid);
+                    expect($scope.currentItem.state.vote).toEqual(-1);
+                    expect($scope.currentItem.state.viewed).toEqual(false);
+                    expect($scope.atHead).toEqual(true);
+                    expect($scope.atTail).toEqual(false);
+                });
+            });
+            describe('voting',function(){
+                describe('getVotePercent',function(){
+                    it('returns 0 if tally is 0', function(){
+                        expect(RumbleCtrl.getVotePercent([0,0,0],0))
+                            .toEqual(0);
+                    });
 
-                    expect($scope.voteList).toBeDefined();
-                    expect($scope.voteList.length).toEqual(3);
-                    expect($scope.currentVote).toBe($scope.voteList[0]);
-                });
-            });
-            describe('findItemByVideo',function(){
-                it('returns an item if it can find one',function(){
-                    expect(RumbleCtrl.findItemByVideo('youtube','vid1video')).toBe(playList[0]);
-                });
-                it('returns undefined if it cannot find one',function(){
-                    expect(RumbleCtrl.findItemByVideo('x','y')).not.toBeDefined();
-                });
-            });
-            describe('findVoteForItem',function(){
-                it('returns a valid item',function(){
-                    expect(RumbleCtrl.findVoteForItem(playList[1]))
-                        .toBe($scope.voteList[1]);
-                });
-                it('returns vote from a valid item id',function(){
-                    expect(RumbleCtrl.findVoteForItem(playList[1].id))
-                        .toBe($scope.voteList[1]);
-                });
-                it('returns undefined with an invalid id',function(){
-                    expect(RumbleCtrl.findVoteForItem('xx')).not.toBeDefined();
+                    it('returns 0 if the index is bad',function(){
+                        expect(RumbleCtrl.getVotePercent([10,20,10],5))
+                            .toEqual(0);
+                    });
+
+                    it('returns the right percent',function(){
+                        var  votes = [7,10,5] ;
+                        expect(RumbleCtrl.getVotePercent(votes,0)).toEqual(0.32);
+                        expect(RumbleCtrl.getVotePercent(votes,1)).toEqual(0.45);
+                        expect(RumbleCtrl.getVotePercent(votes,2)).toEqual(0.23);
+                    });
+
+                    it('returns an array of percents if no index is provided', function(){
+                        var votes = [7,10,5];
+                        expect(RumbleCtrl.getVotePercent(votes)).toEqual([0.32,0.45,0.23]);
+                    });
+
+                    it('returns an array of zeros if no index is provided and votes are zero', function(){
+                        var votes = [0,0,0] ;
+                        expect(RumbleCtrl.getVotePercent(votes)).toEqual([0,0,0]);
+                    });
                 });
             });
             describe('navigation',function(){
+                it('updates elements based on index with setPosition',function(){
+                    RumbleCtrl.setPosition(1);
+                    expect($scope.currentIndex).toEqual(1);
+                    expect($scope.currentItem).toBe($scope.playList[1]);
+                    expect($scope.atHead).toEqual(false);
+                    expect($scope.atTail).toEqual(false);
+                    expect($scope.currentReturns).toBeNull();
+                    $timeout.flush();
+                    expect($scope.currentReturns).toEqual([0.63,0.31,0.06]);
+                });
+
                 it('can move forward',function(){
                     AppCtrl.goto = jasmine.createSpy('app.goto');
                     RumbleCtrl.goForward();
@@ -122,33 +150,32 @@
 
                 it('handles newVideo event moving forward',function(){
                     $scope.currentIndex = 1;
-                    $scope.currentItem  = playList[1];
+                    $scope.currentItem  = $scope.playList[1];
                     $scope.$emit('newVideo',2);
                     $scope.$digest();
                     expect($scope.currentIndex).toEqual(2);
-                    expect($scope.currentItem).toBe(playList[2]);
-                    expect($scope.currentVote).toBe($scope.voteList[2]);
-                    expect($scope.voteList[2].id).toEqual(playList[2].id);
+                    expect($scope.currentItem).toBe($scope.playList[2]);
+                    expect($scope.atHead).toEqual(false);
+                    expect($scope.atTail).toEqual(true);
                 });
                 
                 it('handles newVideo event moving backward',function(){
                     $scope.currentIndex = 1;
-                    $scope.currentItem  = playList[1];
+                    $scope.currentItem  = $scope.playList[1];
                     $scope.$emit('newVideo',0);
                     $scope.$digest();
                     expect($scope.currentIndex).toEqual(0);
-                    expect($scope.currentItem).toBe(playList[0]);
-                    expect($scope.currentVote).toBe($scope.voteList[0]);
-                    expect($scope.voteList[0].id).toEqual(playList[0].id);
+                    expect($scope.currentItem).toBe($scope.playList[0]);
+                    expect($scope.atHead).toEqual(true);
+                    expect($scope.atTail).toEqual(false);
                 });
             });
             describe('videoEnded event',function(){
                 it('sets the viewed to true',function(){
-                    expect($scope.currentVote).toBe($scope.voteList[0]);
-                    expect($scope.currentVote.viewed).toEqual(false);
+                    expect($scope.currentItem.state).toEqual({ vote: -1, viewed: false });
                     $scope.$emit('videoEnded',playList[0].video.player,playList[0].video.videoid);
                     $scope.$digest();
-                    expect($scope.currentVote.viewed).toEqual(true);
+                    expect($scope.currentItem.state).toEqual({ vote: -1, viewed: true });
                 });
             });
         });

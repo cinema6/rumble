@@ -249,7 +249,7 @@
                     if (!isNaN(videoEnd)){
                         player.on('playProgress',function(p,data){
                             var self = this;
-                            $log.info('[%1] - playProgress: %2 (%3)',p,data.seconds,data.percent);
+//                            $log.info('[%1] - playProgress: %2 (%3)',p,data.seconds,data.percent);
                             if (data.seconds >= videoEnd){
                                 player.pause();
                                 $timeout(function(){
