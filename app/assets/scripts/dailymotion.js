@@ -172,8 +172,8 @@
 
         return service;
     }])
-    .directive('dailymotionPlayer',['$log','$timeout','dailymotion','_default',
-        function($log,$timeout,dailymotion,_default){
+    .directive('dailymotionPlayer',['$log','$timeout','c6UserAgent','dailymotion','_default',
+        function($log,$timeout,c6UserAgent,dailymotion,_default){
         $log = $log.context('dailymotionPlayer');
         function fnLink(scope,$element,$attr){
             var player;
@@ -181,6 +181,10 @@
                 $attr.videoid, $attr.start, $attr.end, $attr.autoplay);
             
             _default($attr,'related'    ,0);
+
+            if (c6UserAgent.app.name === 'firefox'){
+                $attr.twerk = false;
+            }
 
             $attr.$observe('width',function(){
                 if (player){
@@ -194,9 +198,15 @@
                 }
             });
 
+            scope.$on('playVideo',function(event,data){
+                $log.info('[%1] on.PlayVideo: %2, %3',player,data.player,data.videoid);
+                if (data.player === 'dailymotion' && data.videoid === $attr.videoid){
+                    player.play();
+                }
+            });
 
             function createPlayer(){
-                var vparams  = { };
+                var vparams  = { }, twerking = false;
 
                 ['startscreen','related','html','info','autoplay'].forEach(function(prop){
                     if ($attr[prop] !== undefined) {
@@ -204,6 +214,9 @@
                     }
                 });
 
+                if ($attr.twerk){
+                    vparams.html = '1';
+                }
                 player = dailymotion.createPlayer('dm-' + $attr.videoid,{
                     videoId     : $attr.videoid,
                     width       : $attr.width,
@@ -214,7 +227,7 @@
 
                 player.on('ready',function(p){
                     $log.info('[%1] - I am ready',p);
-
+                    
                     player.on('ended',function(p){
                         $log.info('[%1] - I am finished',p);
                         scope.$emit('videoEnded','dailymotion',$attr.videoid);
@@ -224,6 +237,21 @@
                         }
                     });
 
+                    if ($attr.twerk){
+                        $log.info('[%1] - start twerk',p);
+                        player.play();
+                        twerking = true;
+                        player.on('playing',function(p){
+                            var self = this;
+                            $log.info('[%1] - stop twerk',p);
+                            twerking = false;
+                            player.pause();
+                            $timeout(function(){
+                                player.removeListener('playing',self);
+                            });
+                        });
+                    }
+                   
                 });
             }
 

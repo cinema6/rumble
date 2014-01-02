@@ -112,3 +112,8 @@ html {
         font-size: 24px;
     }
 
+ul.rumble-players {
+    list-style-type: none;
+    padding: 0px;
+    margin: 0px;
+}

@@ -206,10 +206,17 @@
                 }
             });
 
+            scope.$on('playVideo',function(event,data){
+                $log.info('[%1] on.PlayVideo: %2, %3',player,data.player,data.videoid);
+                if (data.player === 'vimeo' && data.videoid === $attr.videoid){
+                    player.play();
+                }
+            });
 
             function createPlayer(){
                 var videoStart = parseInt($attr.start,10),
                     videoEnd = parseInt($attr.end,10),
+                    twerking = false,
                     vparams  = { };
 
                 ['badge','byline','portrait','title','autoplay'].forEach(function(prop){
@@ -229,6 +236,24 @@
                 player.on('ready',function(p){
                     $log.info('[%1] - I am ready',p);
 
+                    if ($attr.twerk){
+                        $log.info('[%1] - start twerk',p);
+                        player.play();
+                        twerking = true;
+                        player.on('playProgress',function(p){
+                            var self = this;
+                            $log.info('[%1] - stop twerk',p);
+                            twerking = false;
+                            player.pause();
+                            $timeout(function(){
+                                if (isNaN(videoEnd)){
+                                    player.post('removeEventListener','playProgress');
+                                }
+                                player.removeListener('playProgress',self);
+                            });
+                        });
+                    }
+                    
                     player.on('finish',function(p){
                         $log.info('[%1] - I am finished',p);
                         scope.$emit('videoEnded','vimeo',$attr.videoid);

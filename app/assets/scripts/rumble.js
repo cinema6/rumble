@@ -2,6 +2,54 @@
     'use strict';
 
     angular.module('c6.rumble')
+    .animation('player-show',['$log','c6AniCache','gsap',
+        function($log, aniCache, gsap){
+        $log = $log.context('player-show');
+        return aniCache({
+            id : 'player-show',
+            setup: function(element) {
+                $log.log('setup');
+                var timeline        = new gsap.TimelineLite({paused:true});
+
+                //reset states
+                element.css({ opacity : 0, visibility : 'hidden' });
+                timeline.to(element, 2, { opacity: 1, visibility: 'visible' });
+                return timeline;
+            },
+            start: function(element, done, timeline) {
+                $log.info('start');
+                timeline.eventCallback('onComplete',function(){
+                    $log.info('end');
+                    done();
+                });
+                timeline.play();
+            }
+        });
+    }])
+    .animation('player-hide', ['$log', 'c6AniCache','gsap',
+        function($log, aniCache, gsap) {
+        $log = $log.context('player-hide');
+        return aniCache({
+            id : 'player-hide',
+            setup: function(element) {
+                $log.log('setup');
+                var timeline        = new gsap.TimelineLite({paused:true});
+
+                //reset states
+                element.css({ opacity : 1, visibility : 'visible' });
+                timeline.to(element, 2, { opacity: 0 });
+                return timeline;
+            },
+            start: function(element, done, timeline) {
+                $log.info('start');
+                timeline.eventCallback('onComplete',function(){
+                    $log.info('end');
+                    done();
+                });
+                timeline.play();
+            }
+        });
+    }])
     .animation('videoView-enter', ['$log', 'c6AniCache','gsap',
         function($log, aniCache, gsap) {
         $log = $log.context('videoView-enter');
@@ -133,6 +181,7 @@
         $scope.$on('newVideo',function(event,newVal){
             $log.info('newVideo index:',newVal);
             self.setPosition(newVal);
+            $scope.$broadcast('playVideo',$scope.currentItem.video);
         });
 
         $scope.$on('videoEnded',function(event,player,videoId){
@@ -198,7 +247,7 @@
 
         this.setPosition(theApp.currentIndex);
 
-        $log.log('Rumble Controller is initialized!',$scope.playList);
+        $log.log('Rumble Controller is initialized!');
     }])
     .directive('rumblePlayer',['$log','$compile','$window',function($log,$compile,$window){
         $log = $log.context('rumblePlayer');
@@ -219,6 +268,14 @@
                 }
             }
 
+            if ($attr.autoplay === undefined){
+                $attr.autoplay = 0;
+            }
+
+            if ($attr.twerk === undefined){
+                $attr.twerk = 0;
+            }
+
             var inner = '<' + scope.config.player + '-player';
             for (var key in scope.config){
                 if ((key !== 'player') && (scope.config.hasOwnProperty(key))){
@@ -228,7 +285,8 @@
 
             inner += ' width="{{playerWidth}}" height="{{playerHeight}}"';
             inner += ' autoplay="' + $attr.autoplay + '"';
-            
+            inner += ' twerk="' + $attr.twerk + '"';
+           
             if (!scope.profile.inlineVideo){
                 $log.info('Will need to regenerate the player');
                 inner += ' regenerate="1"';

@@ -6,7 +6,8 @@
     <div class="progress">
         <h1> {{currentIndex + 1}} of {{playList.length}} </h1>
     </div>
-    <div ui-view ng-animate="'videoView'"></div>
+    <!--<div ui-view ng-animate="'videoView'"></div>-->
+    <div ui-view></div>
     <div class="navigation" ng-class="{hidden : (currentItem.state.vote < 0)}">
         <button class="prev" ng-hide="atHead" ng-click="RumbleCtrl.goBack()"> Prev Video</button>
         <button class="next" ng-hide="atTail" ng-click="RumbleCtrl.goForward()"> Next Video</button>
@@ -19,4 +20,13 @@
             </li>
         </ul>
     </div>
+    <!--
+    <ul class="rumble-players">
+        <li ng-repeat="item in playList" ng-show="$index === currentIndex" ng-animate="'player'">
+            <rumble-player class="player"
+                x-config="item.video" x-profile="deviceProfile" x-autoplay="0" x-twerk="1">
+            </rumble-player>
+        </li>
+    </ul>
+    -->
 </div>

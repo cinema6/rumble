@@ -6,7 +6,7 @@
         function($log,$window,c6EventEmitter,iframe){
         var service = {};
 
-        service.origin = 'http://www.youtube.com';
+        service.origin = 'https://www.youtube.com';
         service.formatPlayerSrc = function(videoId,params){
             var src = this.origin + '/embed/' + videoId + '?enablejsapi=1';
 
@@ -154,6 +154,10 @@
                     return self;
                 };
 
+                self.setPlaybackQuality = function(quality){
+                    _player.setPlaybackQuality(quality);
+                };
+
                 self.destroy = function(){
                     _player.destroy();
                     $log.info('[%1] - destroyed',_playerId);
@@ -195,8 +199,15 @@
                 }
             });
 
+            scope.$on('playVideo',function(event,data){
+                $log.info('[%1] on.PlayVideo: %2, %3',player,data.player,data.videoid);
+                if (data.player === 'youtube' && data.videoid === $attr.videoid){
+                    player.play();
+                }
+            });
+
             function createPlayer(){
-                var vparams     = { };
+                var vparams     = { }, twerking = false;
 
                 ['start','end','controls','rel','modestbranding','autoplay']
                 .forEach(function(prop){
@@ -205,6 +216,7 @@
                     }
                 });
 
+                vparams.html5='1';
                 player = youtube.createPlayer($attr.videoid,{
                     videoId     : $attr.videoid,
                     width       : $attr.width,
@@ -216,6 +228,25 @@
                 player.on('ready',function(p){
                     $log.info('[%1] - I am ready',p);
 
+                    if ($attr.twerk){
+                        $log.info('[%1] - start twerk',p);
+                        player.setPlaybackQuality('hd720');
+                        //player.play();
+                        player.on('playing',function(p){
+                            var self = this;
+                            $log.info('[%1] - stop twerk',p);
+                            twerking = false;
+                            player.pause();
+                            $timeout(function(){
+                                player.removeListener('playing',self);
+                            });
+                        });
+                    }
+
+                    player.on('buffering',function(p){
+                        $log.info('[%1] - I am buffering',p);
+                    });
+                    
                     player.on('ended',function(p){
                         $log.info('[%1] - I am finished',p);
                         scope.$emit('videoEnded','youtube',$attr.videoid);
