@@ -61,6 +61,17 @@
                 return 'local';
             }())] ,'video');
         }])
+        .config(['$routeProvider','$locationProvider','c6UrlMakerProvider',
+        function($routeProvider,$locationProvider,c6UrlMakerProvider){
+            $routeProvider.when('/experience/video/:item',{
+                templateUrl: c6UrlMakerProvider.makeUrl('views/experience.html'),
+                controller: 'RumbleController'
+            })
+            .otherwise({
+                templateUrl: c6UrlMakerProvider.makeUrl('views/landing.html')
+            });
+        }])
+        /*
         .config(['$stateProvider', '$urlRouterProvider', 'c6UrlMakerProvider',
         function( $stateProvider ,  $urlRouterProvider ,  c6UrlMakerProvider ) {
             $urlRouterProvider.otherwise('/');
@@ -83,6 +94,7 @@
                     url: '/result/:item'
                 });
         }])
+        */
         .factory('_default',[function(){
             return function _default(a,s,v){ if (a[s] === undefined){ a[s] = v; } };
         }])
@@ -91,8 +103,9 @@
                 return Math.round((input * 100)) + '%';
             };
         })
-        .controller('AppController', ['$scope','$state', '$window', '$log', 'site', 'c6ImagePreloader', 'gsap', '$timeout', 'googleAnalytics', 'c6AniCache',
-        function                     ( $scope , $state, $window , $log ,  site ,  c6ImagePreloader ,  gsap ,  $timeout ,  googleAnalytics, c6AniCache ) {
+        .value('$state',{})
+        .controller('AppController', ['$scope','$state','$route','$location', '$window', '$log', 'site', 'c6ImagePreloader', 'gsap', '$timeout', 'googleAnalytics', 'c6AniCache',
+        function                     ( $scope , $state, $route, $location, $window , $log ,  site ,  c6ImagePreloader ,  gsap ,  $timeout ,  googleAnalytics, c6AniCache ) {
             $log = $log.context('AppCtrl');
             var self = this,
                 readyToLand = true;
@@ -127,7 +140,8 @@
             };
 
             this.goto = function(state,toParams,options) {
-                $state.go(state,toParams,options);
+                $location.url(state);
+                //$state.go(state,toParams,options);
             };
 
             site.init({
@@ -149,6 +163,47 @@
                         self.goto('landing');
                     }
                 });
+            });
+
+            $scope.$on('$locationChangeStart', function(event,newUrl,oldUrl){
+                $log.info('$locationChangeStart %2 ==> %1',newUrl,oldUrl);
+//                $log.info('location:',window.location);
+                // If the state transition does not involve the landing, or the
+                // app is ready to land, return so the state change can be finished.
+
+                if (oldUrl.match(/experience/) || (readyToLand)){
+                    return;
+                }
+
+                event.preventDefault();
+
+                site.requestTransitionState(true).then(function() {
+                    readyToLand = true;
+
+                    $location.url(newUrl.replace(/http.*#/,''));
+                    //self.goto(toState.name,toParams);
+
+                    site.requestTransitionState(false);
+                });
+            });
+
+            $scope.$on('$locationChangeSuccess', function(event,newUrl,oldUrl){
+                $log.info('$locationChangeSuccess:',newUrl,oldUrl);
+                readyToLand = false;
+            });
+
+            $scope.$on('$routeChangeStart', function(event,next,current){
+//                $log.info('$routeChangeStart:',event,next,current);
+            });
+
+            $scope.$on('$routeChangeSuccess', function(event,next,current){
+                $log.info('$routeChangeSuccess:',next,current);
+                if ($route.current.loadedTemplateUrl.match(/experience/ )){
+                    $log.info('changed to experience %1',next.params.item);
+                    self.currentIndex = parseInt(next.params.item,10);
+                    $scope.$broadcast('newVideo',self.currentIndex);
+                }
+//                googleAnalytics('send', 'event', '$state', 'changed', next.state.name);
             });
 
             $scope.$on('$stateChangeStart',

@@ -2,6 +2,7 @@
     'use strict';
 
     angular.module('c6.rumble')
+    /*
     .animation('player-show',['$log','c6AniCache','gsap',
         function($log, aniCache, gsap){
         $log = $log.context('player-show');
@@ -98,6 +99,7 @@
             }
         });
     }])
+    */
     .factory('rumbleVotes',['$log','$q','$timeout',function($log,$q,$timeout){
         $log = $log.context('rumbleVotes');
         var service = {}, mocks = {};
@@ -240,7 +242,8 @@
         };
 
         this.goForward = function(){
-            theApp.goto('experience.video',{item : ($scope.currentIndex + 1) });
+//            theApp.goto('experience.video',{item : ($scope.currentIndex + 1) });
+            theApp.goto('/experience/video/' + ($scope.currentIndex + 1));
         };
 
         $scope.RumbleCtrl = this;
