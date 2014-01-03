@@ -241,7 +241,7 @@
                         }
                     });
 
-                    if ($attr.twerk){
+                    if (parseInt($attr.twerk,10)){
                         $log.info('[%1] - start twerk',p);
                         player.play();
                         twerking = true;

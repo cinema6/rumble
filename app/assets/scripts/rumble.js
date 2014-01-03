@@ -230,7 +230,9 @@
         $scope.$on('newVideo',function(event,newVal){
             $log.info('newVideo index:',newVal);
             self.setPosition(newVal);
-            $scope.$broadcast('playVideo',$scope.currentItem.video);
+            if ($scope.deviceProfile.multiPlayer){
+                $scope.$broadcast('playVideo',$scope.currentItem.video);
+            }
         });
 
         $scope.$on('videoEnded',function(event,player,videoId){
@@ -297,9 +299,11 @@
         this.setPosition(theApp.currentIndex);
 
         $log.log('Rumble Controller is initialized!');
+        /*
         $timeout(function(){
             $scope.$broadcast('playVideo',$scope.currentItem.video);
         },3000);
+        */
     }])
     .directive('rumblePlayer',['$log','$compile','$window', function($log,$compile,$window){
         $log = $log.context('rumblePlayer');

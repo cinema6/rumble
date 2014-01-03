@@ -56,6 +56,7 @@
                 };
 
                 _stateChangeHandler = function(event){
+                    $log.info('STATE:',event.data);
                     var PlayerState = $win.YT.PlayerState;
                     switch(event.data){
                         case PlayerState.ENDED:
@@ -249,9 +250,9 @@
                 scope.$emit('createdPlayer',player);
 
                 player.on('ready',function(p){
-                    $log.info('[%1] - I am ready',p);
+                    $log.info('[%1] - I am ready',p );
 
-                    if ($attr.twerk){
+                    if (parseInt($attr.twerk,10)){
                         $log.info('[%1] - start twerk',p);
                         player.setPlaybackQuality('hd720');
                         player.play();
@@ -277,8 +278,10 @@
                     });
 
                     if (!isNaN(videoStart)){
-                        player.once('buffering',function(/*p*/){
-                            player.seekTo(videoStart);
+                        player.on('playing',function(/*p*/){
+                            if (player.getCurrentTime() < videoStart){
+                                player.seekTo(videoStart);
+                            }
                         });
                     }
 
