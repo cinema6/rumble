@@ -35,7 +35,8 @@
             src = this.formatPlayerSrc(config.videoId, config.params);
             params = {
                 width       : config.width,
-                height      : config.height
+                height      : config.height,
+                style       : "visibility: hidden; opacity: 0"
             };
 
             if (config.frameborder !== undefined){
@@ -154,6 +155,14 @@
                     return self;
                 };
 
+                self.show = function(){
+                    _iframe$.css({ 'visibility' : 'visible', 'opacity' : 1 });
+                };
+
+                self.hide = function(){
+                    _iframe$.css({ 'visibility' : 'hidden', 'opacity' : 0 });
+                };
+
                 self.setPlaybackQuality = function(quality){
                     _player.setPlaybackQuality(quality);
                 };
@@ -202,6 +211,7 @@
             scope.$on('playVideo',function(event,data){
                 $log.info('[%1] on.PlayVideo: %2, %3',player,data.player,data.videoid);
                 if (data.player === 'youtube' && data.videoid === $attr.videoid){
+                    player.show();
                     player.play();
                 }
             });

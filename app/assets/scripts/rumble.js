@@ -150,8 +150,8 @@
 
         return service;
     }])
-    .controller('RumbleController',['$log','$scope','$window','rumbleVotes',
-        function($log,$scope,$window,rumbleVotes){
+    .controller('RumbleController',['$log','$scope','$timeout','$window','rumbleVotes',
+        function($log,$scope,$timeout,$window,rumbleVotes){
         $log = $log.context('RumbleCtrl');
         var theApp  = $scope.AppCtrl,
             self    = this;
@@ -248,6 +248,9 @@
         this.setPosition(theApp.currentIndex);
 
         $log.log('Rumble Controller is initialized!');
+        $timeout(function(){
+            $scope.$broadcast('playVideo',$scope.currentItem.video);
+        },3000);
     }])
     .directive('rumblePlayer',['$log','$compile','$window',function($log,$compile,$window){
         $log = $log.context('rumblePlayer');
