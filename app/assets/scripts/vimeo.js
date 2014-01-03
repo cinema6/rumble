@@ -31,8 +31,7 @@
             src = this.formatPlayerSrc(config.videoId, playerId, config.params);
             params = {
                 width       : config.width,
-                height      : config.height,
-                style       : "visibility: hidden; opacity: 0"
+                height      : config.height
             };
 
             if (config.frameborder !== undefined){
@@ -79,14 +78,6 @@
                     return self.post('play');
                 };
                 
-                self.show = function(){
-                    _iframe$.css({ 'visibility' : 'visible', 'opacity' : 1 });
-                };
-
-                self.hide = function(){
-                    _iframe$.css({ 'visibility' : 'hidden', 'opacity' : 0 });
-                };
-
                 self.pause = function(){
                     return self.post('pause');
                 };
@@ -218,8 +209,13 @@
             scope.$on('playVideo',function(event,data){
                 $log.info('[%1] on.PlayVideo: %2, %3',player,data.player,data.videoid);
                 if (data.player === 'vimeo' && data.videoid === $attr.videoid){
-                    player.show();
                     player.play();
+                } else {
+                    player.pause();
+                    var videoStart = parseInt($attr.start,10);
+                    if (!isNaN(videoStart)){
+                        player.seekTo(videoStart);
+                    }
                 }
             });
 
@@ -242,6 +238,8 @@
                     frameborder : 0,
                     params      : vparams
                 },$element);
+                
+                scope.$emit('createdPlayer',player);
 
                 player.on('ready',function(p){
                     $log.info('[%1] - I am ready',p);
@@ -276,7 +274,7 @@
                     if (!isNaN(videoStart)){
                         player.once('loadProgress',function(p,data){
                             $log.info('[%1] - loaded %1 percent',data.percent);
-                            player.seekTo($attr.start);
+                            player.seekTo(videoStart);
                             player.post('removeEventListener','loadProgress');
                         });
                     }

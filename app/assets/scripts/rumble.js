@@ -2,6 +2,54 @@
     'use strict';
 
     angular.module('c6.rumble')
+    .animation('player-visible',['$log','c6AniCache','gsap',
+        function($log, aniCache, gsap){
+        $log = $log.context('player-visible');
+        return aniCache({
+            id : 'player-visible',
+            setup: function(element) {
+                $log.log('setup');
+                var timeline        = new gsap.TimelineLite({paused:true});
+
+                //reset states
+                element.css({ opacity : 0, visibility : 'hidden' });
+                timeline.to(element, 2, { opacity: 1, visibility: 'visible' });
+                return timeline;
+            },
+            start: function(element, done, timeline) {
+                $log.info('start');
+                timeline.eventCallback('onComplete',function(){
+                    $log.info('end');
+                    done();
+                });
+                timeline.play();
+            }
+        });
+    }])
+    .animation('player-hidden', ['$log', 'c6AniCache','gsap',
+        function($log, aniCache, gsap) {
+        $log = $log.context('player-hidden');
+        return aniCache({
+            id : 'player-hidden',
+            setup: function(element) {
+                $log.log('setup');
+                var timeline        = new gsap.TimelineLite({paused:true});
+
+                //reset states
+                element.css({ opacity : 1, visibility : 'visible' });
+                timeline.to(element, 2, { opacity: 0 });
+                return timeline;
+            },
+            start: function(element, done, timeline) {
+                $log.info('start');
+                timeline.eventCallback('onComplete',function(){
+                    $log.info('end');
+                    done();
+                });
+                timeline.play();
+            }
+        });
+    }])
     .animation('player-show',['$log','c6AniCache','gsap',
         function($log, aniCache, gsap){
         $log = $log.context('player-show');
@@ -166,7 +214,8 @@
         $scope.atHead           = null;
         $scope.atTail           = null;
         $scope.currentReturns   = null;
-        
+       
+        $log.info('PROFILE:',$scope.deviceProfile);
         theApp.experience.data.playList.forEach(function(item){
             var newItem = angular.copy(item);
             newItem.state = {
@@ -252,11 +301,10 @@
             $scope.$broadcast('playVideo',$scope.currentItem.video);
         },3000);
     }])
-    .directive('rumblePlayer',['$log','$compile','$window',function($log,$compile,$window){
+    .directive('rumblePlayer',['$log','$compile','$window', function($log,$compile,$window){
         $log = $log.context('rumblePlayer');
         function fnLink(scope,$element,$attr){
             $log.info('link:',scope);
-
             function resize(event,noDigest){
                 var pw = Math.round($window.innerWidth * 0.75),
                     ph = Math.round(pw * 0.5625);
@@ -297,8 +345,7 @@
 
             inner += '></'  + scope.config.player + '-player' + '>';
 
-            var player$ = $compile(inner)(scope);
-            $element.append(player$);
+            $element.append($compile(inner)(scope));
 
             $window.addEventListener('resize',resize);
             resize({},true);

@@ -194,5 +194,35 @@
 
             c6AniCache.enabled(true);
             
+        }])
+        .directive('c6Hidden', ['$animator', function($animator) {
+            return {
+                scope: true,
+                link: function(scope, element, attrs) {
+                    var animate = $animator(scope, attrs);
+
+                    scope.hidden = function() {
+                        return scope.$eval(attrs.c6Hidden);
+                    };
+
+                    scope.$watch('hidden()', function(hidden) {
+                        var canAnimate = ( (attrs.ngAnimate) &&
+                            (!(element.parent().inheritedData('$ngAnimateController') || angular.noop).running) );
+                        if (hidden) {
+                            if (canAnimate) {
+                                animate.animate('hidden', element);
+                            } else {
+                                element.css({'visibility': 'hidden', 'opacity' : 0});
+                            }
+                        } else {
+                            if (canAnimate) {
+                                animate.animate('visible', element);
+                            } else {
+                                element.css({'visibility': 'visible', 'opacity' : 1});
+                            }
+                        }
+                    });
+                }
+            };
         }]);
 }(window));
