@@ -136,7 +136,7 @@
                 }
             };
 
-            this.goto = function(state,toParams,options) {
+            this.goto = function(state/*,toParams,options*/) {
                 $log.info('GOTO STATE:',state);
                 $location.url(state);
                 //$state.go(state,toParams,options);

@@ -5,6 +5,7 @@
         describe('AppController', function() {
             var $rootScope,
                 $scope,
+                $location,
                 $q,
                 $log,
                 $timeout,
@@ -90,10 +91,11 @@
                     $provide.value('googleAnalytics', googleAnalytics);
                 });
 
-                inject(function(_$rootScope_, _$q_, _$timeout_, _$log_, $controller, c6EventEmitter) {
+                inject(function(_$rootScope_, _$q_, _$timeout_, _$log_, _$location_,$controller, c6EventEmitter) {
                     $rootScope = _$rootScope_;
                     $q = _$q_;
                     $log = _$log_;
+                    $location = _$location_;
                     $timeout = _$timeout_;
                     $scope = _$rootScope_.$new();
                     $log.context = function() { return $log; };
@@ -169,7 +171,7 @@
                     });
                 });
             });
-
+/*
             describe('when $stateChangeStart is fired', function() {
                 var fromState;
 
@@ -261,14 +263,14 @@
                     expect(googleAnalytics).toHaveBeenCalledWith('send', 'event', '$state', 'changed', 'experience');
                 });
             });
-
+*/
             describe('@public', function() {
                 describe('methods', function() {
                     describe('goto(state)', function() {
-                        it('should proxy to $state.go(state)', function() {
+                        it('should proxy to $location.url(state)', function() {
+                            spyOn($location, 'url');
                             AppCtrl.goto('experience');
-
-                            expect($state.go).toHaveBeenCalledWith('experience',undefined,undefined);
+                            expect($location.url).toHaveBeenCalledWith('experience');
                         });
                     });
 

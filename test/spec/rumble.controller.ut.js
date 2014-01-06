@@ -133,36 +133,38 @@
                     expect($scope.currentReturns).toEqual([0.63,0.31,0.06]);
                 });
 
-                it('can move forward',function(){
-                    AppCtrl.goto = jasmine.createSpy('app.goto');
-                    RumbleCtrl.goForward();
-                    expect(AppCtrl.goto).toHaveBeenCalledWith('experience.video',{ item : 1 });
-                });
+//                it('can move forward',function(){
+//                    AppCtrl.goto = jasmine.createSpy('app.goto');
+//                    RumbleCtrl.goForward();
+//                    expect(AppCtrl.goto).toHaveBeenCalledWith('experience.video',{ item : 1 });
+//                });
+//
+//                it('can go back', function(){
+//                    $window.history = {
+//                        back : jasmine.createSpy('window.history.back')
+//                    };
+//                    RumbleCtrl.goBack();
+//                    expect($window.history.back).toHaveBeenCalled();
+//
+//                });
 
-                it('can go back', function(){
-                    $window.history = {
-                        back : jasmine.createSpy('window.history.back')
-                    };
-                    RumbleCtrl.goBack();
-                    expect($window.history.back).toHaveBeenCalled();
-
-                });
-
-                it('handles newVideo event moving forward',function(){
+                it('handles moving forward',function(){
                     $scope.currentIndex = 1;
                     $scope.currentItem  = $scope.playList[1];
-                    $scope.$emit('newVideo',2);
-                    $scope.$digest();
+                    RumbleCtrl.goForward();
+//                    $scope.$emit('newVideo',2);
+//                    $scope.$digest();
                     expect($scope.currentIndex).toEqual(2);
                     expect($scope.currentItem).toBe($scope.playList[2]);
                     expect($scope.atHead).toEqual(false);
                     expect($scope.atTail).toEqual(true);
                 });
                 
-                it('handles newVideo event moving backward',function(){
+                it('handles moving backward',function(){
                     $scope.currentIndex = 1;
                     $scope.currentItem  = $scope.playList[1];
-                    $scope.$emit('newVideo',0);
+                    RumbleCtrl.goBack();
+//                    $scope.$emit('newVideo',0);
                     $scope.$digest();
                     expect($scope.currentIndex).toEqual(0);
                     expect($scope.currentItem).toBe($scope.playList[0]);
