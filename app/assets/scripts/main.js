@@ -51,6 +51,7 @@
                     libUrl('gsap/1.11.2-0-g79f8c87/TimelineMax.min.js'),
                     libUrl('angular/v1.2.6-0-g98ee371/angular.min.js'),
                     libUrl('angular/v1.2.6-0-g98ee371/angular-route.min.js'),
+                    libUrl('angular/v1.2.6-0-g98ee371/angular-animate.min.js'),
 //                    libUrl('angular/v1.1.5-0-g9a7035e/angular.min.js'),
 //                    libUrl('ui-router/0.2.0-0-g818b0d6/angular-ui-router.min.js'),
                     libUrl('c6ui/v1.2-exp-angular-1.2-0-g15d18ff/c6uilib.min.js'),
@@ -67,6 +68,7 @@
                     libUrl('gsap/1.11.2-0-g79f8c87/TimelineMax.min.js'),
                     libUrl('angular/v1.2.6-0-g98ee371/angular.min.js'),
                     libUrl('angular/v1.2.6-0-g98ee371/angular-route.min.js'),
+                    libUrl('angular/v1.2.6-0-g98ee371/angular-animate.min.js'),
 //                    libUrl('angular/v1.1.5-0-g9a7035e/angular.js'),
 //                    libUrl('ui-router/0.2.0-0-g818b0d6/angular-ui-router.js'),
                     libUrl('c6ui/v1.2-exp-angular-1.2-0-g15d18ff/c6uilib.js'),
@@ -105,7 +107,7 @@
         dev: 'http://s3.amazonaws.com/c6.dev/media/src/stub',
         cdn: 'http://cdn1.cinema6.com/src/stub'
     };
-    c6.kModDeps = [/*'ui.router',*/'ngRoute','c6.ui', 'c6.log'];
+    c6.kModDeps = ['ngAnimate','ngRoute','c6.ui', 'c6.log'];
     
     if (window.location.host.match(/\/\/(www\.)*cinema6.com/) !== null){
         ga('create', 'UA-44457821-2', 'cinema6.com');

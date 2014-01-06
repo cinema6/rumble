@@ -63,7 +63,7 @@
         }])
         .config(['$routeProvider','$locationProvider','c6UrlMakerProvider',
         function($routeProvider,$locationProvider,c6UrlMakerProvider){
-            $routeProvider.when('/experience/video/:item',{
+            $routeProvider.when('/experience',{
                 templateUrl: c6UrlMakerProvider.makeUrl('views/experience.html'),
                 controller: 'RumbleController'
             })
@@ -107,12 +107,9 @@
         .controller('AppController', ['$scope','$state','$route','$location', '$window', '$log', 'site', 'c6ImagePreloader', 'gsap', '$timeout', 'googleAnalytics', 'c6AniCache',
         function                     ( $scope , $state, $route, $location, $window , $log ,  site ,  c6ImagePreloader ,  gsap ,  $timeout ,  googleAnalytics, c6AniCache ) {
             $log = $log.context('AppCtrl');
-            var self = this,
-                readyToLand = true;
+            var self = this;
 
             $log.info('loaded.');
-
-            this.currentIndex = 0;
 
             this.src = function(src) {
                 var profile = self.profile,
@@ -140,6 +137,7 @@
             };
 
             this.goto = function(state,toParams,options) {
+                $log.info('GOTO STATE:',state);
                 $location.url(state);
                 //$state.go(state,toParams,options);
             };
@@ -165,89 +163,59 @@
                 });
             });
 
-            $scope.$on('$locationChangeStart', function(event,newUrl,oldUrl){
-                $log.info('$locationChangeStart %2 ==> %1',newUrl,oldUrl);
-//                $log.info('location:',window.location);
-                // If the state transition does not involve the landing, or the
-                // app is ready to land, return so the state change can be finished.
-
-                if (oldUrl.match(/experience/) || (readyToLand)){
-                    return;
-                }
-
-                event.preventDefault();
-
-                site.requestTransitionState(true).then(function() {
-                    readyToLand = true;
-
-                    $location.url(newUrl.replace(/http.*#/,''));
-                    //self.goto(toState.name,toParams);
-
-                    site.requestTransitionState(false);
-                });
-            });
-
-            $scope.$on('$locationChangeSuccess', function(event,newUrl,oldUrl){
-                $log.info('$locationChangeSuccess:',newUrl,oldUrl);
-                readyToLand = false;
-            });
-
             $scope.$on('$routeChangeStart', function(event,next,current){
-//                $log.info('$routeChangeStart:',event,next,current);
+                $log.info('$routeChangeStart:',next,current);
             });
 
             $scope.$on('$routeChangeSuccess', function(event,next,current){
                 $log.info('$routeChangeSuccess:',next,current);
-                if ($route.current.loadedTemplateUrl.match(/experience/ )){
-                    $log.info('changed to experience %1',next.params.item);
-                    self.currentIndex = parseInt(next.params.item,10);
-                    $scope.$broadcast('newVideo',self.currentIndex);
-                }
 //                googleAnalytics('send', 'event', '$state', 'changed', next.state.name);
-            });
-
-            $scope.$on('$stateChangeStart',
-                function(event, toState, toParams, fromState, fromParams) {
-                $log.info('State Change Start: %1 (%2) ===> %3 (%4)',
-                    fromState.name,fromParams.item,toState.name,toParams.item);
-               
-                // If the state transition does not involve the landing, or the
-                // app is ready to land, return so the state change can be finished.
-                if ( ((fromState.name !== 'landing') && (toState.name !== 'landing')) ||
-                    (readyToLand) ){
-                    return;
-                }
-
-                // If we reached this point it means that the app is transitioning
-                // to or from the landing page and we need to show our transition animation
-                event.preventDefault();
-
-                site.requestTransitionState(true).then(function() {
-                    readyToLand = true;
-
-                    self.goto(toState.name,toParams);
-
-                    site.requestTransitionState(false);
-                });
-            });
-
-            $scope.$on('$stateChangeSuccess',
-                function(event,toState,toParams,fromState,fromParams){
-                $log.info('State Change Success: %1 (%2) ===> %3 (%4)',
-                    fromState.name,fromParams.item,toState.name,toParams.item);
-
-                if (toState.name === 'experience.video'){
-                    self.currentIndex = parseInt(toParams.item,10);
-                    $scope.$broadcast('newVideo',self.currentIndex);
-                }
-                googleAnalytics('send', 'event', '$state', 'changed', toState.name);
-                
-                readyToLand = false;
             });
 
             $scope.AppCtrl = this;
 
             c6AniCache.enabled(true);
             
+        }])
+        .directive('c6Hidden', ['$animate', function($animate) {
+            return {
+                scope: true,
+                restrict: 'A',
+                link: function(scope, element, attrs) {
+
+                    scope.hidden = function() {
+                        return scope.$eval(attrs.c6Hidden);
+                    };
+
+                    scope.$watch('hidden()', function(hidden) {
+                        if (hidden){
+                            $animate.addClass(element,'hidden',function(){
+                                element.css({'visibility': 'hidden', 'opacity' : 0});
+                            });
+                        } else {
+                            $animate.removeClass(element,'hidden',function(){
+                                element.css({'visibility': 'visible', 'opacity' : 1});
+                            });
+                        }
+                        /*
+                        var canAnimate = ( (attrs.ngAnimate) &&
+                            (!(element.parent().inheritedData('$ngAnimateController') || angular.noop).running) );
+                        if (hidden) {
+                            if (canAnimate) {
+                                animate.animate('hidden', element);
+                            } else {
+                                element.css({'visibility': 'hidden', 'opacity' : 0});
+                            }
+                        } else {
+                            if (canAnimate) {
+                                animate.animate('visible', element);
+                            } else {
+                                element.css({'visibility': 'visible', 'opacity' : 1});
+                            }
+                        }
+                        */
+                    });
+                }
+            };
         }]);
 }(window));

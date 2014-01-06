@@ -77,7 +77,7 @@
                 self.play = function(){
                     return self.post('play');
                 };
-
+                
                 self.pause = function(){
                     return self.post('pause');
                 };
@@ -207,9 +207,15 @@
             });
 
             scope.$on('playVideo',function(event,data){
-                $log.info('[%1] on.PlayVideo: %2, %3',player,data.player,data.videoid);
                 if (data.player === 'vimeo' && data.videoid === $attr.videoid){
+                    $log.info('[%1] on.PlayVideo: %2, %3',player,data.player,data.videoid);
                     player.play();
+                } else {
+                    player.pause();
+                    var videoStart = parseInt($attr.start,10);
+                    if (!isNaN(videoStart)){
+                        player.seekTo(videoStart);
+                    }
                 }
             });
 
@@ -232,11 +238,13 @@
                     frameborder : 0,
                     params      : vparams
                 },$element);
+                
+                scope.$emit('createdPlayer',player);
 
                 player.on('ready',function(p){
                     $log.info('[%1] - I am ready',p);
 
-                    if ($attr.twerk){
+                    if (parseInt($attr.twerk,10)){
                         $log.info('[%1] - start twerk',p);
                         player.play();
                         twerking = true;
@@ -264,10 +272,10 @@
                     });
 
                     if (!isNaN(videoStart)){
-                        player.once('loadProgress',function(p,data){
-                            $log.info('[%1] - loaded %1 percent',data.percent);
-                            player.seekTo($attr.start);
-                            player.post('removeEventListener','loadProgress');
+                        player.once('playProgress',function(/*p,data*/){
+                            //$log.info('[%1] - loaded %1 percent',data.percent);
+                            player.seekTo(videoStart);
+                            //player.post('removeEventListener','loadProgress');
                         });
                     }
 

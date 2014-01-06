@@ -20,10 +20,11 @@
             </li>
         </ul>
     </div>
+    <!--<ul ng-if="deviceProfile.multiPlayer" class="rumble-players">-->
     <ul class="rumble-players">
-        <li ng-repeat="item in playList" c6-visible="$index === currentIndex" ng-animate="'player'">
-            <rumble-player class="player"
-                x-config="item.video" x-profile="deviceProfile" x-autoplay="0" x-twerk="1">
+        <li class="player-list-item" ng-repeat="item in playList" ng-class="{ hidden : ($index !== $parent.currentIndex)}" >
+            <rumble-player class="player"  x-config="item.video" x-profile="deviceProfile" 
+                x-autoplay="0" x-twerk="1">
             </rumble-player>
         </li>
     </ul>

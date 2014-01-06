@@ -56,6 +56,7 @@
                 };
 
                 _stateChangeHandler = function(event){
+                    $log.info('STATE:',event.data);
                     var PlayerState = $win.YT.PlayerState;
                     switch(event.data){
                         case PlayerState.ENDED:
@@ -163,6 +164,19 @@
                     $log.info('[%1] - destroyed',_playerId);
                 };
 
+                self.getCurrentTime = function() {
+                    return _player.getCurrentTime();
+                };
+
+                self.isPlaying = function(){
+                    return (_player.getPlayerState() === $win.YT.PlayerState.PLAYING);
+                };
+
+                self.seekTo = function(seconds){
+                    _player.seekTo(seconds,true);
+                    return self;
+                };
+
                 self.toString = function() {
                     return _val;
                 };
@@ -176,8 +190,8 @@
         return service;
 
     }])
-    .directive('youtubePlayer',['$log','$timeout','youtube','_default',
-        function($log,$timeout,youtube,_default){
+    .directive('youtubePlayer',['$log','$window','$timeout','youtube','_default',
+        function($log,$window,$timeout,youtube,_default){
         $log = $log.context('youtubePlayer');
         function fnLink(scope,$element,$attr){
             var player;
@@ -200,16 +214,24 @@
             });
 
             scope.$on('playVideo',function(event,data){
-                $log.info('[%1] on.PlayVideo: %2, %3',player,data.player,data.videoid);
                 if (data.player === 'youtube' && data.videoid === $attr.videoid){
+                    $log.info('[%1] on.PlayVideo: %2, %3',player,data.player,data.videoid);
                     player.play();
+                } else {
+                    player.pause();
+                    var videoStart = parseInt($attr.start,10);
+                    if (!isNaN(videoStart)){
+                        player.seekTo(videoStart);
+                    }
                 }
             });
 
             function createPlayer(){
-                var vparams     = { }, twerking = false;
+                var videoStart = parseInt($attr.start,10),
+                    videoEnd = parseInt($attr.end,10),
+                    vparams     = { }, twerking = false;
 
-                ['start','end','controls','rel','modestbranding','autoplay']
+                [/*'start','end',*/'controls','rel','modestbranding','autoplay']
                 .forEach(function(prop){
                     if ($attr[prop]) {
                         vparams[prop] = $attr[prop];
@@ -225,28 +247,27 @@
                     params      : vparams
                 },$element);
 
-                player.on('ready',function(p){
-                    $log.info('[%1] - I am ready',p);
+                scope.$emit('createdPlayer',player);
 
-                    if ($attr.twerk){
+                player.on('ready',function(p){
+                    $log.info('[%1] - I am ready',p );
+
+                    if (parseInt($attr.twerk,10)){
                         $log.info('[%1] - start twerk',p);
                         player.setPlaybackQuality('hd720');
-                        //player.play();
+                        player.play();
                         player.on('playing',function(p){
                             var self = this;
                             $log.info('[%1] - stop twerk',p);
                             twerking = false;
                             player.pause();
                             $timeout(function(){
+                                $log.info('[%1] - remoteListenr',p);
                                 player.removeListener('playing',self);
                             });
                         });
                     }
 
-                    player.on('buffering',function(p){
-                        $log.info('[%1] - I am buffering',p);
-                    });
-                    
                     player.on('ended',function(p){
                         $log.info('[%1] - I am finished',p);
                         scope.$emit('videoEnded','youtube',$attr.videoid);
@@ -255,6 +276,37 @@
                             $timeout(createPlayer);
                         }
                     });
+
+                    if (!isNaN(videoStart)){
+                        player.on('playing',function(/*p*/){
+                            if (player.getCurrentTime() < videoStart){
+                                player.seekTo(videoStart);
+                            }
+                        });
+                    }
+
+                    if (!isNaN(videoEnd)){
+                        player.on('playing',function(/*p*/){
+                            if (player.getCurrentTime() >= videoEnd){
+                                return;
+                            }
+                            var i = $window.setInterval(function(){
+                                if (!player.isPlaying()){
+                                    $window.clearInterval(i);
+                                    return;
+                                }
+
+                                if (player.getCurrentTime() >= videoEnd){
+                                    player.pause();
+                                    $timeout(function(){
+                                        $timeout(function(){
+                                            player.emit('ended',player);
+                                        });
+                                    });
+                                }
+                            },1000);
+                        });
+                    }
                 });
             }
 

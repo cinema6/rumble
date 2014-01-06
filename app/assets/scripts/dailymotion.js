@@ -199,9 +199,11 @@
             });
 
             scope.$on('playVideo',function(event,data){
-                $log.info('[%1] on.PlayVideo: %2, %3',player,data.player,data.videoid);
                 if (data.player === 'dailymotion' && data.videoid === $attr.videoid){
+                    $log.info('[%1] on.PlayVideo: %2, %3',player,data.player,data.videoid);
                     player.play();
+                } else {
+                    player.pause();
                 }
             });
 
@@ -225,6 +227,8 @@
                     params      : vparams
                 },$element);
 
+                scope.$emit('createdPlayer',player);
+
                 player.on('ready',function(p){
                     $log.info('[%1] - I am ready',p);
                     
@@ -237,7 +241,7 @@
                         }
                     });
 
-                    if ($attr.twerk){
+                    if (parseInt($attr.twerk,10)){
                         $log.info('[%1] - start twerk',p);
                         player.play();
                         twerking = true;

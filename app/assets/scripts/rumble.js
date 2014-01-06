@@ -2,104 +2,36 @@
     'use strict';
 
     angular.module('c6.rumble')
-    /*
-    .animation('player-show',['$log','c6AniCache','gsap',
-        function($log, aniCache, gsap){
-        $log = $log.context('player-show');
-        return aniCache({
-            id : 'player-show',
-            setup: function(element) {
-                $log.log('setup');
-                var timeline        = new gsap.TimelineLite({paused:true});
-
-                //reset states
-                element.css({ opacity : 0, visibility : 'hidden' });
-                timeline.to(element, 2, { opacity: 1, visibility: 'visible' });
-                return timeline;
-            },
-            start: function(element, done, timeline) {
-                $log.info('start');
-                timeline.eventCallback('onComplete',function(){
-                    $log.info('end');
-                    done();
-                });
-                timeline.play();
-            }
-        });
-    }])
-    .animation('player-hide', ['$log', 'c6AniCache','gsap',
-        function($log, aniCache, gsap) {
-        $log = $log.context('player-hide');
-        return aniCache({
-            id : 'player-hide',
-            setup: function(element) {
-                $log.log('setup');
-                var timeline        = new gsap.TimelineLite({paused:true});
-
-                //reset states
+    .animation('.player-list-item',['$log','gsap', function($log, gsap){
+        $log = $log.context('.player-list-item');
+        return {
+            addClass: function(element,className,done) {
+                $log.log('addClass setup:',className);
+                var timeline = new gsap.TimelineLite({paused:true});
                 element.css({ opacity : 1, visibility : 'visible' });
                 timeline.to(element, 2, { opacity: 0 });
-                return timeline;
-            },
-            start: function(element, done, timeline) {
-                $log.info('start');
                 timeline.eventCallback('onComplete',function(){
-                    $log.info('end');
+                    $log.info('addClass end',className);
+                    element.css('visibility','hidden');
                     done();
                 });
+                $log.info('addClass start',className);
                 timeline.play();
-            }
-        });
-    }])
-    .animation('videoView-enter', ['$log', 'c6AniCache','gsap',
-        function($log, aniCache, gsap) {
-        $log = $log.context('videoView-enter');
-        return aniCache({
-            id : 'videoView-enter',
-            setup: function(element) {
-                $log.log('setup');
-                var timeline        = new gsap.TimelineLite({paused:true});
-
-                //reset states
-                element.css({ opacity : 0, visibility : 'hidden' });
-                timeline.to(element, 2, { opacity: 1, visibility: 'visible' });
-                return timeline;
             },
-            start: function(element, done, timeline) {
-                $log.info('start');
+            removeClass: function(element,className,done) {
+                $log.log('removeClass setup:',className);
+                var timeline = new gsap.TimelineLite({paused:true});
+                element.css({ opacity : 0, visibility : 'visible' });
+                timeline.to(element, 2, { opacity: 1 });
                 timeline.eventCallback('onComplete',function(){
-                    $log.info('end');
+                    $log.info('removeClass end',className);
                     done();
                 });
+                $log.info('removeClass start',className);
                 timeline.play();
             }
-        });
+        };
     }])
-    .animation('videoView-leave', ['$log', 'c6AniCache','gsap',
-        function($log, aniCache, gsap) {
-        $log = $log.context('videoView-leave');
-        return aniCache({
-            id : 'videoView-leave',
-            setup: function(element) {
-                $log.log('setup');
-                var timeline        = new gsap.TimelineLite({paused:true});
-
-                //reset states
-                element.css({ opacity : 1, visibility : 'visible' });
-                timeline.to(element, 2, { opacity: 0 });
-                return timeline;
-            },
-            start: function(element, done, timeline) {
-                $log.info('start');
-                timeline.eventCallback('onComplete',function(){
-                    $log.info('end');
-                    done();
-                });
-                timeline.play();
-            }
-        });
-    }])
-    */
     .factory('rumbleVotes',['$log','$q','$timeout',function($log,$q,$timeout){
         $log = $log.context('rumbleVotes');
         var service = {}, mocks = {};
@@ -152,8 +84,8 @@
 
         return service;
     }])
-    .controller('RumbleController',['$log','$scope','$window','rumbleVotes',
-        function($log,$scope,$window,rumbleVotes){
+    .controller('RumbleController',['$log','$scope','$timeout','$window','rumbleVotes',
+        function($log,$scope,$timeout,$window,rumbleVotes){
         $log = $log.context('RumbleCtrl');
         var theApp  = $scope.AppCtrl,
             self    = this;
@@ -163,12 +95,13 @@
         $scope.rumbleId         = theApp.experience.data.rumbleId;
         
         $scope.playList         = [];
-        $scope.currentIndex     = null;
+        $scope.currentIndex     = 0;
         $scope.currentItem      = null;
         $scope.atHead           = null;
         $scope.atTail           = null;
         $scope.currentReturns   = null;
-        
+       
+        $log.info('PROFILE:',$scope.deviceProfile);
         theApp.experience.data.playList.forEach(function(item){
             var newItem = angular.copy(item);
             newItem.state = {
@@ -178,12 +111,6 @@
             $scope.playList.push(newItem);
             //TODO: remove this when the service works for real
             rumbleVotes.mockReturnsData($scope.rumbleId,item.id,item.voting);
-        });
-
-        $scope.$on('newVideo',function(event,newVal){
-            $log.info('newVideo index:',newVal);
-            self.setPosition(newVal);
-            $scope.$broadcast('playVideo',$scope.currentItem.video);
         });
 
         $scope.$on('videoEnded',function(event,player,videoId){
@@ -220,6 +147,7 @@
         };
 
         this.setPosition = function(i){
+            $log.info('setPosition: %1',i);
             $scope.currentReturns = null;
             $scope.currentIndex   = i;
             $scope.currentItem    = $scope.playList[$scope.currentIndex];
@@ -238,25 +166,34 @@
         };
         
         this.goBack = function(){
-            $window.history.back();
+            self.setPosition($scope.currentIndex - 1);
+            if ($scope.deviceProfile.multiPlayer){
+                $scope.$broadcast('playVideo',$scope.currentItem.video);
+            }
         };
 
         this.goForward = function(){
-//            theApp.goto('experience.video',{item : ($scope.currentIndex + 1) });
-            theApp.goto('/experience/video/' + ($scope.currentIndex + 1));
+            self.setPosition($scope.currentIndex + 1);
+            if ($scope.deviceProfile.multiPlayer){
+                $scope.$broadcast('playVideo',$scope.currentItem.video);
+            }
         };
 
         $scope.RumbleCtrl = this;
 
-        this.setPosition(theApp.currentIndex);
+        this.setPosition($scope.currentIndex);
 
         $log.log('Rumble Controller is initialized!');
+        /*
+        $timeout(function(){
+            $scope.$broadcast('playVideo',$scope.currentItem.video);
+        },3000);
+        */
     }])
-    .directive('rumblePlayer',['$log','$compile','$window',function($log,$compile,$window){
+    .directive('rumblePlayer',['$log','$compile','$window', function($log,$compile,$window){
         $log = $log.context('rumblePlayer');
         function fnLink(scope,$element,$attr){
             $log.info('link:',scope);
-
             function resize(event,noDigest){
                 var pw = Math.round($window.innerWidth * 0.75),
                     ph = Math.round(pw * 0.5625);
@@ -275,7 +212,11 @@
                 $attr.autoplay = 0;
             }
 
-            if ($attr.twerk === undefined){
+            $attr.twerk = parseInt($attr.twerk,10);
+            if (isNaN($attr.twerk)){
+                $attr.twerk = 0;
+            }
+            if ($attr.twerk && !scope.profile.multiPlayer){
                 $attr.twerk = 0;
             }
 
@@ -297,8 +238,7 @@
 
             inner += '></'  + scope.config.player + '-player' + '>';
 
-            var player$ = $compile(inner)(scope);
-            $element.append(player$);
+            $element.append($compile(inner)(scope));
 
             $window.addEventListener('resize',resize);
             resize({},true);
