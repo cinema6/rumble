@@ -195,7 +195,7 @@
         function fnLink(scope,$element,$attr){
             $log.info('link:',scope);
             function resize(event,noDigest){
-                var pw = Math.round($window.innerWidth * 0.75),
+                var pw = Math.round($window.innerWidth * 1),
                     ph = Math.round(pw * 0.5625);
                 $element.css({
                     width : pw,

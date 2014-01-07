@@ -104,8 +104,8 @@
             };
         })
         .value('$state',{})
-        .controller('AppController', ['$scope','$state','$route','$location', '$window', '$log', 'site', 'c6ImagePreloader', 'gsap', '$timeout', 'googleAnalytics', 'c6AniCache',
-        function                     ( $scope , $state, $route, $location, $window , $log ,  site ,  c6ImagePreloader ,  gsap ,  $timeout ,  googleAnalytics, c6AniCache ) {
+        .controller('AppController', ['$scope','$state','$route','$location', '$window', '$log', 'site', 'c6ImagePreloader', 'gsap'/*, 'googleAnalytics'*/,
+        function                     ( $scope , $state, $route, $location, $window , $log ,  site ,  c6ImagePreloader ,  gsap /*, googleAnalytics*/ ) {
             $log = $log.context('AppCtrl');
             var self = this;
 
@@ -169,53 +169,9 @@
 
             $scope.$on('$routeChangeSuccess', function(event,next,current){
                 $log.info('$routeChangeSuccess:',next,current);
-//                googleAnalytics('send', 'event', '$state', 'changed', next.state.name);
+                //googleAnalytics('send', 'event', '$state', 'changed', next.state.name);
             });
 
             $scope.AppCtrl = this;
-
-            c6AniCache.enabled(true);
-            
-        }])
-        .directive('c6Hidden', ['$animate', function($animate) {
-            return {
-                scope: true,
-                restrict: 'A',
-                link: function(scope, element, attrs) {
-
-                    scope.hidden = function() {
-                        return scope.$eval(attrs.c6Hidden);
-                    };
-
-                    scope.$watch('hidden()', function(hidden) {
-                        if (hidden){
-                            $animate.addClass(element,'hidden',function(){
-                                element.css({'visibility': 'hidden', 'opacity' : 0});
-                            });
-                        } else {
-                            $animate.removeClass(element,'hidden',function(){
-                                element.css({'visibility': 'visible', 'opacity' : 1});
-                            });
-                        }
-                        /*
-                        var canAnimate = ( (attrs.ngAnimate) &&
-                            (!(element.parent().inheritedData('$ngAnimateController') || angular.noop).running) );
-                        if (hidden) {
-                            if (canAnimate) {
-                                animate.animate('hidden', element);
-                            } else {
-                                element.css({'visibility': 'hidden', 'opacity' : 0});
-                            }
-                        } else {
-                            if (canAnimate) {
-                                animate.animate('visible', element);
-                            } else {
-                                element.css({'visibility': 'visible', 'opacity' : 1});
-                            }
-                        }
-                        */
-                    });
-                }
-            };
         }]);
 }(window));

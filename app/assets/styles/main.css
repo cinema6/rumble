@@ -11,13 +11,20 @@ html {
 .experience {
     position: relative;
     width: 100%;
-    height: 500px;
+    height: 600px;
 }
 
+ul.rumble-players {
+    width: 100%;
+    height: 0;
+    padding-bottom: 56.25%;
+    list-style-type: none;
+    padding-left: 0px;
+    margin-left: 0px;
+}
 .player {
     position: absolute;
     top: 64px;
-    left: 12.5%;
     z-index: 1;
 }
     .player-list-item.hidden {
@@ -26,29 +33,30 @@ html {
     }
 .title-bar {
     width: 100%;
-    height: 100px;
+    height: 60px;
     margin-top: 0%;
 }
     .title-bar>h1 {
-        font-size: 24px;
+        font-size: 20px;
         margin: 0px;
     }
 
     .title-bar>h2 {
-        font-size: 14px;
+        font-size: 12px;
         margin: 0px;
     }
 
 .progress {
+    font-size: 10px;
     position: absolute;
     top: -10px;
-    right: 12.5%;
+    right: 5%;
 }
     
 .navigation {
     width: 100%;
     height: 40px;
-    margin-top: 42%;
+/*    margin-top: 42%;*/
 }
     .navigation>.prev {
         left: 12.5%;
@@ -73,20 +81,21 @@ html {
     }
 
 .ballot {
-    margin-left: 25%;
-    margin-top: -4%;
-    width: 50%;
+    width: 90%;
+    margin-top: 40px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
     .ballot ul {
         list-style-type: none;
-        padding: 0px;
-        margin: 0px;
+        padding-left: 0px;
     }
 
     .ballot li {
         display: inline-block;
-        padding-left: 14%;
+        margin: 4px;
+/*        padding-left: 10%;*/
     }
 
     .ballot button {
@@ -116,8 +125,3 @@ html {
         font-size: 24px;
     }
 
-ul.rumble-players {
-    list-style-type: none;
-    padding: 0px;
-    margin: 0px;
-}
