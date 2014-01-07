@@ -2,6 +2,24 @@
     'use strict';
 
     angular.module('c6.rumble')
+    .animation('.splash-screen',['$log','gsap',function($log,gsap){
+        $log = $log.context('.splash-screen');
+        return {
+            beforeAddClass : function(element,className,done){
+                if (className === 'ng-hide'){
+                    var timeline = new gsap.TimelineLite({paused:true});
+                    //timeline.to(element, 1, { left: (element.width() * -1) });
+                    timeline.to(element, 1, { opacity: 0 });
+                    timeline.eventCallback('onComplete',function(){
+                        $log.info('addClass end',className);
+                        done();
+                    });
+                    $log.info('addClass start',className);
+                    timeline.play();
+                }
+            }
+        };
+    }])
     .animation('.player-list-item',['$log','gsap', function($log, gsap){
         $log = $log.context('.player-list-item');
         return {
@@ -84,25 +102,25 @@
 
         return service;
     }])
-    .controller('RumbleController',['$log','$scope','$timeout','$window','rumbleVotes',
-        function($log,$scope,$timeout,$window,rumbleVotes){
+    .controller('RumbleController',['$log','$scope','$timeout','$window','appData','rumbleVotes',
+        function($log,$scope,$timeout,$window,appData,rumbleVotes){
         $log = $log.context('RumbleCtrl');
-        var theApp  = $scope.AppCtrl,
-            self    = this;
+        var self    = this;
 
-        $scope.deviceProfile    = theApp.profile;
-        $scope.ballot           = theApp.experience.data.ballot;
-        $scope.rumbleId         = theApp.experience.data.rumbleId;
+        $scope.deviceProfile    = appData.profile;
+        $scope.title            = appData.experience.title;
+        $scope.ballot           = appData.experience.data.ballot;
+        $scope.rumbleId         = appData.experience.data.rumbleId;
         
         $scope.playList         = [];
-        $scope.currentIndex     = 0;
+        $scope.currentIndex     = -1;
         $scope.currentItem      = null;
         $scope.atHead           = null;
         $scope.atTail           = null;
         $scope.currentReturns   = null;
+        //$scope.deviceProfile.multiPlayer = false;
        
-        $log.info('PROFILE:',$scope.deviceProfile);
-        theApp.experience.data.playList.forEach(function(item){
+        appData.experience.data.playList.forEach(function(item){
             var newItem = angular.copy(item);
             newItem.state = {
                 viewed : false,
@@ -179,16 +197,7 @@
             }
         };
 
-        $scope.RumbleCtrl = this;
-
-        this.setPosition($scope.currentIndex);
-
         $log.log('Rumble Controller is initialized!');
-        /*
-        $timeout(function(){
-            $scope.$broadcast('playVideo',$scope.currentItem.video);
-        },3000);
-        */
     }])
     .directive('rumblePlayer',['$log','$compile','$window', function($log,$compile,$window){
         $log = $log.context('rumblePlayer');

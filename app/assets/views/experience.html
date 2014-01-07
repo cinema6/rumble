@@ -1,4 +1,8 @@
 <div class="experience">
+    <div class="splash-screen" ng-show="currentIndex < 0" >
+        <h1> {{title}} </h1>
+        <span class="start-btn" ng-click="RumbleCtrl.goForward() ">Start</span>
+    </div>
     <div class="title-bar">
         <h1>{{currentItem.title}}</h1>
         <h2>{{currentItem.note}}</h2>
@@ -6,8 +10,6 @@
     <div class="progress">
         <h1> {{currentIndex + 1}} of {{playList.length}} </h1>
     </div>
-    <!--<div ui-view ng-animate="'videoView'"></div>-->
-    <!--<ul ng-if="deviceProfile.multiPlayer" class="rumble-players">-->
     <ul class="rumble-players">
         <li class="player-list-item" ng-repeat="item in playList" ng-class="{ hidden : ($index !== $parent.currentIndex)}" >
             <rumble-player class="player"  x-config="item.video" x-profile="deviceProfile" 
@@ -15,12 +17,10 @@
             </rumble-player>
         </li>
     </ul>
-    <!--<div class="navigation" ng-class="{hidden : (currentItem.state.vote < 0)}">-->
     <div class="navigation">
         <button class="prev" ng-hide="atHead" ng-click="RumbleCtrl.goBack()"> Prev Video</button>
         <button class="next" ng-hide="atTail" ng-click="RumbleCtrl.goForward()"> Next Video</button>
     </div>
-    <!--<div class="ballot" ng-show="currentItem.state.viewed">-->
     <div class="ballot" >
         <ul>
             <li ng-repeat="item in ballot">

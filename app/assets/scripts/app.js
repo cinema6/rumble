@@ -57,44 +57,23 @@
         .config(['c6UrlMakerProvider', 'c6Defines',
         function( c6UrlMakerProvider ,  c6Defines ) {
             c6UrlMakerProvider.location(c6Defines.kBaseUrl,'default');
-            c6UrlMakerProvider.location(c6Defines.kVideoUrls[(function() {
-                return 'local';
-            }())] ,'video');
         }])
-        .config(['$routeProvider','$locationProvider','c6UrlMakerProvider',
-        function($routeProvider,$locationProvider,c6UrlMakerProvider){
-            $routeProvider.when('/experience',{
-                templateUrl: c6UrlMakerProvider.makeUrl('views/experience.html'),
-                controller: 'RumbleController'
-            })
+        .config(['$routeProvider','c6UrlMakerProvider',
+        function($routeProvider,c6UrlMakerProvider){
+            $routeProvider.otherwise(/*'/experience',*/{
+                templateUrl     : c6UrlMakerProvider.makeUrl('views/experience.html'),
+                controller      : 'RumbleController',
+                controllerAs    : 'RumbleCtrl',
+                resolve : {
+                    'appData' : 'appData'
+                }
+            });
+            /*
             .otherwise({
                 templateUrl: c6UrlMakerProvider.makeUrl('views/landing.html')
             });
+            */
         }])
-        /*
-        .config(['$stateProvider', '$urlRouterProvider', 'c6UrlMakerProvider',
-        function( $stateProvider ,  $urlRouterProvider ,  c6UrlMakerProvider ) {
-            $urlRouterProvider.otherwise('/');
-            $stateProvider
-                .state('landing', {
-                    templateUrl: c6UrlMakerProvider.makeUrl('views/landing.html'),
-                    url: '/'
-                })
-                .state('experience', {
-                    templateUrl: c6UrlMakerProvider.makeUrl('views/experience.html'),
-                    controller: 'RumbleController',
-                    url: '/experience'
-                })
-                .state('experience.video', {
-                    templateUrl: c6UrlMakerProvider.makeUrl('views/video.html'),
-                    url: '/video/:item'
-                })
-                .state('experience.result', {
-                    templateUrl: c6UrlMakerProvider.makeUrl('views/result.html'),
-                    url: '/result/:item'
-                });
-        }])
-        */
         .factory('_default',[function(){
             return function _default(a,s,v){ if (a[s] === undefined){ a[s] = v; } };
         }])
@@ -103,9 +82,16 @@
                 return Math.round((input * 100)) + '%';
             };
         })
-        .value('$state',{})
-        .controller('AppController', ['$scope','$state','$route','$location', '$window', '$log', 'site', 'c6ImagePreloader', 'gsap'/*, 'googleAnalytics'*/,
-        function                     ( $scope , $state, $route, $location, $window , $log ,  site ,  c6ImagePreloader ,  gsap /*, googleAnalytics*/ ) {
+        .factory('appData',['$q','$rootScope',function($q,$rootScope){
+            var deferred = $q.defer();
+            $rootScope.$on('appInit',function(event,appData){
+                deferred.resolve(appData);
+            });
+            return deferred.promise;
+        }])
+        .controller('AppController', ['$scope','$route','$log',
+        'site', 'c6ImagePreloader', 'gsap'/*, 'googleAnalytics'*/,'appData',
+        function($scope, $route, $log, site, c6ImagePreloader, gsap/*, googleAnalytics*/) {
             $log = $log.context('AppCtrl');
             var self = this;
 
@@ -136,31 +122,14 @@
                 }
             };
 
-            this.goto = function(state/*,toParams,options*/) {
-                $log.info('GOTO STATE:',state);
-                $location.url(state);
-                //$state.go(state,toParams,options);
-            };
-
             site.init({
-                setup: function(appData) {
-                    self.experience = appData.experience;
-                    self.profile = appData.profile;
-
-                    self.playList = self.experience.data.playList;
-
+                setup: function(data) {
+                    self.experience = data.experience;
+                    self.profile    = data.profile;
+                    $scope.$emit('appInit',data);
                     gsap.TweenLite.ticker.useRAF(self.profile.raf);
-
                     return c6ImagePreloader.load([self.src(self.experience.img.hero)]);
                 }
-            });
-
-            site.getSession().then(function(session) {
-                session.on('gotoState', function(state) {
-                    if (state === 'start') {
-                        self.goto('landing');
-                    }
-                });
             });
 
             $scope.$on('$routeChangeStart', function(event,next,current){
@@ -171,7 +140,5 @@
                 $log.info('$routeChangeSuccess:',next,current);
                 //googleAnalytics('send', 'event', '$state', 'changed', next.state.name);
             });
-
-            $scope.AppCtrl = this;
         }]);
 }(window));

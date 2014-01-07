@@ -40,8 +40,7 @@
                         }
                     }
                 ],
-                AppCtrl = {
-                    currentIndex : 0,
+                appData = {
                     profile      : {},
                     experience: {
                         data : {
@@ -62,11 +61,10 @@
                     $scope      = $rootScope.$new();
                     $log.context = function() { return $log; };
 
-                    $scope.AppCtrl = AppCtrl;
-
                     RumbleCtrl = _$controller('RumbleController', {
-                        $scope: $scope,
-                        $log: $log
+                        $scope  : $scope,
+                        $log    : $log,
+                        appData : appData
                     });
 
                 }]);
@@ -74,21 +72,14 @@
             describe('initialization',function(){
                 it('has proper dependencies',function(){
                     expect(RumbleCtrl).toBeDefined();
-                    expect($scope.deviceProfile).toBe(AppCtrl.profile);
+                    expect($scope.deviceProfile).toBe(appData.profile);
                     
                     expect($scope.playList.length)
-                        .toEqual(AppCtrl.experience.data.playList.length);
-                    expect($scope.currentIndex).toEqual(0);
-                    expect($scope.currentItem.id).toEqual(playList[0].id);
-                    expect($scope.currentItem.caption).toEqual(playList[0].caption);
-                    expect($scope.currentItem.note).toEqual(playList[0].note);
-                    expect($scope.currentItem.voting).toEqual(playList[0].voting);
-                    expect($scope.currentItem.video.player).toEqual(playList[0].video.player);
-                    expect($scope.currentItem.video.videoid).toEqual(playList[0].video.videoid);
-                    expect($scope.currentItem.state.vote).toEqual(-1);
-                    expect($scope.currentItem.state.viewed).toEqual(false);
-                    expect($scope.atHead).toEqual(true);
-                    expect($scope.atTail).toEqual(false);
+                        .toEqual(appData.experience.data.playList.length);
+                    expect($scope.currentIndex).toEqual(-1);
+                    expect($scope.currentItem).toBeNull();
+                    expect($scope.atHead).toBeNull();
+                    expect($scope.atTail).toBeNull();
                 });
             });
             describe('voting',function(){
@@ -174,6 +165,7 @@
             });
             describe('videoEnded event',function(){
                 it('sets the viewed to true',function(){
+                    RumbleCtrl.goForward();
                     expect($scope.currentItem.state).toEqual({ vote: -1, viewed: false });
                     $scope.$emit('videoEnded',playList[0].video.player,playList[0].video.videoid);
                     $scope.$digest();

@@ -190,14 +190,15 @@
         return service;
 
     }])
-    .directive('youtubePlayer',['$log','$window','$timeout','youtube','_default',
-        function($log,$window,$timeout,youtube,_default){
+    .directive('youtubePlayer',['$log','$window','$location','$timeout','youtube','_default',
+        function($log,$window,$location,$timeout,youtube,_default){
         $log = $log.context('youtubePlayer');
         function fnLink(scope,$element,$attr){
             var player;
             $log.info('link: videoId=%1, start=%2, end=%3',
                 $attr.videoid, $attr.start, $attr.end);
-           
+          
+            _default($attr,'enablejsapi'    ,1);
             _default($attr,'rel'            ,0);
             _default($attr,'modestbranding' ,1);
 

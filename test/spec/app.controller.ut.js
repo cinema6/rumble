@@ -113,10 +113,6 @@
                 expect(AppCtrl).toBeDefined();
             });
 
-            it('should publish itself to the $scope', function() {
-                expect($scope.AppCtrl).toBe(AppCtrl);
-            });
-
             describe('site integration', function() {
                 var setupResult,
                     srcResult;
@@ -149,131 +145,10 @@
                 it('should configure gsap', function() {
                     expect(gsap.TweenLite.ticker.useRAF).toHaveBeenCalledWith(appData.profile.raf);
                 });
-
-                describe('working with the session', function() {
-                    beforeEach(function() {
-                        $scope.$apply(function() { site._.getSessionResult.resolve(siteSession); });
-
-                        spyOn(AppCtrl, 'goto');
-                    });
-
-                    it('should get the siteSession', function() {
-                        expect(site.getSession).toHaveBeenCalled();
-                    });
-
-                    it('should call AppCtrl.goto(\'landing\') when the site requests it', function() {
-                        siteSession.emit('gotoState', 'experience');
-
-                        expect(AppCtrl.goto).not.toHaveBeenCalled();
-
-                        siteSession.emit('gotoState', 'start');
-                        expect(AppCtrl.goto).toHaveBeenCalledWith('landing');
-                    });
-                });
             });
-/*
-            describe('when $stateChangeStart is fired', function() {
-                var fromState;
-
-                beforeEach(function() {
-                    spyOn(AppCtrl, 'goto').andCallFake(function(state) {
-                        $rootScope.$broadcast('$stateChangeStart', { name: state }, {}, { name: fromState }, {});
-                    });
-                });
-
-                describe('on initial landing page load', function() {
-                    beforeEach(function() {
-                        $scope.$new().$on('$stateChangeStart', function(event) {
-                            expect(event.defaultPrevented).toBe(false);
-                        });
-                        $rootScope.$broadcast('$stateChangeStart', { name: 'landing' }, {},  { name: '' }, {});
-                    });
-
-                    it('should do nothing', function() {
-                        expect(site.requestTransitionState).not.toHaveBeenCalled();
-                        expect(AppCtrl.goto).not.toHaveBeenCalled();
-                    });
-                });
-
-                describe('on first transition to experience', function() {
-                    var event,
-                        unregister;
-
-                    beforeEach(function() {
-                        event = {
-                            preventDefault: jasmine.createSpy('event.preventDefault()')
-                        };
-
-                        unregister = $scope.$new().$on('$stateChangeStart', function(event) {
-                            expect(event.defaultPrevented).toBe(true);
-                        });
-                        $rootScope.$broadcast('$stateChangeSuccess', { name: 'landing' }, {},  { name: '' }, {});
-                        $rootScope.$broadcast('$stateChangeStart',{ name:'experience' },{},{ name:'landing' }, {});
-                    });
-
-                    it('should requestTransitionState(true) from the site', function() {
-                        expect(site.requestTransitionState).toHaveBeenCalledWith(true);
-                    });
-
-                    describe('after the transition state is entered', function() {
-                        beforeEach(function() {
-                            unregister();
-
-                            unregister = $scope.$new().$on('$stateChangeStart', function(event) {
-                                expect(event.defaultPrevented).toBe(false);
-                            });
-                            fromState = 'landing';
-                            $rootScope.$apply(function() { site._.requestTransitionStateResult.resolve(); });
-                        });
-
-                        it('should transition to the state', function() {
-                            expect(AppCtrl.goto).toHaveBeenCalledWith('experience', {});
-                        });
-
-                        it('should requestTransitionState(false) from the site', function() {
-                            expect(site.requestTransitionState).toHaveBeenCalledWith(false);
-                        });
-
-                        it('should rerun this whole procedure during the next transisition', function() {
-                            unregister();
-
-                            unregister = $scope.$new().$on('$stateChangeStart', function(event) {
-                                expect(event.defaultPrevented).toBe(true);
-                            });
-
-                            fromState = 'experience';
-                            $rootScope.$broadcast('$stateChangeSuccess',
-                                { name: 'experience' }, { item : 0 },  { name: 'experience' }, { item : 1 });
-                            AppCtrl.goto('landing',{});
-                        });
-                    });
-                });
-            });
-
-            describe('when $stateChangeSuccess is fired', function() {
-                beforeEach(function() {
-                    $rootScope.$broadcast('$stateChangeSuccess', { name: 'landing' }, {}, { name: '' }, {});
-                });
-
-                it('should send an event to Google Analytics', function() {
-                    expect(googleAnalytics).toHaveBeenCalledWith('send', 'event', '$state', 'changed', 'landing');
-
-                    $rootScope.$broadcast('$stateChangeSuccess', { name:'experience' }, {}, { name:'landing' }, {});
-
-                    expect(googleAnalytics).toHaveBeenCalledWith('send', 'event', '$state', 'changed', 'experience');
-                });
-            });
-*/
+            
             describe('@public', function() {
                 describe('methods', function() {
-                    describe('goto(state)', function() {
-                        it('should proxy to $location.url(state)', function() {
-                            spyOn($location, 'url');
-                            AppCtrl.goto('experience');
-                            expect($location.url).toHaveBeenCalledWith('experience');
-                        });
-                    });
-
                     describe('img(src)', function() {
                         it('should append a different modifier based on different profile properties', function() {
                             var src = 'test/foo.jpg';
