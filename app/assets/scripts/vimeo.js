@@ -155,7 +155,7 @@
                         return;
                     }
 
-//                    $log.info('[%1] - messageReceived: [%2]',_playerId, event.data);
+                    $log.info('[%1] - messageReceived: [%2]',_playerId, event.data);
                     var data = angular.fromJson(event.data), deferreds, deferred;
 
                     if (data.player_id !== _playerId){
@@ -183,13 +183,69 @@
 
         return service;
     }])
-    .directive('vimeoPlayer',['$log','$timeout','vimeo','_default',
-        function($log,$timeout,vimeo,_default){
+    .directive('vimeoPlayer',['$log','$timeout','vimeo','_default','numberify','playerInterface',
+        function($log,$timeout,vimeo,_default,numberify,playerInterface){
         $log = $log.context('vimeoPlayer');
         function fnLink(scope,$element,$attr){
-            var player;
+            if (!$attr.videoid){
+                throw new SyntaxError('vimeoPlayer requires the videoid attribute to be set.');
+            }
+            
             $log.info('link: videoId=%1, start=%2, end=%3, autoPlay=%4',
                 $attr.videoid, $attr.start, $attr.end, $attr.autoplay);
+
+            var player, playerIface  = playerInterface(), playerIsReady;
+
+            playerIface.getType = function () {
+                return 'vimeo';
+            };
+
+            playerIface.getVideoId = function() {
+                return $attr.videoid;
+            };
+
+            playerIface.play = function(){
+                if (playerIsReady){
+                    player.play();
+                }
+            };
+
+            playerIface.pause = function(){
+                if (playerIsReady){
+                    player.pause();
+                }
+            };
+
+            function videoAutoEndHandler(p,data){
+                if (data.seconds >= numberify($attr.end,0)){
+                    player.pause();
+                    $timeout(function(){
+                        player.post('removeEventListener','playProgress');
+                        player.removeListener('playProgress',videoAutoEndHandler);
+                        $timeout(function(){
+                            player.emit('finish',player);
+                        });
+                    });
+                }
+            }
+
+            playerIface.rewind = function(){
+                if (!playerIsReady){
+                    return;
+                }
+                var videoStart = numberify($attr.start,0),
+                    videoEnd   = numberify($attr.end,0);
+
+                player.seekTo(videoStart);
+
+                if (videoEnd === 0){
+                    return;
+                }
+                player.removeListener('playProgress',videoAutoEndHandler);
+                player.on('playProgress',videoAutoEndHandler);
+            };
+
+            scope.$emit('playerAdd',playerIface);
 
             _default($attr,'badge',0);
             _default($attr,'portrait',0);
@@ -206,23 +262,35 @@
                 }
             });
 
+            scope.$on('$destroy',function(){
+                scope.$emit('playerRemove',playerIface);
+                if (player){
+                    //player.destroy();
+                }
+            });
+
             scope.$on('playVideo',function(event,data){
                 if (data.player === 'vimeo' && data.videoid === $attr.videoid){
                     $log.info('[%1] on.PlayVideo: %2, %3',player,data.player,data.videoid);
                     player.play();
                 } else {
                     player.pause();
-                    var videoStart = parseInt($attr.start,10);
-                    if (!isNaN(videoStart)){
-                        player.seekTo(videoStart);
-                    }
+                    playerIface.rewind();
                 }
             });
 
+            function regeneratePlayer(){
+                if (player){
+                    player.destroy();
+                    player  = undefined;
+                    playerIsReady = false;
+                }
+                $timeout(createPlayer);
+            }
+
             function createPlayer(){
-                var videoStart = parseInt($attr.start,10),
-                    videoEnd = parseInt($attr.end,10),
-                    twerking = false,
+                var videoStart  = numberify($attr.start,0),
+                    videoEnd    = numberify($attr.end,0),
                     vparams  = { };
 
                 ['badge','byline','portrait','title','autoplay'].forEach(function(prop){
@@ -231,6 +299,7 @@
                     }
                 });
 
+                playerIsReady = false;
                 player = vimeo.createPlayer($attr.videoid,{
                     videoId     : $attr.videoid,
                     width       : $attr.width,
@@ -239,72 +308,53 @@
                     params      : vparams
                 },$element);
                 
-                scope.$emit('createdPlayer',player);
-
                 player.on('ready',function(p){
+                    playerIsReady = true;
                     $log.info('[%1] - I am ready',p);
 
-                    if (parseInt($attr.twerk,10)){
+                    if (numberify($attr.twerk)){
                         $log.info('[%1] - start twerk',p);
-                        player.play();
-                        twerking = true;
-                        player.on('playProgress',function(p){
-                            var self = this;
+                        playerIface.play();
+                        player.once('playProgress',function(p){
                             $log.info('[%1] - stop twerk',p);
-                            twerking = false;
-                            player.pause();
-                            $timeout(function(){
-                                if (isNaN(videoEnd)){
-                                    player.post('removeEventListener','playProgress');
-                                }
-                                player.removeListener('playProgress',self);
-                            });
+                            playerIface.pause();
+
+                            if (videoStart > 0){
+                                player.once('playProgress',function(){
+                                    player.seekTo(videoStart);
+                                });
+                            }
+                            if (videoEnd > 0){
+                                player.on('playProgress',videoAutoEndHandler);
+                            } else {
+                                player.post('removeEventListener','playProgress');
+                            }
                         });
-                    }
+                    } else {
+
+                        if (videoStart > 0){
+                            player.once('playProgress',function(){
+                                player.seekTo(videoStart);
+                            });
+                        }
                     
+                        if (videoEnd > 0){
+                            player.on('playProgress',videoAutoEndHandler);
+                        }
+                    }
+              
                     player.on('finish',function(p){
                         $log.info('[%1] - I am finished',p);
                         scope.$emit('videoEnded','vimeo',$attr.videoid);
                         if ($attr.regenerate){
-                            player.destroy();
-                            $timeout(createPlayer);
+                            regeneratePlayer();
                         }
                     });
 
-                    if (!isNaN(videoStart)){
-                        player.once('playProgress',function(/*p,data*/){
-                            //$log.info('[%1] - loaded %1 percent',data.percent);
-                            player.seekTo(videoStart);
-                            //player.post('removeEventListener','loadProgress');
-                        });
-                    }
-
-                    if (!isNaN(videoEnd)){
-                        player.on('playProgress',function(p,data){
-                            var self = this;
-//                            $log.info('[%1] - playProgress: %2 (%3)',p,data.seconds,data.percent);
-                            if (data.seconds >= videoEnd){
-                                player.pause();
-                                $timeout(function(){
-                                    player.post('removeEventListener','playProgress');
-                                    player.removeListener('playProgress',self);
-                                    $timeout(function(){
-                                        player.emit('finish',player);
-                                    });
-                                });
-                            }
-                        });
-                    }
                 });
             }
 
-            $timeout(createPlayer);
-
-            scope.$on('$destroy',function(){
-                if (player){
-                    //player.destroy();
-                }
-            });
+            regeneratePlayer();
         }
 
         return {

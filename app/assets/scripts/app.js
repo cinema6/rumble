@@ -74,14 +74,34 @@
             });
             */
         }])
-        .factory('_default',[function(){
-            return function _default(a,s,v){ if (a[s] === undefined){ a[s] = v; } };
-        }])
         .filter('percent',function(){
             return function(input){
                 return Math.round((input * 100)) + '%';
             };
         })
+        .factory('_default',[function(){
+            return function _default(a,s,v){ if (a[s] === undefined){ a[s] = v; } };
+        }])
+        .factory('numberify',function(){
+            return function numberify(v,d) {
+                var result = parseInt(v,10);
+                if (isNaN(result)){
+                    return d;
+                }
+                return result;
+            };
+        })
+        .factory('playerInterface',['c6EventEmitter',function(c6EventEmitter){
+            return function(){
+                return c6EventEmitter({
+                    play        : angular.noop,
+                    pause       : angular.noop,
+                    rewind      : angular.noop,
+                    getType     : angular.noop,
+                    getVideoId  : angular.noop
+                });
+            };
+        }])
         .factory('appData',['$q','$rootScope',function($q,$rootScope){
             var deferred = $q.defer();
             $rootScope.$on('appInit',function(event,appData){

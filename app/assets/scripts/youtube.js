@@ -4,6 +4,7 @@
     angular.module('c6.rumble')
     .factory('youtube',['$log','$window','c6EventEmitter','iframe',
         function($log,$window,c6EventEmitter,iframe){
+        $log = $log.context('youtube');
         var service = {};
 
         service.origin = 'https://www.youtube.com';

@@ -56,14 +56,26 @@ ul.rumble-players {
     padding-left: 0px;
     margin-left: 0px;
 }
+/*
 .player {
     position: absolute;
     top: 64px;
     z-index: 1;
 }
-    .player-list-item.hidden {
+    */
+    .player-list-item {
+        display: block;
+        position: absolute;
+        top: 64px;
+        z-index: 1;
+        overflow: hidden;
+    }
+    .player-list-item.squished {
+        height: 0px;
+        /*
         visibility: hidden;
         opacity: 0;
+        */
     }
 .title-bar {
     width: 100%;

@@ -23,7 +23,7 @@
     .animation('.player-list-item',['$log','gsap', function($log, gsap){
         $log = $log.context('.player-list-item');
         return {
-            addClass: function(element,className,done) {
+            beforeAddClass: function(element,className,done) {
                 $log.log('addClass setup:',className);
                 var timeline = new gsap.TimelineLite({paused:true});
                 element.css({ opacity : 1, visibility : 'visible' });
