@@ -191,14 +191,60 @@
         return service;
 
     }])
-    .directive('youtubePlayer',['$log','$window','$location','$timeout','youtube','_default',
-        function($log,$window,$location,$timeout,youtube,_default){
+    .directive('youtubePlayer',['$log','$window','$timeout','youtube','_default','playerInterface',
+        function($log,$window,$timeout,youtube,_default,playerInterface){
         $log = $log.context('youtubePlayer');
         function fnLink(scope,$element,$attr){
-            var player;
+            if (!$attr.videoid){
+                throw new SyntaxError('youtubePlayer requires the videoid attribute to be set.');
+            }
+            
+            var player, playerIface  = playerInterface(),
+                playerIsReady = false;/*, playerHasLoaded = false;*/
+            
             $log.info('link: videoId=%1, start=%2, end=%3',
                 $attr.videoid, $attr.start, $attr.end);
-          
+
+            /* -- playerInterface : begin -- */
+
+            playerIface.getType = function () {
+                return 'youtube';
+            };
+
+            playerIface.getVideoId = function() {
+                return $attr.videoid;
+            };
+
+            playerIface.isReady = function() {
+                return playerIsReady;
+            };
+
+            playerIface.play = function(){
+                if (playerIsReady){
+                    player.play();
+                }
+            };
+
+            playerIface.pause = function(){
+                if (playerIsReady){
+                    player.pause();
+                }
+            };
+
+            playerIface.reset = function(){
+                /*
+                if (!playerIsReady){
+                    return;
+                }
+                setStartListener();
+                setEndListener();
+                */
+            };
+
+            scope.$emit('playerAdd',playerIface);
+
+            /* -- playerInterface : end -- */
+
             _default($attr,'enablejsapi'    ,1);
             _default($attr,'rel'            ,0);
             _default($attr,'modestbranding' ,1);
@@ -212,6 +258,13 @@
             $attr.$observe('height',function(){
                 if (player){
                     player.setSize($attr.width, $attr.height);
+                }
+            });
+            
+            scope.$on('$destroy',function(){
+                scope.$emit('playerRemove',playerIface);
+                if (player){
+                    //player.destroy();
                 }
             });
 
@@ -233,14 +286,13 @@
                     videoEnd = parseInt($attr.end,10),
                     vparams     = { }, twerking = false;
 
-                [/*'start','end',*/'controls','rel','modestbranding','autoplay']
+                ['controls','rel','modestbranding','autoplay','enablejsapi']
                 .forEach(function(prop){
-                    if ($attr[prop]) {
+                    if ($attr[prop] !== undefined) {
                         vparams[prop] = $attr[prop];
                     }
                 });
 
-                vparams.html5='1';
                 player = youtube.createPlayer($attr.videoid,{
                     videoId     : $attr.videoid,
                     width       : $attr.width,
@@ -313,12 +365,6 @@
             }
 
             $timeout(createPlayer);
-
-            scope.$on('$destroy',function(){
-                if (player){
-                    //player.destroy();
-                }
-            });
         }
 
         return {

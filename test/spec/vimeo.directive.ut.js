@@ -95,7 +95,10 @@
                         videoId: 'abc123',
                         width: '1',
                         height: '2',
-                        params: {},
+                        params: {
+                            badge: 0,
+                            portrait: 0
+                        },
                         frameborder: 0
                     });
                 });

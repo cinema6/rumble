@@ -314,7 +314,7 @@
                 var vparams  = { };
 
                 ['badge','byline','portrait','title','autoplay'].forEach(function(prop){
-                    if ($attr[prop]) {
+                    if ($attr[prop] !== undefined) {
                         vparams[prop] = $attr[prop];
                     }
                 });
