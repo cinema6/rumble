@@ -96,9 +96,10 @@
                 return c6EventEmitter({
                     play        : angular.noop,
                     pause       : angular.noop,
-                    rewind      : angular.noop,
+                    reset       : angular.noop,
                     getType     : angular.noop,
-                    getVideoId  : angular.noop
+                    getVideoId  : angular.noop,
+                    isReady     : angular.noop
                 });
             };
         }])
