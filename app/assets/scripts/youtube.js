@@ -343,7 +343,7 @@
                 });
 
                 playerIsReady = false;
-                player = youtube.createPlayer($attr.videoid,{
+                player = youtube.createPlayer('yt_' + $attr.videoid,{
                     videoId     : $attr.videoid,
                     width       : $attr.width,
                     height      : $attr.height,

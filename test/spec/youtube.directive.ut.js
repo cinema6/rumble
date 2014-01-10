@@ -96,7 +96,7 @@
                     $timeout.flush();
                     expect($log.context).toHaveBeenCalledWith('youtubePlayer');
                     expect(mockPlayers.length).toEqual(1);
-                    expect(youtube.createPlayer.calls[0].args[0]).toEqual('abc123');
+                    expect(youtube.createPlayer.calls[0].args[0]).toEqual('yt_abc123');
                     expect(youtube.createPlayer.calls[0].args[1]).toEqual({
                         videoId: 'abc123',
                         width: '1',

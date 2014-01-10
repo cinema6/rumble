@@ -140,7 +140,7 @@
                         return;
                     }
 
-//                    $log.info('[%1] - messageReceived: [%2]',_playerId, event.data);
+                    $log.info('[%1] - messageReceived: [%2]',_playerId, event.data);
                     var data = service.parseEventData(event.data), deferreds, deferred;
 
                     if (data.id !== _playerId){
@@ -172,19 +172,99 @@
 
         return service;
     }])
-    .directive('dailymotionPlayer',['$log','$timeout','c6UserAgent','dailymotion','_default',
-        function($log,$timeout,c6UserAgent,dailymotion,_default){
+    .directive('dailymotionPlayer',
+        ['$log','$timeout','c6UserAgent','dailymotion','_default','numberify','playerInterface',
+        function($log,$timeout,c6UserAgent,dailymotion,_default,numberify,playerInterface){
         $log = $log.context('dailymotionPlayer');
         function fnLink(scope,$element,$attr){
-            var player;
+            if (!$attr.videoid){
+                throw new SyntaxError('dailymotionPlayer requires the videoid attribute to be set.');
+            }
+            var player, playerIface  = playerInterface(),
+                playerIsReady = false, playerHasLoaded = false;
+
             $log.info('link: videoId=%1, start=%2, end=%3, autoPlay=%4',
                 $attr.videoid, $attr.start, $attr.end, $attr.autoplay);
             
-            _default($attr,'related'    ,0);
-
-            if (c6UserAgent.app.name === 'firefox'){
-                $attr.twerk = false;
+            function endListener(p,data){
+                if (data.seconds >= numberify($attr.end,0)){
+                    player.pause();
+                    $timeout(function(){
+                        player.post('removeEventListener','playing');
+                        player.removeListener('playing',endListener);
+                        player.emit('ended',player);
+                    });
+                }
             }
+
+            function setEndListener(){
+                if (numberify($attr.end,0) > 0){
+                    player.removeListener('playing',endListener);
+                    player.on('playing',endListener);
+                }
+            }
+
+            function setStartListener(){
+                var videoStart = numberify($attr.start,0);
+                if (playerHasLoaded){
+                    player.seekTo(videoStart);
+                    return;
+                }
+                player.once('playing',function(){
+                    if (videoStart > 0){
+                        player.seekTo(videoStart);
+                    }
+                    playerIface.emit('videoStarted',playerIface);
+                    playerHasLoaded = true;
+                });
+            }
+
+            /* -- playerInterface : begin -- */
+
+            playerIface.getType = function () {
+                return 'dailymotion';
+            };
+
+            playerIface.getVideoId = function() {
+                return $attr.videoid;
+            };
+
+            playerIface.isReady = function() {
+                return playerIsReady;
+            };
+
+            playerIface.play = function(){
+                if (playerIsReady){
+                    player.play();
+                }
+            };
+
+            playerIface.pause = function(){
+                if (playerIsReady){
+                    player.pause();
+                }
+            };
+
+            playerIface.reset = function(){
+                if (!playerIsReady){
+                    return;
+                }
+                setStartListener();
+                setEndListener();
+            };
+
+            scope.$emit('playerAdd',playerIface);
+            
+            scope.$on('$destroy',function(){
+                scope.$emit('playerRemove',playerIface);
+                if (player){
+                    //player.destroy();
+                }
+            });
+
+            /* -- playerInterface : end -- */
+            
+            _default($attr,'related'    ,0);
 
             $attr.$observe('width',function(){
                 if (player){
@@ -206,9 +286,22 @@
                     player.pause();
                 }
             });
+            
+            function regeneratePlayer(){
+                if (player){
+                    player.destroy();
+                    player          = undefined;
+                    playerHasLoaded = false;
+                    playerIsReady   = false;
+                }
+                $timeout(createPlayer);
+            }
+
 
             function createPlayer(){
-                var vparams  = { }, twerking = false;
+                var vparams  = { };
+                playerIsReady = false;
+                playerHasLoaded = false;
 
                 ['startscreen','related','html','info','autoplay'].forEach(function(prop){
                     if ($attr[prop] !== undefined) {
@@ -216,10 +309,16 @@
                     }
                 });
 
-                if ($attr.twerk){
+                // Twerking and FireFox
+                if (c6UserAgent.app.name === 'firefox'){
+                    $attr.twerk = 0;
+                }
+
+                if (numberify($attr.twerk)){
                     vparams.html = '1';
                 }
-                player = dailymotion.createPlayer('dm-' + $attr.videoid,{
+
+                player = dailymotion.createPlayer('dm_' + $attr.videoid,{
                     videoId     : $attr.videoid,
                     width       : $attr.width,
                     height      : $attr.height,
@@ -232,40 +331,32 @@
                 player.on('ready',function(p){
                     $log.info('[%1] - I am ready',p);
                     
-                    player.on('ended',function(p){
-                        $log.info('[%1] - I am finished',p);
-                        scope.$emit('videoEnded','dailymotion',$attr.videoid);
-                        if ($attr.regenerate){
-                            player.destroy();
-                            $timeout(createPlayer);
-                        }
-                    });
-
-                    if (parseInt($attr.twerk,10)){
+                    if (numberify($attr.twerk)){
                         $log.info('[%1] - start twerk',p);
                         player.play();
-                        twerking = true;
-                        player.on('playing',function(p){
-                            var self = this;
+                        player.once('playing',function(p){
                             $log.info('[%1] - stop twerk',p);
-                            twerking = false;
                             player.pause();
-                            $timeout(function(){
-                                player.removeListener('playing',self);
-                            });
+                            playerIsReady = true;
+                            playerIface.reset();
                         });
+                    } else {
+                        playerIsReady = true;
+                        playerIface.reset();
                     }
-                   
+                    
+                    player.on('ended',function(p){
+                        $log.info('[%1] - I am finished',p);
+                        playerIface.emit('videoEnded',playerIface);
+                        scope.$emit('videoEnded','dailymotion',$attr.videoid);
+                        if (numberify($attr.regenerate)){
+                            regeneratePlayer();
+                        }
+                    });
                 });
             }
 
-            $timeout(createPlayer);
-
-            scope.$on('$destroy',function(){
-                if (player){
-                    //player.destroy();
-                }
-            });
+            regeneratePlayer();
         }
 
         return {

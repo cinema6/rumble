@@ -1,32 +1,32 @@
 (function(){
     'use strict';
     
-    define(['vimeo'], function() {
-        describe('vimeoPlayer directive',function(){
+    define(['dailymotion'], function() {
+        describe('dailymotionPlayer directive',function(){
             var $compile,
                 $timeout,
                 $log,
                 $rootScope,
                 $scope,
                 mockPlayers,
-                vimeo = {};
+                dailymotion = {};
 
             beforeEach(function() {
                 mockPlayers = [];
                 module('c6.rumble',function($provide){
-                    vimeo.createPlayer = jasmine.createSpy('vimeo.createPlayer')
+                    dailymotion.createPlayer = jasmine.createSpy('dm.createPlayer')
                     .andCallFake(function(playerId,config,$parentElement){
                         var mockPlayer = {
-                            on              : jasmine.createSpy('vimeoPlayer.on'),
-                            once            : jasmine.createSpy('vimeoPlayer.once'),
-                            emit            : jasmine.createSpy('vimeoPlayer.emit'),
-                            removeListener  : jasmine.createSpy('vimeoPlayer.removeListener'),
-                            setSize         : jasmine.createSpy('vimeoPlayer.setSize'),
-                            destroy         : jasmine.createSpy('vimeoPlayer.destroy'),
-                            post            : jasmine.createSpy('vimeoPlayer.post'),
-                            play            : jasmine.createSpy('vimeoPlayer.play'),
-                            pause           : jasmine.createSpy('vimeoPlayer.pause'),
-                            seekTo          : jasmine.createSpy('vimeoPlayer.seekTo'),
+                            on              : jasmine.createSpy('dmPlayer.on'),
+                            once            : jasmine.createSpy('dmPlayer.once'),
+                            emit            : jasmine.createSpy('dmPlayer.emit'),
+                            removeListener  : jasmine.createSpy('dmPlayer.removeListener'),
+                            setSize         : jasmine.createSpy('dmPlayer.setSize'),
+                            destroy         : jasmine.createSpy('dmPlayer.destroy'),
+                            post            : jasmine.createSpy('dmPlayer.post'),
+                            play            : jasmine.createSpy('dmPlayer.play'),
+                            pause           : jasmine.createSpy('dmPlayer.pause'),
+                            seekTo          : jasmine.createSpy('dmPlayer.seekTo'),
 
                             _on             : {},
                             _once           : {},
@@ -57,7 +57,7 @@
                         mockPlayers.push(mockPlayer);
                         return mockPlayer;
                     });
-                    $provide.value('vimeo', vimeo);
+                    $provide.value('dailymotion', dailymotion);
                 });
 
                 inject(function($injector) {
@@ -78,37 +78,36 @@
                 it('will fail without a videoid',function(){
                     expect(function(){
                         $scope.$apply(function() {
-                            $compile('<vimeo-player></vimeo-player>')($rootScope);
+                            $compile('<dailymotion-player></dailymotion-player>')($rootScope);
                         });
-                    }).toThrow('vimeoPlayer requires the videoid attribute to be set.');
+                    }).toThrow('dailymotionPlayer requires the videoid attribute to be set.');
                 });
 
                 it('will create a player',function(){
                     $compile(
-                        '<vimeo-player videoid="abc123" width="1" height="2"></vimeo-player>'
+                        '<dailymotion-player videoid="abc123" width="1" height="2"></dailymotion-player>'
                     )($scope);
                     $timeout.flush();
-                    expect($log.context).toHaveBeenCalledWith('vimeoPlayer');
+                    expect($log.context).toHaveBeenCalledWith('dailymotionPlayer');
                     expect(mockPlayers.length).toEqual(1);
-                    expect(vimeo.createPlayer.calls[0].args[0]).toEqual('vm_abc123');
-                    expect(vimeo.createPlayer.calls[0].args[1]).toEqual({
+                    expect(dailymotion.createPlayer.calls[0].args[0]).toEqual('dm_abc123');
+                    expect(dailymotion.createPlayer.calls[0].args[1]).toEqual({
                         videoId: 'abc123',
                         width: '1',
                         height: '2',
                         params: {
-                            badge: 0,
-                            portrait: 0
+                            related: 0
                         },
                         frameborder: 0
                     });
                 });
 
                 it('will observe changes to width and height',function(){
-                    var vimeoPlayer, scope;
-                    vimeoPlayer = $compile(
-                        '<vimeo-player videoid="abc123" width="{{width}}" height="{{height}}"></vimeo-player>'
+                    var dailymotionPlayer, scope;
+                    dailymotionPlayer = $compile(
+                        '<dailymotion-player videoid="abc123" width="{{width}}" height="{{height}}"></dailymotion-player>'
                     )($scope);
-                    scope = vimeoPlayer.scope();
+                    scope = dailymotionPlayer.scope();
                     $timeout.flush();
                     expect(mockPlayers[0].setSize).not.toHaveBeenCalled();
                     $scope.width  = 200;
@@ -132,7 +131,7 @@
                     $scope.$on('playerAdd'      ,addSpy);
                     
                     $compile(
-                        '<vimeo-player videoid="abc123" width="1" height="2" start="{{start}}" end="{{end}}"></vimeo-player>'
+                        '<dailymotion-player videoid="abc123" width="1" height="2" start="{{start}}" end="{{end}}"></dailymotion-player>'
                     )($scope);
                     $timeout.flush();
                 });
@@ -156,7 +155,7 @@
                     });
 
                     it('will have type information',function(){
-                        expect(iface.getType()).toEqual('vimeo');
+                        expect(iface.getType()).toEqual('dailymotion');
                     });
 
                     it('isReady will return false',function(){
@@ -174,11 +173,11 @@
                     });
 
                     it('will not reset',function(){
-                        expect(mockPlayers[0]._once.playProgress).not.toBeDefined();
-                        expect(mockPlayers[0]._on.playProgress).not.toBeDefined();
+                        expect(mockPlayers[0]._once.playing).not.toBeDefined();
+                        expect(mockPlayers[0]._on.playing).not.toBeDefined();
                         iface.reset();
-                        expect(mockPlayers[0]._once.playProgress).not.toBeDefined();
-                        expect(mockPlayers[0]._on.playProgress).not.toBeDefined();
+                        expect(mockPlayers[0]._once.playing).not.toBeDefined();
+                        expect(mockPlayers[0]._on.playing).not.toBeDefined();
                     });
                 });
 
@@ -211,22 +210,22 @@
 
                     describe('reset method',function(){
                         it('sets startListener only if no end param is set',function(){
-                            expect(mockPlayers[0]._once.playProgress).toBeDefined();
-                            expect(mockPlayers[0]._on.playProgress).not.toBeDefined();
+                            expect(mockPlayers[0]._once.playing).toBeDefined();
+                            expect(mockPlayers[0]._on.playing).not.toBeDefined();
                             iface.reset();
-                            expect(mockPlayers[0]._once.playProgress.length).toEqual(2);
-                            expect(mockPlayers[0]._on.playProgress).not.toBeDefined();
+                            expect(mockPlayers[0]._once.playing.length).toEqual(2);
+                            expect(mockPlayers[0]._on.playing).not.toBeDefined();
                         });
 
                         it('sets start and end listener if both params are set',function(){
-                            expect(mockPlayers[0]._once.playProgress).toBeDefined();
-                            expect(mockPlayers[0]._on.playProgress).not.toBeDefined();
+                            expect(mockPlayers[0]._once.playing).toBeDefined();
+                            expect(mockPlayers[0]._on.playing).not.toBeDefined();
                             $scope.start=10;
                             $scope.end=20;
                             $scope.$digest();
                             iface.reset();
-                            expect(mockPlayers[0]._once.playProgress.length).toEqual(2);
-                            expect(mockPlayers[0]._on.playProgress.length).toEqual(1);
+                            expect(mockPlayers[0]._once.playing.length).toEqual(2);
+                            expect(mockPlayers[0]._on.playing.length).toEqual(1);
                         });
                     });
                 });
@@ -246,7 +245,7 @@
                 describe('when not turned on',function(){
                     beforeEach(function(){
                         $compile(
-                            '<vimeo-player videoid="abc123" width="1" height="2"></vimeo-player>'
+                            '<dailymotion-player videoid="abc123" width="1" height="2"></dailymotion-player>'
                         )($scope);
                         $timeout.flush();
                     });
@@ -256,7 +255,7 @@
                         expect(mockPlayers[0].play).not.toHaveBeenCalled();
                         expect(mockPlayers[0].pause).not.toHaveBeenCalled();
                         expect(iface.reset).not.toHaveBeenCalled();
-                        expect(mockPlayers[0]._once.playProgress).not.toBeDefined();
+                        expect(mockPlayers[0]._once.playing).not.toBeDefined();
                         mockPlayers[0]._on.ready[0]({},mockPlayers[0]);
                         expect(iface.isReady()).toEqual(true);
                         expect(mockPlayers[0].play).not.toHaveBeenCalled();
@@ -269,7 +268,7 @@
 
                     beforeEach(function(){
                         $compile(
-                            '<vimeo-player videoid="abc123" width="1" height="2" twerk="1"></vimeo-player>'
+                            '<dailymotion-player videoid="abc123" width="1" height="2" twerk="1"></dailymotion-player>'
                         )($scope);
                         $timeout.flush();
                     });
@@ -279,10 +278,10 @@
                         expect(mockPlayers[0].play).not.toHaveBeenCalled();
                         expect(mockPlayers[0].pause).not.toHaveBeenCalled();
                         expect(iface.reset).not.toHaveBeenCalled();
-                        expect(mockPlayers[0]._once.playProgress).not.toBeDefined();
+                        expect(mockPlayers[0]._once.playing).not.toBeDefined();
                         mockPlayers[0]._on.ready[0]({},mockPlayers[0]);
                         expect(iface.isReady()).toEqual(false);
-                        expect(mockPlayers[0]._once.playProgress).toBeDefined();
+                        expect(mockPlayers[0]._once.playing).toBeDefined();
                         expect(mockPlayers[0].play).toHaveBeenCalled();
                         expect(mockPlayers[0].pause).not.toHaveBeenCalled();
                         expect(iface.reset).not.toHaveBeenCalled();
@@ -294,7 +293,7 @@
                         expect(mockPlayers[0].pause).not.toHaveBeenCalled();
                         expect(iface.reset).not.toHaveBeenCalled();
                         
-                        mockPlayers[0]._once.playProgress[0]({},mockPlayers[0]);
+                        mockPlayers[0]._once.playing[0]({},mockPlayers[0]);
                         expect(mockPlayers[0].pause).toHaveBeenCalled();
                         expect(iface.reset).toHaveBeenCalled();
                         expect(iface.isReady()).toEqual(true);
@@ -315,9 +314,9 @@
 
                 describe('start',function(){
                 
-                    it('will emit videoStarted on firt playProgress event',function(){
+                    it('will emit videoStarted on firt playing event',function(){
                         $compile(
-                            '<vimeo-player videoid="a" width="1" height="2"></vimeo-player>'
+                            '<dailymotion-player videoid="a" width="1" height="2"></dailymotion-player>'
                         )($scope);
                         var startedSpy = jasmine.createSpy('playerHasStarted');
                         iface.on('videoStarted',startedSpy);
@@ -326,8 +325,8 @@
                         //simulate the firing of the ready event
                         mockPlayers[0]._on.ready[0]({},mockPlayers[0]);
                       
-                        //simulate the firing of the playProgress event
-                        mockPlayers[0]._once.playProgress[0]({},mockPlayers[0]);
+                        //simulate the firing of the playing event
+                        mockPlayers[0]._once.playing[0]({},mockPlayers[0]);
 
                         expect(startedSpy).toHaveBeenCalledWith(iface);
                         
@@ -336,15 +335,15 @@
 
                     it('will seekTo start value if set',function(){
                         $compile(
-                            '<vimeo-player videoid="a" start="10"></vimeo-player>'
+                            '<dailymotion-player videoid="a" start="10"></dailymotion-player>'
                         )($scope);
                         $timeout.flush();
 
                         //simulate the firing of the ready event
                         mockPlayers[0]._on.ready[0](mockPlayers[0]);
                       
-                        //simulate the firing of the playProgress event
-                        mockPlayers[0]._once.playProgress[0](mockPlayers[0]);
+                        //simulate the firing of the playing event
+                        mockPlayers[0]._once.playing[0](mockPlayers[0]);
 
                         expect(mockPlayers[0].seekTo).toHaveBeenCalledWith(10);
 
@@ -353,56 +352,56 @@
 
                 describe('end',function(){
 
-                    it('vimeo finish event will triger videoEnded',function(){
+                    it('dailymotion ended event will triger videoEnded',function(){
                         var endedSpy = jasmine.createSpy('playerHasEnded');
                         $compile(
-                            '<vimeo-player videoid="a" end="10"></vimeo-player>'
+                            '<dailymotion-player videoid="a" end="10"></dailymotion-player>'
                         )($scope);
                         $timeout.flush();
                         iface.on('videoEnded',endedSpy);
                         //simulate the firing of the ready event
                         mockPlayers[0]._on.ready[0](mockPlayers[0]);
 
-                        //simulate the firing of the finish event
-                        mockPlayers[0]._on.finish[0](mockPlayers[0]);
+                        //simulate the firing of the ended event
+                        mockPlayers[0]._on.ended[0](mockPlayers[0]);
                         expect(endedSpy).toHaveBeenCalledWith(iface);
 
                     });
 
-                    it('end param will trigger finish based on playProgress',function(){
+                    it('end param will trigger ended based on playing',function(){
                         $compile(
-                            '<vimeo-player videoid="a" end="10"></vimeo-player>'
+                            '<dailymotion-player videoid="a" end="10"></dailymotion-player>'
                         )($scope);
                         $timeout.flush();
 
-                        expect(mockPlayers[0]._on.finish).not.toBeDefined();
+                        expect(mockPlayers[0]._on.ended).not.toBeDefined();
 
                         //simulate the firing of the ready event
                         mockPlayers[0]._on.ready[0](mockPlayers[0]);
                       
-                        expect(mockPlayers[0]._on.finish).toBeDefined();
+                        expect(mockPlayers[0]._on.ended).toBeDefined();
                         expect(mockPlayers[0].pause).not.toHaveBeenCalled();
 
-                        //simulate the firing of the playProgress event
-                        mockPlayers[0]._on.playProgress[0](mockPlayers[0], { seconds : 0 });
+                        //simulate the firing of the playing event
+                        mockPlayers[0]._on.playing[0](mockPlayers[0], { seconds : 0 });
                         expect(function(){$timeout.flush()}).toThrow();
                         expect(mockPlayers[0].pause).not.toHaveBeenCalled();
                         expect(mockPlayers[0].emit).not.toHaveBeenCalled();
 
-                        mockPlayers[0]._on.playProgress[0](mockPlayers[0], { seconds : 5 });
+                        mockPlayers[0]._on.playing[0](mockPlayers[0], { seconds : 5 });
                         expect(function(){$timeout.flush()}).toThrow();
                         expect(mockPlayers[0].pause).not.toHaveBeenCalled();
                         expect(mockPlayers[0].emit).not.toHaveBeenCalled();
 
-                        mockPlayers[0]._on.playProgress[0](mockPlayers[0], { seconds : 10 });
+                        mockPlayers[0]._on.playing[0](mockPlayers[0], { seconds : 10 });
                         expect(function(){$timeout.flush()}).not.toThrow();
                         expect(mockPlayers[0].pause).toHaveBeenCalled();
-                        expect(mockPlayers[0].emit.mostRecentCall.args[0]).toEqual('finish');
+                        expect(mockPlayers[0].emit.mostRecentCall.args[0]).toEqual('ended');
                     });
 
                     it('will not regenerate the player by default', function(){
                         $compile(
-                            '<vimeo-player videoid="a" end="10"></vimeo-player>'
+                            '<dailymotion-player videoid="a" end="10"></dailymotion-player>'
                         )($scope);
                         $timeout.flush();
                         
@@ -412,8 +411,8 @@
                         expect(iface.isReady()).toEqual(true);
                         expect(mockPlayers[0].destroy.callCount).toEqual(0);
 
-                        //simulate the firing of the finish event
-                        mockPlayers[0]._on.finish[0](mockPlayers[0]);
+                        //simulate the firing of the ended event
+                        mockPlayers[0]._on.ended[0](mockPlayers[0]);
                         expect(function(){$timeout.flush();}).toThrow();
                         expect(mockPlayers.length).toEqual(1);
                         expect(mockPlayers[0].destroy.callCount).toEqual(0);
@@ -422,7 +421,7 @@
 
                     it('will regenerate the player if regenerate param is set',function(){
                         $compile(
-                            '<vimeo-player videoid="a" regenerate="1"></vimeo-player>'
+                            '<dailymotion-player videoid="a" regenerate="1"></dailymotion-player>'
                         )($scope);
                         $timeout.flush();
                         //simulate the firing of the ready event
@@ -431,8 +430,8 @@
                         expect(iface.isReady()).toEqual(true);
                         expect(mockPlayers[0].destroy.callCount).toEqual(0);
 
-                        //simulate the firing of the finish event
-                        mockPlayers[0]._on.finish[0](mockPlayers[0]);
+                        //simulate the firing of the ended event
+                        mockPlayers[0]._on.ended[0](mockPlayers[0]);
                         $timeout.flush();
                         expect(mockPlayers.length).toEqual(2);
                         expect(mockPlayers[0].destroy.callCount).toEqual(1);

@@ -320,7 +320,7 @@
                 });
 
                 playerIsReady = false;
-                player = vimeo.createPlayer($attr.videoid,{
+                player = vimeo.createPlayer('vm_' + $attr.videoid,{
                     videoId     : $attr.videoid,
                     width       : $attr.width,
                     height      : $attr.height,
