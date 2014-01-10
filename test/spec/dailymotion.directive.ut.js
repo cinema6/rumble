@@ -210,21 +210,21 @@
 
                     describe('reset method',function(){
                         it('sets startListener only if no end param is set',function(){
-                            expect(mockPlayers[0]._once.playing).toBeDefined();
+                            expect(mockPlayers[0]._once.playing).not.toBeDefined();
                             expect(mockPlayers[0]._on.playing).not.toBeDefined();
                             iface.reset();
-                            expect(mockPlayers[0]._once.playing.length).toEqual(2);
+                            expect(mockPlayers[0]._once.playing.length).toEqual(1);
                             expect(mockPlayers[0]._on.playing).not.toBeDefined();
                         });
 
                         it('sets start and end listener if both params are set',function(){
-                            expect(mockPlayers[0]._once.playing).toBeDefined();
+                            expect(mockPlayers[0]._once.playing).not.toBeDefined();
                             expect(mockPlayers[0]._on.playing).not.toBeDefined();
                             $scope.start=10;
                             $scope.end=20;
                             $scope.$digest();
                             iface.reset();
-                            expect(mockPlayers[0]._once.playing.length).toEqual(2);
+                            expect(mockPlayers[0]._once.playing.length).toEqual(1);
                             expect(mockPlayers[0]._on.playing.length).toEqual(1);
                         });
                     });
@@ -260,7 +260,7 @@
                         expect(iface.isReady()).toEqual(true);
                         expect(mockPlayers[0].play).not.toHaveBeenCalled();
                         expect(mockPlayers[0].pause).not.toHaveBeenCalled();
-                        expect(iface.reset).toHaveBeenCalled();
+                        expect(iface.reset).not.toHaveBeenCalled();
                     });
                 });
 
@@ -295,7 +295,7 @@
                         
                         mockPlayers[0]._once.playing[0]({},mockPlayers[0]);
                         expect(mockPlayers[0].pause).toHaveBeenCalled();
-                        expect(iface.reset).toHaveBeenCalled();
+                        expect(iface.reset).not.toHaveBeenCalled();
                         expect(iface.isReady()).toEqual(true);
                     });
 
@@ -311,6 +311,43 @@
                         iface = playerInterface;
                     });
                 });
+                
+                describe('ready',function(){
+                    it('is emitted when the player is ready if twerking is off',function(){
+                        var readySpy = jasmine.createSpy('playerIsReady');
+                        $compile(
+                            '<dailymotion-player videoid="a" width="1" height="2"></dailymotion-player>'
+                        )($scope);
+                        $timeout.flush();
+                        iface.on('ready',readySpy);
+                        expect(readySpy).not.toHaveBeenCalled();
+                        expect(iface.isReady()).toEqual(false);
+                        
+                        //simulate the firing of the ready event
+                        mockPlayers[0]._on.ready[0]({},mockPlayers[0]);
+                        
+                        expect(readySpy).toHaveBeenCalledWith(iface);
+                        expect(iface.isReady()).toEqual(true);
+                    });
+
+                    it('is emitted when the twerk is done if twerking is on',function(){
+                        var readySpy = jasmine.createSpy('playerIsReady');
+                        $compile(
+                            '<dailymotion-player videoid="a" width="1" twerk="1"></dailymotion-player>'
+                        )($scope);
+                        $timeout.flush();
+                        iface.on('ready',readySpy);
+                        expect(readySpy).not.toHaveBeenCalled();
+                        expect(iface.isReady()).toEqual(false);
+                        
+                        //simulate the firing of the ready and play event
+                        mockPlayers[0]._on.ready[0]({},mockPlayers[0]);
+                        mockPlayers[0]._once.playing[0]({},mockPlayers[0]);
+                        
+                        expect(readySpy).toHaveBeenCalledWith(iface);
+                        expect(iface.isReady()).toEqual(true);
+                    });
+                });
 
                 describe('start',function(){
                 
@@ -324,6 +361,8 @@
 
                         //simulate the firing of the ready event
                         mockPlayers[0]._on.ready[0]({},mockPlayers[0]);
+                        
+                        iface.reset();
                       
                         //simulate the firing of the playing event
                         mockPlayers[0]._once.playing[0]({},mockPlayers[0]);
@@ -341,6 +380,8 @@
 
                         //simulate the firing of the ready event
                         mockPlayers[0]._on.ready[0](mockPlayers[0]);
+                        
+                        iface.reset();
                       
                         //simulate the firing of the playing event
                         mockPlayers[0]._once.playing[0](mockPlayers[0]);
@@ -381,6 +422,8 @@
                       
                         expect(mockPlayers[0]._on.ended).toBeDefined();
                         expect(mockPlayers[0].pause).not.toHaveBeenCalled();
+
+                        iface.reset();
 
                         //simulate the firing of the playing event
                         mockPlayers[0]._on.playing[0](mockPlayers[0], { seconds : 0 });

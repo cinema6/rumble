@@ -338,11 +338,13 @@
                             $log.info('[%1] - stop twerk',p);
                             playerIsReady = true;
                             player.pause();
-                            playerIface.reset();
+//                            playerIface.reset();
+                            playerIface.emit('ready',playerIface);
                         });
                     } else {
                         playerIsReady = true;
-                        playerIface.reset();
+//                       playerIface.reset();
+                        playerIface.emit('ready',playerIface);
                     }
               
                     player.on('finish',function(p){

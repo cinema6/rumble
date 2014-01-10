@@ -111,17 +111,19 @@
         $scope.title            = appData.experience.title;
         $scope.ballot           = appData.experience.data.ballot;
         $scope.rumbleId         = appData.experience.data.rumbleId;
-        
+
         $scope.playList         = [];
         $scope.currentIndex     = -1;
         $scope.currentItem      = null;
         $scope.atHead           = null;
         $scope.atTail           = null;
         $scope.currentReturns   = null;
+        $scope.ready            = false;
         //$scope.deviceProfile.multiPlayer = false;
        
         appData.experience.data.playList.forEach(function(item){
             var newItem = angular.copy(item);
+            newItem.player = null;
             newItem.state = {
                 viewed : false,
                 vote   : -1
@@ -131,15 +133,68 @@
             rumbleVotes.mockReturnsData($scope.rumbleId,item.id,item.voting);
         });
 
-        $scope.$on('videoEnded',function(event,player,videoId){
-            $log.log('Video %1::%2 has ended!',player,videoId);
-            if ((player === $scope.currentItem.video.player) &&
-                (videoId === $scope.currentItem.video.videoid)){
-                $scope.$apply(function(){
-                    $scope.currentItem.state.viewed = true;
-                });
+        $scope.$on('playerAdd',function(event,player){
+            $log.log('Player added: %1 - %2',player.getType(),player.getVideoId());
+            var playListItem = self.findPlayListItemByVideo(player.getType(),player.getVideoId());
+
+            if (!playListItem){
+                $log.error('Unable to locate item for player.');
+                return;
             }
+
+            playListItem.player = player;
+
+            player.on('ready',function(){
+                $log.log('Player ready: %1 - %2',player.getType(),player.getVideoId());
+                self.checkReady();
+                $timeout(function(){
+                    player.removeListener('ready');
+                });
+            });
+
+            player.on('videoStarted',function(){
+                $log.log('Player start detected: %1 - %2',player.getType(),player.getVideoId());
+                if (playListItem === $scope.currentItem){
+                    $log.log('Player start recorded: %1 - %2',player.getType(),player.getVideoId());
+                    playListItem.state.viewed = true;
+                    $timeout(function(){
+                        player.removeListener('videoStarted');
+                    });
+                }
+            });
         });
+        
+        this.findPlayListItemByVideo = function(videoType,videoId){
+            var result;
+            $scope.playList.some(function(item){
+                if (item.video.player !== videoType){
+                    return false;
+                }
+
+                if (item.video.videoid !== videoId){
+                    return false;
+                }
+
+                result = item;
+                return true;
+            });
+
+            return result;
+        };
+
+        this.checkReady = function(){
+            var result = true;
+            $scope.playList.some(function(item){
+                if ((!item.player) || (!item.player.isReady())){
+                    result = false;
+                    return true;
+                }
+            });
+
+            $scope.$apply(function(){
+                $scope.ready = result;
+            });
+        };
 
         this.vote = function(v){
             $scope.currentItem.state.vote = v;
@@ -184,16 +239,24 @@
         };
         
         this.goBack = function(){
+            if ($scope.currentItem){
+                $scope.currentItem.player.pause();
+            }
             self.setPosition($scope.currentIndex - 1);
+            $scope.currentItem.player.reset();
             if ($scope.deviceProfile.multiPlayer){
-                $scope.$broadcast('playVideo',$scope.currentItem.video);
+                $scope.currentItem.player.play();
             }
         };
 
         this.goForward = function(){
+            if ($scope.currentItem){
+                $scope.currentItem.player.pause();
+            }
             self.setPosition($scope.currentIndex + 1);
+            $scope.currentItem.player.reset();
             if ($scope.deviceProfile.multiPlayer){
-                $scope.$broadcast('playVideo',$scope.currentItem.video);
+                $scope.currentItem.player.play();
             }
         };
 

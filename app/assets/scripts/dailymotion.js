@@ -140,7 +140,7 @@
                         return;
                     }
 
-                    $log.info('[%1] - messageReceived: [%2]',_playerId, event.data);
+//                    $log.info('[%1] - messageReceived: [%2]',_playerId, event.data);
                     var data = service.parseEventData(event.data), deferreds, deferred;
 
                     if (data.id !== _playerId){
@@ -338,11 +338,13 @@
                             $log.info('[%1] - stop twerk',p);
                             player.pause();
                             playerIsReady = true;
-                            playerIface.reset();
+//                            playerIface.reset();
+                            playerIface.emit('ready',playerIface);
                         });
                     } else {
                         playerIsReady = true;
-                        playerIface.reset();
+//                        playerIface.reset();
+                        playerIface.emit('ready',playerIface);
                     }
                     
                     player.on('ended',function(p){
