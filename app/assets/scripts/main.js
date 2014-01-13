@@ -52,12 +52,8 @@
                     libUrl('angular/v1.2.6-0-g98ee371/angular.min.js'),
                     libUrl('angular/v1.2.6-0-g98ee371/angular-route.min.js'),
                     libUrl('angular/v1.2.6-0-g98ee371/angular-animate.min.js'),
-//                    libUrl('angular/v1.1.5-0-g9a7035e/angular.min.js'),
-//                    libUrl('ui-router/0.2.0-0-g818b0d6/angular-ui-router.min.js'),
-                    libUrl('c6ui/v1.2-exp-angular-1.2-0-g15d18ff/c6uilib.min.js'),
-                    libUrl('c6ui/v1.2-exp-angular-1.2-0-g15d18ff/c6log.min.js'),
-//                    libUrl('c6ui/v1.2.12-0-g08ccc1d/c6uilib.min.js'),
-//                    libUrl('c6ui/v1.2.12-0-g08ccc1d/c6log.min.js'),
+                    libUrl('c6ui/v2.0.0-0-ge31e70c/c6uilib.min.js'),
+                    libUrl('c6ui/v2.0.0-0-ge31e70c/c6log.min.js'),
                     'https://www.youtube.com/iframe_api'
                 ];
             } else {
@@ -69,12 +65,8 @@
                     libUrl('angular/v1.2.6-0-g98ee371/angular.min.js'),
                     libUrl('angular/v1.2.6-0-g98ee371/angular-route.min.js'),
                     libUrl('angular/v1.2.6-0-g98ee371/angular-animate.min.js'),
-//                    libUrl('angular/v1.1.5-0-g9a7035e/angular.js'),
-//                    libUrl('ui-router/0.2.0-0-g818b0d6/angular-ui-router.js'),
-                    libUrl('c6ui/v1.2-exp-angular-1.2-0-g15d18ff/c6uilib.js'),
-                    libUrl('c6ui/v1.2-exp-angular-1.2-0-g15d18ff/c6log.js'),
-//                    libUrl('c6ui/v1.2.12-0-g08ccc1d/c6uilib.js'),
-//                    libUrl('c6ui/v1.2.12-0-g08ccc1d/c6log.js'),
+                    libUrl('c6ui/v2.0.0-0-ge31e70c/c6uilib.js'),
+                    libUrl('c6ui/v2.0.0-0-ge31e70c/c6log.js'),
                     'https://www.youtube.com/iframe_api'
                 ];
             }
