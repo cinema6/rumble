@@ -42,21 +42,17 @@
             baseUrl: '/base/' + appDir + '/assets/scripts',
 
             paths: {
-                angular: libUrl('angular/v1.2.6-0-g98ee371/angular'),
-                angularRoute: libUrl('angular/v1.2.6-0-g98ee371/angular-route'),
-                angularMocks: libUrl('angular/v1.2.6-0-g98ee371/angular-mocks'),
-//                angular: libUrl('angular/v1.1.5-0-g9a7035e/angular'),
-//                angularMocks: libUrl('angular/v1.1.5-0-g9a7035e/angular-mocks'),
-                jquery: libUrl('jquery/2.0.3-0-gf576d00/jquery'),
-                modernizr: libUrl('modernizr/modernizr.custom.71747'),
-                tweenmax: libUrl('gsap/1.11.2-0-g79f8c87/TweenMax.min'),
-                timelinemax: libUrl('gsap/1.11.2-0-g79f8c87/TimelineMax.min'),
-                uirouter: libUrl('ui-router/0.2.0-0-g818b0d6/angular-ui-router'),
-//                c6ui: libUrl('c6ui/v1.2.9-0-g6e55613/c6uilib'),
-//                c6log: libUrl('c6ui/v1.2.9-0-g6e55613/c6log'),
-                c6ui:  libUrl('c6ui/v1.2-exp-angular-1.2-0-g15d18ff/c6uilib'),
-                c6log: libUrl('c6ui/v1.2-exp-angular-1.2-0-g15d18ff/c6log'),
-                templates: '/base/.tmp/templates'
+                angular     : libUrl('angular/v1.2.8-0-g0f9a1c2/angular'),
+                angularRoute: libUrl('angular/v1.2.8-0-g0f9a1c2/angular-route'),
+                angularMocks: libUrl('angular/v1.2.8-0-g0f9a1c2/angular-mocks'),
+                jquery      : libUrl('jquery/2.0.3-0-gf576d00/jquery'),
+                modernizr   : libUrl('modernizr/modernizr.custom.71747'),
+                tweenmax    : libUrl('gsap/1.11.2-0-g79f8c87/TweenMax.min'),
+                timelinemax : libUrl('gsap/1.11.2-0-g79f8c87/TimelineMax.min'),
+                uirouter    : libUrl('ui-router/0.2.0-0-g818b0d6/angular-ui-router'),
+                c6ui        : libUrl('c6ui/v2.1.0-0-g235a9de/c6uilib'),
+                c6log       : libUrl('c6ui/v2.1.0-0-g235a9de/c6log'),
+                templates   : '/base/.tmp/templates'
             },
 
             shim: {

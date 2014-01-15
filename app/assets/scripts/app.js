@@ -111,8 +111,8 @@
             return deferred.promise;
         }])
         .controller('AppController', ['$scope','$route','$log',
-        'site', 'c6ImagePreloader', 'gsap'/*, 'googleAnalytics'*/,'appData',
-        function($scope, $route, $log, site, c6ImagePreloader, gsap/*, googleAnalytics*/) {
+        'cinema6', 'c6ImagePreloader', 'gsap'/*, 'googleAnalytics'*/,'appData',
+        function($scope, $route, $log, cinema6, c6ImagePreloader, gsap/*, googleAnalytics*/) {
             $log = $log.context('AppCtrl');
             var self = this;
 
@@ -143,7 +143,7 @@
                 }
             };
 
-            site.init({
+            cinema6.init({
                 setup: function(data) {
                     self.experience = data.experience;
                     self.profile    = data.profile;

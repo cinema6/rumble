@@ -11,7 +11,7 @@
                 $timeout,
                 AppCtrl;
 
-            var site,
+            var cinema6,
                 c6ImagePreloader,
                 gsap,
                 googleAnalytics,
@@ -66,14 +66,14 @@
                 });
 
                 module('c6.ui', function($provide) {
-                    $provide.factory('site', function($q) {
-                        site = {
-                            init: jasmine.createSpy('site.init()'),
-                            getSession: jasmine.createSpy('site.getSiteSession()').andCallFake(function() {
-                                return site._.getSessionResult.promise;
+                    $provide.factory('cinema6', function($q) {
+                        cinema6 = {
+                            init: jasmine.createSpy('cinema6.init()'),
+                            getSession: jasmine.createSpy('cinema6.getSiteSession()').andCallFake(function() {
+                                return cinema6._.getSessionResult.promise;
                             }),
-                            requestTransitionState: jasmine.createSpy('site.requestTransitionState()').andCallFake(function() {
-                                return site._.requestTransitionStateResult.promise;
+                            requestTransitionState: jasmine.createSpy('cinema6.requestTransitionState()').andCallFake(function() {
+                                return cinema6._.requestTransitionStateResult.promise;
                             }),
                             _: {
                                 getSessionResult: $q.defer(),
@@ -81,7 +81,7 @@
                             }
                         };
 
-                        return site;
+                        return cinema6;
                     });
                     $provide.value('c6ImagePreloader', c6ImagePreloader);
                 });
@@ -118,7 +118,7 @@
                     srcResult;
 
                 beforeEach(function() {
-                    var setup = site.init.mostRecentCall.args[0].setup;
+                    var setup = cinema6.init.mostRecentCall.args[0].setup;
 
                     srcResult = {};
                     spyOn(AppCtrl, 'src').andReturn(srcResult);
@@ -130,7 +130,7 @@
                 });
 
                 it('should initialize a session with the site', function() {
-                    expect(site.init).toHaveBeenCalled();
+                    expect(cinema6.init).toHaveBeenCalled();
                 });
 
                 it('should setup the session', function() {
