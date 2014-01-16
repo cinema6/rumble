@@ -6,7 +6,9 @@
                 $scope,
                 $window,
                 $timeout,
+                $q,
                 $log,
+                c6UserAgent,
                 RumbleCtrl,
                 playList,
                 appData,
@@ -72,13 +74,15 @@
 
                 module('c6.rumble');
 
-                inject(['$timeout','$rootScope','$log','$window','$controller',
-                    function(_$timeout,_$rootScope,  _$log, _$window, _$controller) {
+                inject(['$timeout','$q','$rootScope','$log','$window','$controller','c6UserAgent',
+                    function(_$timeout,_$q,_$rootScope,  _$log, _$window, _$controller,_c6UserAgent) {
                     $timeout    = _$timeout;
+                    $q          = _$q;
                     $rootScope  = _$rootScope;
                     $log        = _$log;
                     $window     = _$window;
                     $scope      = $rootScope.$new();
+                    c6UserAgent = _c6UserAgent;
                     $log.context = function() { return $log; };
 
                     RumbleCtrl = _$controller('RumbleController', {
@@ -133,6 +137,74 @@
                     });
                 });
             });
+
+            describe('twerkNext',function(){
+                var resolveSpy, rejectSpy;
+                beforeEach(function(){
+                    resolveSpy = jasmine.createSpy('twerk.resolve');
+                    rejectSpy  = jasmine.createSpy('twerk.reject');
+                    
+                    c6UserAgent.app.name = 'chrome';
+                    $scope.deviceProfile = { multiPlayer : true };
+                    $scope.playList.forEach(function(item,index){
+                        item.player = {
+                            isReady  : jasmine.createSpy('item'+index+'.isReady'),
+                            play     : jasmine.createSpy('item'+index+'.play'),
+                            pause    : jasmine.createSpy('item'+index+'.pause'),
+                            reset    : jasmine.createSpy('item'+index+'.reset'),
+                            twerk    : jasmine.createSpy('item'+index+'.twerk'),
+                            getType  : jasmine.createSpy('item'+index+'.getType')
+                        };
+                        item.player.isReady.andReturn(true);
+                    });
+                });
+
+                it('rejects if there is no next player',function(){
+                    $scope.currentIndex = 2;
+                    RumbleCtrl.twerkNext().then(resolveSpy,rejectSpy);
+                    $scope.$digest();
+                    expect(resolveSpy).not.toHaveBeenCalled();
+                    expect(rejectSpy).toHaveBeenCalledWith({
+                        message : 'No next item to twerk.'
+                    });
+                });
+
+                it('rejects if the next player has unsupportd browser',function(){
+                    $scope.currentIndex = 0;
+                    c6UserAgent.app.name = 'phantomjs';
+                    RumbleCtrl.twerkNext().then(resolveSpy,rejectSpy);
+                    $scope.$digest();
+                    expect(resolveSpy).not.toHaveBeenCalled();
+                    expect(rejectSpy).toHaveBeenCalledWith({
+                        message: 'Twerking not supported on phantomjs'
+                    });
+                });
+
+                it('rejects if the next player has already been twerked',function(){
+                    $scope.currentIndex = 0;
+                    $scope.playList[1].state.twerked = true;
+                    RumbleCtrl.twerkNext().then(resolveSpy,rejectSpy);
+                    $scope.$digest();
+                    expect(resolveSpy).not.toHaveBeenCalled();
+                    expect(rejectSpy).toHaveBeenCalledWith({
+                        message: 'Item is already twerked'
+                    });
+                });
+
+                it('resolves when the next player resolves',function(){
+                    var deferred = $q.defer();
+                    $scope.currentIndex = 0;
+                    $scope.playList[1].player.twerk.andReturn(deferred.promise);
+                    RumbleCtrl.twerkNext().then(resolveSpy,rejectSpy);
+                    deferred.resolve($scope.playList[1].player);
+                    $scope.$digest();
+                    expect(resolveSpy).toHaveBeenCalledWith($scope.playList[1].player);
+                    expect(rejectSpy).not.toHaveBeenCalled();
+                    expect($scope.playList[1].state.twerked).toEqual(true);
+                });
+
+            });
+
             describe('navigation',function(){
                 beforeEach(function(){
                     $scope.deviceProfile = { multiPlayer : true };
@@ -161,6 +233,9 @@
                 it('handles moving forward',function(){
                     $scope.currentIndex = 1;
                     $scope.currentItem  = $scope.playList[1];
+                    spyOn(RumbleCtrl,'twerkNext').andReturn({
+                        then: jasmine.createSpy('twerkNext.then')
+                    });
                     RumbleCtrl.goForward();
                     expect($scope.playList[1].player.pause).toHaveBeenCalled();
                     expect($scope.playList[2].player.reset).toHaveBeenCalled();
@@ -169,6 +244,7 @@
                     expect($scope.currentItem).toBe($scope.playList[2]);
                     expect($scope.atHead).toEqual(false);
                     expect($scope.atTail).toEqual(true);
+                    expect(RumbleCtrl.twerkNext).toHaveBeenCalled();
                 });
                 
                 it('handles moving backward',function(){
@@ -271,6 +347,7 @@
                         expect($scope.playList[1].player).toBe(mockPlayer);
                         expect($scope.playList[1].state.viewed).toEqual(false);
                         mockPlayer._on.videoStarted[0](mockPlayer);
+                        $timeout.flush();
                         expect($scope.playList[1].state.viewed).toEqual(true);
                     });
                 });

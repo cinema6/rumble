@@ -35,14 +35,14 @@
             "playList" : [
                 {
                     "id"     : "rv-22119a8cf9f755",
-                    "title"  : "Ron Burgundy for ESPN",
-                    "note"   : "60% of the time it works 100% of the time",
+                    "title"  : "Did someone say FOX?",
+                    "note"   : "Thought so",
                     "voting" : [ 100, 50, 10 ],
                     "video"  : {
                         "player"  : "youtube",
-                        "videoid" : "sgF7uWZMSdE",
-                        "start"   : 7,
-                        "end"     : 31,
+                        "videoid" : "jofNR_WkoCE",
+                        "start"   : 0,
+                        "end"     : 20,
                         "rel"     : 0,
                         "modestbranding" : 1
                     }

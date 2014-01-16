@@ -102,10 +102,10 @@
 
         return service;
     }])
-    .controller('RumbleController',['$log','$scope','$timeout','$window','appData','rumbleVotes',
-        function($log,$scope,$timeout,$window,appData,rumbleVotes){
+    .controller('RumbleController',['$log','$scope','$timeout','$q','$window','c6UserAgent','appData','rumbleVotes',
+        function($log,$scope,$timeout,$q,$window,c6UserAgent,appData,rumbleVotes){
         $log = $log.context('RumbleCtrl');
-        var self    = this;
+        var self    = this, readyTimeout;
 
         $scope.deviceProfile    = appData.profile;
         $scope.title            = appData.experience.title;
@@ -119,14 +119,14 @@
         $scope.atTail           = null;
         $scope.currentReturns   = null;
         $scope.ready            = false;
-        //$scope.deviceProfile.multiPlayer = false;
-       
+
         appData.experience.data.playList.forEach(function(item){
             var newItem = angular.copy(item);
             newItem.player = null;
             newItem.state = {
-                viewed : false,
-                vote   : -1
+                viewed  : false,
+                twerked : false,
+                vote    : -1
             };
             $scope.playList.push(newItem);
             //TODO: remove this when the service works for real
@@ -147,15 +147,23 @@
             player.on('ready',function(){
                 $log.log('Player ready: %1 - %2',player.getType(),player.getVideoId());
                 self.checkReady();
-                player.removeListener('ready');
+                player.removeListener('ready',this);
+
+                if (playListItem === $scope.playList[0]){
+                    self.twerkNext().then(null,function(e){
+                        $log.warn(e.message);
+                    });
+                }
             });
 
             player.on('videoStarted',function(){
                 $log.log('Player start detected: %1 - %2',player.getType(),player.getVideoId());
                 if (playListItem === $scope.currentItem){
                     $log.log('Player start recorded: %1 - %2',player.getType(),player.getVideoId());
-                    playListItem.state.viewed = true;
                     player.removeListener('videoStarted');
+                    $timeout(function(){
+                        playListItem.state.viewed = true;
+                    });
                 }
             });
         });
@@ -179,6 +187,10 @@
         };
 
         this.checkReady = function(){
+            if ($scope.ready){
+                return;
+            }
+
             var result = true;
             $scope.playList.some(function(item){
                 if ((!item.player) || (!item.player.isReady())){
@@ -188,14 +200,10 @@
             });
 
             $scope.ready = result;
-            /*
-            try {
-                $scope.$digest();
+
+            if ($scope.ready){
+                $timeout.cancel(readyTimeout);
             }
-            catch(e){
-                $log.warn(e);
-            }
-            */
         };
 
         this.vote = function(v){
@@ -219,6 +227,36 @@
             }
 
             return Math.round((votes[index] / tally)* 100) / 100;
+        };
+
+        this.twerkNext = function(){
+            var nextItem = $scope.playList[$scope.currentIndex + 1];
+            if (!nextItem){
+                return $q.reject(new Error('No next item to twerk.'));
+            }
+            
+            if ((c6UserAgent.app.name !== 'chrome') &&
+                (c6UserAgent.app.name !== 'firefox') &&
+                (c6UserAgent.app.name !== 'safari')) {
+                return $q.reject(
+                    new Error('Twerking not supported on ' + c6UserAgent.app.name)
+                );
+            }
+            
+            if (!$scope.deviceProfile.multiPlayer){
+                return $q.reject(new Error('Item cannot be twerked, device not multiplayer.'));
+            }
+            
+            if (nextItem.player.getType() === 'dailymotion'){
+                return $q.reject(new Error('Twerking not supported with DailyMotion.'));
+            }
+            
+            if (nextItem.state.twerked){
+                return $q.reject(new Error('Item is already twerked'));
+            }
+            
+            nextItem.state.twerked = true;
+            return nextItem.player.twerk(5000);
         };
 
         this.setPosition = function(i){
@@ -260,7 +298,16 @@
             if ($scope.deviceProfile.multiPlayer){
                 $scope.currentItem.player.play();
             }
+
+            self.twerkNext().then(null,function(e){
+                $log.warn(e.message);
+            });
         };
+
+        readyTimeout = $timeout(function(){
+            $log.warn('Not all players are ready, but proceding anyway!');
+            $scope.ready = true;
+        });
 
         $log.log('Rumble Controller is initialized!');
     }])

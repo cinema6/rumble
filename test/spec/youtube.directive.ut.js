@@ -228,13 +228,11 @@
 
                         it('sets start and end listener if both params are set',function(){
                             expect(mockPlayers[0]._once.playing).not.toBeDefined();
-                            expect(mockPlayers[0]._on.playing).not.toBeDefined();
                             $scope.start=10;
                             $scope.end=20;
                             $scope.$digest();
                             iface.reset();
-                            expect(mockPlayers[0]._once.playing.length).toEqual(1);
-                            expect(mockPlayers[0]._on.playing.length).toEqual(1);
+                            expect(mockPlayers[0]._once.playing.length).toEqual(2);
                         });
                     });
                 });
@@ -520,7 +518,7 @@
 
                         iface.reset();
                         //simulate the firing of the playing event
-                        mockPlayers[0]._on.playing[0](mockPlayers[0]);
+                        mockPlayers[0]._once.playing[1](mockPlayers[0]);
                         $interval.flush(1000);
 
                         expect(mockPlayers[0].getCurrentTime.callCount).toEqual(0);

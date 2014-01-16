@@ -230,12 +230,13 @@
                 $attr.videoid, $attr.start, $attr.end);
 
             function endListener(p){
+                $log.info('[%1] - endListener',p);
                 var timeCheck = $interval(function(){
                     if (p.getCurrentTime() >= numberify($attr.end,0)){
                         $interval.cancel(timeCheck);
                         p.pause();
+                        $log.info('[%1] - emit ended',p);
                         p.emit('ended',p);
-                        p.removeListener('playing',endListener);
                         return;
                     }
 
@@ -248,23 +249,28 @@
             }
             
             function setEndListener(){
+                $log.info('[%1] - setEndListener',player);
                 if (numberify($attr.end,0) > 0){
                     player.removeListener('playing',endListener);
-                    player.on('playing',endListener);
+                    player.once('playing',endListener);
                 }
             }
 
 
             function setStartListener(){
+                $log.info('[%1] - setStartListener',player);
                 var videoStart = numberify($attr.start,0);
                 if (playerHasLoaded){
                     player.seekTo(videoStart);
                     return;
                 }
+                $log.info('[%1] - setStartListener set once',player);
                 player.once('playing',function(){
+                    $log.info('[%1] - setStartListener at once',player);
                     if (player.getCurrentTime() < videoStart){
                         player.seekTo(videoStart);
                     }
+                    $log.info('[%1] - setStartListener emit videoStarted',player);
                     playerIface.emit('videoStarted',playerIface);
                     playerHasLoaded = true;
                 });
@@ -289,8 +295,7 @@
                 
                 if (wait){
                     waitTimer = $timeout(function(){
-                        player.pause();
-                        player.removeListener('playing',playingListener);
+                        waitTimer = undefined;
                         deferred.reject(new Error('Player twerk timed out'));
                     },wait);
                 }
@@ -369,19 +374,6 @@
                 }
             });
 
-            scope.$on('playVideo',function(event,data){
-                if (data.player === 'youtube' && data.videoid === $attr.videoid){
-                    $log.info('[%1] on.PlayVideo: %2, %3',player,data.player,data.videoid);
-                    player.play();
-                } else {
-                    player.pause();
-                    var videoStart = parseInt($attr.start,10);
-                    if (!isNaN(videoStart)){
-                        player.seekTo(videoStart);
-                    }
-                }
-            });
-            
             function regeneratePlayer(){
                 if (player){
                     player.destroy();
@@ -435,7 +427,6 @@
                     player.on('ended',function(p){
                         $log.info('[%1] - I am finished',p);
                         playerIface.emit('videoEnded',playerIface);
-                        scope.$emit('videoEnded','vimeo',$attr.videoid);
                         if ($attr.regenerate){
                             regeneratePlayer();
                         }

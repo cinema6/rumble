@@ -82,6 +82,17 @@
                     return self.post('pause');
                 };
 
+                self.setVolume = function(vol){
+                    return self.post('setVolume',vol);
+                };
+
+                self.getVolumeAsync = function(){
+                    var deferred = $q.defer();
+                    self.post('getVolume');
+                    getPromises('getVolume').push(deferred);
+                    return deferred.promise;
+                };
+
                 self.getDurationAsync = function(){
                     var deferred = $q.defer();
                     self.post('getDuration');
@@ -249,8 +260,7 @@
                 
                 if (wait){
                     waitTimer = $timeout(function(){
-                        player.pause();
-                        player.removeListener('playProgress',playingListener);
+                        waitTimer = undefined;
                         deferred.reject(new Error('Player twerk timed out'));
                     },wait);
                 }
@@ -328,16 +338,6 @@
                 }
             });
 
-            scope.$on('playVideo',function(event,data){
-                if (data.player === 'vimeo' && data.videoid === $attr.videoid){
-                    $log.info('[%1] on.PlayVideo: %2, %3',player,data.player,data.videoid);
-                    player.play();
-                } else {
-                    player.pause();
-                    playerIface.reset();
-                }
-            });
-
             function regeneratePlayer(){
                 if (player){
                     player.destroy();
@@ -388,7 +388,6 @@
                     player.on('finish',function(p){
                         $log.info('[%1] - I am finished',p);
                         playerIface.emit('videoEnded',playerIface);
-                        scope.$emit('videoEnded','vimeo',$attr.videoid);
                         if ($attr.regenerate){
                             regeneratePlayer();
                         }

@@ -118,14 +118,14 @@
             test: Modernizr.touch,
             yep: [
                 __C6_BUILD_VERSION__ ?
-                    libUrl('angular/v1.2.8-0-g0f9a1c2/angular-mobile.min.js') :
-                    libUrl('angular/v1.2.8-0-g0f9a1c2/angular-mobile.js')
+                    libUrl('angular/v1.2.8-0-g0f9a1c2/angular-touch.min.js') :
+                    libUrl('angular/v1.2.8-0-g0f9a1c2/angular-touch.js')
             ],
             nope: [
                 __C6_APP_BASE_URL__ + '/styles/main--hover.css'
             ],
             complete: function() {
-                if (Modernizr.touch) { c6.kModDeps.push('ngMobile'); }
+                if (Modernizr.touch) { c6.kModDeps.push('ngTouch'); }
 
                 loadScriptsInOrder(appScripts, function() {
                     angular.bootstrap(document.documentElement, ['c6.rumble']);

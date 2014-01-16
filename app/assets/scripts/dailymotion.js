@@ -220,6 +220,11 @@
             }
             
             function twerk(wait){
+                // Twerking and FireFox
+                if (c6UserAgent.app.name === 'firefox'){
+                    return $q.reject('DailyMotion and twerking don\'t mix on firefox.');
+                }
+
                 var deferred = $q.defer(), waitTimer,
                 playingListener = function(){
                     $log.info('[%1] - stop twerk',player);
@@ -238,8 +243,7 @@
                 
                 if (wait){
                     waitTimer = $timeout(function(){
-                        player.pause();
-                        player.removeListener('playing',playingListener);
+                        waitTimer = undefined;
                         deferred.reject(new Error('Player twerk timed out'));
                     },wait);
                 }
@@ -316,15 +320,6 @@
                 }
             });
 
-            scope.$on('playVideo',function(event,data){
-                if (data.player === 'dailymotion' && data.videoid === $attr.videoid){
-                    $log.info('[%1] on.PlayVideo: %2, %3',player,data.player,data.videoid);
-                    player.play();
-                } else {
-                    player.pause();
-                }
-            });
-            
             function regeneratePlayer(){
                 if (player){
                     player.destroy();
@@ -347,11 +342,6 @@
                     }
                 });
 
-                // Twerking and FireFox
-                if (c6UserAgent.app.name === 'firefox'){
-                    $attr.twerk = 0;
-                }
-
                 if (numberify($attr.twerk)){
                     vparams.html = '1';
                 }
@@ -370,7 +360,7 @@
                     $log.info('[%1] - I am ready',p);
                     
                     if (numberify($attr.twerk)){
-                        twerk(0)
+                        twerk()
                             .catch( function (err){
                                 $log.error('[%1] %2',p,err);
                             })
@@ -388,7 +378,6 @@
                     player.on('ended',function(p){
                         $log.info('[%1] - I am finished',p);
                         playerIface.emit('videoEnded',playerIface);
-                        scope.$emit('videoEnded','dailymotion',$attr.videoid);
                         if (numberify($attr.regenerate)){
                             regeneratePlayer();
                         }
