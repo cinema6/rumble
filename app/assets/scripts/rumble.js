@@ -147,9 +147,7 @@
             player.on('ready',function(){
                 $log.log('Player ready: %1 - %2',player.getType(),player.getVideoId());
                 self.checkReady();
-                $timeout(function(){
-                    player.removeListener('ready');
-                });
+                player.removeListener('ready');
             });
 
             player.on('videoStarted',function(){
@@ -157,9 +155,7 @@
                 if (playListItem === $scope.currentItem){
                     $log.log('Player start recorded: %1 - %2',player.getType(),player.getVideoId());
                     playListItem.state.viewed = true;
-                    $timeout(function(){
-                        player.removeListener('videoStarted');
-                    });
+                    player.removeListener('videoStarted');
                 }
             });
         });

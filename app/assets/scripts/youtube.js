@@ -10,7 +10,7 @@
 
         service.origin = 'http://www.youtube.com';
         service.formatPlayerSrc = function(videoId,params){
-            var src = this.origin + '/embed/' + videoId + '?enablejsapi=1';
+            var src = this.origin + '/embed/' + videoId + '?html5=1';
 
             if (params){
                 for (var name in params){
@@ -47,9 +47,9 @@
 
             $parentElement.append($playerElement);
 
-            function YoutubePlayer(iframe$,playerId,videoId,$win){
-                var _iframe$ = iframe$,_playerId = playerId,_videoId = videoId,
-                    _ytId = null, _val = 'YoutubePlayer#' + _playerId,
+            function YoutubePlayer(iframe$,playerId,$win){
+                var _iframe$ = iframe$,_playerId = playerId,
+                    _val = 'YoutubePlayer#' + _playerId,
                     _readyHandler,_stateChangeHandler,_errorHandler, _player, self = this;
                 c6EventEmitter(self);
 
@@ -184,7 +184,7 @@
                 };
                 
                 $log.info('[%1] - created',_playerId);
-                
+/*                
                 function onMessageReceived(event){
                     if (event.origin !== service.origin) {
                         return;
@@ -206,10 +206,10 @@
                     $log.info('[%1] - messageReceived [%2]',_playerId,event.data );
                 }
                 
-//                $win.addEventListener('message', onMessageReceived, false);
+                $win.addEventListener('message', onMessageReceived, false);
+*/
             }
-
-            return new YoutubePlayer($playerElement,playerId,config.videoId,$window);
+            return new YoutubePlayer($playerElement,playerId,$window);
         };
 
         return service;
@@ -235,9 +235,7 @@
                         $interval.cancel(timeCheck);
                         p.pause();
                         p.emit('ended',p);
-                        $timeout(function(){
-                            p.removeListener('playing',endListener);
-                        });
+                        p.removeListener('playing',endListener);
                         return;
                     }
 
@@ -310,7 +308,7 @@
 
             /* -- playerInterface : end -- */
 
-//            _default($attr,'enablejsapi'    ,1);
+            _default($attr,'enablejsapi'    ,1);
             _default($attr,'rel'            ,0);
             _default($attr,'modestbranding' ,1);
 
@@ -387,12 +385,10 @@
                             $log.info('[%1] - stop twerk',p);
                             playerIsReady = true;
                             player.pause();
-//                            playerIface.reset();
                             playerIface.emit('ready',playerIface);
                         });
                     } else {
                         playerIsReady = true;
-//                        playerIface.reset();
                         playerIface.emit('ready',playerIface);
                     }
 

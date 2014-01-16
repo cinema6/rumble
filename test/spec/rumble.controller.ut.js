@@ -14,10 +14,11 @@
             
             beforeEach(function() {
                 mockPlayer = {
-                    getType     : jasmine.createSpy('player.getType'),
-                    getVideoId  : jasmine.createSpy('player.getVideoId'),
-                    isReady     : jasmine.createSpy('player.isReady'),
-                    on        : jasmine.createSpy('player.on'),
+                    getType         : jasmine.createSpy('player.getType'),
+                    getVideoId      : jasmine.createSpy('player.getVideoId'),
+                    isReady         : jasmine.createSpy('player.isReady'),
+                    on              : jasmine.createSpy('player.on'),
+                    removeListener  : jasmine.createSpy('player.removeListener'),
                     _on       : {}
                 };
                 mockPlayer.on.andCallFake(function(eventName,handler){
