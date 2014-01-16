@@ -46,6 +46,7 @@ module.exports = function(grunt) {
     grunt.registerTask('server', 'start a development server', [
         'connect:sandbox',
         'open:server',
+        'ngtemplates:test',
         'karma:debug',
         'watch'
     ]);

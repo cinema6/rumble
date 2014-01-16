@@ -61,9 +61,6 @@
                         raf: {}
                     }
                 };
-                module('ui.router', function($provide) {
-                    $provide.provider('$state', $stateProvider);
-                });
 
                 module('c6.ui', function($provide) {
                     $provide.factory('cinema6', function($q) {

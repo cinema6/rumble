@@ -1,3 +1,4 @@
+/* jshint camelcase: false */
 (function(){
     'use strict';
 
@@ -7,7 +8,7 @@
         $log = $log.context('youtube');
         var service = {};
 
-        service.origin = 'https://www.youtube.com';
+        service.origin = 'http://www.youtube.com';
         service.formatPlayerSrc = function(videoId,params){
             var src = this.origin + '/embed/' + videoId + '?enablejsapi=1';
 
@@ -46,9 +47,9 @@
 
             $parentElement.append($playerElement);
 
-            function YoutubePlayer(iframe$,playerId,$win){
-                var _iframe$ = iframe$,_playerId = playerId,
-                    _val = 'YoutubePlayer#' + _playerId,
+            function YoutubePlayer(iframe$,playerId,videoId,$win){
+                var _iframe$ = iframe$,_playerId = playerId,_videoId = videoId,
+                    _ytId = null, _val = 'YoutubePlayer#' + _playerId,
                     _readyHandler,_stateChangeHandler,_errorHandler, _player, self = this;
                 c6EventEmitter(self);
 
@@ -57,7 +58,7 @@
                 };
 
                 _stateChangeHandler = function(event){
-                    $log.info('STATE:',event.data);
+                    $log.info('[%1] STATE:%2',_playerId,event.data);
                     var PlayerState = $win.YT.PlayerState;
                     switch(event.data){
                         case PlayerState.ENDED:
@@ -183,9 +184,32 @@
                 };
                 
                 $log.info('[%1] - created',_playerId);
+                
+                function onMessageReceived(event){
+                    if (event.origin !== service.origin) {
+                        return;
+                    }
+                    var data = angular.fromJson(event.data);
+
+                    if (data.event === 'initialDelivery'){
+                        if (data.info && data.info.videoData) {
+                            if (data.info.videoData.video_id === _videoId){
+                                _ytId = data.id;
+                            }
+                        }
+                    }
+
+                    if (data.id !== _ytId){
+                        return;
+                    }
+
+                    $log.info('[%1] - messageReceived [%2]',_playerId,event.data );
+                }
+                
+//                $win.addEventListener('message', onMessageReceived, false);
             }
 
-            return new YoutubePlayer($playerElement,playerId,$window);
+            return new YoutubePlayer($playerElement,playerId,config.videoId,$window);
         };
 
         return service;
@@ -286,7 +310,7 @@
 
             /* -- playerInterface : end -- */
 
-            _default($attr,'enablejsapi'    ,1);
+//            _default($attr,'enablejsapi'    ,1);
             _default($attr,'rel'            ,0);
             _default($attr,'modestbranding' ,1);
 

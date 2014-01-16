@@ -103,7 +103,6 @@
                         height: '2',
                         params: {
                             rel             : 0,
-                            enablejsapi     : 1,
                             modestbranding  : 1
                         },
                         frameborder: 0

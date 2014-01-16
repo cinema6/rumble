@@ -49,7 +49,6 @@
                 modernizr   : libUrl('modernizr/modernizr.custom.71747'),
                 tweenmax    : libUrl('gsap/1.11.2-0-g79f8c87/TweenMax.min'),
                 timelinemax : libUrl('gsap/1.11.2-0-g79f8c87/TimelineMax.min'),
-                uirouter    : libUrl('ui-router/0.2.0-0-g818b0d6/angular-ui-router'),
                 c6ui        : libUrl('c6ui/v2.1.0-0-g235a9de/c6uilib'),
                 c6log       : libUrl('c6ui/v2.1.0-0-g235a9de/c6log'),
                 templates   : '/base/.tmp/templates'
@@ -68,9 +67,6 @@
                 timelinemax: {
                     deps: ['tweenmax']
                 },
-                uirouter: {
-                    deps: ['angular']
-                },
                 c6ui: {
                     deps: ['angular']
                 },
@@ -81,7 +77,7 @@
                     deps: ['app']
                 },
                 app: {
-                    deps: ['angular', 'angularRoute', 'angularMocks', 'modernizr', 'timelinemax', 'uirouter', 'c6ui', 'c6log']
+                    deps: ['angular', 'angularRoute', 'angularMocks', 'modernizr', 'timelinemax', 'c6ui', 'c6log']
                 },
                 rumble: {
                     deps: ['angular', 'angularMocks', 'c6ui', 'c6log', 'app']
