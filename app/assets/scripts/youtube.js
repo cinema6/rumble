@@ -215,8 +215,8 @@
         return service;
 
     }])
-    .directive('youtubePlayer',['$log','$window','$timeout','$interval','youtube','_default','playerInterface','numberify',
-        function($log,$window,$timeout,$interval,youtube,_default,playerInterface,numberify){
+    .directive('youtubePlayer',['$log','$window','$timeout','$interval','$q','youtube','_default','playerInterface','numberify',
+        function($log,$window,$timeout,$interval,$q,youtube,_default,playerInterface,numberify){
         $log = $log.context('youtubePlayer');
         function fnLink(scope,$element,$attr){
             if (!$attr.videoid){
@@ -270,6 +270,37 @@
                 });
             }
 
+            function twerk(wait){
+                var deferred = $q.defer(), waitTimer,
+                playingListener = function(){
+                    $log.info('[%1] - stop twerk',player);
+                    if (waitTimer){
+                        $timeout.cancel(waitTimer);
+                    }
+                    player.pause();
+                    deferred.resolve(playerIface);
+                };
+
+                player.once('playing',playingListener);
+
+                if (wait === undefined){
+                    wait = 1000;
+                }
+                
+                if (wait){
+                    waitTimer = $timeout(function(){
+                        player.pause();
+                        player.removeListener('playing',playingListener);
+                        deferred.reject(new Error('Player twerk timed out'));
+                    },wait);
+                }
+                
+                $log.info('[%1] - start twerk, wait=%2',player,wait);
+                player.play();
+
+                return deferred.promise;
+            }
+
             /* -- playerInterface : begin -- */
 
             playerIface.getType = function () {
@@ -294,6 +325,13 @@
                 if (playerIsReady){
                     player.pause();
                 }
+            };
+
+            playerIface.twerk = function(wait){
+                if (!playerIsReady){
+                    return $q.reject(new Error('Player is not ready to twerk'));
+                }
+                return twerk(wait);
             };
 
             playerIface.reset = function(){
@@ -379,17 +417,19 @@
                     $log.info('[%1] - I am ready',p );
                     
                     if (numberify($attr.twerk)){
-                        $log.info('[%1] - start twerk',p);
-                        player.play();
-                        player.once('playing',function(p){
-                            $log.info('[%1] - stop twerk',p);
+                        twerk(0)
+                            .catch( function (err){
+                                $log.error('[%1] %2',p,err);
+                            })
+                            .finally( function(){
+                                playerIsReady = true;
+                                playerIface.emit('ready',playerIface);
+                            });
+                    } else {
+                        $timeout(function(){
                             playerIsReady = true;
-                            player.pause();
                             playerIface.emit('ready',playerIface);
                         });
-                    } else {
-                        playerIsReady = true;
-                        playerIface.emit('ready',playerIface);
                     }
 
                     player.on('ended',function(p){

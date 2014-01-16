@@ -14,7 +14,7 @@
     <ul class="rumble-players">
         <li class="player-list-item" ng-repeat="item in playList" ng-class="{ squished : ($index !== $parent.currentIndex)}" >
         <rumble-player class="player" x-config="item.video" x-profile="deviceProfile" 
-                x-autoplay="0" x-twerk="0">
+                x-autoplay="0" x-twerk="1">
             </rumble-player>
         </li>
     </ul>

@@ -187,9 +187,15 @@
                 }
             });
 
-            $scope.$apply(function(){
-                $scope.ready = result;
-            });
+            $scope.ready = result;
+            /*
+            try {
+                $scope.$digest();
+            }
+            catch(e){
+                $log.warn(e);
+            }
+            */
         };
 
         this.vote = function(v){

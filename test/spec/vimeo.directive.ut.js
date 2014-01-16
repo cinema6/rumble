@@ -185,6 +185,7 @@
                 describe('when player is ready',function(){
                     beforeEach(function(){
                         mockPlayers[0]._on.ready[0]({},mockPlayers[0]);
+                        $timeout.flush();
                     });
 
                     describe('isReady method',function(){
@@ -243,64 +244,149 @@
                     });
                 });
 
-                describe('when not turned on',function(){
+                describe('parameter',function(){
+                    describe('when not turned on',function(){
+                        beforeEach(function(){
+                            $compile(
+                                '<vimeo-player videoid="abc123" width="1" height="2"></vimeo-player>'
+                            )($scope);
+                            $timeout.flush();
+                            $scope.$digest();
+                        });
+
+                        it('will not play/pause when player is ready',function(){
+                            expect(iface.isReady()).toEqual(false);
+                            expect(mockPlayers[0].play).not.toHaveBeenCalled();
+                            expect(mockPlayers[0].pause).not.toHaveBeenCalled();
+                            expect(iface.reset).not.toHaveBeenCalled();
+                            expect(mockPlayers[0]._once.playProgress).not.toBeDefined();
+                            mockPlayers[0]._on.ready[0]({},mockPlayers[0]);
+                            $timeout.flush();
+                            expect(iface.isReady()).toEqual(true);
+                            expect(mockPlayers[0].play).not.toHaveBeenCalled();
+                            expect(mockPlayers[0].pause).not.toHaveBeenCalled();
+                            expect(iface.reset).not.toHaveBeenCalled();
+                        });
+                    });
+
+                    describe('when turned on',function(){
+
+                        beforeEach(function(){
+                            $compile(
+                                '<vimeo-player videoid="abc123" width="1" height="2" twerk="1"></vimeo-player>'
+                            )($scope);
+                            $timeout.flush();
+                        });
+
+                        it('will play when the player is ready',function(){
+                            expect(iface.isReady()).toEqual(false);
+                            expect(mockPlayers[0].play).not.toHaveBeenCalled();
+                            expect(mockPlayers[0].pause).not.toHaveBeenCalled();
+                            expect(iface.reset).not.toHaveBeenCalled();
+                            expect(mockPlayers[0]._once.playProgress).not.toBeDefined();
+                            mockPlayers[0]._on.ready[0]({},mockPlayers[0]);
+                            expect(iface.isReady()).toEqual(false);
+                            expect(mockPlayers[0]._once.playProgress).toBeDefined();
+                            expect(mockPlayers[0].play).toHaveBeenCalled();
+                            expect(mockPlayers[0].pause).not.toHaveBeenCalled();
+                            expect(iface.reset).not.toHaveBeenCalled();
+                        });
+
+                        it('will pause and reset once the player starts playing',function(){
+                            mockPlayers[0]._on.ready[0]({},mockPlayers[0]);
+                            expect(mockPlayers[0].play).toHaveBeenCalled();
+                            expect(mockPlayers[0].pause).not.toHaveBeenCalled();
+                            expect(iface.reset).not.toHaveBeenCalled();
+                            
+                            mockPlayers[0]._once.playProgress[0]({},mockPlayers[0]);
+                            $scope.$digest();
+                            expect(mockPlayers[0].pause).toHaveBeenCalled();
+                            expect(iface.reset).not.toHaveBeenCalled();
+                            expect(iface.isReady()).toEqual(true);
+                        });
+
+                    });
+                });
+
+                describe('method',function(){
+                    var resolveSpy, rejectSpy;
                     beforeEach(function(){
+                        resolveSpy = jasmine.createSpy('twerk.resolve');
+                        rejectSpy  = jasmine.createSpy('twerk.reject');
+                        
                         $compile(
                             '<vimeo-player videoid="abc123" width="1" height="2"></vimeo-player>'
                         )($scope);
                         $timeout.flush();
                     });
 
-                    it('will not play/pause when player is ready',function(){
+                    it('will reject if the player is not ready',function(){
                         expect(iface.isReady()).toEqual(false);
-                        expect(mockPlayers[0].play).not.toHaveBeenCalled();
-                        expect(mockPlayers[0].pause).not.toHaveBeenCalled();
-                        expect(iface.reset).not.toHaveBeenCalled();
-                        expect(mockPlayers[0]._once.playProgress).not.toBeDefined();
-                        mockPlayers[0]._on.ready[0]({},mockPlayers[0]);
-                        expect(iface.isReady()).toEqual(true);
-                        expect(mockPlayers[0].play).not.toHaveBeenCalled();
-                        expect(mockPlayers[0].pause).not.toHaveBeenCalled();
-                        expect(iface.reset).not.toHaveBeenCalled();
+                        iface.twerk().then(resolveSpy,rejectSpy);
+                        $scope.$digest();
+                        expect(resolveSpy).not.toHaveBeenCalled();
+                        expect(rejectSpy).toHaveBeenCalledWith({
+                            message : 'Player is not ready to twerk'
+                        });
                     });
-                });
 
-                describe('when turned on',function(){
-
-                    beforeEach(function(){
-                        $compile(
-                            '<vimeo-player videoid="abc123" width="1" height="2" twerk="1"></vimeo-player>'
-                        )($scope);
+                    it('will resolve when playing starts',function(){
+                        mockPlayers[0]._on.ready[0]({},mockPlayers[0]);
                         $timeout.flush();
-                    });
-
-                    it('will play when the player is ready',function(){
-                        expect(iface.isReady()).toEqual(false);
-                        expect(mockPlayers[0].play).not.toHaveBeenCalled();
-                        expect(mockPlayers[0].pause).not.toHaveBeenCalled();
-                        expect(iface.reset).not.toHaveBeenCalled();
-                        expect(mockPlayers[0]._once.playProgress).not.toBeDefined();
-                        mockPlayers[0]._on.ready[0]({},mockPlayers[0]);
-                        expect(iface.isReady()).toEqual(false);
-                        expect(mockPlayers[0]._once.playProgress).toBeDefined();
-                        expect(mockPlayers[0].play).toHaveBeenCalled();
-                        expect(mockPlayers[0].pause).not.toHaveBeenCalled();
-                        expect(iface.reset).not.toHaveBeenCalled();
-                    });
-
-                    it('will pause and reset once the player starts playing',function(){
-                        mockPlayers[0]._on.ready[0]({},mockPlayers[0]);
-                        expect(mockPlayers[0].play).toHaveBeenCalled();
-                        expect(mockPlayers[0].pause).not.toHaveBeenCalled();
-                        expect(iface.reset).not.toHaveBeenCalled();
+                        iface.twerk().then(resolveSpy,rejectSpy);
                         
                         mockPlayers[0]._once.playProgress[0]({},mockPlayers[0]);
-                        expect(mockPlayers[0].pause).toHaveBeenCalled();
-                        expect(iface.reset).not.toHaveBeenCalled();
-                        expect(iface.isReady()).toEqual(true);
+                        $scope.$digest();
+
+                        expect(resolveSpy).toHaveBeenCalled();
+                        expect(rejectSpy).not.toHaveBeenCalled();
+                    });
+
+                    it('will reject if playing event times out with default',function(){
+                        mockPlayers[0]._on.ready[0]({},mockPlayers[0]);
+                        $timeout.flush();
+                        iface.twerk().then(resolveSpy,rejectSpy);
+                        //default is 1000ms, so it should not be called after 100 
+                        $timeout.flush(100);
+                        expect(resolveSpy).not.toHaveBeenCalled();
+                        expect(rejectSpy).not.toHaveBeenCalled();
+                        
+                        $timeout.flush(1000);
+                        expect(resolveSpy).not.toHaveBeenCalled();
+                        expect(rejectSpy).toHaveBeenCalledWith({
+                            message : 'Player twerk timed out'
+                        });
+                    });
+
+                    it('will reject if playing event times out with specified wait',function(){
+                        mockPlayers[0]._on.ready[0]({},mockPlayers[0]);
+                        $timeout.flush();
+                        iface.twerk(5000).then(resolveSpy,rejectSpy);
+                        
+                        $timeout.flush(1500);
+                        expect(resolveSpy).not.toHaveBeenCalled();
+                        expect(rejectSpy).not.toHaveBeenCalled();
+                        
+                        $timeout.flush(5000);
+                        expect(resolveSpy).not.toHaveBeenCalled();
+                        expect(rejectSpy).toHaveBeenCalledWith({
+                            message : 'Player twerk timed out'
+                        });
+                    });
+
+                    it('will not timeout if timeout passed is 0',function(){
+                        mockPlayers[0]._on.ready[0]({},mockPlayers[0]);
+                        $timeout.flush();
+                        iface.twerk(0).then(resolveSpy,rejectSpy);
+                        
+                        expect(function(){$timeout.flush()}).toThrow();
+                        expect(resolveSpy).not.toHaveBeenCalled();
+                        expect(rejectSpy).not.toHaveBeenCalled();
                     });
 
                 });
+
+
             });
             /* -- end describe('twerking' */
             
@@ -326,6 +412,7 @@
                         
                         //simulate the firing of the ready event
                         mockPlayers[0]._on.ready[0]({},mockPlayers[0]);
+                        $timeout.flush();
                         
                         expect(readySpy).toHaveBeenCalledWith(iface);
                         expect(iface.isReady()).toEqual(true);
@@ -344,6 +431,8 @@
                         //simulate the firing of the ready and play event
                         mockPlayers[0]._on.ready[0]({},mockPlayers[0]);
                         mockPlayers[0]._once.playProgress[0]({},mockPlayers[0]);
+
+                        $scope.$digest();
                         
                         expect(readySpy).toHaveBeenCalledWith(iface);
                         expect(iface.isReady()).toEqual(true);
@@ -362,6 +451,7 @@
 
                         //simulate the firing of the ready event
                         mockPlayers[0]._on.ready[0]({},mockPlayers[0]);
+                        $timeout.flush();
                      
                         iface.reset();
 
@@ -381,6 +471,7 @@
 
                         //simulate the firing of the ready event
                         mockPlayers[0]._on.ready[0](mockPlayers[0]);
+                        $timeout.flush();
                      
                         iface.reset();
 
@@ -403,6 +494,7 @@
                         iface.on('videoEnded',endedSpy);
                         //simulate the firing of the ready event
                         mockPlayers[0]._on.ready[0](mockPlayers[0]);
+                        $timeout.flush();
 
                         //simulate the firing of the finish event
                         mockPlayers[0]._on.finish[0](mockPlayers[0]);
@@ -420,6 +512,7 @@
 
                         //simulate the firing of the ready event
                         mockPlayers[0]._on.ready[0](mockPlayers[0]);
+                        $timeout.flush();
                       
                         expect(mockPlayers[0]._on.finish).toBeDefined();
                         expect(mockPlayers[0].pause).not.toHaveBeenCalled();
@@ -451,6 +544,7 @@
                         
                         //simulate the firing of the ready event
                         mockPlayers[0]._on.ready[0](mockPlayers[0]);
+                        $timeout.flush();
                         expect(mockPlayers.length).toEqual(1);
                         expect(iface.isReady()).toEqual(true);
                         expect(mockPlayers[0].destroy.callCount).toEqual(0);
@@ -470,6 +564,7 @@
                         $timeout.flush();
                         //simulate the firing of the ready event
                         mockPlayers[0]._on.ready[0](mockPlayers[0]);
+                        $timeout.flush();
                         expect(mockPlayers.length).toEqual(1);
                         expect(iface.isReady()).toEqual(true);
                         expect(mockPlayers[0].destroy.callCount).toEqual(0);
