@@ -85,12 +85,14 @@
                     c6UserAgent = _c6UserAgent;
                     $log.context = function() { return $log; };
 
+                    $scope.app = {
+                        data: appData
+                    };
+
                     RumbleCtrl = _$controller('RumbleController', {
                         $scope  : $scope,
-                        $log    : $log,
-                        appData : appData
+                        $log    : $log
                     });
-
                 }]);
             });
             describe('initialization',function(){

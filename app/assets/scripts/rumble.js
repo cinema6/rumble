@@ -2,51 +2,40 @@
     'use strict';
 
     angular.module('c6.rumble')
-    .animation('.splash-screen',['$log','gsap',function($log,gsap){
-        $log = $log.context('.splash-screen');
+    .animation('.splash-screen',[function(){
         return {
             beforeAddClass : function(element,className,done){
                 if (className === 'ng-hide'){
-                    var timeline = new gsap.TimelineLite({paused:true});
-                    //timeline.to(element, 1, { left: (element.width() * -1) });
-                    timeline.to(element, 1, { opacity: 0 });
-                    timeline.eventCallback('onComplete',function(){
-                        $log.info('addClass end',className);
-                        done();
-                    });
-                    $log.info('addClass start',className);
-                    timeline.play();
+                    element.fadeOut(2000, done);
                 }
             }
         };
     }])
-    .animation('.player-list-item',['$log','gsap', function($log, gsap){
+    .animation('.player-list-item',['$log', function($log){
         $log = $log.context('.player-list-item');
         return {
             beforeAddClass: function(element,className,done) {
                 $log.log('addClass setup:',className);
-                var timeline = new gsap.TimelineLite({paused:true});
                 element.css({ opacity : 1, visibility : 'visible' });
-                timeline.to(element, 2, { opacity: 0 });
-                timeline.eventCallback('onComplete',function(){
+                $log.info('addClass start',className);
+                element.animate({
+                    opacity: 0
+                }, 2000, function() {
                     $log.info('addClass end',className);
                     element.css('visibility','hidden');
                     done();
                 });
-                $log.info('addClass start',className);
-                timeline.play();
             },
             removeClass: function(element,className,done) {
                 $log.log('removeClass setup:',className);
-                var timeline = new gsap.TimelineLite({paused:true});
                 element.css({ opacity : 0, visibility : 'visible' });
-                timeline.to(element, 2, { opacity: 1 });
-                timeline.eventCallback('onComplete',function(){
+                $log.info('removeClass start',className);
+                element.animate({
+                    opacity: 1
+                }, 2000, function() {
                     $log.info('removeClass end',className);
                     done();
                 });
-                $log.info('removeClass start',className);
-                timeline.play();
             }
         };
     }])
@@ -102,10 +91,11 @@
 
         return service;
     }])
-    .controller('RumbleController',['$log','$scope','$timeout','$q','$window','c6UserAgent','appData','rumbleVotes','c6Computed',
-        function($log,$scope,$timeout,$q,$window,c6UserAgent,appData,rumbleVotes,c){
+    .controller('RumbleController',['$log','$scope','$timeout','$q','$window','c6UserAgent','rumbleVotes','c6Computed',
+        function($log,$scope,$timeout,$q,$window,c6UserAgent,rumbleVotes,c){
         $log = $log.context('RumbleCtrl');
-        var self    = this, readyTimeout;
+        var self    = this, readyTimeout,
+            appData = $scope.app.data;
 
         $scope.deviceProfile    = appData.profile;
         $scope.title            = appData.experience.title;

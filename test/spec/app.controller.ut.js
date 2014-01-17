@@ -111,19 +111,8 @@
             });
 
             describe('site integration', function() {
-                var setupResult,
-                    srcResult;
-
                 beforeEach(function() {
-                    var setup = cinema6.init.mostRecentCall.args[0].setup;
-
-                    srcResult = {};
-                    spyOn(AppCtrl, 'src').andReturn(srcResult);
-
-                    appData.experience.img.hero = {};
-                    appData.experience.data = { playList : [] };
-
-                    setupResult = setup(appData);
+                    cinema6.init.mostRecentCall.args[0].setup(appData);
                 });
 
                 it('should initialize a session with the site', function() {
@@ -131,54 +120,7 @@
                 });
 
                 it('should setup the session', function() {
-                    expect(AppCtrl.experience).toBe(appData.experience);
-                    expect(AppCtrl.profile).toBe(appData.profile);
-
-                    expect(setupResult).toBe(c6ImagePreloader._.loadResult);
-                    expect(AppCtrl.src).toHaveBeenCalledWith(appData.experience.img.hero);
-                    expect(c6ImagePreloader.load.mostRecentCall.args[0][0]).toBe(srcResult);
-                });
-
-                it('should configure gsap', function() {
-                    expect(gsap.TweenLite.ticker.useRAF).toHaveBeenCalledWith(appData.profile.raf);
-                });
-            });
-            
-            describe('@public', function() {
-                describe('methods', function() {
-                    describe('img(src)', function() {
-                        it('should append a different modifier based on different profile properties', function() {
-                            var src = 'test/foo.jpg';
-
-                            AppCtrl.profile = appData.profile;
-                            expect(AppCtrl.src()).toBe(null);
-
-                            AppCtrl.profile = undefined;
-                            expect(AppCtrl.src(src)).toBe(null);
-
-                            AppCtrl.profile = appData.profile;
-
-                            appData.profile.speed = 'slow';
-                            appData.profile.webp = false;
-                            expect(AppCtrl.src(src)).toBe('test/foo--low.jpg');
-
-                            appData.profile.speed = 'average';
-                            expect(AppCtrl.src(src)).toBe('test/foo--med.jpg');
-
-                            appData.profile.speed = 'fast';
-                            expect(AppCtrl.src(src)).toBe('test/foo--high.jpg');
-
-                            appData.profile.speed = 'slow';
-                            appData.profile.webp = true;
-                            expect(AppCtrl.src(src)).toBe('test/foo--low.jpg');
-
-                            appData.profile.speed = 'average';
-                            expect(AppCtrl.src(src)).toBe('test/foo--med.webp');
-
-                            appData.profile.speed = 'fast';
-                            expect(AppCtrl.src(src)).toBe('test/foo--high.webp');
-                        });
-                    });
+                    expect($scope.app.data).toBe(appData);
                 });
             });
         });

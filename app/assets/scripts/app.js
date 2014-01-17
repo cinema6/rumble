@@ -6,35 +6,6 @@
         .config(['$provide',
         function( $provide ) {
             var config = {
-                modernizr: 'Modernizr',
-                gsap: [
-                    'TimelineLite',
-                    'TimelineMax',
-                    'TweenLite',
-                    'TweenMax',
-                    'Back',
-                    'Bounce',
-                    'Circ',
-                    'Cubic',
-                    'Ease',
-                    'EaseLookup',
-                    'Elastic',
-                    'Expo',
-                    'Linear',
-                    'Power0',
-                    'Power1',
-                    'Power2',
-                    'Power3',
-                    'Power4',
-                    'Quad',
-                    'Quart',
-                    'Quint',
-                    'RoughEase',
-                    'Sine',
-                    'SlowMo',
-                    'SteppedEase',
-                    'Strong'
-                ],
                 googleAnalytics: 'ga'
             };
 
@@ -57,22 +28,6 @@
         .config(['c6UrlMakerProvider', 'c6Defines',
         function( c6UrlMakerProvider ,  c6Defines ) {
             c6UrlMakerProvider.location(c6Defines.kBaseUrl,'default');
-        }])
-        .config(['$routeProvider','c6UrlMakerProvider',
-        function($routeProvider,c6UrlMakerProvider){
-            $routeProvider.otherwise(/*'/experience',*/{
-                templateUrl     : c6UrlMakerProvider.makeUrl('views/experience.html'),
-                controller      : 'RumbleController',
-                controllerAs    : 'RumbleCtrl',
-                resolve : {
-                    'appData' : 'appData'
-                }
-            });
-            /*
-            .otherwise({
-                templateUrl: c6UrlMakerProvider.makeUrl('views/landing.html')
-            });
-            */
         }])
         .filter('percent',function(){
             return function(input){
@@ -104,63 +59,21 @@
                 });
             };
         }])
-        .factory('appData',['$q','$rootScope',function($q,$rootScope){
-            var deferred = $q.defer();
-            $rootScope.$on('appInit',function(event,appData){
-                deferred.resolve(appData);
-            });
-            return deferred.promise;
-        }])
-        .controller('AppController', ['$scope','$route','$log',
-        'cinema6', 'c6ImagePreloader', 'gsap'/*, 'googleAnalytics'*/,'appData',
-        function($scope, $route, $log, cinema6, c6ImagePreloader, gsap/*, googleAnalytics*/) {
+        .controller('AppController', ['$scope','$log','cinema6',
+        function                     ( $scope , $log , cinema6 ) {
             $log = $log.context('AppCtrl');
-            var self = this;
+            var app = {
+                data: null
+            };
 
             $log.info('loaded.');
 
-            this.src = function(src) {
-                var profile = self.profile,
-                    modifiers = {
-                        slow: '--low',
-                        average: '--med',
-                        fast: '--high'
-                    },
-                    speed, webp, extArray, ext;
-
-                if (!src || !profile) {
-                    return null;
-                }
-
-                speed = profile.speed;
-                webp = profile.webp;
-                extArray = src.split('.');
-                ext = extArray[extArray.length - 1];
-
-                if (webp && speed !== 'slow') {
-                    return src.replace(('.' + ext), (modifiers[speed] + '.webp'));
-                } else {
-                    return src.replace(('.' + ext), (modifiers[speed] + '.' + ext));
-                }
-            };
+            $scope.app = app;
 
             cinema6.init({
                 setup: function(data) {
-                    self.experience = data.experience;
-                    self.profile    = data.profile;
-                    $scope.$emit('appInit',data);
-                    gsap.TweenLite.ticker.useRAF(self.profile.raf);
-                    return c6ImagePreloader.load([self.src(self.experience.img.hero)]);
+                    app.data = data;
                 }
-            });
-
-            $scope.$on('$routeChangeStart', function(event,next,current){
-                $log.info('$routeChangeStart:',next,current);
-            });
-
-            $scope.$on('$routeChangeSuccess', function(event,next,current){
-                $log.info('$routeChangeSuccess:',next,current);
-                //googleAnalytics('send', 'event', '$state', 'changed', next.state.name);
             });
         }]);
 }(window));
