@@ -195,7 +195,7 @@
             }
 
             var result = true;
-            $scope.playList.some(function(item){
+            $scope.players().some(function(item){
                 if ((!item.player) || (!item.player.isReady())){
                     result = false;
                     return true;
@@ -310,7 +310,7 @@
         readyTimeout = $timeout(function(){
             $log.warn('Not all players are ready, but proceding anyway!');
             $scope.ready = true;
-        });
+        }, 3000);
 
         $log.log('Rumble Controller is initialized!');
     }])

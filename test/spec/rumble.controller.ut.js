@@ -366,6 +366,9 @@
                         $scope.playList[2].player = {
                             isReady : jasmine.createSpy('player2.isReady')
                         };
+                        $scope.players = function() {
+                            return [$scope.playList[0], $scope.playList[1], $scope.playList[2]];
+                        };
                         $scope.playList[0].player.isReady.andReturn(true);
                         $scope.playList[2].player.isReady.andReturn(true);
                         $scope.$emit('playerAdd',mockPlayer);
