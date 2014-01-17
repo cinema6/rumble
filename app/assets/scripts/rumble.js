@@ -91,8 +91,8 @@
 
         return service;
     }])
-    .controller('RumbleController',['$log','$scope','$timeout','$q','$window','c6UserAgent','rumbleVotes','c6Computed',
-        function($log,$scope,$timeout,$q,$window,c6UserAgent,rumbleVotes,c){
+    .controller('RumbleController',['$log','$scope','$timeout','$q','$window','c6UserAgent','rumbleVotes','c6Computed','cinema6',
+    function                       ( $log , $scope , $timeout , $q , $window , c6UserAgent , rumbleVotes , c          , cinema6 ){
         $log = $log.context('RumbleCtrl');
         var self    = this, readyTimeout,
             appData = $scope.app.data;
@@ -270,7 +270,12 @@
                     }
                 );
         };
-        
+
+        this.start = function() {
+            this.goForward();
+            cinema6.fullscreen(true);
+        };
+
         this.goBack = function(){
             if ($scope.currentItem){
                 $scope.currentItem.player.pause();

@@ -12,9 +12,14 @@
                 RumbleCtrl,
                 playList,
                 appData,
-                mockPlayer;
-            
+                mockPlayer,
+                cinema6;
+
             beforeEach(function() {
+                cinema6 = {
+                    fullscreen: jasmine.createSpy('cinema6.fullscreen')
+                };
+
                 mockPlayer = {
                     getType         : jasmine.createSpy('player.getType'),
                     getVideoId      : jasmine.createSpy('player.getVideoId'),
@@ -29,7 +34,7 @@
                     }
                     mockPlayer._on[eventName].push(handler);
                 });
-                
+
                 playList = [
                     {
                         "id"     : "vid1",
@@ -62,7 +67,7 @@
                         }
                     }
                 ];
-                
+
                 appData = {
                     profile      : {},
                     experience: {
@@ -71,6 +76,10 @@
                         }
                     }
                 };
+
+                module('c6.ui', function($provide) {
+                    $provide.value('cinema6', cinema6);
+                });
 
                 module('c6.rumble');
 
@@ -313,6 +322,22 @@
                     expect($scope.currentItem).toBe($scope.playList[0]);
                     expect($scope.atHead).toEqual(true);
                     expect($scope.atTail).toEqual(false);
+                });
+            });
+
+            describe('starting the mini reel', function() {
+                beforeEach(function() {
+                    spyOn(RumbleCtrl, 'goForward');
+
+                    RumbleCtrl.start();
+                });
+
+                it('should go forward', function() {
+                    expect(RumbleCtrl.goForward).toHaveBeenCalled();
+                });
+
+                it('should ask cinema6 to be moved fullscreen', function() {
+                    expect(cinema6.fullscreen).toHaveBeenCalledWith(true);
                 });
             });
 
