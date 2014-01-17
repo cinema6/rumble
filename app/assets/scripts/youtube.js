@@ -8,7 +8,7 @@
         $log = $log.context('youtube');
         var service = {};
 
-        service.origin = 'http://www.youtube.com';
+        service.origin = 'https://www.youtube.com';
         service.formatPlayerSrc = function(videoId,params){
             var src = this.origin + '/embed/' + videoId + '?html5=1';
 

@@ -54,7 +54,7 @@
                     libUrl('angular/v1.2.8-0-g0f9a1c2/angular-animate.min.js'),
                     libUrl('c6ui/v2.1.0-0-g235a9de/c6uilib.min.js'),
                     libUrl('c6ui/v2.1.0-0-g235a9de/c6log.min.js'),
-                    'http://www.youtube.com/iframe_api'
+                    'https://www.youtube.com/iframe_api'
                 ];
             } else {
                 return [
@@ -67,7 +67,7 @@
                     libUrl('angular/v1.2.8-0-g0f9a1c2/angular-animate.js'),
                     libUrl('c6ui/v2.1.0-0-g235a9de/c6uilib.js'),
                     libUrl('c6ui/v2.1.0-0-g235a9de/c6log.js'),
-                    'http://www.youtube.com/iframe_api'
+                    'https://www.youtube.com/iframe_api'
                 ];
             }
         }());
