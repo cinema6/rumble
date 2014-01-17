@@ -138,6 +138,58 @@
                 });
             });
 
+            describe('$scope.players()', function() {
+                beforeEach(function() {
+                    $scope.playList = [
+                        {
+                            id: 'foo'
+                        },
+                        {
+                            id: 'hello'
+                        },
+                        {
+                            id: 'okay'
+                        },
+                        {
+                            id: 'sweet'
+                        },
+                        {
+                            id: 'umm'
+                        },
+                        {
+                            id: 'cool'
+                        }
+                    ];
+
+                    $scope.currentIndex = -1;
+                });
+
+                it('should always have the current and next two players and should not remove players', function() {
+                    var players = $scope.players;
+
+                    function playlist(index) {
+                        return $scope.playList[index];
+                    }
+
+                    function currentIndex(index) {
+                        $scope.$apply(function() {
+                            $scope.currentIndex = index;
+                        });
+                    }
+
+                    expect(players()).toEqual([playlist(0), playlist(1)]);
+
+                    currentIndex(0);
+                    expect(players()).toEqual([playlist(0), playlist(1), playlist(2)]);
+
+                    currentIndex(1);
+                    expect(players()).toEqual([playlist(0), playlist(1), playlist(2), playlist(3)]);
+
+                    currentIndex(2);
+                    expect(players()).toEqual([playlist(0), playlist(1), playlist(2), playlist(3), playlist(4)]);
+                });
+            });
+
             describe('twerkNext',function(){
                 var resolveSpy, rejectSpy;
                 beforeEach(function(){

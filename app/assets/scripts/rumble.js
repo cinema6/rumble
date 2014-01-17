@@ -102,8 +102,8 @@
 
         return service;
     }])
-    .controller('RumbleController',['$log','$scope','$timeout','$q','$window','c6UserAgent','appData','rumbleVotes',
-        function($log,$scope,$timeout,$q,$window,c6UserAgent,appData,rumbleVotes){
+    .controller('RumbleController',['$log','$scope','$timeout','$q','$window','c6UserAgent','appData','rumbleVotes','c6Computed',
+        function($log,$scope,$timeout,$q,$window,c6UserAgent,appData,rumbleVotes,c){
         $log = $log.context('RumbleCtrl');
         var self    = this, readyTimeout;
 
@@ -113,6 +113,9 @@
         $scope.rumbleId         = appData.experience.data.rumbleId;
 
         $scope.playList         = [];
+        $scope.players          = c($scope, function(index, playList) {
+            return playList.slice(0, (index + 3));
+        }, ['currentIndex', 'playList']);
         $scope.currentIndex     = -1;
         $scope.currentItem      = null;
         $scope.atHead           = null;
