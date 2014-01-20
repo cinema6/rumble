@@ -223,7 +223,6 @@
                             expect(mockPlayers[0]._on.playing).not.toBeDefined();
                             iface.reset();
                             expect(mockPlayers[0]._once.playing.length).toEqual(1);
-                            expect(mockPlayers[0]._on.playing).not.toBeDefined();
                         });
 
                         it('sets start and end listener if both params are set',function(){
@@ -232,7 +231,7 @@
                             $scope.end=20;
                             $scope.$digest();
                             iface.reset();
-                            expect(mockPlayers[0]._once.playing.length).toEqual(2);
+                            expect(mockPlayers[0]._once.playing.length).toEqual(1);
                         });
                     });
                 });
@@ -482,6 +481,43 @@
                     });
                 });
 
+                describe('timeupdate', function() {
+                    beforeEach(function() {
+                        $scope.$apply(function() {
+                            $compile('<youtube-player videoid="a"></youtube-player>')($scope);
+                        });
+                        $timeout.flush();
+                        mockPlayers[0]._on.ready[0](mockPlayers[0]);
+                        $timeout.flush();
+                        spyOn(iface, 'emit');
+                        iface.reset();
+                    });
+
+                    it('should not emit timeupdate before the video time has changed', function() {
+                        $interval.flush(300);
+                        expect(iface.emit).not.toHaveBeenCalled();
+                    });
+
+                    it('should emit timeupdate when the currenttime changes', function() {
+                        var player = mockPlayers[0];
+
+                        player.getCurrentTime.andReturn(0);
+                        $interval.flush(300);
+                        expect(iface.emit).not.toHaveBeenCalled();
+
+                        player.getCurrentTime.andReturn(10);
+                        $interval.flush(1000);
+                        expect(iface.emit).toHaveBeenCalledWith('timeupdate', iface);
+
+                        $interval.flush(1000);
+                        expect(iface.emit.callCount).toBe(1);
+
+                        player.getCurrentTime.andReturn(20);
+                        $interval.flush(1000);
+                        expect(iface.emit.callCount).toBe(2);
+                    });
+                });
+
                 describe('end',function(){
 
                     it('youtube ended event will triger videoEnded',function(){
@@ -518,7 +554,6 @@
 
                         iface.reset();
                         //simulate the firing of the playing event
-                        mockPlayers[0]._once.playing[1](mockPlayers[0]);
                         $interval.flush(1000);
 
                         expect(mockPlayers[0].getCurrentTime.callCount).toEqual(0);

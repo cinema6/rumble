@@ -224,14 +224,16 @@
             }
             
             var player, playerIface  = playerInterface(),
-                playerIsReady = false, playerHasLoaded = false;
+                playerIsReady = false, playerHasLoaded = false,
+                currentTimeInterval, lastNotifiedCurrentTime = 0;
             
             $log.info('link: videoId=%1, start=%2, end=%3',
                 $attr.videoid, $attr.start, $attr.end);
 
-            function endListener(p){
+            /*function endListener(p){
                 $log.info('[%1] - endListener',p);
                 var timeCheck = $interval(function(){
+                    console.log(p.getCurrentTime());
                     if (p.getCurrentTime() >= numberify($attr.end,0)){
                         $interval.cancel(timeCheck);
                         p.pause();
@@ -252,10 +254,20 @@
                 $log.info('[%1] - setEndListener',player);
                 if (numberify($attr.end,0) > 0){
                     player.removeListener('playing',endListener);
-                    player.once('playing',endListener);
+                    player.on('playing',endListener);
                 }
-            }
+            }*/
 
+            function pollCurrentTime() {
+                currentTimeInterval = $interval(function() {
+                    var currentTime = player.getCurrentTime();
+
+                    if (currentTime !== lastNotifiedCurrentTime) {
+                        playerIface.emit('timeupdate', playerIface);
+                        lastNotifiedCurrentTime = currentTime;
+                    }
+                }, 300);
+            }
 
             function setStartListener(){
                 $log.info('[%1] - setStartListener',player);
@@ -344,7 +356,7 @@
                     return;
                 }
                 setStartListener();
-                setEndListener();
+                pollCurrentTime();
             };
 
             scope.$emit('playerAdd',playerIface);
