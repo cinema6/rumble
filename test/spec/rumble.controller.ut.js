@@ -147,6 +147,29 @@
                         expect(RumbleCtrl.getVotePercent(votes)).toEqual([0,0,0]);
                     });
                 });
+
+                describe('vote()', function() {
+                    beforeEach(function() {
+                        spyOn($scope, '$emit');
+
+                        $scope.currentItem = {
+                            state: {
+                                vote: null,
+                                view: 'video'
+                            }
+                        };
+
+                        RumbleCtrl.vote(2);
+                    });
+
+                    it('should set the vote of the currentItem to the passed in value', function() {
+                        expect($scope.currentItem.state.vote).toBe(2);
+                    });
+
+                    it('should change the currentItem\'s view to "results"', function() {
+                        expect($scope.currentItem.state.view).toBe('results');
+                    });
+                });
             });
 
             describe('$scope.players()', function() {
@@ -328,6 +351,7 @@
             describe('starting the mini reel', function() {
                 beforeEach(function() {
                     spyOn(RumbleCtrl, 'goForward');
+                    spyOn($scope, '$emit');
 
                     RumbleCtrl.start();
                 });
@@ -338,6 +362,10 @@
 
                 it('should ask cinema6 to be moved fullscreen', function() {
                     expect(cinema6.fullscreen).toHaveBeenCalledWith(true);
+                });
+
+                it('should $emit the startReel event', function() {
+                    expect($scope.$emit).toHaveBeenCalledWith('reelStart');
                 });
             });
 
@@ -364,7 +392,7 @@
                         expect($scope.playList[1].player).toBeNull();
                         $scope.$emit('playerAdd',mockPlayer);
                         expect($scope.playList[1].player).toBe(mockPlayer);
-                        expect(mockPlayer.on.callCount).toEqual(2);
+                        expect(mockPlayer.on.callCount).toEqual(3);
                         expect(mockPlayer.on.argsForCall[0][0]).toEqual('ready');
                     });
                 });
@@ -431,6 +459,22 @@
                         mockPlayer._on.videoStarted[0](mockPlayer);
                         $timeout.flush();
                         expect($scope.playList[1].state.viewed).toEqual(true);
+                    });
+                });
+
+                describe('ended', function() {
+                    beforeEach(function(){
+                        mockPlayer.getType.andReturn('vimeo');
+                        mockPlayer.getVideoId.andReturn('vid2video');
+                        mockPlayer.isReady.andReturn(true);
+
+                        $scope.$emit('playerAdd',mockPlayer);
+                        $scope.currentItem = $scope.playList[1];
+                        mockPlayer._on.ended[0](mockPlayer);
+                    });
+
+                    it('should set the view to "ballot"', function() {
+                        expect($scope.playList[1].state.view).toBe('ballot');
                     });
                 });
             });

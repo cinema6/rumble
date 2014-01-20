@@ -1,0 +1,24 @@
+<section>
+    <div class="title-bar">
+        <h1>{{currentItem.title}}</h1>
+        <h2>{{currentItem.note}}</h2>
+    </div>
+    <div class="progress">
+        <h1> {{currentIndex + 1}} of {{playList.length}} </h1>
+    </div>
+    <ul class="rumble-players">
+        <li class="player-list-item" ng-repeat="item in players()" ng-class="{ squished : ($index !== $parent.currentIndex)}" >
+        <rumble-player class="player" x-config="item.video" x-profile="deviceProfile" 
+                x-autoplay="0" x-twerk="0">
+            </rumble-player>
+        </li>
+    </ul>
+    <ng-switch on="currentItem.state.view">
+        <div ng-switch-when="ballot">
+            <ng-include src="'assets/views/ballot.html'"></ng-include>
+        </div>
+        <div ng-switch-when="results">
+            <ng-include src="'assets/views/results.html'"></ng-include>
+        </div>
+    </ng-switch>
+</section>

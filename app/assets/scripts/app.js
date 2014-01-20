@@ -62,9 +62,25 @@
         .controller('AppController', ['$scope','$log','cinema6',
         function                     ( $scope , $log , cinema6 ) {
             $log = $log.context('AppCtrl');
-            var app = {
-                data: null
+            var _app = {
+                state: 'splash'
             };
+
+            var app = {
+                data: null,
+            };
+
+            Object.defineProperties(app, {
+                state: {
+                    get: function() {
+                        return _app.state;
+                    }
+                }
+            });
+
+            $scope.$on('reelStart', function() {
+                _app.state = 'deck';
+            });
 
             $log.info('loaded.');
 

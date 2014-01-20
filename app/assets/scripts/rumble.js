@@ -4,10 +4,8 @@
     angular.module('c6.rumble')
     .animation('.splash-screen',[function(){
         return {
-            beforeAddClass : function(element,className,done){
-                if (className === 'ng-hide'){
-                    element.fadeOut(2000, done);
-                }
+            leave: function(element,className,done){
+                element.fadeOut(2000, done);
             }
         };
     }])
@@ -119,7 +117,8 @@
             newItem.state = {
                 viewed  : false,
                 twerked : false,
-                vote    : -1
+                vote    : -1,
+                view    : 'video'
             };
             $scope.playList.push(newItem);
             //TODO: remove this when the service works for real
@@ -158,6 +157,10 @@
                         playListItem.state.viewed = true;
                     });
                 }
+            });
+
+            player.on('ended', function() {
+                playListItem.state.view = 'ballot';
             });
         });
         
@@ -201,6 +204,7 @@
 
         this.vote = function(v){
             $scope.currentItem.state.vote = v;
+            $scope.currentItem.state.view = 'results';
         };
 
         this.getVotePercent = function(votes,index){
@@ -274,6 +278,7 @@
         this.start = function() {
             this.goForward();
             cinema6.fullscreen(true);
+            $scope.$emit('reelStart');
         };
 
         this.goBack = function(){
