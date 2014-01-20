@@ -22,7 +22,9 @@
         </style>
     </head>
     <body>
-        <ng-view></ng-view>
+        <div ng-if="!!app.data">
+            <ng-include src="'assets/views/experience.html'" ng-controller="RumbleController as RumbleCtrl"></ng-include>
+        </div>
         <script>
             (function() {
                 'use strict';

@@ -1,7 +1,7 @@
 <div class="experience">
     <div class="splash-screen" ng-show="currentIndex < 0" >
         <h1> {{title}} </h1>
-        <span class="start-btn" ng-click="RumbleCtrl.goForward()" ng-show="ready">Start</span>
+        <span class="start-btn" ng-click="RumbleCtrl.start()" ng-show="ready">Start</span>
         <span class="start-btn" ng-hide="ready">Loading</span>
     </div>
     <div class="title-bar">
@@ -12,7 +12,7 @@
         <h1> {{currentIndex + 1}} of {{playList.length}} </h1>
     </div>
     <ul class="rumble-players">
-        <li class="player-list-item" ng-repeat="item in playList" ng-class="{ squished : ($index !== $parent.currentIndex)}" >
+        <li class="player-list-item" ng-repeat="item in players()" ng-class="{ squished : ($index !== $parent.currentIndex)}" >
         <rumble-player class="player" x-config="item.video" x-profile="deviceProfile" 
                 x-autoplay="0" x-twerk="0">
             </rumble-player>

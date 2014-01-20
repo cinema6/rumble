@@ -12,9 +12,14 @@
                 RumbleCtrl,
                 playList,
                 appData,
-                mockPlayer;
-            
+                mockPlayer,
+                cinema6;
+
             beforeEach(function() {
+                cinema6 = {
+                    fullscreen: jasmine.createSpy('cinema6.fullscreen')
+                };
+
                 mockPlayer = {
                     getType         : jasmine.createSpy('player.getType'),
                     getVideoId      : jasmine.createSpy('player.getVideoId'),
@@ -29,7 +34,7 @@
                     }
                     mockPlayer._on[eventName].push(handler);
                 });
-                
+
                 playList = [
                     {
                         "id"     : "vid1",
@@ -62,7 +67,7 @@
                         }
                     }
                 ];
-                
+
                 appData = {
                     profile      : {},
                     experience: {
@@ -71,6 +76,10 @@
                         }
                     }
                 };
+
+                module('c6.ui', function($provide) {
+                    $provide.value('cinema6', cinema6);
+                });
 
                 module('c6.rumble');
 
@@ -85,12 +94,14 @@
                     c6UserAgent = _c6UserAgent;
                     $log.context = function() { return $log; };
 
+                    $scope.app = {
+                        data: appData
+                    };
+
                     RumbleCtrl = _$controller('RumbleController', {
                         $scope  : $scope,
-                        $log    : $log,
-                        appData : appData
+                        $log    : $log
                     });
-
                 }]);
             });
             describe('initialization',function(){
@@ -135,6 +146,58 @@
                         var votes = [0,0,0] ;
                         expect(RumbleCtrl.getVotePercent(votes)).toEqual([0,0,0]);
                     });
+                });
+            });
+
+            describe('$scope.players()', function() {
+                beforeEach(function() {
+                    $scope.playList = [
+                        {
+                            id: 'foo'
+                        },
+                        {
+                            id: 'hello'
+                        },
+                        {
+                            id: 'okay'
+                        },
+                        {
+                            id: 'sweet'
+                        },
+                        {
+                            id: 'umm'
+                        },
+                        {
+                            id: 'cool'
+                        }
+                    ];
+
+                    $scope.currentIndex = -1;
+                });
+
+                it('should always have the current and next two players and should not remove players', function() {
+                    var players = $scope.players;
+
+                    function playlist(index) {
+                        return $scope.playList[index];
+                    }
+
+                    function currentIndex(index) {
+                        $scope.$apply(function() {
+                            $scope.currentIndex = index;
+                        });
+                    }
+
+                    expect(players()).toEqual([playlist(0), playlist(1)]);
+
+                    currentIndex(0);
+                    expect(players()).toEqual([playlist(0), playlist(1), playlist(2)]);
+
+                    currentIndex(1);
+                    expect(players()).toEqual([playlist(0), playlist(1), playlist(2), playlist(3)]);
+
+                    currentIndex(2);
+                    expect(players()).toEqual([playlist(0), playlist(1), playlist(2), playlist(3), playlist(4)]);
                 });
             });
 
@@ -262,6 +325,22 @@
                 });
             });
 
+            describe('starting the mini reel', function() {
+                beforeEach(function() {
+                    spyOn(RumbleCtrl, 'goForward');
+
+                    RumbleCtrl.start();
+                });
+
+                it('should go forward', function() {
+                    expect(RumbleCtrl.goForward).toHaveBeenCalled();
+                });
+
+                it('should ask cinema6 to be moved fullscreen', function() {
+                    expect(cinema6.fullscreen).toHaveBeenCalledWith(true);
+                });
+            });
+
             describe('findPlayListItemByVideo',function(){
                 it('returns an item that exists',function(){
                     expect(RumbleCtrl.findPlayListItemByVideo('vimeo','vid2video'))
@@ -313,6 +392,9 @@
                         };
                         $scope.playList[2].player = {
                             isReady : jasmine.createSpy('player2.isReady')
+                        };
+                        $scope.players = function() {
+                            return [$scope.playList[0], $scope.playList[1], $scope.playList[2]];
                         };
                         $scope.playList[0].player.isReady.andReturn(true);
                         $scope.playList[2].player.isReady.andReturn(true);

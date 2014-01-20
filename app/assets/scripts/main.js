@@ -47,27 +47,21 @@
                 return [
                     libUrl('modernizr/modernizr.custom.71747.js'),
                     libUrl('jquery/2.0.3-0-gf576d00/jquery.min.js'),
-                    libUrl('gsap/1.11.2-0-g79f8c87/TweenMax.min.js'),
-                    libUrl('gsap/1.11.2-0-g79f8c87/TimelineMax.min.js'),
                     libUrl('angular/v1.2.8-0-g0f9a1c2/angular.min.js'),
-                    libUrl('angular/v1.2.8-0-g0f9a1c2/angular-route.min.js'),
                     libUrl('angular/v1.2.8-0-g0f9a1c2/angular-animate.min.js'),
                     libUrl('c6ui/v2.1.0-0-g235a9de/c6uilib.min.js'),
                     libUrl('c6ui/v2.1.0-0-g235a9de/c6log.min.js'),
-                    'http://www.youtube.com/iframe_api'
+                    'https://www.youtube.com/iframe_api'
                 ];
             } else {
                 return [
                     libUrl('modernizr/modernizr.custom.71747.js'),
                     libUrl('jquery/2.0.3-0-gf576d00/jquery.js'),
-                    libUrl('gsap/1.11.2-0-g79f8c87/TweenMax.min.js'),
-                    libUrl('gsap/1.11.2-0-g79f8c87/TimelineMax.min.js'),
                     libUrl('angular/v1.2.8-0-g0f9a1c2/angular.js'),
-                    libUrl('angular/v1.2.8-0-g0f9a1c2/angular-route.js'),
                     libUrl('angular/v1.2.8-0-g0f9a1c2/angular-animate.js'),
                     libUrl('c6ui/v2.1.0-0-g235a9de/c6uilib.js'),
                     libUrl('c6ui/v2.1.0-0-g235a9de/c6log.js'),
-                    'http://www.youtube.com/iframe_api'
+                    'https://www.youtube.com/iframe_api'
                 ];
             }
         }());
@@ -103,7 +97,7 @@
         dev: 'http://s3.amazonaws.com/c6.dev/media/src/stub',
         cdn: 'http://cdn1.cinema6.com/src/stub'
     };
-    c6.kModDeps = ['ngAnimate','ngRoute','c6.ui', 'c6.log'];
+    c6.kModDeps = ['ngAnimate','c6.ui', 'c6.log'];
     
     if (window.location.host.match(/\/\/(www\.)*cinema6.com/) !== null){
         ga('create', 'UA-44457821-2', 'cinema6.com');
