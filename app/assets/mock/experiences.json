@@ -41,7 +41,7 @@
                     "video"  : {
                         "player"  : "youtube",
                         "videoid" : "jofNR_WkoCE",
-                        "start"   : 0,
+                        "start"   : 10,
                         "end"     : 20,
                         "rel"     : 0,
                         "modestbranding" : 1

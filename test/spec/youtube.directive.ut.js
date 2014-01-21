@@ -28,6 +28,7 @@
                             pause           : jasmine.createSpy('youtubePlayer.pause'),
                             seekTo          : jasmine.createSpy('youtubePlayer.seekTo'),
                             getCurrentTime  : jasmine.createSpy('youtubePlayer.getCurrentTime'),
+                            isPlaying       : jasmine.createSpy('YoutubePlayer.isPlaying'),
 
                             _on             : {},
                             _once           : {},
@@ -57,6 +58,16 @@
                                 mockPlayer._removes[eventName] = [];
                             }
                             mockPlayer._removes[eventName].push(listener);
+                        });
+
+                        mockPlayer.isPlaying.andReturn(false);
+
+                        mockPlayer.pause.andCallFake(function() {
+                            mockPlayer.isPlaying.andReturn(false);
+                        });
+
+                        mockPlayer.play.andCallFake(function() {
+                            mockPlayer.isPlaying.andReturn(true);
                         });
 
                         mockPlayers.push(mockPlayer);
@@ -155,6 +166,34 @@
                         $scope.$destroy();
                         expect(removeSpy).toHaveBeenCalled();
                     });
+
+                    describe('the interval', function() {
+                        beforeEach(function() {
+                            spyOn($interval, 'cancel');
+                        });
+
+                        describe('if running', function() {
+                            beforeEach(function() {
+                                mockPlayers[0]._on.ready[0]({},mockPlayers[0]);
+                                $timeout.flush();
+                                $scope.$destroy();
+                            });
+
+                            it('should cancel the interval', function() {
+                                expect($interval.cancel).toHaveBeenCalled();
+                            });
+                        });
+
+                        describe('if not running', function() {
+                            beforeEach(function() {
+                                $scope.$destroy();
+                            });
+
+                            it('should do nothing', function() {
+                                expect($interval.cancel).not.toHaveBeenCalled();
+                            });
+                        });
+                    });
                 });
 
                 describe('when player is not ready',function(){
@@ -180,12 +219,14 @@
                         expect(mockPlayers[0].pause).not.toHaveBeenCalled();
                     });
 
-                    it('will not reset',function(){
-                        expect(mockPlayers[0]._once.playing).not.toBeDefined();
-                        expect(mockPlayers[0]._on.playing).not.toBeDefined();
-                        iface.reset();
-                        expect(mockPlayers[0]._once.playing).not.toBeDefined();
-                        expect(mockPlayers[0]._on.playing).not.toBeDefined();
+                    it('will have a currentTime of 0', function() {
+                        expect(iface.currentTime).toBe(0);
+                    });
+
+                    it('will not be seekable', function() {
+                        expect(function() {
+                            iface.currentTime = 10;
+                        }).toThrow();
                     });
                 });
 
@@ -217,21 +258,170 @@
                         });
                     });
 
-                    describe('reset method',function(){
-                        it('sets startListener only if no end param is set',function(){
-                            expect(mockPlayers[0]._once.playing).not.toBeDefined();
-                            expect(mockPlayers[0]._on.playing).not.toBeDefined();
-                            iface.reset();
-                            expect(mockPlayers[0]._once.playing.length).toEqual(1);
+                    describe('currentTime property', function() {
+                        var player;
+
+                        beforeEach(function() {
+                            player = mockPlayers[0];
                         });
 
-                        it('sets start and end listener if both params are set',function(){
-                            expect(mockPlayers[0]._once.playing).not.toBeDefined();
-                            $scope.start=10;
-                            $scope.end=20;
-                            $scope.$digest();
-                            iface.reset();
-                            expect(mockPlayers[0]._once.playing.length).toEqual(1);
+                        describe('getting', function() {
+                            it('should proxy to player.getCurrentTime()', function() {
+                                player.getCurrentTime.andReturn(10);
+                                expect(iface.currentTime).toBe(10);
+
+                                player.getCurrentTime.andReturn(20);
+                                expect(iface.currentTime).toBe(20);
+
+                                player.getCurrentTime.andReturn(30);
+                                expect(iface.currentTime).toBe(30);
+
+                                expect(player.getCurrentTime.callCount).toBe(3);
+                            });
+                        });
+
+                        describe('setting', function() {
+                            it('should proxy to player.seekTo()', function() {
+                                iface.currentTime = 10;
+                                expect(player.seekTo).toHaveBeenCalledWith(10);
+
+                                iface.currentTime = 20;
+                                expect(player.seekTo).toHaveBeenCalledWith(20);
+
+                                iface.currentTime = 30;
+                                expect(player.seekTo).toHaveBeenCalledWith(30);
+                            });
+                        });
+
+                        describe('if a start time is specified', function() {
+                            beforeEach(function() {
+                                $compile(
+                                    '<youtube-player videoid="abc1234" width="1" height="2" start="10"></youtube-player>'
+                                )($scope);
+                                $timeout.flush();
+
+                                player = mockPlayers[1];
+
+                                player._on.ready[0]({},player);
+                                $timeout.flush();
+                                player.getCurrentTime.andReturn(10);
+                            });
+
+                            describe('getting', function() {
+                                it('should subtract the start time in its calculation', function() {
+                                    expect(iface.currentTime).toBe(0);
+
+                                    player.getCurrentTime.andReturn(20);
+                                    expect(iface.currentTime).toBe(10);
+
+                                    player.getCurrentTime.andReturn(30);
+                                    expect(iface.currentTime).toBe(20);
+                                });
+
+                                it('should never go below 0', function() {
+                                    player.getCurrentTime.andReturn(5);
+
+                                    expect(iface.currentTime).toBe(0);
+                                });
+                            });
+
+                            describe('setting', function() {
+                                it('should add the start time when calling seekTo()', function() {
+                                    iface.currentTime = 10;
+                                    expect(player.seekTo).toHaveBeenCalledWith(20);
+
+                                    iface.currentTime = 20;
+                                    expect(player.seekTo).toHaveBeenCalledWith(30);
+
+                                    iface.currentTime = 30;
+                                    expect(player.seekTo).toHaveBeenCalledWith(40);
+                                });
+
+                                it('should never seek before the start time', function() {
+                                    iface.currentTime = -5;
+                                    expect(player.seekTo).toHaveBeenCalledWith(10);
+                                });
+                            });
+                        });
+                    });
+
+                    describe('ended property', function() {
+                        var player;
+
+                        beforeEach(function() {
+                            player = mockPlayers[0];
+                        });
+
+                        describe('getting', function() {
+                            it('should be initialized as false', function() {
+                                expect(iface.ended).toBe(false);
+                            });
+                        });
+
+                        describe('setting', function() {
+                            it('should not be publically set-able', function() {
+                                expect(function() {
+                                    iface.ended = true;
+                                }).toThrow();
+                            });
+                        });
+
+                        describe('when the player emits ended', function() {
+                            beforeEach(function() {
+                                expect(iface.ended).toBe(false);
+
+                                player._on.ended[0](player);
+                            });
+
+                            it('should set ended to true', function() {
+                                expect(iface.ended).toBe(true);
+                            });
+                        });
+
+                        describe('playing after ended', function() {
+                            describe('if no start is provided', function() {
+                                beforeEach(function() {
+                                    player._on.playing[0](player);
+                                    expect(player.seekTo).not.toHaveBeenCalled();
+
+                                    player._on.ended[0](player);
+
+                                    player._on.playing[0](player);
+                                });
+
+                                it('should seek to the beginning of the video', function() {
+                                    expect(player.seekTo).toHaveBeenCalledWith(0);
+                                });
+
+                                it('should set ended to false', function() {
+                                    expect(iface.ended).toBe(false);
+                                });
+                            });
+
+                            describe('if start is provided', function() {
+                                beforeEach(function() {
+                                    $compile(
+                                        '<youtube-player videoid="abc1234" width="1" height="2" start="10"></youtube-player>'
+                                    )($scope);
+                                    $timeout.flush();
+
+                                    player = mockPlayers[1];
+
+                                    player._on.ready[0]({},player);
+                                    $timeout.flush();
+
+                                    player._on.ended[0](player);
+                                    player._on.playing[0](player);
+                                });
+
+                                it('should seek to the start time', function() {
+                                    expect(player.seekTo).toHaveBeenCalledWith(10);
+                                });
+
+                                it('should set ended to false', function() {
+                                    expect(iface.ended).toBe(false);
+                                });
+                            });
                         });
                     });
                 });
@@ -244,7 +434,6 @@
                     iface = null;
                     $scope.$on('playerAdd',function(event,playerInterface){
                         iface = playerInterface;
-                        spyOn(iface,'reset');
                     });
                 });
 
@@ -261,14 +450,12 @@
                             expect(iface.isReady()).toEqual(false);
                             expect(mockPlayers[0].play).not.toHaveBeenCalled();
                             expect(mockPlayers[0].pause).not.toHaveBeenCalled();
-                            expect(iface.reset).not.toHaveBeenCalled();
                             expect(mockPlayers[0]._once.playing).not.toBeDefined();
                             mockPlayers[0]._on.ready[0]({},mockPlayers[0]);
                             $timeout.flush();
                             expect(iface.isReady()).toEqual(true);
                             expect(mockPlayers[0].play).not.toHaveBeenCalled();
                             expect(mockPlayers[0].pause).not.toHaveBeenCalled();
-                            expect(iface.reset).not.toHaveBeenCalled();
                         });
                     });
 
@@ -285,27 +472,23 @@
                             expect(iface.isReady()).toEqual(false);
                             expect(mockPlayers[0].play).not.toHaveBeenCalled();
                             expect(mockPlayers[0].pause).not.toHaveBeenCalled();
-                            expect(iface.reset).not.toHaveBeenCalled();
                             expect(mockPlayers[0]._once.playing).not.toBeDefined();
                             mockPlayers[0]._on.ready[0]({},mockPlayers[0]);
                             expect(iface.isReady()).toEqual(false);
                             expect(mockPlayers[0]._once.playing).toBeDefined();
                             expect(mockPlayers[0].play).toHaveBeenCalled();
                             expect(mockPlayers[0].pause).not.toHaveBeenCalled();
-                            expect(iface.reset).not.toHaveBeenCalled();
                         });
 
                         it('will pause and once the player starts playing',function(){
                             mockPlayers[0]._on.ready[0]({},mockPlayers[0]);
                             expect(mockPlayers[0].play).toHaveBeenCalled();
                             expect(mockPlayers[0].pause).not.toHaveBeenCalled();
-                            expect(iface.reset).not.toHaveBeenCalled();
                             
                             mockPlayers[0]._once.playing[0]({},mockPlayers[0]);
                             $scope.$digest();
                             expect(mockPlayers[0].pause).toHaveBeenCalled();
                             expect(iface.isReady()).toEqual(true);
-                            expect(iface.reset).not.toHaveBeenCalled();
                         });
 
                     });
@@ -440,44 +623,29 @@
 
 
                 describe('start',function(){
-                
-                    it('will emit videoStarted on first playing event',function(){
+                    it('will seekTo start value if currentTime is < start',function(){
+                        var player;
+
                         $compile(
-                            '<youtube-player videoid="a" width="1" height="2"></youtube-player>'
-                        )($scope);
-                        var startedSpy = jasmine.createSpy('playerHasStarted');
-                        iface.on('videoStarted',startedSpy);
-                        $timeout.flush();
-
-                        //simulate the firing of the ready event
-                        mockPlayers[0]._on.ready[0]({},mockPlayers[0]);
-                        $timeout.flush();
-                        iface.reset();
-
-                        //simulate the firing of the playing event
-                        mockPlayers[0]._once.playing[0]({},mockPlayers[0]);
-
-                        expect(startedSpy).toHaveBeenCalledWith(iface);
-                        
-                        expect(mockPlayers[0].seekTo).not.toHaveBeenCalled();
-                    });
-
-                    it('will seekTo start value if set',function(){
-                        $compile(
-                            '<youtube-player videoid="a" start="10"></youtube-player>'
+                            '<youtube-player videoid="a" start="10" end="20"></youtube-player>'
                         )($scope);
                         $timeout.flush();
+                        player = mockPlayers[0];
 
                         //simulate the firing of the ready event
                         mockPlayers[0]._on.ready[0](mockPlayers[0]);
                         $timeout.flush();
-                        iface.reset();
-                      
-                        //simulate the firing of the playing event
-                        mockPlayers[0]._once.playing[0](mockPlayers[0]);
 
-                        expect(mockPlayers[0].seekTo).toHaveBeenCalledWith(10);
+                        $interval.flush(300);
+                        expect(player.seekTo).not.toHaveBeenCalled();
 
+                        player.isPlaying.andReturn(true);
+                        $interval.flush(300);
+                        expect(player.seekTo).toHaveBeenCalledWith(10);
+                        player.getCurrentTime.andReturn(11);
+
+                        $interval.flush(1000);
+                        expect(player.seekTo.callCount).toBe(1);
                     });
                 });
 
@@ -490,7 +658,6 @@
                         mockPlayers[0]._on.ready[0](mockPlayers[0]);
                         $timeout.flush();
                         spyOn(iface, 'emit');
-                        iface.reset();
                     });
 
                     it('should not emit timeupdate before the video time has changed', function() {
@@ -520,13 +687,13 @@
 
                 describe('end',function(){
 
-                    it('youtube ended event will triger videoEnded',function(){
+                    it('youtube ended event will triger ended',function(){
                         var endedSpy = jasmine.createSpy('playerHasEnded');
                         $compile(
                             '<youtube-player videoid="a" end="10"></youtube-player>'
                         )($scope);
                         $timeout.flush();
-                        iface.on('videoEnded',endedSpy);
+                        iface.on('ended',endedSpy);
                         //simulate the firing of the ready event
                         mockPlayers[0]._on.ready[0](mockPlayers[0]);
                         $timeout.flush();
@@ -548,37 +715,38 @@
                         //simulate the firing of the ready event
                         mockPlayers[0]._on.ready[0](mockPlayers[0]);
                         $timeout.flush();
-                      
+
+                        mockPlayers[0].play();
+
                         expect(mockPlayers[0]._on.ended).toBeDefined();
                         expect(mockPlayers[0].pause).not.toHaveBeenCalled();
 
-                        iface.reset();
-                        //simulate the firing of the playing event
-                        $interval.flush(1000);
+                        $interval.flush(300);
 
-                        expect(mockPlayers[0].getCurrentTime.callCount).toEqual(0);
-                        expect(function(){$timeout.flush()}).toThrow();
                         expect(mockPlayers[0].pause).not.toHaveBeenCalled();
                         expect(mockPlayers[0].emit).not.toHaveBeenCalled();
 
                         mockPlayers[0].getCurrentTime.andCallFake(function(){
                             return 5;
                         });
-                        $interval.flush(1000);
-                        expect(mockPlayers[0].getCurrentTime.callCount).toEqual(1);
-                        expect(function(){$timeout.flush()}).toThrow();
+                        $interval.flush(300);
                         expect(mockPlayers[0].pause).not.toHaveBeenCalled();
                         expect(mockPlayers[0].emit).not.toHaveBeenCalled();
 
                         mockPlayers[0].getCurrentTime.andCallFake(function(){
                             return 10;
                         });
-                        $interval.flush(1000);
+                        $interval.flush(300);
 
-                        expect(mockPlayers[0].getCurrentTime.callCount).toEqual(2);
-                        expect(function(){$timeout.flush()}).not.toThrow();
                         expect(mockPlayers[0].pause).toHaveBeenCalled();
                         expect(mockPlayers[0].emit.mostRecentCall.args[0]).toEqual('ended');
+
+                        // Make sure nobody tries to access the player after this
+                        expect(mockPlayers[0].isPlaying.callCount).toBe(3);
+                        expect(mockPlayers[0].getCurrentTime.callCount).toBe(3);
+
+                        $interval.flush(300);
+                        expect(mockPlayers[0].emit.callCount).toBe(1);
                     });
 
                     it('will not regenerate the player by default', function(){
@@ -603,6 +771,7 @@
                     });
 
                     it('will regenerate the player if regenerate param is set',function(){
+                        spyOn($interval, 'cancel');
                         $compile(
                             '<youtube-player videoid="a" regenerate="1"></youtube-player>'
                         )($scope);
@@ -610,6 +779,7 @@
                         //simulate the firing of the ready event
                         mockPlayers[0]._on.ready[0](mockPlayers[0]);
                         $timeout.flush();
+
                         expect(mockPlayers.length).toEqual(1);
                         expect(iface.isReady()).toEqual(true);
                         expect(mockPlayers[0].destroy.callCount).toEqual(0);
@@ -620,6 +790,7 @@
                         expect(mockPlayers.length).toEqual(2);
                         expect(mockPlayers[0].destroy.callCount).toEqual(1);
                         expect(iface.isReady()).toEqual(false);
+                        expect($interval.cancel).toHaveBeenCalled();
                     });
                 });
             });

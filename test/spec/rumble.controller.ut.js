@@ -237,7 +237,6 @@
                             isReady  : jasmine.createSpy('item'+index+'.isReady'),
                             play     : jasmine.createSpy('item'+index+'.play'),
                             pause    : jasmine.createSpy('item'+index+'.pause'),
-                            reset    : jasmine.createSpy('item'+index+'.reset'),
                             twerk    : jasmine.createSpy('item'+index+'.twerk'),
                             getType  : jasmine.createSpy('item'+index+'.getType')
                         };
@@ -298,8 +297,7 @@
                         item.player = {
                             isReady : jasmine.createSpy('item'+index+'.isReady'),
                             play    : jasmine.createSpy('item'+index+'.play'),
-                            pause   : jasmine.createSpy('item'+index+'.pause'),
-                            reset   : jasmine.createSpy('item'+index+'.reset')
+                            pause   : jasmine.createSpy('item'+index+'.pause')
                         };
                         item.player.isReady.andReturn(true);
                     });
@@ -324,7 +322,6 @@
                     });
                     RumbleCtrl.goForward();
                     expect($scope.playList[1].player.pause).toHaveBeenCalled();
-                    expect($scope.playList[2].player.reset).toHaveBeenCalled();
                     expect($scope.playList[2].player.play).toHaveBeenCalled();
                     expect($scope.currentIndex).toEqual(2);
                     expect($scope.currentItem).toBe($scope.playList[2]);
@@ -338,7 +335,6 @@
                     $scope.currentItem  = $scope.playList[1];
                     RumbleCtrl.goBack();
                     expect($scope.playList[1].player.pause).toHaveBeenCalled();
-                    expect($scope.playList[0].player.reset).toHaveBeenCalled();
                     expect($scope.playList[0].player.play).toHaveBeenCalled();
                     $scope.$digest();
                     expect($scope.currentIndex).toEqual(0);
@@ -392,7 +388,7 @@
                         expect($scope.playList[1].player).toBeNull();
                         $scope.$emit('playerAdd',mockPlayer);
                         expect($scope.playList[1].player).toBe(mockPlayer);
-                        expect(mockPlayer.on.callCount).toEqual(3);
+                        expect(mockPlayer.on.callCount).toEqual(2);
                         expect(mockPlayer.on.argsForCall[0][0]).toEqual('ready');
                     });
                 });
@@ -435,30 +431,6 @@
                         expect($scope.playList[1].player.isReady).toHaveBeenCalled();
                         expect($scope.playList[2].player.isReady).toHaveBeenCalled();
                         expect($scope.ready).toEqual(true);
-                    });
-                });
-
-                describe('videoStarted',function(){
-                    beforeEach(function(){
-                        mockPlayer.getType.andReturn('vimeo');
-                        mockPlayer.getVideoId.andReturn('vid2video');
-                        mockPlayer.isReady.andReturn(true);
-                    });
-
-                    it('is listened to when a player is added',function(){
-                        expect(mockPlayer._on.videoStarted).not.toBeDefined();
-                        $scope.$emit('playerAdd',mockPlayer);
-                        expect(mockPlayer._on.videoStarted).toBeDefined();
-                    });
-
-                    it('sets the play list item to viewed when raised',function(){
-                        $scope.$emit('playerAdd',mockPlayer);
-                        $scope.currentItem = $scope.playList[1];
-                        expect($scope.playList[1].player).toBe(mockPlayer);
-                        expect($scope.playList[1].state.viewed).toEqual(false);
-                        mockPlayer._on.videoStarted[0](mockPlayer);
-                        $timeout.flush();
-                        expect($scope.playList[1].state.viewed).toEqual(true);
                     });
                 });
 

@@ -115,7 +115,6 @@
             var newItem = angular.copy(item);
             newItem.player = null;
             newItem.state = {
-                viewed  : false,
                 twerked : false,
                 vote    : -1,
                 view    : 'video'
@@ -144,17 +143,6 @@
                 if (playListItem === $scope.playList[0]){
                     self.twerkNext().then(null,function(e){
                         $log.warn(e.message);
-                    });
-                }
-            });
-
-            player.on('videoStarted',function(){
-                $log.log('Player start detected: %1 - %2',player.getType(),player.getVideoId());
-                if (playListItem === $scope.currentItem){
-                    $log.log('Player start recorded: %1 - %2',player.getType(),player.getVideoId());
-                    player.removeListener('videoStarted');
-                    $timeout(function(){
-                        playListItem.state.viewed = true;
                     });
                 }
             });
@@ -286,7 +274,6 @@
                 $scope.currentItem.player.pause();
             }
             self.setPosition($scope.currentIndex - 1);
-            $scope.currentItem.player.reset();
             if ($scope.deviceProfile.multiPlayer){
                 $scope.currentItem.player.play();
             }
@@ -297,7 +284,6 @@
                 $scope.currentItem.player.pause();
             }
             self.setPosition($scope.currentIndex + 1);
-            $scope.currentItem.player.reset();
             if ($scope.deviceProfile.multiPlayer){
                 $scope.currentItem.player.play();
             }
