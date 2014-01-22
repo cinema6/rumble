@@ -206,41 +206,31 @@
                 $attr.videoid, $attr.start, $attr.end, $attr.autoplay);
 
             var player, playerIface  = playerInterface(),
-                playerIsReady = false, playerHasLoaded = false;
+                playerIsReady = false, playerHasLoaded = false,
+                _playerIface = {
+                    currentTime: 0,
+                    ended: false
+                },
+                start = numberify($attr.start, 0), end = numberify($attr.end, Infinity);
 
-            function endListener(p,data){
-                if (data.seconds >= numberify($attr.end,0)){
+            function handlePlayProgress(player, data) {
+                var time = _playerIface.currentTime = data.seconds;
+
+                playerIface.emit('timeupdate', playerIface);
+
+                if (time >= end){
                     player.pause();
-                    $timeout(function(){
-                        player.post('removeEventListener','playProgress');
-                        player.removeListener('playProgress',endListener);
-                        player.emit('finish',player);
-                    });
-                }
-            }
-
-            function setEndListener(){
-                if (numberify($attr.end,0) > 0){
-                    player.removeListener('playProgress',endListener);
-                    player.on('playProgress',endListener);
-                }
-            }
-
-            function setStartListener(){
-                var videoStart = numberify($attr.start,0);
-                if (playerHasLoaded){
-                    player.seekTo(videoStart);
+                    $log.info('[%1] - emit ended',player);
+                    player.emit('finish',player);
                     return;
                 }
-                player.once('playProgress',function(){
-                    if (videoStart > 0){
-                        player.seekTo(videoStart);
-                    }
-                    playerIface.emit('videoStarted',playerIface);
-                    playerHasLoaded = true;
-                });
+
+                if (time < start) {
+                    $log.info('Seeking to start time');
+                    player.seekTo(start);
+                }
             }
-            
+
             function twerk(wait){
                 var deferred = $q.defer(), waitTimer,
                 playingListener = function(){
@@ -304,13 +294,27 @@
                 return twerk(wait);
             };
 
-            playerIface.reset = function(){
-                if (!playerIsReady){
-                    return;
+            Object.defineProperties(playerIface, {
+                currentTime: {
+                    get: function() {
+                        if (!playerIsReady) { return 0; }
+
+                        return Math.max((_playerIface.currentTime - start), 0);
+                    },
+                    set: function(time) {
+                        if (!playerIsReady) {
+                            throw new Error('Cannot set currentTime! Player is not yet ready.');
+                        }
+
+                        player.seekTo(Math.max((time + start), start));
+                    }
+                },
+                ended: {
+                    get: function() {
+                        return _playerIface.ended;
+                    }
                 }
-                setStartListener();
-                setEndListener();
-            };
+            });
 
             scope.$emit('playerAdd',playerIface);
 
@@ -376,23 +380,34 @@
                             })
                             .finally( function(){
                                 playerIsReady = true;
+                                player.on('playProgress', handlePlayProgress);
                                 playerIface.emit('ready',playerIface);
                             });
                     } else {
                         $timeout(function(){
                             playerIsReady = true;
+                            player.on('playProgress', handlePlayProgress);
                             playerIface.emit('ready',playerIface);
                         });
                     }
               
                     player.on('finish',function(p){
                         $log.info('[%1] - I am finished',p);
-                        playerIface.emit('videoEnded',playerIface);
+
+                        _playerIface.ended = true;
+                        playerIface.emit('ended',playerIface);
+
                         if ($attr.regenerate){
                             regeneratePlayer();
                         }
                     });
 
+                    player.on('play', function(p) {
+                        if (playerIface.ended) {
+                            _playerIface.ended = false;
+                            p.seekTo(start);
+                        }
+                    });
                 });
             }
 
