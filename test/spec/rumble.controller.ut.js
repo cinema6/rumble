@@ -10,12 +10,36 @@
                 $log,
                 c6UserAgent,
                 RumbleCtrl,
+                rumbleVotes,
                 playList,
                 appData,
                 mockPlayer,
-                cinema6;
+                cinema6,
+                MiniReelService;
 
             beforeEach(function() {
+                MiniReelService = {
+                    createPlaylist: jasmine.createSpy('MiniReelService.createPlaylist()')
+                        .andCallFake(function(data) {
+                            var playlist = angular.copy(data.playList);
+
+                            MiniReelService.createPlaylist.mostRecentCall.result = playlist;
+
+                            playlist.forEach(function(video) {
+                                video.player = null;
+                                video.state = {
+                                    twerked: false,
+                                    vote: -1,
+                                    view: 'video'
+                                };
+
+                                rumbleVotes.mockReturnsData(data.id, video.id, video.voting);
+                            });
+
+                            return playlist;
+                        })
+                };
+
                 cinema6 = {
                     fullscreen: jasmine.createSpy('cinema6.fullscreen')
                 };
@@ -81,36 +105,38 @@
                     $provide.value('cinema6', cinema6);
                 });
 
-                module('c6.rumble');
+                module('c6.rumble', function($provide) {
+                    $provide.value('MiniReelService', MiniReelService);
+                });
 
-                inject(['$timeout','$q','$rootScope','$log','$window','$controller','c6UserAgent',
-                    function(_$timeout,_$q,_$rootScope,  _$log, _$window, _$controller,_c6UserAgent) {
-                    $timeout    = _$timeout;
-                    $q          = _$q;
-                    $rootScope  = _$rootScope;
-                    $log        = _$log;
-                    $window     = _$window;
-                    $scope      = $rootScope.$new();
-                    c6UserAgent = _c6UserAgent;
+                inject(function($injector) {
+                    $timeout    = $injector.get('$timeout');
+                    $q          = $injector.get('$q');
+                    $rootScope  = $injector.get('$rootScope');
+                    $log        = $injector.get('$log');
                     $log.context = function() { return $log; };
+                    $window     = $injector.get('$window');
+                    c6UserAgent = $injector.get('c6UserAgent');
+                    rumbleVotes = $injector.get('rumbleVotes');
+
+                    $scope      = $rootScope.$new();
 
                     $scope.app = {
                         data: appData
                     };
 
-                    RumbleCtrl = _$controller('RumbleController', {
+                    RumbleCtrl = $injector.get('$controller')('RumbleController', {
                         $scope  : $scope,
                         $log    : $log
                     });
-                }]);
+                });
             });
             describe('initialization',function(){
                 it('has proper dependencies',function(){
                     expect(RumbleCtrl).toBeDefined();
                     expect($scope.deviceProfile).toBe(appData.profile);
                     
-                    expect($scope.playList.length)
-                        .toEqual(appData.experience.data.playList.length);
+                    expect($scope.playList).toBe(MiniReelService.createPlaylist.mostRecentCall.result);
                     expect($scope.currentIndex).toEqual(-1);
                     expect($scope.currentItem).toBeNull();
                     expect($scope.atHead).toBeNull();

@@ -89,18 +89,82 @@
 
         return service;
     }])
-    .controller('RumbleController',['$log','$scope','$timeout','$q','$window','c6UserAgent','rumbleVotes','c6Computed','cinema6',
-    function                       ( $log , $scope , $timeout , $q , $window , c6UserAgent , rumbleVotes , c          , cinema6 ){
+    .service('MiniReelService', ['InflectorService', 'rumbleVotes',
+    function                    ( InflectorService ,  rumbleVotes ) {
+        this.createPlaylist = function(data) {
+            var playlist = angular.copy(data.playList);
+
+            function getObject(type, id) {
+                var pluralType = InflectorService.pluralize(type),
+                    collection = data[pluralType],
+                    object;
+
+                collection.some(function(item) {
+                    if (item.id === id) {
+                        object = item;
+                    }
+                });
+
+                return object;
+            }
+
+            function resolve(object) {
+                angular.forEach(object, function(value, prop) {
+                    var words,
+                        lastWord,
+                        type;
+
+                    if (angular.isObject(value)) {
+                        resolve(value);
+                        return;
+                    }
+
+                    if (!angular.isString(prop)) {
+                        return;
+                    }
+
+                    words = InflectorService.getWords(prop);
+                    lastWord = words[words.length - 1];
+
+                    if ((lastWord === 'id') && (words.length > 1)) {
+                        words.pop();
+                        type = InflectorService.toCamelCase(words);
+
+                        delete object[prop];
+                        object[type] = getObject(type, value);
+                    }
+                });
+            }
+
+            angular.forEach(playlist, function(video) {
+                resolve(video);
+
+                //TODO: remove this when the service works for real
+                rumbleVotes.mockReturnsData(data.id, video.id, video.voting);
+                delete video.voting;
+
+                video.state = {
+                    twerked: false,
+                    vote: -1,
+                    view: 'video'
+                };
+                video.player = null;
+            });
+
+            return playlist;
+        };
+    }])
+    .controller('RumbleController',['$log','$scope','$timeout','$q','$window','c6UserAgent','rumbleVotes','c6Computed','cinema6','MiniReelService',
+    function                       ( $log , $scope , $timeout , $q , $window , c6UserAgent , rumbleVotes , c          , cinema6 , MiniReelService ){
         $log = $log.context('RumbleCtrl');
         var self    = this, readyTimeout,
             appData = $scope.app.data;
 
         $scope.deviceProfile    = appData.profile;
         $scope.title            = appData.experience.title;
-        $scope.ballot           = appData.experience.data.ballot;
-        $scope.rumbleId         = appData.experience.data.rumbleId;
+        $scope.rumbleId         = appData.experience.data.id;
 
-        $scope.playList         = [];
+        $scope.playList         = MiniReelService.createPlaylist(appData.experience.data);
         $scope.players          = c($scope, function(index, playList) {
             return playList.slice(0, (index + 3));
         }, ['currentIndex', 'playList']);
@@ -110,19 +174,6 @@
         $scope.atTail           = null;
         $scope.currentReturns   = null;
         $scope.ready            = false;
-
-        appData.experience.data.playList.forEach(function(item){
-            var newItem = angular.copy(item);
-            newItem.player = null;
-            newItem.state = {
-                twerked : false,
-                vote    : -1,
-                view    : 'video'
-            };
-            $scope.playList.push(newItem);
-            //TODO: remove this when the service works for real
-            rumbleVotes.mockReturnsData($scope.rumbleId,item.id,item.voting);
-        });
 
         $scope.$on('playerAdd',function(event,player){
             $log.log('Player added: %1 - %2',player.getType(),player.getVideoId());

@@ -23,7 +23,7 @@
         local: 'assets/media',
         cdn: 'http://foo.cinema6.com/media/app'
     };
-    c6.kModDeps = ['ngRoute', 'c6.ui', 'c6.log'];
+    c6.kModDeps = ['c6.rumble.services', 'c6.ui', 'c6.log'];
 
     packageRequest.onload = function(event) {
         var settings = JSON.parse(event.target.response),
@@ -43,7 +43,6 @@
 
             paths: {
                 angular     : libUrl('angular/v1.2.8-0-g0f9a1c2/angular'),
-                angularRoute: libUrl('angular/v1.2.8-0-g0f9a1c2/angular-route'),
                 angularMocks: libUrl('angular/v1.2.8-0-g0f9a1c2/angular-mocks'),
                 jquery      : libUrl('jquery/2.0.3-0-gf576d00/jquery'),
                 modernizr   : libUrl('modernizr/modernizr.custom.71747'),
@@ -77,7 +76,7 @@
                     deps: ['app']
                 },
                 app: {
-                    deps: ['angular', 'angularRoute', 'angularMocks', 'modernizr', 'timelinemax', 'c6ui', 'c6log']
+                    deps: ['angular', 'angularMocks', 'modernizr', 'timelinemax', 'c6ui', 'c6log', 'services']
                 },
                 rumble: {
                     deps: ['angular', 'angularMocks', 'c6ui', 'c6log', 'app']
@@ -93,6 +92,9 @@
                 },
                 vimeo: {
                     deps: ['angular', 'angularMocks', 'c6ui', 'c6log', 'app']
+                },
+                services: {
+                    deps: ['angular', 'angularMocks']
                 }
             },
 

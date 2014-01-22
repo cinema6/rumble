@@ -17,19 +17,24 @@
             "stylesheet": "experiences/rumble/assets/styles.css"
         },
         "data": {
-            "rumbleId" : "r-738c2403d83ddc",
-            "ballot" : [
+            "id" : "r-738c2403d83ddc",
+            "ballots" : [
                 {
-                    "button" : "Good",
-                    "most"   : "The Goodest video"
-                },
-                {
-                    "button" : "Bad",
-                    "most"   : "The Badest video"
-                },
-                {
-                    "button" : "Ugly",
-                    "most"   : "The Ugliest video"
+                    "id": "rb-01eb03bc062c15",
+                    "choices": [
+                        {
+                            "button" : "Good",
+                            "most"   : "The Goodest video"
+                        },
+                        {
+                            "button" : "Bad",
+                            "most"   : "The Badest video"
+                        },
+                        {
+                            "button" : "Ugly",
+                            "most"   : "The Ugliest video"
+                        }
+                    ]
                 }
             ],
             "playList" : [
