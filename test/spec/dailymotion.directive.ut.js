@@ -171,14 +171,6 @@
                         iface.pause();
                         expect(mockPlayers[0].pause).not.toHaveBeenCalled();
                     });
-
-                    it('will not reset',function(){
-                        expect(mockPlayers[0]._once.playing).not.toBeDefined();
-                        expect(mockPlayers[0]._on.playing).not.toBeDefined();
-                        iface.reset();
-                        expect(mockPlayers[0]._once.playing).not.toBeDefined();
-                        expect(mockPlayers[0]._on.playing).not.toBeDefined();
-                    });
                 });
 
                 describe('when player is ready',function(){
@@ -209,24 +201,90 @@
                         });
                     });
 
-                    describe('reset method',function(){
-                        it('sets startListener only if no end param is set',function(){
-                            expect(mockPlayers[0]._once.playing).not.toBeDefined();
-                            expect(mockPlayers[0]._on.playing).not.toBeDefined();
-                            iface.reset();
-                            expect(mockPlayers[0]._once.playing.length).toEqual(1);
-                            expect(mockPlayers[0]._on.playing).not.toBeDefined();
+                    describe('currentTime property', function() {
+                        var player;
+
+                        beforeEach(function() {
+                            player = mockPlayers[0];
                         });
 
-                        it('sets start and end listener if both params are set',function(){
-                            expect(mockPlayers[0]._once.playing).not.toBeDefined();
-                            expect(mockPlayers[0]._on.playing).not.toBeDefined();
-                            $scope.start=10;
-                            $scope.end=20;
-                            $scope.$digest();
-                            iface.reset();
-                            expect(mockPlayers[0]._once.playing.length).toEqual(1);
-                            expect(mockPlayers[0]._on.playing.length).toEqual(1);
+                        describe('getting', function() {
+                            it('should return the latest update from the playProgress event', function() {
+                                player._on.timeupdate[0](player, { time: 10 });
+                                expect(iface.currentTime).toBe(10);
+
+                                player._on.timeupdate[0](player, { time: 20 });
+                                expect(iface.currentTime).toBe(20);
+
+                                player._on.timeupdate[0](player, { time: 30 });
+                                expect(iface.currentTime).toBe(30);
+                            });
+                        });
+
+                        describe('setting', function() {
+                            it('should proxy to player.seekTo()', function() {
+                                iface.currentTime = 10;
+                                expect(player.seekTo).toHaveBeenCalledWith(10);
+
+                                iface.currentTime = 20;
+                                expect(player.seekTo).toHaveBeenCalledWith(20);
+
+                                iface.currentTime = 30;
+                                expect(player.seekTo).toHaveBeenCalledWith(30);
+                            });
+                        });
+                    });
+
+                    describe('ended property', function() {
+                        var player;
+
+                        beforeEach(function() {
+                            player = mockPlayers[0];
+                        });
+
+                        describe('getting', function() {
+                            it('should be initialized as false', function() {
+                                expect(iface.ended).toBe(false);
+                            });
+                        });
+
+                        describe('setting', function() {
+                            it('should not be publically set-able', function() {
+                                expect(function() {
+                                    iface.ended = true;
+                                }).toThrow();
+                            });
+                        });
+
+                        describe('when the player emits ended', function() {
+                            beforeEach(function() {
+                                expect(iface.ended).toBe(false);
+
+                                player._on.ended[0](player);
+                            });
+
+                            it('should set ended to true', function() {
+                                expect(iface.ended).toBe(true);
+                            });
+                        });
+
+                        describe('playing after ended', function() {
+                            beforeEach(function() {
+                                player._on.playing[0](player);
+                                expect(player.seekTo).not.toHaveBeenCalled();
+
+                                player._on.ended[0](player);
+
+                                player._on.playing[0](player);
+                            });
+
+                            it('should seek to the beginning of the video', function() {
+                                expect(player.seekTo).toHaveBeenCalledWith(0);
+                            });
+
+                            it('should set ended to false', function() {
+                                expect(iface.ended).toBe(false);
+                            });
                         });
                     });
                 });
@@ -239,7 +297,6 @@
                     iface = null;
                     $scope.$on('playerAdd',function(event,playerInterface){
                         iface = playerInterface;
-                        spyOn(iface,'reset');
                     });
                 });
 
@@ -256,14 +313,12 @@
                             expect(iface.isReady()).toEqual(false);
                             expect(mockPlayers[0].play).not.toHaveBeenCalled();
                             expect(mockPlayers[0].pause).not.toHaveBeenCalled();
-                            expect(iface.reset).not.toHaveBeenCalled();
                             expect(mockPlayers[0]._once.playing).not.toBeDefined();
                             mockPlayers[0]._on.ready[0]({},mockPlayers[0]);
                             $timeout.flush();
                             expect(iface.isReady()).toEqual(true);
                             expect(mockPlayers[0].play).not.toHaveBeenCalled();
                             expect(mockPlayers[0].pause).not.toHaveBeenCalled();
-                            expect(iface.reset).not.toHaveBeenCalled();
                         });
                     });
 
@@ -280,26 +335,22 @@
                             expect(iface.isReady()).toEqual(false);
                             expect(mockPlayers[0].play).not.toHaveBeenCalled();
                             expect(mockPlayers[0].pause).not.toHaveBeenCalled();
-                            expect(iface.reset).not.toHaveBeenCalled();
                             expect(mockPlayers[0]._once.playing).not.toBeDefined();
                             mockPlayers[0]._on.ready[0]({},mockPlayers[0]);
                             expect(iface.isReady()).toEqual(false);
                             expect(mockPlayers[0]._once.playing).toBeDefined();
                             expect(mockPlayers[0].play).toHaveBeenCalled();
                             expect(mockPlayers[0].pause).not.toHaveBeenCalled();
-                            expect(iface.reset).not.toHaveBeenCalled();
                         });
 
-                        it('will pause and reset once the player starts playing',function(){
+                        it('will pause once the player starts playing',function(){
                             mockPlayers[0]._on.ready[0]({},mockPlayers[0]);
                             expect(mockPlayers[0].play).toHaveBeenCalled();
                             expect(mockPlayers[0].pause).not.toHaveBeenCalled();
-                            expect(iface.reset).not.toHaveBeenCalled();
-                            
+
                             mockPlayers[0]._once.playing[0]({},mockPlayers[0]);
                             $scope.$digest();
                             expect(mockPlayers[0].pause).toHaveBeenCalled();
-                            expect(iface.reset).not.toHaveBeenCalled();
                             expect(iface.isReady()).toEqual(true);
                         });
 
@@ -435,59 +486,37 @@
                     });
                 });
 
-                describe('start',function(){
-                
-                    it('will emit videoStarted on firt playing event',function(){
-                        $compile(
-                            '<dailymotion-player videoid="a" width="1" height="2"></dailymotion-player>'
-                        )($scope);
-                        var startedSpy = jasmine.createSpy('playerHasStarted');
-                        iface.on('videoStarted',startedSpy);
+                describe('timeupdate', function() {
+                    beforeEach(function() {
+                        $scope.$apply(function() {
+                            $compile('<dailymotion-player videoid="a"></dailymotion-player>')($scope);
+                        });
                         $timeout.flush();
-
-                        //simulate the firing of the ready event
-                        mockPlayers[0]._on.ready[0]({},mockPlayers[0]);
-                        $timeout.flush();
-                        
-                        iface.reset();
-                      
-                        //simulate the firing of the playing event
-                        mockPlayers[0]._once.playing[0]({},mockPlayers[0]);
-
-                        expect(startedSpy).toHaveBeenCalledWith(iface);
-                        
-                        expect(mockPlayers[0].seekTo).not.toHaveBeenCalled();
-                    });
-
-                    it('will seekTo start value if set',function(){
-                        $compile(
-                            '<dailymotion-player videoid="a" start="10"></dailymotion-player>'
-                        )($scope);
-                        $timeout.flush();
-
-                        //simulate the firing of the ready event
                         mockPlayers[0]._on.ready[0](mockPlayers[0]);
                         $timeout.flush();
-                        
-                        iface.reset();
-                      
-                        //simulate the firing of the playing event
-                        mockPlayers[0]._once.playing[0](mockPlayers[0]);
+                        spyOn(iface, 'emit');
+                    });
 
-                        expect(mockPlayers[0].seekTo).toHaveBeenCalledWith(10);
+                    it('should emit timeupdate when timeupdate is emitted', function() {
+                        mockPlayers[0]._on.timeupdate[0](mockPlayers[0], { time: 10 });
+                        expect(iface.emit).toHaveBeenCalledWith('timeupdate', iface);
 
+                        mockPlayers[0]._on.timeupdate[0](mockPlayers[0], { time: 20 });
+                        expect(iface.emit.callCount).toBe(2);
+
+                        mockPlayers[0]._on.timeupdate[0](mockPlayers[0], { time: 30 });
+                        expect(iface.emit.callCount).toBe(3);
                     });
                 });
 
                 describe('end',function(){
-
-                    it('dailymotion ended event will triger videoEnded',function(){
+                    it('dailymotion ended event will triger ended',function(){
                         var endedSpy = jasmine.createSpy('playerHasEnded');
                         $compile(
-                            '<dailymotion-player videoid="a" end="10"></dailymotion-player>'
+                            '<dailymotion-player videoid="a"></dailymotion-player>'
                         )($scope);
                         $timeout.flush();
-                        iface.on('videoEnded',endedSpy);
+                        iface.on('ended',endedSpy);
                         //simulate the firing of the ready event
                         mockPlayers[0]._on.ready[0](mockPlayers[0]);
                         $timeout.flush();
@@ -495,41 +524,6 @@
                         //simulate the firing of the ended event
                         mockPlayers[0]._on.ended[0](mockPlayers[0]);
                         expect(endedSpy).toHaveBeenCalledWith(iface);
-
-                    });
-
-                    it('end param will trigger ended based on playing',function(){
-                        $compile(
-                            '<dailymotion-player videoid="a" end="10"></dailymotion-player>'
-                        )($scope);
-                        $timeout.flush();
-
-                        expect(mockPlayers[0]._on.ended).not.toBeDefined();
-
-                        //simulate the firing of the ready event
-                        mockPlayers[0]._on.ready[0](mockPlayers[0]);
-                        $timeout.flush();
-                      
-                        expect(mockPlayers[0]._on.ended).toBeDefined();
-                        expect(mockPlayers[0].pause).not.toHaveBeenCalled();
-
-                        iface.reset();
-
-                        //simulate the firing of the playing event
-                        mockPlayers[0]._on.playing[0](mockPlayers[0], { seconds : 0 });
-                        expect(function(){$timeout.flush()}).toThrow();
-                        expect(mockPlayers[0].pause).not.toHaveBeenCalled();
-                        expect(mockPlayers[0].emit).not.toHaveBeenCalled();
-
-                        mockPlayers[0]._on.playing[0](mockPlayers[0], { seconds : 5 });
-                        expect(function(){$timeout.flush()}).toThrow();
-                        expect(mockPlayers[0].pause).not.toHaveBeenCalled();
-                        expect(mockPlayers[0].emit).not.toHaveBeenCalled();
-
-                        mockPlayers[0]._on.playing[0](mockPlayers[0], { seconds : 10 });
-                        expect(function(){$timeout.flush()}).not.toThrow();
-                        expect(mockPlayers[0].pause).toHaveBeenCalled();
-                        expect(mockPlayers[0].emit.mostRecentCall.args[0]).toEqual('ended');
                     });
 
                     it('will not regenerate the player by default', function(){
