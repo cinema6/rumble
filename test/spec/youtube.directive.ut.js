@@ -636,11 +636,11 @@
                         mockPlayers[0]._on.ready[0](mockPlayers[0]);
                         $timeout.flush();
 
-                        $interval.flush(300);
+                        $interval.flush(500);
                         expect(player.seekTo).not.toHaveBeenCalled();
 
                         player.isPlaying.andReturn(true);
-                        $interval.flush(300);
+                        $interval.flush(500);
                         expect(player.seekTo).toHaveBeenCalledWith(10);
                         player.getCurrentTime.andReturn(11);
 
@@ -661,7 +661,7 @@
                     });
 
                     it('should not emit timeupdate before the video time has changed', function() {
-                        $interval.flush(300);
+                        $interval.flush(500);
                         expect(iface.emit).not.toHaveBeenCalled();
                     });
 
@@ -669,7 +669,7 @@
                         var player = mockPlayers[0];
 
                         player.getCurrentTime.andReturn(0);
-                        $interval.flush(300);
+                        $interval.flush(500);
                         expect(iface.emit).not.toHaveBeenCalled();
 
                         player.getCurrentTime.andReturn(10);
@@ -721,7 +721,7 @@
                         expect(mockPlayers[0]._on.ended).toBeDefined();
                         expect(mockPlayers[0].pause).not.toHaveBeenCalled();
 
-                        $interval.flush(300);
+                        $interval.flush(500);
 
                         expect(mockPlayers[0].pause).not.toHaveBeenCalled();
                         expect(mockPlayers[0].emit).not.toHaveBeenCalled();
@@ -729,14 +729,14 @@
                         mockPlayers[0].getCurrentTime.andCallFake(function(){
                             return 5;
                         });
-                        $interval.flush(300);
+                        $interval.flush(500);
                         expect(mockPlayers[0].pause).not.toHaveBeenCalled();
                         expect(mockPlayers[0].emit).not.toHaveBeenCalled();
 
                         mockPlayers[0].getCurrentTime.andCallFake(function(){
                             return 10;
                         });
-                        $interval.flush(300);
+                        $interval.flush(500);
 
                         expect(mockPlayers[0].pause).toHaveBeenCalled();
                         expect(mockPlayers[0].emit.mostRecentCall.args[0]).toEqual('ended');
@@ -745,7 +745,7 @@
                         expect(mockPlayers[0].isPlaying.callCount).toBe(3);
                         expect(mockPlayers[0].getCurrentTime.callCount).toBe(3);
 
-                        $interval.flush(300);
+                        $interval.flush(500);
                         expect(mockPlayers[0].emit.callCount).toBe(1);
                     });
 

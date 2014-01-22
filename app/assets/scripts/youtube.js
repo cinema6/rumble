@@ -255,7 +255,7 @@
                         $log.info('Seeking to start time');
                         player.seekTo(start);
                     }
-                }, 300);
+                }, 500);
             }
 
             function twerk(wait){
