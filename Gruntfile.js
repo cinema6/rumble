@@ -24,7 +24,7 @@ module.exports = function(grunt) {
             return this;
         }.call({}, settings));
 
-    if (!grunt.file.exists('.c6rumbleinit') && grunt.cli.tasks[0] !== 'init') {
+    if (!grunt.file.exists('.c6stubinit') && grunt.cli.tasks[0] !== 'init') {
         grunt.fail.warn('This project has not been initialized. Please run "grunt init".');
     }
 
@@ -36,7 +36,7 @@ module.exports = function(grunt) {
     });
 
     grunt.loadTasks('tasks');
-    
+
     /*********************************************************************************************
      *
      * SERVER TASKS
@@ -46,9 +46,7 @@ module.exports = function(grunt) {
     grunt.registerTask('server', 'start a development server', [
         'connect:sandbox',
         'open:server',
-        'ngtemplates:test',
-        'karma:debug',
-        'watch'
+        'watch:livereload'
     ]);
 
     /*********************************************************************************************
@@ -72,7 +70,8 @@ module.exports = function(grunt) {
     grunt.registerTask('test:unit:debug', 'run unit tests whenever files change', [
         'clean:build',
         'ngtemplates:test',
-        'karma:debug'
+        'karma:debug',
+        'watch:unit'
     ]);
 
     grunt.registerTask('test:e2e', 'run e2e tests on specified browser', function(browser, env) {
