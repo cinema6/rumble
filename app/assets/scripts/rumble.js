@@ -301,7 +301,18 @@
             $scope.currentIndex   = i;
             $scope.currentItem    = $scope.playList[$scope.currentIndex];
             $scope.atHead         = $scope.currentIndex === 0;
-            $scope.atTail         = $scope.currentIndex === ($scope.playList.length -1);
+            $scope.atTail         = ($scope.currentIndex === $scope.playList.length);
+
+            if ($scope.atTail) {
+                $scope.$emit('reelEnd');
+            } else if ($scope.atHead) {
+                $scope.$emit('reelStart');
+            } else {
+                $scope.$emit('reelMove');
+            }
+
+            if (!$scope.currentItem) { return; }
+
             rumbleVotes.getReturnsForItem($scope.rumbleId,$scope.currentItem.id)
                 .then(
                     function onVotes(votes){
@@ -317,7 +328,6 @@
         this.start = function() {
             this.goForward();
             cinema6.fullscreen(true);
-            $scope.$emit('reelStart');
         };
 
         this.goBack = function(){
@@ -334,7 +344,11 @@
             if ($scope.currentItem){
                 $scope.currentItem.player.pause();
             }
+
             self.setPosition($scope.currentIndex + 1);
+
+            if (!$scope.currentItem) { return; }
+
             if ($scope.deviceProfile.multiPlayer){
                 $scope.currentItem.player.play();
             }

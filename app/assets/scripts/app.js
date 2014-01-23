@@ -79,9 +79,17 @@
                 }
             });
 
-            $scope.$on('reelStart', function() {
+            function gotoDeck() {
                 _app.state = 'deck';
-            });
+            }
+
+            function gotoEnd() {
+                _app.state = 'end';
+            }
+
+            $scope.$on('reelStart', gotoDeck);
+            $scope.$on('reelMove', gotoDeck);
+            $scope.$on('reelEnd', gotoEnd);
 
             $log.info('loaded.');
 

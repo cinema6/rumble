@@ -327,6 +327,7 @@
                         };
                         item.player.isReady.andReturn(true);
                     });
+                    spyOn($scope, '$emit');
                 });
 
                 it('updates elements based on index with setPosition',function(){
@@ -352,34 +353,50 @@
                     expect($scope.currentIndex).toEqual(2);
                     expect($scope.currentItem).toBe($scope.playList[2]);
                     expect($scope.atHead).toEqual(false);
-                    expect($scope.atTail).toEqual(true);
+                    expect($scope.atTail).toEqual(false);
                     expect(RumbleCtrl.twerkNext).toHaveBeenCalled();
+                    expect($scope.$emit).toHaveBeenCalledWith('reelMove');
+                    expect($scope.$emit.callCount).toBe(1);
+                });
+
+                it('can be moved one past the actual length', function() {
+                    $scope.currentIndex = 2;
+                    $scope.currentItem = $scope.playList[2];
+                    spyOn(RumbleCtrl, 'twerkNext');
+
+                    expect(RumbleCtrl.goForward).not.toThrow();
+
+                    expect($scope.playList[2].player.pause).toHaveBeenCalled();
+                    expect($scope.currentIndex).toBe(3);
+                    expect($scope.currentItem).toBeUndefined();
+                    expect($scope.atHead).toBe(false);
+                    expect($scope.atTail).toBe(true);
+                    expect(RumbleCtrl.twerkNext).not.toHaveBeenCalled();
+                    expect($scope.$emit).toHaveBeenCalledWith('reelEnd');
+                    expect($scope.$emit.callCount).toBe(1);
                 });
                 
                 it('handles moving backward',function(){
-                    $scope.currentIndex = 1;
-                    $scope.currentItem  = $scope.playList[1];
+                    $scope.currentIndex = 2;
+                    $scope.currentItem  = $scope.playList[2];
                     RumbleCtrl.goBack();
-                    expect($scope.playList[1].player.pause).toHaveBeenCalled();
-                    expect($scope.playList[0].player.play).toHaveBeenCalled();
+                    expect($scope.playList[2].player.pause).toHaveBeenCalled();
+                    expect($scope.playList[1].player.play).toHaveBeenCalled();
                     $scope.$digest();
-                    expect($scope.currentIndex).toEqual(0);
-                    expect($scope.currentItem).toBe($scope.playList[0]);
-                    expect($scope.atHead).toEqual(true);
+                    expect($scope.currentIndex).toEqual(1);
+                    expect($scope.currentItem).toBe($scope.playList[1]);
+                    expect($scope.atHead).toEqual(false);
                     expect($scope.atTail).toEqual(false);
+                    expect($scope.$emit).toHaveBeenCalledWith('reelMove');
+                    expect($scope.$emit.callCount).toBe(1);
                 });
             });
 
             describe('starting the mini reel', function() {
                 beforeEach(function() {
-                    spyOn(RumbleCtrl, 'goForward');
                     spyOn($scope, '$emit');
 
                     RumbleCtrl.start();
-                });
-
-                it('should go forward', function() {
-                    expect(RumbleCtrl.goForward).toHaveBeenCalled();
                 });
 
                 it('should ask cinema6 to be moved fullscreen', function() {
