@@ -81,17 +81,17 @@
                 it('will fail without a videoid',function(){
                     expect(function(){
                         $scope.$apply(function() {
-                            $compile('<vimeo-player></vimeo-player>')($rootScope);
+                            $compile('<vimeo-card></vimeo-card>')($rootScope);
                         });
-                    }).toThrow('vimeoPlayer requires the videoid attribute to be set.');
+                    }).toThrow('<vimeo-card> requires the videoid attribute to be set.');
                 });
 
                 it('will create a player',function(){
                     $compile(
-                        '<vimeo-player videoid="abc123" width="1" height="2"></vimeo-player>'
+                        '<vimeo-card videoid="abc123" width="1" height="2"></vimeo-card>'
                     )($scope);
                     $timeout.flush();
-                    expect($log.context).toHaveBeenCalledWith('vimeoPlayer');
+                    expect($log.context).toHaveBeenCalledWith('<vimeo-card>');
                     expect(mockPlayers.length).toEqual(1);
                     expect(vimeo.createPlayer.calls[0].args[0]).toEqual('vm_abc123');
                     expect(vimeo.createPlayer.calls[0].args[1]).toEqual({
@@ -109,7 +109,7 @@
                 it('will observe changes to width and height',function(){
                     var vimeoPlayer, scope;
                     vimeoPlayer = $compile(
-                        '<vimeo-player videoid="abc123" width="{{width}}" height="{{height}}"></vimeo-player>'
+                        '<vimeo-card videoid="abc123" width="{{width}}" height="{{height}}"></vimeo-card>'
                     )($scope);
                     scope = vimeoPlayer.scope();
                     $timeout.flush();
@@ -135,7 +135,7 @@
                     $scope.$on('playerAdd'      ,addSpy);
                     
                     $compile(
-                        '<vimeo-player videoid="abc123" width="1" height="2" start="{{start}}" end="{{end}}"></vimeo-player>'
+                        '<vimeo-card videoid="abc123" width="1" height="2" start="{{start}}" end="{{end}}"></vimeo-card>'
                     )($scope);
                     $timeout.flush();
                 });
@@ -205,6 +205,22 @@
                         });
                     });
 
+                    describe('twerked property', function() {
+                        describe('getting', function() {
+                            it('should be initialized as false', function() {
+                                expect(iface.twerked).toBe(false);
+                            });
+                        });
+
+                        describe('setting', function() {
+                            it('should not be publically set-able', function() {
+                                expect(function() {
+                                    iface.twerked = true;
+                                }).toThrow();
+                            });
+                        });
+                    });
+
                     describe('currentTime property', function() {
                         var player;
 
@@ -241,7 +257,7 @@
                         describe('if a start time is specified', function() {
                             beforeEach(function() {
                                 $compile(
-                                    '<vimeo-player videoid="abc1234" width="1" height="2" start="10"></vimeo-player>'
+                                    '<vimeo-card videoid="abc1234" width="1" height="2" start="10"></vimeo-card>'
                                 )($scope);
                                 $timeout.flush();
 
@@ -346,7 +362,7 @@
                             describe('if start is provided', function() {
                                 beforeEach(function() {
                                     $compile(
-                                        '<vimeo-player videoid="abc1234" width="1" height="2" start="10"></vimeo-player>'
+                                        '<vimeo-card videoid="abc1234" width="1" height="2" start="10"></vimeo-card>'
                                     )($scope);
                                     $timeout.flush();
 
@@ -386,7 +402,7 @@
                     describe('when not turned on',function(){
                         beforeEach(function(){
                             $compile(
-                                '<vimeo-player videoid="abc123" width="1" height="2"></vimeo-player>'
+                                '<vimeo-card videoid="abc123" width="1" height="2"></vimeo-card>'
                             )($scope);
                             $timeout.flush();
                             $scope.$digest();
@@ -409,7 +425,7 @@
 
                         beforeEach(function(){
                             $compile(
-                                '<vimeo-player videoid="abc123" width="1" height="2" twerk="1"></vimeo-player>'
+                                '<vimeo-card videoid="abc123" width="1" height="2" twerk="1"></vimeo-card>'
                             )($scope);
                             $timeout.flush();
                         });
@@ -447,7 +463,7 @@
                         rejectSpy  = jasmine.createSpy('twerk.reject');
                         
                         $compile(
-                            '<vimeo-player videoid="abc123" width="1" height="2"></vimeo-player>'
+                            '<vimeo-card videoid="abc123" width="1" height="2"></vimeo-card>'
                         )($scope);
                         $timeout.flush();
                     });
@@ -460,6 +476,7 @@
                         expect(rejectSpy).toHaveBeenCalledWith({
                             message : 'Player is not ready to twerk'
                         });
+                        expect(iface.twerked).toBe(false);
                     });
 
                     it('will resolve when playing starts',function(){
@@ -472,6 +489,7 @@
 
                         expect(resolveSpy).toHaveBeenCalled();
                         expect(rejectSpy).not.toHaveBeenCalled();
+                        expect(iface.twerked).toBe(true);
                     });
 
                     it('will reject if playing event times out with default',function(){
@@ -488,6 +506,7 @@
                         expect(rejectSpy).toHaveBeenCalledWith({
                             message : 'Player twerk timed out'
                         });
+                        expect(iface.twerked).toBe(false);
                     });
 
                     it('will reject if playing event times out with specified wait',function(){
@@ -503,6 +522,23 @@
                         expect(resolveSpy).not.toHaveBeenCalled();
                         expect(rejectSpy).toHaveBeenCalledWith({
                             message : 'Player twerk timed out'
+                        });
+                        expect(iface.twerked).toBe(false);
+                    });
+
+                    it('will reject if the player has already been twerked', function() {
+                        mockPlayers[0]._on.ready[0]({},mockPlayers[0]);
+                        $timeout.flush();
+                        iface.twerk().then(resolveSpy,rejectSpy);
+                        
+                        mockPlayers[0]._once.playProgress[0]({},mockPlayers[0]);
+                        $scope.$digest();
+
+                        $scope.$apply(function() {
+                            iface.twerk().then(resolveSpy, rejectSpy);
+                        });
+                        expect(rejectSpy).toHaveBeenCalledWith({
+                            message: 'Player has already been twerked'
                         });
                     });
 
@@ -535,7 +571,7 @@
                     it('is emitted when the player is ready if twerking is off',function(){
                         var readySpy = jasmine.createSpy('playerIsReady');
                         $compile(
-                            '<vimeo-player videoid="a" width="1" height="2"></vimeo-player>'
+                            '<vimeo-card videoid="a" width="1" height="2"></vimeo-card>'
                         )($scope);
                         $timeout.flush();
                         iface.on('ready',readySpy);
@@ -553,7 +589,7 @@
                     it('is emitted when the twerk is done if twerking is on',function(){
                         var readySpy = jasmine.createSpy('playerIsReady');
                         $compile(
-                            '<vimeo-player videoid="a" width="1" twerk="1"></vimeo-player>'
+                            '<vimeo-card videoid="a" width="1" twerk="1"></vimeo-card>'
                         )($scope);
                         $timeout.flush();
                         iface.on('ready',readySpy);
@@ -574,7 +610,7 @@
                 describe('start',function(){
                     it('will seekTo start value if set',function(){
                         $compile(
-                            '<vimeo-player videoid="a" start="10"></vimeo-player>'
+                            '<vimeo-card videoid="a" start="10"></vimeo-card>'
                         )($scope);
                         $timeout.flush();
 
@@ -594,7 +630,7 @@
                 describe('timeupdate', function() {
                     beforeEach(function() {
                         $scope.$apply(function() {
-                            $compile('<vimeo-player videoid="a"></youtube-player>')($scope);
+                            $compile('<vimeo-card videoid="a"></youtube-player>')($scope);
                         });
                         $timeout.flush();
                         mockPlayers[0]._on.ready[0](mockPlayers[0]);
@@ -619,7 +655,7 @@
                     it('vimeo finish event will triger ended',function(){
                         var endedSpy = jasmine.createSpy('playerHasEnded');
                         $compile(
-                            '<vimeo-player videoid="a"></vimeo-player>'
+                            '<vimeo-card videoid="a"></vimeo-card>'
                         )($scope);
                         $timeout.flush();
                         iface.on('ended' ,endedSpy);
@@ -635,7 +671,7 @@
 
                     it('end param will trigger finish based on playProgress',function(){
                         $compile(
-                            '<vimeo-player videoid="a" end="10"></vimeo-player>'
+                            '<vimeo-card videoid="a" end="10"></vimeo-card>'
                         )($scope);
                         $timeout.flush();
 
@@ -664,7 +700,7 @@
 
                     it('will not regenerate the player by default', function(){
                         $compile(
-                            '<vimeo-player videoid="a" end="10"></vimeo-player>'
+                            '<vimeo-card videoid="a" end="10"></vimeo-card>'
                         )($scope);
                         $timeout.flush();
                         
@@ -685,7 +721,7 @@
 
                     it('will regenerate the player if regenerate param is set',function(){
                         $compile(
-                            '<vimeo-player videoid="a" regenerate="1"></vimeo-player>'
+                            '<vimeo-card videoid="a" regenerate="1"></vimeo-card>'
                         )($scope);
                         $timeout.flush();
                         //simulate the firing of the ready event

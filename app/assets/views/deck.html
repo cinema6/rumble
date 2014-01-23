@@ -7,10 +7,13 @@
         <h1> {{currentIndex + 1}} of {{playList.length}} </h1>
     </div>
     <ul class="rumble-players">
-        <li class="player-list-item" ng-repeat="item in players()" ng-class="{ squished : ($index !== $parent.currentIndex)}" >
-            <rumble-player class="player" x-config="item.video" x-profile="deviceProfile" 
-                x-autoplay="0" x-twerk="0">
-            </rumble-player>
+        <li class="player-list-item" ng-repeat="item in players()" ng-class="{ squished : ($index !== currentIndex)}" >
+            <mr-card class="player"
+                x-config="item.video"
+                x-profile="deviceProfile"
+                x-active="($index === currentIndex)"
+                x-on-deck="($index === (currentIndex + 1))">
+            </mr-card>
         </li>
     </ul>
     <ng-switch on="currentItem.state.view">

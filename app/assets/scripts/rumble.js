@@ -190,12 +190,6 @@
                 $log.log('Player ready: %1 - %2',player.getType(),player.getVideoId());
                 self.checkReady();
                 player.removeListener('ready',this);
-
-                if (playListItem === $scope.playList[0]){
-                    self.twerkNext().then(null,function(e){
-                        $log.warn(e.message);
-                    });
-                }
             });
 
             player.on('ended', function() {
@@ -265,36 +259,6 @@
             return Math.round((votes[index] / tally)* 100) / 100;
         };
 
-        this.twerkNext = function(){
-            var nextItem = $scope.playList[$scope.currentIndex + 1];
-            if (!nextItem){
-                return $q.reject(new Error('No next item to twerk.'));
-            }
-            
-            if ((c6UserAgent.app.name !== 'chrome') &&
-                (c6UserAgent.app.name !== 'firefox') &&
-                (c6UserAgent.app.name !== 'safari')) {
-                return $q.reject(
-                    new Error('Twerking not supported on ' + c6UserAgent.app.name)
-                );
-            }
-            
-            if (!$scope.deviceProfile.multiPlayer){
-                return $q.reject(new Error('Item cannot be twerked, device not multiplayer.'));
-            }
-            
-            if (nextItem.player.getType() === 'dailymotion'){
-                return $q.reject(new Error('Twerking not supported with DailyMotion.'));
-            }
-            
-            if (nextItem.state.twerked){
-                return $q.reject(new Error('Item is already twerked'));
-            }
-            
-            nextItem.state.twerked = true;
-            return nextItem.player.twerk(5000);
-        };
-
         this.setPosition = function(i){
             $log.info('setPosition: %1',i);
             $scope.currentReturns = null;
@@ -352,10 +316,6 @@
             if ($scope.deviceProfile.multiPlayer){
                 $scope.currentItem.player.play();
             }
-
-            self.twerkNext().then(null,function(e){
-                $log.warn(e.message);
-            });
         };
 
         readyTimeout = $timeout(function(){
@@ -365,9 +325,27 @@
 
         $log.log('Rumble Controller is initialized!');
     }])
-    .directive('rumblePlayer',['$log','$compile','$window', function($log,$compile,$window){
-        $log = $log.context('rumblePlayer');
-        function fnLink(scope,$element,$attr){
+    .directive('mrCard',['$log','$compile','$window','c6UserAgent',
+    function            ( $log , $compile , $window , c6UserAgent ){
+        $log = $log.context('<mr-card>');
+        function fnLink(scope,$element){
+            var canTwerk = (function() {
+                if ((c6UserAgent.app.name !== 'chrome') &&
+                    (c6UserAgent.app.name !== 'firefox') &&
+                    (c6UserAgent.app.name !== 'safari')) {
+
+                    $log.warn('Twerking not supported on ' + c6UserAgent.app.name);
+                    return false;
+                }
+
+                if (!scope.profile.multiPlayer){
+                    $log.warn('Item cannot be twerked, device not multiplayer.');
+                    return false;
+                }
+
+                return true;
+            }());
+
             $log.info('link:',scope);
             function resize(event,noDigest){
                 var pw = Math.round($window.innerWidth * 1),
@@ -383,35 +361,27 @@
                 }
             }
 
-            if ($attr.autoplay === undefined){
-                $attr.autoplay = 0;
-            }
-
-            $attr.twerk = parseInt($attr.twerk,10);
-            if (isNaN($attr.twerk)){
-                $attr.twerk = 0;
-            }
-            if ($attr.twerk && !scope.profile.multiPlayer){
-                $attr.twerk = 0;
-            }
-
-            var inner = '<' + scope.config.player + '-player';
+            var inner = '<' + scope.config.player + '-card';
             for (var key in scope.config){
-                if ((key !== 'player') && (scope.config.hasOwnProperty(key))){
+                if ((key !== 'type') && (scope.config.hasOwnProperty(key))){
                     inner += ' ' + key.toLowerCase() + '="' + scope.config[key] + '"';
                 }
             }
 
             inner += ' width="{{playerWidth}}" height="{{playerHeight}}"';
-            inner += ' autoplay="' + $attr.autoplay + '"';
-            inner += ' twerk="' + $attr.twerk + '"';
-           
+            inner += ' active="{{active}} on-deck="{{onDeck}}""';
+
             if (!scope.profile.inlineVideo){
                 $log.info('Will need to regenerate the player');
                 inner += ' regenerate="1"';
             }
 
-            inner += '></'  + scope.config.player + '-player' + '>';
+            if (canTwerk) {
+                $log.info('DAYUM! ' + c6UserAgent.app.name + ' can tweeeerrrrrk!');
+                inner += ' twerk="1"';
+            }
+
+            inner += '></'  + scope.config.player + '-card' + '>';
 
             $element.append($compile(inner)(scope));
 
@@ -424,7 +394,9 @@
             link     : fnLink,
             scope    : {
                 config  : '=',
-                profile : '='
+                profile : '=',
+                active  : '=',
+                onDeck  : '='
             }
         };
 

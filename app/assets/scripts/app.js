@@ -56,7 +56,8 @@
                     twerk       : angular.noop,
                     isReady     : angular.noop,
                     currentTime : 0,
-                    ended       : false
+                    ended       : false,
+                    twerked     : false
                 });
             };
         }])

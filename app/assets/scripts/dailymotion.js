@@ -172,13 +172,13 @@
 
         return service;
     }])
-    .directive('dailymotionPlayer',
+    .directive('dailymotionCard',
         ['$log','$timeout','$q','c6UserAgent','dailymotion','_default','numberify','playerInterface',
         function($log,$timeout,$q,c6UserAgent,dailymotion,_default,numberify,playerInterface){
-        $log = $log.context('dailymotionPlayer');
+        $log = $log.context('<dailymotion-card>');
         function fnLink(scope,$element,$attr){
             if (!$attr.videoid){
-                throw new SyntaxError('dailymotionPlayer requires the videoid attribute to be set.');
+                throw new SyntaxError('<dailymotion-card> requires the videoid attribute to be set.');
             }
             var player, playerIface  = playerInterface(),
                 _playerIface = {
@@ -196,13 +196,8 @@
                 playerIface.emit('timeupdate', playerIface);
             }
 
-            function twerk(wait){
-                // Twerking and FireFox
-                if (c6UserAgent.app.name === 'firefox'){
-                    return $q.reject('DailyMotion and twerking don\'t mix on firefox.');
-                }
-
-                var deferred = $q.defer(), waitTimer,
+            function twerk() {
+                /*var deferred = $q.defer(), waitTimer,
                 playingListener = function(){
                     $log.info('[%1] - stop twerk',player);
                     if (waitTimer){
@@ -217,16 +212,21 @@
                 if (wait === undefined){
                     wait = 1000;
                 }
-                
+
                 if (wait){
                     waitTimer = $timeout(function(){
                         waitTimer = undefined;
                         deferred.reject(new Error('Player twerk timed out'));
                     },wait);
                 }
-                
+
                 $log.info('[%1] - start twerk, wait=%2',player,wait);
                 player.play();
+
+                return deferred.promise;*/
+                var deferred = $q.defer();
+
+                deferred.reject(new Error('DailyMotion ain\'t ratchet enough for twerking.'));
 
                 return deferred.promise;
             }
@@ -282,6 +282,11 @@
                 ended: {
                     get: function() {
                         return _playerIface.ended;
+                    }
+                },
+                twerked: {
+                    get: function() {
+                        return false;
                     }
                 }
             });
@@ -349,25 +354,17 @@
 
                 player.on('ready',function(p){
                     $log.info('[%1] - I am ready',p);
-                    
-                    if (numberify($attr.twerk)){
-                        twerk()
-                            .catch( function (err){
-                                $log.error('[%1] %2',p,err);
-                            })
-                            .finally( function(){
-                                playerIsReady = true;
-                                player.on('timeupdate', handleTimeUpdate);
-                                playerIface.emit('ready',playerIface);
-                            });
-                    } else {
-                        $timeout(function(){
+
+                    (numberify($attr.twerk) ? twerk : function() { return $q.when(playerIface); })()
+                        .catch( function (err){
+                            $log.warn('[%1] %2',p,err);
+                        })
+                        .finally( function(){
                             playerIsReady = true;
                             player.on('timeupdate', handleTimeUpdate);
                             playerIface.emit('ready',playerIface);
                         });
-                    }
-                    
+
                     player.on('ended',function(p){
                         $log.info('[%1] - I am finished',p);
 

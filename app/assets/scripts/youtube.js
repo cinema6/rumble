@@ -215,17 +215,18 @@
         return service;
 
     }])
-    .directive('youtubePlayer',['$log','$window','$timeout','$interval','$q','youtube','_default','playerInterface','numberify',
+    .directive('youtubeCard',['$log','$window','$timeout','$interval','$q','youtube','_default','playerInterface','numberify',
         function($log,$window,$timeout,$interval,$q,youtube,_default,playerInterface,numberify){
-        $log = $log.context('youtubePlayer');
+        $log = $log.context('<youtube-card>');
         function fnLink(scope,$element,$attr){
             if (!$attr.videoid){
-                throw new SyntaxError('youtubePlayer requires the videoid attribute to be set.');
+                throw new SyntaxError('<youtube-card> requires the videoid attribute to be set.');
             }
 
             var player, playerIface  = playerInterface(),
                 _playerIface = {
-                    ended: false
+                    ended: false,
+                    twerked: false
                 },
                 playerIsReady = false, playerHasLoaded = false,
                 currentTimeInterval, lastNotifiedCurrentTime = 0,
@@ -269,6 +270,10 @@
                     deferred.resolve(playerIface);
                 };
 
+                if (playerIface.twerked) {
+                    deferred.reject(new Error('Player has already been twerked'));
+                }
+
                 player.once('playing',playingListener);
 
                 if (wait === undefined){
@@ -285,12 +290,16 @@
                 $log.info('[%1] - start twerk, wait=%2',player,wait);
                 player.play();
 
+                deferred.promise.then(function() {
+                    _playerIface.twerked = true;
+                });
+
                 return deferred.promise;
             }
 
             /* -- playerInterface : begin -- */
 
-            playerIface.getType = function () {
+            playerIface.getType = function() {
                 return 'youtube';
             };
 
@@ -340,10 +349,15 @@
                     get: function() {
                         return _playerIface.ended;
                     }
+                },
+                twerked: {
+                    get: function() {
+                        return _playerIface.twerked;
+                    }
                 }
             });
 
-            scope.$emit('playerAdd',playerIface);
+            scope.$emit('playerAdd', playerIface);
 
             /* -- playerInterface : end -- */
 
@@ -412,23 +426,15 @@
                 player.on('ready',function(p){
                     $log.info('[%1] - I am ready',p );
 
-                    if (numberify($attr.twerk)){
-                        twerk(0)
-                            .catch( function (err){
-                                $log.error('[%1] %2',p,err);
-                            })
-                            .finally( function(){
-                                playerIsReady = true;
-                                playerIface.emit('ready',playerIface);
-                                pollCurrentTime();
-                            });
-                    } else {
-                        $timeout(function(){
+                    (numberify($attr.twerk) ? twerk : function() { return $q.when(playerIface); })()
+                        .catch(function(err) {
+                            $log.warn('[%1] %2',p,err);
+                        })
+                        .finally(function() {
                             playerIsReady = true;
                             playerIface.emit('ready',playerIface);
                             pollCurrentTime();
                         });
-                    }
 
                     player.on('ended',function(p){
                         $log.info('[%1] - I am finished',p);

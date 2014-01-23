@@ -194,12 +194,12 @@
 
         return service;
     }])
-    .directive('vimeoPlayer',['$log','$timeout','$q','vimeo','_default','numberify','playerInterface',
+    .directive('vimeoCard',['$log','$timeout','$q','vimeo','_default','numberify','playerInterface',
         function($log,$timeout,$q,vimeo,_default,numberify,playerInterface){
-        $log = $log.context('vimeoPlayer');
+        $log = $log.context('<vimeo-card>');
         function fnLink(scope,$element,$attr){
             if (!$attr.videoid){
-                throw new SyntaxError('vimeoPlayer requires the videoid attribute to be set.');
+                throw new SyntaxError('<vimeo-card> requires the videoid attribute to be set.');
             }
             
             $log.info('link: videoId=%1, start=%2, end=%3, autoPlay=%4',
@@ -209,7 +209,8 @@
                 playerIsReady = false, playerHasLoaded = false,
                 _playerIface = {
                     currentTime: 0,
-                    ended: false
+                    ended: false,
+                    twerked: false
                 },
                 start = numberify($attr.start, 0), end = numberify($attr.end, Infinity);
 
@@ -242,21 +243,29 @@
                     deferred.resolve(playerIface);
                 };
 
+                if (playerIface.twerked) {
+                    deferred.reject(new Error('Player has already been twerked'));
+                }
+
                 player.once('playProgress',playingListener);
 
                 if (wait === undefined){
                     wait = 1000;
                 }
-                
+
                 if (wait){
                     waitTimer = $timeout(function(){
                         waitTimer = undefined;
                         deferred.reject(new Error('Player twerk timed out'));
                     },wait);
                 }
-                
+
                 $log.info('[%1] - start twerk, wait=%2',player,wait);
                 player.play();
+
+                deferred.promise.then(function() {
+                    _playerIface.twerked = true;
+                });
 
                 return deferred.promise;
             }
@@ -286,7 +295,7 @@
                     player.pause();
                 }
             };
-            
+
             playerIface.twerk = function(wait){
                 if (!playerIsReady){
                     return $q.reject(new Error('Player is not ready to twerk'));
@@ -312,6 +321,11 @@
                 ended: {
                     get: function() {
                         return _playerIface.ended;
+                    }
+                },
+                twerked: {
+                    get: function() {
+                        return _playerIface.twerked;
                     }
                 }
             });
@@ -369,28 +383,20 @@
                     frameborder : 0,
                     params      : vparams
                 },$element);
-                
+
                 player.on('ready',function(p){
                     $log.info('[%1] - I am ready',p);
-                    
-                    if (numberify($attr.twerk)){
-                        twerk(0)
-                            .catch( function (err){
-                                $log.error('[%1] %2',p,err);
-                            })
-                            .finally( function(){
-                                playerIsReady = true;
-                                player.on('playProgress', handlePlayProgress);
-                                playerIface.emit('ready',playerIface);
-                            });
-                    } else {
-                        $timeout(function(){
+
+                    (numberify($attr.twerk) ? twerk : function() { return $q.when(playerIface); })()
+                        .catch( function (err){
+                            $log.warn('[%1] %2',p,err);
+                        })
+                        .finally( function(){
                             playerIsReady = true;
                             player.on('playProgress', handlePlayProgress);
                             playerIface.emit('ready',playerIface);
                         });
-                    }
-              
+
                     player.on('finish',function(p){
                         $log.info('[%1] - I am finished',p);
 

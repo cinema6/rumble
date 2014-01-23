@@ -250,72 +250,6 @@
                 });
             });
 
-            describe('twerkNext',function(){
-                var resolveSpy, rejectSpy;
-                beforeEach(function(){
-                    resolveSpy = jasmine.createSpy('twerk.resolve');
-                    rejectSpy  = jasmine.createSpy('twerk.reject');
-                    
-                    c6UserAgent.app.name = 'chrome';
-                    $scope.deviceProfile = { multiPlayer : true };
-                    $scope.playList.forEach(function(item,index){
-                        item.player = {
-                            isReady  : jasmine.createSpy('item'+index+'.isReady'),
-                            play     : jasmine.createSpy('item'+index+'.play'),
-                            pause    : jasmine.createSpy('item'+index+'.pause'),
-                            twerk    : jasmine.createSpy('item'+index+'.twerk'),
-                            getType  : jasmine.createSpy('item'+index+'.getType')
-                        };
-                        item.player.isReady.andReturn(true);
-                    });
-                });
-
-                it('rejects if there is no next player',function(){
-                    $scope.currentIndex = 2;
-                    RumbleCtrl.twerkNext().then(resolveSpy,rejectSpy);
-                    $scope.$digest();
-                    expect(resolveSpy).not.toHaveBeenCalled();
-                    expect(rejectSpy).toHaveBeenCalledWith({
-                        message : 'No next item to twerk.'
-                    });
-                });
-
-                it('rejects if the next player has unsupportd browser',function(){
-                    $scope.currentIndex = 0;
-                    c6UserAgent.app.name = 'phantomjs';
-                    RumbleCtrl.twerkNext().then(resolveSpy,rejectSpy);
-                    $scope.$digest();
-                    expect(resolveSpy).not.toHaveBeenCalled();
-                    expect(rejectSpy).toHaveBeenCalledWith({
-                        message: 'Twerking not supported on phantomjs'
-                    });
-                });
-
-                it('rejects if the next player has already been twerked',function(){
-                    $scope.currentIndex = 0;
-                    $scope.playList[1].state.twerked = true;
-                    RumbleCtrl.twerkNext().then(resolveSpy,rejectSpy);
-                    $scope.$digest();
-                    expect(resolveSpy).not.toHaveBeenCalled();
-                    expect(rejectSpy).toHaveBeenCalledWith({
-                        message: 'Item is already twerked'
-                    });
-                });
-
-                it('resolves when the next player resolves',function(){
-                    var deferred = $q.defer();
-                    $scope.currentIndex = 0;
-                    $scope.playList[1].player.twerk.andReturn(deferred.promise);
-                    RumbleCtrl.twerkNext().then(resolveSpy,rejectSpy);
-                    deferred.resolve($scope.playList[1].player);
-                    $scope.$digest();
-                    expect(resolveSpy).toHaveBeenCalledWith($scope.playList[1].player);
-                    expect(rejectSpy).not.toHaveBeenCalled();
-                    expect($scope.playList[1].state.twerked).toEqual(true);
-                });
-
-            });
-
             describe('navigation',function(){
                 beforeEach(function(){
                     $scope.deviceProfile = { multiPlayer : true };
@@ -344,9 +278,6 @@
                 it('handles moving forward',function(){
                     $scope.currentIndex = 1;
                     $scope.currentItem  = $scope.playList[1];
-                    spyOn(RumbleCtrl,'twerkNext').andReturn({
-                        then: jasmine.createSpy('twerkNext.then')
-                    });
                     RumbleCtrl.goForward();
                     expect($scope.playList[1].player.pause).toHaveBeenCalled();
                     expect($scope.playList[2].player.play).toHaveBeenCalled();
@@ -354,7 +285,6 @@
                     expect($scope.currentItem).toBe($scope.playList[2]);
                     expect($scope.atHead).toEqual(false);
                     expect($scope.atTail).toEqual(false);
-                    expect(RumbleCtrl.twerkNext).toHaveBeenCalled();
                     expect($scope.$emit).toHaveBeenCalledWith('reelMove');
                     expect($scope.$emit.callCount).toBe(1);
                 });
@@ -362,7 +292,6 @@
                 it('can be moved one past the actual length', function() {
                     $scope.currentIndex = 2;
                     $scope.currentItem = $scope.playList[2];
-                    spyOn(RumbleCtrl, 'twerkNext');
 
                     expect(RumbleCtrl.goForward).not.toThrow();
 
@@ -371,7 +300,6 @@
                     expect($scope.currentItem).toBeUndefined();
                     expect($scope.atHead).toBe(false);
                     expect($scope.atTail).toBe(true);
-                    expect(RumbleCtrl.twerkNext).not.toHaveBeenCalled();
                     expect($scope.$emit).toHaveBeenCalledWith('reelEnd');
                     expect($scope.$emit.callCount).toBe(1);
                 });
