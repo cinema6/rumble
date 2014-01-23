@@ -5,6 +5,7 @@
         describe('AppController', function() {
             var $rootScope,
                 $scope,
+                $childScope,
                 $location,
                 $q,
                 $log,
@@ -95,6 +96,7 @@
                     $location = _$location_;
                     $timeout = _$timeout_;
                     $scope = _$rootScope_.$new();
+                    $childScope = $scope.$new();
                     $log.context = function() { return $log; };
 
                     AppCtrl = $controller('AppController', {
@@ -121,6 +123,58 @@
 
                 it('should setup the session', function() {
                     expect($scope.app.data).toBe(appData);
+                });
+            });
+
+            describe('app', function() {
+                describe('data', function() {
+                    it('should be null', function() {
+                        expect($scope.app.data).toBeNull();
+                    });
+                });
+
+                describe('state', function() {
+                    it('should be splash', function() {
+                        expect($scope.app.state).toBe('splash');
+                    });
+
+                    it('should not be publicly set-able', function() {
+                        expect(function() {
+                            $scope.app.state = 'foo';
+                        }).toThrow();
+                    });
+                });
+            });
+
+            describe('handling events', function() {
+                describe('reelStart', function() {
+                    beforeEach(function() {
+                        $childScope.$emit('reelStart');
+                    });
+
+                    it('should change to the "deck" state', function() {
+                        expect($scope.app.state).toBe('deck');
+                    });
+                });
+
+                describe('reelMove', function() {
+                    beforeEach(function() {
+                        $childScope.$emit('reelMove');
+                    });
+
+                    it('should change to the "deck" state', function() {
+                        expect($scope.app.state).toBe('deck');
+                    });
+                });
+
+                describe('reelEnd', function() {
+                    beforeEach(function() {
+                        $childScope.$emit('reelEnd');
+                    });
+
+                    it('should change to the "end" state', function() {
+                        expect($scope.app.state).toBe('end');
+                    });
                 });
             });
         });

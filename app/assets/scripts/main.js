@@ -34,6 +34,7 @@
             } else {
                 return [
                     'scripts/app',
+                    'scripts/services',
                     'scripts/dailymotion',
                     'scripts/iframe',
                     'scripts/rumble',
@@ -97,7 +98,7 @@
         dev: 'http://s3.amazonaws.com/c6.dev/media/src/stub',
         cdn: 'http://cdn1.cinema6.com/src/stub'
     };
-    c6.kModDeps = ['ngAnimate','c6.ui', 'c6.log'];
+    c6.kModDeps = ['c6.rumble.services', 'ngAnimate','c6.ui', 'c6.log'];
     
     if (window.location.host.match(/\/\/(www\.)*cinema6.com/) !== null){
         ga('create', 'UA-44457821-2', 'cinema6.com');

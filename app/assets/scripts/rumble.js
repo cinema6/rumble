@@ -4,10 +4,8 @@
     angular.module('c6.rumble')
     .animation('.splash-screen',[function(){
         return {
-            beforeAddClass : function(element,className,done){
-                if (className === 'ng-hide'){
-                    element.fadeOut(2000, done);
-                }
+            leave: function(element,className,done){
+                element.fadeOut(2000, done);
             }
         };
     }])
@@ -91,18 +89,82 @@
 
         return service;
     }])
-    .controller('RumbleController',['$log','$scope','$timeout','$q','$window','c6UserAgent','rumbleVotes','c6Computed','cinema6',
-    function                       ( $log , $scope , $timeout , $q , $window , c6UserAgent , rumbleVotes , c          , cinema6 ){
+    .service('MiniReelService', ['InflectorService', 'rumbleVotes',
+    function                    ( InflectorService ,  rumbleVotes ) {
+        this.createPlaylist = function(data) {
+            var playlist = angular.copy(data.playList);
+
+            function getObject(type, id) {
+                var pluralType = InflectorService.pluralize(type),
+                    collection = data[pluralType],
+                    object;
+
+                collection.some(function(item) {
+                    if (item.id === id) {
+                        object = item;
+                    }
+                });
+
+                return object;
+            }
+
+            function resolve(object) {
+                angular.forEach(object, function(value, prop) {
+                    var words,
+                        lastWord,
+                        type;
+
+                    if (angular.isObject(value)) {
+                        resolve(value);
+                        return;
+                    }
+
+                    if (!angular.isString(prop)) {
+                        return;
+                    }
+
+                    words = InflectorService.getWords(prop);
+                    lastWord = words[words.length - 1];
+
+                    if ((lastWord === 'id') && (words.length > 1)) {
+                        words.pop();
+                        type = InflectorService.toCamelCase(words);
+
+                        delete object[prop];
+                        object[type] = getObject(type, value);
+                    }
+                });
+            }
+
+            angular.forEach(playlist, function(video) {
+                resolve(video);
+
+                //TODO: remove this when the service works for real
+                rumbleVotes.mockReturnsData(data.id, video.id, video.voting);
+                delete video.voting;
+
+                video.state = {
+                    twerked: false,
+                    vote: -1,
+                    view: 'video'
+                };
+                video.player = null;
+            });
+
+            return playlist;
+        };
+    }])
+    .controller('RumbleController',['$log','$scope','$timeout','$q','$window','c6UserAgent','rumbleVotes','c6Computed','cinema6','MiniReelService',
+    function                       ( $log , $scope , $timeout , $q , $window , c6UserAgent , rumbleVotes , c          , cinema6 , MiniReelService ){
         $log = $log.context('RumbleCtrl');
         var self    = this, readyTimeout,
             appData = $scope.app.data;
 
         $scope.deviceProfile    = appData.profile;
         $scope.title            = appData.experience.title;
-        $scope.ballot           = appData.experience.data.ballot;
-        $scope.rumbleId         = appData.experience.data.rumbleId;
+        $scope.rumbleId         = appData.experience.data.id;
 
-        $scope.playList         = [];
+        $scope.playList         = MiniReelService.createPlaylist(appData.experience.data);
         $scope.players          = c($scope, function(index, playList) {
             return playList.slice(0, (index + 3));
         }, ['currentIndex', 'playList']);
@@ -112,19 +174,6 @@
         $scope.atTail           = null;
         $scope.currentReturns   = null;
         $scope.ready            = false;
-
-        appData.experience.data.playList.forEach(function(item){
-            var newItem = angular.copy(item);
-            newItem.player = null;
-            newItem.state = {
-                viewed  : false,
-                twerked : false,
-                vote    : -1
-            };
-            $scope.playList.push(newItem);
-            //TODO: remove this when the service works for real
-            rumbleVotes.mockReturnsData($scope.rumbleId,item.id,item.voting);
-        });
 
         $scope.$on('playerAdd',function(event,player){
             $log.log('Player added: %1 - %2',player.getType(),player.getVideoId());
@@ -149,15 +198,8 @@
                 }
             });
 
-            player.on('videoStarted',function(){
-                $log.log('Player start detected: %1 - %2',player.getType(),player.getVideoId());
-                if (playListItem === $scope.currentItem){
-                    $log.log('Player start recorded: %1 - %2',player.getType(),player.getVideoId());
-                    player.removeListener('videoStarted');
-                    $timeout(function(){
-                        playListItem.state.viewed = true;
-                    });
-                }
+            player.on('ended', function() {
+                playListItem.state.view = 'ballot';
             });
         });
         
@@ -201,6 +243,7 @@
 
         this.vote = function(v){
             $scope.currentItem.state.vote = v;
+            $scope.currentItem.state.view = 'results';
         };
 
         this.getVotePercent = function(votes,index){
@@ -258,7 +301,18 @@
             $scope.currentIndex   = i;
             $scope.currentItem    = $scope.playList[$scope.currentIndex];
             $scope.atHead         = $scope.currentIndex === 0;
-            $scope.atTail         = $scope.currentIndex === ($scope.playList.length -1);
+            $scope.atTail         = ($scope.currentIndex === $scope.playList.length);
+
+            if ($scope.atTail) {
+                $scope.$emit('reelEnd');
+            } else if ($scope.atHead) {
+                $scope.$emit('reelStart');
+            } else {
+                $scope.$emit('reelMove');
+            }
+
+            if (!$scope.currentItem) { return; }
+
             rumbleVotes.getReturnsForItem($scope.rumbleId,$scope.currentItem.id)
                 .then(
                     function onVotes(votes){
@@ -281,7 +335,6 @@
                 $scope.currentItem.player.pause();
             }
             self.setPosition($scope.currentIndex - 1);
-            $scope.currentItem.player.reset();
             if ($scope.deviceProfile.multiPlayer){
                 $scope.currentItem.player.play();
             }
@@ -291,8 +344,11 @@
             if ($scope.currentItem){
                 $scope.currentItem.player.pause();
             }
+
             self.setPosition($scope.currentIndex + 1);
-            $scope.currentItem.player.reset();
+
+            if (!$scope.currentItem) { return; }
+
             if ($scope.deviceProfile.multiPlayer){
                 $scope.currentItem.player.play();
             }

@@ -10,12 +10,36 @@
                 $log,
                 c6UserAgent,
                 RumbleCtrl,
+                rumbleVotes,
                 playList,
                 appData,
                 mockPlayer,
-                cinema6;
+                cinema6,
+                MiniReelService;
 
             beforeEach(function() {
+                MiniReelService = {
+                    createPlaylist: jasmine.createSpy('MiniReelService.createPlaylist()')
+                        .andCallFake(function(data) {
+                            var playlist = angular.copy(data.playList);
+
+                            MiniReelService.createPlaylist.mostRecentCall.result = playlist;
+
+                            playlist.forEach(function(video) {
+                                video.player = null;
+                                video.state = {
+                                    twerked: false,
+                                    vote: -1,
+                                    view: 'video'
+                                };
+
+                                rumbleVotes.mockReturnsData(data.id, video.id, video.voting);
+                            });
+
+                            return playlist;
+                        })
+                };
+
                 cinema6 = {
                     fullscreen: jasmine.createSpy('cinema6.fullscreen')
                 };
@@ -81,36 +105,38 @@
                     $provide.value('cinema6', cinema6);
                 });
 
-                module('c6.rumble');
+                module('c6.rumble', function($provide) {
+                    $provide.value('MiniReelService', MiniReelService);
+                });
 
-                inject(['$timeout','$q','$rootScope','$log','$window','$controller','c6UserAgent',
-                    function(_$timeout,_$q,_$rootScope,  _$log, _$window, _$controller,_c6UserAgent) {
-                    $timeout    = _$timeout;
-                    $q          = _$q;
-                    $rootScope  = _$rootScope;
-                    $log        = _$log;
-                    $window     = _$window;
-                    $scope      = $rootScope.$new();
-                    c6UserAgent = _c6UserAgent;
+                inject(function($injector) {
+                    $timeout    = $injector.get('$timeout');
+                    $q          = $injector.get('$q');
+                    $rootScope  = $injector.get('$rootScope');
+                    $log        = $injector.get('$log');
                     $log.context = function() { return $log; };
+                    $window     = $injector.get('$window');
+                    c6UserAgent = $injector.get('c6UserAgent');
+                    rumbleVotes = $injector.get('rumbleVotes');
+
+                    $scope      = $rootScope.$new();
 
                     $scope.app = {
                         data: appData
                     };
 
-                    RumbleCtrl = _$controller('RumbleController', {
+                    RumbleCtrl = $injector.get('$controller')('RumbleController', {
                         $scope  : $scope,
                         $log    : $log
                     });
-                }]);
+                });
             });
             describe('initialization',function(){
                 it('has proper dependencies',function(){
                     expect(RumbleCtrl).toBeDefined();
                     expect($scope.deviceProfile).toBe(appData.profile);
                     
-                    expect($scope.playList.length)
-                        .toEqual(appData.experience.data.playList.length);
+                    expect($scope.playList).toBe(MiniReelService.createPlaylist.mostRecentCall.result);
                     expect($scope.currentIndex).toEqual(-1);
                     expect($scope.currentItem).toBeNull();
                     expect($scope.atHead).toBeNull();
@@ -145,6 +171,29 @@
                     it('returns an array of zeros if no index is provided and votes are zero', function(){
                         var votes = [0,0,0] ;
                         expect(RumbleCtrl.getVotePercent(votes)).toEqual([0,0,0]);
+                    });
+                });
+
+                describe('vote()', function() {
+                    beforeEach(function() {
+                        spyOn($scope, '$emit');
+
+                        $scope.currentItem = {
+                            state: {
+                                vote: null,
+                                view: 'video'
+                            }
+                        };
+
+                        RumbleCtrl.vote(2);
+                    });
+
+                    it('should set the vote of the currentItem to the passed in value', function() {
+                        expect($scope.currentItem.state.vote).toBe(2);
+                    });
+
+                    it('should change the currentItem\'s view to "results"', function() {
+                        expect($scope.currentItem.state.view).toBe('results');
                     });
                 });
             });
@@ -214,7 +263,6 @@
                             isReady  : jasmine.createSpy('item'+index+'.isReady'),
                             play     : jasmine.createSpy('item'+index+'.play'),
                             pause    : jasmine.createSpy('item'+index+'.pause'),
-                            reset    : jasmine.createSpy('item'+index+'.reset'),
                             twerk    : jasmine.createSpy('item'+index+'.twerk'),
                             getType  : jasmine.createSpy('item'+index+'.getType')
                         };
@@ -275,11 +323,11 @@
                         item.player = {
                             isReady : jasmine.createSpy('item'+index+'.isReady'),
                             play    : jasmine.createSpy('item'+index+'.play'),
-                            pause   : jasmine.createSpy('item'+index+'.pause'),
-                            reset   : jasmine.createSpy('item'+index+'.reset')
+                            pause   : jasmine.createSpy('item'+index+'.pause')
                         };
                         item.player.isReady.andReturn(true);
                     });
+                    spyOn($scope, '$emit');
                 });
 
                 it('updates elements based on index with setPosition',function(){
@@ -301,43 +349,62 @@
                     });
                     RumbleCtrl.goForward();
                     expect($scope.playList[1].player.pause).toHaveBeenCalled();
-                    expect($scope.playList[2].player.reset).toHaveBeenCalled();
                     expect($scope.playList[2].player.play).toHaveBeenCalled();
                     expect($scope.currentIndex).toEqual(2);
                     expect($scope.currentItem).toBe($scope.playList[2]);
                     expect($scope.atHead).toEqual(false);
-                    expect($scope.atTail).toEqual(true);
+                    expect($scope.atTail).toEqual(false);
                     expect(RumbleCtrl.twerkNext).toHaveBeenCalled();
+                    expect($scope.$emit).toHaveBeenCalledWith('reelMove');
+                    expect($scope.$emit.callCount).toBe(1);
+                });
+
+                it('can be moved one past the actual length', function() {
+                    $scope.currentIndex = 2;
+                    $scope.currentItem = $scope.playList[2];
+                    spyOn(RumbleCtrl, 'twerkNext');
+
+                    expect(RumbleCtrl.goForward).not.toThrow();
+
+                    expect($scope.playList[2].player.pause).toHaveBeenCalled();
+                    expect($scope.currentIndex).toBe(3);
+                    expect($scope.currentItem).toBeUndefined();
+                    expect($scope.atHead).toBe(false);
+                    expect($scope.atTail).toBe(true);
+                    expect(RumbleCtrl.twerkNext).not.toHaveBeenCalled();
+                    expect($scope.$emit).toHaveBeenCalledWith('reelEnd');
+                    expect($scope.$emit.callCount).toBe(1);
                 });
                 
                 it('handles moving backward',function(){
-                    $scope.currentIndex = 1;
-                    $scope.currentItem  = $scope.playList[1];
+                    $scope.currentIndex = 2;
+                    $scope.currentItem  = $scope.playList[2];
                     RumbleCtrl.goBack();
-                    expect($scope.playList[1].player.pause).toHaveBeenCalled();
-                    expect($scope.playList[0].player.reset).toHaveBeenCalled();
-                    expect($scope.playList[0].player.play).toHaveBeenCalled();
+                    expect($scope.playList[2].player.pause).toHaveBeenCalled();
+                    expect($scope.playList[1].player.play).toHaveBeenCalled();
                     $scope.$digest();
-                    expect($scope.currentIndex).toEqual(0);
-                    expect($scope.currentItem).toBe($scope.playList[0]);
-                    expect($scope.atHead).toEqual(true);
+                    expect($scope.currentIndex).toEqual(1);
+                    expect($scope.currentItem).toBe($scope.playList[1]);
+                    expect($scope.atHead).toEqual(false);
                     expect($scope.atTail).toEqual(false);
+                    expect($scope.$emit).toHaveBeenCalledWith('reelMove');
+                    expect($scope.$emit.callCount).toBe(1);
                 });
             });
 
             describe('starting the mini reel', function() {
                 beforeEach(function() {
-                    spyOn(RumbleCtrl, 'goForward');
+                    spyOn($scope, '$emit');
 
                     RumbleCtrl.start();
                 });
 
-                it('should go forward', function() {
-                    expect(RumbleCtrl.goForward).toHaveBeenCalled();
-                });
-
                 it('should ask cinema6 to be moved fullscreen', function() {
                     expect(cinema6.fullscreen).toHaveBeenCalledWith(true);
+                });
+
+                it('should $emit the startReel event', function() {
+                    expect($scope.$emit).toHaveBeenCalledWith('reelStart');
                 });
             });
 
@@ -410,27 +477,19 @@
                     });
                 });
 
-                describe('videoStarted',function(){
+                describe('ended', function() {
                     beforeEach(function(){
                         mockPlayer.getType.andReturn('vimeo');
                         mockPlayer.getVideoId.andReturn('vid2video');
                         mockPlayer.isReady.andReturn(true);
-                    });
 
-                    it('is listened to when a player is added',function(){
-                        expect(mockPlayer._on.videoStarted).not.toBeDefined();
-                        $scope.$emit('playerAdd',mockPlayer);
-                        expect(mockPlayer._on.videoStarted).toBeDefined();
-                    });
-
-                    it('sets the play list item to viewed when raised',function(){
                         $scope.$emit('playerAdd',mockPlayer);
                         $scope.currentItem = $scope.playList[1];
-                        expect($scope.playList[1].player).toBe(mockPlayer);
-                        expect($scope.playList[1].state.viewed).toEqual(false);
-                        mockPlayer._on.videoStarted[0](mockPlayer);
-                        $timeout.flush();
-                        expect($scope.playList[1].state.viewed).toEqual(true);
+                        mockPlayer._on.ended[0](mockPlayer);
+                    });
+
+                    it('should set the view to "ballot"', function() {
+                        expect($scope.playList[1].state.view).toBe('ballot');
                     });
                 });
             });

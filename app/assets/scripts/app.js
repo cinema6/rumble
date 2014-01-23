@@ -51,20 +51,45 @@
                 return c6EventEmitter({
                     play        : angular.noop,
                     pause       : angular.noop,
-                    reset       : angular.noop,
                     getType     : angular.noop,
                     getVideoId  : angular.noop,
                     twerk       : angular.noop,
-                    isReady     : angular.noop
+                    isReady     : angular.noop,
+                    currentTime : 0,
+                    ended       : false
                 });
             };
         }])
         .controller('AppController', ['$scope','$log','cinema6',
         function                     ( $scope , $log , cinema6 ) {
             $log = $log.context('AppCtrl');
-            var app = {
-                data: null
+            var _app = {
+                state: 'splash'
             };
+
+            var app = {
+                data: null,
+            };
+
+            Object.defineProperties(app, {
+                state: {
+                    get: function() {
+                        return _app.state;
+                    }
+                }
+            });
+
+            function gotoDeck() {
+                _app.state = 'deck';
+            }
+
+            function gotoEnd() {
+                _app.state = 'end';
+            }
+
+            $scope.$on('reelStart', gotoDeck);
+            $scope.$on('reelMove', gotoDeck);
+            $scope.$on('reelEnd', gotoEnd);
 
             $log.info('loaded.');
 

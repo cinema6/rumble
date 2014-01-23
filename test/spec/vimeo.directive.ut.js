@@ -6,6 +6,7 @@
             var $compile,
                 $timeout,
                 $log,
+                $q,
                 $rootScope,
                 $scope,
                 mockPlayers,
@@ -17,21 +18,22 @@
                     vimeo.createPlayer = jasmine.createSpy('vimeo.createPlayer')
                     .andCallFake(function(playerId,config,$parentElement){
                         var mockPlayer = {
-                            on              : jasmine.createSpy('vimeoPlayer.on'),
-                            once            : jasmine.createSpy('vimeoPlayer.once'),
-                            emit            : jasmine.createSpy('vimeoPlayer.emit'),
-                            removeListener  : jasmine.createSpy('vimeoPlayer.removeListener'),
-                            setSize         : jasmine.createSpy('vimeoPlayer.setSize'),
-                            destroy         : jasmine.createSpy('vimeoPlayer.destroy'),
-                            post            : jasmine.createSpy('vimeoPlayer.post'),
-                            play            : jasmine.createSpy('vimeoPlayer.play'),
-                            pause           : jasmine.createSpy('vimeoPlayer.pause'),
-                            seekTo          : jasmine.createSpy('vimeoPlayer.seekTo'),
+                            on                  : jasmine.createSpy('vimeoPlayer.on'),
+                            once                : jasmine.createSpy('vimeoPlayer.once'),
+                            emit                : jasmine.createSpy('vimeoPlayer.emit'),
+                            removeListener      : jasmine.createSpy('vimeoPlayer.removeListener'),
+                            setSize             : jasmine.createSpy('vimeoPlayer.setSize'),
+                            destroy             : jasmine.createSpy('vimeoPlayer.destroy'),
+                            post                : jasmine.createSpy('vimeoPlayer.post'),
+                            play                : jasmine.createSpy('vimeoPlayer.play'),
+                            pause               : jasmine.createSpy('vimeoPlayer.pause'),
+                            seekTo              : jasmine.createSpy('vimeoPlayer.seekTo'),
+                            getCurrentTimeAsync : jasmine.createSpy('VimeoPlayer.getCurrentTimeAsync()'),
 
-                            _on             : {},
-                            _once           : {},
-                            _removes        : {}
-                        }
+                            _on                 : {},
+                            _once               : {},
+                            _removes            : {}
+                        };
 
                         mockPlayer.on.andCallFake(function(eventName,handler){
                             if (mockPlayer._on[eventName] === undefined){
@@ -65,6 +67,7 @@
                     $compile    = $injector.get('$compile');
                     $rootScope  = $injector.get('$rootScope');
                     $log        = $injector.get('$log');
+                    $q          = $injector.get('$q');
                     
                     $log.context = jasmine.createSpy('$log.context');
                     $log.context.andCallFake(function() { return $log; });
@@ -172,14 +175,6 @@
                         iface.pause();
                         expect(mockPlayers[0].pause).not.toHaveBeenCalled();
                     });
-
-                    it('will not reset',function(){
-                        expect(mockPlayers[0]._once.playProgress).not.toBeDefined();
-                        expect(mockPlayers[0]._on.playProgress).not.toBeDefined();
-                        iface.reset();
-                        expect(mockPlayers[0]._once.playProgress).not.toBeDefined();
-                        expect(mockPlayers[0]._on.playProgress).not.toBeDefined();
-                    });
                 });
 
                 describe('when player is ready',function(){
@@ -210,24 +205,168 @@
                         });
                     });
 
-                    describe('reset method',function(){
-                        it('sets startListener only if no end param is set',function(){
-                            expect(mockPlayers[0]._once.playProgress).not.toBeDefined();
-                            expect(mockPlayers[0]._on.playProgress).not.toBeDefined();
-                            iface.reset();
-                            expect(mockPlayers[0]._once.playProgress.length).toEqual(1);
-                            expect(mockPlayers[0]._on.playProgress).not.toBeDefined();
+                    describe('currentTime property', function() {
+                        var player;
+
+                        beforeEach(function() {
+                            player = mockPlayers[0];
                         });
 
-                        it('sets start and end listener if both params are set',function(){
-                            expect(mockPlayers[0]._once.playProgress).not.toBeDefined();
-                            expect(mockPlayers[0]._on.playProgress).not.toBeDefined();
-                            $scope.start=10;
-                            $scope.end=20;
-                            $scope.$digest();
-                            iface.reset();
-                            expect(mockPlayers[0]._once.playProgress.length).toEqual(1);
-                            expect(mockPlayers[0]._on.playProgress.length).toEqual(1);
+                        describe('getting', function() {
+                            it('should return the latest update from the playProgress event', function() {
+                                player._on.playProgress[0](player, { seconds: 10 });
+                                expect(iface.currentTime).toBe(10);
+
+                                player._on.playProgress[0](player, { seconds: 20 });
+                                expect(iface.currentTime).toBe(20);
+
+                                player._on.playProgress[0](player, { seconds: 30 });
+                                expect(iface.currentTime).toBe(30);
+                            });
+                        });
+
+                        describe('setting', function() {
+                            it('should proxy to player.seekTo()', function() {
+                                iface.currentTime = 10;
+                                expect(player.seekTo).toHaveBeenCalledWith(10);
+
+                                iface.currentTime = 20;
+                                expect(player.seekTo).toHaveBeenCalledWith(20);
+
+                                iface.currentTime = 30;
+                                expect(player.seekTo).toHaveBeenCalledWith(30);
+                            });
+                        });
+
+                        describe('if a start time is specified', function() {
+                            beforeEach(function() {
+                                $compile(
+                                    '<vimeo-player videoid="abc1234" width="1" height="2" start="10"></vimeo-player>'
+                                )($scope);
+                                $timeout.flush();
+
+                                player = mockPlayers[1];
+
+                                player._on.ready[0]({},player);
+                                $timeout.flush();
+                                player._on.playProgress[0](player, { seconds: 10 });
+                            });
+
+                            describe('getting', function() {
+                                it('should subtract the start time in its calculation', function() {
+                                    expect(iface.currentTime).toBe(0);
+
+                                    player._on.playProgress[0](player, { seconds: 20 });
+                                    expect(iface.currentTime).toBe(10);
+
+                                    player._on.playProgress[0](player, { seconds: 30 });
+                                    expect(iface.currentTime).toBe(20);
+                                });
+
+                                it('should never go below 0', function() {
+                                    player._on.playProgress[0](player, { seconds: 5 });
+
+                                    expect(iface.currentTime).toBe(0);
+                                });
+                            });
+
+                            describe('setting', function() {
+                                it('should add the start time when calling seekTo()', function() {
+                                    iface.currentTime = 10;
+                                    expect(player.seekTo).toHaveBeenCalledWith(20);
+
+                                    iface.currentTime = 20;
+                                    expect(player.seekTo).toHaveBeenCalledWith(30);
+
+                                    iface.currentTime = 30;
+                                    expect(player.seekTo).toHaveBeenCalledWith(40);
+                                });
+
+                                it('should never seek before the start time', function() {
+                                    iface.currentTime = -5;
+                                    expect(player.seekTo).toHaveBeenCalledWith(10);
+                                });
+                            });
+                        });
+                    });
+
+                    describe('ended property', function() {
+                        var player;
+
+                        beforeEach(function() {
+                            player = mockPlayers[0];
+                        });
+
+                        describe('getting', function() {
+                            it('should be initialized as false', function() {
+                                expect(iface.ended).toBe(false);
+                            });
+                        });
+
+                        describe('setting', function() {
+                            it('should not be publically set-able', function() {
+                                expect(function() {
+                                    iface.ended = true;
+                                }).toThrow();
+                            });
+                        });
+
+                        describe('when the player emits finish', function() {
+                            beforeEach(function() {
+                                expect(iface.ended).toBe(false);
+
+                                player._on.finish[0](player);
+                            });
+
+                            it('should set ended to true', function() {
+                                expect(iface.ended).toBe(true);
+                            });
+                        });
+
+                        describe('playing after ended', function() {
+                            describe('if no start is provided', function() {
+                                beforeEach(function() {
+                                    player._on.play[0](player);
+                                    expect(player.seekTo).not.toHaveBeenCalled();
+
+                                    player._on.finish[0](player);
+
+                                    player._on.play[0](player);
+                                });
+
+                                it('should seek to the beginning of the video', function() {
+                                    expect(player.seekTo).toHaveBeenCalledWith(0);
+                                });
+
+                                it('should set ended to false', function() {
+                                    expect(iface.ended).toBe(false);
+                                });
+                            });
+
+                            describe('if start is provided', function() {
+                                beforeEach(function() {
+                                    $compile(
+                                        '<vimeo-player videoid="abc1234" width="1" height="2" start="10"></vimeo-player>'
+                                    )($scope);
+                                    $timeout.flush();
+
+                                    player = mockPlayers[1];
+
+                                    player._on.ready[0]({},player);
+                                    $timeout.flush();
+
+                                    player._on.finish[0](player);
+                                    player._on.play[0](player);
+                                });
+
+                                it('should seek to the start time', function() {
+                                    expect(player.seekTo).toHaveBeenCalledWith(10);
+                                });
+
+                                it('should set ended to false', function() {
+                                    expect(iface.ended).toBe(false);
+                                });
+                            });
                         });
                     });
                 });
@@ -240,7 +379,6 @@
                     iface = null;
                     $scope.$on('playerAdd',function(event,playerInterface){
                         iface = playerInterface;
-                        spyOn(iface,'reset');
                     });
                 });
 
@@ -258,14 +396,12 @@
                             expect(iface.isReady()).toEqual(false);
                             expect(mockPlayers[0].play).not.toHaveBeenCalled();
                             expect(mockPlayers[0].pause).not.toHaveBeenCalled();
-                            expect(iface.reset).not.toHaveBeenCalled();
                             expect(mockPlayers[0]._once.playProgress).not.toBeDefined();
                             mockPlayers[0]._on.ready[0]({},mockPlayers[0]);
                             $timeout.flush();
                             expect(iface.isReady()).toEqual(true);
                             expect(mockPlayers[0].play).not.toHaveBeenCalled();
                             expect(mockPlayers[0].pause).not.toHaveBeenCalled();
-                            expect(iface.reset).not.toHaveBeenCalled();
                         });
                     });
 
@@ -282,26 +418,22 @@
                             expect(iface.isReady()).toEqual(false);
                             expect(mockPlayers[0].play).not.toHaveBeenCalled();
                             expect(mockPlayers[0].pause).not.toHaveBeenCalled();
-                            expect(iface.reset).not.toHaveBeenCalled();
                             expect(mockPlayers[0]._once.playProgress).not.toBeDefined();
                             mockPlayers[0]._on.ready[0]({},mockPlayers[0]);
                             expect(iface.isReady()).toEqual(false);
                             expect(mockPlayers[0]._once.playProgress).toBeDefined();
                             expect(mockPlayers[0].play).toHaveBeenCalled();
                             expect(mockPlayers[0].pause).not.toHaveBeenCalled();
-                            expect(iface.reset).not.toHaveBeenCalled();
                         });
 
-                        it('will pause and reset once the player starts playing',function(){
+                        it('will pause once the player starts playing',function(){
                             mockPlayers[0]._on.ready[0]({},mockPlayers[0]);
                             expect(mockPlayers[0].play).toHaveBeenCalled();
                             expect(mockPlayers[0].pause).not.toHaveBeenCalled();
-                            expect(iface.reset).not.toHaveBeenCalled();
                             
                             mockPlayers[0]._once.playProgress[0]({},mockPlayers[0]);
                             $scope.$digest();
                             expect(mockPlayers[0].pause).toHaveBeenCalled();
-                            expect(iface.reset).not.toHaveBeenCalled();
                             expect(iface.isReady()).toEqual(true);
                         });
 
@@ -440,29 +572,6 @@
                 });
 
                 describe('start',function(){
-                
-                    it('will emit videoStarted on firt playProgress event',function(){
-                        $compile(
-                            '<vimeo-player videoid="a" width="1" height="2"></vimeo-player>'
-                        )($scope);
-                        var startedSpy = jasmine.createSpy('playerHasStarted');
-                        iface.on('videoStarted',startedSpy);
-                        $timeout.flush();
-
-                        //simulate the firing of the ready event
-                        mockPlayers[0]._on.ready[0]({},mockPlayers[0]);
-                        $timeout.flush();
-                     
-                        iface.reset();
-
-                        //simulate the firing of the playProgress event
-                        mockPlayers[0]._once.playProgress[0]({},mockPlayers[0]);
-
-                        expect(startedSpy).toHaveBeenCalledWith(iface);
-                        
-                        expect(mockPlayers[0].seekTo).not.toHaveBeenCalled();
-                    });
-
                     it('will seekTo start value if set',function(){
                         $compile(
                             '<vimeo-player videoid="a" start="10"></vimeo-player>'
@@ -472,26 +581,48 @@
                         //simulate the firing of the ready event
                         mockPlayers[0]._on.ready[0](mockPlayers[0]);
                         $timeout.flush();
-                     
-                        iface.reset();
 
                         //simulate the firing of the playProgress event
-                        mockPlayers[0]._once.playProgress[0](mockPlayers[0]);
+                        mockPlayers[0]._on.playProgress[0](mockPlayers[0], { seconds: 20 });
+                        expect(mockPlayers[0].seekTo).not.toHaveBeenCalled();
 
+                        mockPlayers[0]._on.playProgress[0](mockPlayers[0], { seconds: 9 });
                         expect(mockPlayers[0].seekTo).toHaveBeenCalledWith(10);
+                    });
+                });
 
+                describe('timeupdate', function() {
+                    beforeEach(function() {
+                        $scope.$apply(function() {
+                            $compile('<vimeo-player videoid="a"></youtube-player>')($scope);
+                        });
+                        $timeout.flush();
+                        mockPlayers[0]._on.ready[0](mockPlayers[0]);
+                        $timeout.flush();
+                        spyOn(iface, 'emit');
+                    });
+
+                    it('should emit timeupdate when playProgress is emitted', function() {
+                        mockPlayers[0]._on.playProgress[0](mockPlayers[0], { seconds: 10 });
+                        expect(iface.emit).toHaveBeenCalledWith('timeupdate', iface);
+
+                        mockPlayers[0]._on.playProgress[0](mockPlayers[0], { seconds: 20 });
+                        expect(iface.emit.callCount).toBe(2);
+
+                        mockPlayers[0]._on.playProgress[0](mockPlayers[0], { seconds: 30 });
+                        expect(iface.emit.callCount).toBe(3);
                     });
                 });
 
                 describe('end',function(){
 
-                    it('vimeo finish event will triger videoEnded',function(){
+                    it('vimeo finish event will triger ended',function(){
                         var endedSpy = jasmine.createSpy('playerHasEnded');
                         $compile(
-                            '<vimeo-player videoid="a" end="10"></vimeo-player>'
+                            '<vimeo-player videoid="a"></vimeo-player>'
                         )($scope);
                         $timeout.flush();
-                        iface.on('videoEnded',endedSpy);
+                        iface.on('ended' ,endedSpy);
                         //simulate the firing of the ready event
                         mockPlayers[0]._on.ready[0](mockPlayers[0]);
                         $timeout.flush();
@@ -517,21 +648,16 @@
                         expect(mockPlayers[0]._on.finish).toBeDefined();
                         expect(mockPlayers[0].pause).not.toHaveBeenCalled();
 
-                        iface.reset();
-
                         //simulate the firing of the playProgress event
                         mockPlayers[0]._on.playProgress[0](mockPlayers[0], { seconds : 0 });
-                        expect(function(){$timeout.flush()}).toThrow();
                         expect(mockPlayers[0].pause).not.toHaveBeenCalled();
                         expect(mockPlayers[0].emit).not.toHaveBeenCalled();
 
                         mockPlayers[0]._on.playProgress[0](mockPlayers[0], { seconds : 5 });
-                        expect(function(){$timeout.flush()}).toThrow();
                         expect(mockPlayers[0].pause).not.toHaveBeenCalled();
                         expect(mockPlayers[0].emit).not.toHaveBeenCalled();
 
                         mockPlayers[0]._on.playProgress[0](mockPlayers[0], { seconds : 10 });
-                        expect(function(){$timeout.flush()}).not.toThrow();
                         expect(mockPlayers[0].pause).toHaveBeenCalled();
                         expect(mockPlayers[0].emit.mostRecentCall.args[0]).toEqual('finish');
                     });

@@ -181,44 +181,21 @@
                 throw new SyntaxError('dailymotionPlayer requires the videoid attribute to be set.');
             }
             var player, playerIface  = playerInterface(),
+                _playerIface = {
+                    currentTime: 0,
+                    ended: false
+                },
                 playerIsReady = false, playerHasLoaded = false;
 
             $log.info('link: videoId=%1, start=%2, end=%3, autoPlay=%4',
                 $attr.videoid, $attr.start, $attr.end, $attr.autoplay);
-            
-            function endListener(p,data){
-                if (data.seconds >= numberify($attr.end,0)){
-                    player.pause();
-                    $timeout(function(){
-                        player.post('removeEventListener','playing');
-                        player.removeListener('playing',endListener);
-                        player.emit('ended',player);
-                    });
-                }
+
+            function handleTimeUpdate(player, data) {
+                _playerIface.currentTime = data.time;
+
+                playerIface.emit('timeupdate', playerIface);
             }
 
-            function setEndListener(){
-                if (numberify($attr.end,0) > 0){
-                    player.removeListener('playing',endListener);
-                    player.on('playing',endListener);
-                }
-            }
-
-            function setStartListener(){
-                var videoStart = numberify($attr.start,0);
-                if (playerHasLoaded){
-                    player.seekTo(videoStart);
-                    return;
-                }
-                player.once('playing',function(){
-                    if (videoStart > 0){
-                        player.seekTo(videoStart);
-                    }
-                    playerIface.emit('videoStarted',playerIface);
-                    playerHasLoaded = true;
-                });
-            }
-            
             function twerk(wait){
                 // Twerking and FireFox
                 if (c6UserAgent.app.name === 'firefox'){
@@ -287,13 +264,27 @@
                 return twerk(wait);
             };
 
-            playerIface.reset = function(){
-                if (!playerIsReady){
-                    return;
+            Object.defineProperties(playerIface, {
+                currentTime: {
+                    get: function() {
+                        if (!playerIsReady) { return 0; }
+
+                        return _playerIface.currentTime;
+                    },
+                    set: function(time) {
+                        if (!playerIsReady) {
+                            throw new Error('Cannot set currentTime! Player is not yet ready.');
+                        }
+
+                        player.seekTo(time);
+                    }
+                },
+                ended: {
+                    get: function() {
+                        return _playerIface.ended;
+                    }
                 }
-                setStartListener();
-                setEndListener();
-            };
+            });
 
             scope.$emit('playerAdd',playerIface);
             
@@ -366,20 +357,32 @@
                             })
                             .finally( function(){
                                 playerIsReady = true;
+                                player.on('timeupdate', handleTimeUpdate);
                                 playerIface.emit('ready',playerIface);
                             });
                     } else {
                         $timeout(function(){
                             playerIsReady = true;
+                            player.on('timeupdate', handleTimeUpdate);
                             playerIface.emit('ready',playerIface);
                         });
                     }
                     
                     player.on('ended',function(p){
                         $log.info('[%1] - I am finished',p);
-                        playerIface.emit('videoEnded',playerIface);
+
+                        _playerIface.ended = true;
+                        playerIface.emit('ended',playerIface);
+
                         if (numberify($attr.regenerate)){
                             regeneratePlayer();
+                        }
+                    });
+
+                    player.on('playing', function(p) {
+                        if (playerIface.ended) {
+                            _playerIface.ended = false;
+                            p.seekTo(0);
                         }
                     });
                 });

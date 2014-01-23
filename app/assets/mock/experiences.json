@@ -17,19 +17,50 @@
             "stylesheet": "experiences/rumble/assets/styles.css"
         },
         "data": {
-            "rumbleId" : "r-738c2403d83ddc",
-            "ballot" : [
+            "id" : "r-738c2403d83ddc",
+            "ballots" : [
                 {
-                    "button" : "Good",
-                    "most"   : "The Goodest video"
+                    "id": "rb-01eb03bc062c15",
+                    "choices": [
+                        {
+                            "button" : "Good",
+                            "most"   : "The Goodest video"
+                        },
+                        {
+                            "button" : "Bad",
+                            "most"   : "The Badest video"
+                        },
+                        {
+                            "button" : "Ugly",
+                            "most"   : "The Ugliest video"
+                        }
+                    ]
                 },
                 {
-                    "button" : "Bad",
-                    "most"   : "The Badest video"
+                    "id": "rb-716ffbdfc356af",
+                    "choices": [
+                        {
+                            "button" : "Catchy",
+                            "most"   : "The Goodest video"
+                        },
+                        {
+                            "button" : "Painful",
+                            "most"   : "The Badest video"
+                        }
+                    ]
                 },
                 {
-                    "button" : "Ugly",
-                    "most"   : "The Ugliest video"
+                    "id": "rb-d1f60e2d64a0ba",
+                    "choices": [
+                        {
+                            "button" : "Too Cool",
+                            "most"   : "The Goodest video"
+                        },
+                        {
+                            "button" : "Too Geeky",
+                            "most"   : "The Badest video"
+                        }
+                    ]
                 }
             ],
             "playList" : [
@@ -41,11 +72,12 @@
                     "video"  : {
                         "player"  : "youtube",
                         "videoid" : "jofNR_WkoCE",
-                        "start"   : 0,
+                        "start"   : 10,
                         "end"     : 20,
                         "rel"     : 0,
                         "modestbranding" : 1
-                    }
+                    },
+                    "ballotId": "rb-716ffbdfc356af"
                 },
                 {
                     "id"     : "rv-4770a2d7f85ce0",
@@ -56,7 +88,8 @@
                         "player"  : "dailymotion",
                         "videoid" : "x18b09a",
                         "related" : 0
-                    }
+                    },
+                    "ballotId": "rb-01eb03bc062c15"
                 },
                 {
                     "id"     : "rv-e489d1c6359fb3",
@@ -68,7 +101,8 @@
                         "videoid" : "81766071",
                         "start"   : 35,
                         "end"     : 45
-                    }
+                    },
+                    "ballotId": "rb-01eb03bc062c15"
                 },
                 {
                     "id"     : "rv-e2947c9bec017e",
@@ -81,7 +115,8 @@
                         "rel"     : 0,
                         "modestbranding" : 1,
                         "end"     : 18
-                    }
+                    },
+                    "ballotId": "rb-d1f60e2d64a0ba"
                 },
                 {
                     "id"     : "rv-99b87ea709d7ac",
@@ -92,7 +127,8 @@
                         "player"  : "dailymotion",
                         "videoid" : "xorbb7",
                         "related" : 0
-                    }
+                    },
+                    "ballotId": "rb-01eb03bc062c15"
                 }
             ]
         }
