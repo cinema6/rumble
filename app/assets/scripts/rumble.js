@@ -144,7 +144,6 @@
                 delete video.voting;
 
                 video.state = {
-                    twerked: false,
                     vote: -1,
                     view: 'video'
                 };
@@ -196,7 +195,7 @@
                 playListItem.state.view = 'ballot';
             });
         });
-        
+
         this.findPlayListItemByVideo = function(videoType,videoId){
             var result;
             $scope.playList.some(function(item){
@@ -295,27 +294,11 @@
         };
 
         this.goBack = function(){
-            if ($scope.currentItem){
-                $scope.currentItem.player.pause();
-            }
             self.setPosition($scope.currentIndex - 1);
-            if ($scope.deviceProfile.multiPlayer){
-                $scope.currentItem.player.play();
-            }
         };
 
         this.goForward = function(){
-            if ($scope.currentItem){
-                $scope.currentItem.player.pause();
-            }
-
             self.setPosition($scope.currentIndex + 1);
-
-            if (!$scope.currentItem) { return; }
-
-            if ($scope.deviceProfile.multiPlayer){
-                $scope.currentItem.player.play();
-            }
         };
 
         readyTimeout = $timeout(function(){
@@ -369,7 +352,6 @@
             }
 
             inner += ' width="{{playerWidth}}" height="{{playerHeight}}"';
-            inner += ' active="{{active}} on-deck="{{onDeck}}""';
 
             if (!scope.profile.inlineVideo){
                 $log.info('Will need to regenerate the player');
@@ -379,6 +361,11 @@
             if (canTwerk) {
                 $log.info('DAYUM! ' + c6UserAgent.app.name + ' can tweeeerrrrrk!');
                 inner += ' twerk="1"';
+            }
+
+            if (scope.profile.multiPlayer){
+                $log.info(c6UserAgent.app.name + ' can autoplay videos.');
+                inner += ' autoplay="1"';
             }
 
             inner += '></'  + scope.config.player + '-card' + '>';

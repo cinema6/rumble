@@ -332,7 +332,7 @@
                 playerIsReady = false;
                 playerHasLoaded = false;
 
-                ['startscreen','related','html','info','autoplay'].forEach(function(prop){
+                ['startscreen','related','html','info'].forEach(function(prop){
                     if ($attr[prop] !== undefined) {
                         vparams[prop] = $attr[prop];
                     }
@@ -381,17 +381,29 @@
                 });
             }
 
+            scope.$watch('active', function(active, wasActive) {
+                if (active === wasActive) { return; }
+
+                if (active) {
+                    if (numberify($attr.autoplay, 0)) {
+                        if (!playerIsReady) {
+                            $log.warn('Player cannot autoplay because it is not ready.');
+                            return;
+                        }
+
+                        player.play();
+                    }
+                } else {
+                    player.pause();
+                }
+            });
+
             regeneratePlayer();
         }
 
         return {
             restrict : 'E',
-            link     : fnLink,
-            scope    : {
-                width   : '@',
-                height  : '@',
-                videoid : '@'
-            }
+            link     : fnLink
         };
     }]);
 

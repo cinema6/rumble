@@ -201,11 +201,10 @@
                             expect(video4.commentGroupId).toBeUndefined();
                         });
 
-                        it('should give each video a "twerked", "vote" and "view" state', function() {
+                        it('should give each video a "vote" and "view" state', function() {
                             result.forEach(function(video) {
                                 var state = video.state;
 
-                                expect(state.twerked).toBe(false);
                                 expect(state.vote).toBe(-1);
                                 expect(state.view).toBe('video');
                             });

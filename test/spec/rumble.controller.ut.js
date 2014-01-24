@@ -279,8 +279,6 @@
                     $scope.currentIndex = 1;
                     $scope.currentItem  = $scope.playList[1];
                     RumbleCtrl.goForward();
-                    expect($scope.playList[1].player.pause).toHaveBeenCalled();
-                    expect($scope.playList[2].player.play).toHaveBeenCalled();
                     expect($scope.currentIndex).toEqual(2);
                     expect($scope.currentItem).toBe($scope.playList[2]);
                     expect($scope.atHead).toEqual(false);
@@ -295,7 +293,6 @@
 
                     expect(RumbleCtrl.goForward).not.toThrow();
 
-                    expect($scope.playList[2].player.pause).toHaveBeenCalled();
                     expect($scope.currentIndex).toBe(3);
                     expect($scope.currentItem).toBeUndefined();
                     expect($scope.atHead).toBe(false);
@@ -308,8 +305,6 @@
                     $scope.currentIndex = 2;
                     $scope.currentItem  = $scope.playList[2];
                     RumbleCtrl.goBack();
-                    expect($scope.playList[2].player.pause).toHaveBeenCalled();
-                    expect($scope.playList[1].player.play).toHaveBeenCalled();
                     $scope.$digest();
                     expect($scope.currentIndex).toEqual(1);
                     expect($scope.currentItem).toBe($scope.playList[1]);

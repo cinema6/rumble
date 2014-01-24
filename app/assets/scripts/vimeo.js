@@ -243,11 +243,12 @@
                     deferred.resolve(playerIface);
                 };
 
-                player.removeListener('playProgress', handlePlayProgress);
-
                 if (playerIface.twerked) {
                     deferred.reject(new Error('Player has already been twerked'));
+                    return deferred.promise;
                 }
+
+                player.removeListener('playProgress', handlePlayProgress);
 
                 player.once('playProgress',playingListener);
 
@@ -375,7 +376,7 @@
             function createPlayer(){
                 var vparams  = { };
 
-                ['badge','byline','portrait','title','autoplay'].forEach(function(prop){
+                ['badge','byline','portrait','title'].forEach(function(prop){
                     if ($attr[prop] !== undefined) {
                         vparams[prop] = $attr[prop];
                     }
@@ -426,6 +427,23 @@
                     });
                 });
             }
+
+            scope.$watch('active', function(active, wasActive) {
+                if (active === wasActive) { return; }
+
+                if (active) {
+                    if (numberify($attr.autoplay, 0)) {
+                        if (!playerIsReady) {
+                            $log.warn('Player cannot autoplay because it is not ready.');
+                            return;
+                        }
+
+                        player.play();
+                    }
+                } else {
+                    player.pause();
+                }
+            });
 
             regeneratePlayer();
         }
