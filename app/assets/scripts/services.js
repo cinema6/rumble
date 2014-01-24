@@ -43,10 +43,7 @@
 
             this.getWords = function(string) {
                 var result = [],
-                    word = string.charAt(0),
-                    character,
-                    index,
-                    length = string.length;
+                    word, character, index, length;
 
                 function isDelimiter(char) {
                     return !!char.match(/-|_|[A-Z]| /);
@@ -59,6 +56,11 @@
                 function pushWord(word) {
                     result.push(word.toLowerCase());
                 }
+
+                if (angular.isArray(string)) { return string; }
+
+                word = string.charAt(0);
+                length = string.length;
 
                 for (index = 1; index < length; index++) {
                     character = string.charAt(index);
@@ -81,9 +83,7 @@
             this.toCamelCase = function(words) {
                 var self = this;
 
-                words = angular.isArray(words) ? words : this.getWords(words);
-
-                return words.map(function(word, index) {
+                return this.getWords(words).map(function(word, index) {
                     if (index === 0) { return word; }
 
                     return self.capitalize(word);
@@ -95,21 +95,15 @@
             };
 
             this.toSnakeCase = function(words) {
-                words = angular.isArray(words) ? words : this.getWords(words);
-
-                return words.join('_');
+                return this.getWords(words).join('_');
             };
 
             this.dasherize = function(words) {
-                words = angular.isArray(words) ? words : this.getWords(words);
-
-                return words.join('-');
+                return this.getWords(words).join('-');
             };
 
             this.toSentence = function(words) {
-                words = angular.isArray(words) ? words : this.getWords(words);
-
-                return words.join(' ');
+                return this.getWords(words).join(' ');
             };
 
             this.addException = function(exception) {

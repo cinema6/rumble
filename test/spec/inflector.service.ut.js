@@ -88,6 +88,14 @@
                             expect(getWords('It\'s_really-coldOutside')).toEqual(['it\'s', 'really', 'cold', 'outside']);
                             expect(getWords('whatIs up-hommie')).toEqual(['what', 'is', 'up', 'hommie']);
                         });
+
+                        it('should just return an array if given one', function() {
+                            var array = [],
+                                array2 = ['foo', 'hey'];
+
+                            expect(getWords(array)).toBe(array);
+                            expect(getWords(array2)).toBe(array2);
+                        });
                     });
 
                     describe('toCamelCase(words)', function() {
