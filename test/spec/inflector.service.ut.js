@@ -78,18 +78,105 @@
                             expect(getWords('i-ate-icecream')).toEqual(['i', 'ate', 'icecream']);
                         });
 
+                        it('should support strings with spaces', function() {
+                            expect(getWords('it is cold outside')).toEqual(['it', 'is', 'cold', 'outside']);
+                            expect(getWords('gotta get down on friday')).toEqual(['gotta', 'get', 'down', 'on', 'friday']);
+                        });
+
                         it('should support combinations of the different forms', function() {
                             expect(getWords('this-isA_test')).toEqual(['this', 'is', 'a', 'test']);
                             expect(getWords('It\'s_really-coldOutside')).toEqual(['it\'s', 'really', 'cold', 'outside']);
+                            expect(getWords('whatIs up-hommie')).toEqual(['what', 'is', 'up', 'hommie']);
                         });
                     });
 
                     describe('toCamelCase(words)', function() {
-                        it('should convert the array to camelcase', function() {
-                            var toCamelCase = InflectorService.toCamelCase.bind(InflectorService);
+                        var toCamelCase;
 
+                        beforeEach(function() {
+                            toCamelCase = InflectorService.toCamelCase.bind(InflectorService);
+                        });
+
+                        it('should convert the array to camelCase', function() {
                             expect(toCamelCase(['hello', 'my', 'friend'])).toBe('helloMyFriend');
                             expect(toCamelCase(['how', 'are', 'you'])).toBe('howAreYou');
+                        });
+
+                        it('should convert a string in any format to camelCase', function() {
+                            expect(toCamelCase('how_are_you-today')).toBe('howAreYouToday');
+                            expect(toCamelCase('it is freezing')).toBe('itIsFreezing');
+                        });
+                    });
+
+                    describe('toConstructorCase(words)', function() {
+                        var toConstructorCase;
+
+                        beforeEach(function() {
+                            toConstructorCase = InflectorService.toConstructorCase.bind(InflectorService);
+                        });
+
+                        it('should convert the array to ConstructorCase', function() {
+                            expect(toConstructorCase(['my', 'class'])).toBe('MyClass');
+                            expect(toConstructorCase(['it\'s', 'getting', 'late'])).toBe('It\'sGettingLate');
+                        });
+
+                        it('should convert a string in any format to ConstructorCase', function() {
+                            expect(toConstructorCase('how_are_youToday')).toBe('HowAreYouToday');
+                            expect(toConstructorCase('it is freezing')).toBe('ItIsFreezing');
+                        });
+                    });
+
+                    describe('toSnakeCase(words)', function() {
+                        var toSnakeCase;
+
+                        beforeEach(function() {
+                            toSnakeCase = InflectorService.toSnakeCase.bind(InflectorService);
+                        });
+
+                        it('should convert the array to snake_case', function() {
+                            expect(toSnakeCase(['here\'s', 'a', 'test'])).toBe('here\'s_a_test');
+                            expect(toSnakeCase(['this', 'is', 'fun'])).toBe('this_is_fun');
+                        });
+
+                        it('should convert a string in any format to snake_case', function() {
+                            expect(toSnakeCase('it is_coldOut')).toBe('it_is_cold_out');
+                            expect(toSnakeCase('StephAndMoo design stuff')).toBe('steph_and_moo_design_stuff');
+                        });
+                    });
+
+                    describe('dasherize(words)', function() {
+                        var dasherize;
+
+                        beforeEach(function() {
+                            dasherize = InflectorService.dasherize.bind(InflectorService);
+                        });
+
+                        it('should dasherize the array', function() {
+                            expect(dasherize(['these', 'are', 'words'])).toBe('these-are-words');
+                            expect(dasherize(['so', 'are', 'these'])).toBe('so-are-these');
+                        });
+
+                        it('should dasherize a string', function() {
+                            expect(dasherize('iRan-today')).toBe('i-ran-today');
+                            expect(dasherize('tomorrow IWill_bike-andRun')).toBe('tomorrow-i-will-bike-and-run');
+                        });
+                    });
+
+                    describe('toSentence(words)', function() {
+                        var toSentence;
+
+                        beforeEach(function() {
+                            toSentence = InflectorService.toSentence.bind(InflectorService);
+                        });
+
+                        it('should space out the words in an array', function() {
+                            expect(toSentence(['this', 'is', 'an', 'array'])).toBe('this is an array');
+                            expect(toSentence(['the', 'computer', 'can', 'speak'])).toBe('the computer can speak');
+                        });
+
+                        it('should space out a string in any format', function() {
+                            expect(toSentence('holyCow How-are_you')).toBe('holy cow how are you');
+                            expect(toSentence('ITruly-have_a great-job')).toBe('i truly have a great job');
                         });
                     });
 

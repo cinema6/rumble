@@ -49,7 +49,7 @@
                     length = string.length;
 
                 function isDelimiter(char) {
-                    return !!char.match(/-|_|[A-Z]/);
+                    return !!char.match(/-|_|[A-Z]| /);
                 }
 
                 function isLetter(char) {
@@ -63,7 +63,7 @@
                 for (index = 1; index < length; index++) {
                     character = string.charAt(index);
 
-                    if (isDelimiter(character)) {
+                    if (isDelimiter(character) && word) {
                         pushWord(word);
                         word = isLetter(character) ? character : '';
 
@@ -79,19 +79,43 @@
             };
 
             this.toCamelCase = function(words) {
-                var self = this,
-                    result = '';
+                var self = this;
 
-                angular.forEach(words, function(word, index) {
-                    if (index === 0) {
-                        result += word.toLowerCase();
-                        return;
-                    }
+                words = angular.isArray(words) ? words : this.getWords(words);
 
-                    result += self.capitalize(word);
-                });
+                return words.map(function(word, index) {
+                    if (index === 0) { return word; }
 
-                return result;
+                    return self.capitalize(word);
+                }).join('');
+            };
+
+            this.toConstructorCase = function(words) {
+                var self = this;
+
+                words = angular.isArray(words) ? words : this.getWords(words);
+
+                return words.map(function(word) {
+                    return self.capitalize(word);
+                }).join('');
+            };
+
+            this.toSnakeCase = function(words) {
+                words = angular.isArray(words) ? words : this.getWords(words);
+
+                return words.join('_');
+            };
+
+            this.dasherize = function(words) {
+                words = angular.isArray(words) ? words : this.getWords(words);
+
+                return words.join('-');
+            };
+
+            this.toSentence = function(words) {
+                words = angular.isArray(words) ? words : this.getWords(words);
+
+                return words.join(' ');
             };
 
             this.addException = function(exception) {
