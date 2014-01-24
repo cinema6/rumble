@@ -270,6 +270,8 @@
                     deferred.resolve(playerIface);
                 };
 
+                $interval.cancel(currentTimeInterval);
+
                 if (playerIface.twerked) {
                     deferred.reject(new Error('Player has already been twerked'));
                 }
@@ -290,9 +292,13 @@
                 $log.info('[%1] - start twerk, wait=%2',player,wait);
                 player.play();
 
-                deferred.promise.then(function() {
-                    _playerIface.twerked = true;
-                });
+                deferred.promise
+                    .then(function() {
+                        _playerIface.twerked = true;
+                    })
+                    .finally(function() {
+                        pollCurrentTime();
+                    });
 
                 return deferred.promise;
             }
@@ -426,15 +432,19 @@
                 player.on('ready',function(p){
                     $log.info('[%1] - I am ready',p );
 
-                    (numberify($attr.twerk) ? twerk : function() { return $q.when(playerIface); })()
-                        .catch(function(err) {
-                            $log.warn('[%1] %2',p,err);
-                        })
-                        .finally(function() {
-                            playerIsReady = true;
-                            playerIface.emit('ready',playerIface);
-                            pollCurrentTime();
+                    $timeout(function() {
+                        playerIsReady = true;
+                        playerIface.emit('ready',playerIface);
+                        pollCurrentTime();
+
+                        scope.$watch('onDeck', function(onDeck) {
+                            if (onDeck) {
+                                if (numberify($attr.twerk, 0)) {
+                                    playerIface.twerk(5000);
+                                }
+                            }
                         });
+                    });
 
                     player.on('ended',function(p){
                         $log.info('[%1] - I am finished',p);

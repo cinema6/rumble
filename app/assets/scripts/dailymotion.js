@@ -355,15 +355,11 @@
                 player.on('ready',function(p){
                     $log.info('[%1] - I am ready',p);
 
-                    (numberify($attr.twerk) ? twerk : function() { return $q.when(playerIface); })()
-                        .catch( function (err){
-                            $log.warn('[%1] %2',p,err);
-                        })
-                        .finally( function(){
-                            playerIsReady = true;
-                            player.on('timeupdate', handleTimeUpdate);
-                            playerIface.emit('ready',playerIface);
-                        });
+                    $timeout(function() {
+                        playerIsReady = true;
+                        player.on('timeupdate', handleTimeUpdate);
+                        playerIface.emit('ready',playerIface);
+                    });
 
                     player.on('ended',function(p){
                         $log.info('[%1] - I am finished',p);

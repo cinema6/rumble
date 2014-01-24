@@ -243,6 +243,8 @@
                     deferred.resolve(playerIface);
                 };
 
+                player.removeListener('playProgress', handlePlayProgress);
+
                 if (playerIface.twerked) {
                     deferred.reject(new Error('Player has already been twerked'));
                 }
@@ -263,9 +265,13 @@
                 $log.info('[%1] - start twerk, wait=%2',player,wait);
                 player.play();
 
-                deferred.promise.then(function() {
-                    _playerIface.twerked = true;
-                });
+                deferred.promise
+                    .then(function() {
+                        _playerIface.twerked = true;
+                    })
+                    .finally(function() {
+                        player.on('playProgress', handlePlayProgress);
+                    });
 
                 return deferred.promise;
             }
@@ -387,15 +393,19 @@
                 player.on('ready',function(p){
                     $log.info('[%1] - I am ready',p);
 
-                    (numberify($attr.twerk) ? twerk : function() { return $q.when(playerIface); })()
-                        .catch( function (err){
-                            $log.warn('[%1] %2',p,err);
-                        })
-                        .finally( function(){
-                            playerIsReady = true;
-                            player.on('playProgress', handlePlayProgress);
-                            playerIface.emit('ready',playerIface);
+                    $timeout(function() {
+                        playerIsReady = true;
+                        player.on('playProgress', handlePlayProgress);
+                        playerIface.emit('ready',playerIface);
+
+                        scope.$watch('onDeck', function(onDeck) {
+                            if (onDeck) {
+                                if (numberify($attr.twerk, 0)) {
+                                    playerIface.twerk(5000);
+                                }
+                            }
                         });
+                    });
 
                     player.on('finish',function(p){
                         $log.info('[%1] - I am finished',p);
@@ -422,12 +432,7 @@
 
         return {
             restrict : 'E',
-            link     : fnLink,
-            scope    : {
-                width   : '@',
-                height  : '@',
-                videoid : '@'
-            }
+            link     : fnLink
         };
     }]);
 }());

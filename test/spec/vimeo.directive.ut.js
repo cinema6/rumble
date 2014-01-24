@@ -50,9 +50,18 @@
                         });
 
                         mockPlayer.removeListener.andCallFake(function(eventName,listener){
+                            var ons = mockPlayer._on[eventName] || [],
+                                onces = mockPlayer._once[eventName] || [],
+                                onIndex = ons.indexOf(listener),
+                                onceIndex = onces.indexOf(listener);
+
                             if (mockPlayer._removes[eventName] === undefined){
                                 mockPlayer._removes[eventName] = [];
                             }
+
+                            ons.splice(onIndex, ((onIndex > -1) ? 1 : 0));
+                            onces.splice(onceIndex, ((onceIndex > -1) ? 1 : 0));
+
                             mockPlayer._removes[eventName].push(listener);
                         });
 
@@ -404,55 +413,81 @@
                             $compile(
                                 '<vimeo-card videoid="abc123" width="1" height="2"></vimeo-card>'
                             )($scope);
+                            spyOn(iface, 'twerk');
                             $timeout.flush();
-                            $scope.$digest();
-                        });
 
-                        it('will not play/pause when player is ready',function(){
-                            expect(iface.isReady()).toEqual(false);
-                            expect(mockPlayers[0].play).not.toHaveBeenCalled();
-                            expect(mockPlayers[0].pause).not.toHaveBeenCalled();
-                            expect(mockPlayers[0]._once.playProgress).not.toBeDefined();
                             mockPlayers[0]._on.ready[0]({},mockPlayers[0]);
                             $timeout.flush();
-                            expect(iface.isReady()).toEqual(true);
-                            expect(mockPlayers[0].play).not.toHaveBeenCalled();
-                            expect(mockPlayers[0].pause).not.toHaveBeenCalled();
+                        });
+
+                        it('will not twerk the player when it is "onDeck"',function(){
+                            expect(iface.twerk).not.toHaveBeenCalled();
+
+                            $scope.$apply(function() {
+                                $scope.onDeck = true;
+                            });
+
+                            expect(iface.twerk).not.toHaveBeenCalled();
                         });
                     });
 
                     describe('when turned on',function(){
+                        var twerkDeferred;
 
                         beforeEach(function(){
+                            twerkDeferred = $q.defer();
+
                             $compile(
                                 '<vimeo-card videoid="abc123" width="1" height="2" twerk="1"></vimeo-card>'
                             )($scope);
+                            spyOn(iface, 'twerk').andCallFake(function() {
+                                return twerkDeferred.promise;
+                            });
                             $timeout.flush();
                         });
 
-                        it('will play when the player is ready',function(){
-                            expect(iface.isReady()).toEqual(false);
-                            expect(mockPlayers[0].play).not.toHaveBeenCalled();
-                            expect(mockPlayers[0].pause).not.toHaveBeenCalled();
-                            expect(mockPlayers[0]._once.playProgress).not.toBeDefined();
-                            mockPlayers[0]._on.ready[0]({},mockPlayers[0]);
-                            expect(iface.isReady()).toEqual(false);
-                            expect(mockPlayers[0]._once.playProgress).toBeDefined();
-                            expect(mockPlayers[0].play).toHaveBeenCalled();
-                            expect(mockPlayers[0].pause).not.toHaveBeenCalled();
+                        describe('when not "onDeck"', function() {
+                            beforeEach(function() {
+                                mockPlayers[0]._on.ready[0]({},mockPlayers[0]);
+                                $timeout.flush();
+                            });
+
+                            it('will not twerk the player', function() {
+                                expect(iface.twerk).not.toHaveBeenCalled();
+                            });
                         });
 
-                        it('will pause once the player starts playing',function(){
-                            mockPlayers[0]._on.ready[0]({},mockPlayers[0]);
-                            expect(mockPlayers[0].play).toHaveBeenCalled();
-                            expect(mockPlayers[0].pause).not.toHaveBeenCalled();
-                            
-                            mockPlayers[0]._once.playProgress[0]({},mockPlayers[0]);
-                            $scope.$digest();
-                            expect(mockPlayers[0].pause).toHaveBeenCalled();
-                            expect(iface.isReady()).toEqual(true);
-                        });
+                        describe('when "onDeck"', function() {
+                            beforeEach(function() {
+                                $scope.$apply(function() {
+                                    $scope.onDeck = true;
+                                });
+                            });
 
+                            describe('if not ready', function() {
+                                it('should not twerk the player', function() {
+                                    expect(iface.twerk).not.toHaveBeenCalled();
+                                });
+
+                                it('should twerk the player after it is ready', function() {
+                                    mockPlayers[0]._on.ready[0]({},mockPlayers[0]);
+                                    $timeout.flush();
+
+                                    expect(iface.twerk).toHaveBeenCalled();
+                                });
+                            });
+
+                            describe('if ready', function() {
+                                beforeEach(function() {
+                                    mockPlayers[0]._on.ready[0]({},mockPlayers[0]);
+                                    $timeout.flush();
+                                });
+
+                                it('should twerk the player', function() {
+                                    expect(iface.twerk).toHaveBeenCalledWith(5000);
+                                });
+                            });
+                        });
                     });
                 });
 
@@ -466,6 +501,14 @@
                             '<vimeo-card videoid="abc123" width="1" height="2"></vimeo-card>'
                         )($scope);
                         $timeout.flush();
+                    });
+
+                    it('will remove the "playProgress" listener', function() {
+                        mockPlayers[0]._on.ready[0]({},mockPlayers[0]);
+                        $timeout.flush();
+                        iface.twerk();
+
+                        expect(mockPlayers[0].removeListener).toHaveBeenCalledWith('playProgress', jasmine.any(Function));
                     });
 
                     it('will reject if the player is not ready',function(){
@@ -551,10 +594,35 @@
                         expect(resolveSpy).not.toHaveBeenCalled();
                         expect(rejectSpy).not.toHaveBeenCalled();
                     });
+                    describe('if twerking fails', function() {
+                        beforeEach(function() {
+                            spyOn(iface, 'emit');
+                            mockPlayers[0]._on.ready[0]({},mockPlayers[0]);
+                            $timeout.flush();
+                            iface.twerk(5000);
+                            $timeout.flush(5000);
+                        });
 
+                        it('will setup the playProgress listener again', function() {
+                            expect(mockPlayers[0]._on.playProgress.length).toBe(1);
+                        });
+                    });
+
+                    describe('if twerking succeeds', function() {
+                        beforeEach(function() {
+                            spyOn(iface, 'emit');
+                            mockPlayers[0]._on.ready[0]({},mockPlayers[0]);
+                            $timeout.flush();
+                            iface.twerk();
+                            mockPlayers[0]._once.playProgress[0]({},mockPlayers[0]);
+                            $scope.$digest();
+                        });
+
+                        it('will setup the playProgress listener again', function() {
+                            expect(mockPlayers[0]._on.playProgress.length).toBe(1);
+                        });
+                    });
                 });
-
-
             });
             /* -- end describe('twerking' */
             
@@ -581,26 +649,6 @@
                         //simulate the firing of the ready event
                         mockPlayers[0]._on.ready[0]({},mockPlayers[0]);
                         $timeout.flush();
-                        
-                        expect(readySpy).toHaveBeenCalledWith(iface);
-                        expect(iface.isReady()).toEqual(true);
-                    });
-
-                    it('is emitted when the twerk is done if twerking is on',function(){
-                        var readySpy = jasmine.createSpy('playerIsReady');
-                        $compile(
-                            '<vimeo-card videoid="a" width="1" twerk="1"></vimeo-card>'
-                        )($scope);
-                        $timeout.flush();
-                        iface.on('ready',readySpy);
-                        expect(readySpy).not.toHaveBeenCalled();
-                        expect(iface.isReady()).toEqual(false);
-                        
-                        //simulate the firing of the ready and play event
-                        mockPlayers[0]._on.ready[0]({},mockPlayers[0]);
-                        mockPlayers[0]._once.playProgress[0]({},mockPlayers[0]);
-
-                        $scope.$digest();
                         
                         expect(readySpy).toHaveBeenCalledWith(iface);
                         expect(iface.isReady()).toEqual(true);
