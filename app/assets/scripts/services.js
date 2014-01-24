@@ -91,13 +91,7 @@
             };
 
             this.toConstructorCase = function(words) {
-                var self = this;
-
-                words = angular.isArray(words) ? words : this.getWords(words);
-
-                return words.map(function(word) {
-                    return self.capitalize(word);
-                }).join('');
+                return this.capitalize(this.toCamelCase(words));
             };
 
             this.toSnakeCase = function(words) {
