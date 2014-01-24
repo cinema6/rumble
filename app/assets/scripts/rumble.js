@@ -308,8 +308,8 @@
 
         $log.log('Rumble Controller is initialized!');
     }])
-    .directive('mrCard',['$log','$compile','$window','c6UserAgent',
-    function            ( $log , $compile , $window , c6UserAgent ){
+    .directive('mrCard',['$log','$compile','$window','c6UserAgent','InflectorService',
+    function            ( $log , $compile , $window , c6UserAgent , InflectorService ){
         $log = $log.context('<mr-card>');
         function fnLink(scope,$element){
             var canTwerk = (function() {
@@ -331,6 +331,8 @@
                 type = scope.config.type,
                 data = scope.config.data;
 
+            var dasherize = InflectorService.dasherize.bind(InflectorService);
+
             $log.info('link:',scope);
             function resize(event,noDigest){
                 var pw = Math.round($window.innerWidth * 1),
@@ -346,7 +348,7 @@
                 }
             }
 
-            var inner = '<' + type + '-card';
+            var inner = '<' + dasherize(type) + '-card';
             for (var key in data){
                 if ((key !== 'type') && (data.hasOwnProperty(key))){
                     inner += ' ' + key.toLowerCase() + '="' + data[key] + '"';
@@ -370,7 +372,7 @@
                 inner += ' autoplay="1"';
             }
 
-            inner += '></'  + type + '-card' + '>';
+            inner += '></'  + dasherize(type) + '-card' + '>';
 
             $element.append($compile(inner)(scope));
 
