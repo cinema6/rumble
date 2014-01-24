@@ -1,6 +1,6 @@
 <section class="results">
     <ul>
-        <li ng-repeat="item in currentItem.ballot.choices">
+        <li ng-repeat="item in currentCard.ballot.choices">
             <strong>{{item.button}}:</strong> {{currentReturns[$index] | percent}}
         </li>
     </ul>

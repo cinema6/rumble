@@ -91,8 +91,8 @@
     }])
     .service('MiniReelService', ['InflectorService', 'rumbleVotes',
     function                    ( InflectorService ,  rumbleVotes ) {
-        this.createPlaylist = function(data) {
-            var playlist = angular.copy(data.playList);
+        this.createDeck = function(data) {
+            var playlist = angular.copy(data.deck);
 
             function getObject(type, id) {
                 var pluralType = InflectorService.pluralize(type),
@@ -163,12 +163,12 @@
         $scope.title            = appData.experience.title;
         $scope.rumbleId         = appData.experience.data.id;
 
-        $scope.playList         = MiniReelService.createPlaylist(appData.experience.data);
-        $scope.players          = c($scope, function(index, playList) {
-            return playList.slice(0, (index + 3));
-        }, ['currentIndex', 'playList']);
+        $scope.deck             = MiniReelService.createDeck(appData.experience.data);
+        $scope.players          = c($scope, function(index, deck) {
+            return deck.slice(0, (index + 3));
+        }, ['currentIndex', 'deck']);
         $scope.currentIndex     = -1;
-        $scope.currentItem      = null;
+        $scope.currentCard      = null;
         $scope.atHead           = null;
         $scope.atTail           = null;
         $scope.currentReturns   = null;
@@ -176,14 +176,14 @@
 
         $scope.$on('playerAdd',function(event,player){
             $log.log('Player added: %1 - %2',player.getType(),player.getVideoId());
-            var playListItem = self.findPlayListItemByVideo(player.getType(),player.getVideoId());
+            var card = self.findCardByVideo(player.getType(),player.getVideoId());
 
-            if (!playListItem){
+            if (!card){
                 $log.error('Unable to locate item for player.');
                 return;
             }
 
-            playListItem.player = player;
+            card.player = player;
 
             player.on('ready',function(){
                 $log.log('Player ready: %1 - %2',player.getType(),player.getVideoId());
@@ -192,18 +192,18 @@
             });
 
             player.on('ended', function() {
-                playListItem.state.view = 'ballot';
+                card.state.view = 'ballot';
             });
         });
 
-        this.findPlayListItemByVideo = function(videoType,videoId){
+        this.findCardByVideo = function(videoType,videoId){
             var result;
-            $scope.playList.some(function(item){
-                if (item.video.player !== videoType){
+            $scope.deck.some(function(item){
+                if (item.type !== videoType){
                     return false;
                 }
 
-                if (item.video.videoid !== videoId){
+                if (item.data.videoid !== videoId){
                     return false;
                 }
 
@@ -235,8 +235,8 @@
         };
 
         this.vote = function(v){
-            $scope.currentItem.state.vote = v;
-            $scope.currentItem.state.view = 'results';
+            $scope.currentCard.state.vote = v;
+            $scope.currentCard.state.view = 'results';
         };
 
         this.getVotePercent = function(votes,index){
@@ -262,9 +262,9 @@
             $log.info('setPosition: %1',i);
             $scope.currentReturns = null;
             $scope.currentIndex   = i;
-            $scope.currentItem    = $scope.playList[$scope.currentIndex];
+            $scope.currentCard    = $scope.deck[$scope.currentIndex];
             $scope.atHead         = $scope.currentIndex === 0;
-            $scope.atTail         = ($scope.currentIndex === $scope.playList.length);
+            $scope.atTail         = ($scope.currentIndex === $scope.deck.length);
 
             if ($scope.atTail) {
                 $scope.$emit('reelEnd');
@@ -274,9 +274,9 @@
                 $scope.$emit('reelMove');
             }
 
-            if (!$scope.currentItem) { return; }
+            if (!$scope.currentCard) { return; }
 
-            rumbleVotes.getReturnsForItem($scope.rumbleId,$scope.currentItem.id)
+            rumbleVotes.getReturnsForItem($scope.rumbleId,$scope.currentCard.id)
                 .then(
                     function onVotes(votes){
                         $log.info('getReturns returned with: ',votes);
@@ -313,21 +313,23 @@
         $log = $log.context('<mr-card>');
         function fnLink(scope,$element){
             var canTwerk = (function() {
-                if ((c6UserAgent.app.name !== 'chrome') &&
-                    (c6UserAgent.app.name !== 'firefox') &&
-                    (c6UserAgent.app.name !== 'safari')) {
+                    if ((c6UserAgent.app.name !== 'chrome') &&
+                        (c6UserAgent.app.name !== 'firefox') &&
+                        (c6UserAgent.app.name !== 'safari')) {
 
-                    $log.warn('Twerking not supported on ' + c6UserAgent.app.name);
-                    return false;
-                }
+                        $log.warn('Twerking not supported on ' + c6UserAgent.app.name);
+                        return false;
+                    }
 
-                if (!scope.profile.multiPlayer){
-                    $log.warn('Item cannot be twerked, device not multiplayer.');
-                    return false;
-                }
+                    if (!scope.profile.multiPlayer){
+                        $log.warn('Item cannot be twerked, device not multiplayer.');
+                        return false;
+                    }
 
-                return true;
-            }());
+                    return true;
+                }()),
+                type = scope.config.type,
+                data = scope.config.data;
 
             $log.info('link:',scope);
             function resize(event,noDigest){
@@ -344,10 +346,10 @@
                 }
             }
 
-            var inner = '<' + scope.config.player + '-card';
-            for (var key in scope.config){
-                if ((key !== 'type') && (scope.config.hasOwnProperty(key))){
-                    inner += ' ' + key.toLowerCase() + '="' + scope.config[key] + '"';
+            var inner = '<' + type + '-card';
+            for (var key in data){
+                if ((key !== 'type') && (data.hasOwnProperty(key))){
+                    inner += ' ' + key.toLowerCase() + '="' + data[key] + '"';
                 }
             }
 
@@ -368,7 +370,7 @@
                 inner += ' autoplay="1"';
             }
 
-            inner += '></'  + scope.config.player + '-card' + '>';
+            inner += '></'  + type + '-card' + '>';
 
             $element.append($compile(inner)(scope));
 

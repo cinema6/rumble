@@ -63,14 +63,14 @@
                     ]
                 }
             ],
-            "playList" : [
+            "deck" : [
                 {
-                    "id"     : "rv-22119a8cf9f755",
+                    "id"     : "rc-22119a8cf9f755",
+                    "type"   : "youtube",
                     "title"  : "Did someone say FOX?",
                     "note"   : "Thought so",
                     "voting" : [ 100, 50, 10 ],
-                    "video"  : {
-                        "player"  : "youtube",
+                    "data"   : {
                         "videoid" : "jofNR_WkoCE",
                         "start"   : 40,
                         "end"     : 49,
@@ -80,24 +80,24 @@
                     "ballotId": "rb-716ffbdfc356af"
                 },
                 {
-                    "id"     : "rv-4770a2d7f85ce0",
+                    "id"     : "rc-4770a2d7f85ce0",
+                    "type"   : "dailymotion",
                     "title"  : "Kristen Stewart for Channel",
                     "note"   : "Psychotic glamour",
                     "voting" : [ 200, 50, 10 ],
-                    "video"  : {
-                        "player"  : "dailymotion",
+                    "data"   : {
                         "videoid" : "x18b09a",
                         "related" : 0
                     },
                     "ballotId": "rb-01eb03bc062c15"
                 },
                 {
-                    "id"     : "rv-e489d1c6359fb3",
+                    "id"     : "rc-e489d1c6359fb3",
+                    "type"   : "vimeo",
                     "title"  : "Aquatic paradise",
                     "note"   : "How may we help you?",
                     "voting" : [ 300, 50, 10 ],
-                    "video"  : {
-                        "player"  : "vimeo",
+                    "data"   : {
                         "videoid" : "81766071",
                         "start"   : 35,
                         "end"     : 45
@@ -105,12 +105,12 @@
                     "ballotId": "rb-01eb03bc062c15"
                 },
                 {
-                    "id"     : "rv-e2947c9bec017e",
+                    "id"     : "rc-e2947c9bec017e",
+                    "type"   : "youtube",
                     "title"  : "Geek cool",
                     "note"   : "Doctor Who #11 meets #4",
                     "voting" : [ 400, 50, 10 ],
-                    "video"  : {
-                        "player"  : "youtube",
+                    "data"   : {
                         "videoid" : "Cn9yJrrm2tk",
                         "rel"     : 0,
                         "modestbranding" : 1,
@@ -119,12 +119,12 @@
                     "ballotId": "rb-d1f60e2d64a0ba"
                 },
                 {
-                    "id"     : "rv-99b87ea709d7ac",
+                    "id"     : "rc-99b87ea709d7ac",
+                    "type"   : "dailymotion",
                     "title"  : "Farting dogs",
                     "note"   : "Enough said",
                     "voting" : [ 500, 50, 10 ],
-                    "video"  : {
-                        "player"  : "dailymotion",
+                    "data"   : {
                         "videoid" : "xorbb7",
                         "related" : 0
                     },

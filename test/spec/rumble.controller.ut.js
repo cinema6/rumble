@@ -11,7 +11,7 @@
                 c6UserAgent,
                 RumbleCtrl,
                 rumbleVotes,
-                playList,
+                deck,
                 appData,
                 mockPlayer,
                 cinema6,
@@ -19,11 +19,11 @@
 
             beforeEach(function() {
                 MiniReelService = {
-                    createPlaylist: jasmine.createSpy('MiniReelService.createPlaylist()')
+                    createDeck: jasmine.createSpy('MiniReelService.createDeck()')
                         .andCallFake(function(data) {
-                            var playlist = angular.copy(data.playList);
+                            var playlist = angular.copy(data.deck);
 
-                            MiniReelService.createPlaylist.mostRecentCall.result = playlist;
+                            MiniReelService.createDeck.mostRecentCall.result = playlist;
 
                             playlist.forEach(function(video) {
                                 video.player = null;
@@ -59,34 +59,34 @@
                     mockPlayer._on[eventName].push(handler);
                 });
 
-                playList = [
+                deck = [
                     {
                         "id"     : "vid1",
+                        "type"   : "youtube",
                         "caption": "vid1 caption",
                         "note"   : "vid1 note",
                         "voting" : [ 100, 50, 10 ],
-                        "video"  : {
-                            "player"  : "youtube",
+                        "data"   : {
                             "videoid" : "vid1video"
                         }
                     },
                     {
                         "id"     : "vid2",
+                        "type"   : "vimeo",
                         "caption": "vid2 caption",
                         "note"   : "vid2 note",
                         "voting" : [ 100, 50, 10 ],
-                        "video"  : {
-                            "player"  : "vimeo",
+                        "data"   : {
                             "videoid" : "vid2video"
                         }
                     },
                     {
                         "id"     : "vid3",
+                        "type"   : "dailymotion",
                         "caption": "vid3 caption",
                         "note"   : "vid3 note",
                         "voting" : [ 100, 50, 10 ],
-                        "video"  : {
-                            "player"  : "dailymotion",
+                        "data"   : {
                             "videoid" : "vid3video"
                         }
                     }
@@ -96,7 +96,7 @@
                     profile      : {},
                     experience: {
                         data : {
-                            playList : playList 
+                            deck : deck 
                         }
                     }
                 };
@@ -136,9 +136,9 @@
                     expect(RumbleCtrl).toBeDefined();
                     expect($scope.deviceProfile).toBe(appData.profile);
                     
-                    expect($scope.playList).toBe(MiniReelService.createPlaylist.mostRecentCall.result);
+                    expect($scope.deck).toBe(MiniReelService.createDeck.mostRecentCall.result);
                     expect($scope.currentIndex).toEqual(-1);
-                    expect($scope.currentItem).toBeNull();
+                    expect($scope.currentCard).toBeNull();
                     expect($scope.atHead).toBeNull();
                     expect($scope.atTail).toBeNull();
                     expect($scope.ready).toEqual(false);
@@ -178,7 +178,7 @@
                     beforeEach(function() {
                         spyOn($scope, '$emit');
 
-                        $scope.currentItem = {
+                        $scope.currentCard = {
                             state: {
                                 vote: null,
                                 view: 'video'
@@ -188,19 +188,19 @@
                         RumbleCtrl.vote(2);
                     });
 
-                    it('should set the vote of the currentItem to the passed in value', function() {
-                        expect($scope.currentItem.state.vote).toBe(2);
+                    it('should set the vote of the currentCard to the passed in value', function() {
+                        expect($scope.currentCard.state.vote).toBe(2);
                     });
 
-                    it('should change the currentItem\'s view to "results"', function() {
-                        expect($scope.currentItem.state.view).toBe('results');
+                    it('should change the currentCard\'s view to "results"', function() {
+                        expect($scope.currentCard.state.view).toBe('results');
                     });
                 });
             });
 
             describe('$scope.players()', function() {
                 beforeEach(function() {
-                    $scope.playList = [
+                    $scope.deck = [
                         {
                             id: 'foo'
                         },
@@ -228,7 +228,7 @@
                     var players = $scope.players;
 
                     function playlist(index) {
-                        return $scope.playList[index];
+                        return $scope.deck[index];
                     }
 
                     function currentIndex(index) {
@@ -253,7 +253,7 @@
             describe('navigation',function(){
                 beforeEach(function(){
                     $scope.deviceProfile = { multiPlayer : true };
-                    $scope.playList.forEach(function(item,index){
+                    $scope.deck.forEach(function(item,index){
                         item.player = {
                             isReady : jasmine.createSpy('item'+index+'.isReady'),
                             play    : jasmine.createSpy('item'+index+'.play'),
@@ -267,7 +267,7 @@
                 it('updates elements based on index with setPosition',function(){
                     RumbleCtrl.setPosition(1);
                     expect($scope.currentIndex).toEqual(1);
-                    expect($scope.currentItem).toBe($scope.playList[1]);
+                    expect($scope.currentCard).toBe($scope.deck[1]);
                     expect($scope.atHead).toEqual(false);
                     expect($scope.atTail).toEqual(false);
                     expect($scope.currentReturns).toBeNull();
@@ -277,10 +277,10 @@
 
                 it('handles moving forward',function(){
                     $scope.currentIndex = 1;
-                    $scope.currentItem  = $scope.playList[1];
+                    $scope.currentCard  = $scope.deck[1];
                     RumbleCtrl.goForward();
                     expect($scope.currentIndex).toEqual(2);
-                    expect($scope.currentItem).toBe($scope.playList[2]);
+                    expect($scope.currentCard).toBe($scope.deck[2]);
                     expect($scope.atHead).toEqual(false);
                     expect($scope.atTail).toEqual(false);
                     expect($scope.$emit).toHaveBeenCalledWith('reelMove');
@@ -289,12 +289,12 @@
 
                 it('can be moved one past the actual length', function() {
                     $scope.currentIndex = 2;
-                    $scope.currentItem = $scope.playList[2];
+                    $scope.currentCard = $scope.deck[2];
 
                     expect(RumbleCtrl.goForward).not.toThrow();
 
                     expect($scope.currentIndex).toBe(3);
-                    expect($scope.currentItem).toBeUndefined();
+                    expect($scope.currentCard).toBeUndefined();
                     expect($scope.atHead).toBe(false);
                     expect($scope.atTail).toBe(true);
                     expect($scope.$emit).toHaveBeenCalledWith('reelEnd');
@@ -303,11 +303,11 @@
                 
                 it('handles moving backward',function(){
                     $scope.currentIndex = 2;
-                    $scope.currentItem  = $scope.playList[2];
+                    $scope.currentCard  = $scope.deck[2];
                     RumbleCtrl.goBack();
                     $scope.$digest();
                     expect($scope.currentIndex).toEqual(1);
-                    expect($scope.currentItem).toBe($scope.playList[1]);
+                    expect($scope.currentCard).toBe($scope.deck[1]);
                     expect($scope.atHead).toEqual(false);
                     expect($scope.atTail).toEqual(false);
                     expect($scope.$emit).toHaveBeenCalledWith('reelMove');
@@ -331,14 +331,14 @@
                 });
             });
 
-            describe('findPlayListItemByVideo',function(){
+            describe('findCardByVideo',function(){
                 it('returns an item that exists',function(){
-                    expect(RumbleCtrl.findPlayListItemByVideo('vimeo','vid2video'))
-                        .toBe($scope.playList[1]);
+                    expect(RumbleCtrl.findCardByVideo('vimeo','vid2video'))
+                        .toBe($scope.deck[1]);
                 });
 
                 it('returns undefined for an item that does not exist',function(){
-                    expect(RumbleCtrl.findPlayListItemByVideo('xxxxx','yyyyyyyyy'))
+                    expect(RumbleCtrl.findCardByVideo('xxxxx','yyyyyyyyy'))
                         .not.toBeDefined();
                 });
             });
@@ -350,10 +350,10 @@
                     mockPlayer.isReady.andReturn(false);
                 });
                 describe('playerAdd',function(){
-                    it('adds new player to playList item',function(){
-                        expect($scope.playList[1].player).toBeNull();
+                    it('adds new player to deck item',function(){
+                        expect($scope.deck[1].player).toBeNull();
                         $scope.$emit('playerAdd',mockPlayer);
-                        expect($scope.playList[1].player).toBe(mockPlayer);
+                        expect($scope.deck[1].player).toBe(mockPlayer);
                         expect(mockPlayer.on.callCount).toEqual(2);
                         expect(mockPlayer.on.argsForCall[0][0]).toEqual('ready');
                     });
@@ -377,25 +377,25 @@
 
                     it('reports ready when all players are ready',function(){
                         spyOn(RumbleCtrl,'checkReady').andCallThrough();
-                        $scope.playList[0].player = {
+                        $scope.deck[0].player = {
                             isReady : jasmine.createSpy('player0.isReady')
                         };
-                        $scope.playList[2].player = {
+                        $scope.deck[2].player = {
                             isReady : jasmine.createSpy('player2.isReady')
                         };
                         $scope.players = function() {
-                            return [$scope.playList[0], $scope.playList[1], $scope.playList[2]];
+                            return [$scope.deck[0], $scope.deck[1], $scope.deck[2]];
                         };
-                        $scope.playList[0].player.isReady.andReturn(true);
-                        $scope.playList[2].player.isReady.andReturn(true);
+                        $scope.deck[0].player.isReady.andReturn(true);
+                        $scope.deck[2].player.isReady.andReturn(true);
                         $scope.$emit('playerAdd',mockPlayer);
                         expect($scope.ready).toEqual(false);
                         mockPlayer.isReady.andReturn(true);
                         mockPlayer._on.ready[0](mockPlayer);
                         expect(RumbleCtrl.checkReady).toHaveBeenCalled();
-                        expect($scope.playList[0].player.isReady).toHaveBeenCalled();
-                        expect($scope.playList[1].player.isReady).toHaveBeenCalled();
-                        expect($scope.playList[2].player.isReady).toHaveBeenCalled();
+                        expect($scope.deck[0].player.isReady).toHaveBeenCalled();
+                        expect($scope.deck[1].player.isReady).toHaveBeenCalled();
+                        expect($scope.deck[2].player.isReady).toHaveBeenCalled();
                         expect($scope.ready).toEqual(true);
                     });
                 });
@@ -407,12 +407,12 @@
                         mockPlayer.isReady.andReturn(true);
 
                         $scope.$emit('playerAdd',mockPlayer);
-                        $scope.currentItem = $scope.playList[1];
+                        $scope.currentCard = $scope.deck[1];
                         mockPlayer._on.ended[0](mockPlayer);
                     });
 
                     it('should set the view to "ballot"', function() {
-                        expect($scope.playList[1].state.view).toBe('ballot');
+                        expect($scope.deck[1].state.view).toBe('ballot');
                     });
                 });
             });
