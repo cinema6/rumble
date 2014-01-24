@@ -129,6 +129,13 @@
                         "related" : 0
                     },
                     "ballotId": "rb-01eb03bc062c15"
+                },
+                {
+                    "id"     : "rc-235d41cde02032",
+                    "type"   : "miniReel",
+                    "data"   : {
+
+                    }
                 }
             ]
         }
