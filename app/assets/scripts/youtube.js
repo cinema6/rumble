@@ -259,6 +259,15 @@
                 }, 500);
             }
 
+            function playListener(player) {
+                playerIface.emit('play', playerIface);
+
+                if (playerIface.ended) {
+                    player.seekTo(start);
+                    _playerIface.ended = false;
+                }
+            }
+
             function twerk(wait){
                 var deferred = $q.defer(), waitTimer,
                 playingListener = function(){
@@ -276,6 +285,7 @@
                 }
 
                 $interval.cancel(currentTimeInterval);
+                player.removeListener('playing', playListener);
 
                 player.once('playing',playingListener);
 
@@ -299,6 +309,7 @@
                     })
                     .finally(function() {
                         pollCurrentTime();
+                        player.on('playing', playListener);
                     });
 
                 return deferred.promise;
@@ -458,12 +469,7 @@
                         }
                     });
 
-                    player.on('playing', function(player) {
-                        if (playerIface.ended) {
-                            player.seekTo(start);
-                            _playerIface.ended = false;
-                        }
-                    });
+                    player.on('playing', playListener);
                 });
             }
 
@@ -491,5 +497,18 @@
             restrict : 'E',
             link     : fnLink
         };
+    }])
+    .controller('YoutubeCardController', ['$scope',
+    function                             ( $scope ) {
+        var config = $scope.config,
+            _data = config._data = config._data || {
+                hasPlayed: false
+            };
+
+        $scope.$on('playerAdd', function(event, player) {
+            player.once('play', function() {
+                _data.hasPlayed = true;
+            });
+        });
     }]);
 }());

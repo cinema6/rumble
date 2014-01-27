@@ -16,12 +16,4 @@
             </mr-card>
         </li>
     </ul>
-    <ng-switch on="currentCard.state.view">
-        <div ng-switch-when="ballot">
-            <ng-include src="'assets/views/ballot.html'"></ng-include>
-        </div>
-        <div ng-switch-when="results">
-            <ng-include src="'assets/views/results.html'"></ng-include>
-        </div>
-    </ng-switch>
 </section>

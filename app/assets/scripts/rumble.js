@@ -234,37 +234,13 @@
             }
         };
 
-        this.vote = function(v){
-            $scope.currentCard.state.vote = v;
-            $scope.currentCard.state.view = 'results';
-        };
-
-        this.getVotePercent = function(votes,index){
-            var tally = 0;
-            votes.forEach(function(v){
-                tally += v;
-            });
-            
-            if (index === undefined){
-                return votes.map(function(v){
-                    return (tally < 1) ? 0 : Math.round((v / tally)* 100) / 100;
-                });
-            }
-
-            if ((tally < 1) || (votes[index] === undefined)){
-                return 0;
-            }
-
-            return Math.round((votes[index] / tally)* 100) / 100;
-        };
-
         this.setPosition = function(i){
             $log.info('setPosition: %1',i);
             $scope.currentReturns = null;
             $scope.currentIndex   = i;
             $scope.currentCard    = $scope.deck[$scope.currentIndex];
             $scope.atHead         = $scope.currentIndex === 0;
-            $scope.atTail         = ($scope.currentIndex === $scope.deck.length);
+            $scope.atTail         = ($scope.currentIndex === ($scope.deck.length - 1));
 
             if ($scope.atTail) {
                 $scope.$emit('reelEnd');
@@ -273,19 +249,6 @@
             } else {
                 $scope.$emit('reelMove');
             }
-
-            if (!$scope.currentCard) { return; }
-
-            rumbleVotes.getReturnsForItem($scope.rumbleId,$scope.currentCard.id)
-                .then(
-                    function onVotes(votes){
-                        $log.info('getReturns returned with: ',votes);
-                        $scope.currentReturns = self.getVotePercent(votes);
-                    },
-                    function onErr(err){
-                        $log.error('getReturnsErr: %1',err.message);
-                    }
-                );
         };
 
         this.start = function() {
@@ -375,6 +338,13 @@
             inner += '></'  + dasherize(type) + '-card' + '>';
 
             $element.append($compile(inner)(scope));
+
+            scope.$watch('onDeck', function(onDeck) {
+                if (onDeck) { scope.$broadcast('onDeck'); }
+            });
+            scope.$watch('active', function(active) {
+                if (active) { scope.$broadcast('active'); }
+            });
 
             $window.addEventListener('resize',resize);
             resize({},true);

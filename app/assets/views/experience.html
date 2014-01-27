@@ -4,9 +4,6 @@
         <div class="splash-screen" ng-switch-when="splash">
             <ng-include src="'assets/views/splash.html'"></ng-include>
         </div>
-        <div ng-switch-when="end">
-            <ng-include src="'assets/views/end.html'"></ng-include>
-        </div>
     </ng-switch>
     <div class="navigation">
         <button class="prev" ng-hide="atHead" ng-click="RumbleCtrl.goBack()">Back</button>

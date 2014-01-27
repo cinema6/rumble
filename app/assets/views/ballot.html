@@ -1,7 +1,0 @@
-<section class="ballot">
-    <ul>
-        <li ng-repeat="item in currentCard.ballot.choices">
-            <button ng-click="RumbleCtrl.vote($index)" ng-class="{ selected : (currentCard.state.vote === $index)}">{{item.button}}</button> 
-        </li>
-    </ul>
-</section>

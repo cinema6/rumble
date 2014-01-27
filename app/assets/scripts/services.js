@@ -2,6 +2,24 @@
     'use strict';
 
     angular.module('c6.rumble.services', [])
+        .service('EventService', [function() {
+            this.trackEvents = function(emitter, events) {
+                var tracker = {};
+
+                angular.forEach(events, function(event) {
+                    var eventObj = tracker[event] = {
+                        emitCount: 0
+                    };
+
+                    emitter.on(event, function() {
+                        eventObj.emitCount++;
+                    });
+                });
+
+                return tracker;
+            };
+        }])
+
         .service('InflectorService', [function() {
             var exceptions = [];
 

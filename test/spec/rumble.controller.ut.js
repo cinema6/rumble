@@ -144,59 +144,6 @@
                     expect($scope.ready).toEqual(false);
                 });
             });
-            describe('voting',function(){
-                describe('getVotePercent',function(){
-                    it('returns 0 if tally is 0', function(){
-                        expect(RumbleCtrl.getVotePercent([0,0,0],0))
-                            .toEqual(0);
-                    });
-
-                    it('returns 0 if the index is bad',function(){
-                        expect(RumbleCtrl.getVotePercent([10,20,10],5))
-                            .toEqual(0);
-                    });
-
-                    it('returns the right percent',function(){
-                        var  votes = [7,10,5] ;
-                        expect(RumbleCtrl.getVotePercent(votes,0)).toEqual(0.32);
-                        expect(RumbleCtrl.getVotePercent(votes,1)).toEqual(0.45);
-                        expect(RumbleCtrl.getVotePercent(votes,2)).toEqual(0.23);
-                    });
-
-                    it('returns an array of percents if no index is provided', function(){
-                        var votes = [7,10,5];
-                        expect(RumbleCtrl.getVotePercent(votes)).toEqual([0.32,0.45,0.23]);
-                    });
-
-                    it('returns an array of zeros if no index is provided and votes are zero', function(){
-                        var votes = [0,0,0] ;
-                        expect(RumbleCtrl.getVotePercent(votes)).toEqual([0,0,0]);
-                    });
-                });
-
-                describe('vote()', function() {
-                    beforeEach(function() {
-                        spyOn($scope, '$emit');
-
-                        $scope.currentCard = {
-                            state: {
-                                vote: null,
-                                view: 'video'
-                            }
-                        };
-
-                        RumbleCtrl.vote(2);
-                    });
-
-                    it('should set the vote of the currentCard to the passed in value', function() {
-                        expect($scope.currentCard.state.vote).toBe(2);
-                    });
-
-                    it('should change the currentCard\'s view to "results"', function() {
-                        expect($scope.currentCard.state.view).toBe('results');
-                    });
-                });
-            });
 
             describe('$scope.players()', function() {
                 beforeEach(function() {
@@ -270,37 +217,21 @@
                     expect($scope.currentCard).toBe($scope.deck[1]);
                     expect($scope.atHead).toEqual(false);
                     expect($scope.atTail).toEqual(false);
-                    expect($scope.currentReturns).toBeNull();
-                    $timeout.flush();
-                    expect($scope.currentReturns).toEqual([0.63,0.31,0.06]);
                 });
 
                 it('handles moving forward',function(){
-                    $scope.currentIndex = 1;
-                    $scope.currentCard  = $scope.deck[1];
+                    $scope.currentIndex = 0;
+                    $scope.currentCard  = $scope.deck[0];
                     RumbleCtrl.goForward();
-                    expect($scope.currentIndex).toEqual(2);
-                    expect($scope.currentCard).toBe($scope.deck[2]);
+                    expect($scope.currentIndex).toEqual(1);
+                    expect($scope.currentCard).toBe($scope.deck[1]);
                     expect($scope.atHead).toEqual(false);
                     expect($scope.atTail).toEqual(false);
                     expect($scope.$emit).toHaveBeenCalledWith('reelMove');
                     expect($scope.$emit.callCount).toBe(1);
                 });
 
-                it('can be moved one past the actual length', function() {
-                    $scope.currentIndex = 2;
-                    $scope.currentCard = $scope.deck[2];
 
-                    expect(RumbleCtrl.goForward).not.toThrow();
-
-                    expect($scope.currentIndex).toBe(3);
-                    expect($scope.currentCard).toBeUndefined();
-                    expect($scope.atHead).toBe(false);
-                    expect($scope.atTail).toBe(true);
-                    expect($scope.$emit).toHaveBeenCalledWith('reelEnd');
-                    expect($scope.$emit.callCount).toBe(1);
-                });
-                
                 it('handles moving backward',function(){
                     $scope.currentIndex = 2;
                     $scope.currentCard  = $scope.deck[2];

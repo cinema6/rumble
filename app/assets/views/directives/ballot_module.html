@@ -1,0 +1,12 @@
+<section class="ballot">
+    <ul ng-hide="!!vote">
+        <li ng-repeat="this in ballot.choices">
+            <button ng-click="Ctrl.vote($index)">{{this.button}}</button>
+        </li>
+    </ul>
+    <ul ng-show="!!vote">
+        <li ng-repeat="this in ballot.choices">
+            <strong>{{this.button}}:</strong> {{currentReturns[$index] | percent}}
+        </li>
+    </ul>
+</section>

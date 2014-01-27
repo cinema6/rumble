@@ -690,6 +690,14 @@
                         expect($interval.cancel).toHaveBeenCalled();
                     });
 
+                    it('will remove its "playing" listener', function() {
+                        mockPlayers[0]._on.ready[0]({},mockPlayers[0]);
+                        $timeout.flush();
+                        iface.twerk();
+
+                        expect(mockPlayers[0].removeListener).toHaveBeenCalledWith('playing', jasmine.any(Function));
+                    });
+
                     it('will reject if the player is not ready',function(){
                         expect(iface.isReady()).toEqual(false);
                         iface.twerk().then(resolveSpy,rejectSpy);
@@ -777,24 +785,33 @@
                     });
 
                     describe('if twerking fails', function() {
+                        var player;
+
                         beforeEach(function() {
                             spyOn(iface, 'emit');
                             mockPlayers[0]._on.ready[0]({},mockPlayers[0]);
                             $timeout.flush();
                             iface.twerk(5000);
                             $timeout.flush(5000);
+
+                            player = mockPlayers[0];
                         });
 
                         it('will setup the $interval again', function() {
-                            var player = mockPlayers[0];
-
                             player.getCurrentTime.andReturn(10);
                             $interval.flush(500);
                             expect(iface.emit).toHaveBeenCalledWith('timeupdate', iface);
                         });
+
+                        it('will set up the "play" listener again', function() {
+                            player._on.playing[1](player);
+                            expect(iface.emit).toHaveBeenCalledWith('play', iface);
+                        });
                     });
 
                     describe('if twerking succeeds', function() {
+                        var player;
+
                         beforeEach(function() {
                             spyOn(iface, 'emit');
                             mockPlayers[0]._on.ready[0]({},mockPlayers[0]);
@@ -802,14 +819,19 @@
                             iface.twerk();
                             mockPlayers[0]._once.playing[0]({},mockPlayers[0]);
                             $scope.$digest();
+
+                            player = mockPlayers[0];
                         });
 
                         it('will setup the $interval again', function() {
-                            var player = mockPlayers[0];
-
                             player.getCurrentTime.andReturn(10);
                             $interval.flush(500);
                             expect(iface.emit).toHaveBeenCalledWith('timeupdate', iface);
+                        });
+
+                        it('will set up the "play" listener again', function() {
+                            player._on.playing[1](player);
+                            expect(iface.emit).toHaveBeenCalledWith('play', iface);
                         });
                     });
                 });
@@ -842,6 +864,33 @@
                         
                         expect(readySpy).toHaveBeenCalledWith(iface);
                         expect(iface.isReady()).toEqual(true);
+                    });
+                });
+
+
+                describe('playing', function() {
+                    beforeEach(function() {
+                        $scope.$apply(function() {
+                            $compile('<youtube-card videoid="a"></youtube-card>')($scope);
+                        });
+                        $timeout.flush();
+                        mockPlayers[0]._on.ready[0](mockPlayers[0]);
+                        $timeout.flush();
+                        spyOn(iface, 'emit');
+                    });
+
+                    describe('when ready', function() {
+                        it('should emit "play" on the interface', function() {
+                            var player = mockPlayers[0],
+                                callCount;
+
+                            player._on.playing[0](player);
+                            expect(iface.emit).toHaveBeenCalledWith('play', iface);
+                            callCount = iface.emit.callCount;
+
+                            player._on.playing[0](player);
+                            expect(iface.emit.callCount).toBe(callCount + 1);
+                        });
                     });
                 });
 
