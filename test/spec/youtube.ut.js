@@ -56,6 +56,7 @@
                     }];
                     
                     angularElementMock.append      = jasmine.createSpy('elt.append');
+                    angularElementMock.prepend     = jasmine.createSpy('elt.prepend');
                     angularElementMock.css         = jasmine.createSpy('elt.css');
                     angularElementMock.replaceWith = jasmine.createSpy('elt.replaceWith');
                     angularElementMock.remove      = jasmine.createSpy('elt.remove');
@@ -136,7 +137,7 @@
                         expect(angular.element.calls[0].args[0]).toEqual('<iframe id="player1" src="http://www.youtube.com/embed/x123?enablejsapi=1" width="100" height="100"></iframe>');
                         expect(angular.element.calls[1].args[0]).toEqual(angularElementMock);
 
-                        expect(angularElementMock.append)
+                        expect(angularElementMock.prepend)
                             .toHaveBeenCalledWith(angularElementMock);
 
                         expect($window.YT.Player.calls[0].args[0]).toEqual('player1');

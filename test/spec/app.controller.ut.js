@@ -156,26 +156,6 @@
                         expect($scope.app.state).toBe('deck');
                     });
                 });
-
-                describe('reelMove', function() {
-                    beforeEach(function() {
-                        $childScope.$emit('reelMove');
-                    });
-
-                    it('should change to the "deck" state', function() {
-                        expect($scope.app.state).toBe('deck');
-                    });
-                });
-
-                describe('reelEnd', function() {
-                    beforeEach(function() {
-                        $childScope.$emit('reelEnd');
-                    });
-
-                    it('should change to the "end" state', function() {
-                        expect($scope.app.state).toBe('end');
-                    });
-                });
             });
         });
     });

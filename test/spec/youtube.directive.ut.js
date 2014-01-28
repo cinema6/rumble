@@ -4,11 +4,13 @@
     define(['youtube'], function() {
         describe('youtubePlayer directive',function(){
             var $compile,
+                interval,
                 $interval,
                 $timeout,
                 $log,
                 $rootScope,
                 $scope,
+                $q,
                 mockPlayers,
                 youtube = {};
 
@@ -82,9 +84,13 @@
                     $compile    = $injector.get('$compile');
                     $rootScope  = $injector.get('$rootScope');
                     $log        = $injector.get('$log');
-                    
+                    $q          = $injector.get('$q');
+
                     $log.context = jasmine.createSpy('$log.context');
                     $log.context.andCallFake(function() { return $log; });
+
+                    $rootScope.config = {};
+
                     $scope = $rootScope.$new();
                     $scope.width = 100;
                     $scope.height = 100;
@@ -95,17 +101,17 @@
                 it('will fail without a videoid',function(){
                     expect(function(){
                         $scope.$apply(function() {
-                            $compile('<youtube-player></youtube-player>')($rootScope);
+                            $compile('<youtube-card></youtube-card>')($rootScope);
                         });
-                    }).toThrow('youtubePlayer requires the videoid attribute to be set.');
+                    }).toThrow('<youtube-card> requires the videoid attribute to be set.');
                 });
 
                 it('will create a player',function(){
                     $compile(
-                        '<youtube-player videoid="abc123" width="1" height="2"></youtube-player>'
+                        '<youtube-card videoid="abc123" width="1" height="2"></youtube-card>'
                     )($scope);
                     $timeout.flush();
-                    expect($log.context).toHaveBeenCalledWith('youtubePlayer');
+                    expect($log.context).toHaveBeenCalledWith('<youtube-card>');
                     expect(mockPlayers.length).toEqual(1);
                     expect(youtube.createPlayer.calls[0].args[0]).toEqual('yt_abc123');
                     expect(youtube.createPlayer.calls[0].args[1]).toEqual({
@@ -124,7 +130,7 @@
                 it('will observe changes to width and height',function(){
                     var youtubePlayer, scope;
                     youtubePlayer = $compile(
-                        '<youtube-player videoid="abc123" width="{{width}}" height="{{height}}"></youtube-player>'
+                        '<youtube-card videoid="abc123" width="{{width}}" height="{{height}}"></youtube-card>'
                     )($scope);
                     scope = youtubePlayer.scope();
                     $timeout.flush();
@@ -150,7 +156,7 @@
                     $scope.$on('playerAdd'      ,addSpy);
                     
                     $compile(
-                        '<youtube-player videoid="abc123" width="1" height="2" start="{{start}}" end="{{end}}"></youtube-player>'
+                        '<youtube-card videoid="abc123" width="1" height="2" start="{{start}}" end="{{end}}"></youtube-card>'
                     )($scope);
                     $timeout.flush();
                 });
@@ -258,6 +264,22 @@
                         });
                     });
 
+                    describe('twerked property', function() {
+                        describe('getting', function() {
+                            it('should be initialized as false', function() {
+                                expect(iface.twerked).toBe(false);
+                            });
+                        });
+
+                        describe('setting', function() {
+                            it('should not be publically set-able', function() {
+                                expect(function() {
+                                    iface.twerked = true;
+                                }).toThrow();
+                            });
+                        });
+                    });
+
                     describe('currentTime property', function() {
                         var player;
 
@@ -296,7 +318,7 @@
                         describe('if a start time is specified', function() {
                             beforeEach(function() {
                                 $compile(
-                                    '<youtube-player videoid="abc1234" width="1" height="2" start="10"></youtube-player>'
+                                    '<youtube-card videoid="abc1234" width="1" height="2" start="10"></youtube-card>'
                                 )($scope);
                                 $timeout.flush();
 
@@ -401,7 +423,7 @@
                             describe('if start is provided', function() {
                                 beforeEach(function() {
                                     $compile(
-                                        '<youtube-player videoid="abc1234" width="1" height="2" start="10"></youtube-player>'
+                                        '<youtube-card videoid="abc1234" width="1" height="2" start="10"></youtube-card>'
                                     )($scope);
                                     $timeout.flush();
 
@@ -427,7 +449,134 @@
                 });
             });
             /* -- end describe('playerInterface' */
-            
+            describe('when the card becomes inavtive', function() {
+                describe('initialization', function() {
+                    beforeEach(function() {
+                        $scope.$apply(function() {
+                            $scope.active = false;
+
+                            $compile(
+                                '<youtube-card videoid="abc123" width="1" height="2"></youtube-card>'
+                            )($scope);
+                        });
+
+                        $timeout.flush();
+                        mockPlayers[0]._on.ready[0]({},mockPlayers[0]);
+                        $timeout.flush();
+                    });
+
+                    it('should not pause the player', function() {
+                        expect(mockPlayers[0].pause).not.toHaveBeenCalled();
+                    });
+                });
+
+                describe('when going from active to inactive', function() {
+                    beforeEach(function() {
+                        $scope.$apply(function() {
+                            $scope.active = false;
+
+                            $compile(
+                                '<youtube-card videoid="abc123" width="1" height="2"></youtube-card>'
+                            )($scope);
+                        });
+
+                        $timeout.flush();
+                        mockPlayers[0]._on.ready[0]({},mockPlayers[0]);
+                        $timeout.flush();
+
+                        $scope.$apply(function() {
+                            $scope.active = true;
+                        });
+
+                        $scope.$apply(function() {
+                            $scope.active = false;
+                        });
+                    });
+
+                    it('should pause the player', function() {
+                        expect(mockPlayers[0].pause).toHaveBeenCalled();
+                    });
+                });
+            });
+
+            describe('autoplay', function() {
+                describe('if off', function() {
+                    beforeEach(function() {
+                        $scope.$apply(function() {
+                            $scope.active = true;
+
+                            $compile(
+                                '<youtube-card videoid="abc123" width="1" height="2"></youtube-card>'
+                            )($scope);
+                        });
+
+                        $timeout.flush();
+                        mockPlayers[0]._on.ready[0]({},mockPlayers[0]);
+                        $timeout.flush();
+                    });
+
+                    it('should not play the player', function() {
+                        expect(mockPlayers[0].play).not.toHaveBeenCalled();
+                    });
+                });
+
+                describe('if on, when becoming active', function() {
+                    var player;
+
+                    beforeEach(function() {
+                        $scope.$apply(function() {
+                            $compile(
+                                '<youtube-card videoid="abc123" width="1" height="2" autoplay="1"></youtube-card>'
+                            )($scope);
+                        });
+                        $timeout.flush();
+
+                        player = mockPlayers[0];
+                    });
+
+                    describe('before becoming active', function() {
+                        beforeEach(function() {
+                            mockPlayers[0]._on.ready[0]({},mockPlayers[0]);
+                            $timeout.flush();
+                        });
+
+                        it('should not play the player', function() {
+                            expect(player.play).not.toHaveBeenCalled();
+                        });
+                    });
+
+                    describe('when not ready', function() {
+                        beforeEach(function() {
+                            spyOn($log, 'warn');
+                        });
+
+                        it('should log a warning if the player becomes active', function() {
+                            $scope.$apply(function() {
+                                $scope.active = true;
+                            });
+
+                            expect(player.play).not.toHaveBeenCalled();
+                            expect($log.warn).toHaveBeenCalledWith('Player cannot autoplay because it is not ready.');
+                        });
+                    });
+
+                    describe(', when ready', function() {
+                        beforeEach(function() {
+                            mockPlayers[0]._on.ready[0]({},mockPlayers[0]);
+                            $timeout.flush();
+
+                            $scope.$apply(function() {
+                                $scope.active = true;
+                            });
+                        });
+
+                        it('should play the player', function() {
+                            expect(player.play).toHaveBeenCalled();
+                        });
+                    });
+                });
+            });
+
             describe('twerking',function(){
                 var iface;
                 beforeEach(function(){
@@ -440,70 +589,120 @@
                 describe('parameter',function(){
                     describe('when not turned on',function(){
                         beforeEach(function(){
-                            $compile(
-                                '<youtube-player videoid="abc123" width="1" height="2"></youtube-player>'
-                            )($scope);
+                            $scope.$apply(function() {
+                                $compile(
+                                    '<youtube-card videoid="abc123" width="1" height="2"></youtube-card>'
+                                )($scope);
+                            });
+                            spyOn(iface, 'twerk');
+                            $timeout.flush();
+
+                            mockPlayers[0]._on.ready[0]({},mockPlayers[0]);
                             $timeout.flush();
                         });
 
-                        it('will not play/pause when player is ready',function(){
-                            expect(iface.isReady()).toEqual(false);
-                            expect(mockPlayers[0].play).not.toHaveBeenCalled();
-                            expect(mockPlayers[0].pause).not.toHaveBeenCalled();
-                            expect(mockPlayers[0]._once.playing).not.toBeDefined();
-                            mockPlayers[0]._on.ready[0]({},mockPlayers[0]);
-                            $timeout.flush();
-                            expect(iface.isReady()).toEqual(true);
-                            expect(mockPlayers[0].play).not.toHaveBeenCalled();
-                            expect(mockPlayers[0].pause).not.toHaveBeenCalled();
+                        it('will not twerk the player when it is "onDeck"',function(){
+                            expect(iface.twerk).not.toHaveBeenCalled();
+
+                            $scope.$apply(function() {
+                                $scope.onDeck = true;
+                            });
+
+                            expect(iface.twerk).not.toHaveBeenCalled();
                         });
                     });
 
                     describe('when turned on',function(){
+                        var twerkDeferred;
 
                         beforeEach(function(){
-                            $compile(
-                                '<youtube-player videoid="abc123" width="1" height="2" twerk="1"></youtube-player>'
-                            )($scope);
+                            twerkDeferred = $q.defer();
+
+                            spyOn($interval, 'cancel');
+                            $scope.$apply(function() {
+                                $compile(
+                                    '<youtube-card videoid="abc123" width="1" height="2" twerk="1"></youtube-card>'
+                                )($scope);
+                            });
+                            spyOn(iface, 'twerk').andCallFake(function() {
+                                return twerkDeferred.promise;
+                            });
                             $timeout.flush();
                         });
 
-                        it('will play when the player is ready',function(){
-                            expect(iface.isReady()).toEqual(false);
-                            expect(mockPlayers[0].play).not.toHaveBeenCalled();
-                            expect(mockPlayers[0].pause).not.toHaveBeenCalled();
-                            expect(mockPlayers[0]._once.playing).not.toBeDefined();
-                            mockPlayers[0]._on.ready[0]({},mockPlayers[0]);
-                            expect(iface.isReady()).toEqual(false);
-                            expect(mockPlayers[0]._once.playing).toBeDefined();
-                            expect(mockPlayers[0].play).toHaveBeenCalled();
-                            expect(mockPlayers[0].pause).not.toHaveBeenCalled();
+                        describe('when not "onDeck"', function() {
+                            beforeEach(function() {
+                                mockPlayers[0]._on.ready[0]({},mockPlayers[0]);
+                                $timeout.flush();
+                            });
+
+                            it('will not twerk the player', function() {
+                                expect(iface.twerk).not.toHaveBeenCalled();
+                            });
                         });
 
-                        it('will pause and once the player starts playing',function(){
-                            mockPlayers[0]._on.ready[0]({},mockPlayers[0]);
-                            expect(mockPlayers[0].play).toHaveBeenCalled();
-                            expect(mockPlayers[0].pause).not.toHaveBeenCalled();
-                            
-                            mockPlayers[0]._once.playing[0]({},mockPlayers[0]);
-                            $scope.$digest();
-                            expect(mockPlayers[0].pause).toHaveBeenCalled();
-                            expect(iface.isReady()).toEqual(true);
-                        });
+                        describe('when "onDeck"', function() {
+                            beforeEach(function() {
+                                $scope.$apply(function() {
+                                    $scope.onDeck = true;
+                                });
+                            });
 
+                            describe('if not ready', function() {
+                                it('should not twerk the player', function() {
+                                    expect(iface.twerk).not.toHaveBeenCalled();
+                                });
+
+                                it('should twerk the player after it is ready', function() {
+                                    mockPlayers[0]._on.ready[0]({},mockPlayers[0]);
+                                    $timeout.flush();
+
+                                    expect(iface.twerk).toHaveBeenCalled();
+                                });
+                            });
+
+                            describe('if ready', function() {
+                                beforeEach(function() {
+                                    mockPlayers[0]._on.ready[0]({},mockPlayers[0]);
+                                    $timeout.flush();
+                                });
+
+                                it('should twerk the player', function() {
+                                    expect(iface.twerk).toHaveBeenCalledWith(5000);
+                                });
+                            });
+                        });
                     });
                 });
 
                 describe('method',function(){
                     var resolveSpy, rejectSpy;
                     beforeEach(function(){
+                        spyOn($interval, 'cancel').andCallThrough();
+
                         resolveSpy = jasmine.createSpy('twerk.resolve');
                         rejectSpy  = jasmine.createSpy('twerk.reject');
                         
                         $compile(
-                            '<youtube-player videoid="abc123" width="1" height="2"></youtube-player>'
+                            '<youtube-card videoid="abc123" width="1" height="2"></youtube-card>'
                         )($scope);
                         $timeout.flush();
+                    });
+
+                    it('will cancel the $interval', function() {
+                        mockPlayers[0]._on.ready[0]({},mockPlayers[0]);
+                        $timeout.flush();
+                        iface.twerk();
+
+                        expect($interval.cancel).toHaveBeenCalled();
+                    });
+
+                    it('will remove its "playing" listener', function() {
+                        mockPlayers[0]._on.ready[0]({},mockPlayers[0]);
+                        $timeout.flush();
+                        iface.twerk();
+
+                        expect(mockPlayers[0].removeListener).toHaveBeenCalledWith('playing', jasmine.any(Function));
                     });
 
                     it('will reject if the player is not ready',function(){
@@ -514,6 +713,7 @@
                         expect(rejectSpy).toHaveBeenCalledWith({
                             message : 'Player is not ready to twerk'
                         });
+                        expect(iface.twerked).toBe(false);
                     });
 
                     it('will resolve when playing starts',function(){
@@ -526,6 +726,7 @@
 
                         expect(resolveSpy).toHaveBeenCalled();
                         expect(rejectSpy).not.toHaveBeenCalled();
+                        expect(iface.twerked).toBe(true);
                     });
 
                     it('will reject if playing event times out with default',function(){
@@ -542,6 +743,7 @@
                         expect(rejectSpy).toHaveBeenCalledWith({
                             message : 'Player twerk timed out'
                         });
+                        expect(iface.twerked).toBe(false);
                     });
 
                     it('will reject if playing event times out with specified wait',function(){
@@ -558,18 +760,87 @@
                         expect(rejectSpy).toHaveBeenCalledWith({
                             message : 'Player twerk timed out'
                         });
+                        expect(iface.twerked).toBe(false);
+                    });
+
+                    it('will reject if the player has already been twerked', function() {
+                        mockPlayers[0]._on.ready[0]({},mockPlayers[0]);
+                        $timeout.flush();
+                        iface.twerk().then(resolveSpy,rejectSpy);
+                        
+                        mockPlayers[0]._once.playing[0]({},mockPlayers[0]);
+                        $scope.$digest();
+
+                        $scope.$apply(function() {
+                            iface.twerk().then(resolveSpy, rejectSpy);
+                        });
+                        expect(rejectSpy).toHaveBeenCalledWith({
+                            message: 'Player has already been twerked'
+                        });
+                        expect(mockPlayers[0].play.callCount).toBe(1);
+                        expect($interval.cancel.callCount).toBe(1);
                     });
 
                     it('will not timeout if timeout passed is 0',function(){
                         mockPlayers[0]._on.ready[0]({},mockPlayers[0]);
                         $timeout.flush();
                         iface.twerk(0).then(resolveSpy,rejectSpy);
-                        
-                        expect(function(){$timeout.flush()}).toThrow();
+
+                        $timeout.flush();
                         expect(resolveSpy).not.toHaveBeenCalled();
                         expect(rejectSpy).not.toHaveBeenCalled();
                     });
 
+                    describe('if twerking fails', function() {
+                        var player;
+
+                        beforeEach(function() {
+                            spyOn(iface, 'emit');
+                            mockPlayers[0]._on.ready[0]({},mockPlayers[0]);
+                            $timeout.flush();
+                            iface.twerk(5000);
+                            $timeout.flush(5000);
+
+                            player = mockPlayers[0];
+                        });
+
+                        it('will setup the $interval again', function() {
+                            player.getCurrentTime.andReturn(10);
+                            $interval.flush(500);
+                            expect(iface.emit).toHaveBeenCalledWith('timeupdate', iface);
+                        });
+
+                        it('will set up the "play" listener again', function() {
+                            player._on.playing[1](player);
+                            expect(iface.emit).toHaveBeenCalledWith('play', iface);
+                        });
+                    });
+
+                    describe('if twerking succeeds', function() {
+                        var player;
+
+                        beforeEach(function() {
+                            spyOn(iface, 'emit');
+                            mockPlayers[0]._on.ready[0]({},mockPlayers[0]);
+                            $timeout.flush();
+                            iface.twerk();
+                            mockPlayers[0]._once.playing[0]({},mockPlayers[0]);
+                            $scope.$digest();
+
+                            player = mockPlayers[0];
+                        });
+
+                        it('will setup the $interval again', function() {
+                            player.getCurrentTime.andReturn(10);
+                            $interval.flush(500);
+                            expect(iface.emit).toHaveBeenCalledWith('timeupdate', iface);
+                        });
+
+                        it('will set up the "play" listener again', function() {
+                            player._on.playing[1](player);
+                            expect(iface.emit).toHaveBeenCalledWith('play', iface);
+                        });
+                    });
                 });
             });
             /* -- end describe('twerking' */
@@ -584,10 +855,10 @@
                 });
                 
                 describe('ready',function(){
-                    it('is emitted when the player is ready if twerking is off',function(){
+                    it('is emitted when the player is ready',function(){
                         var readySpy = jasmine.createSpy('playerIsReady');
                         $compile(
-                            '<youtube-player videoid="a" width="1" height="2"></youtube-player>'
+                            '<youtube-card videoid="a" width="1" height="2"></youtube-card>'
                         )($scope);
                         $timeout.flush();
                         iface.on('ready',readySpy);
@@ -601,23 +872,32 @@
                         expect(readySpy).toHaveBeenCalledWith(iface);
                         expect(iface.isReady()).toEqual(true);
                     });
+                });
 
-                    it('is emitted when the twerk is done if twerking is on',function(){
-                        var readySpy = jasmine.createSpy('playerIsReady');
-                        $compile(
-                            '<youtube-player videoid="a" width="1" twerk="1"></youtube-player>'
-                        )($scope);
+
+                describe('playing', function() {
+                    beforeEach(function() {
+                        $scope.$apply(function() {
+                            $compile('<youtube-card videoid="a"></youtube-card>')($scope);
+                        });
                         $timeout.flush();
-                        iface.on('ready',readySpy);
-                        expect(readySpy).not.toHaveBeenCalled();
-                        expect(iface.isReady()).toEqual(false);
-                        
-                        //simulate the firing of the ready and play event
-                        mockPlayers[0]._on.ready[0]({},mockPlayers[0]);
-                        mockPlayers[0]._once.playing[0]({},mockPlayers[0]);
-                        $scope.$digest(); // <- need this to allow $q mock to do its thing
-                        expect(readySpy).toHaveBeenCalledWith(iface);
-                        expect(iface.isReady()).toEqual(true);
+                        mockPlayers[0]._on.ready[0](mockPlayers[0]);
+                        $timeout.flush();
+                        spyOn(iface, 'emit');
+                    });
+
+                    describe('when ready', function() {
+                        it('should emit "play" on the interface', function() {
+                            var player = mockPlayers[0],
+                                callCount;
+
+                            player._on.playing[0](player);
+                            expect(iface.emit).toHaveBeenCalledWith('play', iface);
+                            callCount = iface.emit.callCount;
+
+                            player._on.playing[0](player);
+                            expect(iface.emit.callCount).toBe(callCount + 1);
+                        });
                     });
                 });
 
@@ -627,7 +907,7 @@
                         var player;
 
                         $compile(
-                            '<youtube-player videoid="a" start="10" end="20"></youtube-player>'
+                            '<youtube-card videoid="a" start="10" end="20"></youtube-card>'
                         )($scope);
                         $timeout.flush();
                         player = mockPlayers[0];
@@ -652,7 +932,7 @@
                 describe('timeupdate', function() {
                     beforeEach(function() {
                         $scope.$apply(function() {
-                            $compile('<youtube-player videoid="a"></youtube-player>')($scope);
+                            $compile('<youtube-card videoid="a"></youtube-card>')($scope);
                         });
                         $timeout.flush();
                         mockPlayers[0]._on.ready[0](mockPlayers[0]);
@@ -690,7 +970,7 @@
                     it('youtube ended event will triger ended',function(){
                         var endedSpy = jasmine.createSpy('playerHasEnded');
                         $compile(
-                            '<youtube-player videoid="a" end="10"></youtube-player>'
+                            '<youtube-card videoid="a" end="10"></youtube-card>'
                         )($scope);
                         $timeout.flush();
                         iface.on('ended',endedSpy);
@@ -706,7 +986,7 @@
 
                     it('end param will trigger ended based on playing',function(){
                         $compile(
-                            '<youtube-player videoid="a" end="10"></youtube-player>'
+                            '<youtube-card videoid="a" end="10"></youtube-card>'
                         )($scope);
                         $timeout.flush();
 
@@ -751,7 +1031,7 @@
 
                     it('will not regenerate the player by default', function(){
                         $compile(
-                            '<youtube-player videoid="a" end="10"></youtube-player>'
+                            '<youtube-card videoid="a" end="10"></youtube-card>'
                         )($scope);
                         $timeout.flush();
                         
@@ -773,7 +1053,7 @@
                     it('will regenerate the player if regenerate param is set',function(){
                         spyOn($interval, 'cancel');
                         $compile(
-                            '<youtube-player videoid="a" regenerate="1"></youtube-player>'
+                            '<youtube-card videoid="a" regenerate="1"></youtube-card>'
                         )($scope);
                         $timeout.flush();
                         //simulate the firing of the ready event

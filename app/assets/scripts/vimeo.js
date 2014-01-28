@@ -39,7 +39,7 @@
             }
             $playerElement = angular.element(iframe.create(playerId,src,params));
             
-            $parentElement.append($playerElement);
+            $parentElement.prepend($playerElement);
 
             function VimeoPlayer(iframe$,playerId,$win){
                 var _iframe$ = iframe$,_playerId = playerId,
@@ -194,12 +194,12 @@
 
         return service;
     }])
-    .directive('vimeoPlayer',['$log','$timeout','$q','vimeo','_default','numberify','playerInterface',
-        function($log,$timeout,$q,vimeo,_default,numberify,playerInterface){
-        $log = $log.context('vimeoPlayer');
+    .directive('vimeoCard',['$log','$timeout','$q','vimeo','_default','numberify','playerInterface','c6UrlMaker',
+    function               ( $log , $timeout , $q , vimeo , _default , numberify , playerInterface , c6UrlMaker ) {
+        $log = $log.context('<vimeo-card>');
         function fnLink(scope,$element,$attr){
             if (!$attr.videoid){
-                throw new SyntaxError('vimeoPlayer requires the videoid attribute to be set.');
+                throw new SyntaxError('<vimeo-card> requires the videoid attribute to be set.');
             }
             
             $log.info('link: videoId=%1, start=%2, end=%3, autoPlay=%4',
@@ -209,7 +209,8 @@
                 playerIsReady = false, playerHasLoaded = false,
                 _playerIface = {
                     currentTime: 0,
-                    ended: false
+                    ended: false,
+                    twerked: false
                 },
                 start = numberify($attr.start, 0), end = numberify($attr.end, Infinity);
 
@@ -231,6 +232,15 @@
                 }
             }
 
+            function playListener(player) {
+                playerIface.emit('play', playerIface);
+
+                if (playerIface.ended) {
+                    _playerIface.ended = false;
+                    player.seekTo(start);
+                }
+            }
+
             function twerk(wait){
                 var deferred = $q.defer(), waitTimer,
                 playingListener = function(){
@@ -242,21 +252,38 @@
                     deferred.resolve(playerIface);
                 };
 
+                if (playerIface.twerked) {
+                    deferred.reject(new Error('Player has already been twerked'));
+                    return deferred.promise;
+                }
+
+                player.removeListener('playProgress', handlePlayProgress);
+                player.removeListener('play', playListener);
+
                 player.once('playProgress',playingListener);
 
                 if (wait === undefined){
                     wait = 1000;
                 }
-                
+
                 if (wait){
                     waitTimer = $timeout(function(){
                         waitTimer = undefined;
                         deferred.reject(new Error('Player twerk timed out'));
                     },wait);
                 }
-                
+
                 $log.info('[%1] - start twerk, wait=%2',player,wait);
                 player.play();
+
+                deferred.promise
+                    .then(function() {
+                        _playerIface.twerked = true;
+                    })
+                    .finally(function() {
+                        player.on('playProgress', handlePlayProgress);
+                        player.on('play', playListener);
+                    });
 
                 return deferred.promise;
             }
@@ -286,7 +313,7 @@
                     player.pause();
                 }
             };
-            
+
             playerIface.twerk = function(wait){
                 if (!playerIsReady){
                     return $q.reject(new Error('Player is not ready to twerk'));
@@ -312,6 +339,11 @@
                 ended: {
                     get: function() {
                         return _playerIface.ended;
+                    }
+                },
+                twerked: {
+                    get: function() {
+                        return _playerIface.twerked;
                     }
                 }
             });
@@ -355,7 +387,7 @@
             function createPlayer(){
                 var vparams  = { };
 
-                ['badge','byline','portrait','title','autoplay'].forEach(function(prop){
+                ['badge','byline','portrait','title'].forEach(function(prop){
                     if ($attr[prop] !== undefined) {
                         vparams[prop] = $attr[prop];
                     }
@@ -369,28 +401,24 @@
                     frameborder : 0,
                     params      : vparams
                 },$element);
-                
+
                 player.on('ready',function(p){
                     $log.info('[%1] - I am ready',p);
-                    
-                    if (numberify($attr.twerk)){
-                        twerk(0)
-                            .catch( function (err){
-                                $log.error('[%1] %2',p,err);
-                            })
-                            .finally( function(){
-                                playerIsReady = true;
-                                player.on('playProgress', handlePlayProgress);
-                                playerIface.emit('ready',playerIface);
-                            });
-                    } else {
-                        $timeout(function(){
-                            playerIsReady = true;
-                            player.on('playProgress', handlePlayProgress);
-                            playerIface.emit('ready',playerIface);
+
+                    $timeout(function() {
+                        playerIsReady = true;
+                        player.on('playProgress', handlePlayProgress);
+                        playerIface.emit('ready',playerIface);
+
+                        scope.$watch('onDeck', function(onDeck) {
+                            if (onDeck) {
+                                if (numberify($attr.twerk, 0)) {
+                                    playerIface.twerk(5000);
+                                }
+                            }
                         });
-                    }
-              
+                    });
+
                     player.on('finish',function(p){
                         $log.info('[%1] - I am finished',p);
 
@@ -402,26 +430,56 @@
                         }
                     });
 
-                    player.on('play', function(p) {
-                        if (playerIface.ended) {
-                            _playerIface.ended = false;
-                            p.seekTo(start);
-                        }
-                    });
+                    player.on('play', playListener);
                 });
             }
+
+            scope.$watch('active', function(active, wasActive) {
+                if (active === wasActive) { return; }
+
+                if (active) {
+                    if (numberify($attr.autoplay, 0)) {
+                        if (!playerIsReady) {
+                            $log.warn('Player cannot autoplay because it is not ready.');
+                            return;
+                        }
+
+                        player.play();
+                    }
+                } else {
+                    player.pause();
+                }
+            });
 
             regeneratePlayer();
         }
 
         return {
-            restrict : 'E',
-            link     : fnLink,
-            scope    : {
-                width   : '@',
-                height  : '@',
-                videoid : '@'
-            }
+            restrict    : 'E',
+            link        : fnLink,
+            controller  : 'VimeoCardController',
+            controllerAs: 'Ctrl',
+            templateUrl : c6UrlMaker('views/directives/video_card.html')
         };
+    }])
+    .controller('VimeoCardController', ['$scope','ModuleService',
+    function                           ( $scope , ModuleService ) {
+        var config = $scope.config,
+            _data = config._data = config._data || {
+                modules: {
+                    ballot: {
+                        active: false,
+                        vote: null
+                    }
+                }
+            };
+
+        this.hasModule = ModuleService.hasModule.bind(ModuleService, config.modules);
+
+        $scope.$on('playerAdd', function(event, player) {
+            player.once('play', function() {
+                _data.modules.ballot.active = true;
+            });
+        });
     }]);
 }());

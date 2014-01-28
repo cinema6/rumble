@@ -18,6 +18,7 @@
                 
                 inject(['rumbleVotes',function(_rv) {
                     rumbleVotes = _rv;
+                    rumbleVotes.init('r-123');
                 }]);
                 
             });
@@ -26,7 +27,7 @@
                 var successSpy = jasmine.createSpy('success'),
                     failureSpy = jasmine.createSpy('failure');
                 rumbleVotes.mockReturnsData('r-123','i-1',[10,20,70],100);
-                rumbleVotes.getReturnsForItem('r-123','i-1').then(successSpy,failureSpy);
+                rumbleVotes.getReturnsForItem('i-1').then(successSpy,failureSpy);
                
                 $timeout.flush();
                 expect(successSpy).toHaveBeenCalledWith([10,20,70]);
@@ -36,7 +37,7 @@
             it('returns an error with bad id', function(){
                 var successSpy = jasmine.createSpy('success'),
                     failureSpy = jasmine.createSpy('failure');
-                rumbleVotes.getReturnsForItem('r-123','i-1').then(successSpy,failureSpy);
+                rumbleVotes.getReturnsForItem('i-1').then(successSpy,failureSpy);
                
                 $timeout.flush();
                 expect(successSpy).not.toHaveBeenCalled();

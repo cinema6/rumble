@@ -54,7 +54,7 @@
             }
             $playerElement = angular.element(iframe.create(playerId,src,params));
             
-            $parentElement.append($playerElement);
+            $parentElement.prepend($playerElement);
 
             function DailymotionPlayer(iframe$,playerId,$win){
                 var _iframe$ = iframe$,_playerId = playerId,
@@ -172,13 +172,12 @@
 
         return service;
     }])
-    .directive('dailymotionPlayer',
-        ['$log','$timeout','$q','c6UserAgent','dailymotion','_default','numberify','playerInterface',
-        function($log,$timeout,$q,c6UserAgent,dailymotion,_default,numberify,playerInterface){
-        $log = $log.context('dailymotionPlayer');
+    .directive('dailymotionCard', ['$log','$timeout','$q','c6UserAgent','dailymotion','_default','numberify','playerInterface','c6UrlMaker',
+    function                      ( $log , $timeout , $q , c6UserAgent , dailymotion , _default , numberify , playerInterface , c6UrlMaker ) {
+        $log = $log.context('<dailymotion-card>');
         function fnLink(scope,$element,$attr){
             if (!$attr.videoid){
-                throw new SyntaxError('dailymotionPlayer requires the videoid attribute to be set.');
+                throw new SyntaxError('<dailymotion-card> requires the videoid attribute to be set.');
             }
             var player, playerIface  = playerInterface(),
                 _playerIface = {
@@ -196,13 +195,8 @@
                 playerIface.emit('timeupdate', playerIface);
             }
 
-            function twerk(wait){
-                // Twerking and FireFox
-                if (c6UserAgent.app.name === 'firefox'){
-                    return $q.reject('DailyMotion and twerking don\'t mix on firefox.');
-                }
-
-                var deferred = $q.defer(), waitTimer,
+            function twerk() {
+                /*var deferred = $q.defer(), waitTimer,
                 playingListener = function(){
                     $log.info('[%1] - stop twerk',player);
                     if (waitTimer){
@@ -217,16 +211,21 @@
                 if (wait === undefined){
                     wait = 1000;
                 }
-                
+
                 if (wait){
                     waitTimer = $timeout(function(){
                         waitTimer = undefined;
                         deferred.reject(new Error('Player twerk timed out'));
                     },wait);
                 }
-                
+
                 $log.info('[%1] - start twerk, wait=%2',player,wait);
                 player.play();
+
+                return deferred.promise;*/
+                var deferred = $q.defer();
+
+                deferred.reject(new Error('DailyMotion ain\'t ratchet enough for twerking.'));
 
                 return deferred.promise;
             }
@@ -283,6 +282,11 @@
                     get: function() {
                         return _playerIface.ended;
                     }
+                },
+                twerked: {
+                    get: function() {
+                        return false;
+                    }
                 }
             });
 
@@ -327,7 +331,7 @@
                 playerIsReady = false;
                 playerHasLoaded = false;
 
-                ['startscreen','related','html','info','autoplay'].forEach(function(prop){
+                ['startscreen','related','html','info'].forEach(function(prop){
                     if ($attr[prop] !== undefined) {
                         vparams[prop] = $attr[prop];
                     }
@@ -349,25 +353,13 @@
 
                 player.on('ready',function(p){
                     $log.info('[%1] - I am ready',p);
-                    
-                    if (numberify($attr.twerk)){
-                        twerk()
-                            .catch( function (err){
-                                $log.error('[%1] %2',p,err);
-                            })
-                            .finally( function(){
-                                playerIsReady = true;
-                                player.on('timeupdate', handleTimeUpdate);
-                                playerIface.emit('ready',playerIface);
-                            });
-                    } else {
-                        $timeout(function(){
-                            playerIsReady = true;
-                            player.on('timeupdate', handleTimeUpdate);
-                            playerIface.emit('ready',playerIface);
-                        });
-                    }
-                    
+
+                    $timeout(function() {
+                        playerIsReady = true;
+                        player.on('timeupdate', handleTimeUpdate);
+                        playerIface.emit('ready',playerIface);
+                    });
+
                     player.on('ended',function(p){
                         $log.info('[%1] - I am finished',p);
 
@@ -380,6 +372,8 @@
                     });
 
                     player.on('playing', function(p) {
+                        playerIface.emit('play', playerIface);
+
                         if (playerIface.ended) {
                             _playerIface.ended = false;
                             p.seekTo(0);
@@ -388,18 +382,52 @@
                 });
             }
 
+            scope.$watch('active', function(active, wasActive) {
+                if (active === wasActive) { return; }
+
+                if (active) {
+                    if (numberify($attr.autoplay, 0)) {
+                        if (!playerIsReady) {
+                            $log.warn('Player cannot autoplay because it is not ready.');
+                            return;
+                        }
+
+                        player.play();
+                    }
+                } else {
+                    player.pause();
+                }
+            });
+
             regeneratePlayer();
         }
 
         return {
             restrict : 'E',
             link     : fnLink,
-            scope    : {
-                width   : '@',
-                height  : '@',
-                videoid : '@'
-            }
+            controller  : 'DailymotionCardController',
+            controllerAs: 'Ctrl',
+            templateUrl : c6UrlMaker('views/directives/video_card.html')
         };
-    }]);
+    }])
+    .controller('DailymotionCardController', ['$scope','ModuleService',
+    function                                 ( $scope , ModuleService ) {
+        var config = $scope.config,
+            _data = config._data = config._data || {
+                modules: {
+                    ballot: {
+                        active: false,
+                        vote: null
+                    }
+                }
+            };
 
+        this.hasModule = ModuleService.hasModule.bind(ModuleService, config.modules);
+
+        $scope.$on('playerAdd', function(event, player) {
+            player.once('play', function() {
+                _data.modules.ballot.active = true;
+            });
+        });
+    }]);
 }());

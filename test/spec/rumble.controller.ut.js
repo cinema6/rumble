@@ -11,7 +11,7 @@
                 c6UserAgent,
                 RumbleCtrl,
                 rumbleVotes,
-                playList,
+                deck,
                 appData,
                 mockPlayer,
                 cinema6,
@@ -19,11 +19,11 @@
 
             beforeEach(function() {
                 MiniReelService = {
-                    createPlaylist: jasmine.createSpy('MiniReelService.createPlaylist()')
+                    createDeck: jasmine.createSpy('MiniReelService.createDeck()')
                         .andCallFake(function(data) {
-                            var playlist = angular.copy(data.playList);
+                            var playlist = angular.copy(data.deck);
 
-                            MiniReelService.createPlaylist.mostRecentCall.result = playlist;
+                            MiniReelService.createDeck.mostRecentCall.result = playlist;
 
                             playlist.forEach(function(video) {
                                 video.player = null;
@@ -59,34 +59,34 @@
                     mockPlayer._on[eventName].push(handler);
                 });
 
-                playList = [
+                deck = [
                     {
                         "id"     : "vid1",
+                        "type"   : "youtube",
                         "caption": "vid1 caption",
                         "note"   : "vid1 note",
                         "voting" : [ 100, 50, 10 ],
-                        "video"  : {
-                            "player"  : "youtube",
+                        "data"   : {
                             "videoid" : "vid1video"
                         }
                     },
                     {
                         "id"     : "vid2",
+                        "type"   : "vimeo",
                         "caption": "vid2 caption",
                         "note"   : "vid2 note",
                         "voting" : [ 100, 50, 10 ],
-                        "video"  : {
-                            "player"  : "vimeo",
+                        "data"   : {
                             "videoid" : "vid2video"
                         }
                     },
                     {
                         "id"     : "vid3",
+                        "type"   : "dailymotion",
                         "caption": "vid3 caption",
                         "note"   : "vid3 note",
                         "voting" : [ 100, 50, 10 ],
-                        "video"  : {
-                            "player"  : "dailymotion",
+                        "data"   : {
                             "videoid" : "vid3video"
                         }
                     }
@@ -96,7 +96,8 @@
                     profile      : {},
                     experience: {
                         data : {
-                            playList : playList 
+                            id: 'r-43yt3fh85',
+                            deck : deck 
                         }
                     }
                 };
@@ -125,6 +126,7 @@
                         data: appData
                     };
 
+                    spyOn(rumbleVotes, 'init');
                     RumbleCtrl = $injector.get('$controller')('RumbleController', {
                         $scope  : $scope,
                         $log    : $log
@@ -136,71 +138,22 @@
                     expect(RumbleCtrl).toBeDefined();
                     expect($scope.deviceProfile).toBe(appData.profile);
                     
-                    expect($scope.playList).toBe(MiniReelService.createPlaylist.mostRecentCall.result);
+                    expect($scope.deck).toBe(MiniReelService.createDeck.mostRecentCall.result);
                     expect($scope.currentIndex).toEqual(-1);
-                    expect($scope.currentItem).toBeNull();
+                    expect($scope.currentCard).toBeNull();
                     expect($scope.atHead).toBeNull();
                     expect($scope.atTail).toBeNull();
                     expect($scope.ready).toEqual(false);
                 });
-            });
-            describe('voting',function(){
-                describe('getVotePercent',function(){
-                    it('returns 0 if tally is 0', function(){
-                        expect(RumbleCtrl.getVotePercent([0,0,0],0))
-                            .toEqual(0);
-                    });
 
-                    it('returns 0 if the index is bad',function(){
-                        expect(RumbleCtrl.getVotePercent([10,20,10],5))
-                            .toEqual(0);
-                    });
-
-                    it('returns the right percent',function(){
-                        var  votes = [7,10,5] ;
-                        expect(RumbleCtrl.getVotePercent(votes,0)).toEqual(0.32);
-                        expect(RumbleCtrl.getVotePercent(votes,1)).toEqual(0.45);
-                        expect(RumbleCtrl.getVotePercent(votes,2)).toEqual(0.23);
-                    });
-
-                    it('returns an array of percents if no index is provided', function(){
-                        var votes = [7,10,5];
-                        expect(RumbleCtrl.getVotePercent(votes)).toEqual([0.32,0.45,0.23]);
-                    });
-
-                    it('returns an array of zeros if no index is provided and votes are zero', function(){
-                        var votes = [0,0,0] ;
-                        expect(RumbleCtrl.getVotePercent(votes)).toEqual([0,0,0]);
-                    });
-                });
-
-                describe('vote()', function() {
-                    beforeEach(function() {
-                        spyOn($scope, '$emit');
-
-                        $scope.currentItem = {
-                            state: {
-                                vote: null,
-                                view: 'video'
-                            }
-                        };
-
-                        RumbleCtrl.vote(2);
-                    });
-
-                    it('should set the vote of the currentItem to the passed in value', function() {
-                        expect($scope.currentItem.state.vote).toBe(2);
-                    });
-
-                    it('should change the currentItem\'s view to "results"', function() {
-                        expect($scope.currentItem.state.view).toBe('results');
-                    });
+                it('should initialize rumbleVotes with the id', function() {
+                    expect(rumbleVotes.init).toHaveBeenCalledWith(appData.experience.data.id);
                 });
             });
 
             describe('$scope.players()', function() {
                 beforeEach(function() {
-                    $scope.playList = [
+                    $scope.deck = [
                         {
                             id: 'foo'
                         },
@@ -228,7 +181,7 @@
                     var players = $scope.players;
 
                     function playlist(index) {
-                        return $scope.playList[index];
+                        return $scope.deck[index];
                     }
 
                     function currentIndex(index) {
@@ -250,76 +203,10 @@
                 });
             });
 
-            describe('twerkNext',function(){
-                var resolveSpy, rejectSpy;
-                beforeEach(function(){
-                    resolveSpy = jasmine.createSpy('twerk.resolve');
-                    rejectSpy  = jasmine.createSpy('twerk.reject');
-                    
-                    c6UserAgent.app.name = 'chrome';
-                    $scope.deviceProfile = { multiPlayer : true };
-                    $scope.playList.forEach(function(item,index){
-                        item.player = {
-                            isReady  : jasmine.createSpy('item'+index+'.isReady'),
-                            play     : jasmine.createSpy('item'+index+'.play'),
-                            pause    : jasmine.createSpy('item'+index+'.pause'),
-                            twerk    : jasmine.createSpy('item'+index+'.twerk'),
-                            getType  : jasmine.createSpy('item'+index+'.getType')
-                        };
-                        item.player.isReady.andReturn(true);
-                    });
-                });
-
-                it('rejects if there is no next player',function(){
-                    $scope.currentIndex = 2;
-                    RumbleCtrl.twerkNext().then(resolveSpy,rejectSpy);
-                    $scope.$digest();
-                    expect(resolveSpy).not.toHaveBeenCalled();
-                    expect(rejectSpy).toHaveBeenCalledWith({
-                        message : 'No next item to twerk.'
-                    });
-                });
-
-                it('rejects if the next player has unsupportd browser',function(){
-                    $scope.currentIndex = 0;
-                    c6UserAgent.app.name = 'phantomjs';
-                    RumbleCtrl.twerkNext().then(resolveSpy,rejectSpy);
-                    $scope.$digest();
-                    expect(resolveSpy).not.toHaveBeenCalled();
-                    expect(rejectSpy).toHaveBeenCalledWith({
-                        message: 'Twerking not supported on phantomjs'
-                    });
-                });
-
-                it('rejects if the next player has already been twerked',function(){
-                    $scope.currentIndex = 0;
-                    $scope.playList[1].state.twerked = true;
-                    RumbleCtrl.twerkNext().then(resolveSpy,rejectSpy);
-                    $scope.$digest();
-                    expect(resolveSpy).not.toHaveBeenCalled();
-                    expect(rejectSpy).toHaveBeenCalledWith({
-                        message: 'Item is already twerked'
-                    });
-                });
-
-                it('resolves when the next player resolves',function(){
-                    var deferred = $q.defer();
-                    $scope.currentIndex = 0;
-                    $scope.playList[1].player.twerk.andReturn(deferred.promise);
-                    RumbleCtrl.twerkNext().then(resolveSpy,rejectSpy);
-                    deferred.resolve($scope.playList[1].player);
-                    $scope.$digest();
-                    expect(resolveSpy).toHaveBeenCalledWith($scope.playList[1].player);
-                    expect(rejectSpy).not.toHaveBeenCalled();
-                    expect($scope.playList[1].state.twerked).toEqual(true);
-                });
-
-            });
-
             describe('navigation',function(){
                 beforeEach(function(){
                     $scope.deviceProfile = { multiPlayer : true };
-                    $scope.playList.forEach(function(item,index){
+                    $scope.deck.forEach(function(item,index){
                         item.player = {
                             isReady : jasmine.createSpy('item'+index+'.isReady'),
                             play    : jasmine.createSpy('item'+index+'.play'),
@@ -333,58 +220,31 @@
                 it('updates elements based on index with setPosition',function(){
                     RumbleCtrl.setPosition(1);
                     expect($scope.currentIndex).toEqual(1);
-                    expect($scope.currentItem).toBe($scope.playList[1]);
+                    expect($scope.currentCard).toBe($scope.deck[1]);
                     expect($scope.atHead).toEqual(false);
                     expect($scope.atTail).toEqual(false);
-                    expect($scope.currentReturns).toBeNull();
-                    $timeout.flush();
-                    expect($scope.currentReturns).toEqual([0.63,0.31,0.06]);
                 });
 
                 it('handles moving forward',function(){
-                    $scope.currentIndex = 1;
-                    $scope.currentItem  = $scope.playList[1];
-                    spyOn(RumbleCtrl,'twerkNext').andReturn({
-                        then: jasmine.createSpy('twerkNext.then')
-                    });
+                    $scope.currentIndex = 0;
+                    $scope.currentCard  = $scope.deck[0];
                     RumbleCtrl.goForward();
-                    expect($scope.playList[1].player.pause).toHaveBeenCalled();
-                    expect($scope.playList[2].player.play).toHaveBeenCalled();
-                    expect($scope.currentIndex).toEqual(2);
-                    expect($scope.currentItem).toBe($scope.playList[2]);
+                    expect($scope.currentIndex).toEqual(1);
+                    expect($scope.currentCard).toBe($scope.deck[1]);
                     expect($scope.atHead).toEqual(false);
                     expect($scope.atTail).toEqual(false);
-                    expect(RumbleCtrl.twerkNext).toHaveBeenCalled();
                     expect($scope.$emit).toHaveBeenCalledWith('reelMove');
                     expect($scope.$emit.callCount).toBe(1);
                 });
 
-                it('can be moved one past the actual length', function() {
-                    $scope.currentIndex = 2;
-                    $scope.currentItem = $scope.playList[2];
-                    spyOn(RumbleCtrl, 'twerkNext');
 
-                    expect(RumbleCtrl.goForward).not.toThrow();
-
-                    expect($scope.playList[2].player.pause).toHaveBeenCalled();
-                    expect($scope.currentIndex).toBe(3);
-                    expect($scope.currentItem).toBeUndefined();
-                    expect($scope.atHead).toBe(false);
-                    expect($scope.atTail).toBe(true);
-                    expect(RumbleCtrl.twerkNext).not.toHaveBeenCalled();
-                    expect($scope.$emit).toHaveBeenCalledWith('reelEnd');
-                    expect($scope.$emit.callCount).toBe(1);
-                });
-                
                 it('handles moving backward',function(){
                     $scope.currentIndex = 2;
-                    $scope.currentItem  = $scope.playList[2];
+                    $scope.currentCard  = $scope.deck[2];
                     RumbleCtrl.goBack();
-                    expect($scope.playList[2].player.pause).toHaveBeenCalled();
-                    expect($scope.playList[1].player.play).toHaveBeenCalled();
                     $scope.$digest();
                     expect($scope.currentIndex).toEqual(1);
-                    expect($scope.currentItem).toBe($scope.playList[1]);
+                    expect($scope.currentCard).toBe($scope.deck[1]);
                     expect($scope.atHead).toEqual(false);
                     expect($scope.atTail).toEqual(false);
                     expect($scope.$emit).toHaveBeenCalledWith('reelMove');
@@ -408,14 +268,14 @@
                 });
             });
 
-            describe('findPlayListItemByVideo',function(){
+            describe('findCardByVideo',function(){
                 it('returns an item that exists',function(){
-                    expect(RumbleCtrl.findPlayListItemByVideo('vimeo','vid2video'))
-                        .toBe($scope.playList[1]);
+                    expect(RumbleCtrl.findCardByVideo('vimeo','vid2video'))
+                        .toBe($scope.deck[1]);
                 });
 
                 it('returns undefined for an item that does not exist',function(){
-                    expect(RumbleCtrl.findPlayListItemByVideo('xxxxx','yyyyyyyyy'))
+                    expect(RumbleCtrl.findCardByVideo('xxxxx','yyyyyyyyy'))
                         .not.toBeDefined();
                 });
             });
@@ -427,10 +287,10 @@
                     mockPlayer.isReady.andReturn(false);
                 });
                 describe('playerAdd',function(){
-                    it('adds new player to playList item',function(){
-                        expect($scope.playList[1].player).toBeNull();
+                    it('adds new player to deck item',function(){
+                        expect($scope.deck[1].player).toBeNull();
                         $scope.$emit('playerAdd',mockPlayer);
-                        expect($scope.playList[1].player).toBe(mockPlayer);
+                        expect($scope.deck[1].player).toBe(mockPlayer);
                         expect(mockPlayer.on.callCount).toEqual(2);
                         expect(mockPlayer.on.argsForCall[0][0]).toEqual('ready');
                     });
@@ -454,25 +314,25 @@
 
                     it('reports ready when all players are ready',function(){
                         spyOn(RumbleCtrl,'checkReady').andCallThrough();
-                        $scope.playList[0].player = {
+                        $scope.deck[0].player = {
                             isReady : jasmine.createSpy('player0.isReady')
                         };
-                        $scope.playList[2].player = {
+                        $scope.deck[2].player = {
                             isReady : jasmine.createSpy('player2.isReady')
                         };
                         $scope.players = function() {
-                            return [$scope.playList[0], $scope.playList[1], $scope.playList[2]];
+                            return [$scope.deck[0], $scope.deck[1], $scope.deck[2]];
                         };
-                        $scope.playList[0].player.isReady.andReturn(true);
-                        $scope.playList[2].player.isReady.andReturn(true);
+                        $scope.deck[0].player.isReady.andReturn(true);
+                        $scope.deck[2].player.isReady.andReturn(true);
                         $scope.$emit('playerAdd',mockPlayer);
                         expect($scope.ready).toEqual(false);
                         mockPlayer.isReady.andReturn(true);
                         mockPlayer._on.ready[0](mockPlayer);
                         expect(RumbleCtrl.checkReady).toHaveBeenCalled();
-                        expect($scope.playList[0].player.isReady).toHaveBeenCalled();
-                        expect($scope.playList[1].player.isReady).toHaveBeenCalled();
-                        expect($scope.playList[2].player.isReady).toHaveBeenCalled();
+                        expect($scope.deck[0].player.isReady).toHaveBeenCalled();
+                        expect($scope.deck[1].player.isReady).toHaveBeenCalled();
+                        expect($scope.deck[2].player.isReady).toHaveBeenCalled();
                         expect($scope.ready).toEqual(true);
                     });
                 });
@@ -484,12 +344,12 @@
                         mockPlayer.isReady.andReturn(true);
 
                         $scope.$emit('playerAdd',mockPlayer);
-                        $scope.currentItem = $scope.playList[1];
+                        $scope.currentCard = $scope.deck[1];
                         mockPlayer._on.ended[0](mockPlayer);
                     });
 
                     it('should set the view to "ballot"', function() {
-                        expect($scope.playList[1].state.view).toBe('ballot');
+                        expect($scope.deck[1].state.view).toBe('ballot');
                     });
                 });
             });

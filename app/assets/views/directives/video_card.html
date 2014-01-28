@@ -1,0 +1,10 @@
+<!-- actual player will be inserted above this comment -->
+<section>
+    <ballot-module ng-if="Ctrl.hasModule('ballot')"
+        active="config._data.modules.ballot.active"
+        fetch-results-when="onDeck"
+        card-id="{{config.id}}"
+        ballot="config.ballot"
+        vote="config._data.modules.ballot.vote">
+    </ballot-module>
+</section>

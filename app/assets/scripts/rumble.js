@@ -39,7 +39,8 @@
     }])
     .factory('rumbleVotes',['$log','$q','$timeout',function($log,$q,$timeout){
         $log = $log.context('rumbleVotes');
-        var service = {}, mocks = {};
+        var service = {}, mocks = {},
+            rumbleId = null;
 
         service.mockReturnsData = function(rumbleId,itemId,votes, delay){
             $log.warn('Setting Mock Data');
@@ -59,7 +60,11 @@
             return this;
         };
 
-        service.getReturnsForItem = function(rumbleId, itemId){
+        service.init = function(id) {
+            rumbleId = id;
+        };
+
+        service.getReturnsForItem = function(itemId){
             var deferred = $q.defer(), mock;
             if (mocks[rumbleId] === undefined){
                 $timeout(function(){
@@ -91,8 +96,8 @@
     }])
     .service('MiniReelService', ['InflectorService', 'rumbleVotes',
     function                    ( InflectorService ,  rumbleVotes ) {
-        this.createPlaylist = function(data) {
-            var playlist = angular.copy(data.playList);
+        this.createDeck = function(data) {
+            var playlist = angular.copy(data.deck);
 
             function getObject(type, id) {
                 var pluralType = InflectorService.pluralize(type),
@@ -144,7 +149,6 @@
                 delete video.voting;
 
                 video.state = {
-                    twerked: false,
                     vote: -1,
                     view: 'video'
                 };
@@ -154,63 +158,58 @@
             return playlist;
         };
     }])
-    .controller('RumbleController',['$log','$scope','$timeout','$q','$window','c6UserAgent','rumbleVotes','c6Computed','cinema6','MiniReelService',
-    function                       ( $log , $scope , $timeout , $q , $window , c6UserAgent , rumbleVotes , c          , cinema6 , MiniReelService ){
+    .controller('RumbleController',['$log','$scope','$timeout','rumbleVotes','c6Computed','cinema6','MiniReelService',
+    function                       ( $log , $scope , $timeout , rumbleVotes , c          , cinema6 , MiniReelService ){
         $log = $log.context('RumbleCtrl');
         var self    = this, readyTimeout,
             appData = $scope.app.data;
 
         $scope.deviceProfile    = appData.profile;
         $scope.title            = appData.experience.title;
-        $scope.rumbleId         = appData.experience.data.id;
 
-        $scope.playList         = MiniReelService.createPlaylist(appData.experience.data);
-        $scope.players          = c($scope, function(index, playList) {
-            return playList.slice(0, (index + 3));
-        }, ['currentIndex', 'playList']);
+        $scope.deck             = MiniReelService.createDeck(appData.experience.data);
+        $scope.players          = c($scope, function(index, deck) {
+            return deck.slice(0, (index + 3));
+        }, ['currentIndex', 'deck']);
         $scope.currentIndex     = -1;
-        $scope.currentItem      = null;
+        $scope.currentCard      = null;
         $scope.atHead           = null;
         $scope.atTail           = null;
         $scope.currentReturns   = null;
         $scope.ready            = false;
 
+        rumbleVotes.init(appData.experience.data.id);
+
         $scope.$on('playerAdd',function(event,player){
             $log.log('Player added: %1 - %2',player.getType(),player.getVideoId());
-            var playListItem = self.findPlayListItemByVideo(player.getType(),player.getVideoId());
+            var card = self.findCardByVideo(player.getType(),player.getVideoId());
 
-            if (!playListItem){
+            if (!card){
                 $log.error('Unable to locate item for player.');
                 return;
             }
 
-            playListItem.player = player;
+            card.player = player;
 
             player.on('ready',function(){
                 $log.log('Player ready: %1 - %2',player.getType(),player.getVideoId());
                 self.checkReady();
                 player.removeListener('ready',this);
-
-                if (playListItem === $scope.playList[0]){
-                    self.twerkNext().then(null,function(e){
-                        $log.warn(e.message);
-                    });
-                }
             });
 
             player.on('ended', function() {
-                playListItem.state.view = 'ballot';
+                card.state.view = 'ballot';
             });
         });
-        
-        this.findPlayListItemByVideo = function(videoType,videoId){
+
+        this.findCardByVideo = function(videoType,videoId){
             var result;
-            $scope.playList.some(function(item){
-                if (item.video.player !== videoType){
+            $scope.deck.some(function(item){
+                if (item.type !== videoType){
                     return false;
                 }
 
-                if (item.video.videoid !== videoId){
+                if (item.data.videoid !== videoId){
                     return false;
                 }
 
@@ -241,67 +240,13 @@
             }
         };
 
-        this.vote = function(v){
-            $scope.currentItem.state.vote = v;
-            $scope.currentItem.state.view = 'results';
-        };
-
-        this.getVotePercent = function(votes,index){
-            var tally = 0;
-            votes.forEach(function(v){
-                tally += v;
-            });
-            
-            if (index === undefined){
-                return votes.map(function(v){
-                    return (tally < 1) ? 0 : Math.round((v / tally)* 100) / 100;
-                });
-            }
-
-            if ((tally < 1) || (votes[index] === undefined)){
-                return 0;
-            }
-
-            return Math.round((votes[index] / tally)* 100) / 100;
-        };
-
-        this.twerkNext = function(){
-            var nextItem = $scope.playList[$scope.currentIndex + 1];
-            if (!nextItem){
-                return $q.reject(new Error('No next item to twerk.'));
-            }
-            
-            if ((c6UserAgent.app.name !== 'chrome') &&
-                (c6UserAgent.app.name !== 'firefox') &&
-                (c6UserAgent.app.name !== 'safari')) {
-                return $q.reject(
-                    new Error('Twerking not supported on ' + c6UserAgent.app.name)
-                );
-            }
-            
-            if (!$scope.deviceProfile.multiPlayer){
-                return $q.reject(new Error('Item cannot be twerked, device not multiplayer.'));
-            }
-            
-            if (nextItem.player.getType() === 'dailymotion'){
-                return $q.reject(new Error('Twerking not supported with DailyMotion.'));
-            }
-            
-            if (nextItem.state.twerked){
-                return $q.reject(new Error('Item is already twerked'));
-            }
-            
-            nextItem.state.twerked = true;
-            return nextItem.player.twerk(5000);
-        };
-
         this.setPosition = function(i){
             $log.info('setPosition: %1',i);
             $scope.currentReturns = null;
             $scope.currentIndex   = i;
-            $scope.currentItem    = $scope.playList[$scope.currentIndex];
+            $scope.currentCard    = $scope.deck[$scope.currentIndex];
             $scope.atHead         = $scope.currentIndex === 0;
-            $scope.atTail         = ($scope.currentIndex === $scope.playList.length);
+            $scope.atTail         = ($scope.currentIndex === ($scope.deck.length - 1));
 
             if ($scope.atTail) {
                 $scope.$emit('reelEnd');
@@ -310,19 +255,6 @@
             } else {
                 $scope.$emit('reelMove');
             }
-
-            if (!$scope.currentItem) { return; }
-
-            rumbleVotes.getReturnsForItem($scope.rumbleId,$scope.currentItem.id)
-                .then(
-                    function onVotes(votes){
-                        $log.info('getReturns returned with: ',votes);
-                        $scope.currentReturns = self.getVotePercent(votes);
-                    },
-                    function onErr(err){
-                        $log.error('getReturnsErr: %1',err.message);
-                    }
-                );
         };
 
         this.start = function() {
@@ -331,31 +263,11 @@
         };
 
         this.goBack = function(){
-            if ($scope.currentItem){
-                $scope.currentItem.player.pause();
-            }
             self.setPosition($scope.currentIndex - 1);
-            if ($scope.deviceProfile.multiPlayer){
-                $scope.currentItem.player.play();
-            }
         };
 
         this.goForward = function(){
-            if ($scope.currentItem){
-                $scope.currentItem.player.pause();
-            }
-
             self.setPosition($scope.currentIndex + 1);
-
-            if (!$scope.currentItem) { return; }
-
-            if ($scope.deviceProfile.multiPlayer){
-                $scope.currentItem.player.play();
-            }
-
-            self.twerkNext().then(null,function(e){
-                $log.warn(e.message);
-            });
         };
 
         readyTimeout = $timeout(function(){
@@ -365,9 +277,31 @@
 
         $log.log('Rumble Controller is initialized!');
     }])
-    .directive('rumblePlayer',['$log','$compile','$window', function($log,$compile,$window){
-        $log = $log.context('rumblePlayer');
-        function fnLink(scope,$element,$attr){
+    .directive('mrCard',['$log','$compile','$window','c6UserAgent','InflectorService',
+    function            ( $log , $compile , $window , c6UserAgent , InflectorService ){
+        $log = $log.context('<mr-card>');
+        function fnLink(scope,$element){
+            var canTwerk = (function() {
+                    if ((c6UserAgent.app.name !== 'chrome') &&
+                        (c6UserAgent.app.name !== 'firefox') &&
+                        (c6UserAgent.app.name !== 'safari')) {
+
+                        $log.warn('Twerking not supported on ' + c6UserAgent.app.name);
+                        return false;
+                    }
+
+                    if (!scope.profile.multiPlayer){
+                        $log.warn('Item cannot be twerked, device not multiplayer.');
+                        return false;
+                    }
+
+                    return true;
+                }()),
+                type = scope.config.type,
+                data = scope.config.data;
+
+            var dasherize = InflectorService.dasherize.bind(InflectorService);
+
             $log.info('link:',scope);
             function resize(event,noDigest){
                 var pw = Math.round($window.innerWidth * 1),
@@ -383,37 +317,40 @@
                 }
             }
 
-            if ($attr.autoplay === undefined){
-                $attr.autoplay = 0;
-            }
-
-            $attr.twerk = parseInt($attr.twerk,10);
-            if (isNaN($attr.twerk)){
-                $attr.twerk = 0;
-            }
-            if ($attr.twerk && !scope.profile.multiPlayer){
-                $attr.twerk = 0;
-            }
-
-            var inner = '<' + scope.config.player + '-player';
-            for (var key in scope.config){
-                if ((key !== 'player') && (scope.config.hasOwnProperty(key))){
-                    inner += ' ' + key.toLowerCase() + '="' + scope.config[key] + '"';
+            var inner = '<' + dasherize(type) + '-card';
+            for (var key in data){
+                if ((key !== 'type') && (data.hasOwnProperty(key))){
+                    inner += ' ' + key.toLowerCase() + '="' + data[key] + '"';
                 }
             }
 
             inner += ' width="{{playerWidth}}" height="{{playerHeight}}"';
-            inner += ' autoplay="' + $attr.autoplay + '"';
-            inner += ' twerk="' + $attr.twerk + '"';
-           
+
             if (!scope.profile.inlineVideo){
                 $log.info('Will need to regenerate the player');
                 inner += ' regenerate="1"';
             }
 
-            inner += '></'  + scope.config.player + '-player' + '>';
+            if (canTwerk) {
+                $log.info('DAYUM! ' + c6UserAgent.app.name + ' can tweeeerrrrrk!');
+                inner += ' twerk="1"';
+            }
+
+            if (scope.profile.multiPlayer){
+                $log.info(c6UserAgent.app.name + ' can autoplay videos.');
+                inner += ' autoplay="1"';
+            }
+
+            inner += '></'  + dasherize(type) + '-card' + '>';
 
             $element.append($compile(inner)(scope));
+
+            scope.$watch('onDeck', function(onDeck) {
+                if (onDeck) { scope.$broadcast('onDeck'); }
+            });
+            scope.$watch('active', function(active) {
+                if (active) { scope.$broadcast('active'); }
+            });
 
             $window.addEventListener('resize',resize);
             resize({},true);
@@ -424,7 +361,9 @@
             link     : fnLink,
             scope    : {
                 config  : '=',
-                profile : '='
+                profile : '=',
+                active  : '=',
+                onDeck  : '='
             }
         };
 

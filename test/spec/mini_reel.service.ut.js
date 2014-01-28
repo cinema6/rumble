@@ -27,7 +27,7 @@
 
             describe('@public', function() {
                 describe('methods: ', function() {
-                    describe('createPlaylist(mrData)', function() {
+                    describe('createDeck(mrData)', function() {
                         var mrData,
                             result;
 
@@ -88,14 +88,14 @@
                                         text: 'Hello!'
                                     }
                                 ],
-                                playList: [
+                                deck: [
                                     {
                                         id: 'rv-22119a8cf9f755',
+                                        type: 'youtube',
                                         title: 'Did someone say FOX?',
                                         note: 'Thought so',
                                         voting: [ 100, 50, 10 ],
-                                        video: {
-                                            player: 'youtube',
+                                        data: {
                                             videoid: 'jofNR_WkoCE',
                                             start: 10,
                                             end: 20,
@@ -108,11 +108,11 @@
                                     },
                                     {
                                         id: 'rv-4770a2d7f85ce0',
+                                        type: 'dailymotion',
                                         title: 'Kristen Stewart for Channel',
                                         note: 'Psychotic glamour',
                                         voting: [ 200, 50, 10 ],
-                                        video: {
-                                            player: 'dailymotion',
+                                        data: {
                                             videoid: 'x18b09a',
                                             related: 0
                                         },
@@ -121,11 +121,12 @@
                                     },
                                     {
                                         id: 'rv-e489d1c6359fb3',
+                                        type: 'vimeo',
                                         title: 'Aquatic paradise',
                                         note: 'How may we help you?',
                                         voting: [ 300, 50, 10 ],
-                                        video: {
-                                            player: 'vimeo',
+                                        data: {
+                                            type: 'vimeo',
                                             videoid: '81766071',
                                             start: 35,
                                             end: 45
@@ -135,11 +136,11 @@
                                     },
                                     {
                                         id: 'rv-e2947c9bec017e',
+                                        type: 'youtube',
                                         title: 'Geek cool',
                                         note: 'Doctor Who #11 meets #4',
                                         voting: [ 400, 50, 10 ],
-                                        video: {
-                                            player: 'youtube',
+                                        data: {
                                             videoid: 'Cn9yJrrm2tk',
                                             rel: 0,
                                             modestbranding: 1,
@@ -159,11 +160,11 @@
                                 return result;
                             });
 
-                            result = MiniReelService.createPlaylist(mrData);
+                            result = MiniReelService.createDeck(mrData);
                         });
 
-                        it('should return a copy of the playlist', function() {
-                            expect(angular.copy).toHaveBeenCalledWith(mrData.playList);
+                        it('should return a copy of the deck', function() {
+                            expect(angular.copy).toHaveBeenCalledWith(mrData.deck);
                             expect(result).toBe(angular.copy.mostRecentCall.result);
                         });
 
@@ -182,8 +183,8 @@
                             expect(video1.ballotId).toBeUndefined();
                             expect(video1.commentGroup).toBe(commentGroup2);
                             expect(video1.commentGroupId).toBeUndefined();
-                            expect(video1.video.note).toBe(note1);
-                            expect(video1.video.noteId).toBeUndefined();
+                            expect(video1.data.note).toBe(note1);
+                            expect(video1.data.noteId).toBeUndefined();
 
                             expect(video2.ballot).toBe(ballot2);
                             expect(video2.ballotId).toBeUndefined();
@@ -201,11 +202,10 @@
                             expect(video4.commentGroupId).toBeUndefined();
                         });
 
-                        it('should give each video a "twerked", "vote" and "view" state', function() {
+                        it('should give each video a "vote" and "view" state', function() {
                             result.forEach(function(video) {
                                 var state = video.state;
 
-                                expect(state.twerked).toBe(false);
                                 expect(state.vote).toBe(-1);
                                 expect(state.view).toBe('video');
                             });

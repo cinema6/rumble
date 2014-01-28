@@ -2,6 +2,30 @@
     'use strict';
 
     angular.module('c6.rumble.services', [])
+        .service('ModuleService', [function() {
+            this.hasModule = function(modules, module) {
+                return ((modules || []).indexOf(module) > -1);
+            };
+        }])
+
+        .service('EventService', [function() {
+            this.trackEvents = function(emitter, events) {
+                var tracker = {};
+
+                angular.forEach(events, function(event) {
+                    var eventObj = tracker[event] = {
+                        emitCount: 0
+                    };
+
+                    emitter.on(event, function() {
+                        eventObj.emitCount++;
+                    });
+                });
+
+                return tracker;
+            };
+        }])
+
         .service('InflectorService', [function() {
             var exceptions = [];
 
@@ -43,13 +67,10 @@
 
             this.getWords = function(string) {
                 var result = [],
-                    word = string.charAt(0),
-                    character,
-                    index,
-                    length = string.length;
+                    word, character, index, length;
 
                 function isDelimiter(char) {
-                    return !!char.match(/-|_|[A-Z]/);
+                    return !!char.match(/-|_|[A-Z]| /);
                 }
 
                 function isLetter(char) {
@@ -60,10 +81,15 @@
                     result.push(word.toLowerCase());
                 }
 
+                if (angular.isArray(string)) { return string; }
+
+                word = string.charAt(0);
+                length = string.length;
+
                 for (index = 1; index < length; index++) {
                     character = string.charAt(index);
 
-                    if (isDelimiter(character)) {
+                    if (isDelimiter(character) && word) {
                         pushWord(word);
                         word = isLetter(character) ? character : '';
 
@@ -79,19 +105,29 @@
             };
 
             this.toCamelCase = function(words) {
-                var self = this,
-                    result = '';
+                var self = this;
 
-                angular.forEach(words, function(word, index) {
-                    if (index === 0) {
-                        result += word.toLowerCase();
-                        return;
-                    }
+                return this.getWords(words).map(function(word, index) {
+                    if (index === 0) { return word; }
 
-                    result += self.capitalize(word);
-                });
+                    return self.capitalize(word);
+                }).join('');
+            };
 
-                return result;
+            this.toConstructorCase = function(words) {
+                return this.capitalize(this.toCamelCase(words));
+            };
+
+            this.toSnakeCase = function(words) {
+                return this.getWords(words).join('_');
+            };
+
+            this.dasherize = function(words) {
+                return this.getWords(words).join('-');
+            };
+
+            this.toSentence = function(words) {
+                return this.getWords(words).join(' ');
             };
 
             this.addException = function(exception) {

@@ -45,7 +45,7 @@
             }
             $playerElement = angular.element(iframe.create(playerId,src,params));
 
-            $parentElement.append($playerElement);
+            $parentElement.prepend($playerElement);
 
             function YoutubePlayer(iframe$,playerId,$win){
                 var _iframe$ = iframe$,_playerId = playerId,
@@ -215,17 +215,18 @@
         return service;
 
     }])
-    .directive('youtubePlayer',['$log','$window','$timeout','$interval','$q','youtube','_default','playerInterface','numberify',
-        function($log,$window,$timeout,$interval,$q,youtube,_default,playerInterface,numberify){
-        $log = $log.context('youtubePlayer');
+    .directive('youtubeCard',['$log','$window','$timeout','$interval','$q','youtube','_default','playerInterface','numberify','c6UrlMaker',
+    function                 ( $log , $window , $timeout , $interval , $q , youtube , _default , playerInterface , numberify , c6UrlMaker ){
+        $log = $log.context('<youtube-card>');
         function fnLink(scope,$element,$attr){
             if (!$attr.videoid){
-                throw new SyntaxError('youtubePlayer requires the videoid attribute to be set.');
+                throw new SyntaxError('<youtube-card> requires the videoid attribute to be set.');
             }
 
             var player, playerIface  = playerInterface(),
                 _playerIface = {
-                    ended: false
+                    ended: false,
+                    twerked: false
                 },
                 playerIsReady = false, playerHasLoaded = false,
                 currentTimeInterval, lastNotifiedCurrentTime = 0,
@@ -258,6 +259,15 @@
                 }, 500);
             }
 
+            function playListener(player) {
+                playerIface.emit('play', playerIface);
+
+                if (playerIface.ended) {
+                    player.seekTo(start);
+                    _playerIface.ended = false;
+                }
+            }
+
             function twerk(wait){
                 var deferred = $q.defer(), waitTimer,
                 playingListener = function(){
@@ -268,6 +278,14 @@
                     player.pause();
                     deferred.resolve(playerIface);
                 };
+
+                if (playerIface.twerked) {
+                    deferred.reject(new Error('Player has already been twerked'));
+                    return deferred.promise;
+                }
+
+                $interval.cancel(currentTimeInterval);
+                player.removeListener('playing', playListener);
 
                 player.once('playing',playingListener);
 
@@ -285,12 +303,21 @@
                 $log.info('[%1] - start twerk, wait=%2',player,wait);
                 player.play();
 
+                deferred.promise
+                    .then(function() {
+                        _playerIface.twerked = true;
+                    })
+                    .finally(function() {
+                        pollCurrentTime();
+                        player.on('playing', playListener);
+                    });
+
                 return deferred.promise;
             }
 
             /* -- playerInterface : begin -- */
 
-            playerIface.getType = function () {
+            playerIface.getType = function() {
                 return 'youtube';
             };
 
@@ -340,10 +367,15 @@
                     get: function() {
                         return _playerIface.ended;
                     }
+                },
+                twerked: {
+                    get: function() {
+                        return _playerIface.twerked;
+                    }
                 }
             });
 
-            scope.$emit('playerAdd',playerIface);
+            scope.$emit('playerAdd', playerIface);
 
             /* -- playerInterface : end -- */
 
@@ -391,7 +423,7 @@
             function createPlayer(){
                 var vparams     = { };
 
-                ['controls','rel','modestbranding','autoplay','enablejsapi']
+                ['controls','rel','modestbranding','enablejsapi']
                 .forEach(function(prop){
                     if ($attr[prop] !== undefined) {
                         vparams[prop] = $attr[prop];
@@ -412,23 +444,19 @@
                 player.on('ready',function(p){
                     $log.info('[%1] - I am ready',p );
 
-                    if (numberify($attr.twerk)){
-                        twerk(0)
-                            .catch( function (err){
-                                $log.error('[%1] %2',p,err);
-                            })
-                            .finally( function(){
-                                playerIsReady = true;
-                                playerIface.emit('ready',playerIface);
-                                pollCurrentTime();
-                            });
-                    } else {
-                        $timeout(function(){
-                            playerIsReady = true;
-                            playerIface.emit('ready',playerIface);
-                            pollCurrentTime();
+                    $timeout(function() {
+                        playerIsReady = true;
+                        playerIface.emit('ready',playerIface);
+                        pollCurrentTime();
+
+                        scope.$watch('onDeck', function(onDeck) {
+                            if (onDeck) {
+                                if (numberify($attr.twerk, 0)) {
+                                    playerIface.twerk(5000);
+                                }
+                            }
                         });
-                    }
+                    });
 
                     player.on('ended',function(p){
                         $log.info('[%1] - I am finished',p);
@@ -441,21 +469,56 @@
                         }
                     });
 
-                    player.on('playing', function(player) {
-                        if (playerIface.ended) {
-                            player.seekTo(start);
-                            _playerIface.ended = false;
-                        }
-                    });
+                    player.on('playing', playListener);
                 });
             }
+
+            scope.$watch('active', function(active, wasActive) {
+                if (active === wasActive) { return; }
+
+                if (active) {
+                    if (numberify($attr.autoplay, 0)) {
+                        if (!playerIsReady) {
+                            $log.warn('Player cannot autoplay because it is not ready.');
+                            return;
+                        }
+
+                        player.play();
+                    }
+                } else {
+                    player.pause();
+                }
+            });
 
             regeneratePlayer();
         }
 
         return {
-            restrict : 'E',
-            link     : fnLink
+            restrict    : 'E',
+            link        : fnLink,
+            controller  : 'YoutubeCardController',
+            controllerAs: 'Ctrl',
+            templateUrl : c6UrlMaker('views/directives/video_card.html')
         };
+    }])
+    .controller('YoutubeCardController', ['$scope','ModuleService',
+    function                             ( $scope , ModuleService ) {
+        var config = $scope.config,
+            _data = config._data = config._data || {
+                modules: {
+                    ballot: {
+                        active: false,
+                        vote: null
+                    }
+                }
+            };
+
+        this.hasModule = ModuleService.hasModule.bind(ModuleService, config.modules);
+
+        $scope.$on('playerAdd', function(event, player) {
+            player.once('play', function() {
+                _data.modules.ballot.active = true;
+            });
+        });
     }]);
 }());

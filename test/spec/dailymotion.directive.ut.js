@@ -68,6 +68,8 @@
                     
                     $log.context = jasmine.createSpy('$log.context');
                     $log.context.andCallFake(function() { return $log; });
+
+                    $rootScope.config = {};
                     $scope = $rootScope.$new();
                     $scope.width = 100;
                     $scope.height = 100;
@@ -78,17 +80,17 @@
                 it('will fail without a videoid',function(){
                     expect(function(){
                         $scope.$apply(function() {
-                            $compile('<dailymotion-player></dailymotion-player>')($rootScope);
+                            $compile('<dailymotion-card></dailymotion-card>')($rootScope);
                         });
-                    }).toThrow('dailymotionPlayer requires the videoid attribute to be set.');
+                    }).toThrow('<dailymotion-card> requires the videoid attribute to be set.');
                 });
 
                 it('will create a player',function(){
                     $compile(
-                        '<dailymotion-player videoid="abc123" width="1" height="2"></dailymotion-player>'
+                        '<dailymotion-card videoid="abc123" width="1" height="2"></dailymotion-card>'
                     )($scope);
                     $timeout.flush();
-                    expect($log.context).toHaveBeenCalledWith('dailymotionPlayer');
+                    expect($log.context).toHaveBeenCalledWith('<dailymotion-card>');
                     expect(mockPlayers.length).toEqual(1);
                     expect(dailymotion.createPlayer.calls[0].args[0]).toEqual('dm_abc123');
                     expect(dailymotion.createPlayer.calls[0].args[1]).toEqual({
@@ -105,7 +107,7 @@
                 it('will observe changes to width and height',function(){
                     var dailymotionPlayer, scope;
                     dailymotionPlayer = $compile(
-                        '<dailymotion-player videoid="abc123" width="{{width}}" height="{{height}}"></dailymotion-player>'
+                        '<dailymotion-card videoid="abc123" width="{{width}}" height="{{height}}"></dailymotion-card>'
                     )($scope);
                     scope = dailymotionPlayer.scope();
                     $timeout.flush();
@@ -131,7 +133,7 @@
                     $scope.$on('playerAdd'      ,addSpy);
                     
                     $compile(
-                        '<dailymotion-player videoid="abc123" width="1" height="2" start="{{start}}" end="{{end}}"></dailymotion-player>'
+                        '<dailymotion-card videoid="abc123" width="1" height="2" start="{{start}}" end="{{end}}"></dailymotion-card>'
                     )($scope);
                     $timeout.flush();
                 });
@@ -198,6 +200,22 @@
                             expect(mockPlayers[0].pause).not.toHaveBeenCalled();
                             iface.pause();
                             expect(mockPlayers[0].pause).toHaveBeenCalled();
+                        });
+                    });
+
+                    describe('twerked property', function() {
+                        describe('getting', function() {
+                            it('should be initialized as false', function() {
+                                expect(iface.twerked).toBe(false);
+                            });
+                        });
+
+                        describe('setting', function() {
+                            it('should not be publically set-able', function() {
+                                expect(function() {
+                                    iface.twerked = true;
+                                }).toThrow();
+                            });
                         });
                     });
 
@@ -290,8 +308,136 @@
                 });
             });
             /* -- end describe('playerInterface' */
-            
-            describe('twerking',function(){
+
+            describe('when the card becomes inavtive', function() {
+                describe('initialization', function() {
+                    beforeEach(function() {
+                        $scope.$apply(function() {
+                            $scope.active = false;
+
+                            $compile(
+                                '<dailymotion-card videoid="abc123" width="1" height="2"></dailymotion-card>'
+                            )($scope);
+                        });
+
+                        $timeout.flush();
+                        mockPlayers[0]._on.ready[0]({},mockPlayers[0]);
+                        $timeout.flush();
+                    });
+
+                    it('should not pause the player', function() {
+                        expect(mockPlayers[0].pause).not.toHaveBeenCalled();
+                    });
+                });
+
+                describe('when going from active to inactive', function() {
+                    beforeEach(function() {
+                        $scope.$apply(function() {
+                            $scope.active = false;
+
+                            $compile(
+                                '<dailymotion-card videoid="abc123" width="1" height="2"></dailymotion-card>'
+                            )($scope);
+                        });
+
+                        $timeout.flush();
+                        mockPlayers[0]._on.ready[0]({},mockPlayers[0]);
+                        $timeout.flush();
+
+                        $scope.$apply(function() {
+                            $scope.active = true;
+                        });
+
+                        $scope.$apply(function() {
+                            $scope.active = false;
+                        });
+                    });
+
+                    it('should pause the player', function() {
+                        expect(mockPlayers[0].pause).toHaveBeenCalled();
+                    });
+                });
+            });
+
+            describe('autoplay', function() {
+                describe('if off', function() {
+                    beforeEach(function() {
+                        $scope.$apply(function() {
+                            $scope.active = true;
+
+                            $compile(
+                                '<dailymotion-card videoid="abc123" width="1" height="2"></dailymotion-card>'
+                            )($scope);
+                        });
+
+                        $timeout.flush();
+                        mockPlayers[0]._on.ready[0]({},mockPlayers[0]);
+                        $timeout.flush();
+                    });
+
+                    it('should not play the player', function() {
+                        expect(mockPlayers[0].play).not.toHaveBeenCalled();
+                    });
+                });
+
+                describe('if on, when becoming active', function() {
+                    var player;
+
+                    beforeEach(function() {
+                        $scope.$apply(function() {
+                            $compile(
+                                '<dailymotion-card videoid="abc123" width="1" height="2" autoplay="1"></dailymotion-card>'
+                            )($scope);
+                        });
+                        $timeout.flush();
+
+                        player = mockPlayers[0];
+                    });
+
+                    describe('before becoming active', function() {
+                        beforeEach(function() {
+                            mockPlayers[0]._on.ready[0]({},mockPlayers[0]);
+                            $timeout.flush();
+                        });
+
+                        it('should not play the player', function() {
+                            expect(player.play).not.toHaveBeenCalled();
+                        });
+                    });
+
+                    describe('when not ready', function() {
+                        beforeEach(function() {
+                            spyOn($log, 'warn');
+                        });
+
+                        it('should log a warning if the player becomes active', function() {
+                            $scope.$apply(function() {
+                                $scope.active = true;
+                            });
+
+                            expect(player.play).not.toHaveBeenCalled();
+                            expect($log.warn).toHaveBeenCalledWith('Player cannot autoplay because it is not ready.');
+                        });
+                    });
+
+                    describe(', when ready', function() {
+                        beforeEach(function() {
+                            mockPlayers[0]._on.ready[0]({},mockPlayers[0]);
+                            $timeout.flush();
+
+                            $scope.$apply(function() {
+                                $scope.active = true;
+                            });
+                        });
+
+                        it('should play the player', function() {
+                            expect(player.play).toHaveBeenCalled();
+                        });
+                    });
+                });
+            });
+
+            xdescribe('twerking',function(){
                 var iface;
                 beforeEach(function(){
                     iface = null;
@@ -304,7 +450,7 @@
                     describe('when not turned on',function(){
                         beforeEach(function(){
                             $compile(
-                                '<dailymotion-player videoid="abc123" width="1" height="2"></dailymotion-player>'
+                                '<dailymotion-card videoid="abc123" width="1" height="2"></dailymotion-card>'
                             )($scope);
                             $timeout.flush();
                         });
@@ -326,7 +472,7 @@
 
                         beforeEach(function(){
                             $compile(
-                                '<dailymotion-player videoid="abc123" width="1" height="2" twerk="1"></dailymotion-player>'
+                                '<dailymotion-card videoid="abc123" width="1" height="2" twerk="1"></dailymotion-card>'
                             )($scope);
                             $timeout.flush();
                         });
@@ -363,7 +509,7 @@
                         rejectSpy  = jasmine.createSpy('twerk.reject');
                         
                         $compile(
-                            '<dailymotion-player videoid="abc123" width="1" height="2"></dailymotion-player>'
+                            '<dailymotion-card videoid="abc123" width="1" height="2"></dailymotion-card>'
                         )($scope);
                         $timeout.flush();
                     });
@@ -451,7 +597,7 @@
                     it('is emitted when the player is ready if twerking is off',function(){
                         var readySpy = jasmine.createSpy('playerIsReady');
                         $compile(
-                            '<dailymotion-player videoid="a" width="1" height="2"></dailymotion-player>'
+                            '<dailymotion-card videoid="a" width="1" height="2"></dailymotion-card>'
                         )($scope);
                         $timeout.flush();
                         iface.on('ready',readySpy);
@@ -466,10 +612,10 @@
                         expect(iface.isReady()).toEqual(true);
                     });
 
-                    it('is emitted when the twerk is done if twerking is on',function(){
+                    xit('is emitted when the twerk is done if twerking is on',function(){
                         var readySpy = jasmine.createSpy('playerIsReady');
                         $compile(
-                            '<dailymotion-player videoid="a" width="1" twerk="1"></dailymotion-player>'
+                            '<dailymotion-card videoid="a" width="1" twerk="1"></dailymotion-card>'
                         )($scope);
                         $timeout.flush();
                         iface.on('ready',readySpy);
@@ -486,10 +632,36 @@
                     });
                 });
 
+                describe('playing', function() {
+                    beforeEach(function() {
+                        $scope.$apply(function() {
+                            $compile('<dailymotion-card videoid="a"></dailymotion-card>')($scope);
+                        });
+                        $timeout.flush();
+                        mockPlayers[0]._on.ready[0](mockPlayers[0]);
+                        $timeout.flush();
+                        spyOn(iface, 'emit');
+                    });
+
+                    describe('when ready', function() {
+                        it('should emit "play" on the interface', function() {
+                            var player = mockPlayers[0],
+                                callCount;
+
+                            player._on.playing[0](player);
+                            expect(iface.emit).toHaveBeenCalledWith('play', iface);
+                            callCount = iface.emit.callCount;
+
+                            player._on.playing[0](player);
+                            expect(iface.emit.callCount).toBe(callCount + 1);
+                        });
+                    });
+                });
+
                 describe('timeupdate', function() {
                     beforeEach(function() {
                         $scope.$apply(function() {
-                            $compile('<dailymotion-player videoid="a"></dailymotion-player>')($scope);
+                            $compile('<dailymotion-card videoid="a"></dailymotion-card>')($scope);
                         });
                         $timeout.flush();
                         mockPlayers[0]._on.ready[0](mockPlayers[0]);
@@ -513,7 +685,7 @@
                     it('dailymotion ended event will triger ended',function(){
                         var endedSpy = jasmine.createSpy('playerHasEnded');
                         $compile(
-                            '<dailymotion-player videoid="a"></dailymotion-player>'
+                            '<dailymotion-card videoid="a"></dailymotion-card>'
                         )($scope);
                         $timeout.flush();
                         iface.on('ended',endedSpy);
@@ -528,7 +700,7 @@
 
                     it('will not regenerate the player by default', function(){
                         $compile(
-                            '<dailymotion-player videoid="a" end="10"></dailymotion-player>'
+                            '<dailymotion-card videoid="a" end="10"></dailymotion-card>'
                         )($scope);
                         $timeout.flush();
                         
@@ -549,7 +721,7 @@
 
                     it('will regenerate the player if regenerate param is set',function(){
                         $compile(
-                            '<dailymotion-player videoid="a" regenerate="1"></dailymotion-player>'
+                            '<dailymotion-card videoid="a" regenerate="1"></dailymotion-card>'
                         )($scope);
                         $timeout.flush();
                         //simulate the firing of the ready event

@@ -25,9 +25,81 @@
                 }
             });
         }])
+        .config(['$provide',
+        function( $provide ) {
+            $provide.decorator('cinema6', ['$delegate', '$q',
+            function                      ( $delegate ,  $q ) {
+                var mocks = {};
+
+                $delegate.db = {
+                    mock: function(query, value) {
+                        mocks[angular.toJson(query)] = value;
+
+                        return $delegate.db;
+                    },
+
+                    find: function(query) {
+                        var deferred = $q.defer(),
+                            mock = mocks[angular.toJson(query)];
+
+                        if (!mock) {
+                            deferred.reject({ code: 404, message: 'Could not find experience with query: "' + angular.toJson(query) + '"' });
+                        } else {
+                            deferred.resolve(angular.copy(mock));
+                        }
+
+                        return deferred.promise;
+                    }
+                };
+
+                return $delegate;
+            }]);
+        }])
         .config(['c6UrlMakerProvider', 'c6Defines',
         function( c6UrlMakerProvider ,  c6Defines ) {
             c6UrlMakerProvider.location(c6Defines.kBaseUrl,'default');
+        }])
+        .run(   ['cinema6',
+        function( cinema6 ) {
+            cinema6.db
+                .mock({ id: ['1', '2', '3'] }, [
+                    {
+                        id: '1',
+                        title: 'Here\'s Another MiniReel',
+                        summary: [
+                            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus ornare ',
+                            'libero ut fermentum pharetra. Praesent convallis pulvinar neque id ',
+                            'sollicitudin. Quisque luctus egestas nisi posuere pharetra. In vel pretium',
+                            ' nulla, nec laoreet eros. Nullam posuere tortor sit amet neque dictum, vel',
+                            ' sollicitudin dui lobortis.'
+                        ].join(''),
+                        data: {}
+                    },
+                    {
+                        id: '2',
+                        title: '5 Videos of Moo\'s Face',
+                        summary: [
+                            'Lorem ipsum dolor sit smirk, consectetur smirk elit. Phasellus ornare ',
+                            'libero smirk fermentum pharetra. Smirk convallis pulvinar neque id ',
+                            'sollicitudin. Quisque luctus egestas smirk posuere pharetra. In smirk pretium',
+                            ' nulla, nec laoreet eros. Nullam smirk tortor sit amet neque dictum, vel',
+                            ' sollicitudin smirk lobortis.'
+                        ].join(''),
+                        data: {}
+                    },
+                    {
+                        id: '3',
+                        title: '10 Videos of CaesarTheBun',
+                        summary: [
+                            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus ornare ',
+                            'libero ut fermentum pharetra. Praesent convallis pulvinar neque id ',
+                            'sollicitudin. Quisque luctus egestas nisi posuere pharetra. In vel pretium',
+                            ' nulla, nec laoreet eros. Nullam posuere tortor sit amet neque dictum, vel',
+                            ' sollicitudin dui lobortis.'
+                        ].join(''),
+                        data: {}
+                    }
+                ]);
         }])
         .filter('percent',function(){
             return function(input){
@@ -56,7 +128,8 @@
                     twerk       : angular.noop,
                     isReady     : angular.noop,
                     currentTime : 0,
-                    ended       : false
+                    ended       : false,
+                    twerked     : false
                 });
             };
         }])
@@ -83,13 +156,7 @@
                 _app.state = 'deck';
             }
 
-            function gotoEnd() {
-                _app.state = 'end';
-            }
-
             $scope.$on('reelStart', gotoDeck);
-            $scope.$on('reelMove', gotoDeck);
-            $scope.$on('reelEnd', gotoEnd);
 
             $log.info('loaded.');
 

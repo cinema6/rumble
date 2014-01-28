@@ -39,7 +39,9 @@
                     'scripts/iframe',
                     'scripts/rumble',
                     'scripts/vimeo',
-                    'scripts/youtube'
+                    'scripts/youtube',
+                    'scripts/mini_reel_card',
+                    'scripts/ballot_module'
                 ];
             }
         }()),

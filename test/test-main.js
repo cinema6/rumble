@@ -95,6 +95,12 @@
                 },
                 services: {
                     deps: ['angular', 'angularMocks']
+                },
+                mini_reel_card: {
+                    deps: ['app']
+                },
+                ballot_module: {
+                    deps: ['app']
                 }
             },
 
