@@ -2,12 +2,12 @@
     'use strict';
 
     define(['youtube'], function() {
-        describe('YoutubeCardController', function() {
+        describe('DailymotionCardController', function() {
             var $rootScope,
                 $scope,
                 $controller,
                 c6EventEmitter,
-                YoutubeCardCtrl;
+                DailymotionCardCtrl;
 
             var EventService,
                 ModuleService;
@@ -53,12 +53,12 @@
                         modules: ['ballot', 'comments']
                     };
                     $scope = $rootScope.$new();
-                    YoutubeCardCtrl = $controller('YoutubeCardController', { $scope: $scope });
+                    DailymotionCardCtrl = $controller('DailymotionCardController', { $scope: $scope });
                 });
             });
 
             it('should exist', function() {
-                expect(YoutubeCardCtrl).toEqual(jasmine.any(Object));
+                expect(DailymotionCardCtrl).toEqual(jasmine.any(Object));
             });
 
             describe('initialization', function() {
@@ -68,7 +68,7 @@
                     beforeEach(function() {
                         origData = $rootScope.config._data = {};
 
-                        YoutubeCardCtrl = $controller('YoutubeCardController', { $scope: $scope });
+                        DailymotionCardCtrl = $controller('DailymotionCardController', { $scope: $scope });
                     });
 
                     it('should not overwrite the data', function() {
@@ -121,10 +121,10 @@
                 describe('methods', function() {
                     describe('hasModule(module)', function() {
                         it('should call ModuleService.hasModule() with the configured modules and the provided module', function() {
-                            YoutubeCardCtrl.hasModule('ballot');
+                            DailymotionCardCtrl.hasModule('ballot');
                             expect(ModuleService.hasModule).toHaveBeenCalledWith($rootScope.config.modules, 'ballot');
 
-                            YoutubeCardCtrl.hasModule('comments');
+                            DailymotionCardCtrl.hasModule('comments');
                             expect(ModuleService.hasModule).toHaveBeenCalledWith($rootScope.config.modules, 'comments');
                         });
                     });

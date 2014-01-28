@@ -39,7 +39,7 @@
             }
             $playerElement = angular.element(iframe.create(playerId,src,params));
             
-            $parentElement.append($playerElement);
+            $parentElement.prepend($playerElement);
 
             function VimeoPlayer(iframe$,playerId,$win){
                 var _iframe$ = iframe$,_playerId = playerId,
@@ -194,8 +194,8 @@
 
         return service;
     }])
-    .directive('vimeoCard',['$log','$timeout','$q','vimeo','_default','numberify','playerInterface',
-        function($log,$timeout,$q,vimeo,_default,numberify,playerInterface){
+    .directive('vimeoCard',['$log','$timeout','$q','vimeo','_default','numberify','playerInterface','c6UrlMaker',
+    function               ( $log , $timeout , $q , vimeo , _default , numberify , playerInterface , c6UrlMaker ) {
         $log = $log.context('<vimeo-card>');
         function fnLink(scope,$element,$attr){
             if (!$attr.videoid){
@@ -232,6 +232,15 @@
                 }
             }
 
+            function playListener(player) {
+                playerIface.emit('play', playerIface);
+
+                if (playerIface.ended) {
+                    _playerIface.ended = false;
+                    player.seekTo(start);
+                }
+            }
+
             function twerk(wait){
                 var deferred = $q.defer(), waitTimer,
                 playingListener = function(){
@@ -249,6 +258,7 @@
                 }
 
                 player.removeListener('playProgress', handlePlayProgress);
+                player.removeListener('play', playListener);
 
                 player.once('playProgress',playingListener);
 
@@ -272,6 +282,7 @@
                     })
                     .finally(function() {
                         player.on('playProgress', handlePlayProgress);
+                        player.on('play', playListener);
                     });
 
                 return deferred.promise;
@@ -419,12 +430,7 @@
                         }
                     });
 
-                    player.on('play', function(p) {
-                        if (playerIface.ended) {
-                            _playerIface.ended = false;
-                            p.seekTo(start);
-                        }
-                    });
+                    player.on('play', playListener);
                 });
             }
 
@@ -449,8 +455,31 @@
         }
 
         return {
-            restrict : 'E',
-            link     : fnLink
+            restrict    : 'E',
+            link        : fnLink,
+            controller  : 'VimeoCardController',
+            controllerAs: 'Ctrl',
+            templateUrl : c6UrlMaker('views/directives/video_card.html')
         };
+    }])
+    .controller('VimeoCardController', ['$scope','ModuleService',
+    function                           ( $scope , ModuleService ) {
+        var config = $scope.config,
+            _data = config._data = config._data || {
+                modules: {
+                    ballot: {
+                        active: false,
+                        vote: null
+                    }
+                }
+            };
+
+        this.hasModule = ModuleService.hasModule.bind(ModuleService, config.modules);
+
+        $scope.$on('playerAdd', function(event, player) {
+            player.once('play', function() {
+                _data.modules.ballot.active = true;
+            });
+        });
     }]);
 }());

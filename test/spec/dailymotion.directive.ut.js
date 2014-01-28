@@ -68,6 +68,8 @@
                     
                     $log.context = jasmine.createSpy('$log.context');
                     $log.context.andCallFake(function() { return $log; });
+
+                    $rootScope.config = {};
                     $scope = $rootScope.$new();
                     $scope.width = 100;
                     $scope.height = 100;
@@ -627,6 +629,32 @@
                         $scope.$digest();
                         expect(readySpy).toHaveBeenCalledWith(iface);
                         expect(iface.isReady()).toEqual(true);
+                    });
+                });
+
+                describe('playing', function() {
+                    beforeEach(function() {
+                        $scope.$apply(function() {
+                            $compile('<dailymotion-card videoid="a"></dailymotion-card>')($scope);
+                        });
+                        $timeout.flush();
+                        mockPlayers[0]._on.ready[0](mockPlayers[0]);
+                        $timeout.flush();
+                        spyOn(iface, 'emit');
+                    });
+
+                    describe('when ready', function() {
+                        it('should emit "play" on the interface', function() {
+                            var player = mockPlayers[0],
+                                callCount;
+
+                            player._on.playing[0](player);
+                            expect(iface.emit).toHaveBeenCalledWith('play', iface);
+                            callCount = iface.emit.callCount;
+
+                            player._on.playing[0](player);
+                            expect(iface.emit.callCount).toBe(callCount + 1);
+                        });
                     });
                 });
 

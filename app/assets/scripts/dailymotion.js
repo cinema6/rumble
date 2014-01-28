@@ -54,7 +54,7 @@
             }
             $playerElement = angular.element(iframe.create(playerId,src,params));
             
-            $parentElement.append($playerElement);
+            $parentElement.prepend($playerElement);
 
             function DailymotionPlayer(iframe$,playerId,$win){
                 var _iframe$ = iframe$,_playerId = playerId,
@@ -172,9 +172,8 @@
 
         return service;
     }])
-    .directive('dailymotionCard',
-        ['$log','$timeout','$q','c6UserAgent','dailymotion','_default','numberify','playerInterface',
-        function($log,$timeout,$q,c6UserAgent,dailymotion,_default,numberify,playerInterface){
+    .directive('dailymotionCard', ['$log','$timeout','$q','c6UserAgent','dailymotion','_default','numberify','playerInterface','c6UrlMaker',
+    function                      ( $log , $timeout , $q , c6UserAgent , dailymotion , _default , numberify , playerInterface , c6UrlMaker ) {
         $log = $log.context('<dailymotion-card>');
         function fnLink(scope,$element,$attr){
             if (!$attr.videoid){
@@ -373,6 +372,8 @@
                     });
 
                     player.on('playing', function(p) {
+                        playerIface.emit('play', playerIface);
+
                         if (playerIface.ended) {
                             _playerIface.ended = false;
                             p.seekTo(0);
@@ -403,8 +404,30 @@
 
         return {
             restrict : 'E',
-            link     : fnLink
+            link     : fnLink,
+            controller  : 'DailymotionCardController',
+            controllerAs: 'Ctrl',
+            templateUrl : c6UrlMaker('views/directives/video_card.html')
         };
-    }]);
+    }])
+    .controller('DailymotionCardController', ['$scope','ModuleService',
+    function                                 ( $scope , ModuleService ) {
+        var config = $scope.config,
+            _data = config._data = config._data || {
+                modules: {
+                    ballot: {
+                        active: false,
+                        vote: null
+                    }
+                }
+            };
 
+        this.hasModule = ModuleService.hasModule.bind(ModuleService, config.modules);
+
+        $scope.$on('playerAdd', function(event, player) {
+            player.once('play', function() {
+                _data.modules.ballot.active = true;
+            });
+        });
+    }]);
 }());

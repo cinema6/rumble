@@ -39,7 +39,8 @@
     }])
     .factory('rumbleVotes',['$log','$q','$timeout',function($log,$q,$timeout){
         $log = $log.context('rumbleVotes');
-        var service = {}, mocks = {};
+        var service = {}, mocks = {},
+            rumbleId = null;
 
         service.mockReturnsData = function(rumbleId,itemId,votes, delay){
             $log.warn('Setting Mock Data');
@@ -59,7 +60,11 @@
             return this;
         };
 
-        service.getReturnsForItem = function(rumbleId, itemId){
+        service.init = function(id) {
+            rumbleId = id;
+        };
+
+        service.getReturnsForItem = function(itemId){
             var deferred = $q.defer(), mock;
             if (mocks[rumbleId] === undefined){
                 $timeout(function(){
@@ -153,15 +158,14 @@
             return playlist;
         };
     }])
-    .controller('RumbleController',['$log','$scope','$timeout','$q','$window','c6UserAgent','rumbleVotes','c6Computed','cinema6','MiniReelService',
-    function                       ( $log , $scope , $timeout , $q , $window , c6UserAgent , rumbleVotes , c          , cinema6 , MiniReelService ){
+    .controller('RumbleController',['$log','$scope','$timeout','rumbleVotes','c6Computed','cinema6','MiniReelService',
+    function                       ( $log , $scope , $timeout , rumbleVotes , c          , cinema6 , MiniReelService ){
         $log = $log.context('RumbleCtrl');
         var self    = this, readyTimeout,
             appData = $scope.app.data;
 
         $scope.deviceProfile    = appData.profile;
         $scope.title            = appData.experience.title;
-        $scope.rumbleId         = appData.experience.data.id;
 
         $scope.deck             = MiniReelService.createDeck(appData.experience.data);
         $scope.players          = c($scope, function(index, deck) {
@@ -173,6 +177,8 @@
         $scope.atTail           = null;
         $scope.currentReturns   = null;
         $scope.ready            = false;
+
+        rumbleVotes.init(appData.experience.data.id);
 
         $scope.$on('playerAdd',function(event,player){
             $log.log('Player added: %1 - %2',player.getType(),player.getVideoId());

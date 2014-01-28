@@ -88,6 +88,9 @@
 
                     $log.context = jasmine.createSpy('$log.context');
                     $log.context.andCallFake(function() { return $log; });
+
+                    $rootScope.config = {};
+
                     $scope = $rootScope.$new();
                     $scope.width = 100;
                     $scope.height = 100;
@@ -586,9 +589,11 @@
                 describe('parameter',function(){
                     describe('when not turned on',function(){
                         beforeEach(function(){
-                            $compile(
-                                '<youtube-card videoid="abc123" width="1" height="2"></youtube-card>'
-                            )($scope);
+                            $scope.$apply(function() {
+                                $compile(
+                                    '<youtube-card videoid="abc123" width="1" height="2"></youtube-card>'
+                                )($scope);
+                            });
                             spyOn(iface, 'twerk');
                             $timeout.flush();
 
@@ -614,9 +619,11 @@
                             twerkDeferred = $q.defer();
 
                             spyOn($interval, 'cancel');
-                            $compile(
-                                '<youtube-card videoid="abc123" width="1" height="2" twerk="1"></youtube-card>'
-                            )($scope);
+                            $scope.$apply(function() {
+                                $compile(
+                                    '<youtube-card videoid="abc123" width="1" height="2" twerk="1"></youtube-card>'
+                                )($scope);
+                            });
                             spyOn(iface, 'twerk').andCallFake(function() {
                                 return twerkDeferred.promise;
                             });

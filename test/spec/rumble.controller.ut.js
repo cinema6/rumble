@@ -96,6 +96,7 @@
                     profile      : {},
                     experience: {
                         data : {
+                            id: 'r-43yt3fh85',
                             deck : deck 
                         }
                     }
@@ -125,6 +126,7 @@
                         data: appData
                     };
 
+                    spyOn(rumbleVotes, 'init');
                     RumbleCtrl = $injector.get('$controller')('RumbleController', {
                         $scope  : $scope,
                         $log    : $log
@@ -142,6 +144,10 @@
                     expect($scope.atHead).toBeNull();
                     expect($scope.atTail).toBeNull();
                     expect($scope.ready).toEqual(false);
+                });
+
+                it('should initialize rumbleVotes with the id', function() {
+                    expect(rumbleVotes.init).toHaveBeenCalledWith(appData.experience.data.id);
                 });
             });
 

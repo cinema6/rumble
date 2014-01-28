@@ -2,6 +2,12 @@
     'use strict';
 
     angular.module('c6.rumble.services', [])
+        .service('ModuleService', [function() {
+            this.hasModule = function(modules, module) {
+                return ((modules || []).indexOf(module) > -1);
+            };
+        }])
+
         .service('EventService', [function() {
             this.trackEvents = function(emitter, events) {
                 var tracker = {};

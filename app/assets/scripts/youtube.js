@@ -45,7 +45,7 @@
             }
             $playerElement = angular.element(iframe.create(playerId,src,params));
 
-            $parentElement.append($playerElement);
+            $parentElement.prepend($playerElement);
 
             function YoutubePlayer(iframe$,playerId,$win){
                 var _iframe$ = iframe$,_playerId = playerId,
@@ -215,8 +215,8 @@
         return service;
 
     }])
-    .directive('youtubeCard',['$log','$window','$timeout','$interval','$q','youtube','_default','playerInterface','numberify',
-        function($log,$window,$timeout,$interval,$q,youtube,_default,playerInterface,numberify){
+    .directive('youtubeCard',['$log','$window','$timeout','$interval','$q','youtube','_default','playerInterface','numberify','c6UrlMaker',
+    function                 ( $log , $window , $timeout , $interval , $q , youtube , _default , playerInterface , numberify , c6UrlMaker ){
         $log = $log.context('<youtube-card>');
         function fnLink(scope,$element,$attr){
             if (!$attr.videoid){
@@ -494,20 +494,30 @@
         }
 
         return {
-            restrict : 'E',
-            link     : fnLink
+            restrict    : 'E',
+            link        : fnLink,
+            controller  : 'YoutubeCardController',
+            controllerAs: 'Ctrl',
+            templateUrl : c6UrlMaker('views/directives/video_card.html')
         };
     }])
-    .controller('YoutubeCardController', ['$scope',
-    function                             ( $scope ) {
+    .controller('YoutubeCardController', ['$scope','ModuleService',
+    function                             ( $scope , ModuleService ) {
         var config = $scope.config,
             _data = config._data = config._data || {
-                hasPlayed: false
+                modules: {
+                    ballot: {
+                        active: false,
+                        vote: null
+                    }
+                }
             };
+
+        this.hasModule = ModuleService.hasModule.bind(ModuleService, config.modules);
 
         $scope.$on('playerAdd', function(event, player) {
             player.once('play', function() {
-                _data.hasPlayed = true;
+                _data.modules.ballot.active = true;
             });
         });
     }]);

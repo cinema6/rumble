@@ -2,12 +2,12 @@
     'use strict';
 
     define(['youtube'], function() {
-        describe('YoutubeCardController', function() {
+        describe('VimeoCardController', function() {
             var $rootScope,
                 $scope,
                 $controller,
                 c6EventEmitter,
-                YoutubeCardCtrl;
+                VimeoCardCtrl;
 
             var EventService,
                 ModuleService;
@@ -53,12 +53,12 @@
                         modules: ['ballot', 'comments']
                     };
                     $scope = $rootScope.$new();
-                    YoutubeCardCtrl = $controller('YoutubeCardController', { $scope: $scope });
+                    VimeoCardCtrl = $controller('VimeoCardController', { $scope: $scope });
                 });
             });
 
             it('should exist', function() {
-                expect(YoutubeCardCtrl).toEqual(jasmine.any(Object));
+                expect(VimeoCardCtrl).toEqual(jasmine.any(Object));
             });
 
             describe('initialization', function() {
@@ -68,7 +68,7 @@
                     beforeEach(function() {
                         origData = $rootScope.config._data = {};
 
-                        YoutubeCardCtrl = $controller('YoutubeCardController', { $scope: $scope });
+                        VimeoCardCtrl = $controller('VimeoCardController', { $scope: $scope });
                     });
 
                     it('should not overwrite the data', function() {
@@ -121,10 +121,10 @@
                 describe('methods', function() {
                     describe('hasModule(module)', function() {
                         it('should call ModuleService.hasModule() with the configured modules and the provided module', function() {
-                            YoutubeCardCtrl.hasModule('ballot');
+                            VimeoCardCtrl.hasModule('ballot');
                             expect(ModuleService.hasModule).toHaveBeenCalledWith($rootScope.config.modules, 'ballot');
 
-                            YoutubeCardCtrl.hasModule('comments');
+                            VimeoCardCtrl.hasModule('comments');
                             expect(ModuleService.hasModule).toHaveBeenCalledWith($rootScope.config.modules, 'comments');
                         });
                     });

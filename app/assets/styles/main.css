@@ -67,7 +67,6 @@ ul.rumble-players {
         display: block;
         position: absolute;
         top: 64px;
-        z-index: 1;
         overflow: hidden;
     }
     .player-list-item.squished {
