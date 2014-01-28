@@ -41,7 +41,8 @@
                     'scripts/vimeo',
                     'scripts/youtube',
                     'scripts/mini_reel_card',
-                    'scripts/ballot_module'
+                    'scripts/ballot_module',
+                    'scripts/comments_module'
                 ];
             }
         }()),

@@ -11,6 +11,7 @@
                 c6UserAgent,
                 RumbleCtrl,
                 rumbleVotes,
+                CommentsService,
                 deck,
                 appData,
                 mockPlayer,
@@ -119,6 +120,7 @@
                     $window     = $injector.get('$window');
                     c6UserAgent = $injector.get('c6UserAgent');
                     rumbleVotes = $injector.get('rumbleVotes');
+                    CommentsService = $injector.get('CommentsService');
 
                     $scope      = $rootScope.$new();
 
@@ -126,6 +128,7 @@
                         data: appData
                     };
 
+                    spyOn(CommentsService, 'init');
                     spyOn(rumbleVotes, 'init');
                     RumbleCtrl = $injector.get('$controller')('RumbleController', {
                         $scope  : $scope,
@@ -148,6 +151,10 @@
 
                 it('should initialize rumbleVotes with the id', function() {
                     expect(rumbleVotes.init).toHaveBeenCalledWith(appData.experience.data.id);
+                });
+
+                it('should initialize the CommentsService with the id', function() {
+                    expect(CommentsService.init).toHaveBeenCalledWith(appData.experience.data.id);
                 });
             });
 
@@ -291,7 +298,7 @@
                         expect($scope.deck[1].player).toBeNull();
                         $scope.$emit('playerAdd',mockPlayer);
                         expect($scope.deck[1].player).toBe(mockPlayer);
-                        expect(mockPlayer.on.callCount).toEqual(2);
+                        expect(mockPlayer.on.callCount).toEqual(1);
                         expect(mockPlayer.on.argsForCall[0][0]).toEqual('ready');
                     });
                 });
@@ -334,22 +341,6 @@
                         expect($scope.deck[1].player.isReady).toHaveBeenCalled();
                         expect($scope.deck[2].player.isReady).toHaveBeenCalled();
                         expect($scope.ready).toEqual(true);
-                    });
-                });
-
-                describe('ended', function() {
-                    beforeEach(function(){
-                        mockPlayer.getType.andReturn('vimeo');
-                        mockPlayer.getVideoId.andReturn('vid2video');
-                        mockPlayer.isReady.andReturn(true);
-
-                        $scope.$emit('playerAdd',mockPlayer);
-                        $scope.currentCard = $scope.deck[1];
-                        mockPlayer._on.ended[0](mockPlayer);
-                    });
-
-                    it('should set the view to "ballot"', function() {
-                        expect($scope.deck[1].state.view).toBe('ballot');
                     });
                 });
             });
