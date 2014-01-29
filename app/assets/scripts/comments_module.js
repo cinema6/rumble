@@ -22,22 +22,14 @@
 
             this.comments = null;
             this.commentsByFriends = c($scope, function(comments) {
-                if (!comments) {
-                    return null;
-                }
-
-                return comments.filter(function(comment) {
+                return (comments ? comments.filter(function(comment) {
                     return comment.user.isFriend;
-                });
+                }) : null);
             }, ['Ctrl.comments']);
             this.commentsByStrangers = c($scope, function(comments) {
-                if (!comments) {
-                    return null;
-                }
-
-                return comments.filter(function(comment) {
+                return (comments ? comments.filter(function(comment) {
                     return !comment.user.isFriend;
-                });
+                }) : null);
             }, ['Ctrl.comments']);
 
             this.showFriendsFirst = true;
