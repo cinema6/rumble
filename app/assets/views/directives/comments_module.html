@@ -2,7 +2,7 @@
     <li ng-repeat="this in Ctrl.comments">
         <header>
             <h3>{{this.user.name}}</h3>
-            <small>{{this.date}}</small>
+            <small>{{this.date | timestamp}}</small>
         </header>
         <article>
             <p>{{this.message}}</p>
