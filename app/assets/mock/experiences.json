@@ -118,6 +118,13 @@
                     "conversationId": "rcv-f9efca48d85143"
                 },
                 {
+                    "id": "rc-2d46a04b21b073",
+                    "type": "video",
+                    "data": {
+                        "src": "https://s3.amazonaws.com/c6.dev/media/src/screenjack/video/gijoe_fridge.mp4"
+                    }
+                },
+                {
                     "id"     : "rc-4770a2d7f85ce0",
                     "type"   : "dailymotion",
                     "title"  : "Kristen Stewart for Channel",

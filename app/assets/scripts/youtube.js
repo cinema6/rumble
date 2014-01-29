@@ -498,7 +498,7 @@
             link        : fnLink,
             controller  : 'YoutubeCardController',
             controllerAs: 'Ctrl',
-            templateUrl : c6UrlMaker('views/directives/video_card.html')
+            templateUrl : c6UrlMaker('views/directives/video_embed_card.html')
         };
     }])
     .controller('YoutubeCardController', ['$scope','ModuleService',

@@ -459,7 +459,7 @@
             link        : fnLink,
             controller  : 'VimeoCardController',
             controllerAs: 'Ctrl',
-            templateUrl : c6UrlMaker('views/directives/video_card.html')
+            templateUrl : c6UrlMaker('views/directives/video_embed_card.html')
         };
     }])
     .controller('VimeoCardController', ['$scope','ModuleService',

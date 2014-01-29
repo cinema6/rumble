@@ -99,6 +99,9 @@
                 mini_reel_card: {
                     deps: ['app']
                 },
+                video_card: {
+                    deps: ['app']
+                },
                 ballot_module: {
                     deps: ['app']
                 },
