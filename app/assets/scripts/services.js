@@ -2,8 +2,8 @@
     'use strict';
 
     angular.module('c6.rumble.services', [])
-        .service('CommentsService', ['$cacheFactory','$q',
-        function                    ( $cacheFactory , $q ) {
+        .service('CommentsService', ['$cacheFactory','$q','$window',
+        function                    ( $cacheFactory , $q , $window ) {
             var _private = {};
 
             _private.mrId = null;
@@ -40,6 +40,20 @@
                 deferred.resolve(comments);
 
                 return deferred.promise;
+            };
+
+            this.post = function(id, message) {
+                var cache = _private.cache.get(_private.mrId),
+                    comments = cache.put(id, (cache.get(id) || []));
+
+                comments.unshift({
+                    user: {
+                        pic: 'anonymous.png',
+                        name: 'Anonymous'
+                    },
+                    date: Math.floor($window.Date.now() / 1000),
+                    message: message
+                });
             };
 
             if (window.c6.kHasKarma) { this._private = _private; }

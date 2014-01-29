@@ -16,11 +16,44 @@
             };
         }])
 
-        .controller('CommentsModuleController', ['$scope','CommentsService',
-        function                                ( $scope , CommentsService ) {
+        .controller('CommentsModuleController', ['$scope','CommentsService','c6Computed',
+        function                                ( $scope , CommentsService , c          ) {
             var self = this;
 
             this.comments = null;
+            this.commentsByFriends = c($scope, function(comments) {
+                if (!comments) {
+                    return null;
+                }
+
+                return comments.filter(function(comment) {
+                    return comment.user.isFriend;
+                });
+            }, ['Ctrl.comments']);
+            this.commentsByStrangers = c($scope, function(comments) {
+                if (!comments) {
+                    return null;
+                }
+
+                return comments.filter(function(comment) {
+                    return !comment.user.isFriend;
+                });
+            }, ['Ctrl.comments']);
+
+            this.showFriendsFirst = true;
+            this.sortOptions = {
+                'Show my friends first': true,
+                'Show chronologically': false
+            };
+
+            this.userComment = {
+                message: null,
+                post: function() {
+                    CommentsService.post($scope.cardId, this.message);
+
+                    this.message = null;
+                }
+            };
 
             $scope.$watch('fetchCommentsWhen', function(shouldFetch) {
                 if (!shouldFetch) { return; }

@@ -8,12 +8,40 @@
                 CommentsService,
                 _private;
 
+            var $window,
+                currentTime;
+
             beforeEach(function() {
+                currentTime = 1391011589127;
+
+                module('ng', function($provide) {
+                    $provide.factory('$window', function() {
+                        var $window = {};
+
+                        function MockDate() {
+
+                        }
+                        MockDate.now = function() {
+                            return currentTime;
+                        };
+
+                        $window.Date = MockDate;
+
+                        return $window;
+                    });
+                });
+
+                module('c6.ui', function($provide) {
+                    $provide.value('cinema6', {});
+                });
+
                 module('c6.rumble');
 
                 inject(function($injector) {
                     $rootScope = $injector.get('$rootScope');
                     $q = $injector.get('$q');
+
+                    $window = $injector.get('$window');
 
                     CommentsService = $injector.get('CommentsService');
                     _private = CommentsService._private;
@@ -139,6 +167,66 @@
                                     CommentsService.fetch('r-2').catch(failure);
                                 });
                                 expect(failure).toHaveBeenCalledWith({ code: 404, message: 'Could not find comments with id: r-2.' });
+                            });
+                        });
+                    });
+
+                    describe('post(id, message)', function() {
+                        var cache;
+
+                        beforeEach(function() {
+                            CommentsService.init('r-123');
+
+                            cache = _private.cache.get('r-123');
+                        });
+
+                        describe('if there are no comments for the card', function() {
+                            it('should create a new array with the comment', function() {
+                                CommentsService.post('r-1', 'This is a comment.');
+                                expect(cache.get('r-1')[0]).toEqual({
+                                    user: {
+                                        pic: 'anonymous.png',
+                                        name: 'Anonymous'
+                                    },
+                                    date: 1391011589,
+                                    message: 'This is a comment.'
+                                });
+                            });
+                        });
+
+                        describe('if there are comments for the card', function() {
+                            beforeEach(function() {
+                                cache.put('r-1', [{
+                                    user: {
+                                        pic: 'anonymous.png',
+                                        name: 'Anonymous'
+                                    },
+                                    date: 1391011589,
+                                    message: 'This is a comment.'
+                                }]);
+                            });
+
+                            it('should "unshift()" the comment onto the array', function() {
+                                CommentsService.post('r-1', 'Hello Moo!');
+                                expect(cache.get('r-1')[0]).toEqual({
+                                    user: {
+                                        pic: 'anonymous.png',
+                                        name: 'Anonymous'
+                                    },
+                                    date: 1391011589,
+                                    message: 'Hello Moo!'
+                                });
+
+                                currentTime = 1391012385999;
+                                CommentsService.post('r-1', 'Evan, stop throwing stuff at me.');
+                                expect(cache.get('r-1')[0]).toEqual({
+                                    user: {
+                                        pic: 'anonymous.png',
+                                        name: 'Anonymous'
+                                    },
+                                    date: 1391012385,
+                                    message: 'Evan, stop throwing stuff at me.'
+                                });
                             });
                         });
                     });
