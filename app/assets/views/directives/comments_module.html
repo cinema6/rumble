@@ -1,0 +1,44 @@
+<form>
+    <div>
+        <label for="comment">Comment</label>
+        <textarea name="comment" ng-model="Ctrl.userComment.message"></textarea>
+        <button ng-click="Ctrl.userComment.post()" ng-disabled="!Ctrl.userComment.message">Submit</button>
+    </div>
+    <div>
+        <select ng-model="Ctrl.showFriendsFirst"
+            ng-options="label for (label, value) in Ctrl.sortOptions">
+        </select>
+    </div>
+</form>
+<ul ng-if="!Ctrl.showFriendsFirst">
+    <li ng-repeat="this in Ctrl.comments">
+        <header>
+            <h3>{{this.user.name}}</h3>
+            <small>{{this.date | timestamp}}</small>
+        </header>
+        <article>
+            <p>{{this.message}}</p>
+        </article>
+    </li>
+</ul>
+<ul ng-if="Ctrl.showFriendsFirst">
+    <li ng-repeat="this in Ctrl.commentsByFriends()">
+        <header>
+            <h3>{{this.user.name}}</h3>
+            <small>{{this.date | timestamp}}</small>
+        </header>
+        <article>
+            <p>{{this.message}}</p>
+        </article>
+    </li>
+    <li>Divider</li>
+    <li ng-repeat="this in Ctrl.commentsByStrangers()">
+        <header>
+            <h3>{{this.user.name}}</h3>
+            <small>{{this.date | timestamp}}</small>
+        </header>
+        <article>
+            <p>{{this.message}}</p>
+        </article>
+    </li>
+</ul>

@@ -101,6 +101,9 @@
                 },
                 ballot_module: {
                     deps: ['app']
+                },
+                comments_module: {
+                    deps: ['app']
                 }
             },
 

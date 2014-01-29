@@ -63,6 +63,39 @@
                     ]
                 }
             ],
+            "conversations": [
+                {
+                    "id": "rcv-f9efca48d85143",
+                    "comments": [
+                        {
+                            "user": {
+                                "pic": "josh.png",
+                                "name": "Josh Minzner",
+                                "isFriend": true
+                            },
+                            "date": "1390945596",
+                            "message": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc sed ultricies turpis. Praesent rutrum blandit nisl, ac adipiscing ante. Integer lectus lectus, ultricies nec orci a, condimentum cursus dolor."
+                        },
+                        {
+                            "user": {
+                                "pic": "steph.png",
+                                "name": "Steph Stober",
+                                "isFriend": true
+                            },
+                            "date": "1389822391",
+                            "message": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc sed ultricies turpis. Praesent rutrum blandit nisl, ac adipiscing ante. Integer lectus lectus, ultricies nec orci a, condimentum cursus dolor."
+                        },
+                        {
+                            "user": {
+                                "pic": "johnny.png",
+                                "name": "Johnny Testmonkey"
+                            },
+                            "date": "1388353591",
+                            "message": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc sed ultricies turpis. Praesent rutrum blandit nisl, ac adipiscing ante. Integer lectus lectus, ultricies nec orci a, condimentum cursus dolor."
+                        }
+                    ]
+                }
+            ],
             "deck" : [
                 {
                     "id"     : "rc-22119a8cf9f755",
@@ -70,7 +103,8 @@
                     "title"  : "Did someone say FOX?",
                     "note"   : "Thought so",
                     "modules": [
-                        "ballot"
+                        "ballot",
+                        "comments"
                     ],
                     "voting" : [ 0.63, 0.31, 0.06 ],
                     "data"   : {
@@ -80,7 +114,8 @@
                         "rel"     : 0,
                         "modestbranding" : 1
                     },
-                    "ballotId": "rb-716ffbdfc356af"
+                    "ballotId": "rb-716ffbdfc356af",
+                    "conversationId": "rcv-f9efca48d85143"
                 },
                 {
                     "id"     : "rc-4770a2d7f85ce0",

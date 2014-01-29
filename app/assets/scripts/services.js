@@ -2,6 +2,63 @@
     'use strict';
 
     angular.module('c6.rumble.services', [])
+        .service('CommentsService', ['$cacheFactory','$q','$window',
+        function                    ( $cacheFactory , $q , $window ) {
+            var _private = {};
+
+            _private.mrId = null;
+
+            _private.cache = $cacheFactory('comments');
+
+            this.init = function(id) {
+                _private.mrId = id;
+
+                _private.cache.put(id, $cacheFactory('comments:' + id));
+            };
+
+            this.push = function(id, comments) {
+                _private.cache.get(_private.mrId).put(id, comments);
+            };
+
+            this.fetch = function(id) {
+                var deferred = $q.defer(),
+                    mrId = _private.mrId,
+                    cache = _private.cache.get(mrId),
+                    comments;
+
+                if (!cache) {
+                    deferred.reject('Service has not been initialized with CommentsService.init(id)!');
+                    return deferred.promise;
+                }
+
+                comments = cache.get(id);
+
+                if (!comments) {
+                    deferred.reject({ code: 404, message: 'Could not find comments with id: ' + id + '.' });
+                }
+
+                deferred.resolve(comments);
+
+                return deferred.promise;
+            };
+
+            this.post = function(id, message) {
+                var cache = _private.cache.get(_private.mrId),
+                    comments = cache.put(id, (cache.get(id) || []));
+
+                comments.unshift({
+                    user: {
+                        pic: 'anonymous.png',
+                        name: 'Anonymous'
+                    },
+                    date: Math.floor($window.Date.now() / 1000),
+                    message: message
+                });
+            };
+
+            if (window.c6.kHasKarma) { this._private = _private; }
+        }])
+
         .service('ModuleService', [function() {
             this.hasModule = function(modules, module) {
                 return ((modules || []).indexOf(module) > -1);

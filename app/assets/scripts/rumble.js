@@ -94,8 +94,8 @@
 
         return service;
     }])
-    .service('MiniReelService', ['InflectorService', 'rumbleVotes',
-    function                    ( InflectorService ,  rumbleVotes ) {
+    .service('MiniReelService', ['InflectorService','rumbleVotes','CommentsService',
+    function                    ( InflectorService , rumbleVotes , CommentsService ) {
         this.createDeck = function(data) {
             var playlist = angular.copy(data.deck);
 
@@ -147,22 +147,24 @@
                 //TODO: remove this when the service works for real
                 rumbleVotes.mockReturnsData(data.id, video.id, video.voting);
                 delete video.voting;
+                CommentsService.push(video.id, (video.conversation && video.conversation.comments));
+                delete video.conversation;
 
-                video.state = {
-                    vote: -1,
-                    view: 'video'
-                };
                 video.player = null;
             });
 
             return playlist;
         };
     }])
-    .controller('RumbleController',['$log','$scope','$timeout','rumbleVotes','c6Computed','cinema6','MiniReelService',
-    function                       ( $log , $scope , $timeout , rumbleVotes , c          , cinema6 , MiniReelService ){
+    .controller('RumbleController',['$log','$scope','$timeout','rumbleVotes','c6Computed','cinema6','MiniReelService','CommentsService',
+    function                       ( $log , $scope , $timeout , rumbleVotes , c          , cinema6 , MiniReelService , CommentsService ){
         $log = $log.context('RumbleCtrl');
         var self    = this, readyTimeout,
-            appData = $scope.app.data;
+            appData = $scope.app.data,
+            id = appData.experience.data.id;
+
+        rumbleVotes.init(id);
+        CommentsService.init(id);
 
         $scope.deviceProfile    = appData.profile;
         $scope.title            = appData.experience.title;
@@ -177,8 +179,6 @@
         $scope.atTail           = null;
         $scope.currentReturns   = null;
         $scope.ready            = false;
-
-        rumbleVotes.init(appData.experience.data.id);
 
         $scope.$on('playerAdd',function(event,player){
             $log.log('Player added: %1 - %2',player.getType(),player.getVideoId());
@@ -195,10 +195,6 @@
                 $log.log('Player ready: %1 - %2',player.getType(),player.getVideoId());
                 self.checkReady();
                 player.removeListener('ready',this);
-            });
-
-            player.on('ended', function() {
-                card.state.view = 'ballot';
             });
         });
 

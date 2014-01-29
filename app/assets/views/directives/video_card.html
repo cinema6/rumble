@@ -7,4 +7,8 @@
         ballot="config.ballot"
         vote="config._data.modules.ballot.vote">
     </ballot-module>
+    <comments-module ng-if="Ctrl.hasModule('comments')"
+        card-id="{{config.id}}"
+        fetch-comments-when="onDeck">
+    </comments-module>
 </section>
