@@ -36,8 +36,8 @@
 
             src = this.formatPlayerSrc(config.videoId, config.params);
             params = {
-                width       : config.width,
-                height      : config.height
+                //width       : config.width,
+                //height      : config.height
             };
 
             if (config.frameborder !== undefined){
@@ -383,7 +383,7 @@
             _default($attr,'rel'            ,0);
             _default($attr,'modestbranding' ,1);
 
-            $attr.$observe('width',function(){
+            /*$attr.$observe('width',function(){
                 if (player){
                     player.setSize($attr.width, $attr.height);
                 }
@@ -393,7 +393,7 @@
                 if (player){
                     player.setSize($attr.width, $attr.height);
                 }
-            });
+            });*/
 
             scope.$on('$destroy',function(){
                 if (currentTimeInterval) {
