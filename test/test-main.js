@@ -99,10 +99,16 @@
                 mini_reel_card: {
                     deps: ['app']
                 },
+                video_card: {
+                    deps: ['app']
+                },
                 ballot_module: {
                     deps: ['app']
                 },
                 comments_module: {
+                    deps: ['app']
+                },
+                display_ad_module: {
                     deps: ['app']
                 }
             },

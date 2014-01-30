@@ -407,7 +407,7 @@
             link     : fnLink,
             controller  : 'DailymotionCardController',
             controllerAs: 'Ctrl',
-            templateUrl : c6UrlMaker('views/directives/video_card.html')
+            templateUrl : c6UrlMaker('views/directives/video_embed_card.html')
         };
     }])
     .controller('DailymotionCardController', ['$scope','ModuleService',
@@ -418,6 +418,9 @@
                     ballot: {
                         active: false,
                         vote: null
+                    },
+                    displayAd: {
+                        active: false
                     }
                 }
             };
@@ -427,6 +430,7 @@
         $scope.$on('playerAdd', function(event, player) {
             player.once('play', function() {
                 _data.modules.ballot.active = true;
+                _data.modules.displayAd.active = true;
             });
         });
     }]);
