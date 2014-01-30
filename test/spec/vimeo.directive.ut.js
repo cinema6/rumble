@@ -653,6 +653,14 @@
                         expect(mockPlayers[0].removeListener).toHaveBeenCalledWith('play', jasmine.any(Function));
                     });
 
+                    it('will remove its "pause" listener', function() {
+                        mockPlayers[0]._on.ready[0]({},mockPlayers[0]);
+                        $timeout.flush();
+                        iface.twerk();
+
+                        expect(mockPlayers[0].removeListener).toHaveBeenCalledWith('pause', jasmine.any(Function));
+                    });
+
                     it('will reject if the player is not ready',function(){
                         expect(iface.isReady()).toEqual(false);
                         iface.twerk().then(resolveSpy,rejectSpy);
@@ -760,6 +768,11 @@
                             player._on.play[0](player);
                             expect(iface.emit).toHaveBeenCalledWith('play', iface);
                         });
+
+                        it('will set up the "pause" listener again', function() {
+                            player._on.pause[0](player);
+                            expect(iface.emit).toHaveBeenCalledWith('pause', iface);
+                        });
                     });
 
                     describe('if twerking succeeds', function() {
@@ -783,6 +796,11 @@
                         it('will set up the "play" listener again', function() {
                             player._on.play[0](player);
                             expect(iface.emit).toHaveBeenCalledWith('play', iface);
+                        });
+
+                        it('will set up the "pause" listener again', function() {
+                            player._on.pause[0](player);
+                            expect(iface.emit).toHaveBeenCalledWith('pause', iface);
                         });
                     });
                 });
@@ -815,6 +833,26 @@
                         
                         expect(readySpy).toHaveBeenCalledWith(iface);
                         expect(iface.isReady()).toEqual(true);
+                    });
+                });
+
+                describe('pause', function() {
+                    beforeEach(function() {
+                        $scope.$apply(function() {
+                            $compile('<vimeo-card videoid="a"></vimeo-card>')($scope);
+                        });
+                        $timeout.flush();
+                        mockPlayers[0]._on.ready[0](mockPlayers[0]);
+                        $timeout.flush();
+                        spyOn(iface, 'emit');
+                    });
+
+                    it('should emit "pause" on the interface', function() {
+                        var player = mockPlayers[0];
+
+                        player._on.pause[0](player);
+
+                        expect(iface.emit).toHaveBeenCalledWith('pause', iface);
                     });
                 });
 

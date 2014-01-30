@@ -531,6 +531,14 @@
                         });
                     });
 
+                    describe('pause', function() {
+                        it('should emit "pause" when the video emits "pause"', function() {
+                            c6Video.trigger('pause');
+
+                            expect(iface.emit).toHaveBeenCalledWith('pause', iface);
+                        });
+                    });
+
                     describe('ended', function() {
                         beforeEach(function() {
                             c6Video.trigger('ended');

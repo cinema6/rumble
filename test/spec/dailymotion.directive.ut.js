@@ -658,6 +658,26 @@
                     });
                 });
 
+                describe('pause', function() {
+                    beforeEach(function() {
+                        $scope.$apply(function() {
+                            $compile('<dailymotion-card videoid="a"></dailymotion-card>')($scope);
+                        });
+                        $timeout.flush();
+                        mockPlayers[0]._on.ready[0](mockPlayers[0]);
+                        $timeout.flush();
+                        spyOn(iface, 'emit');
+                    });
+
+                    it('should emit "pause" on the interface', function() {
+                        var player = mockPlayers[0];
+
+                        player._on.pause[0](player);
+
+                        expect(iface.emit).toHaveBeenCalledWith('pause', iface);
+                    });
+                });
+
                 describe('timeupdate', function() {
                     beforeEach(function() {
                         $scope.$apply(function() {

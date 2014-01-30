@@ -241,6 +241,10 @@
                 }
             }
 
+            function pauseListener() {
+                playerIface.emit('pause', playerIface);
+            }
+
             function twerk(wait){
                 var deferred = $q.defer(), waitTimer,
                 playingListener = function(){
@@ -259,6 +263,7 @@
 
                 player.removeListener('playProgress', handlePlayProgress);
                 player.removeListener('play', playListener);
+                player.removeListener('pause', pauseListener);
 
                 player.once('playProgress',playingListener);
 
@@ -283,6 +288,7 @@
                     .finally(function() {
                         player.on('playProgress', handlePlayProgress);
                         player.on('play', playListener);
+                        player.on('pause', pauseListener);
                     });
 
                 return deferred.promise;
@@ -431,6 +437,7 @@
                     });
 
                     player.on('play', playListener);
+                    player.on('pause', pauseListener);
                 });
             }
 

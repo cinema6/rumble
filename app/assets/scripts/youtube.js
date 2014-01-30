@@ -268,6 +268,10 @@
                 }
             }
 
+            function pauseListener() {
+                playerIface.emit('pause', playerIface);
+            }
+
             function twerk(wait){
                 var deferred = $q.defer(), waitTimer,
                 playingListener = function(){
@@ -286,6 +290,7 @@
 
                 $interval.cancel(currentTimeInterval);
                 player.removeListener('playing', playListener);
+                player.removeListener('paused', pauseListener);
 
                 player.once('playing',playingListener);
 
@@ -310,6 +315,7 @@
                     .finally(function() {
                         pollCurrentTime();
                         player.on('playing', playListener);
+                        player.on('paused', pauseListener);
                     });
 
                 return deferred.promise;
@@ -470,6 +476,7 @@
                     });
 
                     player.on('playing', playListener);
+                    player.on('paused', pauseListener);
                 });
             }
 

@@ -356,7 +356,12 @@
 
                     $timeout(function() {
                         playerIsReady = true;
+
                         player.on('timeupdate', handleTimeUpdate);
+                        player.on('pause', function() {
+                            playerIface.emit('pause', playerIface);
+                        });
+
                         playerIface.emit('ready',playerIface);
                     });
 

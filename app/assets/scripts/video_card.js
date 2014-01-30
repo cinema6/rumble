@@ -166,7 +166,7 @@
                     scope.$on('c6video-ready', function(event, video) {
                         c6Video = video;
 
-                        angular.forEach(['play', 'timeupdate'], function(event) {
+                        angular.forEach(['play', 'pause', 'timeupdate'], function(event) {
                             video.on(event, function() {
                                 iface.emit(event, iface);
                             });
