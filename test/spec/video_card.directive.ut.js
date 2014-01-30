@@ -20,6 +20,8 @@
                     ended: false
                 };
 
+                this.fullscreen = jasmine.createSpy('c6Video.fullscreen()');
+
                 this.bufferedPercent = jasmine.createSpy('c6Video.bufferedPercent()')
                     .andReturn(0);
 
@@ -530,10 +532,16 @@
                     });
 
                     describe('ended', function() {
-                        it('should emit "ended" when the video emits "ended"', function() {
+                        beforeEach(function() {
                             c6Video.trigger('ended');
+                        });
 
+                        it('should emit "ended" when the video emits "ended"', function() {
                             expect(iface.emit).toHaveBeenCalledWith('ended', iface);
+                        });
+
+                        it('should un-fullscreen the player when the video is done', function() {
+                            expect(c6Video.fullscreen).toHaveBeenCalledWith(false);
                         });
                     });
 

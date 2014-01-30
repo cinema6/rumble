@@ -166,10 +166,15 @@
                     scope.$on('c6video-ready', function(event, video) {
                         c6Video = video;
 
-                        angular.forEach(['play', 'ended', 'timeupdate'], function(event) {
+                        angular.forEach(['play', 'timeupdate'], function(event) {
                             video.on(event, function() {
                                 iface.emit(event, iface);
                             });
+                        });
+
+                        video.on('ended', function() {
+                            iface.emit('ended', iface);
+                            video.fullscreen(false);
                         });
 
                         $timeout(function() {
