@@ -10,6 +10,9 @@
                         ballot: {
                             active: false,
                             vote: null
+                        },
+                        displayAd: {
+                            active: false
                         }
                     }
                 };
@@ -44,6 +47,7 @@
 
                 player.once('play', function() {
                     _data.modules.ballot.active = true;
+                    _data.modules.displayAd.active = true;
                 });
             });
         }])

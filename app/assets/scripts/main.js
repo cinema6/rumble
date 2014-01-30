@@ -43,7 +43,8 @@
                     'scripts/mini_reel_card',
                     'scripts/video_card',
                     'scripts/ballot_module',
-                    'scripts/comments_module'
+                    'scripts/comments_module',
+                    'scripts/display_ad_module'
                 ];
             }
         }()),

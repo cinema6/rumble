@@ -116,6 +116,10 @@
                         it('should set _data.modules.ballot.active to true', function() {
                             expect($scope.config._data.modules.ballot.active).toBe(true);
                         });
+
+                        it('should set _data.modules.displayAd.active to true', function() {
+                            expect($scope.config._data.modules.displayAd.active).toBe(true);
+                        });
                     });
                 });
             });

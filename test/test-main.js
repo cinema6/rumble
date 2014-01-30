@@ -107,6 +107,9 @@
                 },
                 comments_module: {
                     deps: ['app']
+                },
+                display_ad_module: {
+                    deps: ['app']
                 }
             },
 
