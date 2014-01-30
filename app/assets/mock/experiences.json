@@ -100,17 +100,17 @@
                 {
                     "id"     : "rc-22119a8cf9f755",
                     "type"   : "youtube",
-                    "title"  : "Did someone say FOX?",
-                    "note"   : "Thought so",
+                    "title"  : "Epic Sax Guy",
+                    "note"   : "He's back, and saxier than ever.",
                     "modules": [
                         "ballot",
                         "comments"
                     ],
                     "voting" : [ 0.63, 0.31, 0.06 ],
                     "data"   : {
-                        "videoid" : "jofNR_WkoCE",
-                        "start"   : 40,
-                        "end"     : 49,
+                        "videoid" : "gy1B3agGNxw",
+                        "start"   : 42,
+                        "end"     : 130,
                         "rel"     : 0,
                         "modestbranding" : 1
                     },

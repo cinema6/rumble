@@ -25,12 +25,12 @@
                 return (comments ? comments.filter(function(comment) {
                     return comment.user.isFriend;
                 }) : null);
-            }, ['Ctrl.comments']);
+            }, ['Ctrl.comments', 'Ctrl.comments.length']);
             this.commentsByStrangers = c($scope, function(comments) {
                 return (comments ? comments.filter(function(comment) {
                     return !comment.user.isFriend;
                 }) : null);
-            }, ['Ctrl.comments']);
+            }, ['Ctrl.comments', 'Ctrl.comments.length']);
 
             this.showFriendsFirst = true;
             this.sortOptions = {
