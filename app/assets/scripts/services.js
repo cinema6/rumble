@@ -2,6 +2,55 @@
     'use strict';
 
     angular.module('c6.rumble.services', [])
+        .service('ControlsService', [function() {
+            var _private = {};
+
+            _private.target = null;
+
+            function handlePlay() {
+
+            }
+
+            function handlePause() {
+
+            }
+
+            function handleTimeupdate() {
+
+            }
+
+            this.init = function() {
+                var noop = angular.noop;
+
+                return {
+                    controller: {
+                        play: noop,
+                        pause: noop,
+                        progress: noop,
+                        volumeChange: noop,
+                        muteChange: noop,
+                        buffer: noop,
+                        repositionNodes: noop,
+                        setButtonDisabled: noop,
+                        ready: false
+                    },
+                    delegate: {},
+                    enabled: true
+                };
+            };
+
+            this.bindTo = function(iface) {
+                _private.target = iface;
+
+                iface
+                    .on('play', handlePlay)
+                    .on('pause', handlePause)
+                    .on('timeupdate', handleTimeupdate);
+            };
+
+            if (window.c6.kHasKarma) { this._private = _private; }
+        }])
+
         .service('CommentsService', ['$cacheFactory','$q','$window',
         function                    ( $cacheFactory , $q , $window ) {
             var _private = {};
