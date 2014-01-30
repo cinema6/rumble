@@ -83,6 +83,9 @@
                                 ballot: {
                                     active: false,
                                     vote: null
+                                },
+                                displayAd: {
+                                    active: false
                                 }
                             }
                         });

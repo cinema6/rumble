@@ -2,10 +2,59 @@
     'use strict';
 
     angular.module('c6.rumble')
-        .directive('videoCard', ['playerInterface','$q','$timeout',
-        function                ( playerInterface , $q , $timeout ) {
+        .controller('VideoCardController', ['$scope','ModuleService','$log',
+        function                           ( $scope , ModuleService , $log ) {
+            var config = $scope.config,
+                _data = config._data = config._data || {
+                    modules: {
+                        ballot: {
+                            active: false,
+                            vote: null
+                        }
+                    }
+                };
+
+            function watchState(player) {
+                $scope.$watch('onDeck', function(onDeck) {
+                    if (onDeck) {
+                        player.twerk()
+                            .catch(function(error) {
+                                $log.warn(error);
+                            });
+                    }
+                });
+
+                $scope.$watch('active', function(active, wasActive) {
+                    if (active === wasActive) { return; }
+
+                    if (active) {
+                        if (config.data.autoplay) {
+                            player.play();
+                        }
+                    } else {
+                        player.pause();
+                    }
+                });
+            }
+
+            this.hasModule = ModuleService.hasModule.bind(ModuleService, config.modules);
+
+            $scope.$on('playerAdd', function(event, player) {
+                player.once('ready', watchState.bind(null, player));
+
+                player.once('play', function() {
+                    _data.modules.ballot.active = true;
+                });
+            });
+        }])
+
+        .directive('videoCard', ['playerInterface','$q','$timeout','c6UrlMaker',
+        function                ( playerInterface , $q , $timeout , c6UrlMaker ) {
             return {
                 restrict: 'E',
+                templateUrl: c6UrlMaker('views/directives/video_card.html'),
+                controller: 'VideoCardController',
+                controllerAs: 'Ctrl',
                 link: function(scope) {
                     var iface = playerInterface(),
                         _iface = {
@@ -78,6 +127,11 @@
                             return promise;
                         }
 
+                        if (iface.twerked) {
+                            deferred.reject('Video has already been twerked.');
+                            return promise;
+                        }
+
                         if (angular.isUndefined(wait)) {
                             wait = 1000;
                         }
@@ -96,6 +150,10 @@
                             resolve();
                         }
 
+                        promise.then(function() {
+                            _iface.twerked = true;
+                        });
+
                         return promise;
                     };
 
@@ -103,7 +161,16 @@
 
                     scope.$on('c6video-ready', function(event, video) {
                         c6Video = video;
-                        iface.emit('ready', iface);
+
+                        angular.forEach(['play', 'ended', 'timeupdate'], function(event) {
+                            video.on(event, function() {
+                                iface.emit(event, iface);
+                            });
+                        });
+
+                        $timeout(function() {
+                            iface.emit('ready', iface);
+                        });
                     });
                 }
             };

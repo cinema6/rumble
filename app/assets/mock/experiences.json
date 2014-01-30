@@ -121,6 +121,7 @@
                     "id": "rc-2d46a04b21b073",
                     "type": "video",
                     "data": {
+                        "autoplay": true,
                         "src": "https://s3.amazonaws.com/c6.dev/media/src/screenjack/video/gijoe_fridge.mp4"
                     }
                 },

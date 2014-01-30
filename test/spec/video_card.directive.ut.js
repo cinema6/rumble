@@ -28,6 +28,8 @@
                         var handlers = eventHandlers[event] = (eventHandlers[event] || []);
 
                         handlers.push(handler);
+
+                        return self;
                     });
 
                 this.off = jasmine.createSpy('c6Video.off()')
@@ -49,6 +51,12 @@
             }
 
             beforeEach(function() {
+                module('c6.ui', function($provide) {
+                    $provide.factory('c6VideoDirective', function() {
+                        return {};
+                    });
+                });
+
                 module('c6.rumble');
 
                 inject(function($injector) {
@@ -90,13 +98,12 @@
 
                     $scope.$apply(function() {
                         $compile('<video-card></video-card>')($scope);
-
-                        spyOn(iface, 'emit').andCallThrough();
-
-                        expect(iface.isReady()).not.toBe(true);
-                        expect(iface.emit).not.toHaveBeenCalled();
                     });
 
+                    spyOn(iface, 'emit').andCallThrough();
+
+                    expect(iface.isReady()).not.toBe(true);
+                    expect(iface.emit).not.toHaveBeenCalled();
 
                     $scope.$emit('c6video-ready', new C6Video());
                 });
@@ -105,7 +112,9 @@
                     expect(iface.isReady()).toBe(true);
                 });
 
-                it('should emit the "ready" event on the iface', function() {
+                it('should emit the "ready" event on the iface in a timeout', function() {
+                    $timeout.flush();
+
                     expect(iface.emit).toHaveBeenCalledWith('ready', iface);
                 });
             });
@@ -351,6 +360,7 @@
                                 c6Video = new C6Video();
 
                                 $scope.$emit('c6video-ready', c6Video);
+                                $timeout.flush();
                             });
 
                             describe('if 0 is passed in', function() {
@@ -460,6 +470,87 @@
                                     expect(failure).toHaveBeenCalledWith('Twerk timed out after 1000ms.');
                                 });
                             });
+
+                            describe('if twerking succeeds', function() {
+                                beforeEach(function() {
+                                    iface.twerk();
+                                    c6Video.trigger('progress');
+                                });
+
+                                it('should set "twerked" to true', function() {
+                                    expect(iface.twerked).toBe(true);
+                                });
+                            });
+
+                            describe('twerking twice', function() {
+                                var onCallCount;
+
+                                beforeEach(function() {
+                                    iface.twerk();
+                                    c6Video.trigger('progress');
+
+                                    onCallCount = c6Video.on.callCount;
+
+                                    $scope.$apply(function() {
+                                        iface.twerk().catch(failure);
+                                    });
+                                });
+
+                                it('should reject the promise', function() {
+                                    expect(failure).toHaveBeenCalledWith('Video has already been twerked.');
+
+                                    expect(c6Video.player.load.callCount).toBe(1);
+                                    expect(c6Video.on.callCount).toBe(onCallCount);
+                                    expect(function() {
+                                        $timeout.flush();
+                                    }).toThrow();
+                                });
+                            });
+                        });
+                    });
+                });
+
+                describe('events', function() {
+                    var c6Video;
+
+                    beforeEach(function() {
+                        spyOn(iface, 'emit').andCallThrough();
+
+                        c6Video = new C6Video();
+
+                        $scope.$emit('c6video-ready', c6Video);
+                    });
+
+                    describe('play', function() {
+                        it('should emit "play" when the video emits "play"', function() {
+                            c6Video.trigger('play');
+
+                            expect(iface.emit).toHaveBeenCalledWith('play', iface);
+                        });
+                    });
+
+                    describe('ended', function() {
+                        it('should emit "ended" when the video emits "ended"', function() {
+                            c6Video.trigger('ended');
+
+                            expect(iface.emit).toHaveBeenCalledWith('ended', iface);
+                        });
+                    });
+
+                    describe('timeupdate', function() {
+                        it('should emit "timeupdate" when the video emits "timeupdate"', function() {
+                            var calls;
+
+                            c6Video.trigger('timeupdate');
+                            expect(iface.emit).toHaveBeenCalledWith('timeupdate', iface);
+
+                            calls = iface.emit.callCount;
+
+                            c6Video.trigger('timeupdate');
+                            expect(iface.emit.callCount).toBe(calls + 1);
+
+                            c6Video.trigger('timeupdate');
+                            expect(iface.emit.callCount).toBe(calls + 2);
                         });
                     });
                 });
