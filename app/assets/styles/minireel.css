@@ -2,7 +2,7 @@
     global styles
     ========================================================================== */
     body {
-        font-size: 1em; font-family: 'Open Sans', Arial, Helvetica, sans-serif; color:#545454; line-height: 1.5;
+        font-size: 1em; font-family: 'MuseoSans', Arial, Helvetica, sans-serif; font-weight:300; color:#545454; line-height: 1.5;
         background:transparent; margin:0;
     }
     @font-face {
@@ -65,15 +65,6 @@
         font-weight: 900;
         font-style: italic;
     }
-    @font-face {
-        font-family: 'iconies_socialregular';
-        src: url('iconiessocial-webfont.eot');
-        src: url('iconiessocial-webfont.eot?#iefix') format('embedded-opentype'),
-             url('iconiessocial-webfont.woff') format('woff'),
-             url('iconiessocial-webfont.ttf') format('truetype');
-        font-weight: normal;
-        font-style: normal;
-    }
     ::-moz-selection {
         background: #e900a4; text-shadow: none; color:#fff;
     }
@@ -96,6 +87,12 @@
         outline:none; border:0;
     }
         
+/*  ==========================================================================
+    c6-copy classes : general type styles
+    ========================================================================== */
+    .tk--hdr {
+        font-family: 'MuseoSans', 'Open Sans', Arial, Helvetica, sans-serif; font-weight:300;
+    }
 
 /*  ==========================================================================
     Helper classes
@@ -116,6 +113,24 @@
     .hidden {
         visibility: hidden;
     }
+    .sprite {
+        background-image:url('../img/sprite.svg'); background-repeat:no-repeat; background-size:18.75em 18.75em;
+    }
+
+/*  ==========================================================================
+    ui-icons classes
+    ========================================================================== */
+    .ui-icon__prev, .ui-icon__next {
+        position: absolute; display: block; margin:-0.625em 0 0 0; padding: 0; font-size: 1em;
+        width:0.75em; /*12px*/ height:1.25em;/*20px*/ top:50%;
+    }
+        .ui-icon__prev {
+            left:1em;
+        }
+        .ui-icon__next {
+            right:1em;
+        }
+
 
 /*  ==========================================================================
     Navigation classes
@@ -140,22 +155,21 @@
                 width:4em; left:50%; margin:0 0 0 -2em;
             }
         .ui-control__label {
-            background: url('../img/nav__prev.svg') 20% 50% no-repeat; background-size:3.3125em 1.25em; left:0; top:0;
-            z-index: 10;
+            left:0; top:0; z-index: 10; color:#fff; font-weight:700;
         }
             .ui-control__label-next {
-                background-image:url('../img/nav__next.svg'); background-position:80% 50%;
+                background-image:url('../img/arrow__next.svg'); background-position:80% 50%;
             }
             .ui-control__label-view-list {
                 width:4em;
                 background: url('../img/nav__index.svg') 50% 50% no-repeat; background-size:2em 1.375em;
             }
         .ui-control__preview-img {
-            background:no-repeat 50% 50%; background-size:cover; top:0; left:0; z-index:1;
+            background:no-repeat 50% 50%; background-size:cover; top:0; left:0;
             opacity:0.7;
         }
         .ui-control__activator {
-           background:#fff; opacity:0; left:0; top:0; z-index: 2;
+           background:#fff; opacity:0; left:0; top:0;
         }
 
     .ui-context {
@@ -164,6 +178,7 @@
         .publisher__branding-logo {
             display: block; width:2.5em;/*40px*/ height:2.5em;/*40px*/ margin:0 0 0 0.4375em; /*0 0 0 7px*/ border:0; padding:0; font-size:1em;
             background:transparent 50% 50% no-repeat; background-size:contain;
+            position:absolute; top:0; left:0;
         }
 
 
