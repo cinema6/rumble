@@ -156,8 +156,8 @@
             return playlist;
         };
     }])
-    .controller('RumbleController',['$log','$scope','$timeout','rumbleVotes','c6Computed','cinema6','MiniReelService','CommentsService',
-    function                       ( $log , $scope , $timeout , rumbleVotes , c          , cinema6 , MiniReelService , CommentsService ){
+    .controller('RumbleController',['$log','$scope','$timeout','rumbleVotes','c6Computed','cinema6','MiniReelService','CommentsService','ControlsService',
+    function                       ( $log , $scope , $timeout , rumbleVotes , c          , cinema6 , MiniReelService , CommentsService , ControlsService ){
         $log = $log.context('RumbleCtrl');
         var self    = this, readyTimeout,
             appData = $scope.app.data,
@@ -168,6 +168,8 @@
 
         $scope.deviceProfile    = appData.profile;
         $scope.title            = appData.experience.title;
+
+        $scope.controls         = ControlsService.init();
 
         $scope.deck             = MiniReelService.createDeck(appData.experience.data);
         $scope.players          = c($scope, function(index, deck) {

@@ -17,7 +17,9 @@
                     pause: jasmine.createSpy('player.pause()'),
                     load: jasmine.createSpy('player.load()'),
                     currentTime: 0,
-                    ended: false
+                    ended: false,
+                    duration: NaN,
+                    paused: true
                 };
 
                 this.fullscreen = jasmine.createSpy('c6Video.fullscreen()');
@@ -193,6 +195,82 @@
                                     iface.currentTime = 30;
                                     expect(c6Video.player.currentTime).toBe(30);
                                 });
+                            });
+                        });
+                    });
+
+                    describe('paused property', function() {
+                        describe('getting', function() {
+                            describe('if the player is not ready', function() {
+                                it('should be true', function() {
+                                    expect(iface.paused).toBe(true);
+                                });
+                            });
+
+                            describe('if the player is ready', function() {
+                                var c6Video;
+
+                                beforeEach(function() {
+                                    c6Video = new C6Video();
+
+                                    $scope.$emit('c6video-ready', c6Video);
+                                });
+
+                                it('should proxy to the video player\'s property', function() {
+                                    expect(iface.paused).toBe(true);
+
+                                    c6Video.player.paused = false;
+                                    expect(iface.paused).toBe(false);
+
+                                    c6Video.player.paused = true;
+                                    expect(iface.paused).toBe(true);
+                                });
+                            });
+                        });
+
+                        describe('setting', function() {
+                            it('should not be publically settable', function() {
+                                expect(function() {
+                                    iface.paused = false;
+                                }).toThrow();
+                            });
+                        });
+                    });
+
+                    describe('duration', function() {
+                        describe('getting', function() {
+                            describe('if the player is not ready', function() {
+                                it('should be NaN', function() {
+                                    expect(iface.duration).toBeNaN();
+                                });
+                            });
+
+                            describe('if the player is ready', function() {
+                                var c6Video;
+
+                                beforeEach(function() {
+                                    c6Video = new C6Video();
+
+                                    $scope.$emit('c6video-ready', c6Video);
+                                });
+
+                                it('should proxy to the player\'s duration', function() {
+                                    expect(iface.duration).toBeNaN();
+
+                                    c6Video.player.duration = 45;
+                                    expect(iface.duration).toBe(45);
+
+                                    c6Video.player.duration = 30;
+                                    expect(iface.duration).toBe(30);
+                                });
+                            });
+                        });
+
+                        describe('setting', function() {
+                            it('should not be publically settable', function() {
+                                expect(function() {
+                                    iface.duration = 20;
+                                }).toThrow();
                             });
                         });
                     });
@@ -528,6 +606,14 @@
                             c6Video.trigger('play');
 
                             expect(iface.emit).toHaveBeenCalledWith('play', iface);
+                        });
+                    });
+
+                    describe('pause', function() {
+                        it('should emit "pause" when the video emits "pause"', function() {
+                            c6Video.trigger('pause');
+
+                            expect(iface.emit).toHaveBeenCalledWith('pause', iface);
                         });
                     });
 

@@ -2,8 +2,8 @@
     'use strict';
 
     angular.module('c6.rumble')
-        .controller('VideoCardController', ['$scope','ModuleService','$log',
-        function                           ( $scope , ModuleService , $log ) {
+        .controller('VideoCardController', ['$scope','ModuleService','$log','ControlsService',
+        function                           ( $scope , ModuleService , $log , ControlsService ) {
             var config = $scope.config,
                 _data = config._data = config._data || {
                     modules: {
@@ -31,6 +31,8 @@
                     if (active === wasActive) { return; }
 
                     if (active) {
+                        ControlsService.bindTo(player);
+
                         if (config.data.autoplay) {
                             player.play();
                         }
@@ -86,13 +88,21 @@
                             get: function() {
                                 return _iface.twerked;
                             }
+                        },
+                        duration: {
+                            get: function() {
+                                return c6Video ? c6Video.player.duration : NaN;
+                            }
+                        },
+                        paused: {
+                            get: function() {
+                                return !c6Video || c6Video.player.paused;
+                            }
                         }
                     });
 
                     iface.isReady = function() {
-                        if (!c6Video) { return false; }
-
-                        return true;
+                        return !!c6Video;
                     };
 
                     iface.getType = function() {
@@ -166,7 +176,7 @@
                     scope.$on('c6video-ready', function(event, video) {
                         c6Video = video;
 
-                        angular.forEach(['play', 'timeupdate'], function(event) {
+                        angular.forEach(['play', 'pause', 'timeupdate'], function(event) {
                             video.on(event, function() {
                                 iface.emit(event, iface);
                             });

@@ -147,7 +147,9 @@
                     isReady     : angular.noop,
                     currentTime : 0,
                     ended       : false,
-                    twerked     : false
+                    twerked     : false,
+                    duration    : NaN,
+                    paused      : true
                 });
             };
         }])

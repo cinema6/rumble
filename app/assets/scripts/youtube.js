@@ -174,6 +174,10 @@
                     return (_player.getPlayerState() === $win.YT.PlayerState.PLAYING);
                 };
 
+                self.getDuration = function() {
+                    return _player.getDuration();
+                };
+
                 self.seekTo = function(seconds){
                     _player.seekTo(seconds,true);
                     return self;
@@ -226,7 +230,8 @@
             var player, playerIface  = playerInterface(),
                 _playerIface = {
                     ended: false,
-                    twerked: false
+                    twerked: false,
+                    paused: true
                 },
                 playerIsReady = false, playerHasLoaded = false,
                 currentTimeInterval, lastNotifiedCurrentTime = 0,
@@ -260,12 +265,18 @@
             }
 
             function playListener(player) {
+                _playerIface.paused = false;
                 playerIface.emit('play', playerIface);
 
                 if (playerIface.ended) {
                     player.seekTo(start);
                     _playerIface.ended = false;
                 }
+            }
+
+            function pauseListener() {
+                _playerIface.paused = true;
+                playerIface.emit('pause', playerIface);
             }
 
             function twerk(wait){
@@ -286,6 +297,7 @@
 
                 $interval.cancel(currentTimeInterval);
                 player.removeListener('playing', playListener);
+                player.removeListener('paused', pauseListener);
 
                 player.once('playing',playingListener);
 
@@ -310,6 +322,7 @@
                     .finally(function() {
                         pollCurrentTime();
                         player.on('playing', playListener);
+                        player.on('paused', pauseListener);
                     });
 
                 return deferred.promise;
@@ -372,6 +385,16 @@
                     get: function() {
                         return _playerIface.twerked;
                     }
+                },
+                duration: {
+                    get: function() {
+                        return (($attr.end || player.getDuration()) - ($attr.start || 0)) || NaN;
+                    }
+                },
+                paused: {
+                    get: function() {
+                        return _playerIface.paused;
+                    }
                 }
             });
 
@@ -429,6 +452,7 @@
                         vparams[prop] = $attr[prop];
                     }
                 });
+                vparams.controls = 0;
 
                 playerIsReady = false;
                 player = youtube.createPlayer('yt_' + $attr.videoid,{
@@ -470,6 +494,7 @@
                     });
 
                     player.on('playing', playListener);
+                    player.on('paused', pauseListener);
                 });
             }
 
@@ -501,8 +526,8 @@
             templateUrl : c6UrlMaker('views/directives/video_embed_card.html')
         };
     }])
-    .controller('YoutubeCardController', ['$scope','ModuleService',
-    function                             ( $scope , ModuleService ) {
+    .controller('YoutubeCardController', ['$scope','ModuleService','ControlsService',
+    function                             ( $scope , ModuleService , ControlsService ) {
         var config = $scope.config,
             _data = config._data = config._data || {
                 modules: {
@@ -522,6 +547,12 @@
             player.once('play', function() {
                 _data.modules.ballot.active = true;
                 _data.modules.displayAd.active = true;
+            });
+
+            $scope.$watch('active', function(active) {
+                if (active) {
+                    ControlsService.bindTo(player);
+                }
             });
         });
     }]);

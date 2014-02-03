@@ -14,6 +14,11 @@
 
             beforeEach(function() {
                 mockPlayers = [];
+                module('c6.rumble.services', function($provide) {
+                    $provide.value('ControlsService', {
+                        bindTo: angular.noop
+                    });
+                });
                 module('c6.rumble',function($provide){
                     vimeo.createPlayer = jasmine.createSpy('vimeo.createPlayer')
                     .andCallFake(function(playerId,config,$parentElement){
@@ -29,6 +34,7 @@
                             pause               : jasmine.createSpy('vimeoPlayer.pause'),
                             seekTo              : jasmine.createSpy('vimeoPlayer.seekTo'),
                             getCurrentTimeAsync : jasmine.createSpy('VimeoPlayer.getCurrentTimeAsync()'),
+                            getDurationAsync    : jasmine.createSpy('VimeoPlayer.getDurationAsync()'),
 
                             _on                 : {},
                             _once               : {},
@@ -64,6 +70,8 @@
 
                             mockPlayer._removes[eventName].push(listener);
                         });
+
+                        mockPlayer.getDurationAsync.andReturn($q.defer().promise);
 
                         mockPlayers.push(mockPlayer);
                         return mockPlayer;
@@ -313,6 +321,189 @@
                                     iface.currentTime = -5;
                                     expect(player.seekTo).toHaveBeenCalledWith(10);
                                 });
+                            });
+                        });
+                    });
+
+                    describe('paused property', function() {
+                        var player;
+
+                        beforeEach(function() {
+                            player = mockPlayers[0];
+                        });
+
+                        describe('getting', function() {
+                            it('should be initialized as true', function() {
+                                expect(iface.paused).toBe(true);
+                            });
+
+                            it('should become false when the "play" event is emitted', function() {
+                                player._on.play[0](player);
+
+                                expect(iface.paused).toBe(false);
+                            });
+
+                            it('should go back to true when the "pause" event is emitted', function() {
+                                player._on.play[0](player);
+                                player._on.pause[0](player);
+
+                                expect(iface.paused).toBe(true);
+                            });
+                        });
+
+                        describe('setting', function() {
+                            it('should not be publically settable', function() {
+                                expect(function() {
+                                    iface.paused = false;
+                                }).toThrow();
+                            });
+                        });
+                    });
+
+                    describe('duration property', function() {
+                        var player;
+
+                        beforeEach(function() {
+                            player = mockPlayers[0];
+                        });
+
+                        describe('getting', function() {
+                            describe('if there is a start and end time', function() {
+                                it('should return the difference between the end and start time', function() {
+                                    $scope.$apply(function() {
+                                        $scope.start = 10;
+                                        $scope.end = 20;
+                                    });
+                                    expect(iface.duration).toBe(10);
+
+                                    $scope.$apply(function() {
+                                        $scope.end = 30;
+                                    });
+                                    expect(iface.duration).toBe(20);
+                                });
+                            });
+
+                            describe('if there is a start time', function() {
+                                var duration;
+
+                                beforeEach(function() {
+                                    duration = $q.defer();
+
+                                    $scope.start = 30;
+
+                                    $compile(
+                                        '<vimeo-card videoid="abc1234" width="1" height="2" start="{{start}}"></vimeo-card>'
+                                    )($scope);
+                                    $timeout.flush();
+
+                                    player = mockPlayers[1];
+                                    player.getDurationAsync.andReturn(duration.promise);
+
+                                    player._on.ready[0]({},player);
+                                    $timeout.flush();
+                                });
+
+                                it('should be NaN at first', function() {
+                                    expect(iface.duration).toBeNaN();
+                                });
+
+                                it('should update after the deferred resolves', function() {
+                                    expect(iface.duration).toBeNaN();
+
+                                    $scope.$apply(function() {
+                                        duration.resolve(60);
+                                    });
+                                    expect(iface.duration).toBe(30);
+
+                                    $scope.$apply(function() {
+                                        $scope.start = 20;
+                                    });
+                                    expect(iface.duration).toBe(40);
+                                });
+                            });
+
+                            describe('if there is an end time', function() {
+                                beforeEach(function() {
+                                    $scope.end = 30;
+
+                                    $compile(
+                                        '<vimeo-card videoid="abc1234" width="1" height="2" end="{{end}}"></vimeo-card>'
+                                    )($scope);
+                                    $timeout.flush();
+
+                                    player = mockPlayers[1];
+
+                                    player._on.ready[0]({},player);
+                                    $timeout.flush();
+                                });
+
+                                it('should return the end time', function() {
+                                    expect(iface.duration).toBe(30);
+
+                                    $scope.$apply(function() {
+                                        $scope.end = 15;
+                                    });
+                                    expect(iface.duration).toBe(15);
+
+                                    $scope.$apply(function() {
+                                        $scope.end = 60;
+                                    });
+                                    expect(iface.duration).toBe(60);
+                                });
+                            });
+
+                            describe('if there is no start or end time', function() {
+                                var duration;
+
+                                beforeEach(function() {
+                                    duration = $q.defer();
+
+                                    $compile(
+                                        '<vimeo-card videoid="abc1234" width="1" height="2"></vimeo-card>'
+                                    )($scope);
+                                    $timeout.flush();
+
+                                    player = mockPlayers[1];
+                                    player.getDurationAsync.andReturn(duration.promise);
+
+                                    player._on.ready[0]({},player);
+                                    $timeout.flush();
+                                });
+
+                                it('should be NaN at first', function() {
+                                    expect(iface.duration).toBeNaN();
+                                });
+
+                                it('should be the video\'s duration after the deferred is resolved', function() {
+                                    expect(iface.duration).toBeNaN();
+
+                                    $scope.$apply(function() {
+                                        duration.resolve(25);
+                                    });
+
+                                    expect(iface.duration).toBe(25);
+                                });
+                            });
+
+                            describe('if the player duration is 0', function() {
+                                beforeEach(function() {
+                                    $scope.$apply(function() {
+                                        $scope.start = 10;
+                                        $scope.end = 10;
+                                    });
+                                });
+
+                                it('should be NaN', function() {
+                                    expect(iface.duration).toBeNaN();
+                                });
+                            });
+                        });
+
+                        describe('setting', function() {
+                            it('should not be publically settable', function() {
+                                expect(function() {
+                                    iface.duration = 30;
+                                }).toThrow();
                             });
                         });
                     });
@@ -653,6 +844,14 @@
                         expect(mockPlayers[0].removeListener).toHaveBeenCalledWith('play', jasmine.any(Function));
                     });
 
+                    it('will remove its "pause" listener', function() {
+                        mockPlayers[0]._on.ready[0]({},mockPlayers[0]);
+                        $timeout.flush();
+                        iface.twerk();
+
+                        expect(mockPlayers[0].removeListener).toHaveBeenCalledWith('pause', jasmine.any(Function));
+                    });
+
                     it('will reject if the player is not ready',function(){
                         expect(iface.isReady()).toEqual(false);
                         iface.twerk().then(resolveSpy,rejectSpy);
@@ -760,6 +959,11 @@
                             player._on.play[0](player);
                             expect(iface.emit).toHaveBeenCalledWith('play', iface);
                         });
+
+                        it('will set up the "pause" listener again', function() {
+                            player._on.pause[0](player);
+                            expect(iface.emit).toHaveBeenCalledWith('pause', iface);
+                        });
                     });
 
                     describe('if twerking succeeds', function() {
@@ -783,6 +987,11 @@
                         it('will set up the "play" listener again', function() {
                             player._on.play[0](player);
                             expect(iface.emit).toHaveBeenCalledWith('play', iface);
+                        });
+
+                        it('will set up the "pause" listener again', function() {
+                            player._on.pause[0](player);
+                            expect(iface.emit).toHaveBeenCalledWith('pause', iface);
                         });
                     });
                 });
@@ -815,6 +1024,26 @@
                         
                         expect(readySpy).toHaveBeenCalledWith(iface);
                         expect(iface.isReady()).toEqual(true);
+                    });
+                });
+
+                describe('pause', function() {
+                    beforeEach(function() {
+                        $scope.$apply(function() {
+                            $compile('<vimeo-card videoid="a"></vimeo-card>')($scope);
+                        });
+                        $timeout.flush();
+                        mockPlayers[0]._on.ready[0](mockPlayers[0]);
+                        $timeout.flush();
+                        spyOn(iface, 'emit');
+                    });
+
+                    it('should emit "pause" on the interface', function() {
+                        var player = mockPlayers[0];
+
+                        player._on.pause[0](player);
+
+                        expect(iface.emit).toHaveBeenCalledWith('pause', iface);
                     });
                 });
 

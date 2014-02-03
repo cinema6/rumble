@@ -2,6 +2,102 @@
     'use strict';
 
     angular.module('c6.rumble.services', [])
+        .service('ControlsService', ['$timeout',
+        function                    ( $timeout ) {
+            var _private = {};
+
+            _private.target = null;
+            _private.iface = null;
+
+            function handlePlay() {
+                _private.iface.controller.play();
+            }
+
+            function handlePause() {
+                _private.iface.controller.pause();
+            }
+
+            function handleTimeupdate(player) {
+                var duration = player.duration,
+                    currentTime = player.currentTime;
+
+                if (isNaN(duration)) { return; }
+
+                _private.iface.controller.progress((currentTime / duration) * 100);
+            }
+
+            this.init = function() {
+                var noop = angular.noop,
+                    wasPlaying;
+
+                _private.iface = {
+                    controller: {
+                        play: noop,
+                        pause: noop,
+                        progress: noop,
+                        volumeChange: noop,
+                        muteChange: noop,
+                        buffer: noop,
+                        repositionNodes: noop,
+                        setButtonDisabled: noop,
+                        ready: false
+                    },
+                    delegate: {
+                        play: function() {
+                            _private.target.play();
+                        },
+                        pause: function() {
+                            _private.target.pause();
+                        },
+                        seekStart: function() {
+                            wasPlaying = !_private.target.paused;
+
+                            _private.target.pause();
+                        },
+                        seek: function(event) {
+                            $timeout(function() {
+                                _private.iface.controller.progress(event.percent);
+                            });
+                        },
+                        seekStop: function(event) {
+                            var percent = event.percent,
+                                duration = _private.target.duration;
+
+                            _private.target.currentTime = ((percent * duration) / 100);
+
+                            if (wasPlaying) {
+                                _private.target.play();
+                            }
+                        }
+                    },
+                    enabled: true
+                };
+
+                return _private.iface;
+            };
+
+            this.bindTo = function(iface) {
+                _private.iface.controller.progress(0);
+                _private.iface.controller.pause();
+
+                if (_private.target) {
+                    _private.target
+                        .removeListener('play', handlePlay)
+                        .removeListener('pause', handlePause)
+                        .removeListener('timeupdate', handleTimeupdate);
+                }
+
+                _private.target = iface;
+
+                iface
+                    .on('play', handlePlay)
+                    .on('pause', handlePause)
+                    .on('timeupdate', handleTimeupdate);
+            };
+
+            if (window.c6.kHasKarma) { this._private = _private; }
+        }])
+
         .service('CommentsService', ['$cacheFactory','$q','$window',
         function                    ( $cacheFactory , $q , $window ) {
             var _private = {};

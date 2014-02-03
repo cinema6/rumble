@@ -56,6 +56,13 @@ ul.rumble-players {
     padding-left: 0px;
     margin-left: 0px;
 }
+
+.controls {
+    position: fixed;
+    height: 40px;
+    bottom: 10px;
+    width: 100%;
+}
 /*
 .player {
     position: absolute;

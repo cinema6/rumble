@@ -8,6 +8,7 @@
                 $timeout,
                 $q,
                 $log,
+                $controller,
                 c6UserAgent,
                 RumbleCtrl,
                 rumbleVotes,
@@ -16,7 +17,8 @@
                 appData,
                 mockPlayer,
                 cinema6,
-                MiniReelService;
+                MiniReelService,
+                ControlsService;
 
             beforeEach(function() {
                 MiniReelService = {
@@ -109,6 +111,10 @@
 
                 module('c6.rumble', function($provide) {
                     $provide.value('MiniReelService', MiniReelService);
+                    $provide.value('ControlsService', {
+                        init: jasmine.createSpy('ControlsService.init()')
+                            .andReturn({})
+                    });
                 });
 
                 inject(function($injector) {
@@ -116,11 +122,13 @@
                     $q          = $injector.get('$q');
                     $rootScope  = $injector.get('$rootScope');
                     $log        = $injector.get('$log');
+                    $controller = $injector.get('$controller');
                     $log.context = function() { return $log; };
                     $window     = $injector.get('$window');
                     c6UserAgent = $injector.get('c6UserAgent');
                     rumbleVotes = $injector.get('rumbleVotes');
                     CommentsService = $injector.get('CommentsService');
+                    ControlsService = $injector.get('ControlsService');
 
                     $scope      = $rootScope.$new();
 
@@ -130,7 +138,7 @@
 
                     spyOn(CommentsService, 'init');
                     spyOn(rumbleVotes, 'init');
-                    RumbleCtrl = $injector.get('$controller')('RumbleController', {
+                    RumbleCtrl = $controller('RumbleController', {
                         $scope  : $scope,
                         $log    : $log
                     });
@@ -140,7 +148,7 @@
                 it('has proper dependencies',function(){
                     expect(RumbleCtrl).toBeDefined();
                     expect($scope.deviceProfile).toBe(appData.profile);
-                    
+
                     expect($scope.deck).toBe(MiniReelService.createDeck.mostRecentCall.result);
                     expect($scope.currentIndex).toEqual(-1);
                     expect($scope.currentCard).toBeNull();
@@ -207,6 +215,22 @@
 
                     currentIndex(2);
                     expect(players()).toEqual([playlist(0), playlist(1), playlist(2), playlist(3), playlist(4)]);
+                });
+            });
+
+            describe('$scope.controls', function() {
+                var controlsIFace;
+
+                beforeEach(function() {
+                    controlsIFace = {};
+
+                    ControlsService.init.andReturn(controlsIFace);
+                    RumbleCtrl = $controller('RumbleController', { $scope: $scope });
+                });
+
+                it('should be the result of calling init() on the ControlsService', function() {
+                    expect($scope.controls).toBe(controlsIFace);
+                    expect(ControlsService.init).toHaveBeenCalled();
                 });
             });
 
