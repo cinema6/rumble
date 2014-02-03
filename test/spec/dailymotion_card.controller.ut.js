@@ -10,7 +10,8 @@
                 DailymotionCardCtrl;
 
             var EventService,
-                ModuleService;
+                ModuleService,
+                ControlsService;
 
             function Tracker(events) {
                 events.forEach(function(event) {
@@ -37,6 +38,10 @@
                     $provide.value('ModuleService', {
                         hasModule: jasmine.createSpy('ModuleService.hasModule()')
                     });
+
+                    $provide.value('ControlsService', {
+                        bindTo: jasmine.createSpy('ControlsService.bindTo()')
+                    });
                 });
 
                 module('c6.rumble');
@@ -48,6 +53,7 @@
 
                     EventService = $injector.get('EventService');
                     ModuleService = $injector.get('ModuleService');
+                    ControlsService = $injector.get('ControlsService');
 
                     $rootScope.config = {
                         modules: ['ballot', 'comments']
@@ -88,6 +94,42 @@
                                     active: false
                                 }
                             }
+                        });
+                    });
+                });
+            });
+
+            describe('$watchers', function() {
+                describe('active', function() {
+                    var iface;
+
+                    beforeEach(function() {
+                        iface = c6EventEmitter({});
+
+                        $scope.$emit('playerAdd', iface);
+                    });
+
+                    describe('when not active', function() {
+                        beforeEach(function() {
+                            $scope.$apply(function() {
+                                $scope.active = false;
+                            });
+                        });
+
+                        it('should not bind to the controls', function() {
+                            expect(ControlsService.bindTo).not.toHaveBeenCalled();
+                        });
+                    });
+
+                    describe('when active', function() {
+                        beforeEach(function() {
+                            $scope.$apply(function() {
+                                $scope.active = true;
+                            });
+                        });
+
+                        it('should bind to the controls', function() {
+                            expect(ControlsService.bindTo).toHaveBeenCalledWith(iface);
                         });
                     });
                 });

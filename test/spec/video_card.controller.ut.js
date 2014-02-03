@@ -11,6 +11,7 @@
                 VideoCardCtrl;
 
             var ModuleService,
+                ControlsService,
                 $log;
 
             beforeEach(function() {
@@ -21,6 +22,10 @@
 
                     $provide.value('$log', {
                         warn: jasmine.createSpy('$log.warn()')
+                    });
+
+                    $provide.value('ControlsService', {
+                        bindTo: jasmine.createSpy('ControlsService.bindTo()')
                     });
                 });
 
@@ -33,6 +38,7 @@
                     $q = $injector.get('$q');
 
                     ModuleService = $injector.get('ModuleService');
+                    ControlsService = $injector.get('ControlsService');
                     $log = $injector.get('$log');
 
                     $scope = $rootScope.$new();
@@ -178,6 +184,19 @@
                         });
 
                         describe('when active is true', function() {
+                            describe('regardless of autoplay', function() {
+                                beforeEach(function() {
+                                    $scope.$digest();
+                                    $scope.$apply(function() {
+                                        $scope.active = true;
+                                    });
+                                });
+
+                                it('should bind to the controls', function() {
+                                    expect(ControlsService.bindTo).toHaveBeenCalledWith(iface);
+                                });
+                            });
+
                             describe('if autoplay is false', function() {
                                 beforeEach(function() {
                                     $scope.$apply(function() {
@@ -208,6 +227,7 @@
 
                         describe('when active is false', function() {
                             beforeEach(function() {
+                                $scope.$digest();
                                 $scope.$apply(function() {
                                     $scope.active = true;
                                 });
@@ -219,6 +239,10 @@
 
                             it('should pause the video', function() {
                                 expect(iface.pause).toHaveBeenCalled();
+                            });
+
+                            it('should not bind to the controls', function() {
+                                expect(ControlsService.bindTo.callCount).toBe(1);
                             });
                         });
                     });

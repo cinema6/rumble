@@ -16,6 +16,12 @@
 
             beforeEach(function() {
                 mockPlayers = [];
+                module('c6.rumble.services', function($provide) {
+                    $provide.value('ControlsService', {
+                        bindTo: angular.noop
+                    });
+                });
+
                 module('c6.rumble',function($provide){
                     youtube.createPlayer = jasmine.createSpy('youtube.createPlayer')
                     .andCallFake(function(playerId,config,$parentElement){
@@ -31,6 +37,7 @@
                             seekTo          : jasmine.createSpy('youtubePlayer.seekTo'),
                             getCurrentTime  : jasmine.createSpy('youtubePlayer.getCurrentTime'),
                             isPlaying       : jasmine.createSpy('YoutubePlayer.isPlaying'),
+                            getDuration     : jasmine.createSpy('YoutubePlayer.getDuration'),
 
                             _on             : {},
                             _once           : {},
@@ -121,7 +128,8 @@
                         params: {
                             rel             : 0,
                             enablejsapi     : 1,
-                            modestbranding  : 1
+                            modestbranding  : 1,
+                            controls        : 0
                         },
                         frameborder: 0
                     });
@@ -363,6 +371,174 @@
                                     iface.currentTime = -5;
                                     expect(player.seekTo).toHaveBeenCalledWith(10);
                                 });
+                            });
+                        });
+                    });
+
+                    describe('paused property', function() {
+                        var player;
+
+                        beforeEach(function() {
+                            player = mockPlayers[0];
+                        });
+
+                        describe('getting', function() {
+                            it('should be initialized as true', function() {
+                                expect(iface.paused).toBe(true);
+                            });
+
+                            it('should become false when the "playing" event is emitted', function() {
+                                player._on.playing[0](player);
+
+                                expect(iface.paused).toBe(false);
+                            });
+
+                            it('should go back to true when the "paused" event is emitted', function() {
+                                player._on.playing[0](player);
+                                player._on.paused[0](player);
+
+                                expect(iface.paused).toBe(true);
+                            });
+                        });
+
+                        describe('setting', function() {
+                            it('should not be publically settable', function() {
+                                expect(function() {
+                                    iface.paused = false;
+                                }).toThrow();
+                            });
+                        });
+                    });
+
+                    describe('duration property', function() {
+                        var player;
+
+                        beforeEach(function() {
+                            player = mockPlayers[0];
+                        });
+
+                        describe('getting', function() {
+                            describe('if there is a start and end time', function() {
+                                it('should return the difference between the end and start time', function() {
+                                    $scope.$apply(function() {
+                                        $scope.start = 10;
+                                        $scope.end = 20;
+                                    });
+                                    expect(iface.duration).toBe(10);
+
+                                    $scope.$apply(function() {
+                                        $scope.end = 30;
+                                    });
+                                    expect(iface.duration).toBe(20);
+                                });
+                            });
+
+                            describe('if there is a start time', function() {
+                                beforeEach(function() {
+                                    $scope.start = 0;
+
+                                    $compile(
+                                        '<youtube-card videoid="abc1234" width="1" height="2" start="{{start}}"></youtube-card>'
+                                    )($scope);
+                                    $timeout.flush();
+
+                                    player = mockPlayers[1];
+                                    player.getDuration.andReturn(30);
+
+                                    player._on.ready[0]({},player);
+                                    $timeout.flush();
+                                });
+
+                                it('should return the difference between the actual duration and the start time', function() {
+                                    expect(iface.duration).toBe(30);
+
+                                    $scope.$apply(function() {
+                                        $scope.start = 10;
+                                    });
+                                    expect(iface.duration).toBe(20);
+
+                                    $scope.$apply(function() {
+                                        $scope.start = 30;
+                                        player.getDuration.andReturn(40);
+                                    });
+                                    expect(iface.duration).toBe(10);
+                                });
+                            });
+
+                            describe('if there is an end time', function() {
+                                beforeEach(function() {
+                                    $scope.end = 30;
+
+                                    $compile(
+                                        '<youtube-card videoid="abc1234" width="1" height="2" end="{{end}}"></youtube-card>'
+                                    )($scope);
+                                    $timeout.flush();
+
+                                    player = mockPlayers[1];
+                                    player.getDuration.andReturn(30);
+
+                                    player._on.ready[0]({},player);
+                                    $timeout.flush();
+                                });
+
+                                it('should return the end time', function() {
+                                    expect(iface.duration).toBe(30);
+
+                                    $scope.$apply(function() {
+                                        $scope.end = 15;
+                                    });
+                                    expect(iface.duration).toBe(15);
+
+                                    $scope.$apply(function() {
+                                        $scope.end = 60;
+                                    });
+                                    expect(iface.duration).toBe(60);
+                                });
+                            });
+
+                            describe('if there is no start or end time', function() {
+                                beforeEach(function() {
+                                    $compile(
+                                        '<youtube-card videoid="abc1234" width="1" height="2"></youtube-card>'
+                                    )($scope);
+                                    $timeout.flush();
+
+                                    player = mockPlayers[1];
+                                    player.getDuration.andReturn(30);
+
+                                    player._on.ready[0]({},player);
+                                    $timeout.flush();
+                                });
+
+                                it('should return the duration of the player', function() {
+                                    expect(iface.duration).toBe(30);
+
+                                    player.getDuration.andReturn(24);
+                                    expect(iface.duration).toBe(24);
+                                });
+                            });
+
+                            describe('if the player duration is 0', function() {
+                                beforeEach(function() {
+                                    $scope.$apply(function() {
+                                        $scope.start = undefined;
+                                        $scope.end = undefined;
+                                    });
+
+                                    player.getDuration.andReturn(0);
+                                });
+
+                                it('should be NaN', function() {
+                                    expect(iface.duration).toBeNaN();
+                                });
+                            });
+                        });
+
+                        describe('setting', function() {
+                            it('should not be publically settable', function() {
+                                expect(function() {
+                                    iface.duration = 30;
+                                }).toThrow();
                             });
                         });
                     });

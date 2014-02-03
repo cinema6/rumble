@@ -182,7 +182,9 @@
             var player, playerIface  = playerInterface(),
                 _playerIface = {
                     currentTime: 0,
-                    ended: false
+                    ended: false,
+                    duration: NaN,
+                    paused: true
                 },
                 playerIsReady = false, playerHasLoaded = false;
 
@@ -190,7 +192,7 @@
                 $attr.videoid, $attr.start, $attr.end, $attr.autoplay);
 
             function handleTimeUpdate(player, data) {
-                _playerIface.currentTime = data.time;
+                _playerIface.currentTime = parseFloat(data.time);
 
                 playerIface.emit('timeupdate', playerIface);
             }
@@ -287,6 +289,16 @@
                     get: function() {
                         return false;
                     }
+                },
+                duration: {
+                    get: function() {
+                        return _playerIface.duration;
+                    }
+                },
+                paused: {
+                    get: function() {
+                        return _playerIface.paused;
+                    }
                 }
             });
 
@@ -336,10 +348,7 @@
                         vparams[prop] = $attr[prop];
                     }
                 });
-
-                if (numberify($attr.twerk)){
-                    vparams.html = '1';
-                }
+                vparams.chromeless = ((scope.profile.device === 'phone') ? 0 : 1);
 
                 player = dailymotion.createPlayer('dm_' + $attr.videoid,{
                     videoId     : $attr.videoid,
@@ -359,6 +368,7 @@
 
                         player.on('timeupdate', handleTimeUpdate);
                         player.on('pause', function() {
+                            _playerIface.paused = true;
                             playerIface.emit('pause', playerIface);
                         });
 
@@ -377,12 +387,17 @@
                     });
 
                     player.on('playing', function(p) {
+                        _playerIface.paused = false;
                         playerIface.emit('play', playerIface);
 
                         if (playerIface.ended) {
                             _playerIface.ended = false;
                             p.seekTo(0);
                         }
+                    });
+
+                    player.on('durationchange', function(player, data) {
+                        _playerIface.duration = parseFloat(data.duration);
                     });
                 });
             }
@@ -415,8 +430,8 @@
             templateUrl : c6UrlMaker('views/directives/video_embed_card.html')
         };
     }])
-    .controller('DailymotionCardController', ['$scope','ModuleService',
-    function                                 ( $scope , ModuleService ) {
+    .controller('DailymotionCardController', ['$scope','ModuleService','ControlsService',
+    function                                 ( $scope , ModuleService , ControlsService ) {
         var config = $scope.config,
             _data = config._data = config._data || {
                 modules: {
@@ -436,6 +451,12 @@
             player.once('play', function() {
                 _data.modules.ballot.active = true;
                 _data.modules.displayAd.active = true;
+            });
+
+            $scope.$watch('active', function(active) {
+                if (active) {
+                    ControlsService.bindTo(player);
+                }
             });
         });
     }]);

@@ -210,7 +210,9 @@
                 _playerIface = {
                     currentTime: 0,
                     ended: false,
-                    twerked: false
+                    twerked: false,
+                    duration: NaN,
+                    paused: true
                 },
                 start = numberify($attr.start, 0), end = numberify($attr.end, Infinity);
 
@@ -233,6 +235,7 @@
             }
 
             function playListener(player) {
+                _playerIface.paused = false;
                 playerIface.emit('play', playerIface);
 
                 if (playerIface.ended) {
@@ -242,6 +245,7 @@
             }
 
             function pauseListener() {
+                _playerIface.paused = true;
                 playerIface.emit('pause', playerIface);
             }
 
@@ -350,6 +354,20 @@
                 twerked: {
                     get: function() {
                         return _playerIface.twerked;
+                    }
+                },
+                duration: {
+                    get: function() {
+                        player.getDurationAsync().then(function(duration) {
+                            _playerIface.duration = duration;
+                        });
+
+                        return (($attr.end || _playerIface.duration) - ($attr.start || 0)) || NaN;
+                    }
+                },
+                paused: {
+                    get: function() {
+                        return _playerIface.paused;
                     }
                 }
             });
@@ -469,8 +487,8 @@
             templateUrl : c6UrlMaker('views/directives/video_embed_card.html')
         };
     }])
-    .controller('VimeoCardController', ['$scope','ModuleService',
-    function                           ( $scope , ModuleService ) {
+    .controller('VimeoCardController', ['$scope','ModuleService','ControlsService',
+    function                           ( $scope , ModuleService , ControlsService ) {
         var config = $scope.config,
             _data = config._data = config._data || {
                 modules: {
@@ -490,6 +508,12 @@
             player.once('play', function() {
                 _data.modules.ballot.active = true;
                 _data.modules.displayAd.active = true;
+            });
+
+            $scope.$watch('active', function(active) {
+                if (active) {
+                    ControlsService.bindTo(player);
+                }
             });
         });
     }]);

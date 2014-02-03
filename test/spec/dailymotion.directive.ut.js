@@ -13,6 +13,11 @@
 
             beforeEach(function() {
                 mockPlayers = [];
+                module('c6.rumble.services', function($provide) {
+                    $provide.value('ControlsService', {
+                        bindTo: angular.noop
+                    });
+                });
                 module('c6.rumble',function($provide){
                     dailymotion.createPlayer = jasmine.createSpy('dm.createPlayer')
                     .andCallFake(function(playerId,config,$parentElement){
@@ -73,6 +78,9 @@
                     $scope = $rootScope.$new();
                     $scope.width = 100;
                     $scope.height = 100;
+                    $scope.profile = {
+                        device: 'desktop'
+                    };
                 });
             });
 
@@ -98,7 +106,8 @@
                         width: '1',
                         height: '2',
                         params: {
-                            related: 0
+                            related: 0,
+                            chromeless: 1
                         },
                         frameborder: 0
                     });
@@ -228,13 +237,13 @@
 
                         describe('getting', function() {
                             it('should return the latest update from the playProgress event', function() {
-                                player._on.timeupdate[0](player, { time: 10 });
+                                player._on.timeupdate[0](player, { time: '10' });
                                 expect(iface.currentTime).toBe(10);
 
-                                player._on.timeupdate[0](player, { time: 20 });
-                                expect(iface.currentTime).toBe(20);
+                                player._on.timeupdate[0](player, { time: '20.12' });
+                                expect(iface.currentTime).toBe(20.12);
 
-                                player._on.timeupdate[0](player, { time: 30 });
+                                player._on.timeupdate[0](player, { time: '30' });
                                 expect(iface.currentTime).toBe(30);
                             });
                         });
@@ -249,6 +258,71 @@
 
                                 iface.currentTime = 30;
                                 expect(player.seekTo).toHaveBeenCalledWith(30);
+                            });
+                        });
+                    });
+
+                    describe('paused property', function() {
+                        var player;
+
+                        beforeEach(function() {
+                            player = mockPlayers[0];
+                        });
+
+                        describe('getting', function() {
+                            it('should be initialized as true', function() {
+                                expect(iface.paused).toBe(true);
+                            });
+
+                            it('should become false when the "playing" event is emitted', function() {
+                                player._on.playing[0](player);
+
+                                expect(iface.paused).toBe(false);
+                            });
+
+                            it('should go back to true when the "pause" event is emitted', function() {
+                                player._on.playing[0](player);
+                                player._on.pause[0](player);
+
+                                expect(iface.paused).toBe(true);
+                            });
+                        });
+
+                        describe('setting', function() {
+                            it('should not be publically settable', function() {
+                                expect(function() {
+                                    iface.paused = false;
+                                }).toThrow();
+                            });
+                        });
+                    });
+
+                    describe('duration property', function() {
+                        var player;
+
+                        beforeEach(function() {
+                            player = mockPlayers[0];
+                        });
+
+                        describe('getting', function() {
+                            it('should be initialized as NaN', function() {
+                                expect(iface.duration).toBeNaN();
+                            });
+
+                            it('should be updated with the duration when the "durationchange" event is fired', function() {
+                                player._on.durationchange[0](player, { duration: '45.2sc' });
+                                expect(iface.duration).toBe(45.2);
+
+                                player._on.durationchange[0](player, { duration: '20sc' });
+                                expect(iface.duration).toBe(20);
+                            });
+                        });
+
+                        describe('setting', function() {
+                            it('should not be publically settable', function() {
+                                expect(function() {
+                                    iface.duration = 20;
+                                }).toThrow();
                             });
                         });
                     });
@@ -690,13 +764,13 @@
                     });
 
                     it('should emit timeupdate when timeupdate is emitted', function() {
-                        mockPlayers[0]._on.timeupdate[0](mockPlayers[0], { time: 10 });
+                        mockPlayers[0]._on.timeupdate[0](mockPlayers[0], { time: '10' });
                         expect(iface.emit).toHaveBeenCalledWith('timeupdate', iface);
 
-                        mockPlayers[0]._on.timeupdate[0](mockPlayers[0], { time: 20 });
+                        mockPlayers[0]._on.timeupdate[0](mockPlayers[0], { time: '20' });
                         expect(iface.emit.callCount).toBe(2);
 
-                        mockPlayers[0]._on.timeupdate[0](mockPlayers[0], { time: 30 });
+                        mockPlayers[0]._on.timeupdate[0](mockPlayers[0], { time: '30' });
                         expect(iface.emit.callCount).toBe(3);
                     });
                 });
