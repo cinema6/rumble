@@ -166,7 +166,7 @@
                 });
             });
 
-            describe('$scope.players()', function() {
+            describe('$scope.players', function() {
                 beforeEach(function() {
                     $scope.deck = [
                         {
@@ -193,8 +193,6 @@
                 });
 
                 it('should always have the current and next two players and should not remove players', function() {
-                    var players = $scope.players;
-
                     function playlist(index) {
                         return $scope.deck[index];
                     }
@@ -205,16 +203,16 @@
                         });
                     }
 
-                    expect(players()).toEqual([playlist(0), playlist(1)]);
+                    expect($scope.players).toEqual([playlist(0), playlist(1)]);
 
                     currentIndex(0);
-                    expect(players()).toEqual([playlist(0), playlist(1), playlist(2)]);
+                    expect($scope.players).toEqual([playlist(0), playlist(1), playlist(2)]);
 
                     currentIndex(1);
-                    expect(players()).toEqual([playlist(0), playlist(1), playlist(2), playlist(3)]);
+                    expect($scope.players).toEqual([playlist(0), playlist(1), playlist(2), playlist(3)]);
 
                     currentIndex(2);
-                    expect(players()).toEqual([playlist(0), playlist(1), playlist(2), playlist(3), playlist(4)]);
+                    expect($scope.players).toEqual([playlist(0), playlist(1), playlist(2), playlist(3), playlist(4)]);
                 });
             });
 
@@ -222,9 +220,15 @@
                 var controlsIFace;
 
                 beforeEach(function() {
+                    var newScope = $rootScope.$new();
+
+                    newScope.app = $scope.app;
+
                     controlsIFace = {};
 
                     ControlsService.init.andReturn(controlsIFace);
+
+                    $scope = newScope;
                     RumbleCtrl = $controller('RumbleController', { $scope: $scope });
                 });
 
@@ -351,9 +355,11 @@
                         $scope.deck[2].player = {
                             isReady : jasmine.createSpy('player2.isReady')
                         };
-                        $scope.players = function() {
-                            return [$scope.deck[0], $scope.deck[1], $scope.deck[2]];
-                        };
+
+                        $scope.$apply(function() {
+                            $scope.currentIndex = 0;
+                        });
+
                         $scope.deck[0].player.isReady.andReturn(true);
                         $scope.deck[2].player.isReady.andReturn(true);
                         $scope.$emit('playerAdd',mockPlayer);

@@ -48,8 +48,8 @@
                 modernizr   : libUrl('modernizr/modernizr.custom.71747'),
                 tweenmax    : libUrl('gsap/1.11.2-0-g79f8c87/TweenMax.min'),
                 timelinemax : libUrl('gsap/1.11.2-0-g79f8c87/TimelineMax.min'),
-                c6ui        : libUrl('c6ui/v2.1.0-0-g235a9de/c6uilib'),
-                c6log       : libUrl('c6ui/v2.1.0-0-g235a9de/c6log'),
+                c6ui        : libUrl('c6ui/v2.2.0-0-gf6c648c/c6uilib'),
+                c6log       : libUrl('c6ui/v2.2.0-0-gf6c648c/c6log'),
                 templates   : '/base/.tmp/templates'
             },
 
