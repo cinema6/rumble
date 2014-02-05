@@ -3,8 +3,8 @@
         <h1>{{currentCard.title}}</h1>
         <h2>{{currentCard.note}}</h2>
     </div>
-    <div class="progress">
-        <h1> {{currentIndex + 1}} of {{deck.length}} </h1>
+    <div class="progress" ng-show="tocIndex > -1">
+        <h1> {{tocIndex + 1}} of {{tocCards.length}} </h1>
     </div>
     <ul class="rumble-players">
         <li class="player-list-item" ng-repeat="item in players" ng-class="{ squished : ($index !== currentIndex)}" >

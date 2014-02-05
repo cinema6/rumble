@@ -120,6 +120,7 @@
                 {
                     "id": "rc-2d46a04b21b073",
                     "type": "video",
+                    "ad": true,
                     "modules": [
                         "displayAd"
                     ],
