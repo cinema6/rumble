@@ -157,11 +157,12 @@
         };
     }])
     .controller('RumbleController',['$log','$scope','$timeout','rumbleVotes','c6Computed','cinema6','MiniReelService','CommentsService','ControlsService',
-    function                       ( $log , $scope , $timeout , rumbleVotes , c          , cinema6 , MiniReelService , CommentsService , ControlsService ){
+    function                       ( $log , $scope , $timeout , rumbleVotes , c6Computed , cinema6 , MiniReelService , CommentsService , ControlsService ){
         $log = $log.context('RumbleCtrl');
         var self    = this, readyTimeout,
             appData = $scope.app.data,
-            id = appData.experience.data.id;
+            id = appData.experience.data.id,
+            c = c6Computed($scope);
 
         rumbleVotes.init(id);
         CommentsService.init(id);
@@ -172,8 +173,8 @@
         $scope.controls         = ControlsService.init();
 
         $scope.deck             = MiniReelService.createDeck(appData.experience.data);
-        $scope.players          = c($scope, function(index, deck) {
-            return deck.slice(0, (index + 3));
+        c($scope, 'players', function() {
+            return this.deck.slice(0, (this.currentIndex + 3));
         }, ['currentIndex', 'deck']);
         $scope.currentIndex     = -1;
         $scope.currentCard      = null;
@@ -224,7 +225,7 @@
             }
 
             var result = true;
-            $scope.players().some(function(item){
+            $scope.players.some(function(item){
                 if ((!item.player) || (!item.player.isReady())){
                     result = false;
                     return true;

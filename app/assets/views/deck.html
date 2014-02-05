@@ -7,7 +7,7 @@
         <h1> {{currentIndex + 1}} of {{deck.length}} </h1>
     </div>
     <ul class="rumble-players">
-        <li class="player-list-item" ng-repeat="item in players()" ng-class="{ squished : ($index !== currentIndex)}" >
+        <li class="player-list-item" ng-repeat="item in players" ng-class="{ squished : ($index !== currentIndex)}" >
             <mr-card class="player"
                 x-config="item"
                 x-profile="deviceProfile"

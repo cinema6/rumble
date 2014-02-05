@@ -22,7 +22,7 @@
     </li>
 </ul>
 <ul ng-if="Ctrl.showFriendsFirst">
-    <li ng-repeat="this in Ctrl.commentsByFriends()">
+    <li ng-repeat="this in Ctrl.commentsByFriends">
         <header>
             <h3>{{this.user.name}}</h3>
             <small>{{this.date | timestamp}}</small>
@@ -32,7 +32,7 @@
         </article>
     </li>
     <li>Divider</li>
-    <li ng-repeat="this in Ctrl.commentsByStrangers()">
+    <li ng-repeat="this in Ctrl.commentsByStrangers">
         <header>
             <h3>{{this.user.name}}</h3>
             <small>{{this.date | timestamp}}</small>

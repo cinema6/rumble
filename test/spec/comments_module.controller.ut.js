@@ -75,10 +75,10 @@
 
             describe('@public', function() {
                 describe('properties', function() {
-                    describe('commentsByFriends()', function() {
+                    describe('commentsByFriends', function() {
                         describe('if comments are null', function() {
                             it('should be null', function() {
-                                expect(CommentsModuleCtrl.commentsByFriends()).toBeNull();
+                                expect(CommentsModuleCtrl.commentsByFriends).toBeNull();
                             });
                         });
 
@@ -112,7 +112,7 @@
                             });
 
                             it('should return the comments made by friends', function() {
-                                expect(CommentsModuleCtrl.commentsByFriends()).toEqual([
+                                expect(CommentsModuleCtrl.commentsByFriends).toEqual([
                                     comments[0],
                                     comments[2],
                                     comments[3]
@@ -121,10 +121,10 @@
                         });
                     });
 
-                    describe('commentsByStrangers()', function() {
+                    describe('commentsByStrangers', function() {
                         describe('if comments are null', function() {
                             it('should be null', function() {
-                                expect(CommentsModuleCtrl.commentsByStrangers()).toBeNull();
+                                expect(CommentsModuleCtrl.commentsByStrangers).toBeNull();
                             });
                         });
 
@@ -158,7 +158,7 @@
                             });
 
                             it('should return the comments made by strangers', function() {
-                                expect(CommentsModuleCtrl.commentsByStrangers()).toEqual([
+                                expect(CommentsModuleCtrl.commentsByStrangers).toEqual([
                                     comments[1],
                                     comments[4]
                                 ]);

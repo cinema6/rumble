@@ -17,16 +17,21 @@
         }])
 
         .controller('CommentsModuleController', ['$scope','CommentsService','c6Computed',
-        function                                ( $scope , CommentsService , c          ) {
-            var self = this;
+        function                                ( $scope , CommentsService , c6Computed ) {
+            var self = this,
+                c = c6Computed($scope);
 
             this.comments = null;
-            this.commentsByFriends = c($scope, function(comments) {
+            c(this, 'commentsByFriends', function() {
+                var comments = this.comments;
+
                 return (comments ? comments.filter(function(comment) {
                     return comment.user.isFriend;
                 }) : null);
             }, ['Ctrl.comments', 'Ctrl.comments.length']);
-            this.commentsByStrangers = c($scope, function(comments) {
+            c(this, 'commentsByStrangers', function() {
+                var comments = this.comments;
+
                 return (comments ? comments.filter(function(comment) {
                     return !comment.user.isFriend;
                 }) : null);
