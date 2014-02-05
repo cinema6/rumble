@@ -128,7 +128,7 @@
             left:1em;
         }
         .ui-icon__next {
-            right:1em;
+            right:1em; background-position:0 -3.125em;
         }
 
 
@@ -155,10 +155,13 @@
                 width:4em; left:50%; margin:0 0 0 -2em;
             }
         .ui-control__label {
-            left:0; top:0; z-index: 10; color:#fff; font-weight:700;
+            top:1.375em; z-index: 10; color:#fff; font-weight:700; width:auto; height:0; line-height: 1;
         }
+            .ui-control__label-prev {
+                left:2.25em;
+            }
             .ui-control__label-next {
-                background-image:url('../img/arrow__next.svg'); background-position:80% 50%;
+                right:2.25em; text-align: right;
             }
             .ui-control__label-view-list {
                 width:4em;
