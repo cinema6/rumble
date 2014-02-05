@@ -238,6 +238,119 @@
                 });
             });
 
+            describe('$scope.tocCards', function() {
+                var deck;
+
+                beforeEach(function() {
+                    $scope.$apply(function() {
+                        deck = $scope.deck = [
+                            {},
+                            {
+                                ad: true,
+                                sponsored: true
+                            },
+                            {
+                                ad: true
+                            },
+                            {},
+                            {},
+                            {
+                                ad: true
+                            },
+                            {
+                                ad: true,
+                                sponsored: true
+                            }
+                        ];
+                    });
+                });
+
+                it('should only include non-ad cards, unless they are sponsored', function() {
+                    expect($scope.tocCards).toEqual([
+                        deck[0],
+                        deck[1],
+                        deck[3],
+                        deck[4],
+                        deck[6]
+                    ]);
+                });
+            });
+
+            describe('$scope.tocIndex', function() {
+                var deck;
+
+                beforeEach(function() {
+                    deck = $scope.deck = [
+                        {},
+                        {
+                            ad: true,
+                            sponsored: true
+                        },
+                        {
+                            ad: true
+                        },
+                        {},
+                        {},
+                        {
+                            ad: true
+                        },
+                        {
+                            ad: true,
+                            sponsored: true
+                        }
+                    ];
+
+                    $scope.currentCard = null;
+                });
+
+                it('should reflect the index of the card in the tocCards', function() {
+                    expect($scope.tocIndex).toBe(-1);
+
+                    $scope.$apply(function() {
+                        $scope.currentCard = deck[0];
+                    });
+                    expect($scope.tocIndex).toBe(0);
+
+                    $scope.$apply(function() {
+                        $scope.currentCard = deck[1];
+                    });
+                    expect($scope.tocIndex).toBe(1);
+
+                    $scope.$apply(function() {
+                        $scope.currentCard = deck[2];
+                    });
+                    expect($scope.tocIndex).toBe(-1);
+
+                    $scope.$apply(function() {
+                        $scope.currentCard = deck[3];
+                    });
+                    expect($scope.tocIndex).toBe(2);
+                });
+            });
+
+            describe('$scope.showTOC', function() {
+                it('should be false', function() {
+                    expect($scope.showTOC).toBe(false);
+                });
+            });
+
+            describe('jumpTo(card)', function() {
+                beforeEach(function() {
+                    spyOn(RumbleCtrl, 'setPosition');
+                });
+
+                it('should call "setPosition" with the index of the provided card', function() {
+                    RumbleCtrl.jumpTo($scope.deck[1]);
+                    expect(RumbleCtrl.setPosition).toHaveBeenCalledWith(1);
+
+                    RumbleCtrl.jumpTo($scope.deck[0]);
+                    expect(RumbleCtrl.setPosition).toHaveBeenCalledWith(0);
+
+                    RumbleCtrl.jumpTo($scope.deck[2]);
+                    expect(RumbleCtrl.setPosition).toHaveBeenCalledWith(2);
+                });
+            });
+
             describe('navigation',function(){
                 beforeEach(function(){
                     $scope.deviceProfile = { multiPlayer : true };

@@ -38,6 +38,7 @@
                     'scripts/dailymotion',
                     'scripts/iframe',
                     'scripts/rumble',
+                    'scripts/table_of_contents',
                     'scripts/vimeo',
                     'scripts/youtube',
                     'scripts/mini_reel_card',

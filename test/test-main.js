@@ -110,6 +110,9 @@
                 },
                 display_ad_module: {
                     deps: ['app']
+                },
+                table_of_contents: {
+                    deps: ['app']
                 }
             },
 

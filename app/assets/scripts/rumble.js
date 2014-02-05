@@ -176,6 +176,15 @@
         c($scope, 'players', function() {
             return this.deck.slice(0, (this.currentIndex + 3));
         }, ['currentIndex', 'deck']);
+        c($scope, 'tocCards', function() {
+            return this.deck.filter(function(card) {
+                return !card.ad || card.sponsored;
+            });
+        }, ['deck']);
+        c($scope, 'tocIndex', function() {
+            return this.tocCards.indexOf(this.currentCard);
+        }, ['currentCard', 'tocCards.length']);
+        $scope.showTOC          = false;
         $scope.currentIndex     = -1;
         $scope.currentCard      = null;
         $scope.atHead           = null;
@@ -254,6 +263,10 @@
             } else {
                 $scope.$emit('reelMove');
             }
+        };
+
+        this.jumpTo = function(card) {
+            this.setPosition($scope.deck.indexOf(card));
         };
 
         this.start = function() {
