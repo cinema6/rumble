@@ -102,6 +102,9 @@
                 video_card: {
                     deps: ['app']
                 },
+                vast_card: {
+                    deps: ['app']
+                },
                 ballot_module: {
                     deps: ['app']
                 },
