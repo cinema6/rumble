@@ -1,4 +1,4 @@
-<video ng-style="{visibility: (active ? 'visible' : 'hidden')}" c6-video id="{{config.id}}" c6-src="config.data.src"></video>
+<video ng-style="{visibility: (active ? 'visible' : 'hidden')}" c6-controls="true" c6-video id="{{config.id}}" c6-src="Ctrl.videoSrc"></video>
 <section>
     <ballot-module ng-if="Ctrl.hasModule('ballot')"
         active="config._data.modules.ballot.active"

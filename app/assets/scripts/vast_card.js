@@ -2,6 +2,21 @@
     'use strict';
 
     angular.module('c6.rumble')
+        .controller('VastCardController', ['$scope', 'VASTService',
+        function                          ( $scope, VASTService ) {
+            var self = this;
+
+            this.videoSrc = null;
+
+            $scope.$watch('onDeck', function(onDeck) {
+                if(onDeck) {
+                    VASTService.getVAST().then(function(vast) {
+                        self.videoSrc = vast.getVideoSrc('video/mp4');
+                    });
+                }
+            });
+        }])
+
         .directive('vastCard', ['playerInterface','$q','$timeout','c6UrlMaker',
         function               ( playerInterface , $q , $timeout , c6UrlMaker ) {
             return {

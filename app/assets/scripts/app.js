@@ -59,6 +59,10 @@
         function( c6UrlMakerProvider ,  c6Defines ) {
             c6UrlMakerProvider.location(c6Defines.kBaseUrl,'default');
         }])
+        .config(['VASTServiceProvider',
+        function( VASTServiceProvider ) {
+            VASTServiceProvider.adServerUrl('http://ads.adap.tv/a/t/integration_test');
+        }])
         .run(   ['cinema6',
         function( cinema6 ) {
             cinema6.db
