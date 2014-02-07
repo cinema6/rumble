@@ -18,7 +18,7 @@
                     var $ = xml.querySelectorAll.bind(xml);
 
                     this.video = {
-                        duration: _service.getSecondsFromTimestamp($('Video Duration')[0].childNodes[0].nodeValue),
+                        duration: _service.getSecondsFromTimestamp($('Linear Duration')[0].childNodes[0].nodeValue),
                         mediaFiles: []
                     };
 
@@ -29,7 +29,7 @@
                             file[attribute.name] = attribute.value;
                         });
 
-                        file.url = mediaFile.childNodes[0].childNodes[0].nodeValue;
+                        file.url = mediaFile.firstChild.nodeValue;
 
                         this.video.mediaFiles.push(file);
                     }.bind(this));
@@ -66,15 +66,32 @@
                     return parser.parseFromString(string.replace(/\n/g, '').replace(/>\s+</g, '><'), 'text/xml');
                 };
 
-                service.getVAST = function() {
-                    function createVast(response) {
-                        return new _service.VAST(response.data);
+                service.getVAST = function(url) {
+                    function fetchVAST(url) {
+                        function recurse(response) {
+                            var vast = response.data,
+                                uriNodes = vast.querySelectorAll('VASTAdTagURI');
+
+                            if (uriNodes.length > 0) {
+                                return fetchVAST(uriNodes[0].firstChild.nodeValue);
+                            }
+
+                            return vast;
+
+                        }
+
+                        return $http.get(url, {
+                            transformResponse: _service.getXML,
+                            responseType: 'text'
+                        }).then(recurse);
                     }
 
-                    return $http.get(_provider.serverUrl, {
-                        transformResponse: _service.getXML,
-                        responseType: 'text'
-                    }).then(createVast);
+
+                    function createVast(vast) {
+                        return new _service.VAST(vast);
+                    }
+
+                    return fetchVAST((url || _provider.serverUrl)).then(createVast);
                 };
 
                 if (window.c6.kHasKarma) { service._private = _service; }

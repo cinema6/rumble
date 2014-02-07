@@ -2,7 +2,7 @@
     'use strict';
 
     define(['vast_card'], function() {
-        xdescribe('<vast-card></vast-card>', function() {
+        describe('<vast-card></vast-card>', function() {
             var $rootScope,
                 $scope,
                 $compile,
@@ -330,7 +330,7 @@
                 describe('methods', function() {
                     describe('getType()', function() {
                         it('should return "video"', function() {
-                            expect(iface.getType()).toBe('video');
+                            expect(iface.getType()).toBe('vast');
                         });
                     });
 

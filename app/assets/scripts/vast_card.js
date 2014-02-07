@@ -2,9 +2,11 @@
     'use strict';
 
     angular.module('c6.rumble')
-        .controller('VastCardController', ['$scope', 'VASTService',
-        function                          ( $scope, VASTService ) {
-            var self = this;
+        .controller('VastCardController', ['$scope','VASTService','ControlsService',
+        function                          ( $scope , VASTService , ControlsService ) {
+            var self = this,
+                config = $scope.config,
+                data = config.data;
 
             this.videoSrc = null;
 
@@ -14,6 +16,22 @@
                         self.videoSrc = vast.getVideoSrc('video/mp4');
                     });
                 }
+            });
+
+            $scope.$on('playerAdd', function(event, iface) {
+                $scope.$watch('active', function(active, wasActive) {
+                    if (active === wasActive) { return; }
+
+                    if (active) {
+                        ControlsService.bindTo(iface);
+
+                        if (data.autoplay) {
+                            iface.play();
+                        }
+                    } else {
+                        iface.pause();
+                    }
+                });
             });
         }])
 
@@ -69,7 +87,7 @@
                     };
 
                     iface.getType = function() {
-                        return 'video';
+                        return 'vast';
                     };
 
                     iface.play = function() {
