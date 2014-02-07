@@ -120,16 +120,31 @@
 /*  ==========================================================================
     ui-icons classes
     ========================================================================== */
-    .ui-icon__prev, .ui-icon__next {
+    .ui-icon__prev, .ui-icon__next, .ui-icon__list, .ui-icon__close, .ui-icon__page {
         position: absolute; display: block; margin:-0.625em 0 0 0; padding: 0; font-size: 1em;
         width:0.75em; /*12px*/ height:1.25em;/*20px*/ top:50%;
     }
-        .ui-icon__prev {
+        .portrait .ui-icon__prev {
             left:1em;
         }
-        .ui-icon__next {
+        .portrait .ui-icon__next {
             right:1em; background-position:0 -3.125em;
         }
+        .portrait .ui-icon__list {
+            width:1.875em; /*30px*/ height:1.375em;/*22px*/ background-position:0 -6.25em;
+            left:1.0625em; /*17px*/
+        }
+        .portrait .ui-icon__close {
+            width:0.8125em; height:0.8125em;/*13px*/ background-position:0 -9.375em;
+            right:0.625em; /*10px*/ margin-top:-0.375em;
+        }
+        .portrait .ui-icon__page {
+            width:0.75em;/*12px*/ height:0.375em;/*6px*/ background-position:0.375em -12.5em;
+            display:inline-block; position:relative; margin:1em 0 0 0; opacity:0.3;
+        }
+            .portrait .ui-icon__page--active {
+                opacity:1;
+            }
 
 
 /*  ==========================================================================
@@ -138,10 +153,11 @@
     .ui-control {
         position:fixed; bottom:0; height:3.75em;/*60px*/ width:100%; z-index: 10000;
     }
-        .ui-control__prev, .ui-control__next, .ui-control__view-list, .ui-control__preview-img, .ui-control__label, .ui-control__activator {
+        .ui-control__prev, .ui-control__next, .ui-control__view-list, .ui-context__close, 
+        .ui-control__preview-img, .ui-control__label, .ui-control__activator, .ui-context__label {
             width:100%; height:100%; display:block; border:0; margin:0; padding:0; position:absolute;
         }
-        .ui-control__prev, .ui-control__next, .ui-control__view-list {
+        .ui-control__prev, .ui-control__next, .ui-control__view-list, .ui-context__close {
             width:8em;/*128px*/ height:3.75em;/*60px*/
             cursor:pointer; font-size:1em; background-color:transparent;
         }
@@ -160,7 +176,7 @@
             .ui-control__label-prev {
                 left:2.25em;
             }
-            .ui-control__label-next {
+            .ui-control__label-next, .ui-context__label-close {
                 right:2.25em; text-align: right;
             }
             .ui-control__label-view-list {
@@ -181,7 +197,19 @@
         .publisher__branding-logo {
             display: block; width:2.5em;/*40px*/ height:2.5em;/*40px*/ margin:0 0 0 0.4375em; /*0 0 0 7px*/ border:0; padding:0; font-size:1em;
             background:transparent 50% 50% no-repeat; background-size:contain;
-            position:absolute; top:0; left:0;
+            position:absolute; top:0; left:0; cursor:pointer;
+        }
+        .ui-context__label {
+            top:1em;/*14px*/ z-index: 10; color:#fff; font-weight:300; width:auto; height:0; line-height: 1; font-size:0.875em;/*14px*/
+        }
+        .ui-context__close {
+            width:4.75em; /*76px*/ height:2.5em;/*40px*/ right:0;
+        }
+            .ui-context__label-close {
+                right:2.143em; /*30px*/
+            }
+        .ui-context__paginator {
+            width:100%; text-align: center;
         }
 
 
