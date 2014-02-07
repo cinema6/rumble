@@ -2,6 +2,106 @@
     'use strict';
 
     angular.module('c6.rumble.services', [])
+        .provider('VASTService', [function() {
+            var _provider = {};
+
+            this.adServerUrl = function(url) {
+                _provider.serverUrl = url;
+            };
+
+            this.$get = ['$http','$window',
+            function    ( $http , $window ) {
+                var service = {},
+                    _service = {};
+
+                _service.VAST = function(xml) {
+                    var $ = xml.querySelectorAll.bind(xml);
+
+                    this.video = {
+                        duration: _service.getSecondsFromTimestamp($('Linear Duration')[0].childNodes[0].nodeValue),
+                        mediaFiles: []
+                    };
+
+                    angular.forEach($('MediaFiles MediaFile'), function(mediaFile) {
+                        var file = {};
+
+                        angular.forEach(mediaFile.attributes, function(attribute) {
+                            file[attribute.name] = attribute.value;
+                        });
+
+                        file.url = mediaFile.firstChild.nodeValue;
+
+                        this.video.mediaFiles.push(file);
+                    }.bind(this));
+                };
+                _service.VAST.prototype = {
+                    getVideoSrc: function(type) {
+                        var src = null;
+
+                        this.video.mediaFiles.some(function(mediaFile) {
+                            if (mediaFile.type === type) {
+                                src = mediaFile.url;
+                                return true;
+                            }
+                        });
+
+                        return src;
+                    }
+                };
+
+                _service.getSecondsFromTimestamp = function(timestamp) {
+                    var timeArray = timestamp.split(':'),
+                        total = 0;
+
+                    total += parseInt(timeArray[0], 10) * 60 * 60;
+                    total += parseInt(timeArray[1], 10) * 60;
+                    total += parseInt(timeArray[2], 10);
+
+                    return total;
+                };
+
+                _service.getXML = function(string) {
+                    var parser = new $window.DOMParser();
+
+                    return parser.parseFromString(string.replace(/\n/g, '').replace(/>\s+</g, '><'), 'text/xml');
+                };
+
+                service.getVAST = function(url) {
+                    function fetchVAST(url) {
+                        function recurse(response) {
+                            var vast = response.data,
+                                uriNodes = vast.querySelectorAll('VASTAdTagURI');
+
+                            if (uriNodes.length > 0) {
+                                return fetchVAST(uriNodes[0].firstChild.nodeValue);
+                            }
+
+                            return vast;
+
+                        }
+
+                        return $http.get(url, {
+                            transformResponse: _service.getXML,
+                            responseType: 'text'
+                        }).then(recurse);
+                    }
+
+
+                    function createVast(vast) {
+                        return new _service.VAST(vast);
+                    }
+
+                    return fetchVAST((url || _provider.serverUrl)).then(createVast);
+                };
+
+                if (window.c6.kHasKarma) { service._private = _service; }
+
+                return service;
+            }];
+
+            if (window.c6.kHasKarma) { this._private = _provider; }
+        }])
+
         .service('ControlsService', ['$timeout',
         function                    ( $timeout ) {
             var _private = {};

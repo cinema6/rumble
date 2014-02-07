@@ -59,6 +59,10 @@
         function( c6UrlMakerProvider ,  c6Defines ) {
             c6UrlMakerProvider.location(c6Defines.kBaseUrl,'default');
         }])
+        .config(['VASTServiceProvider',
+        function( VASTServiceProvider ) {
+            VASTServiceProvider.adServerUrl('http://u-ads.adap.tv/a/h/CbyYsMcIh10+XoGWvwRuGArwmci9atPoLiGQaGjtyrT4ht6z4qOJpQ==?cb=%5BCACHE_BREAKER%5D&pageUrl=http%3A%2F%2Ftest.com&eov=eov');
+        }])
         .run(   ['cinema6',
         function( cinema6 ) {
             cinema6.db

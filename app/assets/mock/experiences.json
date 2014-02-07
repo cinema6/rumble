@@ -119,14 +119,13 @@
                 },
                 {
                     "id": "rc-2d46a04b21b073",
-                    "type": "video",
+                    "type": "vast",
                     "ad": true,
                     "modules": [
                         "displayAd"
                     ],
                     "data": {
-                        "autoplay": true,
-                        "src": "https://s3.amazonaws.com/c6.dev/media/src/screenjack/video/gijoe_fridge.mp4"
+                        "autoplay": true
                     },
                     "displayAd": "http://2.bp.blogspot.com/-TlM_3FT89Y0/UMzLr7kVykI/AAAAAAAACjs/lKrdhgp6OQg/s1600/brad-turner.jpg"
                 },
