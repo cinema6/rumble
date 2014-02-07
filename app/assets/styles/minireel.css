@@ -116,6 +116,13 @@
     .sprite {
         background-image:url('../img/sprite.svg'); background-repeat:no-repeat; background-size:18.75em 18.75em;
     }
+    .mr-container {
+        background:#dddddd; padding:3em 0.375em 4em 0.375em;
+    }
+    .mr-card {
+        background:#fff; border-radius: 3px;
+        -webkit-box-shadow: 0 1px 2px 0 rgba(0,0,0,0.12); box-shadow: 0 1px 2px 0 rgba(0,0,0,0.12);
+    }
 
 /*  ==========================================================================
     ui-icons classes
@@ -200,7 +207,7 @@
             position:absolute; top:0; left:0; cursor:pointer;
         }
         .ui-context__label {
-            top:1em;/*14px*/ z-index: 10; color:#fff; font-weight:300; width:auto; height:0; line-height: 1; font-size:0.875em;/*14px*/
+            top:0.929em;/*13px*/ z-index: 10; color:#fff; font-weight:300; width:auto; height:0; line-height: 1; font-size:0.875em;/*14px*/
         }
         .ui-context__close {
             width:4.75em; /*76px*/ height:2.5em;/*40px*/ right:0;
