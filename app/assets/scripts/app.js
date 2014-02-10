@@ -2,7 +2,7 @@
     /* jshint -W106 */
     'use strict';
 
-    angular.module('c6.stub', window$.c6.kModDeps)
+    angular.module('c6.mrmaker', window$.c6.kModDeps)
         .constant('c6Defines', window$.c6)
         .config(['$provide',
         function( $provide ) {

@@ -49,7 +49,7 @@
                     });
                 });
 
-                module('c6.stub', function($provide) {
+                module('c6.mrmaker', function($provide) {
                     $provide.value('gsap', gsap);
                     $provide.value('googleAnalytics', googleAnalytics);
                 });
