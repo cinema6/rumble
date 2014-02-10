@@ -1,14 +1,14 @@
 <section class="mr-card">
-    <div class="title-bar">
-        <h1>{{currentCard.title}}</h1>
-        <h2>{{currentCard.note}}</h2>
+    <div class="mr-card__title">
+        <h1 class="mr-card__title-h1">{{currentCard.title}}</h1>
+        <p class="mr-card__attributes">via <a href="#" title="YouTube">YouTube</a></p>
+        <div class="progress">
+            <h1> {{currentIndex + 1}} of {{deck.length}} </h1>
+        </div>
     </div>
-    <div class="progress">
-        <h1> {{currentIndex + 1}} of {{deck.length}} </h1>
-    </div>
-    <ul class="rumble-players">
-        <li class="player-list-item" ng-repeat="item in players()" ng-class="{ squished : ($index !== currentIndex)}" >
-            <mr-card class="player"
+    <ul class="mr-players">
+        <li class="mr-players__item player-list-item" ng-repeat="item in players()" ng-class="{ squished : ($index !== currentIndex)}" >
+            <mr-card class="mr-players__player"
                 x-config="item"
                 x-profile="deviceProfile"
                 x-active="($index === currentIndex)"
@@ -16,4 +16,5 @@
             </mr-card>
         </li>
     </ul>
+    <div class="mr-card__copy">{{currentCard.note}}</div>
 </section>
