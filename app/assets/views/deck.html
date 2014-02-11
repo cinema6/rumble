@@ -1,20 +1,22 @@
 <section class="mr-card">
-    <div class="mr-card__title">
-        <h1 class="mr-card__title-h1">{{currentCard.title}}</h1>
-        <p class="mr-card__attributes">via <a href="#" title="YouTube">YouTube</a></p>
-        <div class="progress">
-            <h1> {{currentIndex + 1}} of {{deck.length}} </h1>
+    <div class="clearfix">
+        <div class="mr-card__title">
+            <h1 class="mr-card__title-h1">{{currentCard.title}}</h1>
+            <p class="mr-card__attributes">via <a href="#" title="YouTube">YouTube</a></p>
+            <div class="progress">
+                <h1> {{currentIndex + 1}} of {{deck.length}} </h1>
+            </div>
         </div>
+        <ul class="mr-players">
+            <li class="mr-players__item player-list-item" ng-repeat="item in players()" ng-class="{ squished : ($index !== currentIndex)}" >
+                <mr-card class="mr-players__player"
+                    x-config="item"
+                    x-profile="deviceProfile"
+                    x-active="($index === currentIndex)"
+                    x-on-deck="($index === (currentIndex + 1))">
+                </mr-card>
+            </li>
+        </ul>
     </div>
-    <ul class="mr-players">
-        <li class="mr-players__item player-list-item" ng-repeat="item in players()" ng-class="{ squished : ($index !== currentIndex)}" >
-            <mr-card class="mr-players__player"
-                x-config="item"
-                x-profile="deviceProfile"
-                x-active="($index === currentIndex)"
-                x-on-deck="($index === (currentIndex + 1))">
-            </mr-card>
-        </li>
-    </ul>
     <div class="mr-card__copy">{{currentCard.note}}</div>
 </section>
