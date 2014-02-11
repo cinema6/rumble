@@ -161,11 +161,12 @@
                             playVideo   : jasmine.createSpy('YT.playVideo'),
                             pauseVideo  : jasmine.createSpy('YT.pauseVideo'),
                             destroy     : jasmine.createSpy('YT.destroy'),
-                            setSize     : jasmine.createSpy('YT.setSize') 
+                            setSize     : jasmine.createSpy('YT.setSize'),
+                            getDuration : jasmine.createSpy('YT.getDuration').andReturn(10)
                         };
                         spyOn($window.YT,'Player').andCallFake(function(videoId,params){
                             ytPlayerSpy.events = params.events;
-                            return ytPlayerSpy; 
+                            return ytPlayerSpy;
                         });
                         
                         player = youtube.createPlayer('player1',{
@@ -210,6 +211,11 @@
                         it('destroy', function(){
                             player.destroy();
                             expect(ytPlayerSpy.destroy).toHaveBeenCalled();
+                        });
+
+                        it('getDuration', function() {
+                            expect(player.getDuration()).toBe(10);
+                            expect(ytPlayerSpy.getDuration).toHaveBeenCalled();
                         });
                     });
 

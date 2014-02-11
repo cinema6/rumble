@@ -94,8 +94,8 @@
 
         return service;
     }])
-    .service('MiniReelService', ['InflectorService', 'rumbleVotes',
-    function                    ( InflectorService ,  rumbleVotes ) {
+    .service('MiniReelService', ['InflectorService','rumbleVotes','CommentsService',
+    function                    ( InflectorService , rumbleVotes , CommentsService ) {
         this.createDeck = function(data) {
             var playlist = angular.copy(data.deck);
 
@@ -147,38 +147,50 @@
                 //TODO: remove this when the service works for real
                 rumbleVotes.mockReturnsData(data.id, video.id, video.voting);
                 delete video.voting;
+                CommentsService.push(video.id, (video.conversation && video.conversation.comments));
+                delete video.conversation;
 
-                video.state = {
-                    vote: -1,
-                    view: 'video'
-                };
                 video.player = null;
             });
 
             return playlist;
         };
     }])
-    .controller('RumbleController',['$log','$scope','$timeout','rumbleVotes','c6Computed','cinema6','MiniReelService',
-    function                       ( $log , $scope , $timeout , rumbleVotes , c          , cinema6 , MiniReelService ){
+    .controller('RumbleController',['$log','$scope','$timeout','rumbleVotes','c6Computed','cinema6','MiniReelService','CommentsService','ControlsService',
+    function                       ( $log , $scope , $timeout , rumbleVotes , c6Computed , cinema6 , MiniReelService , CommentsService , ControlsService ){
         $log = $log.context('RumbleCtrl');
         var self    = this, readyTimeout,
-            appData = $scope.app.data;
+            appData = $scope.app.data,
+            id = appData.experience.data.id,
+            c = c6Computed($scope);
+
+        rumbleVotes.init(id);
+        CommentsService.init(id);
 
         $scope.deviceProfile    = appData.profile;
         $scope.title            = appData.experience.title;
 
+        $scope.controls         = ControlsService.init();
+
         $scope.deck             = MiniReelService.createDeck(appData.experience.data);
-        $scope.players          = c($scope, function(index, deck) {
-            return deck.slice(0, (index + 3));
+        c($scope, 'players', function() {
+            return this.deck.slice(0, (this.currentIndex + 3));
         }, ['currentIndex', 'deck']);
+        c($scope, 'tocCards', function() {
+            return this.deck.filter(function(card) {
+                return !card.ad || card.sponsored;
+            });
+        }, ['deck']);
+        c($scope, 'tocIndex', function() {
+            return this.tocCards.indexOf(this.currentCard);
+        }, ['currentCard', 'tocCards.length']);
+        $scope.showTOC          = false;
         $scope.currentIndex     = -1;
         $scope.currentCard      = null;
         $scope.atHead           = null;
         $scope.atTail           = null;
         $scope.currentReturns   = null;
         $scope.ready            = false;
-
-        rumbleVotes.init(appData.experience.data.id);
 
         $scope.$on('playerAdd',function(event,player){
             $log.log('Player added: %1 - %2',player.getType(),player.getVideoId());
@@ -195,10 +207,6 @@
                 $log.log('Player ready: %1 - %2',player.getType(),player.getVideoId());
                 self.checkReady();
                 player.removeListener('ready',this);
-            });
-
-            player.on('ended', function() {
-                card.state.view = 'ballot';
             });
         });
 
@@ -226,7 +234,7 @@
             }
 
             var result = true;
-            $scope.players().some(function(item){
+            $scope.players.some(function(item){
                 if ((!item.player) || (!item.player.isReady())){
                     result = false;
                     return true;
@@ -255,6 +263,10 @@
             } else {
                 $scope.$emit('reelMove');
             }
+        };
+
+        this.jumpTo = function(card) {
+            this.setPosition($scope.deck.indexOf(card));
         };
 
         this.start = function() {

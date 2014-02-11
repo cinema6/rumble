@@ -48,8 +48,8 @@
                 modernizr   : libUrl('modernizr/modernizr.custom.71747'),
                 tweenmax    : libUrl('gsap/1.11.2-0-g79f8c87/TweenMax.min'),
                 timelinemax : libUrl('gsap/1.11.2-0-g79f8c87/TimelineMax.min'),
-                c6ui        : libUrl('c6ui/v2.1.0-0-g235a9de/c6uilib'),
-                c6log       : libUrl('c6ui/v2.1.0-0-g235a9de/c6log'),
+                c6ui        : libUrl('c6ui/v2.2.1-0-g89204c8/c6uilib'),
+                c6log       : libUrl('c6ui/v2.2.1-0-g89204c8/c6log'),
                 templates   : '/base/.tmp/templates'
             },
 
@@ -99,7 +99,22 @@
                 mini_reel_card: {
                     deps: ['app']
                 },
+                video_card: {
+                    deps: ['app']
+                },
+                vast_card: {
+                    deps: ['app']
+                },
                 ballot_module: {
+                    deps: ['app']
+                },
+                comments_module: {
+                    deps: ['app']
+                },
+                display_ad_module: {
+                    deps: ['app']
+                },
+                table_of_contents: {
                     deps: ['app']
                 }
             },

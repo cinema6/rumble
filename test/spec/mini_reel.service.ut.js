@@ -3,7 +3,8 @@
 
     define(['rumble'], function() {
         describe('MiniReelService', function() {
-            var MiniReelService;
+            var CommentsService,
+                MiniReelService;
 
             var copy;
 
@@ -17,6 +18,10 @@
                 });
 
                 inject(function($injector) {
+                    CommentsService = $injector.get('CommentsService');
+
+                    CommentsService.init('r-738c2403d83ddc');
+
                     MiniReelService = $injector.get('MiniReelService');
                 });
             });
@@ -200,15 +205,6 @@
                             expect(video4.ballotId).toBeUndefined();
                             expect(video4.commentGroup).toBe(commentGroup1);
                             expect(video4.commentGroupId).toBeUndefined();
-                        });
-
-                        it('should give each video a "vote" and "view" state', function() {
-                            result.forEach(function(video) {
-                                var state = video.state;
-
-                                expect(state.vote).toBe(-1);
-                                expect(state.view).toBe('video');
-                            });
                         });
 
                         it('should give each video a "null" player', function() {

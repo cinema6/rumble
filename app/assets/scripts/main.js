@@ -38,10 +38,15 @@
                     'scripts/dailymotion',
                     'scripts/iframe',
                     'scripts/rumble',
+                    'scripts/table_of_contents',
                     'scripts/vimeo',
                     'scripts/youtube',
                     'scripts/mini_reel_card',
-                    'scripts/ballot_module'
+                    'scripts/video_card',
+                    'scripts/vast_card',
+                    'scripts/ballot_module',
+                    'scripts/comments_module',
+                    'scripts/display_ad_module'
                 ];
             }
         }()),
@@ -52,8 +57,8 @@
                     libUrl('jquery/2.0.3-0-gf576d00/jquery.min.js'),
                     libUrl('angular/v1.2.8-0-g0f9a1c2/angular.min.js'),
                     libUrl('angular/v1.2.8-0-g0f9a1c2/angular-animate.min.js'),
-                    libUrl('c6ui/v2.1.0-0-g235a9de/c6uilib.min.js'),
-                    libUrl('c6ui/v2.1.0-0-g235a9de/c6log.min.js'),
+                    libUrl('c6ui/v2.2.1-0-g89204c8/c6uilib.min.js'),
+                    libUrl('c6ui/v2.2.1-0-g89204c8/c6log.min.js'),
                     'https://www.youtube.com/iframe_api'
                 ];
             } else {
@@ -62,8 +67,8 @@
                     libUrl('jquery/2.0.3-0-gf576d00/jquery.js'),
                     libUrl('angular/v1.2.8-0-g0f9a1c2/angular.js'),
                     libUrl('angular/v1.2.8-0-g0f9a1c2/angular-animate.js'),
-                    libUrl('c6ui/v2.1.0-0-g235a9de/c6uilib.js'),
-                    libUrl('c6ui/v2.1.0-0-g235a9de/c6log.js'),
+                    libUrl('c6ui/v2.2.1-0-g89204c8/c6uilib.js'),
+                    libUrl('c6ui/v2.2.1-0-g89204c8/c6log.js'),
                     'https://www.youtube.com/iframe_api'
                 ];
             }

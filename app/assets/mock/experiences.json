@@ -63,24 +63,71 @@
                     ]
                 }
             ],
+            "conversations": [
+                {
+                    "id": "rcv-f9efca48d85143",
+                    "comments": [
+                        {
+                            "user": {
+                                "pic": "josh.png",
+                                "name": "Josh Minzner",
+                                "isFriend": true
+                            },
+                            "date": "1390945596",
+                            "message": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc sed ultricies turpis. Praesent rutrum blandit nisl, ac adipiscing ante. Integer lectus lectus, ultricies nec orci a, condimentum cursus dolor."
+                        },
+                        {
+                            "user": {
+                                "pic": "steph.png",
+                                "name": "Steph Stober",
+                                "isFriend": true
+                            },
+                            "date": "1389822391",
+                            "message": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc sed ultricies turpis. Praesent rutrum blandit nisl, ac adipiscing ante. Integer lectus lectus, ultricies nec orci a, condimentum cursus dolor."
+                        },
+                        {
+                            "user": {
+                                "pic": "johnny.png",
+                                "name": "Johnny Testmonkey"
+                            },
+                            "date": "1388353591",
+                            "message": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc sed ultricies turpis. Praesent rutrum blandit nisl, ac adipiscing ante. Integer lectus lectus, ultricies nec orci a, condimentum cursus dolor."
+                        }
+                    ]
+                }
+            ],
             "deck" : [
                 {
                     "id"     : "rc-22119a8cf9f755",
                     "type"   : "youtube",
-                    "title"  : "Did someone say FOX?",
-                    "note"   : "Thought so",
+                    "title"  : "Epic Sax Guy",
+                    "note"   : "He's back, and saxier than ever.",
                     "modules": [
-                        "ballot"
+                        "ballot",
+                        "comments"
                     ],
                     "voting" : [ 0.63, 0.31, 0.06 ],
                     "data"   : {
-                        "videoid" : "jofNR_WkoCE",
-                        "start"   : 40,
-                        "end"     : 49,
+                        "videoid" : "gy1B3agGNxw",
+                        "start"   : 42,
+                        "end"     : 130,
                         "rel"     : 0,
                         "modestbranding" : 1
                     },
-                    "ballotId": "rb-716ffbdfc356af"
+                    "ballotId": "rb-716ffbdfc356af",
+                    "conversationId": "rcv-f9efca48d85143"
+                },
+                {
+                    "id": "rc-2d46a04b21b073",
+                    "type": "vast",
+                    "ad": true,
+                    "modules": [
+                        "displayAd"
+                    ],
+                    "data": {
+                        "autoplay": true
+                    },
+                    "displayAd": "http://2.bp.blogspot.com/-TlM_3FT89Y0/UMzLr7kVykI/AAAAAAAACjs/lKrdhgp6OQg/s1600/brad-turner.jpg"
                 },
                 {
                     "id"     : "rc-4770a2d7f85ce0",

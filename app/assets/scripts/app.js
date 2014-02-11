@@ -59,6 +59,10 @@
         function( c6UrlMakerProvider ,  c6Defines ) {
             c6UrlMakerProvider.location(c6Defines.kBaseUrl,'default');
         }])
+        .config(['VASTServiceProvider',
+        function( VASTServiceProvider ) {
+            VASTServiceProvider.adServerUrl('http://u-ads.adap.tv/a/h/CbyYsMcIh10+XoGWvwRuGArwmci9atPoLiGQaGjtyrT4ht6z4qOJpQ==?cb=%5BCACHE_BREAKER%5D&pageUrl=http%3A%2F%2Ftest.com&eov=eov');
+        }])
         .run(   ['cinema6',
         function( cinema6 ) {
             cinema6.db
@@ -106,6 +110,24 @@
                 return Math.round((input * 100)) + '%';
             };
         })
+        .filter('timestamp', ['dateFilter','$window',
+        function             ( dateFilter , $window ) {
+            return function(epoch) {
+                var jsEpoch = (epoch * 1000),
+                    daysAgo = (function() {
+                        var date = new $window.Date(jsEpoch),
+                            now = new $window.Date();
+
+                        return Math.round(Math.abs((now.getTime() - date.getTime()) / 86400000));
+                    }());
+
+                if (!daysAgo) {
+                    return dateFilter(jsEpoch, 'h:mm a').toLowerCase();
+                }
+
+                return daysAgo + ' day' + ((daysAgo > 1) ? 's' : '') + ' ago';
+            };
+        }])
         .factory('_default',[function(){
             return function _default(a,s,v){ if (a[s] === undefined){ a[s] = v; } };
         }])
@@ -129,7 +151,9 @@
                     isReady     : angular.noop,
                     currentTime : 0,
                     ended       : false,
-                    twerked     : false
+                    twerked     : false,
+                    duration    : NaN,
+                    paused      : true
                 });
             };
         }])

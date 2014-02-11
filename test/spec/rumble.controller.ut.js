@@ -8,14 +8,17 @@
                 $timeout,
                 $q,
                 $log,
+                $controller,
                 c6UserAgent,
                 RumbleCtrl,
                 rumbleVotes,
+                CommentsService,
                 deck,
                 appData,
                 mockPlayer,
                 cinema6,
-                MiniReelService;
+                MiniReelService,
+                ControlsService;
 
             beforeEach(function() {
                 MiniReelService = {
@@ -108,6 +111,10 @@
 
                 module('c6.rumble', function($provide) {
                     $provide.value('MiniReelService', MiniReelService);
+                    $provide.value('ControlsService', {
+                        init: jasmine.createSpy('ControlsService.init()')
+                            .andReturn({})
+                    });
                 });
 
                 inject(function($injector) {
@@ -115,10 +122,13 @@
                     $q          = $injector.get('$q');
                     $rootScope  = $injector.get('$rootScope');
                     $log        = $injector.get('$log');
+                    $controller = $injector.get('$controller');
                     $log.context = function() { return $log; };
                     $window     = $injector.get('$window');
                     c6UserAgent = $injector.get('c6UserAgent');
                     rumbleVotes = $injector.get('rumbleVotes');
+                    CommentsService = $injector.get('CommentsService');
+                    ControlsService = $injector.get('ControlsService');
 
                     $scope      = $rootScope.$new();
 
@@ -126,8 +136,9 @@
                         data: appData
                     };
 
+                    spyOn(CommentsService, 'init');
                     spyOn(rumbleVotes, 'init');
-                    RumbleCtrl = $injector.get('$controller')('RumbleController', {
+                    RumbleCtrl = $controller('RumbleController', {
                         $scope  : $scope,
                         $log    : $log
                     });
@@ -137,7 +148,7 @@
                 it('has proper dependencies',function(){
                     expect(RumbleCtrl).toBeDefined();
                     expect($scope.deviceProfile).toBe(appData.profile);
-                    
+
                     expect($scope.deck).toBe(MiniReelService.createDeck.mostRecentCall.result);
                     expect($scope.currentIndex).toEqual(-1);
                     expect($scope.currentCard).toBeNull();
@@ -149,9 +160,13 @@
                 it('should initialize rumbleVotes with the id', function() {
                     expect(rumbleVotes.init).toHaveBeenCalledWith(appData.experience.data.id);
                 });
+
+                it('should initialize the CommentsService with the id', function() {
+                    expect(CommentsService.init).toHaveBeenCalledWith(appData.experience.data.id);
+                });
             });
 
-            describe('$scope.players()', function() {
+            describe('$scope.players', function() {
                 beforeEach(function() {
                     $scope.deck = [
                         {
@@ -178,8 +193,6 @@
                 });
 
                 it('should always have the current and next two players and should not remove players', function() {
-                    var players = $scope.players;
-
                     function playlist(index) {
                         return $scope.deck[index];
                     }
@@ -190,16 +203,151 @@
                         });
                     }
 
-                    expect(players()).toEqual([playlist(0), playlist(1)]);
+                    expect($scope.players).toEqual([playlist(0), playlist(1)]);
 
                     currentIndex(0);
-                    expect(players()).toEqual([playlist(0), playlist(1), playlist(2)]);
+                    expect($scope.players).toEqual([playlist(0), playlist(1), playlist(2)]);
 
                     currentIndex(1);
-                    expect(players()).toEqual([playlist(0), playlist(1), playlist(2), playlist(3)]);
+                    expect($scope.players).toEqual([playlist(0), playlist(1), playlist(2), playlist(3)]);
 
                     currentIndex(2);
-                    expect(players()).toEqual([playlist(0), playlist(1), playlist(2), playlist(3), playlist(4)]);
+                    expect($scope.players).toEqual([playlist(0), playlist(1), playlist(2), playlist(3), playlist(4)]);
+                });
+            });
+
+            describe('$scope.controls', function() {
+                var controlsIFace;
+
+                beforeEach(function() {
+                    var newScope = $rootScope.$new();
+
+                    newScope.app = $scope.app;
+
+                    controlsIFace = {};
+
+                    ControlsService.init.andReturn(controlsIFace);
+
+                    $scope = newScope;
+                    RumbleCtrl = $controller('RumbleController', { $scope: $scope });
+                });
+
+                it('should be the result of calling init() on the ControlsService', function() {
+                    expect($scope.controls).toBe(controlsIFace);
+                    expect(ControlsService.init).toHaveBeenCalled();
+                });
+            });
+
+            describe('$scope.tocCards', function() {
+                var deck;
+
+                beforeEach(function() {
+                    $scope.$apply(function() {
+                        deck = $scope.deck = [
+                            {},
+                            {
+                                ad: true,
+                                sponsored: true
+                            },
+                            {
+                                ad: true
+                            },
+                            {},
+                            {},
+                            {
+                                ad: true
+                            },
+                            {
+                                ad: true,
+                                sponsored: true
+                            }
+                        ];
+                    });
+                });
+
+                it('should only include non-ad cards, unless they are sponsored', function() {
+                    expect($scope.tocCards).toEqual([
+                        deck[0],
+                        deck[1],
+                        deck[3],
+                        deck[4],
+                        deck[6]
+                    ]);
+                });
+            });
+
+            describe('$scope.tocIndex', function() {
+                var deck;
+
+                beforeEach(function() {
+                    deck = $scope.deck = [
+                        {},
+                        {
+                            ad: true,
+                            sponsored: true
+                        },
+                        {
+                            ad: true
+                        },
+                        {},
+                        {},
+                        {
+                            ad: true
+                        },
+                        {
+                            ad: true,
+                            sponsored: true
+                        }
+                    ];
+
+                    $scope.currentCard = null;
+                });
+
+                it('should reflect the index of the card in the tocCards', function() {
+                    expect($scope.tocIndex).toBe(-1);
+
+                    $scope.$apply(function() {
+                        $scope.currentCard = deck[0];
+                    });
+                    expect($scope.tocIndex).toBe(0);
+
+                    $scope.$apply(function() {
+                        $scope.currentCard = deck[1];
+                    });
+                    expect($scope.tocIndex).toBe(1);
+
+                    $scope.$apply(function() {
+                        $scope.currentCard = deck[2];
+                    });
+                    expect($scope.tocIndex).toBe(-1);
+
+                    $scope.$apply(function() {
+                        $scope.currentCard = deck[3];
+                    });
+                    expect($scope.tocIndex).toBe(2);
+                });
+            });
+
+            describe('$scope.showTOC', function() {
+                it('should be false', function() {
+                    expect($scope.showTOC).toBe(false);
+                });
+            });
+
+            describe('jumpTo(card)', function() {
+                beforeEach(function() {
+                    spyOn(RumbleCtrl, 'setPosition');
+                });
+
+                it('should call "setPosition" with the index of the provided card', function() {
+                    RumbleCtrl.jumpTo($scope.deck[1]);
+                    expect(RumbleCtrl.setPosition).toHaveBeenCalledWith(1);
+
+                    RumbleCtrl.jumpTo($scope.deck[0]);
+                    expect(RumbleCtrl.setPosition).toHaveBeenCalledWith(0);
+
+                    RumbleCtrl.jumpTo($scope.deck[2]);
+                    expect(RumbleCtrl.setPosition).toHaveBeenCalledWith(2);
                 });
             });
 
@@ -291,7 +439,7 @@
                         expect($scope.deck[1].player).toBeNull();
                         $scope.$emit('playerAdd',mockPlayer);
                         expect($scope.deck[1].player).toBe(mockPlayer);
-                        expect(mockPlayer.on.callCount).toEqual(2);
+                        expect(mockPlayer.on.callCount).toEqual(1);
                         expect(mockPlayer.on.argsForCall[0][0]).toEqual('ready');
                     });
                 });
@@ -320,9 +468,11 @@
                         $scope.deck[2].player = {
                             isReady : jasmine.createSpy('player2.isReady')
                         };
-                        $scope.players = function() {
-                            return [$scope.deck[0], $scope.deck[1], $scope.deck[2]];
-                        };
+
+                        $scope.$apply(function() {
+                            $scope.currentIndex = 0;
+                        });
+
                         $scope.deck[0].player.isReady.andReturn(true);
                         $scope.deck[2].player.isReady.andReturn(true);
                         $scope.$emit('playerAdd',mockPlayer);
@@ -334,22 +484,6 @@
                         expect($scope.deck[1].player.isReady).toHaveBeenCalled();
                         expect($scope.deck[2].player.isReady).toHaveBeenCalled();
                         expect($scope.ready).toEqual(true);
-                    });
-                });
-
-                describe('ended', function() {
-                    beforeEach(function(){
-                        mockPlayer.getType.andReturn('vimeo');
-                        mockPlayer.getVideoId.andReturn('vid2video');
-                        mockPlayer.isReady.andReturn(true);
-
-                        $scope.$emit('playerAdd',mockPlayer);
-                        $scope.currentCard = $scope.deck[1];
-                        mockPlayer._on.ended[0](mockPlayer);
-                    });
-
-                    it('should set the view to "ballot"', function() {
-                        expect($scope.deck[1].state.view).toBe('ballot');
                     });
                 });
             });
