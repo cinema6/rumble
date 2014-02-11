@@ -21,7 +21,7 @@
 </div><!--.ui-nav-left--landscape-->
 
 <div class="ui-nav-right--landscape css-promote">
-    <button class="ui-nav__view-list" title="View List Pane" type="button" >
+    <button class="ui-nav__view-list" ng-click="showTOC = true;" title="View List Pane" type="button" >
         <span class="ir">List Pane</span>
         <span class="sprite ui-icon__list">&nbsp;</span>
         <span class="ui-control__activator">&nbsp;</span>
@@ -75,7 +75,7 @@
         <span class="sprite ui-icon__prev">&nbsp;</span>
         <span class="ui-control__activator">&nbsp;</span>
     </button>
-    <button class="ui-control__view-list" title="View List Pane" type="button" >
+    <button class="ui-control__view-list" ng-click="showTOC = true;" title="View List Pane" type="button" >
         <span class="ir">List Pane</span>
         <span class="sprite ui-icon__list">&nbsp;</span>
         <span class="ui-control__activator">&nbsp;</span>
@@ -105,11 +105,6 @@
             <ng-include src="'assets/views/splash.html'"></ng-include>
         </div>
     </ng-switch>
-    <div class="navigation">
-        <button class="prev" ng-hide="atHead" ng-click="RumbleCtrl.goBack()">Back</button>
-        <button ng-click="showTOC = true;">Contents</button>
-        <button class="next" ng-hide="atTail" ng-click="RumbleCtrl.goForward()">Next</button>
-    </div>
     <div class="controls" ng-if="deviceProfile.device !== 'phone'">
         <c6-controls controller="controls.controller" delegate="controls.delegate" volume="false"></c6-controls>
     </div>
@@ -118,4 +113,4 @@
         on-select="RumbleCtrl.jumpTo(card)"
         on-exit="showTOC = false">
     </table-of-contents>
-</div>
+</article>

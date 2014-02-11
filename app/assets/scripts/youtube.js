@@ -461,7 +461,7 @@
                     height      : $attr.height,
                     frameborder : 0,
                     params      : vparams
-                },$element);
+                },$element.find('.mr-player'));
 
                 scope.$emit('createdPlayer',player);
 
