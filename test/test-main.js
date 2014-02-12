@@ -116,6 +116,9 @@
                 },
                 table_of_contents: {
                     deps: ['app']
+                },
+                paginator: {
+                    deps: ['app']
                 }
             },
 
