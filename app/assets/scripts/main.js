@@ -46,7 +46,8 @@
                     'scripts/vast_card',
                     'scripts/ballot_module',
                     'scripts/comments_module',
-                    'scripts/display_ad_module'
+                    'scripts/display_ad_module',
+                    'scripts/paginator'
                 ];
             }
         }()),
