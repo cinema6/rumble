@@ -1,13 +1,17 @@
-<section class="mr-ballot__group">
-    <ul ng-hide="!!vote || vote === 0">
+<section class="mr-ballot__group" ng-hide="!!vote || vote === 0">
+    <h2 class="mr-ballot__title">What did you think of this video?</h2>
+    <ul class="mr-ballot__list">
         <li class="mr-ballot__item mr-ballot__item{{$index}}" ng-repeat="this in ballot.choices">
-            <button ng-click="Ctrl.vote($index)">{{this.button}}</button>
+            <button class="mr-ballot__btn mr-ballot{{$index}}" ng-click="Ctrl.vote($index)">{{this.button}}</button>
         </li>
     </ul>
+    <p><a href="#" title="Show Voting Results">Show Voting Results</a></p>
+    <p><a href="#">Watch Again</a></p>
+
     <ul ng-show="!!vote || vote === 0">
         <li ng-repeat="this in ballot.choices">
             <strong>{{this.button}}:</strong> {{Ctrl.results[$index] | percent}}
         </li>
     </ul>
 </section>
-<div class="mr-overlay">&nbsp;</div>
+<div class="mr-overlay" ng-hide="!!vote || vote === 0">&nbsp;</div>
