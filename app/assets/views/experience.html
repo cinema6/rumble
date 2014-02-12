@@ -93,6 +93,12 @@
     </button>
 </div><!--.ui-control-->
 
+<table-of-contents ng-show="showTOC"
+    cards="tocCards"
+    on-select="RumbleCtrl.jumpTo(card)"
+    on-exit="showTOC = false">
+</table-of-contents>
+
 <ng-switch on="app.state">
     <div class="splash-screen" ng-switch-when="splash">
         <ng-include src="'assets/views/splash.html'"></ng-include>
@@ -108,9 +114,4 @@
     <div class="controls" ng-if="deviceProfile.device !== 'phone'">
         <c6-controls controller="controls.controller" delegate="controls.delegate" volume="false"></c6-controls>
     </div>
-    <table-of-contents ng-show="showTOC"
-        cards="tocCards"
-        on-select="RumbleCtrl.jumpTo(card)"
-        on-exit="showTOC = false">
-    </table-of-contents>
 </article>

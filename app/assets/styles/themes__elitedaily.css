@@ -11,3 +11,10 @@
     .ui-control--portrait, .ui-context--portrait, .ui-nav-left--landscape, .ui-nav-right--landscape {
         background:#2a2a2a;
     }
+
+/*  ==========================================================================
+    table of contents
+    ========================================================================== */
+    .mr-toc {
+        border-top:0.25em solid #2a2a2a;
+    }
