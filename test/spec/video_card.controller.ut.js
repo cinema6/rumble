@@ -75,6 +75,7 @@
                 describe('if the config has no _data', function() {
                     it('should create some data', function() {
                         expect($scope.config._data).toEqual({
+                            playerEvents: {},
                             modules: {
                                 ballot: {
                                     active: false,
@@ -109,13 +110,49 @@
                         expect(iface.once).toHaveBeenCalledWith('play', jasmine.any(Function));
                     });
 
+                    it('should turn config._data.modules.ballot.active into a computed property that is true when the video is paused or ended and false when there are votes or the video is playing', function() {
+                        var ballot = $scope.config._data.modules.ballot;
+
+                        $scope.$apply(function() {
+                            $scope.active = true;
+                            iface.paused = true;
+                            iface.ended = false;
+                        });
+                        expect(ballot.active).toBe(false);
+
+                        $scope.$apply(function() {
+                            iface.emit('play', iface);
+                            iface.paused = false;
+                            iface.ended = false;
+                        });
+                        expect(ballot.active).toBe(false);
+
+                        $scope.$apply(function() {
+                            iface.ended = true;
+                        });
+                        expect(ballot.active).toBe(true);
+
+                        $scope.$apply(function() {
+                            iface.paused = true;
+                            iface.ended = false;
+                        });
+                        expect(ballot.active).toBe(true);
+
+                        $scope.$apply(function() {
+                            $scope.active = false;
+                        });
+                        expect(ballot.active).toBe(false);
+
+                        $scope.$apply(function() {
+                            $scope.active = true;
+                            ballot.vote = 0;
+                        });
+                        expect(ballot.active).toBe(false);
+                    });
+
                     describe('when "play" is emitted', function() {
                         beforeEach(function() {
                             iface.emit('play', iface);
-                        });
-
-                        it('should set _data.modules.ballot.active to true', function() {
-                            expect($scope.config._data.modules.ballot.active).toBe(true);
                         });
 
                         it('should set _data.modules.displayAd.active to true', function() {
