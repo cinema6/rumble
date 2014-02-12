@@ -271,7 +271,10 @@
 
         this.start = function() {
             this.goForward();
-            cinema6.fullscreen(true);
+
+            if ($scope.deviceProfile.device === 'phone') {
+                cinema6.fullscreen(true);
+            }
         };
 
         this.goBack = function(){

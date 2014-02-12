@@ -96,7 +96,9 @@
                 ];
 
                 appData = {
-                    profile      : {},
+                    profile: {
+                        device: 'desktop'
+                    },
                     experience: {
                         data : {
                             id: 'r-43yt3fh85',
@@ -401,18 +403,38 @@
             });
 
             describe('starting the mini reel', function() {
-                beforeEach(function() {
-                    spyOn($scope, '$emit');
+                describe('if the device is a phone', function() {
+                    beforeEach(function() {
+                        spyOn($scope, '$emit');
+                        appData.profile.device = 'phone';
 
-                    RumbleCtrl.start();
+                        RumbleCtrl.start();
+                    });
+
+                    it('should ask cinema6 to be moved fullscreen', function() {
+                        expect(cinema6.fullscreen).toHaveBeenCalledWith(true);
+                    });
+
+                    it('should $emit the startReel event', function() {
+                        expect($scope.$emit).toHaveBeenCalledWith('reelStart');
+                    });
                 });
 
-                it('should ask cinema6 to be moved fullscreen', function() {
-                    expect(cinema6.fullscreen).toHaveBeenCalledWith(true);
-                });
+                describe('if the device is not a phone', function() {
+                    beforeEach(function() {
+                        spyOn($scope, '$emit');
+                        appData.profile.device = 'tablet';
 
-                it('should $emit the startReel event', function() {
-                    expect($scope.$emit).toHaveBeenCalledWith('reelStart');
+                        RumbleCtrl.start();
+                    });
+
+                    it('should not ask cinema6 to be moved fullscreen', function() {
+                        expect(cinema6.fullscreen).not.toHaveBeenCalled();
+                    });
+
+                    it('should $emit the startReel event', function() {
+                        expect($scope.$emit).toHaveBeenCalledWith('reelStart');
+                    });
                 });
             });
 
