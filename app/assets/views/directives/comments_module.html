@@ -15,7 +15,7 @@
         </select>
     </form>
     <ul class="mr-comments__list mr-comments__list" ng-if="!Ctrl.showFriendsFirst">
-        <li class="mr-comments__item" ng-repeat="this in Ctrl.comments">
+        <li ng-repeat="this in Ctrl.comments">
             <article class="mr-comments__comment clearfix">
                 <div class="mr-comments__userpic mr-card-shadow">
                     <img class="mr-comments__userpic-img" src="http://lorempixel.com/56/56/">
@@ -33,7 +33,7 @@
         </li>
     </ul>
     <ul class="mr-comments__list" ng-if="Ctrl.showFriendsFirst">
-        <li class="mr-comments__item" ng-repeat="this in Ctrl.commentsByFriends">
+        <li ng-repeat="this in Ctrl.commentsByFriends">
             <article class="mr-comments__comment mr-comments__comment--friend clearfix">
                 <div class="mr-comments__userpic mr-card-shadow">
                     <img class="mr-comments__userpic-img" src="http://lorempixel.com/56/56/">
@@ -66,5 +66,6 @@
                 </div>
             </article>
         </li>
+        <li class="mr-comments__terminator-outer"><span class="mr-comments__terminator sprite">&nbsp;</span></li>
     </ul>
 </section>
