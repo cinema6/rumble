@@ -1,3 +1,10 @@
+<ballot-module ng-if="Ctrl.hasModule('ballot')"
+    active="config._data.modules.ballot.active"
+    fetch-results-when="onDeck"
+    card-id="{{config.id}}"
+    ballot="config.ballot"
+    vote="config._data.modules.ballot.vote">
+</ballot-module>
 <article>
     <div class="mr-card mr-card-shadow">
         <div class="clearfix">
@@ -7,14 +14,6 @@
             </div>
             <div class="mr-player"><!-- actual player will be inserted into this container --></div>
         </div>
-        <ballot-module ng-if="Ctrl.hasModule('ballot')"
-            active="config._data.modules.ballot.active"
-            fetch-results-when="onDeck"
-            card-id="{{config.id}}"
-            ballot="config.ballot"
-            vote="config._data.modules.ballot.vote">
-        </ballot-module>
-        
         <div class="mr-card__copy">{{config.note}}</div>
     </div><!--.mr-card-->
     <comments-module ng-if="Ctrl.hasModule('comments')"

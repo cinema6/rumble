@@ -1,6 +1,6 @@
-<section class="ballot">
+<section class="mr-ballot__group">
     <ul ng-hide="!!vote || vote === 0">
-        <li ng-repeat="this in ballot.choices">
+        <li class="mr-ballot__item mr-ballot__item{{$index}}" ng-repeat="this in ballot.choices">
             <button ng-click="Ctrl.vote($index)">{{this.button}}</button>
         </li>
     </ul>
@@ -10,3 +10,4 @@
         </li>
     </ul>
 </section>
+<div class="mr-overlay">&nbsp;</div>
