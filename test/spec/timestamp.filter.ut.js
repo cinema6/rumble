@@ -15,10 +15,10 @@
 
                         function MockDate(arg1, arg2, arg3, arg4) {
                             if (arguments.length > 0) {
-                                return new Date(arg1);
+                                return new angular.mock.TzDate(-5, arg1);
                             }
 
-                            return new Date(currentTime);
+                            return new angular.mock.TzDate(-5, currentTime);
                         }
                         MockDate.now = function() {
                             return currentTime;
