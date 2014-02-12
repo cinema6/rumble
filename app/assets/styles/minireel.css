@@ -80,18 +80,22 @@
     img {
         border:0; max-width:100%;
     }
+        
+/*  ==========================================================================
+    c6-copy classes : general type & color styles
+    ========================================================================== */
+    .tk--hdr {
+        font-family: 'MuseoSans', 'Open Sans', Arial, Helvetica, sans-serif; font-weight:300;
+    }
     a {
-        text-decoration: none; color:#266cb3;
+        text-decoration: none; color:#d94040;
     }
     a:focus, button:focus, input:focus, textarea:focus {
         outline:none; border:0;
     }
-        
-/*  ==========================================================================
-    c6-copy classes : general type styles
-    ========================================================================== */
-    .tk--hdr {
-        font-family: 'MuseoSans', 'Open Sans', Arial, Helvetica, sans-serif; font-weight:300;
+
+    .mr-comments__post-btn {
+        background:#d94040;
     }
 
 /*  ==========================================================================
@@ -118,6 +122,11 @@
     }
     .mr-container {
         background:#dddddd; padding:3em 0.375em 4em 0.375em;
+        max-height:300px; 
+        overflow-x:auto; overflow-y: scroll; -webkit-overflow-scrolling: touch;
+    }
+    .mr-card-shadow {
+        -webkit-box-shadow: 0 1px 2px 0 rgba(0,0,0,0.12); box-shadow: 0 1px 2px 0 rgba(0,0,0,0.12);
     }
     .css-promote {
         transform: translateZ(0);
@@ -306,7 +315,6 @@
         }
     .mr-card {
         background:#fff; border-radius: 3px; padding:0.5em 0;
-        -webkit-box-shadow: 0 1px 2px 0 rgba(0,0,0,0.12); box-shadow: 0 1px 2px 0 rgba(0,0,0,0.12);
     }
         .mr-card__title {
             margin:0 0.5em;
@@ -342,8 +350,35 @@
     .mr-comments
     ========================================================================== */
     .mr-comments__title {
-        color:#747474; font-weight:700; font-size:1em; margin:17px 0 0 0;
+        color:#747474; font-weight:700; font-size:1em; margin:1.0625em 0 0.3125em 0;
     }
+
+    .mr-comments__hdr-bar {
+        background:#747474; color:#f2f2f2;
+        -webkit-border-radius: 3px 3px 0 0; border-radius: 3px 3px 0 0;
+        border-bottom:1px solid #5e5e5e;
+    }
+        .mr-comments__hdr-label {
+            margin:3px 0 2px 8px; font-weight:700; font-size:14px;
+        }
+    .mr-comments__body {
+        background:#fff;
+        -webkit-border-radius: 0 0 3px 3px; border-radius: 0 0 3px 3px;
+        margin:0 0 0.875em 0;
+    }
+        .mr-comments__textarea {
+            width:80%; margin:3px 0 3px 8px; font-size:1em; font-weight:300; color:#999999; float:left; display: block;
+            border:0;
+        }
+        .mr-comments__post-btn {
+            border-radius:3px; font-size:0.75em; font-weight:700; color:#fff; text-align:center;
+            border:0; margin:0.67em 0.67em 1em 0; padding:0;
+            float:right; width:12%; height:3.83em;
+        }
+    .mr-comments__select {
+        width:100%; border-radius:3px;
+    }
+
 
 
 
@@ -380,92 +415,4 @@
             margin-right: auto;
             width: 60px;
             text-align: center;
-        }
-    ul.rumble-players {
-        width: 100%;
-        height: 0;
-        padding-bottom: 56.25%;
-        list-style-type: none;
-        padding-left: 0px;
-        margin-left: 0px;
-    }
-    /*
-    .player {
-        position: absolute;
-        top: 64px;
-        z-index: 1;
-    }
-        */
-        .player-list-item.squished {
-            height: 0px;
-            /*
-            visibility: hidden;
-            opacity: 0;
-            */
-        }
-    .title-bar {
-        width: 100%;
-        height: 60px;
-        margin-top: 0%;
-    }
-        .title-bar>h1 {
-            font-size: 20px;
-            margin: 0px;
-        }
-
-        .title-bar>h2 {
-            font-size: 12px;
-            margin: 0px;
-        }
-
-    .progress {
-        font-size: 10px;
-        position: absolute;
-        top: -10px;
-        right: 5%;
-    }
-
-    .ballot {
-        width: 90%;
-        margin-top: 40px;
-        margin-left: auto;
-        margin-right: auto;
-    }
-
-        .ballot ul {
-            list-style-type: none;
-            padding-left: 0px;
-        }
-
-        .ballot li {
-            display: inline-block;
-            margin: 4px;
-    /*        padding-left: 10%;*/
-        }
-
-        .ballot button {
-            background-color:#fb9e25;
-            color: #ffffff;
-            cursor: pointer;
-            font-family: arial;
-            font-size: 17px;
-            -moz-border-radius:18px;
-            -webkit-border-radius:18px;
-            border-radius:18px;
-            border: 0px;
-            padding: 12px 20px;
-        }
-
-        .ballot button.selected {
-            -webkit-box-shadow: 0 0 40px white;
-            box-shadow: 0 0 40px white;
-        }
-
-        span.returns {
-            display: block;
-            width: 100%;
-            text-align: center;
-            margin-top: 8px;
-            font-family: arial;
-            font-size: 24px;
         }

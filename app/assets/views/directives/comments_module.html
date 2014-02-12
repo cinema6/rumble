@@ -2,14 +2,14 @@
     <h1 class="mr-comments__title">Comments(59)</h1>
     <form class="mr-comments__form">
         <div class="mr-comments__hdr-bar">
-            <label class="mr-comments__label" for="comment">Join the Discussion</label>
+            <label class="mr-comments__hdr-label" for="comment">Join the Discussion</label>
         </div>
-        <div class="mr-comments__body clearfix">
-            <textarea name="comment" ng-model="Ctrl.userComment.message"></textarea>
-            <button ng-click="Ctrl.userComment.post()" ng-disabled="!Ctrl.userComment.message">Submit</button>
+        <div class="mr-comments__body mr-card-shadow clearfix">
+            <textarea class="mr-comments__textarea" name="comment" ng-model="Ctrl.userComment.message"></textarea>
+            <button class="mr-comments__post-btn" ng-click="Ctrl.userComment.post()" ng-disabled="!Ctrl.userComment.message" type="button">Post</button>
         </div>
         <div>
-            <select ng-model="Ctrl.showFriendsFirst"
+            <select class="mr-comments__select" ng-model="Ctrl.showFriendsFirst"
                 ng-options="label for (label, value) in Ctrl.sortOptions">
             </select>
         </div>
