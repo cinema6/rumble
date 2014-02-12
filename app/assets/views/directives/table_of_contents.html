@@ -1,6 +1,14 @@
-<ul>
-    <li ng-repeat="this in cards" ng-click="Ctrl.select(this)">
-        <h5>{{this.title}}</h5>
-        <p>{{this.note}}</p>
-    </li>
-</ul>
+<section class="mr-toc">
+    <h1 class="mr-toc__title">The Most Breathtaking Go Pro Videos You'll See This Week</h1>
+    <ul class="mr-toc__list">
+        <li class="mr-toc__item clearfix" ng-repeat="this in cards" ng-click="Ctrl.select(this)">
+            <div class="mr-toc-item__thumbnail" style="background-image:url('http://lorempixel.com/212/120/');">
+                &nbsp;
+            </div>
+            <div class="mr-toc-item__details">
+                <h1 class="mr-toc-item__title">{{this.title}}</h1>
+                <p class="mr-toc-item__attributes">via <a href="#" title="YouTube">YouTube</a></p>
+            </div>
+        </li>
+    </ul>
+</section>

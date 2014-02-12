@@ -26,7 +26,7 @@
         function                   ( c6UrlMaker , $animate ) {
             return {
                 restrict: 'E',
-                templateUrl: c6UrlMaker('views/directives/ballot_vote_module.html'),
+                templateUrl: c6UrlMaker('views/directives/ballot_results_module.html'),
                 controller: 'BallotVoteModuleController',
                 controllerAs: 'Ctrl',
                 scope: {
