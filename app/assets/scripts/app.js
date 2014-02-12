@@ -153,16 +153,35 @@
                 });
             };
         }])
-        .controller('AppController', ['$scope','$log','cinema6',
-        function                     ( $scope , $log , cinema6 ) {
+        .controller('AppController', ['$scope','$log','cinema6','c6Computed','c6UrlMaker',
+        function                     ( $scope , $log , cinema6 , c6Computed , c6UrlMaker ) {
             $log = $log.context('AppCtrl');
-            var _app = {
-                state: 'splash'
-            };
+            var c = c6Computed($scope),
+                _app = {
+                    state: 'splash'
+                };
 
             var app = {
-                data: null,
+                data: null
             };
+
+            c(app, 'views', function() {
+                var data = this.data,
+                    profile = data && data.profile,
+                    isMobile = profile && (profile.device === 'phone');
+
+                if (!profile) {
+                    return {
+                        experience: null,
+                        deck: null
+                    };
+                }
+
+                return {
+                    experience: c6UrlMaker('views/experience' + (isMobile ? '--mobile' : '') + '.html'),
+                    deck: c6UrlMaker('views/deck' + (isMobile ? '--mobile' : '') + '.html')
+                };
+            }, ['app.data.profile.device']);
 
             Object.defineProperties(app, {
                 state: {
