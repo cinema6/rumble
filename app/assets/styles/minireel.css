@@ -365,12 +365,26 @@
     .mr-ballot__title {
         color:#fff; font-size:1.25em;/*20px*/ font-weight:300; text-align: center; line-height: 1.2;
     }
-    .mr-ballot__item {
-        
+    .mr-ballot__list {
+        margin:0 0 2em 0; padding:0; list-style: none;
     }
-        .mr-ballot__btn {
-            border-radius:3px; width:8.125em; /*130px*/
+        .mr-ballot__item {
+            display:inline-block; margin:0 0.625em;
         }
+        .mr-ballot__btn {
+            border-radius:3px; border:0; 
+            width:8.125em; /*130px*/ height:4.5em; /*72px*/
+            font-size:1em; color:#fff; font-weight:900; font-style: italic;
+        }
+            .mr-ballot__btn0 {
+                background:#8ac12a;
+            }
+            .mr-ballot__btn1 {
+                background:#19cbe6;
+            }
+            .mr-ballot__btn-label {
+                font-size:1.125em;/*18px*/ line-height: 1.33;
+            }
 
 
 /*  ==========================================================================
