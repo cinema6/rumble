@@ -2,7 +2,7 @@
     'use strict';
 
     define(['ballot_module'], function() {
-        describe('<ballot-module>', function() {
+        describe('<ballot-vote-module>', function() {
             var $rootScope,
                 $scope,
                 $compile;
@@ -35,7 +35,7 @@
                     beforeEach(function() {
                         $scope.active = false;
                         $scope.$apply(function() {
-                            ballot$ = $compile('<ballot-module active="active"></ballot-module>')($scope);
+                            ballot$ = $compile('<ballot-vote-module active="active"></ballot-vote-module>')($scope);
                         });
                     });
 

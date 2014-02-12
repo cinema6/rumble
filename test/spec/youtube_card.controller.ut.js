@@ -9,32 +9,11 @@
                 c6EventEmitter,
                 YoutubeCardCtrl;
 
-            var EventService,
-                ModuleService,
+            var ModuleService,
                 ControlsService;
-
-            function Tracker(events) {
-                events.forEach(function(event) {
-                    this[event] = {
-                        emitCount: 0
-                    };
-                }.bind(this));
-
-                EventService._.trackers.push(this);
-            }
 
             beforeEach(function() {
                 module('c6.rumble.services', function($provide) {
-                    $provide.value('EventService', {
-                        trackEvents: jasmine.createSpy('EventService.trackEvents()')
-                            .andCallFake(function(emitter, events) {
-                                return new Tracker(events);
-                            }),
-                        _: {
-                            trackers: []
-                        }
-                    });
-
                     $provide.value('ModuleService', {
                         hasModule: jasmine.createSpy('ModuleService.hasModule()')
                     });
@@ -51,7 +30,6 @@
                     $controller = $injector.get('$controller');
                     c6EventEmitter = $injector.get('c6EventEmitter');
 
-                    EventService = $injector.get('EventService');
                     ModuleService = $injector.get('ModuleService');
                     ControlsService = $injector.get('ControlsService');
 
@@ -85,6 +63,7 @@
                 describe('if the config has no _data', function() {
                     it('should create some data', function() {
                         expect($scope.config._data).toEqual({
+                            playerEvents: {},
                             modules: {
                                 ballot: {
                                     active: false,
@@ -155,13 +134,49 @@
                             iface.emit('play', iface);
                         });
 
-                        it('should set _data.modules.ballot.active to true', function() {
-                            expect($scope.config._data.modules.ballot.active).toBe(true);
-                        });
-
                         it('should set _data.modules.displayAd.active to true', function() {
                             expect($scope.config._data.modules.displayAd.active).toBe(true);
                         });
+                    });
+
+                    it('should turn config._data.modules.ballot.active into a computed property that is true when the video is paused or ended and false when there are votes or the video is playing', function() {
+                        var ballot = $scope.config._data.modules.ballot;
+
+                        $scope.$apply(function() {
+                            $scope.active = true;
+                            iface.paused = true;
+                            iface.ended = false;
+                        });
+                        expect(ballot.active).toBe(false);
+
+                        $scope.$apply(function() {
+                            iface.emit('play', iface);
+                            iface.paused = false;
+                            iface.ended = false;
+                        });
+                        expect(ballot.active).toBe(false);
+
+                        $scope.$apply(function() {
+                            iface.ended = true;
+                        });
+                        expect(ballot.active).toBe(true);
+
+                        $scope.$apply(function() {
+                            iface.paused = true;
+                            iface.ended = false;
+                        });
+                        expect(ballot.active).toBe(true);
+
+                        $scope.$apply(function() {
+                            $scope.active = false;
+                        });
+                        expect(ballot.active).toBe(false);
+
+                        $scope.$apply(function() {
+                            $scope.active = true;
+                            ballot.vote = 0;
+                        });
+                        expect(ballot.active).toBe(false);
                     });
                 });
             });

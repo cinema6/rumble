@@ -487,10 +487,11 @@
             templateUrl : c6UrlMaker('views/directives/video_embed_card.html')
         };
     }])
-    .controller('VimeoCardController', ['$scope','ModuleService','ControlsService',
-    function                           ( $scope , ModuleService , ControlsService ) {
+    .controller('VimeoCardController', ['$scope','ModuleService','ControlsService','EventService',
+    function                           ( $scope , ModuleService , ControlsService , EventService ) {
         var config = $scope.config,
             _data = config._data = config._data || {
+                playerEvents: {},
                 modules: {
                     ballot: {
                         active: false,
@@ -505,9 +506,20 @@
         this.hasModule = ModuleService.hasModule.bind(ModuleService, config.modules);
 
         $scope.$on('playerAdd', function(event, player) {
+            _data.playerEvents = EventService.trackEvents(player, ['play']);
+
             player.once('play', function() {
-                _data.modules.ballot.active = true;
                 _data.modules.displayAd.active = true;
+            });
+
+            Object.defineProperty(_data.modules.ballot, 'active', {
+                get: function() {
+                    var playing = (!player.paused && !player.ended),
+                        voted = angular.isNumber(_data.modules.ballot.vote),
+                        hasPlayed = _data.playerEvents.play.emitCount > 0;
+
+                    return !voted && !playing && hasPlayed && $scope.active;
+                }
             });
 
             $scope.$watch('active', function(active) {
