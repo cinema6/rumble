@@ -29,16 +29,13 @@
             if (!this.isReady()){
                 throw new Error('Youtube has not been initialized');
             }
-            var $playerElement,src,params;
+            var $playerElement,src,
+                params = {};
             if (!$parentElement){
                 throw new Error('Parent element is required for youtube.createPlayer');
             }
 
             src = this.formatPlayerSrc(config.videoId, config.params);
-            params = {
-                //width       : config.width,
-                //height      : config.height
-            };
 
             if (config.frameborder !== undefined){
                 params.frameborder = config.frameborder;
@@ -405,18 +402,6 @@
             _default($attr,'enablejsapi'    ,1);
             _default($attr,'rel'            ,0);
             _default($attr,'modestbranding' ,1);
-
-            /*$attr.$observe('width',function(){
-                if (player){
-                    player.setSize($attr.width, $attr.height);
-                }
-            });
-
-            $attr.$observe('height',function(){
-                if (player){
-                    player.setSize($attr.width, $attr.height);
-                }
-            });*/
 
             scope.$on('$destroy',function(){
                 if (currentTimeInterval) {

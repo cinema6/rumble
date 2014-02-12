@@ -127,14 +127,12 @@
                             });
 
                         result = youtube.createPlayer('player1',{
-                            width: 100,
-                            height: 100,
                             videoId: 'x123'
                         },angularElementMock);
 
                         expect(youtube.formatPlayerSrc)
                             .toHaveBeenCalledWith('x123',undefined);
-                        expect(angular.element.calls[0].args[0]).toEqual('<iframe id="player1" src="http://www.youtube.com/embed/x123?enablejsapi=1" width="100" height="100"></iframe>');
+                        expect(angular.element.calls[0].args[0]).toEqual('<iframe id="player1" src="http://www.youtube.com/embed/x123?enablejsapi=1"></iframe>');
                         expect(angular.element.calls[1].args[0]).toEqual(angularElementMock);
 
                         expect(angularElementMock.prepend)

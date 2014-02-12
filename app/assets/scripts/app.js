@@ -114,15 +114,11 @@
         function             ( dateFilter , $window ) {
             return function(epoch) {
                 var jsEpoch = (epoch * 1000),
-                    daysAgo = (function() {
-                        var date = new $window.Date(jsEpoch),
-                            now = new $window.Date();
-
-                        return Math.round(Math.abs((now.getTime() - date.getTime()) / 86400000));
-                    }());
+                    date = new $window.Date(jsEpoch),
+                    daysAgo = Math.round(Math.abs(($window.Date.now() - date.getTime()) / 86400000));
 
                 if (!daysAgo) {
-                    return dateFilter(jsEpoch, 'h:mm a').toLowerCase();
+                    return dateFilter(date, 'h:mm a').toLowerCase();
                 }
 
                 return daysAgo + ' day' + ((daysAgo > 1) ? 's' : '') + ' ago';
