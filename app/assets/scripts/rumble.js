@@ -318,10 +318,10 @@
             function resize(event,noDigest){
                 var pw = Math.round($window.innerWidth * 1),
                     ph = Math.round(pw * 0.5625);
-                $element.css({
+                /* $element.css({
                     width : pw,
                     height: ph
-                });
+                }); */
                 scope.playerWidth   = pw;
                 scope.playerHeight  = ph;
                 if(!noDigest){
@@ -336,7 +336,7 @@
                 }
             }
 
-            inner += ' width="{{playerWidth}}" height="{{playerHeight}}"';
+            // inner += ' width="{{playerWidth}}" height="{{playerHeight}}"';
 
             if (!scope.profile.inlineVideo){
                 $log.info('Will need to regenerate the player');

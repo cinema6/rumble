@@ -1,19 +1,10 @@
-<section>
-    <div class="title-bar">
-        <h1>{{currentCard.title}}</h1>
-        <h2>{{currentCard.note}}</h2>
-    </div>
-    <div class="progress" ng-show="tocIndex > -1">
-        <h1> {{tocIndex + 1}} of {{tocCards.length}} </h1>
-    </div>
-    <ul class="rumble-players">
-        <li class="player-list-item" ng-repeat="item in players" ng-class="{ squished : ($index !== currentIndex)}" >
-            <mr-card class="player"
-                x-config="item"
-                x-profile="deviceProfile"
-                x-active="($index === currentIndex)"
-                x-on-deck="($index === (currentIndex + 1))">
-            </mr-card>
-        </li>
-    </ul>
-</section>
+<ul class="mr-cards__list">
+    <li class="mr-cards__item" ng-repeat="item in players" ng-class="{ squished : ($index !== currentIndex)}" >
+        <mr-card
+            x-config="item"
+            x-profile="deviceProfile"
+            x-active="($index === currentIndex)"
+            x-on-deck="($index === (currentIndex + 1))">
+        </mr-card>
+    </li>
+</ul>

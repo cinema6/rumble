@@ -134,21 +134,6 @@
                         frameborder: 0
                     });
                 });
-
-                it('will observe changes to width and height',function(){
-                    var youtubePlayer, scope;
-                    youtubePlayer = $compile(
-                        '<youtube-card videoid="abc123" width="{{width}}" height="{{height}}"></youtube-card>'
-                    )($scope);
-                    scope = youtubePlayer.scope();
-                    $timeout.flush();
-                    expect(mockPlayers[0].setSize).not.toHaveBeenCalled();
-                    $scope.width  = 200;
-                    $scope.height = 300;
-                    scope.$digest();
-                    expect(mockPlayers[0].setSize).toHaveBeenCalledWith('200','300');
-                });
-
             });
             /* -- end describe('initialization' */
 

@@ -1,0 +1,13 @@
+/*  ==========================================================================
+    Branding classes
+    ========================================================================== */
+    .publisher__branding-logo {
+        background-image:url('../img/publisher__elite-daily.png');
+    }
+
+/*  ==========================================================================
+    Navigation classes
+    ========================================================================== */
+    .ui-control--portrait, .ui-context--portrait, .ui-nav-left--landscape, .ui-nav-right--landscape {
+        background:#2a2a2a;
+    }

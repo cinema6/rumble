@@ -1,0 +1,492 @@
+/*  ==========================================================================
+    global styles
+    ========================================================================== */
+    body {
+        font-size: 1em; font-family: 'MuseoSans', Arial, Helvetica, sans-serif; font-weight:300; color:#545454; line-height: 1.5;
+        background:transparent; margin:0;
+    }
+    @font-face {
+        font-family: 'MuseoSans';
+        src: url('museosans-300-webfont.eot');
+        src: url('museosans-300-webfont.eot?#iefix') format('embedded-opentype'),
+             url('museosans-300-webfont.woff') format('woff'),
+             url('museosans-300-webfont.svg#museo_sans300') format('svg'),
+             url('museosans-300-webfont.ttf') format('truetype');
+        font-weight: 300;
+        font-style: normal;
+    }
+    @font-face {
+        font-family: 'MuseoSans';
+        src: url('museosans-300italic-webfont.eot');
+        src: url('museosans-300italic-webfont.eot?#iefix') format('embedded-opentype'),
+             url('museosans-300italic-webfont.woff') format('woff'),
+             url('museosans-300italic-webfont.svg#museo_sans300_italic') format('svg'),
+             url('museosans-300italic-webfont.ttf') format('truetype');
+        font-weight: 300;
+        font-style: italic;
+    }
+    @font-face {
+        font-family: 'MuseoSans';
+        src: url('museosans_700-webfont.eot');
+        src: url('museosans_700-webfont.eot?#iefix') format('embedded-opentype'),
+             url('museosans_700-webfont.woff') format('woff'),
+             url('museosans_700-webfont.svg#museo_sans700') format('svg'),
+             url('museosans_700-webfont.ttf') format('truetype');
+        font-weight: 700;
+        font-style: normal;
+    }
+    @font-face {
+        font-family: 'MuseoSans';
+        src: url('museosans-700italic-webfont.eot');
+        src: url('museosans-700italic-webfont.eot?#iefix') format('embedded-opentype'),
+             url('museosans-700italic-webfont.woff') format('woff'),
+             url('museosans-700italic-webfont.svg#museo_sans700_italic') format('svg'),
+             url('museosans-700italic-webfont.ttf') format('truetype');
+        font-weight: 700;
+        font-style: italic;
+    }
+    @font-face {
+        font-family: 'MuseoSans';
+        src: url('museosans_900-webfont.eot');
+        src: url('museosans_900-webfont.eot?#iefix') format('embedded-opentype'),
+             url('museosans_900-webfont.woff') format('woff'),
+             url('museosans_900-webfont.svg#museo_sans900') format('svg'),
+             url('museosans_900-webfont.ttf') format('truetype');
+        font-weight: 900;
+        font-style: normal;
+    }
+    @font-face {
+        font-family: 'MuseoSans';
+        src: url('museosans-900italic-webfont.eot');
+        src: url('museosans-900italic-webfont.eot?#iefix') format('embedded-opentype'),
+             url('museosans-900italic-webfont.woff') format('woff'),
+             url('museosans-900italic-webfont.svg#museo_sans900_italic') format('svg'),
+             url('museosans-900italic-webfont.ttf') format('truetype');
+        font-weight: 900;
+        font-style: italic;
+    }
+    ::-moz-selection {
+        background: #e900a4; text-shadow: none; color:#fff;
+    }
+    ::selection {
+        background: #e900a4; text-shadow: none; color:#fff;
+    }
+    p {
+        margin: 0.75em 0;
+    }
+    textarea {
+        resize: vertical;
+    }
+    img {
+        border:0; max-width:100%;
+    }
+        
+/*  ==========================================================================
+    c6-copy classes : general type & color styles
+    ========================================================================== */
+    .tk--hdr {
+        font-family: 'MuseoSans', 'Open Sans', Arial, Helvetica, sans-serif; font-weight:300;
+    }
+    a {
+        text-decoration: none; color:#d94040; border-bottom:1px dotted #d94040;
+    }
+    a:focus, button:focus, input:focus, textarea:focus {
+        outline:none; border:0;
+    }
+
+    .mr-comments__post-btn {
+        background:#d94040;
+    }
+
+/*  ==========================================================================
+    Helper classes
+    ========================================================================== */
+    .ir {
+        background-color: transparent;
+        border: 0; width:0; height:0;
+        overflow: hidden; display: block; position:absolute;
+    }
+    .clearfix:before,
+    .clearfix:after {
+        content: ' ';
+        display: table;
+    }
+    .clearfix:after {
+        clear: both;
+    }
+    .hidden {
+        visibility: hidden;
+    }
+    .sprite {
+        background-image:url('../img/sprite.svg'); background-repeat:no-repeat; background-size:18.75em 18.75em;
+    }
+    .mr-container {
+        background:#dddddd; padding:3em 0.375em 4em 0.375em;
+        overflow-x:auto; overflow-y: scroll; -webkit-overflow-scrolling: touch;
+        max-height:300px;
+    }
+    .mr-overlay {
+        background:rgb(0,0,0); background:rgba(0,0,0,0.8);
+        position:absolute; width:100%; height:100%; z-index: 10; top:0; left:0;
+    }
+    .mr-card-shadow {
+        -webkit-box-shadow: 0 1px 2px 0 rgba(0,0,0,0.12); box-shadow: 0 1px 2px 0 rgba(0,0,0,0.12);
+    }
+    .css-promote {
+        transform: translateZ(0);
+        -webkit-transform: translateZ(0); /* Safari and Chrome */
+    }
+    @media screen and (orientation: portrait) {
+        .portrait, .ui-control--portrait, .ui-context--portrait {
+            display:block;
+        }
+        .landscape, .ui-nav-left--landscape, .ui-nav-right--landscape {
+            display:none;
+        }
+    }
+    @media screen and (orientation:landscape) {
+        .landscape, .ui-nav-left--landscape, .ui-nav-right--landscape {
+            display:block;
+        }
+        .portrait, .ui-control--portrait, .ui-context--portrait {
+            display:none;
+        }
+        .mr-container {
+            padding:0.375em 4.125em;
+        }
+    }
+/*  ==========================================================================
+    ui-icons classes
+    ========================================================================== */
+    .ui-icon__prev, .ui-icon__next, .ui-icon__list, .ui-icon__close, .ui-icon__page {
+        position: absolute; display: block; margin:-0.625em 0 0 0; padding: 0; font-size: 1em;
+        width:0.75em; /*12px*/ height:1.25em;/*20px*/ top:50%;
+    }
+        .ui-icon__prev {
+            left:1em;
+        }
+        .ui-icon__next {
+            right:1em; background-position:0 -3.125em;
+        }
+        .ui-icon__list {
+            width:1.875em; /*30px*/ height:1.375em;/*22px*/ background-position:0 -6.25em;
+            left:1.0625em; /*17px*/
+        }
+        .ui-icon__close {
+            width:0.8125em; height:0.8125em;/*13px*/ background-position:0 -9.375em;
+            right:0.625em; /*10px*/ margin-top:-0.375em;
+        }
+        .ui-icon__page {
+            width:0.75em;/*12px*/ height:0.375em;/*6px*/ background-position:0.375em -12.5em;
+            display:inline-block; position:relative; margin:1em 0 0 0; opacity:0.3;
+        }
+            .ui-icon__page--active {
+                opacity:1;
+            }
+
+
+/*  ==========================================================================
+    Navigation classes
+    ========================================================================== */
+    .ui-control--portrait {
+        position:fixed; bottom:0; height:3.75em;/*60px*/ width:100%; z-index: 10000;
+    }
+        .ui-control__prev, .ui-control__next, .ui-control__view-list, .ui-context__close, 
+        .ui-control__preview-img, .ui-control__label, .ui-control__activator, .ui-context__label, .ui-nav__prev, .ui-nav__next, .ui-nav__view-list, .ui-nav__close {
+            width:100%; height:100%; display:block; border:0; margin:0; padding:0; position:absolute; font-size:1em; background-color:transparent;
+        }
+        .ui-control__prev, .ui-control__next, .ui-control__view-list, .ui-context__close {
+            width:8em;/*128px*/ height:3.75em;/*60px*/
+            cursor:pointer; font-size:1em; background-color:transparent;
+        }
+            .ui-control__prev:active .ui-control__activator, 
+            .ui-control__next:active .ui-control__activator, 
+            .ui-control__view-list:active .ui-control__activator,
+            .ui-nav__close:active .ui-control__activator,
+            .ui-nav__prev:active .ui-control__activator,
+            .ui-nav__next:active .ui-control__activator {
+                opacity:0.7;
+            }
+            .ui-control__next {
+                right:0;
+            }
+            .ui-control__view-list {
+                width:4em; left:50%; margin:0 0 0 -2em;
+            }
+        .ui-control__label {
+            top:1.375em; z-index: 10; color:#fff; font-weight:700; width:auto; height:0; line-height: 1;
+        }
+            .ui-control__label-prev {
+                left:2.25em;
+            }
+            .ui-control__label-next, .ui-context__label-close {
+                right:2.25em; text-align: right;
+            }
+            .ui-control__label-view-list {
+                width:4em;
+                background: url('../img/nav__index.svg') 50% 50% no-repeat; background-size:2em 1.375em;
+            }
+        .ui-control__preview-img {
+            background:no-repeat 50% 50%; background-size:cover; top:0; left:0;
+            opacity:0.7;
+        }
+        .ui-control__activator {
+           background:#fff; opacity:0; left:0; top:0;
+        }
+
+    .ui-context--portrait {
+        position:fixed; top:0; height:2.5em;/*40px*/ width:100%; z-index: 10000;
+    }
+        .publisher__branding-logo {
+            display: block; width:2.5em;/*40px*/ height:2.5em;/*40px*/ margin:0 0 0 0.4375em; /*0 0 0 7px*/ border:0; padding:0; font-size:1em;
+            background:transparent 50% 50% no-repeat; background-size:contain;
+            position:absolute; top:0; left:0; cursor:pointer;
+        }
+        .ui-context__label {
+            top:0.929em;/*13px*/ z-index: 10; color:#fff; font-weight:300; width:auto; height:0; line-height: 1; font-size:0.875em;/*14px*/
+        }
+        .ui-context__close {
+            width:4.75em; /*76px*/ height:2.5em;/*40px*/ right:0;
+        }
+            .ui-context__label-close {
+                right:2.143em; /*30px*/
+            }
+        .ui-context__paginator {
+            width:100%; text-align: center;
+        }
+        .ui-context__close:active .ui-control__activator {
+            opacity:0.7;
+        }
+
+    .ui-nav-left--landscape, .ui-nav-right--landscape {
+        position:fixed; top:0; width:3.75em;/*60px*/ height:100%; z-index: 10000;
+
+    }
+        .ui-nav-left--landscape {
+            left:0;
+        }
+        .ui-nav-right--landscape {
+            right:0;
+        }
+        .ui-nav-left--landscape .publisher__branding-logo {
+            width:3.75em; /*60px*/ height:4em;/*64px*/ margin:0;
+        }
+        .ui-nav__prev, .ui-nav__next {
+            width:3.75em;/*60px*/ height:5em;/*80px*/ top:37.5%;
+            cursor:pointer; font-size:1em; background-color:transparent;
+        }
+        .ui-nav__label {
+            top:3.4375em; z-index: 10; width:100%; height:0; display:block; position:absolute;
+            color:#fff; font-weight:700; line-height: 1; text-align: center;
+        }
+            .ui-nav__label-view-list {
+                width:4em;
+                background: url('../img/nav__index.svg') 50% 50% no-repeat; background-size:2em 1.375em;
+            }
+        .ui-nav__prev .ui-icon__prev {
+            top:1.125em; left:1.5em; margin:0;
+        }
+        .ui-nav__next .ui-icon__next {
+            top:1.125em; right:1.5em; margin:0;
+        }
+        .ui-nav__close {
+            width:3.75em;/*60px*/ height:4em;/*64px*/
+            bottom:0;
+        }
+            .ui-nav__close .ui-icon__close {
+                top:1.5625em; left:1.4375em; margin:0; right:auto;
+            }
+        .ui-nav__view-list {
+            width:3.75em;/*60px*/ height:4em;/*64px*/
+        }
+            .ui-nav__view-list:active .ui-control__activator {
+                opacity:0.7;
+            }
+        .ui-nav__counter {
+            color:#fff; font-size:0.875em; font-weight:300; text-align: center;
+            position:absolute; width:100%; bottom:1.143em; margin:0;
+        }
+
+
+/*  ==========================================================================
+    Mini Reel Cards classes
+    ========================================================================== */
+    .mr-cards__list, .mr-cards__item {
+        margin:0; padding:0; list-style:none;
+    }
+        .mr-cards__item.squished {
+            height:0; overflow:hidden;
+        }
+    .mr-card {
+        background:#fff; border-radius: 3px; padding:0.5em 0;
+    }
+        .mr-card__title {
+            margin:0 0.5em;
+            }
+            .mr-card__title-h1 {
+                font-size:1.25em; /*20px*/ color:#444444; font-weight:300; margin:0; line-height: 1.2;
+            }
+            .mr-card__attributes {
+                color:#999999; font-size:0.75em;/*12px*/ margin:0.16em 0 1em 0;
+            }
+        .mr-card__copy {
+            margin:1em 0.5em 0.143em 0.5em; font-size:0.875em;/*14px*/ color:#747474; line-height:1.75;
+        }
+    .mr-player {
+        padding:0 0 56.25%; margin:0;
+        width:100%; height:0; position:relative;
+    }
+        .mr-player iframe {
+            width:100%; height:100%;
+        }
+
+    @media screen and (orientation:landscape) {
+        .mr-card__title {
+            width:25%; float:left; margin-right:0;
+        }
+        .mr-player {
+            width:70%; float:right; margin-right:0.5em; padding:0 0 39.375%;
+        }
+    }
+
+
+/*  ==========================================================================
+    .mr-ballot__group
+    ========================================================================== */
+    .mr-ballot__group {
+        position: absolute; z-index: 500; top:3em;/*48px*/; left:0; width:100%;
+        text-align: center; box-sizing:border-box; -moz-box-sizing:border-box;
+    }
+        @media screen and (orientation:landscape) {
+            .mr-ballot__group {
+                padding:0 3.75em;
+            }
+        }
+    .mr-ballot__title {
+        color:#fff; font-size:1.25em;/*20px*/ font-weight:300; text-align: center; line-height: 1.2;
+    }
+    .mr-ballot__item {
+        
+    }
+        .mr-ballot__btn {
+            border-radius:3px; width:8.125em; /*130px*/
+        }
+
+
+/*  ==========================================================================
+    .mr-comments
+    ========================================================================== */
+    .mr-comments__title {
+        color:#747474; font-weight:700; font-size:1em; margin:1.0625em 0 0.3125em 0;
+    }
+    .mr-comments__body {
+        -webkit-border-radius: 3px; border-radius: 3px; overflow: hidden;
+        margin:0 0 0.875em 0;
+    }
+        .mr-comments__hdr-bar {
+            background:#747474; color:#f2f2f2;
+            border-bottom:1px solid #5e5e5e;
+        }
+            .mr-comments__hdr-label {
+                margin:3px 0 2px 8px; font-weight:700; font-size:14px;
+            }
+        .mr-comments__textbox {
+            background:#fff;
+        }
+            .mr-comments__textarea {
+                width:80%; margin:3px 0 3px 8px; font-size:1em; font-weight:300; color:#999999; float:left; display: block;
+                border:0;
+            }
+            .mr-comments__post-btn {
+                border-radius:3px; font-size:0.75em; font-weight:700; color:#fff; text-align:center;
+                border:0; margin:0.67em 0.67em 1em 0; padding:0;
+                float:right; width:12%; height:3.83em;
+            }
+    .mr-comments__select {
+        width:100%; border-radius:3px; border:0; height:2.25em;/*36px*/
+    }
+
+    .mr-comments__list {
+        margin:0; padding:1.125em 0 0 0; list-style:none; 
+        background:url('../img/border__ccc@2x.png') 17px 0 repeat-y; background-size:1px 1px;
+    }
+        .mr-comments__comment {
+            margin:0 0 0.75em 0;
+        }
+            .mr-comments__userpic {
+                border-radius:5px; overflow: hidden; background:#fff; padding:2px;
+                width:1.75em; height:1.75em; /*28px*/ float:left; margin:0 0.875em 0 0;
+            }
+                .mr-comments__userpic-img {
+                    display:block; width:1.75em; height:1.75em; /*28px*/
+                    border-radius:3px; overflow: hidden;
+                }
+            .mr-comments__comment--friend .mr-comments__userpic, .mr-comments__comment--friend .mr-comments__meta {
+                background:#e2f7ff;
+            }
+        .mr-comments__comment .mr-comments__body {
+            background:#fff; margin:0;
+        }
+            .mr-comments__meta {
+                background:#f2f2f2; padding:0.3125em 0.5em 0.1875em 0.5em; border-bottom:1px solid #eeeeee;
+            }
+                .mr-comments__comment--friend .mr-comments__meta {
+                    border-bottom:1px solid #daf5ff;
+                }
+                .mr-comm-meta__username {
+                    float:left; color:#747474; font-weight:700; font-size:0.875em; /*14px*/
+                    width:68%; margin:0;
+                }
+                    .mr-comments__comment--friend .mr-comm-meta__username {
+                        color:#0086b9;
+                    }
+                .mr-comm-meta__timestamp {
+                    float:right; color:#999999; font-weight:300; font-size:0.75em; /*12px*/ text-align: right;
+                    width:32%; margin:0.167em 0 0 0;
+                }
+            .mr-comments__copy {
+                padding:0.4167em 0.667em 0.583em 0.667em; color:#747474; font-size:0.75em;/*12px*/ 
+            }
+            .mr-comments__breaker {
+                display:block; width:2.25em; height:0.375em; margin:0 auto 0.75em auto;
+                background-position:-2.5em -12.5em; opacity:0.1;
+            }
+
+
+
+
+
+/*  ==========================================================================
+    Initial classes
+    ========================================================================== */
+    .splash-screen {
+        position: absolute;
+        display: block;
+        overflow: hidden;
+        top: 0px;
+        left: 0px;
+        z-index: 100;
+    }
+        .splash-screen h1 {
+            margin-top: 100px;
+            font-size: 42px;
+            text-align: center;
+        }
+        .splash-screen .start-btn {
+            display: block;
+            background-color:#ff0000;
+            color: #ffffff;
+            cursor: pointer;
+            font-family: arial;
+            font-size: 17px;
+            -moz-border-radius:18px;
+            -webkit-border-radius:18px;
+            border-radius:18px;
+            border: 0px;
+            padding: 12px 20px;
+            margin-top: 100px;
+            margin-left: auto;
+            margin-right: auto;
+            width: 60px;
+            text-align: center;
+        }
