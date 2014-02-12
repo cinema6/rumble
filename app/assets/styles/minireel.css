@@ -420,6 +420,10 @@
             .mr-comments__copy {
                 padding:0.4167em 0.667em 0.583em 0.667em; color:#747474; font-size:0.75em;/*12px*/ 
             }
+            .mr-comments__breaker {
+                display:block; width:2.25em; height:0.375em; margin:0 auto 0.75em auto;
+                background-position:-2.5em -12.5em; opacity:0.1;
+            }
 
 
 
