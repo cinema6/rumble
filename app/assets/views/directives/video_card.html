@@ -1,12 +1,18 @@
 <video ng-style="{visibility: (active ? 'visible' : 'hidden')}" c6-video id="{{config.id}}" c6-src="config.data.src"></video>
 <section>
-    <ballot-module ng-if="Ctrl.hasModule('ballot')"
+    <ballot-vote-module ng-if="Ctrl.hasModule('ballot')"
         active="config._data.modules.ballot.active"
-        fetch-results-when="onDeck"
-        card-id="{{config.id}}"
         ballot="config.ballot"
-        vote="config._data.modules.ballot.vote">
-    </ballot-module>
+        vote="config._data.modules.ballot.vote"
+        on-dismiss="Ctrl.dismissBallot()">
+    </ballot-vote-module>
+    <ballot-results-module ng-if="Ctrl.hasModule('ballot')"
+        active="config._data.modules.ballot.vote !== null"
+        ballot="config.ballot"
+        vote="config._data.modules.ballot.vote"
+        card-id="config.id"
+        fetch-when="onDeck">
+    </ballot-results-module>
     <comments-module ng-if="Ctrl.hasModule('comments')"
         card-id="{{config.id}}"
         fetch-comments-when="onDeck">
