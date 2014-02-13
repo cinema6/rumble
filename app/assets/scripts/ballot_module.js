@@ -28,7 +28,7 @@
             return {
                 restrict: 'E',
                 templateUrl: c6UrlMaker('views/directives/ballot_results_module.html'),
-                controller: 'BallotVoteModuleController',
+                controller: 'BallotResultsModuleController',
                 controllerAs: 'Ctrl',
                 scope: {
                     ballot: '=',

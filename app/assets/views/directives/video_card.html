@@ -10,7 +10,7 @@
         active="config._data.modules.ballot.vote !== null"
         ballot="config.ballot"
         vote="config._data.modules.ballot.vote"
-        card-id="config.id"
+        card-id="{{config.id}}"
         fetch-when="onDeck">
     </ballot-results-module>
     <comments-module ng-if="Ctrl.hasModule('comments')"
