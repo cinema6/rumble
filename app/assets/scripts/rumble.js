@@ -252,7 +252,7 @@
             $log.info('setPosition: %1',i);
             $scope.currentReturns = null;
             $scope.currentIndex   = i;
-            $scope.currentCard    = $scope.deck[$scope.currentIndex];
+            $scope.currentCard    = $scope.deck[$scope.currentIndex] || null;
             $scope.atHead         = $scope.currentIndex === 0;
             $scope.atTail         = ($scope.currentIndex === ($scope.deck.length - 1));
 
@@ -260,6 +260,8 @@
                 $scope.$emit('reelEnd');
             } else if ($scope.atHead) {
                 $scope.$emit('reelStart');
+            } else if (i < 0) {
+                $scope.$emit('reelReset');
             } else {
                 $scope.$emit('reelMove');
             }

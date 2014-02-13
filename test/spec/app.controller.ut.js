@@ -74,6 +74,7 @@
                             requestTransitionState: jasmine.createSpy('cinema6.requestTransitionState()').andCallFake(function() {
                                 return cinema6._.requestTransitionStateResult.promise;
                             }),
+                            fullscreen: jasmine.createSpy('cinema6.fullscreen()'),
                             _: {
                                 getSessionResult: $q.defer(),
                                 requestTransitionStateResult: $q.defer()
@@ -195,6 +196,21 @@
 
                     it('should change to the "deck" state', function() {
                         expect($scope.app.state).toBe('deck');
+                    });
+                });
+
+                describe('reelReset', function() {
+                    beforeEach(function() {
+                        $childScope.$emit('reelStart');
+                        $childScope.$emit('reelReset');
+                    });
+
+                    it('should change to the "splash" state', function() {
+                        expect($scope.app.state).toBe('splash');
+                    });
+
+                    it('should exit fullscreen mode', function() {
+                        expect(cinema6.fullscreen).toHaveBeenCalledWith(false);
                     });
                 });
             });

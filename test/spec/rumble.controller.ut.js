@@ -373,6 +373,15 @@
                     expect($scope.atTail).toEqual(false);
                 });
 
+                it('emits reelReset when going back to before the first card', function() {
+                    RumbleCtrl.setPosition(-1);
+                    expect($scope.currentIndex).toBe(-1);
+                    expect($scope.currentCard).toBe(null);
+                    expect($scope.atHead).toBe(false);
+                    expect($scope.atTail).toBe(false);
+                    expect($scope.$emit).toHaveBeenCalledWith('reelReset');
+                });
+
                 it('handles moving forward',function(){
                     $scope.currentIndex = 0;
                     $scope.currentCard  = $scope.deck[0];
