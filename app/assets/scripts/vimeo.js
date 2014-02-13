@@ -487,8 +487,8 @@
             templateUrl : c6UrlMaker('views/directives/video_embed_card.html')
         };
     }])
-    .controller('VimeoCardController', ['$scope','ModuleService','ControlsService','EventService',
-    function                           ( $scope , ModuleService , ControlsService , EventService ) {
+    .controller('VimeoCardController', ['$scope','ModuleService','ControlsService','EventService','c6Computed',
+    function                           ( $scope , ModuleService , ControlsService , EventService , c6Computed ) {
         var config = $scope.config,
             _data = config._data = config._data || {
                 playerEvents: {},
@@ -502,6 +502,12 @@
                     }
                 }
             };
+
+        c6Computed($scope)(this, 'videoUrl', function() {
+            var id = $scope.config.data.videoid;
+
+            return ('http://vimeo.com/' + id);
+        }, ['config.data.videoid']);
 
         this.hasModule = ModuleService.hasModule.bind(ModuleService, config.modules);
 

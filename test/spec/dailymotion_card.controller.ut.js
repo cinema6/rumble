@@ -34,7 +34,10 @@
                     ControlsService = $injector.get('ControlsService');
 
                     $rootScope.config = {
-                        modules: ['ballot', 'comments']
+                        modules: ['ballot', 'comments'],
+                        data: {
+                            videoid: 'x1bx4ir'
+                        }
                     };
                     $scope = $rootScope.$new();
                     DailymotionCardCtrl = $controller('DailymotionCardController', { $scope: $scope });
@@ -182,6 +185,19 @@
             });
 
             describe('@public', function() {
+                describe('properties', function() {
+                    describe('videoUrl', function() {
+                        it('should be computed based on the video\'s id', function() {
+                            expect(DailymotionCardCtrl.videoUrl).toBe('http://www.dailymotion.com/video/x1bx4ir');
+
+                            $scope.$apply(function() {
+                                $rootScope.config.data.videoid = 'x1btkdy';
+                            });
+                            expect(DailymotionCardCtrl.videoUrl).toBe('http://www.dailymotion.com/video/x1btkdy');
+                        });
+                    });
+                });
+
                 describe('methods', function() {
                     describe('hasModule(module)', function() {
                         it('should call ModuleService.hasModule() with the configured modules and the provided module', function() {

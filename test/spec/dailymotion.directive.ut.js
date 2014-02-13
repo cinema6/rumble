@@ -81,6 +81,11 @@
                     $scope.profile = {
                         device: 'desktop'
                     };
+                    $scope.config = {
+                        data: {
+                            videoid: 'foo'
+                        }
+                    };
                 });
             });
 
@@ -88,7 +93,7 @@
                 it('will fail without a videoid',function(){
                     expect(function(){
                         $scope.$apply(function() {
-                            $compile('<dailymotion-card></dailymotion-card>')($rootScope);
+                            $compile('<dailymotion-card></dailymotion-card>')($scope);
                         });
                     }).toThrow('<dailymotion-card> requires the videoid attribute to be set.');
                 });
