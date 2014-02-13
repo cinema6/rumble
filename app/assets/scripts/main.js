@@ -56,8 +56,8 @@
                 return [
                     libUrl('modernizr/modernizr.custom.71747.js'),
                     libUrl('jquery/2.0.3-0-gf576d00/jquery.min.js'),
-                    libUrl('angular/v1.2.8-0-g0f9a1c2/angular.min.js'),
-                    libUrl('angular/v1.2.8-0-g0f9a1c2/angular-animate.min.js'),
+                    libUrl('angular/v1.2.12-0-g5cc5cc1/angular.min.js'),
+                    libUrl('angular/v1.2.12-0-g5cc5cc1/angular-animate.min.js'),
                     libUrl('c6ui/v2.2.1-0-g89204c8/c6uilib.min.js'),
                     libUrl('c6ui/v2.2.1-0-g89204c8/c6log.min.js'),
                     'https://www.youtube.com/iframe_api'
@@ -66,8 +66,8 @@
                 return [
                     libUrl('modernizr/modernizr.custom.71747.js'),
                     libUrl('jquery/2.0.3-0-gf576d00/jquery.js'),
-                    libUrl('angular/v1.2.8-0-g0f9a1c2/angular.js'),
-                    libUrl('angular/v1.2.8-0-g0f9a1c2/angular-animate.js'),
+                    libUrl('angular/v1.2.12-0-g5cc5cc1/angular.js'),
+                    libUrl('angular/v1.2.12-0-g5cc5cc1/angular-animate.js'),
                     libUrl('c6ui/v2.2.1-0-g89204c8/c6uilib.js'),
                     libUrl('c6ui/v2.2.1-0-g89204c8/c6log.js'),
                     'https://www.youtube.com/iframe_api'
@@ -121,8 +121,8 @@
             test: Modernizr.touch,
             yep: [
                 __C6_BUILD_VERSION__ ?
-                    libUrl('angular/v1.2.8-0-g0f9a1c2/angular-touch.min.js') :
-                    libUrl('angular/v1.2.8-0-g0f9a1c2/angular-touch.js')
+                    libUrl('angular/v1.2.12-0-g5cc5cc1/angular-touch.min.js') :
+                    libUrl('angular/v1.2.12-0-g5cc5cc1/angular-touch.js')
             ],
             nope: [
                 __C6_APP_BASE_URL__ + '/styles/main--hover.css'
