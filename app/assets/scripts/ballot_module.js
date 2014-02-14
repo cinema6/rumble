@@ -12,7 +12,8 @@
                 scope: {
                     ballot: '=',
                     vote: '=',
-                    active: '='
+                    active: '=',
+                    onDismiss: '&'
                 },
                 link: function(scope, element) {
                     scope.$watch('active', function(active) {
@@ -27,7 +28,7 @@
             return {
                 restrict: 'E',
                 templateUrl: c6UrlMaker('views/directives/ballot_results_module.html'),
-                controller: 'BallotVoteModuleController',
+                controller: 'BallotResultsModuleController',
                 controllerAs: 'Ctrl',
                 scope: {
                     ballot: '=',
@@ -49,6 +50,10 @@
             this.vote = function(vote) {
                 $scope.vote = vote;
             };
+
+            this.pass = function() {
+                $scope.vote = -1;
+            };
         }])
 
         .controller('BallotResultsModuleController', ['$scope','rumbleVotes',
@@ -57,7 +62,7 @@
 
             this.results = null;
 
-            $scope.$watch('fetchResultsWhen', function(shouldFetch) {
+            $scope.$watch('fetchWhen', function(shouldFetch) {
                 if (!shouldFetch) { return; }
 
                 rumbleVotes.getReturnsForItem($scope.cardId)

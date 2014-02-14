@@ -2,6 +2,49 @@
     'use strict';
 
     angular.module('c6.rumble.services', [])
+        .service('VideoThumbService', ['$http','$q',
+        function                      ( $http , $q ) {
+            var _private = {};
+
+            _private.getFromYoutube = function(id) {
+                return $q.when('http://img.youtube.com/vi/' + id + '/2.jpg');
+            };
+
+            _private.getFromVimeo = function(id) {
+                return $http.get('http://vimeo.com/api/v2/video/' + id + '.json')
+                    .then(function(response) {
+                        /* jshint camelcase:false */
+                        return response.data[0].thumbnail_small;
+                    });
+            };
+
+            _private.getFromDailymotion = function(id) {
+                return $http.get('https://api.dailymotion.com/video/' + id + '?fields=thumbnail_120_url')
+                    .then(function(response) {
+                        /* jshint camelcase:false */
+                        return response.data.thumbnail_120_url;
+                    });
+            };
+
+            this.getThumb = function(type, id) {
+                switch (type) {
+
+                case 'youtube':
+                    return _private.getFromYoutube(id);
+                case 'vimeo':
+                    return _private.getFromVimeo(id);
+                case 'dailymotion':
+                    return _private.getFromDailymotion(id);
+
+                default:
+                    return $q.reject('Unknown video type: ' + type + '.');
+
+                }
+            };
+
+            if (window.c6.kHasKarma) { this._private = _private; }
+        }])
+
         .provider('VASTService', [function() {
             var _provider = {};
 

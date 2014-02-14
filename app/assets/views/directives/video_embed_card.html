@@ -1,14 +1,15 @@
 <ballot-vote-module ng-if="Ctrl.hasModule('ballot')"
     active="config._data.modules.ballot.active"
     ballot="config.ballot"
-    vote="config._data.modules.ballot.vote">
+    vote="config._data.modules.ballot.vote"
+    on-dismiss="Ctrl.dismissBallot()">
 </ballot-vote-module>
 <article>
     <div class="mr-card mr-card-shadow">
         <div class="clearfix">
             <div class="mr-card__title">
                 <h1 class="mr-card__title-h1">{{config.title}}</h1>
-                <p class="mr-card__attributes">via <a href="#" title="YouTube">YouTube</a></p>
+                <p class="mr-card__attributes">via <a ng-href="{{Ctrl.videoUrl}}" target="_blank" title="YouTube">{{config.source}}</a></p>
             </div>
             <div class="mr-player"><!-- actual player will be inserted into this container --></div>
         </div>
@@ -16,7 +17,7 @@
             active="config._data.modules.ballot.vote !== null"
             ballot="config.ballot"
             vote="config._data.modules.ballot.vote"
-            card-id="config.id"
+            card-id="{{config.id}}"
             fetch-when="onDeck">
         </ballot-results-module>
         <div class="mr-card__copy">{{config.note}}</div>

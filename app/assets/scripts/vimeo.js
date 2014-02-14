@@ -487,8 +487,8 @@
             templateUrl : c6UrlMaker('views/directives/video_embed_card.html')
         };
     }])
-    .controller('VimeoCardController', ['$scope','ModuleService','ControlsService','EventService',
-    function                           ( $scope , ModuleService , ControlsService , EventService ) {
+    .controller('VimeoCardController', ['$scope','ModuleService','ControlsService','EventService','c6Computed',
+    function                           ( $scope , ModuleService , ControlsService , EventService , c6Computed ) {
         var config = $scope.config,
             _data = config._data = config._data || {
                 playerEvents: {},
@@ -501,9 +501,20 @@
                         active: false
                     }
                 }
-            };
+            },
+            targetPlays = 0;
+
+        c6Computed($scope)(this, 'videoUrl', function() {
+            var id = $scope.config.data.videoid;
+
+            return ('http://vimeo.com/' + id);
+        }, ['config.data.videoid']);
 
         this.hasModule = ModuleService.hasModule.bind(ModuleService, config.modules);
+
+        this.dismissBallot = function() {
+            targetPlays = _data.playerEvents.play.emitCount;
+        };
 
         $scope.$on('playerAdd', function(event, player) {
             _data.playerEvents = EventService.trackEvents(player, ['play']);
@@ -516,7 +527,7 @@
                 get: function() {
                     var playing = (!player.paused && !player.ended),
                         voted = angular.isNumber(_data.modules.ballot.vote),
-                        hasPlayed = _data.playerEvents.play.emitCount > 0;
+                        hasPlayed = _data.playerEvents.play.emitCount > targetPlays;
 
                     return !voted && !playing && hasPlayed && $scope.active;
                 }

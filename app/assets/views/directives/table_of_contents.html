@@ -1,13 +1,13 @@
 <section class="mr-toc">
     <h1 class="mr-toc__title">The Most Breathtaking Go Pro Videos You'll See This Week</h1>
     <ul class="mr-toc__list">
-        <li class="mr-toc__item clearfix" ng-repeat="this in cards" ng-click="Ctrl.select(this)">
-            <div class="mr-toc-item__thumbnail" style="background-image:url('http://lorempixel.com/212/120/');">
+        <li class="mr-toc__item clearfix" ng-repeat="this in cards" ng-show="!!this.title" ng-click="Ctrl.select(this)">
+            <div class="mr-toc-item__thumbnail" ng-style="{'background-image': this.thumb && 'url(' + this.thumb + ')'}">
                 &nbsp;
             </div>
             <div class="mr-toc-item__details">
                 <h1 class="mr-toc-item__title">{{this.title}}</h1>
-                <p class="mr-toc-item__attributes">via <a href="#" title="YouTube">YouTube</a></p>
+                <p class="mr-toc-item__attributes">via {{this.source}}</p>
             </div>
         </li>
     </ul>
