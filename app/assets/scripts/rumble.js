@@ -94,8 +94,8 @@
 
         return service;
     }])
-    .service('MiniReelService', ['InflectorService','rumbleVotes','CommentsService',
-    function                    ( InflectorService , rumbleVotes , CommentsService ) {
+    .service('MiniReelService', ['InflectorService','rumbleVotes','CommentsService','VideoThumbService',
+    function                    ( InflectorService , rumbleVotes , CommentsService , VideoThumbService ) {
         this.createDeck = function(data) {
             var playlist = angular.copy(data.deck);
 
@@ -141,8 +141,18 @@
                 });
             }
 
+            function fetchThumb(card) {
+                card.thumb = null;
+
+                VideoThumbService.getThumb(card.type, card.data.videoid)
+                    .then(function(url) {
+                        card.thumb = url;
+                    });
+            }
+
             angular.forEach(playlist, function(video) {
                 resolve(video);
+                fetchThumb(video);
 
                 //TODO: remove this when the service works for real
                 rumbleVotes.mockReturnsData(data.id, video.id, video.voting);
@@ -191,6 +201,16 @@
         $scope.atTail           = null;
         $scope.currentReturns   = null;
         $scope.ready            = false;
+        c($scope, 'prevThumb', function() {
+            var card = this.deck[this.currentIndex - 1];
+
+            return (card || null) && card.thumb;
+        }, ['currentIndex']);
+        c($scope, 'nextThumb', function() {
+            var card = this.deck[this.currentIndex + 1];
+
+            return (card || null) && card.thumb;
+        }, ['currentIndex']);
 
         $scope.$on('playerAdd',function(event,player){
             $log.log('Player added: %1 - %2',player.getType(),player.getVideoId());

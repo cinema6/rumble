@@ -68,6 +68,7 @@
                         "type"   : "youtube",
                         "caption": "vid1 caption",
                         "note"   : "vid1 note",
+                        "thumb"  : "vid1.jpg",
                         "voting" : [ 100, 50, 10 ],
                         "data"   : {
                             "videoid" : "vid1video"
@@ -78,6 +79,7 @@
                         "type"   : "vimeo",
                         "caption": "vid2 caption",
                         "note"   : "vid2 note",
+                        "thumb"  : "vid2.jpg",
                         "voting" : [ 100, 50, 10 ],
                         "data"   : {
                             "videoid" : "vid2video"
@@ -88,6 +90,7 @@
                         "type"   : "dailymotion",
                         "caption": "vid3 caption",
                         "note"   : "vid3 note",
+                        "thumb"  : "vid3.jpg",
                         "voting" : [ 100, 50, 10 ],
                         "data"   : {
                             "videoid" : "vid3video"
@@ -163,6 +166,55 @@
 
                 it('should initialize the CommentsService with the id', function() {
                     expect(CommentsService.init).toHaveBeenCalledWith(appData.experience.data.id);
+                });
+            });
+
+            describe('$scope.prevThumb', function() {
+                beforeEach(function() {
+                    $scope.currentIndex = 0;
+                });
+
+                it('should be null if there is no previous card', function() {
+                    expect($scope.prevThumb).toBeNull();
+                });
+
+                it('should be the thumb of the previous card if there is one', function() {
+                    $scope.$apply(function() {
+                        $scope.currentIndex = 1;
+                    });
+                    expect($scope.prevThumb).toBe('vid1.jpg');
+
+                    $scope.$apply(function() {
+                        $scope.currentIndex = 2;
+                    });
+                    expect($scope.prevThumb).toBe('vid2.jpg');
+                });
+            });
+
+            describe('$scope.nextThumb', function() {
+                beforeEach(function() {
+                    $scope.currentIndex = 2;
+                });
+
+                it('should be null if there is no next card', function() {
+                    expect($scope.nextThumb).toBeNull();
+                });
+
+                it('should be the thumb of the next card if there is one', function() {
+                    $scope.$apply(function() {
+                        $scope.currentIndex = -1;
+                    });
+                    expect($scope.nextThumb).toBe('vid1.jpg');
+
+                    $scope.$apply(function() {
+                        $scope.currentIndex = 0;
+                    });
+                    expect($scope.nextThumb).toBe('vid2.jpg');
+
+                    $scope.$apply(function() {
+                        $scope.currentIndex = 1;
+                    });
+                    expect($scope.nextThumb).toBe('vid3.jpg');
                 });
             });
 
