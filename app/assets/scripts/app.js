@@ -153,6 +153,10 @@
                 });
             };
         }])
+        .factory('myFrame$', ['$window',
+        function             ( $window ) {
+            return angular.element($window.frameElement);
+        }])
         .controller('AppController', ['$scope','$log','cinema6','c6Computed','c6UrlMaker',
         function                     ( $scope , $log , cinema6 , c6Computed , c6UrlMaker ) {
             $log = $log.context('AppCtrl');
