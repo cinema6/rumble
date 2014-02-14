@@ -120,15 +120,9 @@
     .sprite {
         background-image:url('../img/sprite.svg'); background-repeat:no-repeat; background-size:18.75em 18.75em;
     }
-    .mr-container {
-        background:#dddddd; padding:3em 0.375em 4em 0.375em;
-    }
     .mr-overlay {
-        background:rgb(0,0,0); background:rgba(0,0,0,0.8);
-        position:absolute; width:100%; height:100%; z-index: 10; top:0; left:0;
-    }
-    .mr-card-shadow {
-        -webkit-box-shadow: 0 1px 2px 0 rgba(0,0,0,0.12); box-shadow: 0 1px 2px 0 rgba(0,0,0,0.12);
+        background:rgb(0,0,0); background:rgba(0,0,0,0.8); padding:0 0 56.25%;
+        position:absolute; width:100%; height:0; z-index: 10; left:0;
     }
     .css-promote {
         transform: translateZ(0);
@@ -165,7 +159,7 @@
             }
         .ui-control__activator {
             width:100%; height:100%; position: absolute; top:0; left:0;
-            opacity:0;
+            opacity:0; background:#fff;
         }
 
 
@@ -185,6 +179,9 @@
                 background-position:-75px 0;
                 margin:-0.3125em 0 0 0; left:0.75em;
             }
+            .ui-titlebar__view-list:active {
+                border-right:1px solid rgba(0,0,0,0.1);
+            }
             .ui-titlebar__view-list:active .ui-control__activator {
                 opacity:0.7;
             }
@@ -192,6 +189,61 @@
             text-align: center; color:#fff; font-size:0.875em;/*14px*/ font-weight:300; font-style: italic;
             margin:0; padding:9px 0 0 0;
         }
+
+/*  ==========================================================================
+    .ui-navbar classes
+    ========================================================================== */
+    .ui-navbar {
+        height:2.5em; padding:0.25em 0; background:#2a2a2a;
+        position:absolute; top:78%; width:100%;
+    }
+        .ui-nav__label {
+            position:absolute; color:#fff; font-size:0.875em; font-weight:700;
+            line-height: 1; height:0; top:0.857em; z-index: 10;
+        }
+        .ui-nav__prev, .ui-nav__next {
+            border-radius:3px; border:0; background:#e67e22; position:absolute;
+            margin:0; padding:0; font-size:1em; 
+            width:4.75em; height:2.5em; overflow: hidden;
+            cursor:pointer;
+        }
+            .ui-control__preview-img {
+                position:absolute; width:100%; height:100%; top:0; left:0;
+                opacity:0;
+                background-size:cover;
+            }
+            .ui-nav__prev {
+                left:0.25em;
+            }
+                .ui-nav__label-prev {
+                    left:2.143em;
+                }
+                .ui-nav__prev .ui-icon__prev {
+                    left:0.6875em;
+                }
+            .ui-nav__next {
+                right:0.25em;
+            }
+                .ui-nav__label-next {
+                    right:2.143em;
+                }            
+                .ui-nav__next .ui-icon__next {
+                    right:0.6875em;
+                }
+        .ui-navbar__paginator {
+            height:100%; margin:0 5em; padding:0; list-style:none;
+            text-align: center;
+        }
+            .ui-navbar__page-item {
+                display: inline;
+            }
+            .ui-navbar__page {
+                border:0; border-radius:3px; background:#353535; 
+                width:4.571em;/*64px*/ height:100%; overflow: hidden;
+                margin:0; padding:0; font-size:0.875em; color:#ddd; font-weight:700;
+                cursor: pointer; position:relative;
+            }
+
 
 
 
@@ -205,10 +257,10 @@
             height:0; overflow:hidden;
         }
     .mr-card {
-        background:#fff; border-radius: 3px; padding:0.5em 0;
+        background:#f2f2f2; padding:1.125em 1.5em 0.875em 1.5em;
     }
         .mr-card__title {
-            margin:0 0.5em;
+            margin:0;
             }
             .mr-card__title-h1 {
                 font-size:1.25em; /*20px*/ color:#444444; font-weight:300; margin:0; line-height: 1.2;
@@ -217,24 +269,15 @@
                 color:#999999; font-size:0.75em;/*12px*/ margin:0.16em 0 1em 0;
             }
         .mr-card__copy {
-            margin:1em 0.5em 0.143em 0.5em; font-size:0.875em;/*14px*/ color:#747474; line-height:1.75;
+            margin:1em 0 0.143em 0; font-size:0.875em;/*14px*/ color:#747474; line-height:1.75;
         }
     .mr-player {
-        padding:0 0 56.25%; margin:0;
+        padding:0 0 56.25%; margin:0 0 3em 0;
         width:100%; height:0; position:relative;
     }
         .mr-player iframe {
             width:100%; height:100%;
         }
-
-    @media screen and (orientation:landscape) {
-        .mr-card__title {
-            width:25%; float:left; margin-right:0;
-        }
-        .mr-player {
-            width:70%; float:right; margin-right:0.5em; padding:0 0 39.375%;
-        }
-    }
 
 
 /*  ==========================================================================
