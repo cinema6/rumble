@@ -4,7 +4,11 @@
     define(['rumble'], function() {
         describe('MiniReelService', function() {
             var CommentsService,
-                MiniReelService;
+                MiniReelService,
+                $rootScope,
+                $q;
+
+            var VideoThumbService;
 
             var copy;
 
@@ -15,14 +19,23 @@
                     $provide.value('rumbleVotes', {
                         mockReturnsData: angular.noop
                     });
+
+                    $provide.value('VideoThumbService', {
+                        getThumb: jasmine.createSpy('VideoThumbService.getThumb()')
+                            .andCallFake(function() {
+                                return $q.defer().promise;
+                            })
+                    });
                 });
 
                 inject(function($injector) {
+                    MiniReelService = $injector.get('MiniReelService');
                     CommentsService = $injector.get('CommentsService');
-
+                    $rootScope = $injector.get('$rootScope');
+                    $q = $injector.get('$q');
                     CommentsService.init('r-738c2403d83ddc');
 
-                    MiniReelService = $injector.get('MiniReelService');
+                    VideoThumbService = $injector.get('VideoThumbService');
                 });
             });
 
@@ -95,7 +108,7 @@
                                 ],
                                 deck: [
                                     {
-                                        id: 'rv-22119a8cf9f755',
+                                        id: 'rc-22119a8cf9f755',
                                         type: 'youtube',
                                         title: 'Did someone say FOX?',
                                         note: 'Thought so',
@@ -112,7 +125,19 @@
                                         commentGroupId: 'rc-1d98e6113fd436'
                                     },
                                     {
-                                        id: 'rv-4770a2d7f85ce0',
+                                        id: 'rc-2d46a04b21b073',
+                                        type: 'vast',
+                                        ad: true,
+                                        modules: [
+                                            'displayAd'
+                                        ],
+                                        data: {
+                                            autoplay: true
+                                        },
+                                        displayAd: 'http://2.bp.blogspot.com/-TlM_3FT89Y0/UMzLr7kVykI/AAAAAAAACjs/lKrdhgp6OQg/s1600/brad-turner.jpg'
+                                    },
+                                    {
+                                        id: 'rc-4770a2d7f85ce0',
                                         type: 'dailymotion',
                                         title: 'Kristen Stewart for Channel',
                                         note: 'Psychotic glamour',
@@ -125,7 +150,7 @@
                                         commentGroupId: 'rc-90db37d7af97a7'
                                     },
                                     {
-                                        id: 'rv-e489d1c6359fb3',
+                                        id: 'rc-e489d1c6359fb3',
                                         type: 'vimeo',
                                         title: 'Aquatic paradise',
                                         note: 'How may we help you?',
@@ -140,7 +165,7 @@
                                         commentGroupId: 'rc-1d98e6113fd436'
                                     },
                                     {
-                                        id: 'rv-e2947c9bec017e',
+                                        id: 'rc-e2947c9bec017e',
                                         type: 'youtube',
                                         title: 'Geek cool',
                                         note: 'Doctor Who #11 meets #4',
@@ -156,6 +181,24 @@
                                     }
                                 ]
                             };
+
+                            VideoThumbService.getThumb.andCallFake(function(type, id) {
+                                switch (id) {
+
+                                case 'jofNR_WkoCE':
+                                    return $q.when('http://img.youtube.com/vi/gy1B3agGNxw/2.jpg');
+                                case 'x18b09a':
+                                    return $q.when('http://s2.dmcdn.net/Dm9Np/x120-6Xz.jpg');
+                                case '81766071':
+                                    return $q.when('http://b.vimeocdn.com/ts/462/944/462944068_100.jpg');
+                                case 'Cn9yJrrm2tk':
+                                    return $q.when('http://img.youtube.com/vi/Cn9yJrrm2tk/2.jpg');
+
+                                default:
+                                    return $q.reject('Unknown video type: ' + type + '.');
+
+                                }
+                            });
 
                             spyOn(angular, 'copy').andCallFake(function(value) {
                                 var result = copy(value);
@@ -175,9 +218,9 @@
 
                         it('should resolve any properties ending in "Id" to a reference to the object it\'s pointing to', function() {
                             var video1 = result[0],
-                                video2 = result[1],
-                                video3 = result[2],
-                                video4 = result[3],
+                                video2 = result[2],
+                                video3 = result[3],
+                                video4 = result[4],
                                 ballot1 = mrData.ballots[0],
                                 ballot2 = mrData.ballots[1],
                                 commentGroup1 = mrData.commentGroups[0],
@@ -210,6 +253,30 @@
                         it('should give each video a "null" player', function() {
                             result.forEach(function(video) {
                                 expect(video.player).toBeNull();
+                            });
+                        });
+
+                        describe('getting thumbnails', function() {
+                            it('should make every thumbnail null at first', function() {
+                                result.forEach(function(card) {
+                                    expect(card.thumb).toBeNull('card:' + card.id);
+                                });
+                            });
+
+                            it('should get a thumbnail for every video', function() {
+                                result.forEach(function(card) {
+                                    expect(VideoThumbService.getThumb).toHaveBeenCalledWith(card.type, card.data.videoid);
+                                });
+                            });
+
+                            it('should update the thumb if a thumbnail is returned', function() {
+                                $rootScope.$digest();
+
+                                expect(result[0].thumb).toBe('http://img.youtube.com/vi/gy1B3agGNxw/2.jpg');
+                                expect(result[1].thumb).toBeNull();
+                                expect(result[2].thumb).toBe('http://s2.dmcdn.net/Dm9Np/x120-6Xz.jpg');
+                                expect(result[3].thumb).toBe('http://b.vimeocdn.com/ts/462/944/462944068_100.jpg');
+                                expect(result[4].thumb).toBe('http://img.youtube.com/vi/Cn9yJrrm2tk/2.jpg');
                             });
                         });
                     });
