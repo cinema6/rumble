@@ -437,7 +437,6 @@
                         vparams[prop] = $attr[prop];
                     }
                 });
-                vparams.controls = 0;
 
                 playerIsReady = false;
                 player = youtube.createPlayer('yt_' + $attr.videoid,{
