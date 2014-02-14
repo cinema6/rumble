@@ -68,6 +68,7 @@
                         "type"   : "youtube",
                         "caption": "vid1 caption",
                         "note"   : "vid1 note",
+                        "thumb"  : "vid1.jpg",
                         "voting" : [ 100, 50, 10 ],
                         "data"   : {
                             "videoid" : "vid1video"
@@ -78,6 +79,7 @@
                         "type"   : "vimeo",
                         "caption": "vid2 caption",
                         "note"   : "vid2 note",
+                        "thumb"  : "vid2.jpg",
                         "voting" : [ 100, 50, 10 ],
                         "data"   : {
                             "videoid" : "vid2video"
@@ -88,6 +90,7 @@
                         "type"   : "dailymotion",
                         "caption": "vid3 caption",
                         "note"   : "vid3 note",
+                        "thumb"  : "vid3.jpg",
                         "voting" : [ 100, 50, 10 ],
                         "data"   : {
                             "videoid" : "vid3video"
@@ -96,7 +99,9 @@
                 ];
 
                 appData = {
-                    profile      : {},
+                    profile: {
+                        device: 'desktop'
+                    },
                     experience: {
                         data : {
                             id: 'r-43yt3fh85',
@@ -163,6 +168,55 @@
 
                 it('should initialize the CommentsService with the id', function() {
                     expect(CommentsService.init).toHaveBeenCalledWith(appData.experience.data.id);
+                });
+            });
+
+            describe('$scope.prevThumb', function() {
+                beforeEach(function() {
+                    $scope.currentIndex = 0;
+                });
+
+                it('should be null if there is no previous card', function() {
+                    expect($scope.prevThumb).toBeNull();
+                });
+
+                it('should be the thumb of the previous card if there is one', function() {
+                    $scope.$apply(function() {
+                        $scope.currentIndex = 1;
+                    });
+                    expect($scope.prevThumb).toBe('vid1.jpg');
+
+                    $scope.$apply(function() {
+                        $scope.currentIndex = 2;
+                    });
+                    expect($scope.prevThumb).toBe('vid2.jpg');
+                });
+            });
+
+            describe('$scope.nextThumb', function() {
+                beforeEach(function() {
+                    $scope.currentIndex = 2;
+                });
+
+                it('should be null if there is no next card', function() {
+                    expect($scope.nextThumb).toBeNull();
+                });
+
+                it('should be the thumb of the next card if there is one', function() {
+                    $scope.$apply(function() {
+                        $scope.currentIndex = -1;
+                    });
+                    expect($scope.nextThumb).toBe('vid1.jpg');
+
+                    $scope.$apply(function() {
+                        $scope.currentIndex = 0;
+                    });
+                    expect($scope.nextThumb).toBe('vid2.jpg');
+
+                    $scope.$apply(function() {
+                        $scope.currentIndex = 1;
+                    });
+                    expect($scope.nextThumb).toBe('vid3.jpg');
                 });
             });
 
@@ -373,6 +427,15 @@
                     expect($scope.atTail).toEqual(false);
                 });
 
+                it('emits reelReset when going back to before the first card', function() {
+                    RumbleCtrl.setPosition(-1);
+                    expect($scope.currentIndex).toBe(-1);
+                    expect($scope.currentCard).toBe(null);
+                    expect($scope.atHead).toBe(false);
+                    expect($scope.atTail).toBe(false);
+                    expect($scope.$emit).toHaveBeenCalledWith('reelReset');
+                });
+
                 it('handles moving forward',function(){
                     $scope.currentIndex = 0;
                     $scope.currentCard  = $scope.deck[0];
@@ -401,18 +464,38 @@
             });
 
             describe('starting the mini reel', function() {
-                beforeEach(function() {
-                    spyOn($scope, '$emit');
+                describe('if the device is a phone', function() {
+                    beforeEach(function() {
+                        spyOn($scope, '$emit');
+                        appData.profile.device = 'phone';
 
-                    RumbleCtrl.start();
+                        RumbleCtrl.start();
+                    });
+
+                    it('should ask cinema6 to be moved fullscreen', function() {
+                        expect(cinema6.fullscreen).toHaveBeenCalledWith(true);
+                    });
+
+                    it('should $emit the startReel event', function() {
+                        expect($scope.$emit).toHaveBeenCalledWith('reelStart');
+                    });
                 });
 
-                it('should ask cinema6 to be moved fullscreen', function() {
-                    expect(cinema6.fullscreen).toHaveBeenCalledWith(true);
-                });
+                describe('if the device is not a phone', function() {
+                    beforeEach(function() {
+                        spyOn($scope, '$emit');
+                        appData.profile.device = 'tablet';
 
-                it('should $emit the startReel event', function() {
-                    expect($scope.$emit).toHaveBeenCalledWith('reelStart');
+                        RumbleCtrl.start();
+                    });
+
+                    it('should not ask cinema6 to be moved fullscreen', function() {
+                        expect(cinema6.fullscreen).not.toHaveBeenCalled();
+                    });
+
+                    it('should $emit the startReel event', function() {
+                        expect($scope.$emit).toHaveBeenCalledWith('reelStart');
+                    });
                 });
             });
 

@@ -139,44 +139,77 @@
                         });
                     });
 
-                    it('should turn config._data.modules.ballot.active into a computed property that is true when the video is paused or ended and false when there are votes or the video is playing', function() {
-                        var ballot = $scope.config._data.modules.ballot;
+                    describe('config._data.modules.ballot.active', function() {
+                        var ballot;
 
-                        $scope.$apply(function() {
-                            $scope.active = true;
-                            iface.paused = true;
-                            iface.ended = false;
+                        beforeEach(function() {
+                            ballot = $scope.config._data.modules.ballot;
                         });
-                        expect(ballot.active).toBe(false);
 
-                        $scope.$apply(function() {
-                            iface.emit('play', iface);
-                            iface.paused = false;
-                            iface.ended = false;
-                        });
-                        expect(ballot.active).toBe(false);
+                        it('should be a computed property that is true when the video is paused or ended and false when there are votes or the video is playing', function() {
+                            $scope.$apply(function() {
+                                $scope.active = true;
+                                iface.paused = true;
+                                iface.ended = false;
+                            });
+                            expect(ballot.active).toBe(false);
 
-                        $scope.$apply(function() {
-                            iface.ended = true;
-                        });
-                        expect(ballot.active).toBe(true);
+                            $scope.$apply(function() {
+                                iface.emit('play', iface);
+                                iface.paused = false;
+                                iface.ended = false;
+                            });
+                            expect(ballot.active).toBe(false);
 
-                        $scope.$apply(function() {
-                            iface.paused = true;
-                            iface.ended = false;
-                        });
-                        expect(ballot.active).toBe(true);
+                            $scope.$apply(function() {
+                                iface.ended = true;
+                            });
+                            expect(ballot.active).toBe(true);
 
-                        $scope.$apply(function() {
-                            $scope.active = false;
-                        });
-                        expect(ballot.active).toBe(false);
+                            $scope.$apply(function() {
+                                iface.paused = true;
+                                iface.ended = false;
+                            });
+                            expect(ballot.active).toBe(true);
 
-                        $scope.$apply(function() {
-                            $scope.active = true;
-                            ballot.vote = 0;
+                            $scope.$apply(function() {
+                                $scope.active = false;
+                            });
+                            expect(ballot.active).toBe(false);
+
+                            $scope.$apply(function() {
+                                $scope.active = true;
+                                ballot.vote = 0;
+                            });
+                            expect(ballot.active).toBe(false);
                         });
-                        expect(ballot.active).toBe(false);
+
+                        it('should be temporarily overrideable by DailymotionCardCtrl.dismissBallot()', function() {
+                            $scope.$apply(function() {
+                                $scope.active = true;
+                                iface.emit('play', iface);
+                                iface.emit('play', iface);
+                                iface.paused = true;
+                                iface.ended = false;
+                            });
+                            expect(ballot.active).toBe(true);
+
+                            $scope.$apply(function() {
+                                DailymotionCardCtrl.dismissBallot();
+                            });
+                            expect(ballot.active).toBe(false);
+
+                            $scope.$apply(function() {
+                                iface.paused = false;
+                                iface.emit('play', iface);
+                            });
+                            expect(ballot.active).toBe(false);
+
+                            $scope.$apply(function() {
+                                iface.ended = true;
+                            });
+                            expect(ballot.active).toBe(true);
+                        });
                     });
                 });
             });

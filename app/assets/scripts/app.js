@@ -195,7 +195,13 @@
                 _app.state = 'deck';
             }
 
+            function gotoSplash() {
+                cinema6.fullscreen(false);
+                _app.state = 'splash';
+            }
+
             $scope.$on('reelStart', gotoDeck);
+            $scope.$on('reelReset', gotoSplash);
 
             $log.info('loaded.');
 
