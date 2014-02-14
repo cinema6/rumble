@@ -35,7 +35,7 @@
 
                     $scope = $rootScope.$new();
                     $scope.cardId = 'rc-76tfg5467ug';
-                    $scope.fetchResultsWhen = false;
+                    $scope.fetchWhen = false;
 
                     BallotResultsModuleCtrl = $controller('BallotResultsModuleController', { $scope: $scope });
                 });
@@ -46,12 +46,12 @@
             });
 
             describe('$watchers', function() {
-                describe('fetchResultsWhen', function() {
+                describe('fetchWhen', function() {
                     beforeEach(function() {
                         expect(rumbleVotes.getReturnsForItem).not.toHaveBeenCalled();
 
                         $scope.$apply(function() {
-                            $scope.fetchResultsWhen = true;
+                            $scope.fetchWhen = true;
                         });
                     });
 
