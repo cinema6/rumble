@@ -3,7 +3,7 @@
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
 	 viewBox="0 0 600 600" enable-background="new 0 0 600 600" xml:space="preserve">
-<rect display="none" fill="#ACACAC" width="600" height="600"/>
+<rect display="none" fill="#ABABAB" width="600" height="600"/>
 <path fill="#FFFFFF" d="M0.88,16.897L16.734,0.978c1.161-1.165,3.078-1.346,4.288-0.233c1.27,1.168,1.303,3.149,0.098,4.359
 	L5.266,21.022c-1.161,1.165-3.078,1.346-4.289,0.233C-0.292,20.088-0.325,18.107,0.88,16.897z"/>
 <path fill="#FFFFFF" d="M0.883,21.158l15.904,15.867c1.164,1.161,3.087,1.342,4.302,0.233c1.274-1.164,1.307-3.139-0.513-4.955
@@ -34,4 +34,10 @@
 <circle cx="86" cy="406" r="6"/>
 <circle cx="116" cy="406" r="6"/>
 <circle cx="146" cy="406" r="6"/>
+<path fill-rule="evenodd" clip-rule="evenodd" fill="#FFFFFF" d="M150,0h4v4h-4V0z"/>
+<path fill-rule="evenodd" clip-rule="evenodd" fill="#FFFFFF" d="M158,0h20v4h-20V0z"/>
+<path fill-rule="evenodd" clip-rule="evenodd" fill="#FFFFFF" d="M150,8h4v4h-4V8z"/>
+<path fill-rule="evenodd" clip-rule="evenodd" fill="#FFFFFF" d="M158,8h20v4h-20V8z"/>
+<path fill-rule="evenodd" clip-rule="evenodd" fill="#FFFFFF" d="M150,16h4v4h-4V16z"/>
+<path fill-rule="evenodd" clip-rule="evenodd" fill="#FFFFFF" d="M158,16h20v4h-20V16z"/>
 </svg>
