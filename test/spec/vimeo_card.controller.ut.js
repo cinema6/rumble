@@ -34,7 +34,10 @@
                     ControlsService = $injector.get('ControlsService');
 
                     $rootScope.config = {
-                        modules: ['ballot', 'comments']
+                        modules: ['ballot', 'comments'],
+                        data: {
+                            videoid: '68160950'
+                        }
                     };
                     $scope = $rootScope.$new();
                     VimeoCardCtrl = $controller('VimeoCardController', { $scope: $scope });
@@ -215,6 +218,19 @@
             });
 
             describe('@public', function() {
+                describe('properties', function() {
+                    describe('videoUrl', function() {
+                        it('should be computed based on the video\'s id', function() {
+                            expect(VimeoCardCtrl.videoUrl).toBe('http://vimeo.com/68160950');
+
+                            $scope.$apply(function() {
+                                $rootScope.config.data.videoid = '84844989';
+                            });
+                            expect(VimeoCardCtrl.videoUrl).toBe('http://vimeo.com/84844989');
+                        });
+                    });
+                });
+
                 describe('methods', function() {
                     describe('hasModule(module)', function() {
                         it('should call ModuleService.hasModule() with the configured modules and the provided module', function() {

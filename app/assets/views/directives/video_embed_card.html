@@ -9,7 +9,7 @@
         <div class="clearfix">
             <div class="mr-card__title">
                 <h1 class="mr-card__title-h1">{{config.title}}</h1>
-                <p class="mr-card__attributes">via <a href="#" title="YouTube">YouTube</a></p>
+                <p class="mr-card__attributes">via <a ng-href="{{Ctrl.videoUrl}}" target="_blank" title="YouTube">{{config.source}}</a></p>
             </div>
             <div class="mr-player"><!-- actual player will be inserted into this container --></div>
         </div>
