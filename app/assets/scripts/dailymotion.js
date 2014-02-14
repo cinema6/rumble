@@ -444,7 +444,8 @@
                         active: false
                     }
                 }
-            };
+            },
+            targetPlays = 0;
 
         c6Computed($scope)(this, 'videoUrl', function() {
             var id = $scope.config.data.videoid;
@@ -453,6 +454,10 @@
         }, ['config.data.videoid']);
 
         this.hasModule = ModuleService.hasModule.bind(ModuleService, config.modules);
+
+        this.dismissBallot = function() {
+            targetPlays = _data.playerEvents.play.emitCount;
+        };
 
         $scope.$on('playerAdd', function(event, player) {
             _data.playerEvents = EventService.trackEvents(player, ['play']);
@@ -465,7 +470,7 @@
                 get: function() {
                     var playing = (!player.paused && !player.ended),
                         voted = angular.isNumber(_data.modules.ballot.vote),
-                        hasPlayed = _data.playerEvents.play.emitCount > 0;
+                        hasPlayed = _data.playerEvents.play.emitCount > targetPlays;
 
                     return !voted && !playing && hasPlayed && $scope.active;
                 }

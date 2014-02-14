@@ -5,7 +5,7 @@
             <button class="mr-ballot__btn mr-ballot__btn{{$index}}" ng-click="Ctrl.vote($index)"><span class="mr-ballot__btn-label">{{this.button}}</span></button>
         </li>
     </ul>
-    <p class="mr-ballot__textlink"><a href="#" title="Show Voting Results">Show Voting Results</a></p>
-    <p class="mr-ballot__textlink"><a href="#">Watch Again</a></p>
+    <p class="mr-ballot__textlink"><a ng-click="Ctrl.pass()" title="Show Voting Results">Show Voting Results</a></p>
+    <p class="mr-ballot__textlink"><a ng-click="onDismiss()">Watch Again</a></p>
 </section>
 <div class="mr-overlay">&nbsp;</div>
