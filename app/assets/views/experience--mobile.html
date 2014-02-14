@@ -1,3 +1,9 @@
+<!-- Moo, I'm wrapping all of the toolbars in this div so
+    I don't have to add that ng-hide directive to every div in here.
+    I hope that's okay. I'm also *not* tabbing everything inside this
+    div in so the git diff is not coma-inducing. After this gets merged,
+    Feel Free to delete this comment and tab everything in. -->
+<div ng-hide="currentIndex < 0">
 <div class="ui-nav-left--landscape css-promote">
     <button class="publisher__branding-logo" type="button" title="Elite Daily">
         <span class="ir">Elite Daily</span>
@@ -26,7 +32,7 @@
         <span class="sprite ui-icon__list">&nbsp;</span>
         <span class="ui-control__activator">&nbsp;</span>
     </button>
-    <button class="ui-nav__next" title="Previous Video" type="button" ng-click="RumbleCtrl.goForward()">
+    <button ng-class="{'ui-nav__next--disabled': atTail}" class="ui-nav__next" title="Previous Video" type="button" ng-click="RumbleCtrl.goForward()" ng-disabled="atTail">
         <span class="ui-nav__label ui-nav__label-next">
             Next
         </span>
@@ -80,7 +86,7 @@
         <span class="sprite ui-icon__list">&nbsp;</span>
         <span class="ui-control__activator">&nbsp;</span>
     </button>
-    <button class="ui-control__next" title="Next Video" type="button" ng-click="RumbleCtrl.goForward()">
+    <button ng-class="{'ui-control__next--disabled': atTail}" class="ui-control__next" title="Next Video" type="button" ng-click="RumbleCtrl.goForward()" ng-disabled="atTail">
         <span class="ui-control__label ui-control__label-next">
             Next
         </span>
@@ -92,6 +98,7 @@
         <span class="ui-control__activator">&nbsp;</span>
     </button>
 </div><!--.ui-control-->
+</div><!-- end of the ng-hide div-->
 
 <ng-switch on="app.state">
     <div class="splash-screen" ng-switch-when="splash">
