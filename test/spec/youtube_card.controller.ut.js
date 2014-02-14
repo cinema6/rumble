@@ -34,7 +34,10 @@
                     ControlsService = $injector.get('ControlsService');
 
                     $rootScope.config = {
-                        modules: ['ballot', 'comments']
+                        modules: ['ballot', 'comments'],
+                        data: {
+                            videoid: 'gy1B3agGNxw'
+                        }
                     };
                     $scope = $rootScope.$new();
                     YoutubeCardCtrl = $controller('YoutubeCardController', { $scope: $scope });
@@ -215,6 +218,19 @@
             });
 
             describe('@public', function() {
+                describe('properties', function() {
+                    describe('videoUrl', function() {
+                        it('should be computed based on the video\'s id', function() {
+                            expect(YoutubeCardCtrl.videoUrl).toBe('https://www.youtube.com/watch?v=gy1B3agGNxw');
+
+                            $scope.$apply(function() {
+                                $rootScope.config.data.videoid = 'GaoLU6zKaws';
+                            });
+                            expect(YoutubeCardCtrl.videoUrl).toBe('https://www.youtube.com/watch?v=GaoLU6zKaws');
+                        });
+                    });
+                });
+
                 describe('methods', function() {
                     describe('hasModule(module)', function() {
                         it('should call ModuleService.hasModule() with the configured modules and the provided module', function() {

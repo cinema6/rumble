@@ -102,6 +102,7 @@
                     "type"   : "youtube",
                     "title"  : "Epic Sax Guy",
                     "note"   : "He's back, and saxier than ever.",
+                    "source" : "YouTube",
                     "modules": [
                         "ballot",
                         "comments"
@@ -134,6 +135,7 @@
                     "type"   : "dailymotion",
                     "title"  : "Kristen Stewart for Channel",
                     "note"   : "Psychotic glamour",
+                    "source" : "DailyMotion",
                     "modules": [
                         "ballot"
                     ],
@@ -149,6 +151,7 @@
                     "type"   : "vimeo",
                     "title"  : "Aquatic paradise",
                     "note"   : "How may we help you?",
+                    "source" : "Vimeo",
                     "modules": [
                         "ballot"
                     ],
@@ -165,6 +168,7 @@
                     "type"   : "youtube",
                     "title"  : "Geek cool",
                     "note"   : "Doctor Who #11 meets #4",
+                    "source" : "YouTube",
                     "modules": [
                         "ballot"
                     ],
@@ -182,6 +186,7 @@
                     "type"   : "dailymotion",
                     "title"  : "Farting dogs",
                     "note"   : "Enough said",
+                    "source" : "DailyMotion",
                     "modules": [
                         "ballot"
                     ],

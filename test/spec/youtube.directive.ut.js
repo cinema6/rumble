@@ -101,6 +101,11 @@
                     $scope = $rootScope.$new();
                     $scope.width = 100;
                     $scope.height = 100;
+                    $scope.config = {
+                        data: {
+                            videoid: 'foo'
+                        }
+                    };
                 });
             });
 
@@ -108,7 +113,7 @@
                 it('will fail without a videoid',function(){
                     expect(function(){
                         $scope.$apply(function() {
-                            $compile('<youtube-card></youtube-card>')($rootScope);
+                            $compile('<youtube-card></youtube-card>')($scope);
                         });
                     }).toThrow('<youtube-card> requires the videoid attribute to be set.');
                 });
