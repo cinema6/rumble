@@ -327,8 +327,8 @@
                         return false;
                     }
 
-                    if (!scope.profile.multiPlayer){
-                        $log.warn('Item cannot be twerked, device not multiplayer.');
+                    if (!scope.profile.multiPlayer || !scope.profile.autoplay){
+                        $log.warn('Item cannot be twerked, device not multiplayer or autoplayable.');
                         return false;
                     }
 
@@ -373,9 +373,14 @@
                 inner += ' twerk="1"';
             }
 
-            if (scope.profile.multiPlayer){
+            if (scope.profile.autoplay){
                 $log.info(c6UserAgent.app.name + ' can autoplay videos.');
                 inner += ' autoplay="1"';
+            }
+
+            if (scope.profile.device === 'phone') {
+                $log.info(c6UserAgent.device.name + ' is a phone. Using embeded controls.');
+                inner += ' controls="1"';
             }
 
             inner += '></'  + dasherize(type) + '-card' + '>';
