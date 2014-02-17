@@ -6,7 +6,8 @@
             var $rootScope,
                 $scope,
                 $compile,
-                $timeout;
+                $timeout,
+                $log;
 
             function C6Video() {
                 var self = this,
@@ -67,6 +68,7 @@
                     $rootScope = $injector.get('$rootScope');
                     $compile = $injector.get('$compile');
                     $timeout = $injector.get('$timeout');
+                    $log = $injector.get('$log');
 
                     $rootScope.config = {
                         data: {
@@ -75,6 +77,7 @@
                     };
 
                     $scope = $rootScope.$new();
+                    $log.context = function() { return $log; };
                 });
             });
 
