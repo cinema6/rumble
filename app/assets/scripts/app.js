@@ -153,11 +153,15 @@
                 });
             };
         }])
-        .value('c6Profile', {})
-        .controller('AppController', ['$scope','$log','cinema6','c6Computed','c6UrlMaker','c6Profile',
-        function                     ( $scope , $log , cinema6 , c6Computed , c6UrlMaker , c6Profile ) {
+        .factory('myFrame$', ['$window',
+        function             ( $window ) {
+            return angular.element($window.frameElement);
+        }])
+        .controller('AppController', ['$scope','$log','cinema6','c6Computed','c6UrlMaker','c6Profile','$timeout','$document','myFrame$','$window','c6Debounce',
+        function                     ( $scope , $log , cinema6 , c6Computed , c6UrlMaker , c6Profile , $timeout , $document , myFrame$ , $window , c6Debounce ) {
             $log = $log.context('AppCtrl');
             var c = c6Computed($scope),
+                window$ = angular.element($window),
                 _app = {
                     state: 'splash'
                 };
@@ -192,6 +196,15 @@
                 }
             });
 
+            this.resize = function() {
+                $timeout(function() {
+                    var height = $document.height();
+
+                    $log.info('iFrame Resizing to ' + height +'px.');
+                    myFrame$.height(height);
+                }, 50);
+            };
+
             function gotoDeck() {
                 _app.state = 'deck';
             }
@@ -204,6 +217,7 @@
             $scope.$on('reelStart', gotoDeck);
             $scope.$on('reelReset', gotoSplash);
 
+
             $log.info('loaded.');
 
             $scope.app = app;
@@ -213,7 +227,11 @@
                     app.data = data;
 
                     angular.copy(data.profile, c6Profile);
-                }
+
+                    if (data.profile.device !== 'phone') {
+                        window$.on('resize', c6Debounce(function() { this.resize(); }.bind(this), 250));
+                    }
+                }.bind(this)
             });
         }]);
 }(window));
