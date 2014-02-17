@@ -284,7 +284,7 @@
     .mr-ballot__group
     ========================================================================== */
     .mr-ballot__group {
-        position: absolute; z-index: 500; top:3em;/*48px*/; left:0; width:100%;
+        position: absolute; z-index: 500; top:6.25em;/*100px*/; left:0; width:100%;
         text-align: center; box-sizing:border-box; -moz-box-sizing:border-box;
     }
         @media screen and (orientation:landscape) {
@@ -293,18 +293,18 @@
             }
         }
     .mr-ballot__title {
-        color:#fff; font-size:1.25em;/*20px*/ font-weight:300; text-align: center; line-height: 1.2;
+        color:#fff; font-size:1.5em;/*24px*/ font-weight:300; text-align: center; line-height: 1.2;
     }
     .mr-ballot__list {
         margin:0 0 2em 0; padding:0; list-style: none;
     }
         .mr-ballot__item {
-            display:inline-block; margin:0 0.625em;
+            display:inline-block; margin:0 1em;
         }
             .mr-ballot__btn {
                 border-radius:3px; border:0; 
-                width:8.125em; /*130px*/ height:4.5em; /*72px*/
-                font-size:1em; color:#fff; font-weight:900; font-style: italic;
+                width:10em; /*240px*/ height:5em; /*120px*/
+                font-size:1.5em;/*24px*/ color:#fff; font-weight:900; font-style: italic;
                 cursor:pointer;
             }
                 .mr-ballot__btn0 {
