@@ -276,7 +276,7 @@
         width:100%; height:0; position:relative;
     }
         .mr-player iframe {
-            width:100%; height:100%;
+            width:100%; height:100%; position:absolute;
         }
 
 
@@ -486,10 +486,34 @@
                     color:#999; font-size:0.75em;
                     margin:0;
                 }
-            @media screen and (orientation:landscape) {
-                .mr-toc-item__thumbnail {
-                    
-                }
+
+/*  ==========================================================================
+    More Reels card classes
+    ========================================================================== */
+    .mr-more-reels__group {
+        background:#f2f2f2; padding:1.25em 1.5em;
+    }
+    .more-reels__intro {
+        font-size:1.25em; color:#444; font-weight:300; text-align:center;
+        margin:0 0 1em 0;
+    }
+    .more-reels__list {
+        margin:0; padding:0; list-style: none;
+    }
+        .more-reels__item {
+            margin:0 0 1.25em 0;
+        }
+        .more-reels__details {
+            float:left; width:32%;
+        }
+            .more-reels__title {
+                margin:0; color:#444; font-size:1.25em; font-weight:700;
+            }
+        .more-reels__preview {
+            float:right; width:66%;
+        }
+            .more-reels__preview-img {
+                width:100%;
             }
 
 
