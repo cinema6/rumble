@@ -195,7 +195,7 @@
     ========================================================================== */
     .ui-navbar {
         height:2.5em; padding:0.25em 0; background:#2a2a2a;
-        position:absolute; top:78%; width:100%;
+        position:absolute; top:64%; width:100%;
     }
         .ui-nav__label {
             position:absolute; color:#fff; font-size:0.875em; font-weight:700;
@@ -325,14 +325,15 @@
     .mr-results__group
     ========================================================================== */
     .mr-results__group {
-        margin:0.5em;
+        margin:0 0 1em 0; padding:0 0 1.375em 0;
+        border-bottom:1px solid #cdcdcd;
     }
         .mr-results__title {
             color:#999; text-align: center; font-weight:300; font-size:0.75em; /*12px*/
             margin:0 0 0.333em 0; line-height: 1;
         }
         .mr-results__list {
-            margin:0 0 0.4375em 0; padding:0; list-style:none;
+            margin:-1.125em 0 0.4375em 0; padding:0; list-style:none;
         }
             .mr-results__item {
                 display:inline-block; width:50%;
@@ -354,7 +355,7 @@
                         color:#19cbe6;
                     }
         .mr-results__meter {
-            border-radius:2px; background:#19cbe6; 
+            border-radius:2px; background:#19cbe6;
             height:0.625em; width:100%;
             overflow: hidden;
         }
@@ -455,31 +456,30 @@
     .mr-toc
     ========================================================================== */
     .mr-toc {
-        background:#fff; position:absolute; z-index: 50000; top:0; left:0;
-        padding:0 0.375em; width:100%; max-height:300px;
+        background:#fff; position:absolute; z-index: 50000; top:2.375em; left:0;
+        padding:0; width:100%;
         box-sizing:border-box; -moz-box-sizing:border-box;
-        overflow-y: scroll; -webkit-overflow-scrolling: touch;
     }
     .mr-toc__title {
-        font-weight:700; color:#444; font-size:1.25em;/*20px*/ line-height:1.2;
-        margin:0.7em 0 0 0;
+        display:none;
     }
     .mr-toc__list {
         margin:1.125em 0 0 0; padding:0; list-style: none;
     }
         .mr-toc__item {
-            border-bottom:1px solid #eee; padding:0.75em 0 0 0; background:#fff;
+            background:#f2f2f2; width:32%; margin:0 1.3% 1% 0; float:left;
+            cursor:pointer;
         }
             .mr-toc-item__thumbnail {
-                float:left; background-size:cover; background-color:#000;
-                width:22%; height:0; padding:0 0 12.375% 0; margin:0 0 0.6875em 0;
+                background-size:cover; background-color:#000;
+                width:100%; height:0; padding:0 0 56.25% 0;
             }
             .mr-toc-item__details {
-                float:left; width:76%; margin:0 0 0.6875em 2%;
+                padding:1em 0.375em 0.8125em 0.375em;
             }
                 .mr-toc-item__title {
-                    color:#444; font-size:0.875em; font-weight:300; line-height: 1.286;
-                    margin:0;
+                    color:#444; font-size:1em; font-weight:300; line-height: 1.25;
+                    margin:0; height:3.75em; overflow: hidden;
                 }
                 .mr-toc-item__attributes {
                     color:#999; font-size:0.75em;
