@@ -140,6 +140,9 @@
                     $scope.app = {
                         data: appData
                     };
+                    $scope.AppCtrl = {
+                        resize: jasmine.createSpy('AppCtrl.resize()')
+                    };
 
                     spyOn(CommentsService, 'init');
                     spyOn(rumbleVotes, 'init');
@@ -220,6 +223,52 @@
                 });
             });
 
+            describe('$watchers', function() {
+                describe('currentIndex', function() {
+                    describe('if the device is not a phone', function() {
+                        it('should call resize() when the index changes', function() {
+                            var resize = $scope.AppCtrl.resize;
+
+                            $scope.$apply(function() {
+                                $scope.currentIndex = 0;
+                            });
+                            expect(resize).toHaveBeenCalled();
+
+                            $scope.$apply(function() {
+                                $scope.currentIndex = 4;
+                            });
+                            expect(resize.callCount).toBe(2);
+                        });
+                    });
+
+                    describe('if the device is a phone', function() {
+                        beforeEach(function() {
+                            appData.profile.device = 'phone';
+                            $scope = $rootScope.$new();
+                            $scope.app = {
+                                data: appData
+                            };
+                            $scope.AppCtrl = {
+                                resize: jasmine.createSpy('AppCtrl.resize()')
+                            };
+                            RumbleCtrl = $controller('RumbleController', { $scope: $scope });
+                        });
+
+                        it('should do nothing', function() {
+                            $scope.$apply(function() {
+                                $scope.currentIndex = 0;
+                            });
+                            expect($scope.AppCtrl.resize).not.toHaveBeenCalled();
+
+                            $scope.$apply(function() {
+                                $scope.currentIndex = 2;
+                            });
+                            expect($scope.AppCtrl.resize).not.toHaveBeenCalled();
+                        });
+                    });
+                });
+            });
+
             describe('$scope.players', function() {
                 beforeEach(function() {
                     $scope.deck = [
@@ -277,6 +326,9 @@
                     var newScope = $rootScope.$new();
 
                     newScope.app = $scope.app;
+                    newScope.AppCtrl = {
+                        resize: angular.noop
+                    };
 
                     controlsIFace = {};
 
