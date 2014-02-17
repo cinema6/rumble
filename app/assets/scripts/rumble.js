@@ -174,6 +174,10 @@
             id = appData.experience.data.id,
             c = c6Computed($scope);
 
+        function isAd(card) {
+            return (card || null) && (card.ad && !card.sponsored);
+        }
+
         rumbleVotes.init(id);
         CommentsService.init(id);
 
@@ -202,14 +206,33 @@
         $scope.currentReturns   = null;
         $scope.ready            = false;
         c($scope, 'prevThumb', function() {
-            var card = this.deck[this.currentIndex - 1];
+            var index = this.currentIndex - 1,
+                card;
 
-            return (card || null) && card.thumb;
+            for ( ; index > -1; index--) {
+                card = this.deck[index];
+
+                if (isAd(card)) { continue; }
+
+                return (card || null) && card.thumb;
+            }
+
+            return null;
         }, ['currentIndex']);
         c($scope, 'nextThumb', function() {
-            var card = this.deck[this.currentIndex + 1];
+            var index = this.currentIndex + 1,
+                length = this.deck.length,
+                card;
 
-            return (card || null) && card.thumb;
+            for ( ; index < length; index++) {
+                card = this.deck[index];
+
+                if (isAd(card)) { continue; }
+
+                return (card || null) && card.thumb;
+            }
+
+            return null;
         }, ['currentIndex']);
 
         $scope.$on('playerAdd',function(event,player){

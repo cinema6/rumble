@@ -75,6 +75,13 @@
                         }
                     },
                     {
+                        "id"     : "ad1",
+                        "type"   : "vast",
+                        "voting" : [ 100, 50, 10 ],
+                        "ad"     : true,
+                        "data"   : {}
+                    },
+                    {
                         "id"     : "vid2",
                         "type"   : "vimeo",
                         "caption": "vid2 caption",
@@ -83,6 +90,18 @@
                         "voting" : [ 100, 50, 10 ],
                         "data"   : {
                             "videoid" : "vid2video"
+                        }
+                    },
+                    {
+                        "id"     : "ad2",
+                        "type"   : "vimeo",
+                        "ad"     : true,
+                        "sponsored": true,
+                        "caption": "ad2 caption",
+                        "note"   : "ad2 note",
+                        "thumb"  : "ad2.jpg",
+                        "data"   : {
+                            "videoid" : "ad2video"
                         }
                     },
                     {
@@ -185,20 +204,27 @@
 
                 it('should be the thumb of the previous card if there is one', function() {
                     $scope.$apply(function() {
-                        $scope.currentIndex = 1;
+                        $scope.currentIndex = 4;
                     });
-                    expect($scope.prevThumb).toBe('vid1.jpg');
+                    expect($scope.prevThumb).toBe('ad2.jpg');
 
+                    $scope.$apply(function() {
+                        $scope.currentIndex = 3;
+                    });
+                    expect($scope.prevThumb).toBe('vid2.jpg');
+                });
+
+                it('should skip non-sponsored ads and go to the next thumb', function() {
                     $scope.$apply(function() {
                         $scope.currentIndex = 2;
                     });
-                    expect($scope.prevThumb).toBe('vid2.jpg');
+                    expect($scope.prevThumb).toBe('vid1.jpg');
                 });
             });
 
             describe('$scope.nextThumb', function() {
                 beforeEach(function() {
-                    $scope.currentIndex = 2;
+                    $scope.currentIndex = 4;
                 });
 
                 it('should be null if there is no next card', function() {
@@ -212,14 +238,21 @@
                     expect($scope.nextThumb).toBe('vid1.jpg');
 
                     $scope.$apply(function() {
-                        $scope.currentIndex = 0;
+                        $scope.currentIndex = 1;
                     });
                     expect($scope.nextThumb).toBe('vid2.jpg');
 
                     $scope.$apply(function() {
-                        $scope.currentIndex = 1;
+                        $scope.currentIndex = 2;
                     });
-                    expect($scope.nextThumb).toBe('vid3.jpg');
+                    expect($scope.nextThumb).toBe('ad2.jpg');
+                });
+
+                it('should skip non-sponsored ads and go to the next thumb', function() {
+                    $scope.$apply(function() {
+                        $scope.currentIndex = 0;
+                    });
+                    expect($scope.nextThumb).toBe('vid2.jpg');
                 });
             });
 
@@ -554,7 +587,7 @@
             describe('findCardByVideo',function(){
                 it('returns an item that exists',function(){
                     expect(RumbleCtrl.findCardByVideo('vimeo','vid2video'))
-                        .toBe($scope.deck[1]);
+                        .toBe($scope.deck[2]);
                 });
 
                 it('returns undefined for an item that does not exist',function(){
@@ -571,9 +604,9 @@
                 });
                 describe('playerAdd',function(){
                     it('adds new player to deck item',function(){
-                        expect($scope.deck[1].player).toBeNull();
+                        expect($scope.deck[2].player).toBeNull();
                         $scope.$emit('playerAdd',mockPlayer);
-                        expect($scope.deck[1].player).toBe(mockPlayer);
+                        expect($scope.deck[2].player).toBe(mockPlayer);
                         expect(mockPlayer.on.callCount).toEqual(1);
                         expect(mockPlayer.on.argsForCall[0][0]).toEqual('ready');
                     });
@@ -600,6 +633,7 @@
                         $scope.deck[0].player = {
                             isReady : jasmine.createSpy('player0.isReady')
                         };
+                        $scope.deck[1].player = mockPlayer;
                         $scope.deck[2].player = {
                             isReady : jasmine.createSpy('player2.isReady')
                         };
