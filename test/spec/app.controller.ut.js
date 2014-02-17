@@ -295,13 +295,13 @@
                     });
                 });
 
-                describe('$window resize', function() {
+                describe('$window.parent resize', function() {
                     var window$;
 
                     beforeEach(function() {
                         spyOn(AppCtrl, 'resize');
 
-                        window$ = angular.element($window);
+                        window$ = angular.element($window.parent);
                         cinema6.init.mostRecentCall.args[0].setup(appData);
                     });
 

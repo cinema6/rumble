@@ -348,7 +348,6 @@
                         vparams[prop] = $attr[prop];
                     }
                 });
-                vparams.chromeless = ((scope.profile.device === 'phone') ? 0 : 1);
 
                 player = dailymotion.createPlayer('dm_' + $attr.videoid,{
                     videoId     : $attr.videoid,
