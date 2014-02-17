@@ -501,7 +501,7 @@
         margin:0; padding:0; list-style: none;
     }
         .more-reels__item {
-            margin:0 0 1.25em 0;
+            margin:0 0 1.25em 0; border-bottom:1px solid #cdcdcd;
         }
         .more-reels__details {
             float:left; width:32%;
