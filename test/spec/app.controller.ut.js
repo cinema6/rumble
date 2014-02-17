@@ -251,6 +251,46 @@
                     });
                 });
 
+                describe('<ballot-vote-module>:vote', function() {
+                    var window$;
+
+                    beforeEach(function() {
+                        spyOn(AppCtrl, 'resize');
+
+                        cinema6.init.mostRecentCall.args[0].setup(appData);
+                    });
+
+                    describe('if not on a phone', function() {
+                        it('should call AppCtrl.resize() debounced', function() {
+                            $childScope.$emit('<ballot-vote-module>:vote', 0);
+                            expect(AppCtrl.resize).toHaveBeenCalled();
+
+                            $childScope.$emit('<ballot-vote-module>:vote', 2);
+                            expect(AppCtrl.resize.callCount).toBe(2);
+                        });
+                    });
+
+                    describe('if on a phone', function() {
+                        beforeEach(function() {
+                            appData.profile.device = 'phone';
+
+                            $scope = $rootScope.$new();
+                            AppCtrl = $controller('AppController', { $scope: $scope });
+                            spyOn(AppCtrl, 'resize');
+
+                            cinema6.init.mostRecentCall.args[0].setup(appData);
+                        });
+
+                        it('should do nothing', function() {
+                            $childScope.$emit('<ballot-vote-module>:vote', 0);
+                            expect(AppCtrl.resize).not.toHaveBeenCalled();
+
+                            $childScope.$emit('<ballot-vote-module>:vote', 0);
+                            expect(AppCtrl.resize).not.toHaveBeenCalled();
+                        });
+                    });
+                });
+
                 describe('$window resize', function() {
                     var window$;
 
