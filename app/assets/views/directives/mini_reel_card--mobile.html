@@ -1,0 +1,18 @@
+<div class="mr-more-reels__group">
+    <header>
+        <h3 class="more-reels__intro">{{config.data.message}}</h3>
+    </header>
+    <ul class="more-reels__list">
+        <li class="more-reels__item" ng-repeat="this in Ctrl.miniReels">
+            <article class="clearfix">
+                <div class="more-reels__details">
+                    <h1 class="more-reels__title">{{this.title}}</h1>
+                    <p>{{this.summary}}</p>
+                </div>
+                <div class="more-reels__preview">
+                    <img src="http://lorempixel.com/800/400/" class="more-reels__preview-img">
+                </div>
+            </article>
+        </li>
+    </ul>
+</div>

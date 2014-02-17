@@ -20,11 +20,13 @@
             });
         }])
 
-        .directive('miniReelCard', ['c6UrlMaker',
-        function                   ( c6UrlMaker ) {
+        .directive('miniReelCard', ['c6UrlMaker','c6Profile',
+        function                   ( c6UrlMaker , c6Profile ) {
             return {
                 restrict: 'E',
-                templateUrl: c6UrlMaker('views/directives/mini_reel_card.html'),
+                templateUrl : c6UrlMaker('views/directives/mini_reel_card' +
+                                        ((c6Profile.device === 'phone') ? '--mobile' : '') +
+                                        '.html'),
                 controller: 'MiniReelCardController',
                 controllerAs: 'Ctrl'
             };

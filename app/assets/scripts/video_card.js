@@ -71,11 +71,13 @@
             });
         }])
 
-        .directive('videoCard', ['playerInterface','$q','$timeout','c6UrlMaker',
-        function                ( playerInterface , $q , $timeout , c6UrlMaker ) {
+        .directive('videoCard', ['playerInterface','$q','$timeout','c6UrlMaker','c6Profile',
+        function                ( playerInterface , $q , $timeout , c6UrlMaker , c6Profile ) {
             return {
                 restrict: 'E',
-                templateUrl: c6UrlMaker('views/directives/video_card.html'),
+                templateUrl : c6UrlMaker('views/directives/video_card' +
+                                        ((c6Profile.device === 'phone') ? '--mobile' : '') +
+                                        '.html'),
                 controller: 'VideoCardController',
                 controllerAs: 'Ctrl',
                 link: function(scope) {
