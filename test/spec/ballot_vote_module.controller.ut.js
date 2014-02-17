@@ -46,6 +46,10 @@
             describe('@public', function() {
                 describe('methods', function() {
                     describe('vote(index)', function() {
+                        beforeEach(function() {
+                            spyOn($scope, '$emit').andCallThrough();
+                        });
+
                         it('should set $scope.vote to the provided value', function() {
                             BallotVoteModuleCtrl.vote(1);
                             expect($scope.vote).toBe(1);
@@ -55,6 +59,14 @@
 
                             BallotVoteModuleCtrl.vote(3);
                             expect($scope.vote).toBe(3);
+                        });
+
+                        it('should emit "<ballot-vote-module>:vote"', function() {
+                            BallotVoteModuleCtrl.vote(1);
+                            expect($scope.$emit).toHaveBeenCalledWith('<ballot-vote-module>:vote', 1);
+
+                            BallotVoteModuleCtrl.vote(0);
+                            expect($scope.$emit).toHaveBeenCalledWith('<ballot-vote-module>:vote', 0);
                         });
                     });
 

@@ -228,6 +228,7 @@
 
                     if (data.profile.device !== 'phone') {
                         window$.on('resize', c6Debounce(function() { this.resize(); }.bind(this), 250));
+                        $scope.$on('<ballot-vote-module>:vote', this.resize.bind(this));
                     }
                 }.bind(this)
             });
