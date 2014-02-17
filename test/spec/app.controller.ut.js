@@ -126,6 +126,10 @@
                 it('should setup the session', function() {
                     expect($scope.app.data).toBe(appData);
                 });
+
+                it('should copy the profile onto the c6Profile injectable', inject(function(c6Profile) {
+                    expect(c6Profile).toEqual(appData.profile);
+                }));
             });
 
             describe('app', function() {

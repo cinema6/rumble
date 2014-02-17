@@ -216,8 +216,8 @@
         return service;
 
     }])
-    .directive('youtubeCard',['$log','$window','$timeout','$interval','$q','youtube','_default','playerInterface','numberify','c6UrlMaker',
-    function                 ( $log , $window , $timeout , $interval , $q , youtube , _default , playerInterface , numberify , c6UrlMaker ){
+    .directive('youtubeCard',['$log','$window','$timeout','$interval','$q','youtube','_default','playerInterface','numberify','c6UrlMaker','c6Profile',
+    function                 ( $log , $window , $timeout , $interval , $q , youtube , _default , playerInterface , numberify , c6UrlMaker , c6Profile ){
         $log = $log.context('<youtube-card>');
         function fnLink(scope,$element,$attr){
             if (!$attr.videoid){
@@ -507,7 +507,9 @@
             link        : fnLink,
             controller  : 'YoutubeCardController',
             controllerAs: 'Ctrl',
-            templateUrl : c6UrlMaker('views/directives/video_embed_card.html')
+            templateUrl : c6UrlMaker('views/directives/video_embed_card' +
+                                    ((c6Profile.device === 'phone') ? '--mobile' : '') +
+                                    '.html')
         };
     }])
     .controller('YoutubeCardController', ['$scope','ModuleService','ControlsService','EventService','c6Computed',

@@ -153,8 +153,9 @@
                 });
             };
         }])
-        .controller('AppController', ['$scope','$log','cinema6','c6Computed','c6UrlMaker',
-        function                     ( $scope , $log , cinema6 , c6Computed , c6UrlMaker ) {
+        .value('c6Profile', {})
+        .controller('AppController', ['$scope','$log','cinema6','c6Computed','c6UrlMaker','c6Profile',
+        function                     ( $scope , $log , cinema6 , c6Computed , c6UrlMaker , c6Profile ) {
             $log = $log.context('AppCtrl');
             var c = c6Computed($scope),
                 _app = {
@@ -210,6 +211,8 @@
             cinema6.init({
                 setup: function(data) {
                     app.data = data;
+
+                    angular.copy(data.profile, c6Profile);
                 }
             });
         }]);
