@@ -49,6 +49,8 @@
         function                                  ( $scope  ) {
             this.vote = function(vote) {
                 $scope.vote = vote;
+
+                $scope.$emit('<ballot-vote-module>:vote', vote);
             };
 
             this.pass = function() {

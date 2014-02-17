@@ -1,0 +1,19 @@
+/*  ==========================================================================
+    .ui-navbar classes
+    ========================================================================== */    
+    .ui-control__preview-img {
+        -webkit-transition:opacity 0.5s; transition:opacity 0.5s;
+    }
+        .ui-nav__prev:hover .ui-control__preview-img, 
+        .ui-nav__next:hover .ui-control__preview-img {
+            opacity:0.76;
+        } 
+    .ui-navbar__page {
+        -webkit-transition:background 0.5s; transition:background 0.5s;
+    }
+        .ui-navbar__page:hover {
+            background:#4c4c4c;
+        }
+        .ui-navbar__page:hover .ui-control__preview-img {
+            opacity:1;
+        }

@@ -5,14 +5,8 @@
     on-dismiss="Ctrl.dismissBallot()">
 </ballot-vote-module>
 <article>
-    <div class="mr-card mr-card-shadow">
-        <div class="clearfix">
-            <div class="mr-card__title">
-                <h1 class="mr-card__title-h1">{{config.title}}</h1>
-                <p class="mr-card__attributes">via <a ng-href="{{Ctrl.videoUrl}}" target="_blank" title="YouTube">{{config.source}}</a></p>
-            </div>
-            <div class="mr-player"><!-- actual player will be inserted into this container --></div>
-        </div>
+    <div class="mr-player"><!-- actual player will be inserted into this container --></div>
+    <div class="mr-card">
         <ballot-results-module ng-if="Ctrl.hasModule('ballot')"
             active="config._data.modules.ballot.vote !== null"
             ballot="config.ballot"
@@ -20,12 +14,16 @@
             card-id="{{config.id}}"
             fetch-when="onDeck">
         </ballot-results-module>
+        <div class="mr-card__title">
+            <h1 class="mr-card__title-h1">{{config.title}}</h1>
+            <p class="mr-card__attributes">via <a ng-href="{{Ctrl.videoUrl}}" target="_blank" title="YouTube">{{config.source}}</a></p>
+        </div>
         <div class="mr-card__copy">{{config.note}}</div>
     </div><!--.mr-card-->
-    <comments-module ng-if="Ctrl.hasModule('comments')"
+    <!--<comments-module ng-if="Ctrl.hasModule('comments')"
         card-id="{{config.id}}"
         fetch-comments-when="onDeck">
-    </comments-module>
+    </comments-module>-->
     <display-ad-module ng-if="Ctrl.hasModule('displayAd')"
         active="config._data.modules.displayAd.active"
         ad-src="{{config.displayAd}}">
