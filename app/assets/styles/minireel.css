@@ -356,12 +356,12 @@
                         color:#19cbe6;
                     }
         .mr-results__meter {
-            border-radius:2px; background:#19cbe6;
-            height:0.625em; width:100%;
+            border-radius:4px; background:#19cbe6;
+            height:1.25em; width:100%;
             overflow: hidden;
         }
             .mr-results__bar1 {
-                height:0.625em; background:#8ac12a; border-right:2px solid #fff;
+                height:1.25em; background:#8ac12a; border-right:2px solid #fff;
             }
 
 
