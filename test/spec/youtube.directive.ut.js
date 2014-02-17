@@ -133,8 +133,7 @@
                         params: {
                             rel             : 0,
                             enablejsapi     : 1,
-                            modestbranding  : 1,
-                            controls        : 0
+                            modestbranding  : 1
                         },
                         frameborder: 0
                     });
