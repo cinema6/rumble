@@ -565,6 +565,27 @@
                 }
             }
 
+/*  ==========================================================================
+    .more-reels card classes
+    ========================================================================== */
+    .more-reels__intro {
+        font-size:0.875em;/*14px*/ color:#747474; font-weight:300; text-align: center;
+        margin:0 0 0.5em 0;
+    }
+    .more-reels__list {
+        margin:0; padding:0; list-style:none;
+    }
+        .more-reels__item {
+            margin-bottom:1em;
+        }
+        .more-reels__title {
+            color:#444; font-size:1.25em; margin:0.25em 0.8em 0.5em 0.8em;
+        }
+        .more-reels__copy {
+            color:#747474; font-size:0.875em;/*14px*/ line-height: 1.714;
+            margin:0.7em 1.143em;
+        }
+
 
 /*  ==========================================================================
     Initial classes
