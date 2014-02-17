@@ -33,65 +33,16 @@
 
     <ul class="ui-navbar__paginator">
         <li class="ui-navbar__page-item">
-            <button class="ui-navbar__page">
+            <button ng-click="RumbleCtrl.setPosition(-1);" class="ui-navbar__page">
                 <span class="ui-page__label">Start</span>
             </button>
         </li>
-        <li class="ui-navbar__page-item">
-            <button class="ui-navbar__page">
-                <span class="ui-page__label">1</span>
-                <span class="ui-control__preview-img" style="background:url('http://lorempixel.com/160/80/');">
-                    &nbsp;
-                </span>
-            </button>
-        </li>
-        <li class="ui-navbar__page-item">
-            <button class="ui-navbar__page">
-                <span class="ui-page__label">2</span>
-                <span class="ui-control__preview-img" style="background:url('http://lorempixel.com/160/80/');">
-                    &nbsp;
-                </span>
-            </button>
-        </li>
-        <li class="ui-navbar__page-item">
-            <button class="ui-navbar__page">
-                <span class="ui-page__label">3</span>
-                <span class="ui-control__preview-img" style="background:url('http://lorempixel.com/160/80/');">
-                    &nbsp;
-                </span>
-            </button>
-        </li>
-        <li class="ui-navbar__page-item">
-            <button class="ui-navbar__page">
-                <span class="ui-page__label">4</span>
-                <span class="ui-control__preview-img" style="background:url('http://lorempixel.com/160/80/');">
-                    &nbsp;
-                </span>
-            </button>
-        </li>
-        <li class="ui-navbar__page-item">
-            <button class="ui-navbar__page">
-                <span class="ui-page__label">5</span>
-                <span class="ui-control__preview-img" style="background:url('http://lorempixel.com/160/80/');">
-                    &nbsp;
-                </span>
-            </button>
-        </li>
-        <li class="ui-navbar__page-item">
-            <button class="ui-navbar__page">
-                <span class="ui-page__label">6</span>
-                <span class="ui-control__preview-img" style="background:url('http://lorempixel.com/160/80/');">
-                    &nbsp;
-                </span>
-            </button>
-        </li>
-        <li class="ui-navbar__page-item">
-            <button class="ui-navbar__page">
-                <span class="ui-page__label">7</span>
-                <span class="ui-control__preview-img" style="background:url('http://lorempixel.com/160/80/');">
-                    &nbsp;
-                </span>
-            </button>
+        <li ng-repeat="this in tocCards" class="ui-navbar__page-item">
+            <navbar-button index="$index"
+                current-index="tocIndex"
+                card="this"
+                on-select="RumbleCtrl.setPosition(deck.indexOf(this));">
+            </navbar-button>
         </li>
     </ul>
 </div>
