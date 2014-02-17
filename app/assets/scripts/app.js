@@ -157,8 +157,9 @@
         function             ( $window ) {
             return angular.element($window.frameElement);
         }])
-        .controller('AppController', ['$scope','$log','cinema6','c6Computed','c6UrlMaker','$timeout','$document','myFrame$','$window','c6Debounce',
-        function                     ( $scope , $log , cinema6 , c6Computed , c6UrlMaker , $timeout , $document , myFrame$ , $window , c6Debounce ) {
+        .value('c6Profile', {})
+        .controller('AppController', ['$scope','$log','cinema6','c6Computed','c6UrlMaker','c6Profile','$timeout','$document','myFrame$','$window','c6Debounce',
+        function                     ( $scope , $log , cinema6 , c6Computed , c6UrlMaker , c6Profile , $timeout , $document , myFrame$ , $window , c6Debounce ) {
             $log = $log.context('AppCtrl');
             var c = c6Computed($scope),
                 window$ = angular.element($window),
@@ -225,6 +226,8 @@
             cinema6.init({
                 setup: function(data) {
                     app.data = data;
+
+                    angular.copy(data.profile, c6Profile);
 
                     if (data.profile.device !== 'phone') {
                         window$.on('resize', c6Debounce(function() { this.resize(); }.bind(this), 250));
