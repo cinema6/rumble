@@ -157,6 +157,7 @@
         function             ( $window ) {
             return angular.element($window.frameElement);
         }])
+        .value('c6Profile', {})
         .controller('AppController', ['$scope','$log','cinema6','c6Computed','c6UrlMaker','c6Profile','$timeout','$document','myFrame$','$window','c6Debounce',
         function                     ( $scope , $log , cinema6 , c6Computed , c6UrlMaker , c6Profile , $timeout , $document , myFrame$ , $window , c6Debounce ) {
             $log = $log.context('AppCtrl');
