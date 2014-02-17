@@ -10,6 +10,8 @@
                 $q,
                 $log,
                 $timeout,
+                $controller,
+                c6EventEmitter,
                 AppCtrl;
 
             var cinema6,
@@ -18,6 +20,8 @@
                 googleAnalytics,
                 $stateProvider,
                 $state,
+                $document,
+                myFrame$,
                 appData,
                 siteSession;
 
@@ -64,6 +68,13 @@
                     }
                 };
 
+                module('ng', function($provide) {
+                    $provide.value('$document', {
+                        height: jasmine.createSpy('$document.height()')
+                            .andReturn(600)
+                    });
+                });
+
                 module('c6.ui', function($provide) {
                     $provide.factory('cinema6', function($q) {
                         cinema6 = {
@@ -89,15 +100,24 @@
                 module('c6.rumble', function($provide) {
                     $provide.value('gsap', gsap);
                     $provide.value('googleAnalytics', googleAnalytics);
+                    $provide.value('myFrame$', {
+                        height: jasmine.createSpy('myFrame$.height()')
+                    });
                 });
 
-                inject(function(_$rootScope_, _$q_, _$timeout_, _$log_, _$location_,$controller, c6EventEmitter) {
-                    $rootScope = _$rootScope_;
-                    $q = _$q_;
-                    $log = _$log_;
-                    $location = _$location_;
-                    $timeout = _$timeout_;
-                    $scope = _$rootScope_.$new();
+                inject(function($injector) {
+                    $rootScope = $injector.get('$rootScope');
+                    $q = $injector.get('$q');
+                    $log = $injector.get('$log');
+                    $location = $injector.get('$location');
+                    $timeout = $injector.get('$timeout');
+                    $controller = $injector.get('$controller');
+                    c6EventEmitter = $injector.get('c6EventEmitter');
+
+                    $document = $injector.get('$document');
+                    myFrame$ = $injector.get('myFrame$');
+
+                    $scope = $rootScope.$new();
                     $childScope = $scope.$new();
                     $log.context = function() { return $log; };
 
@@ -125,6 +145,21 @@
 
                 it('should setup the session', function() {
                     expect($scope.app.data).toBe(appData);
+                });
+            });
+
+            describe('methods', function() {
+                describe('resize', function() {
+                    it('should set the height of myFrame$ to the height of the document contents in a timeout.', function() {
+                        AppCtrl.resize();
+                        $timeout.flush();
+                        expect(myFrame$.height).toHaveBeenCalledWith(600);
+
+                        $document.height.andReturn(1000);
+                        AppCtrl.resize();
+                        $timeout.flush();
+                        expect(myFrame$.height).toHaveBeenCalledWith(1000);
+                    });
                 });
             });
 

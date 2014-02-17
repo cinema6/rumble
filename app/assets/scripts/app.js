@@ -157,8 +157,8 @@
         function             ( $window ) {
             return angular.element($window.frameElement);
         }])
-        .controller('AppController', ['$scope','$log','cinema6','c6Computed','c6UrlMaker',
-        function                     ( $scope , $log , cinema6 , c6Computed , c6UrlMaker ) {
+        .controller('AppController', ['$scope','$log','cinema6','c6Computed','c6UrlMaker','$timeout','$document','myFrame$',
+        function                     ( $scope , $log , cinema6 , c6Computed , c6UrlMaker , $timeout , $document , myFrame$ ) {
             $log = $log.context('AppCtrl');
             var c = c6Computed($scope),
                 _app = {
@@ -194,6 +194,12 @@
                     }
                 }
             });
+
+            this.resize = function() {
+                $timeout(function() {
+                    myFrame$.height($document.height());
+                }, 50);
+            };
 
             function gotoDeck() {
                 _app.state = 'deck';

@@ -230,6 +230,10 @@
             });
         });
 
+        if (appData.profile.device === 'phone') {
+            $scope.$watch('currentIndex', $scope.AppCtrl.resize.bind($scope.AppCtrl));
+        }
+
         this.findCardByVideo = function(videoType,videoId){
             var result;
             $scope.deck.some(function(item){
