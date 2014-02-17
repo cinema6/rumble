@@ -3,7 +3,9 @@
     class="ui-navbar__page"
     ng-click="onSelect();">
     <span class="ui-page__label">{{index + 1}}</span>
-    <span class="ui-control__preview-img" ng-style="{ background: thumb, opacity: thumbOpacity}">
+    <span class="ui-control__preview-img"
+        ng-class="{'ui-control__preview-img--active': active}"
+        ng-style="{ background: thumb }">
         &nbsp;
     </span>
 </button>

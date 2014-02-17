@@ -54,7 +54,7 @@
             });
         });
 
-        describe('thumbOpacity', function() {
+        describe('active', function() {
             describe('if index === currentIndex', function() {
                 beforeEach(function() {
                     $scope.$apply(function() {
@@ -62,15 +62,15 @@
                     });
                 });
 
-                it('should be 1', function() {
-                    expect(scope.thumbOpacity).toBe(1);
+                it('should be true', function() {
+                    expect(scope.active).toBe(true);
                 });
             });
 
             describe('if index !== currentIndex', function() {
                 describe('if hover is false or undefined', function() {
-                    it('should be 0', function() {
-                        expect(scope.thumbOpacity).toBe(0);
+                    it('should be false', function() {
+                        expect(scope.active).toBe(false);
                     });
                 });
 
@@ -81,8 +81,8 @@
                         });
                     });
 
-                    it('should be 1', function() {
-                        expect(scope.thumbOpacity).toBe(1);
+                    it('should be true', function() {
+                        expect(scope.active).toBe(true);
                     });
                 });
             });

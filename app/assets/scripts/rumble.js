@@ -361,8 +361,8 @@
                     return thumb ? ('url(' + thumb + ')') : 'none';
                 }, ['card.thumb']);
 
-                c(scope, 'thumbOpacity', function() {
-                    return ((this.currentIndex === this.index) || this.hover) ? 1 : 0;
+                c(scope, 'active', function() {
+                    return !!((this.currentIndex === this.index) || this.hover);
                 }, ['currentIndex', 'index', 'hover']);
             }
         };
