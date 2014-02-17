@@ -162,7 +162,7 @@
         function                     ( $scope , $log , cinema6 , c6Computed , c6UrlMaker , c6Profile , $timeout , $document , myFrame$ , $window , c6Debounce ) {
             $log = $log.context('AppCtrl');
             var c = c6Computed($scope),
-                window$ = angular.element($window),
+                parentWindow$ = angular.element($window.parent),
                 _app = {
                     state: 'splash'
                 };
@@ -230,7 +230,7 @@
                     angular.copy(data.profile, c6Profile);
 
                     if (data.profile.device !== 'phone') {
-                        window$.on('resize', c6Debounce(function() { this.resize(); }.bind(this), 250));
+                        parentWindow$.on('resize', c6Debounce(function() { this.resize(); }.bind(this), 250));
                         $scope.$on('<ballot-vote-module>:vote', this.resize.bind(this));
                     }
                 }.bind(this)
