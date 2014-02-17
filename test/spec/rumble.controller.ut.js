@@ -226,16 +226,18 @@
             describe('$watchers', function() {
                 describe('currentIndex', function() {
                     describe('if the device is not a phone', function() {
-                        it('should do nothing', function() {
+                        it('should call resize() when the index changes', function() {
+                            var resize = $scope.AppCtrl.resize;
+
                             $scope.$apply(function() {
                                 $scope.currentIndex = 0;
                             });
-                            expect($scope.AppCtrl.resize).not.toHaveBeenCalled();
+                            expect(resize).toHaveBeenCalled();
 
                             $scope.$apply(function() {
-                                $scope.currentIndex = 2;
+                                $scope.currentIndex = 4;
                             });
-                            expect($scope.AppCtrl.resize).not.toHaveBeenCalled();
+                            expect(resize.callCount).toBe(2);
                         });
                     });
 
@@ -252,18 +254,16 @@
                             RumbleCtrl = $controller('RumbleController', { $scope: $scope });
                         });
 
-                        it('should call resize() when the index changes', function() {
-                            var resize = $scope.AppCtrl.resize;
-
+                        it('should do nothing', function() {
                             $scope.$apply(function() {
                                 $scope.currentIndex = 0;
                             });
-                            expect(resize).toHaveBeenCalled();
+                            expect($scope.AppCtrl.resize).not.toHaveBeenCalled();
 
                             $scope.$apply(function() {
-                                $scope.currentIndex = 4;
+                                $scope.currentIndex = 2;
                             });
-                            expect(resize.callCount).toBe(2);
+                            expect($scope.AppCtrl.resize).not.toHaveBeenCalled();
                         });
                     });
                 });
@@ -326,6 +326,9 @@
                     var newScope = $rootScope.$new();
 
                     newScope.app = $scope.app;
+                    newScope.AppCtrl = {
+                        resize: angular.noop
+                    };
 
                     controlsIFace = {};
 

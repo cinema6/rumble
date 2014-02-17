@@ -157,10 +157,11 @@
         function             ( $window ) {
             return angular.element($window.frameElement);
         }])
-        .controller('AppController', ['$scope','$log','cinema6','c6Computed','c6UrlMaker','$timeout','$document','myFrame$',
-        function                     ( $scope , $log , cinema6 , c6Computed , c6UrlMaker , $timeout , $document , myFrame$ ) {
+        .controller('AppController', ['$scope','$log','cinema6','c6Computed','c6UrlMaker','$timeout','$document','myFrame$','$window','c6Debounce',
+        function                     ( $scope , $log , cinema6 , c6Computed , c6UrlMaker , $timeout , $document , myFrame$ , $window , c6Debounce ) {
             $log = $log.context('AppCtrl');
             var c = c6Computed($scope),
+                window$ = angular.element($window),
                 _app = {
                     state: 'splash'
                 };
@@ -197,7 +198,10 @@
 
             this.resize = function() {
                 $timeout(function() {
-                    myFrame$.height($document.height());
+                    var height = $document.height();
+
+                    $log.info('iFrame Resizing to ' + height +'px.');
+                    myFrame$.height(height);
                 }, 50);
             };
 
@@ -213,6 +217,7 @@
             $scope.$on('reelStart', gotoDeck);
             $scope.$on('reelReset', gotoSplash);
 
+
             $log.info('loaded.');
 
             $scope.app = app;
@@ -220,7 +225,11 @@
             cinema6.init({
                 setup: function(data) {
                     app.data = data;
-                }
+
+                    if (data.profile.device !== 'phone') {
+                        window$.on('resize', c6Debounce(function() { this.resize(); }.bind(this), 250));
+                    }
+                }.bind(this)
             });
         }]);
 }(window));

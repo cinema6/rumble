@@ -12,6 +12,7 @@
                 $timeout,
                 $controller,
                 c6EventEmitter,
+                $window,
                 AppCtrl;
 
             var cinema6,
@@ -113,6 +114,7 @@
                     $timeout = $injector.get('$timeout');
                     $controller = $injector.get('$controller');
                     c6EventEmitter = $injector.get('c6EventEmitter');
+                    $window = $injector.get('$window');
 
                     $document = $injector.get('$document');
                     myFrame$ = $injector.get('myFrame$');
@@ -246,6 +248,51 @@
 
                     it('should exit fullscreen mode', function() {
                         expect(cinema6.fullscreen).toHaveBeenCalledWith(false);
+                    });
+                });
+
+                describe('$window resize', function() {
+                    var window$;
+
+                    beforeEach(function() {
+                        spyOn(AppCtrl, 'resize');
+
+                        window$ = angular.element($window);
+                        cinema6.init.mostRecentCall.args[0].setup(appData);
+                    });
+
+                    describe('if not on a phone', function() {
+                        it('should call AppCtrl.resize() debounced', function() {
+                            window$.trigger('resize');
+                            $timeout.flush();
+                            expect(AppCtrl.resize).toHaveBeenCalled();
+
+                            window$.trigger('resize');
+                            $timeout.flush();
+                            expect(AppCtrl.resize.callCount).toBe(2);
+                        });
+                    });
+
+                    describe('if on a phone', function() {
+                        beforeEach(function() {
+                            appData.profile.device = 'phone';
+
+                            $scope = $rootScope.$new();
+                            AppCtrl = $controller('AppController', { $scope: $scope });
+                            spyOn(AppCtrl, 'resize');
+
+                            cinema6.init.mostRecentCall.args[0].setup(appData);
+                        });
+
+                        it('should do nothing', function() {
+                            window$.trigger('resize');
+                            $timeout.flush();
+                            expect(AppCtrl.resize).not.toHaveBeenCalled();
+
+                            window$.trigger('resize');
+                            $timeout.flush();
+                            expect(AppCtrl.resize).not.toHaveBeenCalled();
+                        });
                     });
                 });
             });

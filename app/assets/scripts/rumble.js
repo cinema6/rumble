@@ -230,7 +230,7 @@
             });
         });
 
-        if (appData.profile.device === 'phone') {
+        if (appData.profile.device !== 'phone') {
             $scope.$watch('currentIndex', $scope.AppCtrl.resize.bind($scope.AppCtrl));
         }
 
