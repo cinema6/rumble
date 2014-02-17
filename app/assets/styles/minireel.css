@@ -287,11 +287,6 @@
         position: absolute; z-index: 500; top:6.25em;/*100px*/; left:0; width:100%;
         text-align: center; box-sizing:border-box; -moz-box-sizing:border-box;
     }
-        @media screen and (orientation:landscape) {
-            .mr-ballot__group {
-                padding:0 3.75em;
-            }
-        }
     .mr-ballot__title {
         color:#fff; font-size:1.5em;/*24px*/ font-weight:300; text-align: center; line-height: 1.2;
     }
@@ -316,11 +311,9 @@
                 .mr-ballot__btn-label {
                     font-size:1.125em;/*18px*/ line-height: 1.33;
                 }
-    @media screen and (orientation:landscape) {
         .mr-ballot__textlink {
             display:inline; margin-left:1em; margin-right:1em;
         }
-    }
 
 /*  ==========================================================================
     .mr-results__group
