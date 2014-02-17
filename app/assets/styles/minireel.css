@@ -305,6 +305,7 @@
                 border-radius:3px; border:0; 
                 width:8.125em; /*130px*/ height:4.5em; /*72px*/
                 font-size:1em; color:#fff; font-weight:900; font-style: italic;
+                cursor:pointer;
             }
                 .mr-ballot__btn0 {
                     background:#8ac12a;
