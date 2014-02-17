@@ -35,11 +35,13 @@
             });
         }])
 
-        .directive('vastCard', ['playerInterface','$q','$timeout','c6UrlMaker',
-        function               ( playerInterface , $q , $timeout , c6UrlMaker ) {
+        .directive('vastCard', ['playerInterface','$q','$timeout','c6UrlMaker','c6Profile',
+        function               ( playerInterface , $q , $timeout , c6UrlMaker , c6Profile ) {
             return {
                 restrict: 'E',
-                templateUrl: c6UrlMaker('views/directives/vast_card.html'),
+                templateUrl : c6UrlMaker('views/directives/vast_card' +
+                                        ((c6Profile.device === 'phone') ? '--mobile' : '') +
+                                        '.html'),
                 controller: 'VastCardController',
                 controllerAs: 'Ctrl',
                 link: function(scope) {
