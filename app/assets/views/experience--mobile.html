@@ -112,9 +112,6 @@
             <ng-include src="'assets/views/splash.html'"></ng-include>
         </div>
     </ng-switch>
-    <div class="controls" ng-if="deviceProfile.device !== 'phone'">
-        <c6-controls controller="controls.controller" delegate="controls.delegate" volume="false"></c6-controls>
-    </div>
     <table-of-contents ng-show="showTOC"
         cards="tocCards"
         on-select="RumbleCtrl.jumpTo(card)"

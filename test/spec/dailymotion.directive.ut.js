@@ -111,8 +111,7 @@
                         width: '1',
                         height: '2',
                         params: {
-                            related: 0,
-                            chromeless: 1
+                            related: 0
                         },
                         frameborder: 0
                     });
