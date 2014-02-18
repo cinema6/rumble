@@ -56,11 +56,6 @@
     on-exit="showTOC = false">
 </table-of-contents>
 
-<ng-switch on="app.state">
-    <div class="splash-screen" ng-switch-when="splash">
-        <ng-include src="'assets/views/splash.html'"></ng-include>
-    </div>
-</ng-switch>
 <article id="card" class="mr-container">
     <ng-include src="app.views.deck"></ng-include>
     <ng-switch on="app.state">
