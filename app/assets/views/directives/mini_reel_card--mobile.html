@@ -3,15 +3,13 @@
         <h3 class="more-reels__intro">{{config.data.message}}</h3>
     </header>
     <ul class="more-reels__list">
-        <li class="more-reels__item" ng-repeat="this in Ctrl.miniReels">
-            <article class="clearfix">
-                <div class="more-reels__details">
-                    <h1 class="more-reels__title">{{this.title}}</h1>
-                    <p>{{this.summary}}</p>
-                </div>
+        <li class="more-reels__item mr-card mr-card-shadow" ng-repeat="this in Ctrl.miniReels">
+            <article>
+                <h1 class="more-reels__title">{{this.title}}</h1>
                 <div class="more-reels__preview">
                     <img src="http://lorempixel.com/800/400/" class="more-reels__preview-img">
                 </div>
+                <div class="more-reels__copy">{{this.summary}}</div>
             </article>
         </li>
     </ul>

@@ -193,6 +193,12 @@
 /*  ==========================================================================
     .ui-navbar classes
     ========================================================================== */
+    .ui-navbar__group {
+        position: absolute; width: 100%; height:0; padding-bottom: 56.25%;
+    }
+        .ui-navbar__group--docked {
+            position: fixed; width: 100%; padding-bottom: 0; bottom:3em;
+        }
     .ui-navbar {
         height:2.5em; padding:0.25em 0; background:#2a2a2a;
         position:absolute; width:100%; bottom: -3em;
@@ -284,27 +290,22 @@
     .mr-ballot__group
     ========================================================================== */
     .mr-ballot__group {
-        position: absolute; z-index: 500; top:3em;/*48px*/; left:0; width:100%;
+        position: absolute; z-index: 500; top:6.25em;/*100px*/; left:0; width:100%;
         text-align: center; box-sizing:border-box; -moz-box-sizing:border-box;
     }
-        @media screen and (orientation:landscape) {
-            .mr-ballot__group {
-                padding:0 3.75em;
-            }
-        }
     .mr-ballot__title {
-        color:#fff; font-size:1.25em;/*20px*/ font-weight:300; text-align: center; line-height: 1.2;
+        color:#fff; font-size:1.5em;/*24px*/ font-weight:300; text-align: center; line-height: 1.2;
     }
     .mr-ballot__list {
         margin:0 0 2em 0; padding:0; list-style: none;
     }
         .mr-ballot__item {
-            display:inline-block; margin:0 0.625em;
+            display:inline-block; margin:0 1em;
         }
             .mr-ballot__btn {
                 border-radius:3px; border:0; 
-                width:8.125em; /*130px*/ height:4.5em; /*72px*/
-                font-size:1em; color:#fff; font-weight:900; font-style: italic;
+                width:10em; /*240px*/ height:5em; /*120px*/
+                font-size:1.5em;/*24px*/ color:#fff; font-weight:900; font-style: italic;
                 cursor:pointer;
             }
                 .mr-ballot__btn0 {
@@ -316,11 +317,23 @@
                 .mr-ballot__btn-label {
                     font-size:1.125em;/*18px*/ line-height: 1.33;
                 }
-    @media screen and (orientation:landscape) {
         .mr-ballot__textlink {
             display:inline; margin-left:1em; margin-right:1em;
         }
+    .mr-ballot-module {
+        opacity:1;
+        position: absolute; width:100%;
+        z-index: 5;
+        transition:0.5s all; -webkit-transition:0.5s all;
     }
+        
+    .mr-ballot-module.ng-hide {
+        opacity:0;
+    }
+    .mr-ballot-module.ng-hide-add, .mr-ballot-module.ng-hide-remove {
+        display:block !important;
+    }
+
 
 /*  ==========================================================================
     .mr-results__group
@@ -356,12 +369,12 @@
                         color:#19cbe6;
                     }
         .mr-results__meter {
-            border-radius:2px; background:#19cbe6;
-            height:0.625em; width:100%;
+            border-radius:4px; background:#19cbe6;
+            height:1.25em; width:100%;
             overflow: hidden;
         }
             .mr-results__bar1 {
-                height:0.625em; background:#8ac12a; border-right:2px solid #fff;
+                height:1.25em; background:#8ac12a; border-right:2px solid #fff;
             }
 
 
@@ -501,7 +514,7 @@
         margin:0; padding:0; list-style: none;
     }
         .more-reels__item {
-            margin:0 0 1.25em 0;
+            margin:0 0 1.25em 0; border-bottom:1px solid #cdcdcd;
         }
         .more-reels__details {
             float:left; width:32%;
