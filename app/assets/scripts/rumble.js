@@ -28,7 +28,7 @@
                 $log.log('removeClass setup:',className);
                 element.css({ opacity : 0, visibility : 'visible' });
                 $log.info('removeClass start',className);
-                element.delay(500).animate({
+                element.delay(1000).animate({
                     opacity: 1
                 }, 500, function() {
                     $log.info('removeClass end',className);
