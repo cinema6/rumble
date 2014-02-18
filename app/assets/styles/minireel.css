@@ -193,6 +193,12 @@
 /*  ==========================================================================
     .ui-navbar classes
     ========================================================================== */
+    .ui-navbar__group {
+        position: absolute; width: 100%; height:0; padding-bottom: 56.25%;
+    }
+        .ui-navbar__group--docked {
+            position: fixed; width: 100%; padding-bottom: 0; bottom:3em;
+        }
     .ui-navbar {
         height:2.5em; padding:0.25em 0; background:#2a2a2a;
         position:absolute; width:100%; bottom: -3em;
