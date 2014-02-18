@@ -5,11 +5,11 @@
     .animation('.splash-screen',[function(){
         return {
             leave: function(element,className,done){
-                element.fadeOut(2000, done);
+                element.fadeOut(500, done);
             }
         };
     }])
-    .animation('.player-list-item',['$log', function($log){
+    .animation('.mr-cards__item',['$log', function($log){
         $log = $log.context('.player-list-item');
         return {
             beforeAddClass: function(element,className,done) {
@@ -18,7 +18,7 @@
                 $log.info('addClass start',className);
                 element.animate({
                     opacity: 0
-                }, 2000, function() {
+                }, 500, function() {
                     $log.info('addClass end',className);
                     element.css('visibility','hidden');
                     done();
@@ -28,9 +28,9 @@
                 $log.log('removeClass setup:',className);
                 element.css({ opacity : 0, visibility : 'visible' });
                 $log.info('removeClass start',className);
-                element.animate({
+                element.delay(500).animate({
                     opacity: 1
-                }, 2000, function() {
+                }, 500, function() {
                     $log.info('removeClass end',className);
                     done();
                 });
