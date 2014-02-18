@@ -157,6 +157,79 @@
         function             ( $window ) {
             return angular.element($window.frameElement);
         }])
+        .directive('c6DockAnchor', ['$window',
+        function                   ( $window ) {
+            return {
+                restrict: 'EA',
+                link: function(scope, element, attrs) {
+                    var window$ = angular.element($window),
+                        positionEvent = ('c6-dock-anchor(' + attrs.id + '):position'),
+                        dockEvent = ('c6-dock(' + attrs.id + '):linked');
+
+                    function notifyPosition() {
+                        var top = element.prop('offsetTop'),
+                            left = element.prop('offsetLeft'),
+                            height = element.prop('offsetHeight'),
+                            width = element.prop('offsetWidth'),
+                            position = {
+                                top: top,
+                                right: left + width,
+                                bottom: top + height,
+                                left: left
+                            };
+
+                        scope.$broadcast(positionEvent, position, element.prop('offsetParent'));
+                    }
+
+                    if (!attrs.id) {
+                        throw new Error('c6-dock-anchor requires an id.');
+                    }
+
+                    scope.$on(dockEvent, notifyPosition);
+                    window$.on('resize', notifyPosition);
+
+                    scope.$on('$destroy', function() {
+                        window$.off('resize', notifyPosition);
+                    });
+
+                    notifyPosition();
+                }
+            };
+        }])
+        .directive('c6Dock', [function() {
+            return {
+                restrict: 'A',
+                link: function(scope, element, attrs) {
+                    var configs = (function() {
+                            return attrs.c6Dock.split(/,\s*/).map(function(param) {
+                                var parts = param.split(' to '),
+                                    anchorParts = parts[1].split(':');
+
+                                return {
+                                    prop: parts[0],
+                                    anchorId: anchorParts[0],
+                                    anchorPosition: anchorParts[1]
+                                };
+                            });
+                        }());
+
+                    angular.forEach(configs, function(config) {
+                        var positionEvent = ('c6-dock-anchor(' + config.anchorId + '):position'),
+                            dockEvent = ('c6-dock(' + config.anchorId + '):linked');
+
+                        scope.$on(positionEvent, function(event, position, offsetParent) {
+                            if (offsetParent !== element.prop('offsetParent')) {
+                                throw new Error('Cannot dock ' + attrs.c6Dock + ' because the element to dock has a different offsetParent than its anchor.');
+                            }
+
+                            element.css(config.prop, (position[config.anchorPosition] + 'px'));
+                        });
+
+                        scope.$broadcast(dockEvent);
+                    });
+                }
+            };
+        }])
         .value('c6Profile', {})
         .controller('AppController', ['$scope','$log','cinema6','c6Computed','c6UrlMaker','c6Profile','$timeout','$document','myFrame$','$window','c6Debounce',
         function                     ( $scope , $log , cinema6 , c6Computed , c6UrlMaker , c6Profile , $timeout , $document , myFrame$ , $window , c6Debounce ) {
