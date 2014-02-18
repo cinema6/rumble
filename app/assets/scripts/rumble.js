@@ -341,6 +341,32 @@
 
         $log.log('Rumble Controller is initialized!');
     }])
+    .directive('navbarButton', ['c6UrlMaker','c6Computed',
+    function                   ( c6UrlMaker , c6Computed ) {
+        return {
+            restrict: 'E',
+            templateUrl: c6UrlMaker('views/directives/navbar_button.html'),
+            scope: {
+                index: '=',
+                currentIndex: '=',
+                card: '=',
+                onSelect: '&'
+            },
+            link: function(scope) {
+                var c = c6Computed(scope);
+
+                c(scope, 'thumb', function() {
+                    var thumb = this.card.thumb;
+
+                    return thumb ? ('url(' + thumb + ')') : 'none';
+                }, ['card.thumb']);
+
+                c(scope, 'active', function() {
+                    return !!((this.currentIndex === this.index) || this.hover);
+                }, ['currentIndex', 'index', 'hover']);
+            }
+        };
+    }])
     .directive('mrCard',['$log','$compile','$window','c6UserAgent','InflectorService',
     function            ( $log , $compile , $window , c6UserAgent , InflectorService ){
         $log = $log.context('<mr-card>');
