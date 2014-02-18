@@ -256,6 +256,38 @@
                 });
             });
 
+            describe('$scope.dockNav', function() {
+                beforeEach(function() {
+                    $scope.currentCard = {};
+                });
+
+                it('should be false if the currentCard is any kind of video', function() {
+                    ['video', 'vast', 'youtube', 'vimeo', 'dailymotion'].forEach(function(type) {
+                        $scope.$apply(function() {
+                            $scope.currentCard.type = type;
+                        });
+                        expect($scope.dockNav).toBe(false);
+                    });
+                });
+
+                it('should be true if anything else', function() {
+                    ['foo', 'test', 'miniReel', 'displayAd'].forEach(function(type) {
+                        $scope.$apply(function() {
+                            $scope.currentCard.type = type;
+                        });
+                        expect($scope.dockNav).toBe(true);
+                    });
+                });
+
+                it('should be true if there is no card', function() {
+                    $scope.$apply(function() {
+                        $scope.currentCard = null;
+                    });
+
+                    expect($scope.dockNav).toBe(true);
+                });
+            });
+
             describe('$watchers', function() {
                 describe('currentIndex', function() {
                     describe('if the device is not a phone', function() {

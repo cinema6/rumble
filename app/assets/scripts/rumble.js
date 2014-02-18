@@ -234,6 +234,21 @@
 
             return null;
         }, ['currentIndex']);
+        c($scope, 'dockNav', function() {
+            var card = this.currentCard,
+                type = card && card.type;
+
+            switch (type) {
+                case 'video':
+                case 'vast':
+                case 'youtube':
+                case 'dailymotion':
+                case 'vimeo':
+                    return false;
+                default:
+                    return true;
+            }
+        }, ['currentCard.type']);
 
         $scope.$on('playerAdd',function(event,player){
             $log.log('Player added: %1 - %2',player.getType(),player.getVideoId());
