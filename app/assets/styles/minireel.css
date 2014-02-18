@@ -314,6 +314,20 @@
         .mr-ballot__textlink {
             display:inline; margin-left:1em; margin-right:1em;
         }
+    .mr-ballot-module {
+        opacity:1;
+        position: absolute; width:100%; height:100%;
+        z-index: 500;
+        transition:0.5s all; -webkit-transition:0.5s all;
+    }
+        
+    .mr-ballot-module.ng-hide {
+        opacity:0;
+    }
+    .mr-ballot-module.ng-hide-add, .mr-ballot-module.ng-hide-remove {
+        display:block !important;
+    }
+
 
 /*  ==========================================================================
     .mr-results__group
