@@ -1,11 +1,10 @@
-<button ng-mouseenter="hover = true"
-    ng-mouseleave="hover = false"
+<button
     class="ui-navbar__page"
     ng-click="onSelect();">
     <span class="ui-page__label">{{index + 1}}</span>
     <span class="ui-control__preview-img"
         ng-class="{'ui-control__preview-img--active': active}"
-        ng-style="{ background: thumb }">
+        ng-style="{ backgroundImage: thumb }">
         &nbsp;
     </span>
 </button>

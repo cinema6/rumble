@@ -128,6 +128,16 @@
         transform: translateZ(0);
         -webkit-transform: translateZ(0); /* Safari and Chrome */
     }
+    .c6-animate {
+        opacity:1;
+        transition:0.5s all; -webkit-transition:0.5s all;
+    }   
+        .c6-animate.ng-hide {
+            opacity:0;
+        }
+        .c6-animate.ng-hide-add, .c6-animate.ng-hide-remove {
+            display:block !important;
+        }
     
 /*  ==========================================================================
     ui-icons classes
@@ -174,6 +184,12 @@
             border:0; border-right:1px solid rgba(0,0,0,0.1); padding:0; margin:0;
             cursor:pointer; 
         }
+            .ui-titlebar__view-list--open {
+                background:#ac5e19;
+            }
+                .ui-titlebar__view-list--open .ui-icon__list {
+                    opacity:0.5;
+                }
             .ui-titlebar__view-list .ui-icon__list {
                 position:absolute; width:0.875em; height:0.625em;
                 background-position:-75px 0;
@@ -194,14 +210,14 @@
     .ui-navbar classes
     ========================================================================== */
     .ui-navbar__group {
-        position: absolute; width: 100%; height:0; padding-bottom: 56.25%;
+        position: absolute; width: 100%; height:0; padding-bottom: 56.25%; z-index:10;
     }
         .ui-navbar__group--docked {
             position: fixed; width: 100%; padding-bottom: 0; bottom:3em;
         }
     .ui-navbar {
         height:2.5em; padding:0.25em 0; background:#2a2a2a;
-        position:absolute; width:100%; bottom: -3em;
+        position:absolute; width:100%; bottom: -3em; z-index:20;
     }
         .ui-nav__label {
             position:absolute; color:#fff; font-size:0.875em; font-weight:700;
@@ -249,8 +265,6 @@
                 margin:0; padding:0; font-size:0.875em; color:#ddd; font-weight:700;
                 cursor: pointer; position:relative;
             }
-
-
 
 
 /*  ==========================================================================
@@ -325,17 +339,8 @@
             display:inline; margin-left:1em; margin-right:1em;
         }
     .mr-ballot-module {
-        opacity:1;
         position: absolute; width:100%;
         z-index: 5;
-        transition:0.5s all; -webkit-transition:0.5s all;
-    }
-        
-    .mr-ballot-module.ng-hide {
-        opacity:0;
-    }
-    .mr-ballot-module.ng-hide-add, .mr-ballot-module.ng-hide-remove {
-        display:block !important;
     }
 
 
@@ -473,9 +478,12 @@
 /*  ==========================================================================
     .mr-toc
     ========================================================================== */
+    .mr-toc__group {
+        position: absolute; width:100%; height:100%; z-index: 500;
+    }
     .mr-toc {
-        background:#fff; position:absolute; z-index: 50000; top:2.375em; left:0;
-        padding:0; width:100%;
+        background:#fff; position:absolute; z-index: 5; left:0;
+        padding:0; width:100%; height:100%;
         box-sizing:border-box; -moz-box-sizing:border-box;
     }
     .mr-toc__title {
@@ -508,7 +516,7 @@
     More Reels card classes
     ========================================================================== */
     .mr-more-reels__group {
-        background:#f2f2f2; padding:1.25em 1.5em;
+        background:#f2f2f2; padding:1.25em 1.5em 3em 1.5em;
     }
     .more-reels__intro {
         font-size:1.25em; color:#444; font-weight:300; text-align:center;
