@@ -29,10 +29,6 @@
                         {
                             "button" : "Bad",
                             "most"   : "The Badest video"
-                        },
-                        {
-                            "button" : "Ugly",
-                            "most"   : "The Ugliest video"
                         }
                     ]
                 },
