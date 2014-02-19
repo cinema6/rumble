@@ -271,6 +271,19 @@
                 margin:0; padding:0; font-size:0.875em; color:#ddd; font-weight:700;
                 cursor: pointer; position:relative;
             }
+    @media screen and (min-width:40.625rem) and (max-width:60rem) {
+        /*650px and 800px*/
+        .ui-navbar__page {
+            width:3.375em;/*54px*/
+        }
+    }
+    @media screen and (max-width:40.5625rem) {
+        /*max 649px*/
+        .ui-navbar__page {
+            width:2.857em;/*40px*/
+            font-size:0.75em; /*12px*/
+        }
+    }
 
 
 /*  ==========================================================================
@@ -347,6 +360,21 @@
     .mr-ballot-module {
         position: absolute; width:100%;
         z-index: 5;
+    }
+    @media screen and (min-width:40.625rem) and (max-width:60rem) {
+        /*650px and 800px*/
+        .mr-ballot__group {
+            top:4rem;
+        }
+    }
+    @media screen and (max-width:40.5625rem) {
+        /*max 649px*/
+        .mr-ballot__group {
+            top:3rem;
+        }
+        .mr-ballot__btn, .mr-ballot__title {
+            font-size:1.25em;
+        }
     }
 
 
@@ -532,7 +560,7 @@
         margin:0; padding:0; list-style: none;
     }
         .more-reels__item {
-            margin:0 0 1.25em 0; border-bottom:1px solid #cdcdcd;
+            margin:0 0 1.25em 0; padding:0 0 1em 0; border-bottom:1px solid #cdcdcd;
         }
         .more-reels__details {
             float:left; width:32%;
@@ -546,6 +574,21 @@
             .more-reels__preview-img {
                 width:100%;
             }
+    @media screen and (max-width:60rem) {
+        /*max 800px*/
+        .more-reels__copy {
+            font-size:0.875em;
+        }
+    }
+    @media screen and (max-width:40.5625rem) {
+        /*max 649px*/
+        .more-reels__details {
+            width:48%;
+        }
+        .more-reels__preview {
+            width:50%;
+        }
+    }
 
 
 /*  ==========================================================================
