@@ -367,13 +367,28 @@
             top:4rem;
         }
     }
-    @media screen and (max-width:40.5625rem) {
-        /*max 649px*/
+    @media screen and (min-width:28.75rem) and (max-width:40.5625rem) {
+        /*460px and 649px*/
         .mr-ballot__group {
             top:3rem;
         }
         .mr-ballot__btn, .mr-ballot__title {
             font-size:1.25em;
+        }
+    }
+    @media screen and (max-width:28.6875rem) {
+        /*max 459px*/
+        .mr-ballot__group {
+            top:1rem;
+        }
+        .mr-ballot__item {
+            margin:0 0.5em;
+        }
+        .mr-ballot__btn, .mr-ballot__title {
+            font-size:1em;
+        }
+        .mr-ballot__btn {
+            width:9em;
         }
     }
 
