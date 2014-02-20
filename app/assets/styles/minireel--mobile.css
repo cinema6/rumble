@@ -137,6 +137,31 @@
         transform: translateZ(0);
         -webkit-transform: translateZ(0); /* Safari and Chrome */
     }
+
+    @media screen and (orientation: portrait) {
+        .portrait, .ui-control--portrait, .ui-context--portrait {
+            display:block;
+        }
+        .landscape, .ui-nav-left--landscape, .ui-nav-right--landscape {
+            display:none;
+        }
+
+    }
+    @media screen and (orientation:landscape) {
+        .landscape, .ui-nav-left--landscape, .ui-nav-right--landscape {
+            display:block;
+        }
+        .portrait, .ui-control--portrait, .ui-context--portrait {
+            display:none;
+        }
+        .mr-container {
+            padding:0.375em 4.125em;
+        }
+    }
+
+/*  ==========================================================================
+    Animation classes
+    ========================================================================== */
     .c6-animate {
         animation: slide-out 0.7s; 
         -webkit-animation: slide-out 0.7s
@@ -166,15 +191,49 @@
             animation: slide-top-leave 0.25s 0.2s backwards; 
             -webkit-animation: slide-top-leave  0.25s 0.2s backwards;
         }
-    
-    @media screen and (orientation: portrait) {
-        .portrait, .ui-control--portrait, .ui-context--portrait {
-            display:block;
-        }
-        .landscape, .ui-nav-left--landscape, .ui-nav-right--landscape {
-            display:none;
-        }
 
+    .c6-fade {
+        animation: fade-in 1s;
+        -webkit-animation: fade-in 1s;
+    }
+        .c6-fade.ng-hide {
+            animation: fade-out 1s;
+            -webkit-animation: fade-out 1s;
+        }   
+
+        @keyframes fade-in {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+        @-webkit-keyframes fade-in {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+        @keyframes fade-out {
+            0% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+            }
+        }
+        @-webkit-keyframes fade-out {
+            0% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+            }
+        }
+    @media screen and (orientation: portrait) {
         @keyframes slide-out {
             0% {
                 transform: translateY(100%);
@@ -246,15 +305,6 @@
             }
     }
     @media screen and (orientation:landscape) {
-        .landscape, .ui-nav-left--landscape, .ui-nav-right--landscape {
-            display:block;
-        }
-        .portrait, .ui-control--portrait, .ui-context--portrait {
-            display:none;
-        }
-        .mr-container {
-            padding:0.375em 4.125em;
-        }
         @keyframes slide-out {
             0% {
                 transform: translateX(100%);

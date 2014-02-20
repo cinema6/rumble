@@ -10,7 +10,7 @@
         };
     }])
     .animation('.mr-cards__item',['$log', function($log){
-        $log = $log.context('.player-list-item');
+        $log = $log.context('.mr-cards__item');
         return {
             beforeAddClass: function(element,className,done) {
                 $log.log('addClass setup:',className);
