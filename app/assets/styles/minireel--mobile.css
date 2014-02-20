@@ -138,15 +138,35 @@
         -webkit-transform: translateZ(0); /* Safari and Chrome */
     }
     .c6-animate {
-        opacity:1;
-        transition:0.5s all; -webkit-transition:0.5s all;
+        animation: slide-out 0.7s; 
+        -webkit-animation: slide-out 0.7s
     }   
         .c6-animate.ng-hide {
-            opacity:0;
+            animation: slide-in 0.7s; 
+            -webkit-animation: slide-in 0.7s;
         }
         .c6-animate.ng-hide-add, .c6-animate.ng-hide-remove {
             display:block !important;
         }
+
+    .c6-slide-bar--left {
+        animation: slide-left-enter 0.25s 0.3s backwards; 
+        -webkit-animation: slide-left-enter 0.25s 0.3s backwards;
+    }
+        .c6-slide-bar--left.ng-hide {
+            animation: slide-left-leave 0.25s 0.2s backwards; 
+            -webkit-animation: slide-left-leave  0.25s 0.2s backwards;
+        }
+        
+    .c6-slide-bar--top {
+        animation: slide-top-enter 0.25s 0.3s backwards; 
+        -webkit-animation: slide-top-enter 0.25s 0.3s backwards;
+    }
+        .c6-slide-bar--top.ng-hide {
+            animation: slide-top-leave 0.25s 0.2s backwards; 
+            -webkit-animation: slide-top-leave  0.25s 0.2s backwards;
+        }
+    
     @media screen and (orientation: portrait) {
         .portrait, .ui-control--portrait, .ui-context--portrait {
             display:block;
@@ -154,6 +174,76 @@
         .landscape, .ui-nav-left--landscape, .ui-nav-right--landscape {
             display:none;
         }
+
+        @keyframes slide-out {
+            0% {
+                transform: translateY(100%);
+            }
+            100% {
+                transform: translateY(0);
+            }
+        }
+        @-webkit-keyframes slide-out {
+            0% {
+                -webkit-transform: translateY(100%);
+            }
+            100% {
+                -webkit-transform: translateY(0);
+            }
+        }
+
+        @keyframes slide-in {
+            0% {
+                transform: translateY(0);
+            }
+            100% {
+                transform: translateY(100%);
+            }
+        } 
+
+        @-webkit-keyframes slide-in {
+            0% {
+                -webkit-transform: translateY(0);
+            }
+            100% {
+                -webkit-transform: translateY(100%);
+            }
+        }
+        .c6-slide-bar--top.ng-hide-add, .c6-slide-bar--top.ng-hide-remove {
+            display:block !important;
+        }
+            @keyframes slide-top-enter {
+                0% {
+                    transform: translateY(-100%);
+                }
+                100% {
+                    transform: translateY(0);
+                }
+            }
+            @-webkit-keyframes slide-top-enter {
+                0% {
+                    -webkit-transform: translateY(-100%);
+                }
+                100% {
+                    -webkit-transform: translateY(0);
+                }
+            }
+            @keyframes slide-top-leave {
+                0% {
+                    transform: translateY(0);
+                }
+                100% {
+                    transform: translateY(-100%);
+                }
+            }
+            @-webkit-keyframes slide-top-leave {
+                0% {
+                    -webkit-transform: translateY(0);
+                }
+                100% {
+                    -webkit-transform: translateY(-100%);
+                }
+            }
     }
     @media screen and (orientation:landscape) {
         .landscape, .ui-nav-left--landscape, .ui-nav-right--landscape {
@@ -165,6 +255,73 @@
         .mr-container {
             padding:0.375em 4.125em;
         }
+        @keyframes slide-out {
+            0% {
+                transform: translateX(100%);
+            }
+            100% {
+                transform: translateX(0);
+            }
+        }
+        @-webkit-keyframes slide-out {
+            0% {
+                -webkit-transform: translateX(100%);
+            }
+            100% {
+                -webkit-transform: translateX(0);
+            }
+        }
+        @keyframes slide-in {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(100%);
+            }
+        }
+        @-webkit-keyframes slide-in {
+            0% {
+                -webkit-transform: translateX(0);
+            }
+            100% {
+                -webkit-transform: translateX(100%);
+            }
+        }
+        .c6-slide-bar--left.ng-hide-add, .c6-slide-bar--left.ng-hide-remove {
+            display:block !important;
+        }
+            @keyframes slide-left-enter {
+                0% {
+                    transform: translateX(-100%);
+                }
+                100% {
+                    transform: translateX(0);
+                }
+            }
+            @-webkit-keyframes slide-left-enter {
+                0% {
+                    -webkit-transform: translateX(-100%);
+                }
+                100% {
+                    -webkit-transform: translateX(0);
+                }
+            }
+            @keyframes slide-left-leave {
+                0% {
+                    transform: translateX(0);
+                }
+                100% {
+                    transform: translateX(-100%);
+                }
+            }
+            @-webkit-keyframes slide-left-leave {
+                0% {
+                    -webkit-transform: translateX(0);
+                }
+                100% {
+                    -webkit-transform: translateX(-100%);
+                }
+            }
     }
 /*  ==========================================================================
     ui-icons classes
