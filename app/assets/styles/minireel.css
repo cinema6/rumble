@@ -143,6 +143,9 @@
         .c6-animate.ng-hide-add, .c6-animate.ng-hide-remove {
             display:block !important;
         }
+        .mr-ballot-module.ng-hide-add, .mr-ballot-module.ng-hide-remove {
+            display:block !important;
+        }
         @-webkit-keyframes slide-in {
             0% {
                 -webkit-transform: translateX(-100%);

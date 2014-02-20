@@ -182,6 +182,10 @@
             animation: slide-left-leave 0.25s 0.2s backwards; 
             -webkit-animation: slide-left-leave  0.25s 0.2s backwards;
         }
+        .c6-side-bar--right {
+            animation: slide-right-enter 0.25s 0.3s backwards; 
+            -webkit-animation: slide-right-enter 0.25s 0.3s backwards;
+        }
         
     .c6-slide-bar--top {
         animation: slide-top-enter 0.25s 0.3s backwards; 
@@ -191,51 +195,15 @@
             animation: slide-top-leave 0.25s 0.2s backwards; 
             -webkit-animation: slide-top-leave  0.25s 0.2s backwards;
         }
-
-    /*.c6-fade {
-        animation: fade-in 0.5s;
-        -webkit-animation: fade-in 1s backwards;
-    }
-        .c6-fade.ng-hide {
-            animation: fade-out 0.5s;
-            -webkit-animation: fade-out 1s;*/
+        .c6-slide-bar--bottom {
+            animation: slide-bottom-enter 0.25s 0.3s backwards; 
+            -webkit-animation: slide-bottom-enter 0.25s 0.3s backwards;
         }
-        .c6-fade.ng-hide-add, .c6-fade.ng-hide-remove {
+
+        .mr-ballot-module.ng-hide-add, .mr-ballot-module.ng-hide-remove {
             display:block !important;
         }
 
-        /*@keyframes fade-in {
-            0% {
-                opacity: 0;
-            }
-            100% {
-                opacity: 1;
-            }
-        }
-        @-webkit-keyframes fade-in {
-            0% {
-                opacity: 0;
-            }
-            100% {
-                opacity: 1;
-            }
-        }
-        @keyframes fade-out {
-            0% {
-                opacity: 1;
-            }
-            100% {
-                opacity: 0;
-            }
-        }
-        @-webkit-keyframes fade-out {
-            0% {
-                opacity: 1;
-            }
-            100% {
-                opacity: 0;
-            }
-        }*/
     @media screen and (orientation: portrait) {
         @keyframes slide-out {
             0% {
@@ -274,6 +242,22 @@
         .c6-slide-bar--top.ng-hide-add, .c6-slide-bar--top.ng-hide-remove {
             display:block !important;
         }
+            @keyframes slide-bottom-enter {
+                0% {
+                    transform: translateY(100%);
+                }
+                100% {
+                    transform: translateY(0);
+                }
+            }
+            @-webkit-keyframes slide-bottom-enter {
+                0% {
+                    -webkit-transform: translateY(100%);
+                }
+                100% {
+                    -webkit-transform: translateY(0);
+                }
+            }
             @keyframes slide-top-enter {
                 0% {
                     transform: translateY(-100%);
@@ -307,6 +291,7 @@
                 }
             }
     }
+    
     @media screen and (orientation:landscape) {
         @keyframes slide-out {
             0% {
@@ -343,6 +328,22 @@
         .c6-slide-bar--left.ng-hide-add, .c6-slide-bar--left.ng-hide-remove {
             display:block !important;
         }
+            @keyframes slide-right-enter {
+                0% {
+                    transform: translateX(100%);
+                }
+                100% {
+                    transform: translateX(0);
+                }
+            }
+            @-webkit-keyframes slide-right-enter {
+                0% {
+                    -webkit-transform: translateX(100%);
+                }
+                100% {
+                    -webkit-transform: translateX(0);
+                }
+            }
             @keyframes slide-left-enter {
                 0% {
                     transform: translateX(-100%);
@@ -376,6 +377,8 @@
                 }
             }
     }
+
+
 /*  ==========================================================================
     ui-icons classes
     ========================================================================== */
