@@ -37,6 +37,36 @@
             }
         };
     }])
+    .animation('.mr-ballot-module', ['$log', function($log) {
+        $log = $log.context('.mr-ballot-module');
+        return {
+            beforeAddClass: function(element,className,done) {
+                $log.log('addClass setup:',className);
+                element.css({ opacity: 1, visibility: 'visible'});
+
+                $log.info('addClass start',className);
+                element.delay(250).animate({
+                    opacity: 0
+                }, 750, function() {
+                    $log.info('addClass end',className);
+                    element.css('visibility','hidden');
+                    done();
+                });
+            },
+            removeClass: function(element,className,done) {
+                $log.log('removeClass setup:', className);
+                element.css({opacity: 0, visibility:'visibile'});
+
+                $log.info('removeClass start',className);
+                element.delay(1000).animate({
+                    opacity: 1
+                }, 750, function() {
+                    $log.info('removeClass end', className);
+                    done();
+                });
+            }
+        };
+    }])
     .factory('rumbleVotes',['$log','$q','$timeout',function($log,$q,$timeout){
         $log = $log.context('rumbleVotes');
         var service = {}, mocks = {},
