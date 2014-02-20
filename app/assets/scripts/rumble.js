@@ -42,7 +42,7 @@
         return {
             beforeAddClass: function(element,className,done) {
                 $log.log('addClass setup:',className);
-                element.css({ opacity: 1, visibility: 'visible'});
+                element.css({opacity: 1, 'visibility': 'visible'});
 
                 $log.info('addClass start',className);
                 element.delay(250).animate({
@@ -55,10 +55,10 @@
             },
             removeClass: function(element,className,done) {
                 $log.log('removeClass setup:', className);
-                element.css({opacity: 0, visibility:'visibile'});
+                element.css({opacity: 0, 'visibility':'visible'});
 
                 $log.info('removeClass start',className);
-                element.delay(1000).animate({
+                element.animate({
                     opacity: 1
                 }, 750, function() {
                     $log.info('removeClass end', className);
