@@ -134,16 +134,73 @@
         transform: translateZ(0);
         -webkit-transform: translateZ(0); /* Safari and Chrome */
     }
-    .c6-animate {
-        opacity:1;
-        transition:0.5s all; -webkit-transition:0.5s all;
+    .c6-animate /* enter */ {
+        animation: slide-in 0.5s; -webkit-animation: slide-in 0.5s;
     }
-        .c6-animate.ng-hide {
-            opacity:0;
+        .c6-animate.ng-hide /* leave */ {
+            animation: slide-out 0.5s 1s; -webkit-animation: slide-out 0.5s 1s;
         }
         .c6-animate.ng-hide-add, .c6-animate.ng-hide-remove {
             display:block !important;
         }
+        .mr-ballot-module.ng-hide-add, .mr-ballot-module.ng-hide-remove {
+            display:block !important;
+        }
+        @-webkit-keyframes slide-in {
+            0% {
+                -webkit-transform: translateX(-100%);
+            }
+            100% {
+                -webkit-transform: translateX(0);
+            }
+        }
+        @keyframes slide-in {
+            0% {
+                transform: translateX(-100%);
+            }
+            100% {
+                transform: translateX(0);
+            }
+        }
+        @-webkit-keyframes slide-out {
+            0% {
+                -webkit-transform: translateX(0);
+            }
+            100% {
+                -webkit-transform: translateX(-100%);
+            }
+        }
+        @keyframes slide-out {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(-100%);
+            }
+        }
+    .c6-animate .c6-show /* enter */ { 
+        animation: show 1s 1.5s backwards; -webkit-animation: show 1s 1.5s backwards;
+    }
+        .c6-animate.ng-hide .c6-show /* leave */ {
+            animation: hide 1s forwards; -webkit-animation: hide 1s forwards;
+        }
+        @keyframes hide {
+            0% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+            }
+        }
+        @keyframes show {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+
     
 /*  ==========================================================================
     ui-icons classes

@@ -4,7 +4,7 @@
     div in so the git diff is not coma-inducing. After this gets merged,
     Feel Free to delete this comment and tab everything in. -->
 <div ng-hide="currentIndex < 0">
-<div ng-hide="showTOC" class="ui-nav-left--landscape css-promote">
+<div ng-hide="showTOC" class="ui-nav-left--landscape c6-slide-bar--left css-promote">
     <button class="publisher__branding-logo" type="button" title="Elite Daily">
         <span class="ir">Elite Daily</span>
     </button>
@@ -26,7 +26,7 @@
     </button>
 </div><!--.ui-nav-left--landscape-->
 
-<div class="ui-nav-right--landscape css-promote">
+<div class="ui-nav-right--landscape c6-side-bar--right css-promote">
     <button ng-class="{'ui-nav__view-list--open': showTOC}" class="ui-nav__view-list" ng-click="showTOC = !showTOC;" title="View List Pane" type="button" >
         <span class="ir">List Pane</span>
         <span class="sprite ui-icon__list">&nbsp;</span>
@@ -48,7 +48,7 @@
     </h2>
 </div><!--.ui-nav-right--landscape-->
 
-<div ng-hide="showTOC" class="ui-context--portrait css-promote">
+<div ng-hide="showTOC" class="ui-context--portrait c6-slide-bar--top css-promote">
     <button class="publisher__branding-logo" type="button" title="Elite Daily">
         <span class="ir">Elite Daily</span>
     </button>
@@ -69,7 +69,7 @@
     </div>
 </div><!--.ui-context-->
 
-<div class="ui-control--portrait css-promote">
+<div class="ui-control--portrait c6-slide-bar--bottom  css-promote">
     <button ng-hide="showTOC" class="ui-control__prev" title="Previous Video" type="button" ng-click="RumbleCtrl.goBack()">
         <span class="ui-control__label ui-control__label-prev">
             Prev
@@ -113,7 +113,7 @@
         </div>
     </ng-switch>
     <table-of-contents ng-show="showTOC"
-        class="mr-toc__group c6-animate css-promote"
+        class="mr-toc__group c6-toc-slide css-promote"
         cards="tocCards"
         on-select="RumbleCtrl.jumpTo(card)"
         on-exit="showTOC = false">
