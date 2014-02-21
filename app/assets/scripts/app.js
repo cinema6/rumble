@@ -55,6 +55,10 @@
                 return $delegate;
             }]);
         }])
+        .config(['$sceProvider',
+        function( $sceProvider ) {
+            $sceProvider.enabled(false);
+        }])
         .config(['c6UrlMakerProvider', 'c6Defines',
         function( c6UrlMakerProvider ,  c6Defines ) {
             c6UrlMakerProvider.location(c6Defines.kBaseUrl,'default');
