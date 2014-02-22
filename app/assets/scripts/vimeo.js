@@ -120,7 +120,9 @@
                         data.value = value;
                     }
 
-                    _iframe$[0].contentWindow.postMessage(angular.toJson(data), _url);
+                    $log.info('Posting message: [%1]', data);
+
+                    _iframe$[0].contentWindow.postMessage(angular.toJson(data), '*');
                     return self;
                 };
 
