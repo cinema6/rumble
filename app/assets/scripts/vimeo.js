@@ -168,7 +168,7 @@
                         return;
                     }
 
-//                    $log.info('[%1] - messageReceived: [%2]',_playerId, event.data);
+                    $log.info('[%1] - messageReceived: [%2]',_playerId, event.data);
                     var data = angular.fromJson(event.data), deferreds, deferred;
 
                     if (data.player_id !== _playerId){
