@@ -165,6 +165,7 @@
 
                 function onMessageReceived(event){
                     if (event.origin !== service.origin) {
+                        $log.warn('Origins don\'t match ignoring event: [%1]', event);
                         return;
                     }
 
