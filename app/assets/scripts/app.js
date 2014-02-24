@@ -157,10 +157,10 @@
                 });
             };
         }])
-        .factory('myFrame$', ['$window',
+        /*.factory('myFrame$', ['$window',
         function             ( $window ) {
             return angular.element($window.frameElement);
-        }])
+        }])*/
         .directive('c6DockAnchor', ['$window',
         function                   ( $window ) {
             return {
@@ -235,8 +235,8 @@
             };
         }])
         .value('c6Profile', {})
-        .controller('AppController', ['$scope','$log','cinema6','c6Computed','c6UrlMaker','c6Profile','$timeout','$document','myFrame$','$window','c6Debounce',
-        function                     ( $scope , $log , cinema6 , c6Computed , c6UrlMaker , c6Profile , $timeout , $document , myFrame$ , $window , c6Debounce ) {
+        .controller('AppController', ['$scope','$log','cinema6','c6Computed','c6UrlMaker','c6Profile','$timeout','$document','$window','c6Debounce',
+        function                     ( $scope , $log , cinema6 , c6Computed , c6UrlMaker , c6Profile , $timeout , $document , $window , c6Debounce ) {
             $log = $log.context('AppCtrl');
             var c = c6Computed($scope),
                 parentWindow$ = angular.element($window.parent),
@@ -274,14 +274,14 @@
                 }
             });
 
-            this.resize = function() {
+            /*this.resize = function() {
                 $timeout(function() {
                     var height = $document.height();
 
                     $log.info('iFrame Resizing to ' + height +'px.');
                     myFrame$.height(height);
                 }, 50);
-            };
+            };*/
 
             function gotoDeck() {
                 _app.state = 'deck';
