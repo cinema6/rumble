@@ -10,7 +10,7 @@
         };
     }])
     .animation('.mr-cards__item',['$log', function($log){
-        $log = $log.context('.player-list-item');
+        $log = $log.context('.mr-cards__item');
         return {
             beforeAddClass: function(element,className,done) {
                 $log.log('addClass setup:',className);
@@ -32,6 +32,36 @@
                     opacity: 1
                 }, 500, function() {
                     $log.info('removeClass end',className);
+                    done();
+                });
+            }
+        };
+    }])
+    .animation('.mr-ballot-module', ['$log', function($log) {
+        $log = $log.context('.mr-ballot-module');
+        return {
+            beforeAddClass: function(element,className,done) {
+                $log.log('addClass setup:',className);
+                element.css({opacity: 1, 'visibility': 'visible'});
+
+                $log.info('addClass start',className);
+                element.delay(250).animate({
+                    opacity: 0
+                }, 750, function() {
+                    $log.info('addClass end',className);
+                    element.css('visibility','hidden');
+                    done();
+                });
+            },
+            removeClass: function(element,className,done) {
+                $log.log('removeClass setup:', className);
+                element.css({opacity: 0, 'visibility':'visible'});
+
+                $log.info('removeClass start',className);
+                element.animate({
+                    opacity: 1
+                }, 750, function() {
+                    $log.info('removeClass end', className);
                     done();
                 });
             }
