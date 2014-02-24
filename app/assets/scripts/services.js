@@ -11,6 +11,7 @@
             };
 
             _private.getFromVimeo = function(id) {
+                return $q.when(null);
                 return $http.get('http://vimeo.com/api/v2/video/' + id + '.json')
                     .then(function(response) {
                         /* jshint camelcase:false */
@@ -19,6 +20,7 @@
             };
 
             _private.getFromDailymotion = function(id) {
+                return $q.when(null);
                 return $http.get('https://api.dailymotion.com/video/' + id + '?fields=thumbnail_120_url')
                     .then(function(response) {
                         /* jshint camelcase:false */
