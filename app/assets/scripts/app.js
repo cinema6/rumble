@@ -308,18 +308,18 @@
 
             $scope.app = app;
 
-            console.log(JSON.stringify($scope.app));
-
             cinema6.init({
                 setup: function(data) {
                     app.data = data;
 
+                    console.log(app.data);
+
                     angular.copy(data.profile, c6Profile);
 
-                    if (data.profile.device !== 'phone') {
+                    /*if (data.profile.device !== 'phone') {
                         parentWindow$.on('resize', c6Debounce(function() { this.resize(); }.bind(this), 250));
                         $scope.$on('<ballot-vote-module>:vote', this.resize.bind(this));
-                    }
+                    }*/
                 }.bind(this)
             });
         }]);
