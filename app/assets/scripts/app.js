@@ -274,14 +274,14 @@
                 }
             });
 
-            /*this.resize = function() {
-                $timeout(function() {
+            this.resize = function() {
+                /*$timeout(function() {
                     var height = $document.height();
 
                     $log.info('iFrame Resizing to ' + height +'px.');
                     myFrame$.height(height);
-                }, 50);
-            };*/
+                }, 50);*/
+            };
 
             function gotoDeck() {
                 _app.state = 'deck';
