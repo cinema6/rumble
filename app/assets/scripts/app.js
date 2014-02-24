@@ -248,6 +248,8 @@
                 data: null
             };
 
+            console.log('set app object');
+
             c(app, 'views', function() {
                 var data = this.data,
                     profile = data && data.profile,
@@ -266,6 +268,8 @@
                 };
             }, ['app.data.profile.device']);
 
+            console.log('setup computed property');
+
             Object.defineProperties(app, {
                 state: {
                     get: function() {
@@ -273,6 +277,8 @@
                     }
                 }
             });
+
+            console.log('define some properties');
 
             this.resize = function() {
                 /*$timeout(function() {
@@ -282,6 +288,8 @@
                     myFrame$.height(height);
                 }, 50);*/
             };
+
+            console.log('define resize');
 
             function gotoDeck() {
                 _app.state = 'deck';
