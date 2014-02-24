@@ -24,7 +24,8 @@
                 $document,
                 myFrame$,
                 appData,
-                siteSession;
+                siteSession,
+                $body;
 
             beforeEach(function() {
                 c6ImagePreloader = {
@@ -69,10 +70,23 @@
                     }
                 };
 
+                $body = {
+                    height: jasmine.createSpy('$body.height()')
+                        .andReturn(600)
+                };
+
                 module('ng', function($provide) {
                     $provide.value('$document', {
                         height: jasmine.createSpy('$document.height()')
-                            .andReturn(600)
+                            .andReturn(600),
+                        find: jasmine.createSpy('$document.find()')
+                            .andCallFake(function(selector) {
+                                if (selector === 'body') {
+                                    return $body;
+                                }
+
+                                return [];
+                            })
                     });
                 });
 
@@ -161,7 +175,7 @@
                         $timeout.flush();
                         expect(myFrame$.height).toHaveBeenCalledWith(600);
 
-                        $document.height.andReturn(1000);
+                        $body.height.andReturn(1000);
                         AppCtrl.resize();
                         $timeout.flush();
                         expect(myFrame$.height).toHaveBeenCalledWith(1000);

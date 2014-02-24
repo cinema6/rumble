@@ -276,7 +276,7 @@
 
             this.resize = function() {
                 $timeout(function() {
-                    var height = $document.height();
+                    var height = $document.find('body').height();
 
                     $log.info('iFrame Resizing to ' + height +'px.');
                     myFrame$.height(height);
