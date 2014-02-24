@@ -312,9 +312,11 @@
                 setup: function(data) {
                     app.data = data;
 
-                    console.log(app.data);
+                    console.log(JSON.stringify(app.data));
 
                     angular.copy(data.profile, c6Profile);
+
+                    console.log(JSON.stringify(app.views));
 
                     /*if (data.profile.device !== 'phone') {
                         parentWindow$.on('resize', c6Debounce(function() { this.resize(); }.bind(this), 250));
