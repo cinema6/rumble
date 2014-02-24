@@ -123,8 +123,7 @@
     .mr-container {
         background:#dddddd; padding:3em 0.375em 4em 0.375em;
         overflow-x:auto; overflow-y: scroll; -webkit-overflow-scrolling: touch;
-        position: fixed; top: 0; bottom: 0;
-        width:100%; box-sizing:border-box; -moz-box-sizing:border-box;
+        position: fixed; top:0; bottom:0; left:0; right:0;
     }
     .mr-overlay {
         background:rgb(0,0,0); background:rgba(0,0,0,0.8);
