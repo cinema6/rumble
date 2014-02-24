@@ -308,6 +308,8 @@
 
             $scope.app = app;
 
+            console.log(JSON.stringify($scope.app));
+
             cinema6.init({
                 setup: function(data) {
                     app.data = data;
