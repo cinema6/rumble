@@ -570,6 +570,9 @@
         padding:0 0 56.25%; margin:0;
         width:100%; height:0; position:relative;
     }
+        .mr-player--fly-away {
+            position: fixed; top: 40000em;
+        }
         .mr-player iframe {
             width:100%; height:100%;
         }
