@@ -7,26 +7,39 @@
             var _private = {};
 
             _private.getFromYoutube = function(id) {
-                return $q.when('http://img.youtube.com/vi/' + id + '/2.jpg');
+                return $q.when({
+                    small: 'http://img.youtube.com/vi/' + id + '/2.jpg',
+                    large: 'http://img.youtube.com/vi/' + id + '/0.jpg'
+                });
             };
 
             _private.getFromVimeo = function(id) {
                 return $http.get('http://vimeo.com/api/v2/video/' + id + '.json')
                     .then(function(response) {
                         /* jshint camelcase:false */
-                        return response.data[0].thumbnail_small;
+                        var data = response.data[0];
+
+                        return {
+                            small: data.thumbnail_small,
+                            large: data.thumbnail_large
+                        };
                     });
             };
 
             _private.getFromDailymotion = function(id) {
-                return $http.get('https://api.dailymotion.com/video/' + id + '?fields=thumbnail_120_url')
+                return $http.get('https://api.dailymotion.com/video/' + id + '?fields=thumbnail_120_url,thumbnail_720_url')
                     .then(function(response) {
                         /* jshint camelcase:false */
-                        return response.data.thumbnail_120_url;
+                        var data = response.data;
+
+                        return {
+                            small: data.thumbnail_120_url,
+                            large: data.thumbnail_720_url
+                        };
                     });
             };
 
-            this.getThumb = function(type, id) {
+            this.getThumbs = function(type, id) {
                 switch (type) {
 
                 case 'youtube':
