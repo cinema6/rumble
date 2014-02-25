@@ -229,6 +229,60 @@
                             expect(DailymotionCardCtrl.videoUrl).toBe('http://www.dailymotion.com/video/x1btkdy');
                         });
                     });
+
+                    describe('flyAway', function() {
+                        describe('if the ballot module is not enabled', function() {
+                            beforeEach(function() {
+                                spyOn(DailymotionCardCtrl, 'hasModule').andCallFake(function(module) {
+                                    if (module === 'ballot') {
+                                        return false;
+                                    }
+                                });
+                            });
+
+                            it('should be false', function() {
+                                expect(DailymotionCardCtrl.flyAway).toBe(false);
+
+                                $scope.$apply(function() {
+                                    $scope.active = false;
+                                });
+                                expect(DailymotionCardCtrl.flyAway).toBe(false);
+
+                                $scope.$apply(function() {
+                                    $scope.active = true;
+                                    $scope.config._data.modules.ballot.active = true;
+                                });
+                                expect(DailymotionCardCtrl.flyAway).toBe(false);
+                            });
+                        });
+
+                        describe('if the ballot module is enabled', function() {
+                            beforeEach(function() {
+                                spyOn(DailymotionCardCtrl, 'hasModule').andCallFake(function(module) {
+                                    if (module === 'ballot') {
+                                        return true;
+                                    }
+                                });
+                            });
+
+                            it('should be true if the ballot module is active', function() {
+                                $scope.$apply(function() {
+                                    $scope.config._data.modules.ballot.active = true;
+                                    $scope.active = true;
+                                });
+
+                                expect(DailymotionCardCtrl.flyAway).toBe(true);
+                            });
+
+                            it('should be true if the card is not active', function() {
+                                $scope.$apply(function() {
+                                    $scope.config._data.modules.ballot.active = false;
+                                    $scope.active = false;
+                                });
+                                expect(DailymotionCardCtrl.flyAway).toBe(true);
+                            });
+                        });
+                    });
                 });
 
                 describe('methods', function() {

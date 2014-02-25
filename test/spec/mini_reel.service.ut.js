@@ -21,7 +21,7 @@
                     });
 
                     $provide.value('VideoThumbService', {
-                        getThumb: jasmine.createSpy('VideoThumbService.getThumb()')
+                        getThumbs: jasmine.createSpy('VideoThumbService.getThumb()')
                             .andCallFake(function() {
                                 return $q.defer().promise;
                             })
@@ -182,17 +182,29 @@
                                 ]
                             };
 
-                            VideoThumbService.getThumb.andCallFake(function(type, id) {
+                            VideoThumbService.getThumbs.andCallFake(function(type, id) {
                                 switch (id) {
 
                                 case 'jofNR_WkoCE':
-                                    return $q.when('http://img.youtube.com/vi/gy1B3agGNxw/2.jpg');
+                                    return $q.when({
+                                        small: 'http://img.youtube.com/vi/gy1B3agGNxw/2.jpg',
+                                        large: 'http://img.youtube.com/vi/gy1B3agGNxw/0.jpg'
+                                    });
                                 case 'x18b09a':
-                                    return $q.when('http://s2.dmcdn.net/Dm9Np/x120-6Xz.jpg');
+                                    return $q.when({
+                                        small: 'http://s2.dmcdn.net/Dm9Np/x120-6Xz.jpg',
+                                        large: 'http://s2.dmcdn.net/Dm9Np/x720-6Xz.jpg'
+                                    });
                                 case '81766071':
-                                    return $q.when('http://b.vimeocdn.com/ts/462/944/462944068_100.jpg');
+                                    return $q.when({
+                                        small: 'http://b.vimeocdn.com/ts/462/944/462944068_100.jpg',
+                                        large: 'http://b.vimeocdn.com/ts/462/944/462944068_600.jpg'
+                                    });
                                 case 'Cn9yJrrm2tk':
-                                    return $q.when('http://img.youtube.com/vi/Cn9yJrrm2tk/2.jpg');
+                                    return $q.when({
+                                        small: 'http://img.youtube.com/vi/Cn9yJrrm2tk/2.jpg',
+                                        large: 'http://img.youtube.com/vi/Cn9yJrrm2tk/0.jpg'
+                                    });
 
                                 default:
                                     return $q.reject('Unknown video type: ' + type + '.');
@@ -259,24 +271,36 @@
                         describe('getting thumbnails', function() {
                             it('should make every thumbnail null at first', function() {
                                 result.forEach(function(card) {
-                                    expect(card.thumb).toBeNull('card:' + card.id);
+                                    expect(card.thumbs).toBeNull('card:' + card.id);
                                 });
                             });
 
                             it('should get a thumbnail for every video', function() {
                                 result.forEach(function(card) {
-                                    expect(VideoThumbService.getThumb).toHaveBeenCalledWith(card.type, card.data.videoid);
+                                    expect(VideoThumbService.getThumbs).toHaveBeenCalledWith(card.type, card.data.videoid);
                                 });
                             });
 
                             it('should update the thumb if a thumbnail is returned', function() {
                                 $rootScope.$digest();
 
-                                expect(result[0].thumb).toBe('http://img.youtube.com/vi/gy1B3agGNxw/2.jpg');
-                                expect(result[1].thumb).toBeNull();
-                                expect(result[2].thumb).toBe('http://s2.dmcdn.net/Dm9Np/x120-6Xz.jpg');
-                                expect(result[3].thumb).toBe('http://b.vimeocdn.com/ts/462/944/462944068_100.jpg');
-                                expect(result[4].thumb).toBe('http://img.youtube.com/vi/Cn9yJrrm2tk/2.jpg');
+                                expect(result[0].thumbs).toEqual({
+                                    small: 'http://img.youtube.com/vi/gy1B3agGNxw/2.jpg',
+                                    large: 'http://img.youtube.com/vi/gy1B3agGNxw/0.jpg'
+                                });
+                                expect(result[1].thumbs).toBeNull();
+                                expect(result[2].thumbs).toEqual({
+                                    small: 'http://s2.dmcdn.net/Dm9Np/x120-6Xz.jpg',
+                                    large: 'http://s2.dmcdn.net/Dm9Np/x720-6Xz.jpg'
+                                });
+                                expect(result[3].thumbs).toEqual({
+                                    small: 'http://b.vimeocdn.com/ts/462/944/462944068_100.jpg',
+                                    large: 'http://b.vimeocdn.com/ts/462/944/462944068_600.jpg'
+                                });
+                                expect(result[4].thumbs).toEqual({
+                                    small: 'http://img.youtube.com/vi/Cn9yJrrm2tk/2.jpg',
+                                    large: 'http://img.youtube.com/vi/Cn9yJrrm2tk/0.jpg'
+                                });
                             });
                         });
                     });
