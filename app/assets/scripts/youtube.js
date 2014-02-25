@@ -10,7 +10,7 @@
 
         service.origin = 'https://www.youtube.com';
         service.formatPlayerSrc = function(videoId,params){
-            var src = this.origin + '/embed/' + videoId + '?html5=1';
+            var src = this.origin + '/embed/' + videoId + '?html5=1&wmode=opaque';
 
             if (params){
                 for (var name in params){
