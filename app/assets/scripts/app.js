@@ -235,8 +235,8 @@
             };
         }])
         .value('c6Profile', {})
-        .controller('AppController', ['$scope','$log','cinema6','c6Computed','c6UrlMaker','c6Profile','$timeout','$document','myFrame$','$window','c6Debounce',
-        function                     ( $scope , $log , cinema6 , c6Computed , c6UrlMaker , c6Profile , $timeout , $document , myFrame$ , $window , c6Debounce ) {
+        .controller('AppController', ['$scope','$log','cinema6','c6Computed','c6UrlMaker','c6Profile','$timeout','$document','myFrame$','$window','c6Debounce','$animate',
+        function                     ( $scope , $log , cinema6 , c6Computed , c6UrlMaker , c6Profile , $timeout , $document , myFrame$ , $window , c6Debounce , $animate ) {
             $log = $log.context('AppCtrl');
             var c = c6Computed($scope),
                 parentWindow$ = angular.element($window.parent),
@@ -247,6 +247,8 @@
             var app = {
                 data: null
             };
+
+            $animate.enabled(false);
 
             c(app, 'views', function() {
                 var data = this.data,
@@ -284,6 +286,7 @@
             };
 
             function gotoDeck() {
+                $animate.enabled(true);
                 _app.state = 'deck';
             }
 
