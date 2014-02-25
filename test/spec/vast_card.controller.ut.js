@@ -6,6 +6,7 @@
             var $rootScope,
                 $scope,
                 $controller,
+                c6EventEmitter,
                 VastCardCtrl;
 
             var VASTService,
@@ -15,6 +16,8 @@
             function IFace() {
                 this.play = jasmine.createSpy('iface.play()');
                 this.pause = jasmine.createSpy('iface.pause()');
+
+                c6EventEmitter(this);
             }
 
             beforeEach(function() {
@@ -45,6 +48,7 @@
                 inject(function($injector) {
                     $rootScope = $injector.get('$rootScope');
                     $controller = $injector.get('$controller');
+                    c6EventEmitter = $injector.get('c6EventEmitter');
 
                     VASTService = $injector.get('VASTService');
                     ControlsService = $injector.get('ControlsService');
@@ -68,10 +72,83 @@
                 expect(VastCardCtrl).toEqual(jasmine.any(Object));
             });
 
+            describe('initialization', function() {
+                describe('if the config already has _data', function() {
+                    var origData;
+
+                    beforeEach(function() {
+                        origData = $scope.config._data = {};
+
+                        VastCardCtrl = $controller('VastCardController', { $scope: $scope });
+                    });
+
+                    it('should not overwrite the data', function() {
+                        expect($scope.config._data).toBe(origData);
+                    });
+                });
+
+                describe('if the config has no _data', function() {
+                    it('should create some data', function() {
+                        expect($scope.config._data).toEqual({
+                            playerEvents: {},
+                            modules: {
+                                ballot: {
+                                    active: false,
+                                    vote: null
+                                },
+                                displayAd: {
+                                    active: false
+                                }
+                            }
+                        });
+                    });
+                });
+            });
+
             describe('@properties', function() {
                 describe('videoSrc', function() {
                     it('should be null', function() {
                         expect(VastCardCtrl.videoSrc).toBeNull();
+                    });
+                });
+            });
+
+            describe('player events', function() {
+                var iface;
+
+                beforeEach(function() {
+                    iface = new IFace();
+
+                    $scope.$apply(function() {
+                        $scope.$emit('playerAdd', iface);
+                    });
+                });
+
+                describe('ended', function() {
+                    beforeEach(function() {
+                        spyOn($scope, '$emit').andCallThrough();
+                    });
+
+                    describe('if there is a displayAd', function() {
+                        beforeEach(function() {
+                            $scope.config._data.modules.displayAd.src = 'foo.jpg';
+
+                            iface.emit('ended', iface);
+                        });
+
+                        it('should not $emit the contentEnd event', function() {
+                            expect($scope.$emit).not.toHaveBeenCalledWith('<vast-card>:contentEnd', $scope.config);
+                        });
+                    });
+
+                    describe('if there is no displayAd', function() {
+                        beforeEach(function() {
+                            iface.emit('ended', iface);
+                        });
+
+                        it('should emit the contentEnd event', function() {
+                            expect($scope.$emit).toHaveBeenCalledWith('<vast-card>:contentEnd', $scope.config);
+                        });
                     });
                 });
             });

@@ -644,6 +644,25 @@
                     });
                 });
 
+                describe('<vast-card>:contentEnd', function() {
+                    beforeEach(function() {
+                        spyOn(RumbleCtrl, 'goForward');
+                    });
+
+                    it('should move to the next card if the event is for the currentCard', function() {
+                        var card1 = {},
+                            card2 = {};
+
+                        $scope.currentCard = card2;
+
+                        $scope.$emit('<vast-card>:contentEnd', card1);
+                        expect(RumbleCtrl.goForward).not.toHaveBeenCalled();
+
+                        $scope.$emit('<vast-card>:contentEnd', card2);
+                        expect(RumbleCtrl.goForward).toHaveBeenCalled();
+                    });
+                });
+
                 describe('ready',function(){
                     it('runs a ready check when a player becomes ready',function(){
                         spyOn(RumbleCtrl,'checkReady').andCallThrough();

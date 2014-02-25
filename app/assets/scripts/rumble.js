@@ -298,6 +298,12 @@
             });
         });
 
+        $scope.$on('<vast-card>:contentEnd', function(event, card) {
+            if ($scope.currentCard === card) {
+                self.goForward();
+            }
+        });
+
         if (appData.profile.device !== 'phone') {
             $scope.$watch('currentIndex', $scope.AppCtrl.resize.bind($scope.AppCtrl));
         }
