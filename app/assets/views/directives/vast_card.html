@@ -10,14 +10,14 @@
 <section>
     <ballot-module ng-if="Ctrl.hasModule('ballot')"
         active="config._data.modules.ballot.active"
-        fetch-results-when="onDeck"
+        fetch-results-when="onDeck || active"
         card-id="{{config.id}}"
         ballot="config.ballot"
         vote="config._data.modules.ballot.vote">
     </ballot-module>
     <comments-module ng-if="Ctrl.hasModule('comments')"
         card-id="{{config.id}}"
-        fetch-comments-when="onDeck">
+        fetch-comments-when="onDeck || active">
     </comments-module>
     <display-ad-module ng-if="Ctrl.hasModule('displayAd')"
         active="config._data.modules.displayAd.active"

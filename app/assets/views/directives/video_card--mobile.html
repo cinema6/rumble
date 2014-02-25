@@ -12,11 +12,11 @@
             ballot="config.ballot"
             vote="config._data.modules.ballot.vote"
             card-id="{{config.id}}"
-            fetch-when="onDeck">
+            fetch-when="onDeck || active">
         </ballot-results-module>
         <comments-module ng-if="Ctrl.hasModule('comments')"
             card-id="{{config.id}}"
-            fetch-comments-when="onDeck">
+            fetch-comments-when="onDeck || active">
         </comments-module>
         <display-ad-module ng-if="Ctrl.hasModule('displayAd')"
             active="config._data.modules.displayAd.active"

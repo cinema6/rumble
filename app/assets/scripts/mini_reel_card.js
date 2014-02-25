@@ -10,7 +10,7 @@
 
             this.miniReels = null;
 
-            $scope.$watch('onDeck', function(onDeck) {
+            $scope.$watch('onDeck || active', function(onDeck) {
                 if (onDeck) {
                     cinema6.db.find(data.query)
                         .then(function(miniReels) {
