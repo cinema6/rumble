@@ -1093,8 +1093,36 @@
                         mockPlayers[0]._on.playProgress[0](mockPlayers[0], { seconds: 20 });
                         expect(mockPlayers[0].seekTo).not.toHaveBeenCalled();
 
-                        mockPlayers[0]._on.playProgress[0](mockPlayers[0], { seconds: 9 });
+                        mockPlayers[0]._on.playProgress[0](mockPlayers[0], { seconds: 3 });
                         expect(mockPlayers[0].seekTo).toHaveBeenCalledWith(10);
+                    });
+
+                    // On some devices *COUGH*android*COUGH*, seeking to a time results in the video seeking
+                    // to a few seconds before that time. Our code must be forgiving of inaccuracy.
+                    it('will forgive the player if it seeks a few seconds before the start time', function() {
+                        $compile(
+                            '<vimeo-card videoid="a" start="10"></vimeo-card>'
+                        )($scope);
+                        $timeout.flush();
+
+                        //simulate the firing of the ready event
+                        mockPlayers[0]._on.ready[0](mockPlayers[0]);
+                        $timeout.flush();
+
+                        mockPlayers[0]._on.playProgress[0](mockPlayers[0], { seconds: 0.2 });
+                        expect(mockPlayers[0].seekTo).toHaveBeenCalledWith(10);
+
+                        mockPlayers[0]._on.playProgress[0](mockPlayers[0], { seconds: 10 });
+                        expect(mockPlayers[0].seekTo.callCount).toBe(1);
+
+                        mockPlayers[0]._on.playProgress[0](mockPlayers[0], { seconds: 7 });
+                        expect(mockPlayers[0].seekTo.callCount).toBe(1);
+
+                        mockPlayers[0]._on.playProgress[0](mockPlayers[0], { seconds: 8 });
+                        expect(mockPlayers[0].seekTo.callCount).toBe(1);
+
+                        mockPlayers[0]._on.playProgress[0](mockPlayers[0], { seconds: 9 });
+                        expect(mockPlayers[0].seekTo.callCount).toBe(1);
                     });
                 });
 

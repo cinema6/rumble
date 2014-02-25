@@ -228,8 +228,8 @@
                     return;
                 }
 
-                if (time < start) {
-                    $log.info('Seeking to start time');
+                if (time < (start - 3)) {
+                    $log.info('Seeking to start time. Current time: %1; Start time: %2.', time, start);
                     player.seekTo(start);
                 }
             }
