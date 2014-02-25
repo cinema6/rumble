@@ -21,14 +21,13 @@
             return src;
         };
 
-        service.isReady = function(){
-            return (!!$window.YT);
+        service.isReady = function() {
+            var YT = $window.YT;
+
+            return !!(YT && YT.Player);
         };
 
         service.createPlayer = function(playerId,config,$parentElement){
-            if (!this.isReady()){
-                throw new Error('Youtube has not been initialized');
-            }
             var $playerElement,src,
                 params = {};
             if (!$parentElement){
@@ -122,14 +121,25 @@
                     self.emit('error',self,err);
                 };
 
-                _player = new $win.YT.Player(playerId, {
-                    events: {
-                        'onReady'       : _readyHandler,
-                        'onStateChange' : _stateChangeHandler,
-                        'onError'       : _errorHandler
-                    }
-                } );
+                function createPlayer() {
+                    $log.info('API ready. Creating player: %1', playerId);
+                    _player = new $win.YT.Player(playerId, {
+                        events: {
+                            'onReady'       : _readyHandler,
+                            'onStateChange' : _stateChangeHandler,
+                            'onError'       : _errorHandler
+                        }
+                    } );
 
+                    $window.onYouTubeIframeAPIReady = undefined;
+                }
+
+                if (!service.isReady()) {
+                    $log.warn('API not ready. Adding event handler.');
+                    $window.onYouTubeIframeAPIReady = createPlayer;
+                } else {
+                    createPlayer();
+                }
 
                 self.getPlayerId = function(){
                     return _playerId;
