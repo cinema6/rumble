@@ -415,6 +415,7 @@
                     }
                 } else {
                     player.pause();
+                    regeneratePlayer();
                 }
             });
 
