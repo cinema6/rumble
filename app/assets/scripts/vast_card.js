@@ -6,6 +6,18 @@
         function                          ( $scope , VASTService , ControlsService ) {
             var self = this,
                 config = $scope.config,
+                _data = config._data = config._data || {
+                    playerEvents: {},
+                    modules: {
+                        ballot: {
+                            active: false,
+                            vote: null
+                        },
+                        displayAd: {
+                            active: false
+                        }
+                    }
+                },
                 data = config.data;
 
             this.videoSrc = null;
@@ -19,6 +31,12 @@
             });
 
             $scope.$on('playerAdd', function(event, iface) {
+                iface.on('ended', function() {
+                    if (!_data.modules.displayAd.src) {
+                        $scope.$emit('<vast-card>:contentEnd', config);
+                    }
+                });
+
                 $scope.$watch('active', function(active, wasActive) {
                     if (active === wasActive) { return; }
 
