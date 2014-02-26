@@ -24,23 +24,27 @@
             describe('formatPlayerSrc',function(){
                 it('should format without params',function(){
                     expect(youtube.formatPlayerSrc('x123'))
-                        .toEqual('https://www.youtube.com/embed/x123?html5=1');
+                        .toEqual('https://www.youtube.com/embed/x123?html5=1&wmode=opaque');
                 });
                 it('should format with params', function(){
                     expect(youtube.formatPlayerSrc('x123',{ autoPlay : 1, loop: 1}))
-                        .toEqual('https://www.youtube.com/embed/x123?html5=1&autoplay=1&loop=1');
+                        .toEqual('https://www.youtube.com/embed/x123?html5=1&wmode=opaque&autoplay=1&loop=1');
                 });
             });
 
             describe('isReady',function(){
-                it('returns true if the YT var is set',function(){
-                    $window.YT = {};
+                it('returns true if the YT.Player var is set',function(){
+                    $window.YT = {
+                        Player: function() {}
+                    };
                     expect(youtube.isReady()).toEqual(true);
                     delete $window.YT;
                 });
 
-                it('returns false if the YT var is not set',function(){
+                it('returns false if the YT.Player var is not set',function(){
+                    $window.YT = {};
                     expect(youtube.isReady()).toEqual(false);
+                    delete $window.YT;
                 });
             });
 
@@ -83,16 +87,6 @@
                     afterEach(function(){
                         delete $window.YT;
                     });
-                    it('when the YT var is not ready',function(){
-                        expect(function(){
-                            youtube.createPlayer('player1',{
-                                width: 100,
-                                height: 100,
-                                videoId: 'xyz'
-                            });
-                        }).toThrow('Youtube has not been initialized');
-                    });
-
                     it('when it is not provided with a parentElement', function(){
                         $window.YT = {};
                         expect(function(){
@@ -141,7 +135,66 @@
                         expect($window.YT.Player.calls[0].args[0]).toEqual('player1');
                     });
                 });
-                
+
+                describe('when the Youtube API is not loaded', function() {
+                    var player;
+
+                    beforeEach(function() {
+                        $window.YT = {};
+
+                        delete $window.onYouTubeIframeAPIReady;
+
+                        player = youtube.createPlayer('player1', {}, angularElementMock);
+                    });
+
+                    it('should return a player', function() {
+                        expect(player).toEqual(jasmine.any(Object));
+                    });
+
+                    it('should create the YT.Player() when YT calls the onYouTubeIframeAPIReady() function', function() {
+                        $window.YT.Player = jasmine.createSpy('YT.Player()');
+                        $window.onYouTubeIframeAPIReady();
+                        expect($window.onYouTubeIframeAPIReady).not.toBeDefined();
+
+                        expect($window.YT.Player).toHaveBeenCalledWith('player1', {
+                            events: {
+                                onReady: jasmine.any(Function),
+                                onStateChange: jasmine.any(Function),
+                                onError: jasmine.any(Function)
+                            }
+                        });
+                    });
+                });
+
+                describe('when the Youtube API is loaded', function() {
+                    var player;
+
+                    beforeEach(function() {
+                        delete $window.onYouTubeIframeAPIReady;
+
+                        $window.YT = {
+                            Player: jasmine.createSpy('YT.Player()')
+                        };
+
+                        player = youtube.createPlayer('player1', {}, angularElementMock);
+                        expect($window.onYouTubeIframeAPIReady).not.toBeDefined();
+                    });
+
+                    it('should return a player', function() {
+                        expect(player).toEqual(jasmine.any(Object));
+                    });
+
+                    it('should create the YT.Player() immediately', function() {
+                        expect($window.YT.Player).toHaveBeenCalledWith('player1', {
+                            events: {
+                                onReady: jasmine.any(Function),
+                                onStateChange: jasmine.any(Function),
+                                onError: jasmine.any(Function)
+                            }
+                        });
+                    });
+                });
+
                 describe('returns a YoutubePlayer with',function(){
                     var player, ytPlayerSpy;
                     beforeEach(function(){

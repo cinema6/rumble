@@ -409,7 +409,13 @@
                 });
 
                 describe('when going from active to inactive', function() {
+                    var iface;
+
                     beforeEach(function() {
+                        $scope.$on('playerAdd',function(event,playerInterface){
+                            iface = playerInterface;
+                        });
+
                         $scope.$apply(function() {
                             $scope.active = false;
 
@@ -433,6 +439,13 @@
 
                     it('should pause the player', function() {
                         expect(mockPlayers[0].pause).toHaveBeenCalled();
+                    });
+
+                    it('should regenerate the player', function() {
+                        $timeout.flush();
+                        expect(mockPlayers.length).toEqual(2);
+                        expect(mockPlayers[0].destroy.callCount).toEqual(1);
+                        expect(iface.isReady()).toEqual(false);
                     });
                 });
             });

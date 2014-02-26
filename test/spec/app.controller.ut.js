@@ -21,6 +21,7 @@
                 googleAnalytics,
                 $stateProvider,
                 $state,
+                $animate,
                 $document,
                 myFrame$,
                 appData,
@@ -118,6 +119,8 @@
 
                     $document = $injector.get('$document');
                     myFrame$ = $injector.get('myFrame$');
+                    $animate = $injector.get('$animate');
+                    spyOn($animate, 'enabled');
 
                     $scope = $rootScope.$new();
                     $childScope = $scope.$new();
@@ -134,6 +137,10 @@
 
             it('should exist',function() {
                 expect(AppCtrl).toBeDefined();
+            });
+
+            it('should disable animations', function() {
+                expect($animate.enabled).toHaveBeenCalledWith(false);
             });
 
             describe('site integration', function() {
@@ -233,6 +240,10 @@
                 describe('reelStart', function() {
                     beforeEach(function() {
                         $childScope.$emit('reelStart');
+                    });
+
+                    it('should enable animations', function() {
+                        expect($animate.enabled).toHaveBeenCalledWith(true);
                     });
 
                     it('should change to the "deck" state', function() {

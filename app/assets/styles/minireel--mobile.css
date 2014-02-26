@@ -481,7 +481,7 @@
                 right:2.143em; /*30px*/
             }
         .ui-context__paginator {
-            width:100%; text-align: center;
+            display: block; width:100%; text-align: center;
         }
         .ui-context__close:active .ui-control__activator {
             opacity:0.7;

@@ -69,7 +69,7 @@
             });
 
             describe('$watchers on', function() {
-                describe('onDeck', function() {
+                describe('onDeck || active', function() {
                     describe('when false', function() {
                         beforeEach(function() {
                             $rootScope.$digest();
@@ -91,6 +91,15 @@
                             expect(cinema6.db.find).toHaveBeenCalledWith($rootScope.config.data.query);
                             expect(MiniReelCardCtrl.miniReels).toBe(cinema6.db._.mocks['{"id":["1","2","3"]}']);
                         });
+                    });
+
+                    it('should fetch if the card jumps straight to being active', function() {
+                        $rootScope.$apply(function() {
+                            $rootScope.active = true;
+                        });
+
+                        expect(cinema6.db.find).toHaveBeenCalledWith($rootScope.config.data.query);
+                        expect(MiniReelCardCtrl.miniReels).toBe(cinema6.db._.mocks['{"id":["1","2","3"]}']);
                     });
                 });
             });
