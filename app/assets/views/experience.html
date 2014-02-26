@@ -1,12 +1,9 @@
-<div ng-hide="currentIndex < 0">
-    <div class="mr-titlebar mr-titlebar--sports">
-        <button ng-class="{'ui-titlebar__view-list--open': showTOC}" class="ui-titlebar__view-list" ng-click="showTOC = !showTOC;" title="View List Pane" type="button" >
-            <span class="ir">List Pane</span>
-            <span class="sprite ui-icon__list">&nbsp;</span>
-            <span class="ui-control__activator">&nbsp;</span>
-        </button>
-        <h1 class="ui-titlebar__title">{{app.data.experience.title}}</h1>
+<div class="mr-experience" ng-hide="currentIndex < 0">
+    <div class="mr-titlebar">
+        <h1 class="mr-titlebar__title">{{app.data.experience.title}}</h1>
     </div>
+</div>
+<div ng-hide="currentIndex < 0">
     <div class="ui-navbar__group" ng-class="{'ui-navbar__group--docked': dockNav}">
         <div class="ui-navbar">
             <button class="ui-nav__prev" title="Previous Video" type="button" ng-click="RumbleCtrl.goBack()">
