@@ -176,16 +176,23 @@
                 .mr-pages__page {
                     width:7.25rem;/*116px*/ height:4.0625rem;/*65px*/
                     margin:0; padding:0; border:0; background:black;
-                    position:relative;
+                    position:relative; overflow: hidden;
                     cursor: pointer;
                 }
                     .mr-pages__preview-img {
                         position:absolute; top:0;
                         width:100%; height:100%; display: block;
-                        background:no-repeat 50% 50% / 125%;
+                        background:no-repeat 50% 50% / 102%;
                     }
-                        .mr-pages__preview-img--active {
-                            opacity:1;
+                        .mr-pages__page--active .mr-pages__preview-img {
+                            -webkit-transform: scale(1.12);
+                            -moz-transform: scale(1.12);
+                            -o-transform: scale(1.12);
+                            -ms-transform: scale(1.12);
+                            transform: scale(1.12);
+                        }
+                        .mr-pages__page:last-child .mr-pages__preview-img {
+                            background-image:url('../img/more-reels__preview.jpg');
                         }
                     .mr-pages__label {
                         display: block; width:100%;
@@ -197,12 +204,15 @@
                         position:absolute; width:100%; height:100%;
                         top:0; left:0; z-index: 1;
                     }
+                        .mr-pages__page--active .mr-pages__fader {
+                            opacity:0;
+                        }
                     .mr-pages__current-indicator {
                         opacity:0; display: block; width:100%; height:100%;
                         position: absolute; top:0; left:0; z-index: 2;
                         background:url('../img/mr-pages__current-indicator.png') 0 0 / cover no-repeat;
                     }
-                        .mr-pages__current-indicator--active {
+                        .mr-pages__page--active .mr-pages__current-indicator {
                             opacity:1;
                         }
 

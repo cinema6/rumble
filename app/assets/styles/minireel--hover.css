@@ -18,13 +18,24 @@
             opacity:0;
         }
     .mr-pages__preview-img {
-        -webkit-transition: background 0.5s ease; 
-        -moz-transition: background 0.5s ease; 
-        -o-transition: background 0.5s ease; 
-        transition: background 0.5s ease;
+        -webkit-transition: -webkit-transform 0.5s ease; 
+        -moz-transition: -moz-transform 0.5s ease; 
+        -o-transition: -o-transform 0.5s ease; 
+        transition: transform 0.5s ease;
     }
     .mr-pages__page:hover .mr-pages__preview-img {
-        background-size:110% auto;
+        -webkit-transform: scale(1.25);
+        -moz-transform: scale(1.25);
+        -o-transform: scale(1.25);
+        -ms-transform: scale(1.25);
+        transform: scale(1.25);
+    }
+    .mr-pages__page--active:hover .mr-pages__preview-img {
+        -webkit-transform: scale(1.12);
+        -moz-transform: scale(1.12);
+        -o-transform: scale(1.12);
+        -ms-transform: scale(1.12);
+        transform: scale(1.12);
     }
 
 
