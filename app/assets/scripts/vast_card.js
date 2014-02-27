@@ -2,8 +2,8 @@
     'use strict';
 
     angular.module('c6.rumble')
-        .controller('VastCardController', ['$scope','VASTService','ControlsService',
-        function                          ( $scope , VASTService , ControlsService ) {
+        .controller('VastCardController', ['$scope','VASTService','ControlsService','EventService',
+        function                          ( $scope , VASTService , ControlsService , EventService ) {
             var self = this,
                 config = $scope.config,
                 _data = config._data = config._data || {
@@ -31,6 +31,8 @@
             });
 
             $scope.$on('playerAdd', function(event, iface) {
+                _data.playerEvents = EventService.trackEvents(iface, ['play']);
+
                 iface.on('ended', function() {
                     if (!_data.modules.displayAd.src) {
                         $scope.$emit('<vast-card>:contentEnd', config);
@@ -43,7 +45,7 @@
                     if (active) {
                         ControlsService.bindTo(iface);
 
-                        if (data.autoplay) {
+                        if (data.autoplay && _data.playerEvents.play.emitCount < 1) {
                             iface.play();
                         }
                     } else {
