@@ -9,7 +9,10 @@
     </ballot-vote-module>
 
     <div class="mr-card__player">
-        <div class="mr-player"><!-- actual player will be inserted into this container --></div>
+        <div ng-class="{'mr-player--fly-away': Ctrl.flyAway}" class="mr-player"><!-- actual player will be inserted into this container --></div>
+        <div ng-show="Ctrl.flyAway">
+            <img ng-src="{{config.thumbs.large}}">
+        </div>
     </div>
     
     <div class="mr-card__copy">

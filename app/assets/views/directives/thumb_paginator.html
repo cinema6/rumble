@@ -1,0 +1,26 @@
+<button thumb-paginator-button
+    ng-style="{width: Ctrl.buttonWidth}"
+    ng-click="Ctrl.previousPage()"
+    ng-class="{'mr-pager__btn--disabled': !Ctrl.canGoBack}"
+    class="mr-pager__btn mr-pager__prev"
+    type="button"
+    title="Previous Page">
+    <span class="sprite--alpha-png mr-pager__icon mr-pager__icon-prev">
+        <span class="ir">Previous Page</span>
+    </span>
+</button>
+<button thumb-paginator-button
+    ng-style="{width: Ctrl.buttonWidth}"
+    ng-click="Ctrl.nextPage()"
+    ng-class="{'mr-pager__btn--disabled': !Ctrl.canGoForward}"
+    class="mr-pager__btn mr-pager__next"
+    type="button"
+    title="Next Page">
+    <span class="sprite--alpha-png mr-pager__icon mr-pager__icon-next">
+        <span class="ir">Next Page</span>
+    </span>
+</button>
+
+<div ng-style="{left: Ctrl.buttonWidth, right: Ctrl.buttonWidth}" class="mr-pages__group">
+    <div ng-style="{left: (page * -100) + '%'}" class="mr-pages__scroller" ng-transclude></div>
+</div>

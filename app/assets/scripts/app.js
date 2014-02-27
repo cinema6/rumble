@@ -131,10 +131,6 @@
                 });
             };
         }])
-        .factory('myFrame$', ['$window',
-        function             ( $window ) {
-            return angular.element($window.frameElement);
-        }])
         .directive('c6DockAnchor', ['$window',
         function                   ( $window ) {
             return {
@@ -209,11 +205,10 @@
             };
         }])
         .value('c6Profile', {})
-        .controller('AppController', ['$scope','$log','cinema6','c6Computed','c6UrlMaker','c6Profile','$timeout','$document','myFrame$','$window','c6Debounce','$animate',
-        function                     ( $scope , $log , cinema6 , c6Computed , c6UrlMaker , c6Profile , $timeout , $document , myFrame$ , $window , c6Debounce , $animate ) {
+        .controller('AppController', ['$scope','$log','cinema6','c6Computed','c6UrlMaker','c6Profile','$timeout','$document','$window','c6Debounce','$animate',
+        function                     ( $scope , $log , cinema6 , c6Computed , c6UrlMaker , c6Profile , $timeout , $document , $window , c6Debounce , $animate ) {
             $log = $log.context('AppCtrl');
             var c = c6Computed($scope),
-                parentWindow$ = angular.element($window.parent),
                 _app = {
                     state: 'splash'
                 };
@@ -250,15 +245,6 @@
                 }
             });
 
-            this.resize = function() {
-                $timeout(function() {
-                    var height = $document.height();
-
-                    $log.info('iFrame Resizing to ' + height +'px.');
-                    myFrame$.height(height);
-                }, 50);
-            };
-
             function gotoDeck() {
                 $animate.enabled(true);
                 _app.state = 'deck';
@@ -282,11 +268,6 @@
                     app.data = data;
 
                     angular.copy(data.profile, c6Profile);
-
-                    if (data.profile.device !== 'phone') {
-                        parentWindow$.on('resize', c6Debounce(function() { this.resize(); }.bind(this), 250));
-                        $scope.$on('<ballot-vote-module>:vote', this.resize.bind(this));
-                    }
                 }.bind(this)
             });
         }]);
