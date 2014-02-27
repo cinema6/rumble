@@ -1,14 +1,22 @@
-<ballot-vote-module 
-    class="mr-ballot-module css-promote"
-    ng-if="Ctrl.hasModule('ballot')"
-    active="config._data.modules.ballot.active"
-    ballot="config.ballot"
-    vote="config._data.modules.ballot.vote"
-    on-dismiss="Ctrl.dismissBallot()">
-</ballot-vote-module>
-<article>
-    <div class="mr-player"><!-- actual player will be inserted into this container --></div>
-    <div class="mr-card">
+<article class="mr-card__group clearfix">
+    <ballot-vote-module 
+        class="mr-ballot-module css-promote"
+        ng-if="Ctrl.hasModule('ballot')"
+        active="config._data.modules.ballot.active"
+        ballot="config.ballot"
+        vote="config._data.modules.ballot.vote"
+        on-dismiss="Ctrl.dismissBallot()">
+    </ballot-vote-module>
+
+    <div class="mr-card__player">
+        <div class="mr-player"><!-- actual player will be inserted into this container --></div>
+    </div>
+    
+    <div class="mr-card__copy">
+        <div class="mr-card__title">
+            <h1 class="mr-card__title-h1 tk--hdr">{{config.title}}</h1>
+            <p class="mr-card__attributes">via <a ng-href="{{Ctrl.videoUrl}}" target="_blank" title="YouTube">{{config.source}}</a></p>
+        </div>
         <ballot-results-module ng-if="Ctrl.hasModule('ballot')"
             active="config._data.modules.ballot.vote !== null"
             ballot="config.ballot"
@@ -16,12 +24,8 @@
             card-id="{{config.id}}"
             fetch-when="onDeck || active">
         </ballot-results-module>
-        <div class="mr-card__title">
-            <h1 class="mr-card__title-h1">{{config.title}}</h1>
-            <p class="mr-card__attributes">via <a ng-href="{{Ctrl.videoUrl}}" target="_blank" title="YouTube">{{config.source}}</a></p>
-        </div>
-        <div class="mr-card__copy">{{config.note}}</div>
-    </div><!--.mr-card-->
+        <div class="mr-card__desc">{{config.note}}</div>
+    </div><!--.mr-card__copy-->
     <!--<comments-module ng-if="Ctrl.hasModule('comments')"
         card-id="{{config.id}}"
         fetch-comments-when="onDeck || active">

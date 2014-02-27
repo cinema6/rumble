@@ -2,41 +2,43 @@
     <div class="mr-titlebar">
         <h1 class="mr-titlebar__title">{{app.data.experience.title}}</h1>
     </div>
-</div>
-<div ng-hide="currentIndex < 0">
-    <div class="ui-navbar__group" ng-class="{'ui-navbar__group--docked': dockNav}">
-        <div class="ui-navbar">
-            <button class="ui-nav__prev" title="Previous Video" type="button" ng-click="RumbleCtrl.goBack()">
-                <span class="ui-nav__label ui-nav__label-prev">
-                    Prev
+
+    <div class="mr-card__container">
+        <nav class="mr-nav__group">
+            <button class="mr-nav__btn mr-nav__prev" title="Previous Video" type="button" 
+                ng-click="RumbleCtrl.goBack()">
+                <span class="sprite--alpha-png mr-nav__icon mr-nav__icon-prev">
+                    <span class="ir">Previous Video</span>
                 </span>
-                <span class="ui-control__preview-img"
-                    ng-style="{'background-image': prevThumb && 'url(' + prevThumb + ')'}">
-                    &nbsp;
-                </span>
-                <span class="sprite ui-icon__prev">&nbsp;</span>
-                <span class="ui-control__activator">&nbsp;</span>
             </button>
 
-                <button ng-hide="showTOC" ng-class="{'ui-nav__next--disabled': atTail}" class="ui-nav__next" title="Previous Video" type="button" ng-click="RumbleCtrl.goForward()" ng-disabled="atTail">
-                    <span class="ui-nav__label ui-nav__label-next">
-                        Next
-                    </span>
-                    <span class="ui-control__preview-img" 
-                        ng-style="{'background-image': nextThumb && 'url(' + nextThumb + ')'}">
-                        &nbsp;
-                    </span>
-                    <span class="sprite ui-icon__next">&nbsp;</span>
-                    <span class="ui-control__activator">&nbsp;</span>
-                </button>
+            <button ng-class="{'mr-nav__next--disabled': atTail}" 
+                class="mr-nav__btn mr-nav__next" title="Next Video" type="button" 
+                ng-click="RumbleCtrl.goForward()" ng-disabled="atTail">
+                <span class="sprite--alpha-png mr-nav__icon mr-nav__icon-next">
+                    <span class="ir">Next Video</span>
+                </span>
+            </button>
+        </nav>
 
-            <ul class="ui-navbar__paginator">
-                <li class="ui-navbar__page-item">
-                    <button ng-click="RumbleCtrl.setPosition(-1);" class="ui-navbar__page">
-                        <span class="ui-page__label">Start</span>
-                    </button>
-                </li>
-                <li ng-repeat="this in tocCards" class="ui-navbar__page-item">
+        <ng-include src="app.views.deck"></ng-include>
+    </div>
+
+    <nav class="mr-pager__group">
+        <button class="mr-pager__btn mr-pager__prev" type="button" title="Previous Page">
+            <span class="sprite--alpha-png mr-pager__icon mr-pager__icon-prev">
+                <span class="ir">Previous Page</span>
+            </span>
+        </button>
+        <button class="mr-pager__btn mr-pager__next" type="button" title="Next Page">
+            <span class="sprite--alpha-png mr-pager__icon mr-pager__icon-next">
+                <span class="ir">Next Page</span>
+            </span>
+        </button>
+
+        <div class="mr-pages__group">
+            <ul class="mr-pages__list">
+                <li ng-repeat="this in tocCards" class="mr-pages__item">
                     <navbar-button index="$index"
                         current-index="tocIndex"
                         card="this"
@@ -45,8 +47,15 @@
                 </li>
             </ul>
         </div>
-    </div>
-</div>
+        <!--<ul class="ui-navbar__paginator">
+            <li class="ui-navbar__page-item">
+                <button ng-click="RumbleCtrl.setPosition(-1);" class="ui-navbar__page">
+                    <span class="ui-page__label">Start</span>
+                </button>
+            </li>
+        </ul>-->
+    </nav><!--.mr-pager__group-->
+</div><!--.mr-experience-->
 
 <table-of-contents ng-show="showTOC"
     class="mr-toc__group c6-animate css-promote"
@@ -56,7 +65,6 @@
 </table-of-contents>
 
 <article id="card" class="mr-container">
-    <ng-include src="app.views.deck"></ng-include>
     <ng-switch on="app.state">
         <div class="splash-screen" ng-switch-when="splash">
             <ng-include src="'assets/views/splash.html'"></ng-include>

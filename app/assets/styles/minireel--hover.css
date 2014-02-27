@@ -1,4 +1,29 @@
 /*  ==========================================================================
+    .mr-pager__group classes
+    ========================================================================== */
+    .mr-pager__icon, 
+    .mr-pages__preview-img, 
+    .mr-pages__current-indicator, 
+    .mr-nav__btn {
+        -webkit-transition: opacity 0.5s ease; 
+        -moz-transition: opacity 0.5s ease; 
+        -o-transition: opacity 0.5s ease; 
+        transition: opacity 0.5s ease;
+    }
+    .mr-pager__btn:hover .mr-pager__icon, 
+    .mr-pages__page:hover .mr-pages__preview-img,
+    .mr-nav__btn:hover {
+        opacity:1;
+    }
+
+
+
+
+
+
+
+
+/*  ==========================================================================
     .ui-navbar classes
     ========================================================================== */    
     .ui-control__preview-img {

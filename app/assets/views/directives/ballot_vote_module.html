@@ -1,5 +1,5 @@
 <section class="mr-ballot__group">
-    <h2 class="mr-ballot__title">What did you think of this video?</h2>
+    <h2 class="mr-ballot__title tk--hdr">What did you think of this video?</h2>
     <ul class="mr-ballot__list">
         <li class="mr-ballot__item mr-ballot__item{{$index}}" ng-repeat="this in ballot.choices">
             <button class="mr-ballot__btn mr-ballot__btn{{$index}}" ng-click="Ctrl.vote($index)"><span class="mr-ballot__btn-label">{{this.button}}</span></button>

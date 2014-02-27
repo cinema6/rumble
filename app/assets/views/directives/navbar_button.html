@@ -1,10 +1,11 @@
-<button
-    class="ui-navbar__page"
-    ng-click="onSelect();">
-    <span class="ui-page__label">{{index + 1}}</span>
-    <span class="ui-control__preview-img"
-        ng-class="{'ui-control__preview-img--active': active}"
+<button class="mr-pages__page" ng-click="onSelect();" type="button" title="{{index + 1}}">
+	<span class="mr-pages__current-indicator"
+		ng-class="{'mr-pages__current-indicator--active': active}">
+		<span class="ir">Current Page</span>
+	</span>
+	<span class="mr-pages__preview-img"
+        ng-class="{'mr-pages__preview-img--active': active}"
         ng-style="{ backgroundImage: thumb }">
-        &nbsp;
+        <span class="ir">Page {{index + 1}}</span>
     </span>
 </button>
