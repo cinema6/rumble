@@ -73,37 +73,11 @@
                 .mock({ id: ['1', '2', '3'] }, [
                     {
                         id: '1',
-                        title: 'Here\'s Another MiniReel',
+                        title: 'The 15 Most Legendary Pro Wrestling  Intros Of All Time',
                         summary: [
                             'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus ornare ',
                             'libero ut fermentum pharetra. Praesent convallis pulvinar neque id ',
-                            'sollicitudin. Quisque luctus egestas nisi posuere pharetra. In vel pretium',
-                            ' nulla, nec laoreet eros. Nullam posuere tortor sit amet neque dictum, vel',
-                            ' sollicitudin dui lobortis.'
-                        ].join(''),
-                        data: {}
-                    },
-                    {
-                        id: '2',
-                        title: '5 Videos of Moo\'s Face',
-                        summary: [
-                            'Lorem ipsum dolor sit smirk, consectetur smirk elit. Phasellus ornare ',
-                            'libero smirk fermentum pharetra. Smirk convallis pulvinar neque id ',
-                            'sollicitudin. Quisque luctus egestas smirk posuere pharetra. In smirk pretium',
-                            ' nulla, nec laoreet eros. Nullam smirk tortor sit amet neque dictum, vel',
-                            ' sollicitudin smirk lobortis.'
-                        ].join(''),
-                        data: {}
-                    },
-                    {
-                        id: '3',
-                        title: '10 Videos of CaesarTheBun',
-                        summary: [
-                            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus ornare ',
-                            'libero ut fermentum pharetra. Praesent convallis pulvinar neque id ',
-                            'sollicitudin. Quisque luctus egestas nisi posuere pharetra. In vel pretium',
-                            ' nulla, nec laoreet eros. Nullam posuere tortor sit amet neque dictum, vel',
-                            ' sollicitudin dui lobortis.'
+                            'sollicitudin.'
                         ].join(''),
                         data: {}
                     }
@@ -156,10 +130,6 @@
                     paused      : true
                 });
             };
-        }])
-        .factory('myFrame$', ['$window',
-        function             ( $window ) {
-            return angular.element($window.frameElement);
         }])
         .directive('c6DockAnchor', ['$window',
         function                   ( $window ) {
@@ -235,11 +205,10 @@
             };
         }])
         .value('c6Profile', {})
-        .controller('AppController', ['$scope','$log','cinema6','c6Computed','c6UrlMaker','c6Profile','$timeout','$document','myFrame$','$window','c6Debounce','$animate',
-        function                     ( $scope , $log , cinema6 , c6Computed , c6UrlMaker , c6Profile , $timeout , $document , myFrame$ , $window , c6Debounce , $animate ) {
+        .controller('AppController', ['$scope','$log','cinema6','c6Computed','c6UrlMaker','c6Profile','$timeout','$document','$window','c6Debounce','$animate',
+        function                     ( $scope , $log , cinema6 , c6Computed , c6UrlMaker , c6Profile , $timeout , $document , $window , c6Debounce , $animate ) {
             $log = $log.context('AppCtrl');
             var c = c6Computed($scope),
-                parentWindow$ = angular.element($window.parent),
                 _app = {
                     state: 'splash'
                 };
@@ -276,15 +245,6 @@
                 }
             });
 
-            this.resize = function() {
-                $timeout(function() {
-                    var height = $document.height();
-
-                    $log.info('iFrame Resizing to ' + height +'px.');
-                    myFrame$.height(height);
-                }, 50);
-            };
-
             function gotoDeck() {
                 $animate.enabled(true);
                 _app.state = 'deck';
@@ -308,11 +268,6 @@
                     app.data = data;
 
                     angular.copy(data.profile, c6Profile);
-
-                    if (data.profile.device !== 'phone') {
-                        parentWindow$.on('resize', c6Debounce(function() { this.resize(); }.bind(this), 250));
-                        $scope.$on('<ballot-vote-module>:vote', this.resize.bind(this));
-                    }
                 }.bind(this)
             });
         }]);

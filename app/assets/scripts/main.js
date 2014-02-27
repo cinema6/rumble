@@ -47,7 +47,8 @@
                     'scripts/ballot_module',
                     'scripts/comments_module',
                     'scripts/display_ad_module',
-                    'scripts/paginator'
+                    'scripts/paginator',
+                    'scripts/thumb_paginator'
                 ];
             }
         }()),

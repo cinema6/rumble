@@ -14,13 +14,13 @@
         return {
             beforeAddClass: function(element,className,done) {
                 $log.log('addClass setup:',className);
-                element.css({ opacity : 1, visibility : 'visible' });
+                element.css({ opacity : 1, 'visibility' : 'visible', 'position': 'absolute' });
                 $log.info('addClass start',className);
                 element.animate({
                     opacity: 0
                 }, 500, function() {
                     $log.info('addClass end',className);
-                    element.css('visibility','hidden');
+                    element.css({'visibility' : 'hidden', 'position': 'relative'});
                     done();
                 });
             },
@@ -172,11 +172,11 @@
             }
 
             function fetchThumb(card) {
-                card.thumb = null;
+                card.thumbs = null;
 
-                VideoThumbService.getThumb(card.type, card.data.videoid)
-                    .then(function(url) {
-                        card.thumb = url;
+                VideoThumbService.getThumbs(card.type, card.data.videoid)
+                    .then(function(thumbs) {
+                        card.thumbs = thumbs;
                     });
             }
 
@@ -304,10 +304,6 @@
             }
         });
 
-        if (appData.profile.device !== 'phone') {
-            $scope.$watch('currentIndex', $scope.AppCtrl.resize.bind($scope.AppCtrl));
-        }
-
         this.findCardByVideo = function(videoType,videoId){
             var result;
             $scope.deck.some(function(item){
@@ -407,10 +403,11 @@
                 var c = c6Computed(scope);
 
                 c(scope, 'thumb', function() {
-                    var thumb = this.card.thumb;
+                    var thumbs = this.card.thumbs,
+                        thumb = thumbs && thumbs.small;
 
-                    return thumb ? ('url(' + thumb + ')') : 'none';
-                }, ['card.thumb']);
+                    return thumb ? ('url(' + thumb + ')') : '';
+                }, ['card.thumbs.small']);
 
                 c(scope, 'active', function() {
                     return !!((this.currentIndex === this.index) || this.hover);

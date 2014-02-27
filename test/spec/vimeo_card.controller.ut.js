@@ -229,6 +229,60 @@
                             expect(VimeoCardCtrl.videoUrl).toBe('http://vimeo.com/84844989');
                         });
                     });
+
+                    describe('flyAway', function() {
+                        describe('if the ballot module is not enabled', function() {
+                            beforeEach(function() {
+                                spyOn(VimeoCardCtrl, 'hasModule').andCallFake(function(module) {
+                                    if (module === 'ballot') {
+                                        return false;
+                                    }
+                                });
+                            });
+
+                            it('should be false', function() {
+                                expect(VimeoCardCtrl.flyAway).toBe(false);
+
+                                $scope.$apply(function() {
+                                    $scope.active = false;
+                                });
+                                expect(VimeoCardCtrl.flyAway).toBe(false);
+
+                                $scope.$apply(function() {
+                                    $scope.active = true;
+                                    $scope.config._data.modules.ballot.active = true;
+                                });
+                                expect(VimeoCardCtrl.flyAway).toBe(false);
+                            });
+                        });
+
+                        describe('if the ballot module is enabled', function() {
+                            beforeEach(function() {
+                                spyOn(VimeoCardCtrl, 'hasModule').andCallFake(function(module) {
+                                    if (module === 'ballot') {
+                                        return true;
+                                    }
+                                });
+                            });
+
+                            it('should be true if the ballot module is active', function() {
+                                $scope.$apply(function() {
+                                    $scope.config._data.modules.ballot.active = true;
+                                    $scope.active = true;
+                                });
+
+                                expect(VimeoCardCtrl.flyAway).toBe(true);
+                            });
+
+                            it('should be true if the card is not active', function() {
+                                $scope.$apply(function() {
+                                    $scope.config._data.modules.ballot.active = false;
+                                    $scope.active = false;
+                                });
+                                expect(VimeoCardCtrl.flyAway).toBe(true);
+                            });
+                        });
+                    });
                 });
 
                 describe('methods', function() {
