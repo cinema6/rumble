@@ -406,7 +406,7 @@
                     var thumbs = this.card.thumbs,
                         thumb = thumbs && thumbs.small;
 
-                    return thumb ? ('url(' + thumb + ')') : 'none';
+                    return thumb ? ('url(' + thumb + ')') : '';
                 }, ['card.thumbs.small']);
 
                 c(scope, 'active', function() {

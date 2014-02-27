@@ -31,8 +31,8 @@
 
         describe('$scope.thumb', function() {
             describe('if the card thumb is null', function() {
-                it('should be "none"', function() {
-                    expect(scope.thumb).toBe('none');
+                it('should be ""', function() {
+                    expect(scope.thumb).toBe('');
                 });
             });
 
