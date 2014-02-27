@@ -14,8 +14,16 @@
                 vast;
 
             function IFace() {
-                this.play = jasmine.createSpy('iface.play()');
-                this.pause = jasmine.createSpy('iface.pause()');
+                var self = this;
+
+                this.play = jasmine.createSpy('iface.play()')
+                    .andCallFake(function() {
+                        self.emit('play', self);
+                    });
+                this.pause = jasmine.createSpy('iface.pause()')
+                    .andCallFake(function() {
+                        self.emit('pause', self);
+                    });
 
                 c6EventEmitter(this);
             }
@@ -215,6 +223,18 @@
 
                                 it('should play the video', function() {
                                     expect(iface.play).toHaveBeenCalled();
+                                });
+
+                                it('should only autoplay the video once', function() {
+                                    $scope.$apply(function() {
+                                        $scope.active = false;
+                                    });
+
+                                    $scope.$apply(function() {
+                                        $scope.active = true;
+                                    });
+
+                                    expect(iface.play.callCount).toBe(1);
                                 });
                             });
 
