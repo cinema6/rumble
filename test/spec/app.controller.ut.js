@@ -161,21 +161,6 @@
                 }));
             });
 
-            describe('methods', function() {
-                describe('resize', function() {
-                    it('should set the height of myFrame$ to the height of the document contents in a timeout.', function() {
-                        AppCtrl.resize();
-                        $timeout.flush();
-                        expect(myFrame$.height).toHaveBeenCalledWith(600);
-
-                        $document.height.andReturn(1000);
-                        AppCtrl.resize();
-                        $timeout.flush();
-                        expect(myFrame$.height).toHaveBeenCalledWith(1000);
-                    });
-                });
-            });
-
             describe('app', function() {
                 describe('data', function() {
                     it('should be null', function() {
@@ -263,91 +248,6 @@
 
                     it('should exit fullscreen mode', function() {
                         expect(cinema6.fullscreen).toHaveBeenCalledWith(false);
-                    });
-                });
-
-                describe('<ballot-vote-module>:vote', function() {
-                    var window$;
-
-                    beforeEach(function() {
-                        spyOn(AppCtrl, 'resize');
-
-                        cinema6.init.mostRecentCall.args[0].setup(appData);
-                    });
-
-                    describe('if not on a phone', function() {
-                        it('should call AppCtrl.resize() debounced', function() {
-                            $childScope.$emit('<ballot-vote-module>:vote', 0);
-                            expect(AppCtrl.resize).toHaveBeenCalled();
-
-                            $childScope.$emit('<ballot-vote-module>:vote', 2);
-                            expect(AppCtrl.resize.callCount).toBe(2);
-                        });
-                    });
-
-                    describe('if on a phone', function() {
-                        beforeEach(function() {
-                            appData.profile.device = 'phone';
-
-                            $scope = $rootScope.$new();
-                            AppCtrl = $controller('AppController', { $scope: $scope });
-                            spyOn(AppCtrl, 'resize');
-
-                            cinema6.init.mostRecentCall.args[0].setup(appData);
-                        });
-
-                        it('should do nothing', function() {
-                            $childScope.$emit('<ballot-vote-module>:vote', 0);
-                            expect(AppCtrl.resize).not.toHaveBeenCalled();
-
-                            $childScope.$emit('<ballot-vote-module>:vote', 0);
-                            expect(AppCtrl.resize).not.toHaveBeenCalled();
-                        });
-                    });
-                });
-
-                describe('$window.parent resize', function() {
-                    var window$;
-
-                    beforeEach(function() {
-                        spyOn(AppCtrl, 'resize');
-
-                        window$ = angular.element($window.parent);
-                        cinema6.init.mostRecentCall.args[0].setup(appData);
-                    });
-
-                    describe('if not on a phone', function() {
-                        it('should call AppCtrl.resize() debounced', function() {
-                            window$.trigger('resize');
-                            $timeout.flush();
-                            expect(AppCtrl.resize).toHaveBeenCalled();
-
-                            window$.trigger('resize');
-                            $timeout.flush();
-                            expect(AppCtrl.resize.callCount).toBe(2);
-                        });
-                    });
-
-                    describe('if on a phone', function() {
-                        beforeEach(function() {
-                            appData.profile.device = 'phone';
-
-                            $scope = $rootScope.$new();
-                            AppCtrl = $controller('AppController', { $scope: $scope });
-                            spyOn(AppCtrl, 'resize');
-
-                            cinema6.init.mostRecentCall.args[0].setup(appData);
-                        });
-
-                        it('should do nothing', function() {
-                            window$.trigger('resize');
-                            $timeout.flush();
-                            expect(AppCtrl.resize).not.toHaveBeenCalled();
-
-                            window$.trigger('resize');
-                            $timeout.flush();
-                            expect(AppCtrl.resize).not.toHaveBeenCalled();
-                        });
                     });
                 });
             });
