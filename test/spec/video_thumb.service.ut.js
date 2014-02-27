@@ -40,17 +40,26 @@
                             $rootScope.$apply(function() {
                                 _private.getFromYoutube('abcd').then(spy);
                             });
-                            expect(spy).toHaveBeenCalledWith('http://img.youtube.com/vi/abcd/2.jpg');
+                            expect(spy).toHaveBeenCalledWith({
+                                small: 'http://img.youtube.com/vi/abcd/2.jpg',
+                                large: 'http://img.youtube.com/vi/abcd/0.jpg'
+                            });
 
                             $rootScope.$apply(function() {
                                 _private.getFromYoutube('1234').then(spy);
                             });
-                            expect(spy).toHaveBeenCalledWith('http://img.youtube.com/vi/1234/2.jpg');
+                            expect(spy).toHaveBeenCalledWith({
+                                small: 'http://img.youtube.com/vi/1234/2.jpg',
+                                large: 'http://img.youtube.com/vi/1234/0.jpg'
+                            });
 
                             $rootScope.$apply(function() {
                                 _private.getFromYoutube('abc123').then(spy);
                             });
-                            expect(spy).toHaveBeenCalledWith('http://img.youtube.com/vi/abc123/2.jpg');
+                            expect(spy).toHaveBeenCalledWith({
+                                small: 'http://img.youtube.com/vi/abc123/2.jpg',
+                                large: 'http://img.youtube.com/vi/abc123/0.jpg'
+                            });
                         });
                     });
 
@@ -124,13 +133,19 @@
                                 .respond(200, json1);
                             _private.getFromVimeo('81766071').then(spy);
                             $httpBackend.flush();
-                            expect(spy).toHaveBeenCalledWith('http://b.vimeocdn.com/ts/457/952/457952450_100.jpg');
+                            expect(spy).toHaveBeenCalledWith({
+                                small: 'http://b.vimeocdn.com/ts/457/952/457952450_100.jpg',
+                                large: 'http://b.vimeocdn.com/ts/457/952/457952450_640.jpg'
+                            });
 
                             $httpBackend.expectGET('http://vimeo.com/api/v2/video/85509673.json')
                                 .respond(200, json2);
                             _private.getFromVimeo('85509673').then(spy);
                             $httpBackend.flush();
-                            expect(spy).toHaveBeenCalledWith('http://b.vimeocdn.com/ts/462/944/462944068_100.jpg');
+                            expect(spy).toHaveBeenCalledWith({
+                                small: 'http://b.vimeocdn.com/ts/462/944/462944068_100.jpg',
+                                large: 'http://b.vimeocdn.com/ts/462/944/462944068_640.jpg'
+                            });
                         });
                     });
 
@@ -140,27 +155,35 @@
 
                         beforeEach(function() {
                             json1 = {
-                                'thumbnail_120_url': 'http://s1.dmcdn.net/ATQ1h/x120-Zw_.jpg'
+                                'thumbnail_120_url': 'http://s1.dmcdn.net/ATQ1h/x120-Zw_.jpg',
+                                'thumbnail_720_url': 'http://s1.dmcdn.net/ATQ1h/x720-qJQ.jpg'
                             };
                             json2 = {
-                                'thumbnail_120_url': 'http://s2.dmcdn.net/Dm9Np/x120-6Xz.jpg'
+                                'thumbnail_120_url': 'http://s2.dmcdn.net/Dm9Np/x120-6Xz.jpg',
+                                'thumbnail_720_url': 'http://s2.dmcdn.net/Dm9Np/x720-lyL.jpg'
                             };
                         });
 
                         it('should return the 120px thumbnail url in a promise', function() {
                             var spy = jasmine.createSpy('getFromDailymotion spy');
 
-                            $httpBackend.expectGET('https://api.dailymotion.com/video/xjfn0s?fields=thumbnail_120_url')
+                            $httpBackend.expectGET('https://api.dailymotion.com/video/xjfn0s?fields=thumbnail_120_url,thumbnail_720_url')
                                 .respond(200, json1);
                             _private.getFromDailymotion('xjfn0s').then(spy);
                             $httpBackend.flush();
-                            expect(spy).toHaveBeenCalledWith('http://s1.dmcdn.net/ATQ1h/x120-Zw_.jpg');
+                            expect(spy).toHaveBeenCalledWith({
+                                small: 'http://s1.dmcdn.net/ATQ1h/x120-Zw_.jpg',
+                                large: 'http://s1.dmcdn.net/ATQ1h/x720-qJQ.jpg'
+                            });
 
-                            $httpBackend.expectGET('https://api.dailymotion.com/video/x1bxmgq?fields=thumbnail_120_url')
+                            $httpBackend.expectGET('https://api.dailymotion.com/video/x1bxmgq?fields=thumbnail_120_url,thumbnail_720_url')
                                 .respond(200, json2);
                             _private.getFromDailymotion('x1bxmgq').then(spy);
                             $httpBackend.flush();
-                            expect(spy).toHaveBeenCalledWith('http://s2.dmcdn.net/Dm9Np/x120-6Xz.jpg');
+                            expect(spy).toHaveBeenCalledWith({
+                                small: 'http://s2.dmcdn.net/Dm9Np/x120-6Xz.jpg',
+                                large: 'http://s2.dmcdn.net/Dm9Np/x720-lyL.jpg'
+                            });
                         });
                     });
                 });
@@ -169,7 +192,7 @@
 
             describe('@public', function() {
                 describe('methods', function() {
-                    describe('getThumb(type, id)', function() {
+                    describe('getThumbs(type, id)', function() {
                         var youtubePromise,
                             vimeoPromise,
                             dailymotionPromise;
@@ -185,13 +208,13 @@
                         });
 
                         it('should delegate to the appropriate private method', function() {
-                            expect(VideoThumbService.getThumb('youtube', 'abc123')).toBe(youtubePromise);
+                            expect(VideoThumbService.getThumbs('youtube', 'abc123')).toBe(youtubePromise);
                             expect(_private.getFromYoutube).toHaveBeenCalledWith('abc123');
 
-                            expect(VideoThumbService.getThumb('vimeo', '123abc')).toBe(vimeoPromise);
+                            expect(VideoThumbService.getThumbs('vimeo', '123abc')).toBe(vimeoPromise);
                             expect(_private.getFromVimeo).toHaveBeenCalledWith('123abc');
 
-                            expect(VideoThumbService.getThumb('dailymotion', 'cba321')).toBe(dailymotionPromise);
+                            expect(VideoThumbService.getThumbs('dailymotion', 'cba321')).toBe(dailymotionPromise);
                             expect(_private.getFromDailymotion).toHaveBeenCalledWith('cba321');
                         });
 
@@ -199,12 +222,12 @@
                             var spy = jasmine.createSpy('getThumb fail');
 
                             $rootScope.$apply(function() {
-                                VideoThumbService.getThumb('video', '1234').catch(spy);
+                                VideoThumbService.getThumbs('video', '1234').catch(spy);
                             });
                             expect(spy).toHaveBeenCalledWith('Unknown video type: video.');
 
                             $rootScope.$apply(function() {
-                                VideoThumbService.getThumb('vast', 'abcd').catch(spy);
+                                VideoThumbService.getThumbs('vast', 'abcd').catch(spy);
                             });
                             expect(spy).toHaveBeenCalledWith('Unknown video type: vast.');
                         });

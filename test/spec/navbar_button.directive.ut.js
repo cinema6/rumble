@@ -39,15 +39,18 @@
             describe('if the card thumb has a value', function() {
                 beforeEach(function() {
                     $scope.$apply(function() {
-                        $scope.card.thumb = 'hello.jpg';
+                        $scope.card.thumbs = {
+                            small: 'hello.jpg',
+                            large: 'hello--large.jpg'
+                        };
                     });
                 });
 
-                it('should return the card thumb formated as css background', function() {
+                it('should return the small card thumb formated as css background', function() {
                     expect(scope.thumb).toBe('url(hello.jpg)');
 
                     $scope.$apply(function() {
-                        $scope.card.thumb = 'foo.jpg';
+                        $scope.card.thumbs.small = 'foo.jpg';
                     });
                     expect(scope.thumb).toBe('url(foo.jpg)');
                 });

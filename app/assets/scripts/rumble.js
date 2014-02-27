@@ -172,11 +172,11 @@
             }
 
             function fetchThumb(card) {
-                card.thumb = null;
+                card.thumbs = null;
 
-                VideoThumbService.getThumb(card.type, card.data.videoid)
-                    .then(function(url) {
-                        card.thumb = url;
+                VideoThumbService.getThumbs(card.type, card.data.videoid)
+                    .then(function(thumbs) {
+                        card.thumbs = thumbs;
                     });
             }
 
@@ -403,10 +403,11 @@
                 var c = c6Computed(scope);
 
                 c(scope, 'thumb', function() {
-                    var thumb = this.card.thumb;
+                    var thumbs = this.card.thumbs,
+                        thumb = thumbs && thumbs.small;
 
                     return thumb ? ('url(' + thumb + ')') : 'none';
-                }, ['card.thumb']);
+                }, ['card.thumbs.small']);
 
                 c(scope, 'active', function() {
                     return !!((this.currentIndex === this.index) || this.hover);
