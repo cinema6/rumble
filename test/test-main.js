@@ -119,6 +119,9 @@
                 },
                 paginator: {
                     deps: ['app']
+                },
+                thumb_paginator: {
+                    deps: ['app']
                 }
             },
 

@@ -1,10 +1,13 @@
-<button
-    class="ui-navbar__page"
-    ng-click="onSelect();">
-    <span class="ui-page__label">{{index + 1}}</span>
-    <span class="ui-control__preview-img"
-        ng-class="{'ui-control__preview-img--active': active}"
+<button class="mr-pages__page" ng-click="onSelect();" type="button" 
+	title="Video {{index + 1}} : {{card.title}}"
+	ng-class="{'mr-pages__page--active': active}">
+	<span class="mr-pages__current-indicator css-promote">
+		<span class="ir">Current Page</span>
+	</span>
+	<span class="mr-pages__label">{{index + 1}}</span>
+	<span class="mr-pages__fader css-promote">&nbsp;</span>
+	<span class="mr-pages__preview-img css-promote"
         ng-style="{ backgroundImage: thumb }">
-        &nbsp;
+        <span class="ir">Video {{index + 1}} : {{card.title}}</span>
     </span>
 </button>

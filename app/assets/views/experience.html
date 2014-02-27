@@ -1,65 +1,50 @@
-<div ng-hide="currentIndex < 0">
-    <div class="mr-titlebar mr-titlebar--sports">
-        <button ng-class="{'ui-titlebar__view-list--open': showTOC}" class="ui-titlebar__view-list" ng-click="showTOC = !showTOC;" title="View List Pane" type="button" >
-            <span class="ir">List Pane</span>
-            <span class="sprite ui-icon__list">&nbsp;</span>
-            <span class="ui-control__activator">&nbsp;</span>
-        </button>
-        <h1 class="ui-titlebar__title">{{app.data.experience.title}}</h1>
+<div class="mr-experience">
+    <div class="mr-titlebar">
+        <h1 class="mr-titlebar__title">{{app.data.experience.title}}</h1>
     </div>
-    <div class="ui-navbar__group" ng-class="{'ui-navbar__group--docked': dockNav}">
-        <div class="ui-navbar">
-            <button class="ui-nav__prev" title="Previous Video" type="button" ng-click="RumbleCtrl.goBack()">
-                <span class="ui-nav__label ui-nav__label-prev">
-                    Prev
+
+    <div class="mr-card__container">
+        <nav class="mr-nav__group">
+            <button class="mr-nav__btn mr-nav__prev" title="Previous Video" type="button" 
+                ng-click="RumbleCtrl.goBack()">
+                <span class="sprite--alpha-png mr-nav__icon mr-nav__icon-prev">
+                    <span class="ir">Previous Video</span>
                 </span>
-                <span class="ui-control__preview-img"
-                    ng-style="{'background-image': prevThumb && 'url(' + prevThumb + ')'}">
-                    &nbsp;
-                </span>
-                <span class="sprite ui-icon__prev">&nbsp;</span>
-                <span class="ui-control__activator">&nbsp;</span>
             </button>
 
-                <button ng-hide="showTOC" ng-class="{'ui-nav__next--disabled': atTail}" class="ui-nav__next" title="Previous Video" type="button" ng-click="RumbleCtrl.goForward()" ng-disabled="atTail">
-                    <span class="ui-nav__label ui-nav__label-next">
-                        Next
-                    </span>
-                    <span class="ui-control__preview-img" 
-                        ng-style="{'background-image': nextThumb && 'url(' + nextThumb + ')'}">
-                        &nbsp;
-                    </span>
-                    <span class="sprite ui-icon__next">&nbsp;</span>
-                    <span class="ui-control__activator">&nbsp;</span>
-                </button>
+            <button ng-class="{'mr-nav__next--disabled': atTail}" 
+                class="mr-nav__btn mr-nav__next" title="Next Video" type="button" 
+                ng-click="RumbleCtrl.goForward()" ng-disabled="atTail">
+                <span class="sprite--alpha-png mr-nav__icon mr-nav__icon-next">
+                    <span class="ir">Next Video</span>
+                </span>
+            </button>
+        </nav>
 
-            <ul class="ui-navbar__paginator">
-                <li class="ui-navbar__page-item">
-                    <button ng-click="RumbleCtrl.setPosition(-1);" class="ui-navbar__page">
-                        <span class="ui-page__label">Start</span>
-                    </button>
-                </li>
-                <li ng-repeat="this in tocCards" class="ui-navbar__page-item">
-                    <navbar-button index="$index"
-                        current-index="tocIndex"
-                        card="this"
-                        on-select="RumbleCtrl.setPosition(deck.indexOf(this));">
-                    </navbar-button>
-                </li>
-            </ul>
-        </div>
+        <ng-include src="app.views.deck"></ng-include>
     </div>
-</div>
 
-<table-of-contents ng-show="showTOC"
+    <thumb-paginator active="tocIndex" ng-if="currentIndex > -1" class="mr-pager__group">
+        <ul class="mr-pages__list">
+            <li thumb-paginator-item ng-repeat="this in tocCards" class="mr-pages__item">
+                <navbar-button index="$index"
+                    current-index="tocIndex"
+                    card="this"
+                    on-select="RumbleCtrl.setPosition(deck.indexOf(this));">
+                </navbar-button>
+            </li>
+        </ul>
+    </thumb-paginator><!--.mr-pager__group-->
+</div><!--.mr-experience-->
+
+<!--<table-of-contents ng-show="showTOC"
     class="mr-toc__group c6-animate css-promote"
     cards="tocCards"
     on-select="RumbleCtrl.jumpTo(card)"
     on-exit="showTOC = false">
-</table-of-contents>
+</table-of-contents>-->
 
 <article id="card" class="mr-container">
-    <ng-include src="app.views.deck"></ng-include>
     <ng-switch on="app.state">
         <div class="splash-screen" ng-switch-when="splash">
             <ng-include src="'assets/views/splash.html'"></ng-include>

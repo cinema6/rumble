@@ -455,6 +455,14 @@
             return ('http://www.dailymotion.com/video/' + id);
         }, ['config.data.videoid']);
 
+        Object.defineProperties(this, {
+            flyAway: {
+                get: function() {
+                    return ($scope.config._data.modules.ballot.active || !$scope.active) && this.hasModule('ballot');
+                }
+            }
+        });
+
         this.hasModule = ModuleService.hasModule.bind(ModuleService, config.modules);
 
         this.dismissBallot = function() {
