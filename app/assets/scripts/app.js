@@ -73,37 +73,11 @@
                 .mock({ id: ['1', '2', '3'] }, [
                     {
                         id: '1',
-                        title: 'Here\'s Another MiniReel',
+                        title: 'The 15 Most Legendary Pro Wrestling  Intros Of All Time',
                         summary: [
                             'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus ornare ',
                             'libero ut fermentum pharetra. Praesent convallis pulvinar neque id ',
-                            'sollicitudin. Quisque luctus egestas nisi posuere pharetra. In vel pretium',
-                            ' nulla, nec laoreet eros. Nullam posuere tortor sit amet neque dictum, vel',
-                            ' sollicitudin dui lobortis.'
-                        ].join(''),
-                        data: {}
-                    },
-                    {
-                        id: '2',
-                        title: '5 Videos of Moo\'s Face',
-                        summary: [
-                            'Lorem ipsum dolor sit smirk, consectetur smirk elit. Phasellus ornare ',
-                            'libero smirk fermentum pharetra. Smirk convallis pulvinar neque id ',
-                            'sollicitudin. Quisque luctus egestas smirk posuere pharetra. In smirk pretium',
-                            ' nulla, nec laoreet eros. Nullam smirk tortor sit amet neque dictum, vel',
-                            ' sollicitudin smirk lobortis.'
-                        ].join(''),
-                        data: {}
-                    },
-                    {
-                        id: '3',
-                        title: '10 Videos of CaesarTheBun',
-                        summary: [
-                            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus ornare ',
-                            'libero ut fermentum pharetra. Praesent convallis pulvinar neque id ',
-                            'sollicitudin. Quisque luctus egestas nisi posuere pharetra. In vel pretium',
-                            ' nulla, nec laoreet eros. Nullam posuere tortor sit amet neque dictum, vel',
-                            ' sollicitudin dui lobortis.'
+                            'sollicitudin.'
                         ].join(''),
                         data: {}
                     }

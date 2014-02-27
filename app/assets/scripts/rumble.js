@@ -14,13 +14,13 @@
         return {
             beforeAddClass: function(element,className,done) {
                 $log.log('addClass setup:',className);
-                element.css({ opacity : 1, visibility : 'visible' });
+                element.css({ opacity : 1, 'visibility' : 'visible', 'position': 'absolute' });
                 $log.info('addClass start',className);
                 element.animate({
                     opacity: 0
                 }, 500, function() {
                     $log.info('addClass end',className);
-                    element.css('visibility','hidden');
+                    element.css({'visibility' : 'hidden', 'position': 'relative'});
                     done();
                 });
             },
