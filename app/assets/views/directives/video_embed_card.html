@@ -9,9 +9,12 @@
     </ballot-vote-module>
 
     <div class="mr-card__player">
-        <div ng-class="{'mr-player--fly-away': Ctrl.flyAway}" class="mr-player"><!-- actual player will be inserted into this container --></div>
-        <div ng-show="Ctrl.flyAway">
-            <img ng-src="{{config.thumbs.large}}">
+        <div class="mr-player__group">
+            <div ng-class="{'mr-player--fly-away': Ctrl.flyAway}" class="mr-player"><!-- actual player will be inserted into this container --></div>
+            <div ng-show="Ctrl.flyAway" class="mr-player__thumbnail"
+                ng-style="{'background-image':config.thumbs.large ? 'url(' + config.thumbs.large + ')' : ''}">
+                <span class="ir"><img ng-src="{{config.thumbs.large}}"></span>
+            </div>
         </div>
     </div>
     

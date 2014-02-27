@@ -17,6 +17,9 @@
         .mr-pages__page:hover .mr-pages__fader {
             opacity:0;
         }
+        .mr-pager__btn--disabled:hover .mr-pager__icon {
+            opacity:0.5;
+        }
     .mr-pages__preview-img {
         -webkit-transition: -webkit-transform 0.5s ease; 
         -moz-transition: -moz-transform 0.5s ease; 
