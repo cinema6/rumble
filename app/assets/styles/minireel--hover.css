@@ -2,7 +2,7 @@
     .mr-pager__group classes
     ========================================================================== */
     .mr-pager__icon, 
-    .mr-pages__preview-img, 
+    .mr-pages__fader, 
     .mr-pages__current-indicator, 
     .mr-nav__btn {
         -webkit-transition: opacity 0.5s ease; 
@@ -10,10 +10,21 @@
         -o-transition: opacity 0.5s ease; 
         transition: opacity 0.5s ease;
     }
-    .mr-pager__btn:hover .mr-pager__icon, 
-    .mr-pages__page:hover .mr-pages__preview-img,
-    .mr-nav__btn:hover {
-        opacity:1;
+        .mr-pager__btn:hover .mr-pager__icon, 
+        .mr-nav__btn:hover {
+            opacity:1;
+        }
+        .mr-pages__page:hover .mr-pages__fader {
+            opacity:0;
+        }
+    .mr-pages__preview-img {
+        -webkit-transition: background 0.5s ease; 
+        -moz-transition: background 0.5s ease; 
+        -o-transition: background 0.5s ease; 
+        transition: background 0.5s ease;
+    }
+    .mr-pages__page:hover .mr-pages__preview-img {
+        background-size:110% auto;
     }
 
 
