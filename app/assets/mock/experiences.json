@@ -17,18 +17,18 @@
             "stylesheet": "experiences/rumble/assets/styles.css"
         },
         "data": {
-            "id" : "r-738c2403d83ddc",
-            "ballots" : [
+            "id": "r-738c2403d83ddc",
+            "ballots": [
                 {
                     "id": "rb-01eb03bc062c15",
                     "choices": [
                         {
-                            "button" : "Good",
-                            "most"   : "The Goodest video"
+                            "button": "Good",
+                            "most": "The Goodest video"
                         },
                         {
-                            "button" : "Bad",
-                            "most"   : "The Badest video"
+                            "button": "Bad",
+                            "most": "The Badest video"
                         }
                     ]
                 },
@@ -36,12 +36,12 @@
                     "id": "rb-716ffbdfc356af",
                     "choices": [
                         {
-                            "button" : "Catchy",
-                            "most"   : "The Goodest video"
+                            "button": "Catchy",
+                            "most": "The Goodest video"
                         },
                         {
-                            "button" : "Painful",
-                            "most"   : "The Badest video"
+                            "button": "Painful",
+                            "most": "The Badest video"
                         }
                     ]
                 },
@@ -49,12 +49,12 @@
                     "id": "rb-d1f60e2d64a0ba",
                     "choices": [
                         {
-                            "button" : "Too Cool",
-                            "most"   : "The Goodest video"
+                            "button": "Too Cool",
+                            "most": "The Goodest video"
                         },
                         {
-                            "button" : "Too Geeky",
-                            "most"   : "The Badest video"
+                            "button": "Too Geeky",
+                            "most": "The Badest video"
                         }
                     ]
                 }
@@ -92,24 +92,28 @@
                     ]
                 }
             ],
-            "deck" : [
+            "deck": [
                 {
-                    "id"     : "rc-22119a8cf9f755",
-                    "type"   : "youtube",
-                    "title"  : "Epic Sax Guy",
-                    "note"   : "He's back, and saxier than ever.",
-                    "source" : "YouTube",
+                    "id": "rc-22119a8cf9f755",
+                    "type": "youtube",
+                    "title": "Epic Sax Guy",
+                    "note": "He's back, and saxier than ever.",
+                    "source": "YouTube",
                     "modules": [
                         "ballot",
                         "comments"
                     ],
-                    "voting" : [ 0.63, 0.31, 0.06 ],
-                    "data"   : {
-                        "videoid" : "gy1B3agGNxw",
-                        "start"   : 42,
-                        "end"     : 130,
-                        "rel"     : 0,
-                        "modestbranding" : 1
+                    "voting": [
+                        0.63,
+                        0.31,
+                        0.06
+                    ],
+                    "data": {
+                        "videoid": "gy1B3agGNxw",
+                        "start": 42,
+                        "end": 130,
+                        "rel": 0,
+                        "modestbranding": 1
                     },
                     "ballotId": "rb-716ffbdfc356af",
                     "conversationId": "rcv-f9efca48d85143"
@@ -127,79 +131,451 @@
                     "displayAd": "http://2.bp.blogspot.com/-TlM_3FT89Y0/UMzLr7kVykI/AAAAAAAACjs/lKrdhgp6OQg/s1600/brad-turner.jpg"
                 },
                 {
-                    "id"     : "rc-4770a2d7f85ce0",
-                    "type"   : "dailymotion",
-                    "title"  : "Kristen Stewart for Channel",
-                    "note"   : "Psychotic glamour",
-                    "source" : "DailyMotion",
+                    "id": "rc-4770a2d7f85ce0",
+                    "type": "dailymotion",
+                    "title": "Kristen Stewart for Channel",
+                    "note": "Psychotic glamour",
+                    "source": "DailyMotion",
                     "modules": [
                         "ballot"
                     ],
-                    "voting" : [ 0.77, 0.19, 0.04 ],
-                    "data"   : {
-                        "videoid" : "x18b09a",
-                        "related" : 0
+                    "voting": [
+                        0.77,
+                        0.19,
+                        0.04
+                    ],
+                    "data": {
+                        "videoid": "x18b09a",
+                        "related": 0
                     },
                     "ballotId": "rb-01eb03bc062c15"
                 },
                 {
-                    "id"     : "rc-e489d1c6359fb3",
-                    "type"   : "vimeo",
-                    "title"  : "Aquatic paradise",
-                    "note"   : "How may we help you?",
-                    "source" : "Vimeo",
+                    "id": "rc-e489d1c6359fb3",
+                    "type": "vimeo",
+                    "title": "Aquatic paradise",
+                    "note": "How may we help you?",
+                    "source": "Vimeo",
                     "modules": [
                         "ballot"
                     ],
-                    "voting" : [ 0.83, 0.14, 0.03 ],
-                    "data"   : {
-                        "videoid" : "81766071",
-                        "start"   : 35,
-                        "end"     : 45
+                    "voting": [
+                        0.83,
+                        0.14,
+                        0.03
+                    ],
+                    "data": {
+                        "videoid": "81766071",
+                        "start": 35,
+                        "end": 45
                     },
                     "ballotId": "rb-01eb03bc062c15"
                 },
                 {
-                    "id"     : "rc-e2947c9bec017e",
-                    "type"   : "youtube",
-                    "title"  : "Geek cool",
-                    "note"   : "Doctor Who #11 meets #4",
-                    "source" : "YouTube",
+                    "id": "rc-e2947c9bec017e",
+                    "type": "youtube",
+                    "title": "Geek cool",
+                    "note": "Doctor Who #11 meets #4",
+                    "source": "YouTube",
                     "modules": [
                         "ballot"
                     ],
-                    "voting" : [ 0.87, 0.11, 0.02 ],
-                    "data"   : {
-                        "videoid" : "Cn9yJrrm2tk",
-                        "rel"     : 0,
-                        "modestbranding" : 1,
-                        "end"     : 18
+                    "voting": [
+                        0.87,
+                        0.11,
+                        0.02
+                    ],
+                    "data": {
+                        "videoid": "Cn9yJrrm2tk",
+                        "rel": 0,
+                        "modestbranding": 1,
+                        "end": 18
                     },
                     "ballotId": "rb-d1f60e2d64a0ba"
                 },
                 {
-                    "id"     : "rc-99b87ea709d7ac",
-                    "type"   : "dailymotion",
-                    "title"  : "Farting dogs",
-                    "note"   : "Enough said",
-                    "source" : "DailyMotion",
+                    "id": "rc-99b87ea709d7ac",
+                    "type": "dailymotion",
+                    "title": "Farting dogs",
+                    "note": "Enough said",
+                    "source": "DailyMotion",
                     "modules": [
                         "ballot"
                     ],
-                    "voting" : [ 0.89, 0.09, 0.02 ],
-                    "data"   : {
-                        "videoid" : "xorbb7",
-                        "related" : 0
+                    "voting": [
+                        0.89,
+                        0.09,
+                        0.02
+                    ],
+                    "data": {
+                        "videoid": "xorbb7",
+                        "related": 0
                     },
                     "ballotId": "rb-01eb03bc062c15"
                 },
                 {
-                    "id"     : "rc-235d41cde02032",
-                    "type"   : "miniReel",
-                    "data"   : {
+                    "id": "rc-235d41cde02032",
+                    "type": "miniReel",
+                    "data": {
                         "message": "Check out these other MiniReels!",
                         "query": {
-                            "id": ["1", "2", "3"]
+                            "id": [
+                                "1",
+                                "2",
+                                "3"
+                            ]
+                        }
+                    }
+                }
+            ]
+        }
+    },
+    {
+        "id": "e-220f09b2398217",
+        "uri": "gopro",
+        "appUriPrefix": "<%= settings.appUrl %>",
+        "appUri": "rumble",
+        "title": "The 15 Most Amazing GoPro Videos Ever Recorded",
+        "subtitle": "",
+        "summary": "GoPro cameras are the only tech inventions we were introduced to in 2013 that we think deserve to continue trending in 2014. These handy-dandy cameras are perfect for just about any activity, including skydiving, surfing, or rescuing a baby kitten from a tree.",
+        "data": {
+            "id": "r-ea8caee7de7582",
+            "ballots": [
+                {
+                    "id": "rb-8e76295e41625f",
+                    "choices": [
+                        {
+                            "button": "Way Rad",
+                            "most": "The Goodest video"
+                        },
+                        {
+                            "button": "Way Lame",
+                            "most": "The Badest video"
+                        }
+                    ]
+                }
+            ],
+            "deck": [
+                {
+                    "id": "rc-22119a8cf9f755",
+                    "type": "youtube",
+                    "title": "F18 Fighter",
+                    "note": "This guy recorded himself in an F18 fighter jet.",
+                    "source": "YouTube",
+                    "modules": [
+                        "ballot"
+                    ],
+                    "voting": [
+                        0.81,
+                        0.19
+                    ],
+                    "data": {
+                        "videoid": "IqVPwcvgOWQ",
+                        "rel": 0,
+                        "modestbranding": 1
+                    },
+                    "ballotId": "rb-8e76295e41625f"
+                },
+                {
+                    "id": "rc-337f092e881524",
+                    "type": "youtube",
+                    "title": "Lions",
+                    "note": "If you ever get the chance to hang out with lions, record it.",
+                    "source": "YouTube",
+                    "modules": [
+                        "ballot"
+                    ],
+                    "voting": [
+                        0.74,
+                        0.26
+                    ],
+                    "data": {
+                        "videoid": "MNCzSfv4hX8",
+                        "rel": 0,
+                        "modestbranding": 1
+                    },
+                    "ballotId": "rb-8e76295e41625f"
+                },
+                {
+                    "id": "rc-facb167546a4ff",
+                    "type": "youtube",
+                    "title": "Vetical Skydive",
+                    "note": "Vertical skydiving looks like a breeze, doesn't it?",
+                    "source": "YouTube",
+                    "modules": [
+                        "ballot"
+                    ],
+                    "voting": [
+                        0.95,
+                        0.05
+                    ],
+                    "data": {
+                        "videoid": "HrqXTHCGVEo",
+                        "rel": 0,
+                        "modestbranding": 1
+                    },
+                    "ballotId": "rb-8e76295e41625f"
+                },
+                {
+                    "id": "rc-4b9dc6b9651428",
+                    "type": "youtube",
+                    "title": "Canyon Backflip",
+                    "note": "Kelly McGarry flips over a 72-foot-long canyon gap.",
+                    "source": "YouTube",
+                    "modules": [
+                        "ballot"
+                    ],
+                    "voting": [
+                        0.65,
+                        0.35
+                    ],
+                    "data": {
+                        "videoid": "x76VEPXYaI0",
+                        "rel": 0,
+                        "modestbranding": 1
+                    },
+                    "ballotId": "rb-8e76295e41625f"
+                },
+                {
+                    "id": "rc-9b524d0c0535db",
+                    "type": "youtube",
+                    "title": "Afghanistan",
+                    "note": "Six months in Afghanistan in a two-minute video.",
+                    "source": "YouTube",
+                    "modules": [
+                        "ballot"
+                    ],
+                    "voting": [
+                        0.70,
+                        0.30
+                    ],
+                    "data": {
+                        "videoid": "af2m0gf6TtA",
+                        "rel": 0,
+                        "modestbranding": 1
+                    },
+                    "ballotId": "rb-8e76295e41625f"
+                },
+                {
+                    "id": "rc-828007b55441ca",
+                    "type": "youtube",
+                    "title": "Waterski Breakdancing",
+                    "note": "Yes, there is such a thing as waterski-breakdancing.",
+                    "source": "YouTube",
+                    "modules": [
+                        "ballot"
+                    ],
+                    "voting": [
+                        0.90,
+                        0.10
+                    ],
+                    "data": {
+                        "videoid": "GdEKSyad_rk",
+                        "rel": 0,
+                        "modestbranding": 1
+                    },
+                    "ballotId": "rb-8e76295e41625f"
+                },
+                {
+                    "id": "rc-4ea854fd34d960",
+                    "type": "youtube",
+                    "title": "Cat Bike Guy",
+                    "note": "This guy rides all around Philly with his cat on his shoulder.",
+                    "source": "YouTube",
+                    "modules": [
+                        "ballot"
+                    ],
+                    "voting": [
+                        0.82,
+                        0.18
+                    ],
+                    "data": {
+                        "videoid": "T8F8WR2rzPA",
+                        "rel": 0,
+                        "modestbranding": 1
+                    },
+                    "ballotId": "rb-8e76295e41625f"
+                },
+                {
+                    "id": "rc-392f3546f0cfc3",
+                    "type": "vast",
+                    "ad": true,
+                    "modules": [],
+                    "data": {
+                        "autoplay": true
+                    }
+                },
+                {
+                    "id": "rc-77d0ea2794cc6b",
+                    "type": "youtube",
+                    "title": "Avalanche Cliff Jump",
+                    "note": "You're going to want to add avalanche cliff jumping to your bucket list.",
+                    "source": "YouTube",
+                    "modules": [
+                        "ballot"
+                    ],
+                    "voting": [
+                        0.97,
+                        0.03
+                    ],
+                    "data": {
+                        "videoid": "SwbP9WLX3fY",
+                        "rel": 0,
+                        "modestbranding": 1
+                    },
+                    "ballotId": "rb-8e76295e41625f"
+                },
+                {
+                    "id": "rc-389f9dea3498d2",
+                    "type": "youtube",
+                    "title": "Toy Robot in Space",
+                    "note": "Who said sending a toy robot to space was impossible?!",
+                    "source": "YouTube",
+                    "modules": [
+                        "ballot"
+                    ],
+                    "voting": [
+                        0.67,
+                        0.33
+                    ],
+                    "data": {
+                        "videoid": "ZCAnLxRvNNc",
+                        "rel": 0,
+                        "modestbranding": 1
+                    },
+                    "ballotId": "rb-8e76295e41625f"
+                },
+                {
+                    "id": "rc-065050baf27d98",
+                    "type": "youtube",
+                    "title": "Flash Flood Biker",
+                    "note": "Genius biker thinks he can make it through a flood on his motorcycle.",
+                    "source": "YouTube",
+                    "modules": [
+                        "ballot"
+                    ],
+                    "voting": [
+                        0.78,
+                        0.22
+                    ],
+                    "data": {
+                        "videoid": "pOoy7_l2EbI",
+                        "rel": 0,
+                        "modestbranding": 1
+                    },
+                    "ballotId": "rb-8e76295e41625f"
+                },
+                {
+                    "id": "rc-3194c992829ad5",
+                    "type": "youtube",
+                    "title": "Seagull GoPro Thief!",
+                    "note": "Oh, what about the time a seagull stole a GoPro? Insane.",
+                    "source": "YouTube",
+                    "modules": [
+                        "ballot"
+                    ],
+                    "voting": [
+                        0.90,
+                        0.10
+                    ],
+                    "data": {
+                        "videoid": "rIu5B3Fsstg",
+                        "rel": 0,
+                        "modestbranding": 1
+                    },
+                    "ballotId": "rb-8e76295e41625f"
+                },
+                {
+                    "id": "rc-974e99904a58fd",
+                    "type": "youtube",
+                    "title": "Rattlesnake Attack!",
+                    "note": "Want to see what an angry rattlesnake looks like?",
+                    "source": "YouTube",
+                    "modules": [
+                        "ballot"
+                    ],
+                    "voting": [
+                        0.86,
+                        0.14
+                    ],
+                    "data": {
+                        "videoid": "oEG1V7rkIK8",
+                        "rel": 0,
+                        "modestbranding": 1
+                    },
+                    "ballotId": "rb-8e76295e41625f"
+                },
+                {
+                    "id": "rc-0518f251954d3d",
+                    "type": "youtube",
+                    "title": "Rope-Swing!",
+                    "note": "Rope-swinging from a moving boat sounds like fun.",
+                    "source": "YouTube",
+                    "modules": [
+                        "ballot"
+                    ],
+                    "voting": [
+                        0.75,
+                        0.25
+                    ],
+                    "data": {
+                        "videoid": "zqIjZFV4YAU",
+                        "rel": 0,
+                        "modestbranding": 1
+                    },
+                    "ballotId": "rb-8e76295e41625f"
+                },
+                {
+                    "id": "rc-3502759494071f",
+                    "type": "youtube",
+                    "title": "Kitten Rescue!",
+                    "note": "The world's greatest fireman rescues a kitten.",
+                    "source": "YouTube",
+                    "modules": [
+                        "ballot"
+                    ],
+                    "voting": [
+                        0.98,
+                        0.02
+                    ],
+                    "data": {
+                        "videoid": "CjB_oVeq8Lo",
+                        "rel": 0,
+                        "modestbranding": 1
+                    },
+                    "ballotId": "rb-8e76295e41625f"
+                },
+                {
+                    "id": "rc-3502759494071f",
+                    "type": "youtube",
+                    "title": "Red Sox Victory!",
+                    "note": "Shane Victorino captures the moment the Red Sox won the World Series.",
+                    "source": "YouTube",
+                    "modules": [
+                        "ballot"
+                    ],
+                    "voting": [
+                        0.64,
+                        0.36
+                    ],
+                    "data": {
+                        "videoid": "eesJwsJoczY",
+                        "rel": 0,
+                        "modestbranding": 1
+                    },
+                    "ballotId": "rb-8e76295e41625f"
+                },
+                {
+                    "id": "rc-ee5f1c11d8d42f",
+                    "type": "miniReel",
+                    "data": {
+                        "message": "Check out these other MiniReels!",
+                        "query": {
+                            "id": [
+                                "1",
+                                "2",
+                                "3"
+                            ]
                         }
                     }
                 }

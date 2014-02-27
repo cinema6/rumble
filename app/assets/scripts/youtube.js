@@ -242,7 +242,7 @@
                 },
                 playerIsReady = false, playerHasLoaded = false,
                 currentTimeInterval, lastNotifiedCurrentTime = 0,
-                start = numberify($attr.start, 0), end = numberify($attr.end, 0);
+                start = numberify($attr.start, 0), end = numberify($attr.end, Infinity);
 
             $log.info('link: videoId=%1, start=%2, end=%3',
                 $attr.videoid, $attr.start, $attr.end);
