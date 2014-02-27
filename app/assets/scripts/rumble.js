@@ -20,7 +20,7 @@
                     opacity: 0
                 }, 500, function() {
                     $log.info('addClass end',className);
-                    element.css({'visibility' : 'hidden', 'position': 'absolute'});
+                    element.css({'visibility' : 'hidden', 'position': 'relative'});
                     done();
                 });
             },

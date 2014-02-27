@@ -258,7 +258,7 @@
             .mr-cards__item.squished {
                 height:0; overflow:hidden;
             }
-            .mr__cards__item.ng-animate {
+            .mr-cards__item.ng-animate {
                 top: 0;
             }
     .mr-card__group {
