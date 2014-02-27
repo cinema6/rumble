@@ -68,7 +68,10 @@
                         "type"   : "youtube",
                         "caption": "vid1 caption",
                         "note"   : "vid1 note",
-                        "thumb"  : "vid1.jpg",
+                        "thumbs" : {
+                            "small": "vid1.jpg",
+                            "large": "vid1--large.jpg"
+                        },
                         "voting" : [ 100, 50, 10 ],
                         "data"   : {
                             "videoid" : "vid1video"
@@ -86,7 +89,10 @@
                         "type"   : "vimeo",
                         "caption": "vid2 caption",
                         "note"   : "vid2 note",
-                        "thumb"  : "vid2.jpg",
+                        "thumbs" : {
+                            "small": "vid2.jpg",
+                            "large": "vid2--large.jpg"
+                        },
                         "voting" : [ 100, 50, 10 ],
                         "data"   : {
                             "videoid" : "vid2video"
@@ -99,7 +105,10 @@
                         "sponsored": true,
                         "caption": "ad2 caption",
                         "note"   : "ad2 note",
-                        "thumb"  : "ad2.jpg",
+                        "thumbs" : {
+                            "small": "ad2.jpg",
+                            "large": "ad2--large.jpg"
+                        },
                         "data"   : {
                             "videoid" : "ad2video"
                         }
@@ -109,7 +118,10 @@
                         "type"   : "dailymotion",
                         "caption": "vid3 caption",
                         "note"   : "vid3 note",
-                        "thumb"  : "vid3.jpg",
+                        "thumbs" : {
+                            "small": "vid3.jpg",
+                            "large": "vid3--large.jpg"
+                        },
                         "voting" : [ 100, 50, 10 ],
                         "data"   : {
                             "videoid" : "vid3video"
