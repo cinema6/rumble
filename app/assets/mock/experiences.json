@@ -197,7 +197,7 @@
                     "id"     : "rc-235d41cde02032",
                     "type"   : "miniReel",
                     "data"   : {
-                        "message": "Check out these other MiniReels!",
+                        "message": "Now check out...",
                         "query": {
                             "id": ["1", "2", "3"]
                         }
