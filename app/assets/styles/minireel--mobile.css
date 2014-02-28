@@ -562,7 +562,7 @@
             .mr-card__title-h1 {
                 font-size:1.25em; /*20px*/ color:#444444; font-weight:300; margin:0; line-height: 1.2;
             }
-            .mr-card__attributes a{
+            .mr-card__attributes {
                 color:#999999; font-size:0.75em;/*12px*/ margin:0.16em 0 1em 0;
             }
         .mr-card__copy {
