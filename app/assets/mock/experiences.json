@@ -833,5 +833,197 @@
                 }
             ]
         }
+    },
+    {
+        "id": "e-0bf9209b8cf08f",
+        "uri": "wrestling",
+        "appUriPrefix": "<%= settings.appUrl %>",
+        "appUri": "rumble",
+        "title": "The 7 Most Legendary Pro Wrestling Intros Of All Time",
+        "subtitle": "",
+        "summary": "Nothing electrifies a crowd like a good wrestling entrance. Finishing moves are cool, but most of them don't even hurt!",
+        "data": {
+            "id": "r-ea8caee7de7582",
+            "ballots": [
+                {
+                    "id": "rb-148edd87e67134",
+                    "choices": [
+                        {
+                            "button": "Hulk-Strong",
+                            "most": "The Goodest video"
+                        },
+                        {
+                            "button": "Too Weak",
+                            "most": "The Badest video"
+                        }
+                    ]
+                }
+            ],
+            "deck": [
+                {
+                    "id": "rc-0c4d7938b6fe3c",
+                    "type": "youtube",
+                    "title": "The Brood",
+                    "note": "Before there was \"Twilight\" or any of these dumbass vampire shows on TV, there was The Brood.",
+                    "source": "YouTube",
+                    "modules": [
+                        "ballot"
+                    ],
+                    "voting": [
+                        0.81,
+                        0.19
+                    ],
+                    "data": {
+                        "videoid": "E0q7PPu_NIg",
+                        "rel": 0,
+                        "modestbranding": 1
+                    },
+                    "ballotId": "rb-148edd87e67134"
+                },
+                {
+                    "id": "rc-29bd38a14dc46b",
+                    "type": "youtube",
+                    "title": "Rey Mysterio",
+                    "note": "Rey Mysterio is notoriously a sneaky, little bastard. You never know when he's going to pop up, but once he does, the minuscule Mexican emerges from under and hops up like a little chupacabra.",
+                    "source": "YouTube",
+                    "modules": [
+                        "ballot"
+                    ],
+                    "voting": [
+                        0.74,
+                        0.26
+                    ],
+                    "data": {
+                        "videoid": "SrliMvIPALU",
+                        "rel": 0,
+                        "modestbranding": 1
+                    },
+                    "ballotId": "rb-148edd87e67134"
+                },
+                {
+                    "id": "rc-9e477d23518112",
+                    "type": "youtube",
+                    "title": "Kane",
+                    "note": "No wrestler can intimidate like Kane. Not only did we have no idea what his face looked like for over a decade, but he always came out disheveled and looking like he was just finishing some terrible, cannibalistic act.",
+                    "source": "YouTube",
+                    "modules": [
+                        "ballot"
+                    ],
+                    "voting": [
+                        0.95,
+                        0.05
+                    ],
+                    "data": {
+                        "videoid": "Z5lMOIFAJVI",
+                        "rel": 0,
+                        "modestbranding": 1
+                    },
+                    "ballotId": "rb-148edd87e67134"
+                },
+                {
+                    "id": "rc-e1919a486fccfb",
+                    "type": "youtube",
+                    "title": "Eddie Guerrero",
+                    "note": "Coming down with the straight cholo music bumping in his lowrider with the fuzzy dice and hydraulics, Eddie was one of the greatest entertainers of his time.",
+                    "source": "YouTube",
+                    "modules": [
+                        "ballot"
+                    ],
+                    "voting": [
+                        0.65,
+                        0.35
+                    ],
+                    "data": {
+                        "videoid": "5oJtvopJoAU",
+                        "rel": 0,
+                        "modestbranding": 1
+                    },
+                    "ballotId": "rb-148edd87e67134"
+                },
+                {
+                    "id": "rc-11df958a25966d",
+                    "type": "vast",
+                    "ad": true,
+                    "modules": [],
+                    "data": {
+                        "autoplay": true
+                    }
+                },
+                {
+                    "id": "rc-2d991b6317e23d",
+                    "type": "youtube",
+                    "title": "Stacy Keibler",
+                    "note": "Stacy Keibler is one of the most stunning women ever to grace the ring, which makes sense considering that she was able to go beyond her career and become a model and an actress.",
+                    "source": "YouTube",
+                    "modules": [
+                        "ballot"
+                    ],
+                    "voting": [
+                        0.7,
+                        0.3
+                    ],
+                    "data": {
+                        "videoid": "HBq-FYvAFmk",
+                        "rel": 0,
+                        "modestbranding": 1
+                    },
+                    "ballotId": "rb-148edd87e67134"
+                },
+                {
+                    "id": "rc-26eb95e7e9d2ca",
+                    "type": "youtube",
+                    "title": "The Rock",
+                    "note": "The Rock is the most electrifying man in sports entertainment. But it's not just his theme song or routine that make him special, as he just has one of the craziest auras in the world.",
+                    "source": "YouTube",
+                    "modules": [
+                        "ballot"
+                    ],
+                    "voting": [
+                        0.9,
+                        0.1
+                    ],
+                    "data": {
+                        "videoid": "GQly9YfEhpA",
+                        "rel": 0,
+                        "modestbranding": 1
+                    },
+                    "ballotId": "rb-148edd87e67134"
+                },
+                {
+                    "id": "rc-cf6102c95f8d91",
+                    "type": "youtube",
+                    "title": "Degeneration X",
+                    "note": "DX has the best entrance of all time. Straight up. Starting off with the infamous \"Are you ready?\" line, you already know what time it is once the lights turn green.",
+                    "source": "YouTube",
+                    "modules": [
+                        "ballot"
+                    ],
+                    "voting": [
+                        0.82,
+                        0.18
+                    ],
+                    "data": {
+                        "videoid": "MNhe8ghamyE",
+                        "rel": 0,
+                        "modestbranding": 1
+                    },
+                    "ballotId": "rb-148edd87e67134"
+                },
+                {
+                    "id": "rc-b4b209132e2674",
+                    "type": "miniReel",
+                    "data": {
+                        "message": "Now check out...",
+                        "query": {
+                            "id": [
+                                "1",
+                                "2",
+                                "3"
+                            ]
+                        }
+                    }
+                }
+            ]
+        }
     }
 ]
