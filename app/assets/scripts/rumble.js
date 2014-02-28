@@ -244,7 +244,7 @@
 
                 if (isAd(card)) { continue; }
 
-                return (card || null) && card.thumb;
+                return (card || null) && card.thumbs.small;
             }
 
             return null;
@@ -259,7 +259,7 @@
 
                 if (isAd(card)) { continue; }
 
-                return (card || null) && card.thumb;
+                return (card || null) && card.thumbs.small;
             }
 
             return null;
