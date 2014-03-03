@@ -39,7 +39,10 @@
     .ui-control--portrait, .ui-context--portrait, .ui-nav-left--landscape, .ui-nav-right--landscape {
         background:#2a2a2a;
     }
-    .ui-context__label, .ui-nav__counter {
+    .ui-context__label, .ui-control__label, .ui-nav__label {
+        font-family: Georgia, Times, serif;
+    }
+    .ui-nav__counter {
         font-weight: 400;
     }
 
