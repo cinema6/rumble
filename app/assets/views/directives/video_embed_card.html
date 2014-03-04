@@ -1,6 +1,6 @@
 <article class="mr-card__group clearfix">
     <ballot-vote-module 
-        class="mr-ballot-module mr-ballot-module--light css-promote"
+        class="mr-ballot-module css-promote"
         ng-if="Ctrl.hasModule('ballot')"
         active="config._data.modules.ballot.active"
         ballot="config.ballot"
@@ -16,9 +16,9 @@
         </div>
     </div>
     
-    <div class="mr-card__copy mr-card__copy--light">
+    <div class="mr-card__copy">
         <div class="mr-card__title">
-            <h1 class="mr-card__title-h1 mr-card__title-h1--light tk--hdr">{{config.title}}</h1>
+            <h1 class="mr-card__title-h1 tk--hdr">{{config.title}}</h1>
             <!-- new -->
             <button class="mr-card__btn">
                 <span class="sprite--alpha-png mr-card__icon">
@@ -35,7 +35,7 @@
             card-id="{{config.id}}"
             fetch-when="onDeck || active">
         </ballot-results-module>-->
-        <div class="mr-card__desc mr-card__desc--light">{{config.note}}</div>
+        <div class="mr-card__desc">{{config.note}}</div>
     </div><!--.mr-card__copy-->
     <!--<comments-module ng-if="Ctrl.hasModule('comments')"
         card-id="{{config.id}}"

@@ -115,34 +115,22 @@
     .mr-experience classes
     ========================================================================== */
     .mr-experience {
-        padding:0 0.75rem 1.0625rem 0.75rem; 
-        min-width:28rem;/*448px*/
+        padding: 0 0.625em 63% 0.625rem;/*10px*/ position:relative;
+        height: 8.125rem;/*130px*/ min-width:28rem;/*448px*/
     }
-        .mr-experience--light {
-            padding: 0 0.625em 63% 0.625rem;/*10px*/ position:relative;
-            height: 8.125rem;/*130px*/
-        }
 
 /*  ==========================================================================
     .mr-pager__group classes
     ========================================================================== */
     .mr-pager__group {
-        width:100%; height:4.0625rem; /*65px*/ position:relative;
-        margin:0.875rem 0 0 0; display: block;
+        height:3.75rem;/*60px*/ position: absolute; z-index: 1;
+        margin:0; display: block; left: 0.625em; right: 0.625em; bottom: 0.625em;/*10px*/
     }
-        .mr-pager__group--light {
-            width: auto; height:3.75rem;/*60px*/ position: absolute; z-index: 1;
-            left: 0.625em; right: 0.625em; bottom: 0.625em;/*10px*/
-        }
-
     .mr-pager__btn {
-        min-width:1.4375rem;/*23px*/ height:4.065rem; position:absolute;
+        min-width:1.4375rem;/*23px*/ height:3.75rem;/*60px*/ position:absolute;
         background:#404040 no-repeat 50% 50%; border:0; padding:0; margin:0;
         cursor:pointer;
     }
-        .mr-pager__btn--light {
-            height:3.75rem;
-        }
         .mr-pager__btn--disabled {
             opacity:0.25; cursor:default;
         }
@@ -179,14 +167,11 @@
                     float:left; margin:0 0.125rem 0 0;
                 }
                     .mr-pages__page {
-                        width:7.25rem;/*116px*/ height:4.0625rem;/*65px*/
+                        width:7.25rem;/*116px*/ height:3.75rem;/*60px*/
                         margin:0; padding:0; border:0; background:black;
                         position:relative; overflow: hidden;
                         cursor: pointer;
                     }
-                        .mr-pages__page--light {
-                            height:3.75rem;/*60px*/
-                        }
                         .mr-pages__preview-img {
                             position:absolute; top:0;
                             width:100%; height:100%; display: block;
@@ -233,51 +218,24 @@
         width:100%;
     }
         .mr-nav__btn {
-            display: block; width:2.75rem;/*44px*/ height:3.375rem;/*54px*/
-            border:0; margin:-1.6875rem 0 0 0; padding:0; background:#404040;
+            display: block; width:3rem;/*48px*/ height:4.25rem;/*68px*/
+            border:0; margin:-2.125rem 0 0 0; padding:0; background:#b69823;
             position: absolute;
             cursor:pointer; opacity:0.3;
         }
-            .mr-nav__btn--light {
-                width:3rem;/*48px*/ height:4.25rem;/*68px*/
-                margin:-2.125rem 0 0 0; background:#b69823;
-            }
-                .mr-nav__prev {
-                    -webkit-border-radius: 0 3px 3px 0;
-                    -moz-border-radius: 0 3px 3px 0;
-                    border-radius: 0 3px 3px 0;
+                .mr-nav__prev--disabled {
+                    display: none;
                 }
-                    .mr-nav__prev--light {
-                        -webkit-border-radius: 0;
-                        -moz-border-radius: 0;
-                        border-radius: 0;
-                    }
-                    .mr-nav__prev--disabled {
-                        display: none;
-                    }
                 .mr-nav__next {
-                    -webkit-border-radius: 3px 0 0 3px;
-                    -moz-border-radius: 3px 0 0 3px;
-                    border-radius: 3px 0 0 3px;
                     right:0;
                 }
-                    .mr-nav__next--light {
-                        -webkit-border-radius: 0;
-                        -moz-border-radius: 0;
-                        border-radius: 0;
-                        right:0;
-                    }
                     .mr-nav__next--disabled {
                         display: none;
                     }
             .mr-nav__icon {
-                display: block; width:0.75rem;/*12px*/ height:1.25rem;/*20px*/
-                position:absolute; top:1.0625rem;/*17px*/
+                display: block; width:0.9375rem;/*15px*/  height:1.5rem;/*24px*/
+                position:absolute; top:1.4375rem;/*23px*/
             }
-                .mr-nav__icon--light {
-                    width:0.9375rem;/*15px*/ height:1.5rem;/*24px*/
-                    top:1.4375rem;/*23px*/
-                }
                 .mr-nav__icon-prev {
                     left:0.875rem;/*14px*/ background-position:0 -1.25rem;
                 }
@@ -290,12 +248,9 @@
     Mini Reel Cards classes
     ========================================================================== */
     .mr-card__container {
-        position: relative;
+        position: absolute; z-index: 2; padding: 0 0.625rem;/*10px*/
+        left: 0; right: 0; top: 0.625rem;/*10px*/ bottom: 4.375rem;/*70px*/
     }
-        .mr-card__container--light {
-            position: absolute; z-index: 2; padding: 0 0.625rem;/*10px*/
-            left: 0; right: 0; top: 0.625rem;/*10px*/ bottom: 4.375rem;/*70px*/
-        }
     .mr-cards__list, .mr-cards__item {
         margin:0; padding:0; list-style:none;
     }
@@ -303,11 +258,8 @@
             width:100%;
         }
         .mr-cards__item {
-            position:relative; width:100%; background:#fff;
+            position:relative; width:100%;
         }
-            .mr-cards__item--light {
-                background: none;
-            }
             .mr-cards__item.squished {
                 height:0; overflow:hidden;
             }
@@ -339,22 +291,15 @@
                     background:50% 50% / cover no-repeat;
                 }
         .mr-card__copy {
-            width:29.63%; float:right; margin:0.75rem 1.85% 0 0;
+            position: relative; width:100%; cursor: pointer; background-color: #252626; margin: 0;
         }
-            .mr-card__copy--light {
-                position: relative; width:100%; cursor: pointer; background-color: #252626; 
-                margin: 0; float: none;
-            }
             .mr-card__title {
                 margin:0; 
             }
                 .mr-card__title-h1 {
-                    font-size:1.25rem;/*20px*/ color:#000; font-weight:normal; margin:0; line-height: 1.3;
+                    font-size:1.125rem;/*18px*/ color:#fff; font-weight:normal; 
+                    padding: 0.8125rem 2.25rem 1rem 0; margin:0; line-height: 1;
                 }
-                    .mr-card__title-h1--light {
-                        padding: 0.8125rem 2.25rem 1rem 0; 
-                        font-size:1.125rem;/*18px*/ color:#fff; line-height: 1;
-                    }
                 .mr-card__attributes {
                     color:#999999; font-size:0.75em;/*12px*/ margin:0.16em 0 1em 0;
                 }
@@ -365,36 +310,27 @@
                     cursor: pointer;
                 }
             .mr-card__desc {
-                margin:1em 0 0 0; font-size:0.875rem;/*14px*/ color:#474747; line-height:1.57;
+                margin: -0.5em 0 0 0;/*8px*/ font-size:0.8125rem;/*13px*/ 
+                color:#c2c2c2; line-height:1.69; height: 4.75rem;/*76px*/
+                display:none;
             }   
-                .mr-card__desc--light {
-                    font-size:0.8125rem;/*13px*/ color:#c2c2c2; line-height:1.69; height: 4.75rem;/*76px*/
-                    margin: -0.5em 0 0 0;/*8px*/
-                    display:none;
-                }   
 
 
 /*  ==========================================================================
     .mr-ballot__module styles
     ========================================================================== */
     .mr-ballot-module {
-        position: absolute; width:100%; height:100%;
+        position: absolute; width:100%; height: 0; padding: 0 0 63%;
         z-index: 2; left:0; top:0;
     }
-        .mr-ballot-module--light {
-            height: 0; padding: 0 0 63%;
-        }
     .mr-ballot__group {
         position: absolute; z-index: 500; top:1.25em;/*20px*/; left:0; width:100%;
         text-align: center; box-sizing:border-box; -moz-box-sizing:border-box;
     }
     .mr-ballot__title {
-        color:#fff; font-size:1.5em;/*24px*/ font-weight:normal; 
-        text-align: center; line-height: 1.2; font-style: italic;
+        color:#fff; font-size: 1.25em;/*20px*/ font-weight:normal; 
+        text-align: center; line-height: 1.1;
     }
-        .mr-ballot__title--light {
-            font-size: 1.25em;/*20px*/ font-style: normal; line-height: 1.1;
-        }
     .mr-ballot__list {
         margin:0 0 2em 0; padding:0; list-style: none;
     }
