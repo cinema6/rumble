@@ -2,8 +2,8 @@
     'use strict';
 
     angular.module('c6.rumble')
-        .controller('VastCardController', ['$scope','VASTService','ControlsService','EventService',
-        function                          ( $scope , VASTService , ControlsService , EventService ) {
+        .controller('VastCardController', ['$scope','VASTService','ControlsService','EventService','ModuleService',
+        function                          ( $scope , VASTService , ControlsService , EventService , ModuleService ) {
             var self = this,
                 config = $scope.config,
                 _data = config._data = config._data || {
@@ -18,26 +18,46 @@
                         }
                     }
                 },
-                data = config.data;
+                data = config.data,
+                player = null;
 
             this.videoSrc = null;
+
+            this.hasModule = ModuleService.hasModule.bind(ModuleService, config.modules);
+
+            this.reset = function() {
+                _data.modules.displayAd.active = false;
+
+                player.currentTime = 0;
+                player.play();
+            };
 
             $scope.$watch('onDeck', function(onDeck) {
                 if(onDeck) {
                     VASTService.getVAST().then(function(vast) {
                         self.videoSrc = vast.getVideoSrc('video/mp4');
                     });
+
+                    _data.modules.displayAd.src = config.displayAd;
                 }
             });
 
             $scope.$on('playerAdd', function(event, iface) {
+                player = iface;
+
                 _data.playerEvents = EventService.trackEvents(iface, ['play']);
 
                 iface.on('ended', function() {
-                    if (!_data.modules.displayAd.src) {
-                        $scope.$emit('<vast-card>:contentEnd', config);
-                    }
-                });
+                        if (!_data.modules.displayAd.src) {
+                            $scope.$emit('<vast-card>:contentEnd', config);
+                        }
+                    })
+                    .on('pause', function() {
+                        _data.modules.displayAd.active = true;
+                    })
+                    .on('play', function() {
+                        _data.modules.displayAd.active = false;
+                    });
 
                 $scope.$watch('active', function(active, wasActive) {
                     if (active === wasActive) { return; }
