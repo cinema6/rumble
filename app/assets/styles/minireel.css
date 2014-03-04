@@ -565,6 +565,6 @@
     }
     .mr-splash__start {
         position:absolute; width:100%; height:100%; top:0; min-height:28.75rem;/*460px*/
-        background:url('../img/splash__desktop.jpg') 50% 50% / cover no-repeat;
+        background: cover no-repeat;
         border:0; margin:0; padding:0; cursor:pointer;
     }

@@ -8,13 +8,7 @@
         "subtitle": "You choose",
         "summary": "Pick the best",
         "img": {
-            "hero": "experiences/rumble/assets/rumble__hero.jpg",
-            "tag": null
-        },
-        "landingPageContent": {
-            "middle": "experiences/rumble/middle.html",
-            "right": "experiences/rumble/right.html",
-            "stylesheet": "experiences/rumble/assets/styles.css"
+            "splash": "experiences/rumble/splash.jpg"
         },
         "data": {
             "id": "r-738c2403d83ddc",
@@ -238,6 +232,9 @@
         "title": "The 15 Most Amazing GoPro Videos Ever Recorded",
         "subtitle": "",
         "summary": "GoPro cameras are the only tech inventions we were introduced to in 2013 that we think deserve to continue trending in 2014. These handy-dandy cameras are perfect for just about any activity, including skydiving, surfing, or rescuing a baby kitten from a tree.",
+        "img": {
+            "splash": "experiences/gopro/splash.jpg"
+        },
         "data": {
             "id": "r-ea8caee7de7582",
             "ballots": [
@@ -590,6 +587,9 @@
         "title": "The 10 Greatest Super Bowl Plays Of All Time",
         "subtitle": "",
         "summary": "From touchdowns, to big hits, spectacular catches and defensive stops, the highest level of competition never disappoints. To really appreciate what this Super Bowl will bring us on Sunday, it's important to remember some of the greatness of the past.",
+        "img": {
+            "splash": "experiences/superbowl/splash.jpg"
+        },
         "data": {
             "id": "r-a798237d2e522f",
             "ballots": [
@@ -842,6 +842,9 @@
         "title": "The 7 Most Legendary Pro Wrestling Intros Of All Time",
         "subtitle": "",
         "summary": "Nothing electrifies a crowd like a good wrestling entrance. Finishing moves are cool, but most of them don't even hurt!",
+        "img": {
+            "splash": "experiences/wrestling/splash.jpg"
+        },
         "data": {
             "id": "r-ea8caee7de7582",
             "ballots": [

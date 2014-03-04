@@ -7,7 +7,7 @@
     "saucelabsJSON": ".saucelabs.json",
     "browserstackJSON": ".browserstack.json",
     "sandboxPort": 9000,
-    "collateralDir": "siteContent",
+    "collateralDir": "c6Content",
     "experiencesJSON": "<%= settings.appDir %>/assets/mock/experiences.json",
     "libUrl": "http://s3.amazonaws.com/c6.dev/ext/",
     "defaultE2EEnv": "browserstack",
