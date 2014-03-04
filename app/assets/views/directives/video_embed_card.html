@@ -1,6 +1,6 @@
 <article class="mr-card__group clearfix">
     <ballot-vote-module 
-        class="mr-ballot-module css-promote"
+        class="mr-ballot-module mr-ballot-module--light css-promote"
         ng-if="Ctrl.hasModule('ballot')"
         active="config._data.modules.ballot.active"
         ballot="config.ballot"
@@ -8,29 +8,34 @@
         on-dismiss="Ctrl.dismissBallot()">
     </ballot-vote-module>
 
-    <div class="mr-card__player">
-        <div class="mr-player__group">
-            <div ng-class="{'mr-player--fly-away': Ctrl.flyAway}" class="mr-player"><!-- actual player will be inserted into this container --></div>
-            <div ng-show="Ctrl.flyAway" class="mr-player__thumbnail"
-                ng-style="{'background-image':config.thumbs.large ? 'url(' + config.thumbs.large + ')' : ''}">
-                <span class="ir"><img ng-src="{{config.thumbs.large}}"></span>
-            </div>
+    <div class="mr-player__group">
+        <div ng-class="{'mr-player--fly-away': Ctrl.flyAway}" class="mr-player"><!-- actual player will be inserted into this container --></div>
+        <div ng-show="Ctrl.flyAway" class="mr-player__thumbnail"
+            ng-style="{'background-image':config.thumbs.large ? 'url(' + config.thumbs.large + ')' : ''}">
+            <span class="ir"><img ng-src="{{config.thumbs.large}}"></span>
         </div>
     </div>
     
-    <div class="mr-card__copy">
+    <div class="mr-card__copy mr-card__copy--light">
         <div class="mr-card__title">
-            <h1 class="mr-card__title-h1 tk--hdr">{{config.title}}</h1>
-            <p class="mr-card__attributes">via <a ng-href="{{Ctrl.videoUrl}}" target="_blank" title="YouTube">{{config.source}}</a></p>
+            <h1 class="mr-card__title-h1 mr-card__title-h1--light tk--hdr">{{config.title}}</h1>
+            <!-- new -->
+            <button class="mr-card__btn">
+                <span class="sprite--alpha-png mr-card__icon">
+                    <span class="ir">Open</span>
+                </span>
+            </button>
+            <!-- end new -->
+            <!-- removed attrs element -->
         </div>
-        <ballot-results-module ng-if="Ctrl.hasModule('ballot')"
+        <!--<ballot-results-module ng-if="Ctrl.hasModule('ballot')"
             active="config._data.modules.ballot.vote !== null"
             ballot="config.ballot"
             vote="config._data.modules.ballot.vote"
             card-id="{{config.id}}"
             fetch-when="onDeck || active">
-        </ballot-results-module>
-        <div class="mr-card__desc">{{config.note}}</div>
+        </ballot-results-module>-->
+        <div class="mr-card__desc mr-card__desc--light">{{config.note}}</div>
     </div><!--.mr-card__copy-->
     <!--<comments-module ng-if="Ctrl.hasModule('comments')"
         card-id="{{config.id}}"

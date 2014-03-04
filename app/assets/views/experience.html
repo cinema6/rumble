@@ -1,21 +1,18 @@
-<div class="mr-experience">
-    <div class="mr-titlebar" ng-hide="currentIndex < 0">
-        <h1 class="mr-titlebar__title">{{app.data.experience.title}}</h1>
-    </div>
-
-    <div class="mr-card__container">
+<div class="mr-experience mr-experience--light">
+    <!-- removed experience title -->
+    <div class="mr-card__container mr-card__container--light">
         <nav class="mr-nav__group" ng-hide="currentIndex < 0">
-            <button class="mr-nav__btn mr-nav__prev" title="Previous Video" type="button" 
+            <button class="mr-nav__btn mr-nav__btn--light mr-nav__prev mr-nav__prev--light" title="Previous Video" type="button" 
                 ng-click="RumbleCtrl.goBack()">
-                <span class="sprite--alpha-png mr-nav__icon mr-nav__icon-prev">
+                <span class="sprite--alpha-png mr-nav__icon mr-nav__icon--light mr-nav__icon-prev">
                     <span class="ir">Previous Video</span>
                 </span>
             </button>
 
             <button ng-class="{'mr-nav__next--disabled': atTail}" 
-                class="mr-nav__btn mr-nav__next" title="Next Video" type="button" 
+                class="mr-nav__btn mr-nav__btn--light mr-nav__next mr-nav__next--light" title="Next Video" type="button" 
                 ng-click="RumbleCtrl.goForward()" ng-disabled="atTail">
-                <span class="sprite--alpha-png mr-nav__icon mr-nav__icon-next">
+                <span class="sprite--alpha-png mr-nav__icon mr-nav__icon--light mr-nav__icon-next">
                     <span class="ir">Next Video</span>
                 </span>
             </button>
@@ -25,7 +22,7 @@
     </div>
 
     <thumb-paginator active="tocIndex" ng-if="currentIndex > -1" 
-        class="mr-pager__group" ng-hide="currentIndex < 0">
+        class="mr-pager__group mr-pager__group--light" ng-hide="currentIndex < 0">
         <ul class="mr-pages__list">
             <li thumb-paginator-item ng-repeat="this in tocCards" class="mr-pages__item">
                 <navbar-button index="$index"
