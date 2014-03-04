@@ -62,6 +62,10 @@
         .config(['c6UrlMakerProvider', 'c6Defines',
         function( c6UrlMakerProvider ,  c6Defines ) {
             c6UrlMakerProvider.location(c6Defines.kBaseUrl,'default');
+            c6UrlMakerProvider.location(
+                c6Defines.kCollateralUrls[c6Defines.kDebug ? 'dev' : 'cdn'],
+                'collateral'
+            );
         }])
         .config(['VASTServiceProvider',
         function( VASTServiceProvider ) {
@@ -88,6 +92,12 @@
                 return Math.round((input * 100)) + '%';
             };
         })
+        .filter('collateral', ['c6UrlMaker',
+        function              ( c6UrlMaker ) {
+            return function(url) {
+                return url && c6UrlMaker(url, 'collateral');
+            };
+        }])
         .filter('timestamp', ['dateFilter','$window',
         function             ( dateFilter , $window ) {
             return function(epoch) {
@@ -129,6 +139,16 @@
                     duration    : NaN,
                     paused      : true
                 });
+            };
+        }])
+        .directive('c6BgImg', [function() {
+            return {
+                restrict: 'AC',
+                link: function(scope, element, attrs) {
+                    attrs.$observe('c6BgImg', function(src) {
+                        element.css('background-image', (src || '') && ('url(' + src + ')'));
+                    });
+                }
             };
         }])
         .directive('c6DockAnchor', ['$window',

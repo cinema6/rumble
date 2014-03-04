@@ -19,7 +19,7 @@
     c6.kHasKarma = true;
     c6.kLogFormats = true;
     c6.kLogLevels = ['error','warn','log','info'];
-    c6.kVideoUrls = {
+    c6.kCollateralUrls = {
         local: 'assets/media',
         cdn: 'http://foo.cinema6.com/media/app'
     };
