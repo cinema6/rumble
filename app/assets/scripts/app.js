@@ -55,6 +55,7 @@
                 }
             });
         }])
+
         .config(['c6UrlMakerProvider', 'c6Defines',
         function( c6UrlMakerProvider ,  c6Defines ) {
             c6UrlMakerProvider.location(c6Defines.kBaseUrl,'default');
@@ -62,6 +63,30 @@
                 return 'local';
             }())] ,'video');
         }])
+
+        .config(['cinema6Provider','c6UrlMakerProvider',
+        function( cinema6Provider , c6UrlMakerProvider ) {
+            var FixtureAdapter = cinema6Provider.adapters.fixture;
+
+            FixtureAdapter.config = {
+                jsonSrc: c6UrlMakerProvider.makeUrl('mock/fixtures.json')
+            };
+
+            cinema6Provider.useAdapter(FixtureAdapter);
+        }])
+
+        .config(['c6StateProvider','c6UrlMakerProvider',
+        function( c6StateProvider , c6UrlMakerProvider ) {
+            var assets = c6UrlMakerProvider.makeUrl.bind(c6UrlMakerProvider);
+
+            c6StateProvider
+                .state('manager', {
+                    controller: 'ManagerController',
+                    templateUrl: assets('views/manager.html')
+                })
+                .index('manager');
+        }])
+
         .controller('AppController', ['$scope', '$log', 'cinema6', 'gsap',
         function                     ( $scope ,  $log ,  cinema6 ,  gsap ) {
             var self = this;
