@@ -546,6 +546,9 @@
         .mr-cards__item.squished {
             height:0; overflow:hidden;
         }
+        .mr-cards__item.ng-animate {
+            top: 3em; left: 0.375em; right: 0.375em; position: absolute !important;
+        }
     .mr-card {
         background:#fff; border-radius: 3px; padding:0.5em 0;
     }
@@ -583,8 +586,11 @@
         .mr-card__title {
             width:25%; float:left; margin-right:0;
         }
-        .mr-player {
+        .mr-player, .mr-player__thumbnail {
             width:70%; float:right; margin-right:0.5em; padding:0 0 39.375%;
+        }
+        .mr-cards__item.ng-animate {
+            top: 0.375em; left: 4.125em; right: 4.125em;
         }
     }
 
