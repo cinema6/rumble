@@ -102,10 +102,9 @@
     c6.kHasKarma = false;
     c6.kLogFormats = c6.kDebug;
     c6.kLogLevels = (c6.kDebug) ? ['error','warn','log','info'] : [];
-    c6.kVideoUrls = {
-        local: c6.kBaseUrl + '/media',
-        dev: 'http://s3.amazonaws.com/c6.dev/media/src/stub',
-        cdn: 'http://cdn1.cinema6.com/src/stub'
+    c6.kCollateralUrls = {
+        dev: 'http://s3.amazonaws.com/c6.dev/media/src/site/collateral',
+        cdn: 'http://cinema6.com/collateral'
     };
     c6.kModDeps = ['c6.rumble.services', 'ngAnimate','c6.ui', 'c6.log'];
     
