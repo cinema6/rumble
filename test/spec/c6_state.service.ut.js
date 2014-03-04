@@ -58,16 +58,16 @@
 
                     aboutModelSpy = jasmine.createSpy('aboutModelSpy');
                     contactBeforeModelSpy = jasmine.createSpy('contactBeforeModelSpy')
-                        .andCallFake(function($q) {
+                        .and.callFake(function($q) {
                             return $q.reject('I am rejected');
                         });
                     contactModelSpy = jasmine.createSpy('contactModelSpy')
-                        .andCallFake(function($q) {
+                        .and.callFake(function($q) {
                             return $q.when(fakeUser);
                         });
                     contactAfterModelSpy = jasmine.createSpy('contactAfterModelSpy');
                     handleErrorSpy = jasmine.createSpy('handleErrorSpy')
-                        .andCallFake(function() {
+                        .and.callFake(function() {
                             return {};
                         });
 
@@ -104,7 +104,7 @@
                         transition = $q.defer();
 
                         spyOn($log, 'error');
-                        spyOn(c6State, 'transitionTo').andReturn(transition.promise);
+                        spyOn(c6State, 'transitionTo').and.returnValue(transition.promise);
                     });
 
                     describe('if there is no current state', function() {
@@ -149,7 +149,7 @@
                             beforeEach(function() {
                                 resolveStateSpy = jasmine.createSpy('resolve state');
 
-                                spyOn(_service, 'resolveState').andCallThrough();
+                                spyOn(_service, 'resolveState').and.callThrough();
                             });
 
                             it('should call all the hooks in order', function() {
@@ -281,8 +281,8 @@
                                 transition2 = $q.defer();
                                 resolveState = $q.defer();
 
-                                spyOn(_service, 'resolveState').andReturn(resolveState.promise);
-                                spyOn(c6State, 'emit').andCallThrough();
+                                spyOn(_service, 'resolveState').and.returnValue(resolveState.promise);
+                                spyOn(c6State, 'emit').and.callThrough();
                             });
 
                             it('should emit transitionStart with the new and previous state', function() {

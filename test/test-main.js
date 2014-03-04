@@ -80,6 +80,9 @@
                 c6_state: {
                     deps: ['angularMocks']
                 },
+                c6_with: {
+                    deps: ['app']
+                },
                 manager: {
                     deps: ['app']
                 }

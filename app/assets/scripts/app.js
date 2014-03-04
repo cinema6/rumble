@@ -82,7 +82,17 @@
             c6StateProvider
                 .state('manager', {
                     controller: 'ManagerController',
-                    templateUrl: assets('views/manager.html')
+                    controllerAs: 'ManagerCtrl',
+                    templateUrl: assets('views/manager.html'),
+                    model:  ['cinema6',
+                    function( cinema6 ) {
+                        return cinema6.db.findAll('currentUser')
+                            .then(function(currentUsers) {
+                                var user = currentUsers[0];
+
+                                return cinema6.db.findAll('experience', { appUri: 'rumble', org: user.org });
+                            });
+                    }]
                 })
                 .index('manager');
         }])

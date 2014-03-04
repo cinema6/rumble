@@ -22,7 +22,7 @@
                     $provide.factory('c6State', function(c6EventEmitter) {
                         var c6State = c6EventEmitter({});
 
-                        spyOn(c6State, 'emit').andCallThrough();
+                        spyOn(c6State, 'emit').and.callThrough();
 
                         return c6State;
                     });
@@ -86,7 +86,7 @@
                         },
                         oldScope = view.find('c6-view div').scope();
 
-                    spyOn(oldScope, '$destroy').andCallThrough();
+                    spyOn(oldScope, '$destroy').and.callThrough();
 
                     $scope.$apply(function() {
                         c6State.emit('viewChangeStart', contactsState);

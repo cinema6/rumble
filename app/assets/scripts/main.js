@@ -36,7 +36,8 @@
                 return [
                     'scripts/app',
                     'scripts/manager',
-                    'scripts/c6_state'
+                    'scripts/c6_state',
+                    'scripts/c6_with'
                 ];
             }
         }()),

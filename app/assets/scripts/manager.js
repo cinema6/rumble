@@ -2,7 +2,8 @@
     'use strict';
 
     angular.module('c6.mrmaker')
-        .controller('ManagerController', [function() {
-
+        .controller('ManagerController', ['cModel',
+        function                         ( cModel ) {
+            this.model = cModel;
         }]);
 }());

@@ -1,22 +1,22 @@
-<main>
+<main c6-with="ManagerCtrl.model as minireels">
     <nav>
         <ul>
             <li><button>Create New</button>
         </ul>
     </nav>
     <ul>
-        <li>
+        <li ng-repeat="this in minireels">
             <article>
                 <header>
-                    <h4>My Mini Reel</h4>
+                    <h4>{{this.title}}</h4>
                     <span>Unpublished</span>
                 </header>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. In ligula ante, bibendum quis consequat ut, pellentesque eu nunc. Donec a pretium orci.</p>
+                <p>{{this.summary}}</p>
                 <button>Edit</button>
                 <button>Copy</button>
                 <button>Delete</button>
             </article>
         </li>
     </ul>
-    <p>You have no Mini Reels. Would you like to <a>create one?</a></p>
+    <p ng-show="!minireels.length">You have no Mini Reels. Would you like to <a>create one?</a></p>
 </main>
