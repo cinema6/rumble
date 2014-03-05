@@ -28,7 +28,7 @@
         font-family: 'Georgia', 'Times New Roman', serif; font-weight:300;
     }
     a {
-        text-decoration: none; color:#d94040; border-bottom:1px dotted #d94040;
+        text-decoration: none; color:#d94040; /*border-bottom:1px dotted #d94040;*/
     }
     a:focus, button:focus, input:focus, textarea:focus {
         outline:none; border:0;
@@ -57,12 +57,12 @@
         background:url('../img/mr-sprite__alpha@2x.png') 0 0 / 6.25rem 3.125rem no-repeat;
     }
     .sprite {
-        background:url('../img/sprite.svg') 0 0 / 18.75em 18.75em no-repeat;
+        background:url('../img/sprite--light.svg') 0 0 / 18.75em 18.75em no-repeat;
     }
     @media screen and (min-width:0\0) {  
         /* IE9 and IE10 rule sets go here */
         .sprite {
-            background-image:url('../img/sprite.png');
+            background-image:url('../img/sprite--light.png');
         }
     }
     .mr-overlay {
@@ -72,6 +72,9 @@
     .css-promote {
         transform: translateZ(0);
         -webkit-transform: translateZ(0); /* Safari and Chrome */
+    }
+    .threshold-320 { 
+        min-height:20rem;/*320px*/ 
     }
 
     
@@ -128,7 +131,7 @@
     }
     .mr-pager__btn {
         min-width:1.4375rem;/*23px*/ height:3.75rem;/*60px*/ position:absolute;
-        background:#404040 no-repeat 50% 50%; border:0; padding:0; margin:0;
+        background:#b69823 no-repeat 50% 50%; border:0; padding:0; margin:0;
         cursor:pointer;
     }
         .mr-pager__btn--disabled {
@@ -141,12 +144,12 @@
             right:0;
         }
     .mr-pager__icon {
-        display:block; width:0.5625rem;/*9px*/ height:1rem;/*16px*/
-        position:absolute; top:1.5625rem;/*25px*/ left:50%; margin:0 0 0 -0.25rem;
+        display:block; width:0.875rem;/*14px*/ height:1.4375rem;/*23px*/
+        position:absolute; top:1.1875rem;/*19px*/ left:50%; margin:0 0 0 -0.375rem;
         opacity:0.5;
     }
         .mr-pager__icon-next {
-            background-position:-0.625rem 0;
+            background-position: 0 -2.5rem;
         }
     /* pages styles */
     .mr-pages__group {
@@ -167,7 +170,7 @@
                     float:left; margin:0 0.125rem 0 0;
                 }
                     .mr-pages__page {
-                        width:7.25rem;/*116px*/ height:3.75rem;/*60px*/
+                        width:5.625rem;/*90px*/ height:3.75rem;/*60px*/
                         margin:0; padding:0; border:0; background:black;
                         position:relative; overflow: hidden;
                         cursor: pointer;
@@ -266,9 +269,7 @@
             .mr-cards__item.ng-animate {
                 top: 0;
             }
-    .mr-card__group {
-        min-height:20rem;/*320px*/ 
-    }
+
         .mr-card__player {
             width:66.14%; float:left;
         }
@@ -279,7 +280,6 @@
             }
                 .mr-player, .mr-player__thumbnail {
                     position:absolute; width:100%; height:100%;
-                    min-height:20rem;/*320px*/
                 }
                     .mr-player iframe {
                         width:100%; height:100%; position:absolute;
@@ -291,7 +291,7 @@
                     background:50% 50% / cover no-repeat;
                 }
         .mr-card__copy {
-            position: relative; width:100%; cursor: pointer; background-color: #252626; margin: 0;
+            position: relative; width:100%; background-color: #252626; margin: 0;
         }
             .mr-card__title {
                 margin:0; 
@@ -303,15 +303,24 @@
                 .mr-card__attributes {
                     color:#999999; font-size:0.75em;/*12px*/ margin:0.16em 0 1em 0;
                 }
-                /* new class */
                 .mr-card__btn {
                     height: 1.5rem;/*24px*/ width: 1.5rem;/*24px*/ right: 0; top: 0.75rem;/*12px*/
                     position: absolute; padding: 0; border: 0; background-color: #b69823;
                     cursor: pointer;
                 }
+                    .mr-card__icon {
+                        height: 0.4375rem;/*7px*/ width: 0.3125rem;/*5px*/ display:block;
+                        background: url('../img/dropdown-arrow.png') no-repeat 0 0;
+                        margin: 0 auto;
+                    }
+                        .mr-card__icon--active {
+                            transform: rotateX(180deg);
+                            -ms-transform: rotateX(180deg);
+                            -webkit-transform: rotateX(180deg);
+                        }
             .mr-card__desc {
                 margin: -0.5em 0 0 0;/*8px*/ font-size:0.8125rem;/*13px*/ 
-                color:#c2c2c2; line-height:1.69; height: 4.75rem;/*76px*/
+                color:#c2c2c2; line-height:1.69; height: 4.875rem;/*78px*/
                 display:none;
             }   
 
@@ -320,16 +329,16 @@
     .mr-ballot__module styles
     ========================================================================== */
     .mr-ballot-module {
-        position: absolute; width:100%; height: 0; padding: 0 0 63%;
+        position: absolute; width:100%; height: 0; padding: 0 0 64%;
         z-index: 2; left:0; top:0;
     }
     .mr-ballot__group {
-        position: absolute; z-index: 500; top:1.25em;/*20px*/; left:0; width:100%;
-        text-align: center; box-sizing:border-box; -moz-box-sizing:border-box;
+        position: absolute; z-index: 500; top:26%; bottom: 0; width:100%;
+        text-align: center;
     }
     .mr-ballot__title {
         color:#fff; font-size: 1.25em;/*20px*/ font-weight:normal; 
-        text-align: center; line-height: 1.1;
+        text-align: center; line-height: 1.4;
     }
     .mr-ballot__list {
         margin:0 0 2em 0; padding:0; list-style: none;
@@ -338,8 +347,7 @@
             display:inline-block; margin:0 1em;
         }
             .mr-ballot__btn {
-                border-radius:3px; border:0; 
-                width:10em; /*240px*/ height:5em; /*120px*/
+                border:0; width:10em; /*240px*/ height:5em; /*120px*/
                 font-size:1.25rem;/*20px*/ color:#fff; font-weight:bold; font-style: italic;
                 cursor:pointer;
             }
@@ -353,18 +361,23 @@
                     font-size:1.125rem;/*18px*/ line-height: 1.33;
                 }
         .mr-ballot__textlink {
-            display:inline; margin-left:1em; margin-right:1em;
-            cursor: pointer;
+            position: absolute; margin: 0; bottom:0.625rem;/*10px*/ cursor: pointer;
         }
-    
-    @media screen and (min-width:30.625rem) and (max-width:40.5625rem) {
-        /*490px and 649px*/
-        .mr-ballot__group {
-            top:3rem;
+            .mr-ballot__textlink--results {
+                right: 1rem;
+            }
+            .mr-ballot__textlink--watch-again {
+                left: 1rem;
+            }
+
+        .mr-ballot__close {
+            width: 1.25rem;/*20px*/ height: 1.25rem;/*20px*/ position: absolute;
+            padding: 0; border: 0; top: 0; right: 0; font-size: 1em; margin: 1em;
+            background-position: 0 -9.35rem; cursor: pointer;
         }
-    }
-    @media screen and (max-width:30.5625rem) {
-        /*max 489px*/
+
+    @media screen and (max-width:31.25rem) {
+        /*max 500px*/
         .mr-ballot__group {
             top:4rem;
         }
@@ -384,12 +397,12 @@
     .mr-results__group
     ========================================================================== */
     .mr-results__group {
-        margin:0; padding:0.75rem 0;
-        border-bottom:1px dotted #cdcdcd; border-top:1px dotted #cdcdcd;
+        position: absolute; height: 0; padding: 0 6.25rem 64%;
+        z-index: 2; left:0; right: 0; top:0; background-color: rgba(0,0,0,0.8);
     }
         .mr-results__title {
-            color:#999; text-align: center; font-weight:300; font-size:0.75em; /*12px*/
-            margin:0 0 0.333em 0; line-height: 1;
+            color:#fff; font-size: 1.25em;/*20px*/ font-weight:normal; 
+            text-align: center; line-height: 1.4; margin-top: 26%;
         }
         .mr-results__list {
             margin:0; padding:0; list-style:none;
@@ -401,11 +414,12 @@
                     text-align: right;
                 }
                 .mr-results__option {
-                    font-weight:700; font-style:italic; font-size:0.875em; /*14px*/ line-height: 1;
+                    font-weight:400; font-style:italic; font-size:1em; line-height: 1.5;
                     margin:0;
                 }
                 .mr-results__tally {
-                    font-weight:900; font-size:1.125em; margin:1px 0 0 0; line-height: 1;
+                    font-weight:900; font-style: italic; font-size:1.375em;/*22px*/ line-height: 1;
+                    margin:0 0 0.7273em;/*16px*/ 
                 }
                     .mr-results__item0 .mr-results__option, .mr-results__item0 .mr-results__tally {
                         color:#8ac12a;
@@ -414,13 +428,22 @@
                         color:#19cbe6;
                     }
         .mr-results__meter {
-            border-radius:3px; background:#19cbe6;
-            height:0.75em; width:100%;
+            background:#19cbe6;
+            height:1.75em;/*28px*/ width:100%;
             overflow: hidden;
         }
             .mr-results__bar1 {
-                height:0.75em; background:#8ac12a; border-right:2px solid #fff;
+                height:1.75em; background:#8ac12a; border-right:1px solid #000;
             }
+        .mr-results__watch-again {
+            display: block; margin: 3em auto 0; cursor: pointer; width: 8.75em;
+        }
+
+        .mr-results__close {
+            width: 1.25rem;/*20px*/ height: 1.25rem;/*20px*/ position: absolute;
+            padding: 0; border: 0; top: 0; right: 0; font-size: 1em; margin: 1em;
+            background-position: 0 -9.35rem; cursor: pointer;
+        }
 
 
 
@@ -514,17 +537,37 @@
 /*  ==========================================================================
     VAST Ad styles
     ========================================================================== */
+    .mr-vast__group {
+        position: relative; height: 100%; width: 100%;
+    }
     .mr-vast__player {
-        width:100%; height:0;
-        position:relative; padding:0 0 42.34% 0;
+        width:100%; height:0; position:absolute;
+        padding:0 0 64% 0; z-index: 2;
     }
         .mr-vast__video {
-            width:100%; height:100%; position:absolute; min-height:20rem;
+            width:100%; height:100%; position:absolute;
         }
         .mr-vast__title-h1 {
-            margin:0 0 0 -3.5rem; padding:0.125rem 0; position:absolute; left:50%; top:0;
-            font-size:0.625rem; text-align: center; color:#a0a0a0;
-            width:7rem; background:#000; background:rgba(0,0,0,0.76);
+            font-size: 0.875em; color: #929292; text-align: center;
+        }
+            .mr-vast__title-h1--playing {
+                position: absolute; bottom: -2.57em; left: 50%; margin-left: -3em;
+            }
+            .mr-vast__title-h1--display {
+                position: absolute; top: 50%; left: 50%; margin: -9.5rem 0 0 -3em;
+            }
+        .mr-vast__display-ad {
+            width:100%; height:0; position:relative;
+            padding:0 0 64% 0; z-index: 1;
+        }
+            .mr-vast__thumbnail {
+                position: absolute; width: 18.75rem;/*300px*/ height: 15.625rem;/*250px*/
+                left: 50%; top: 50%; margin: -7.8125rem 0 0 -9.375rem;
+                background: cover no-repeat;
+            }
+        .mr-vast__watch-again {
+            font-size: 1em; position: absolute; 
+            top: 50%; left: 50%; margin: 8em 0 0 -3.6875em;
         }
 
 
@@ -532,13 +575,13 @@
     More Reels card classes
     ========================================================================== */
     .mr-more-reels__intro {
-        font-size:1rem; color:#444; font-weight:300;
-        margin:0 0 0.5em 0;
+        font-size:0.875rem; color:#929292; font-weight:300; text-align: center;
+        background-color: #252626; margin:0; padding: 0.125rem 0 0.4375rem 0;
     }
         .mr-more-reels__preview {
             background:url('../img/more-reels__preview.jpg') 50% 50% / cover no-repeat; 
             border:0; margin:0; padding:0; 
-            position: absolute; width:100%; height:100%; min-height:20rem;
+            position: absolute; width:100%; height:100%;
         }
             .mr-more-reels__preview-img {
                 width:100%;
@@ -549,11 +592,11 @@
     Splash Screen classes
     ========================================================================== */
     .mr-splash__group {
-        width:100%; height:0; padding:0 0 56.87% 0;
+        width:100%; height:100%; /*padding:0 0 56.87% 0;*/
         position: absolute; top:0; z-index:5;
     }
     .mr-splash__start {
         position:absolute; width:100%; height:100%; top:0; min-height:28.75rem;/*460px*/
-        background: cover no-repeat;
+        background: 50% 50% / cover no-repeat;
         border:0; margin:0; padding:0; cursor:pointer;
     }
