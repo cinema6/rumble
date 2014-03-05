@@ -127,7 +127,8 @@
     }
     .mr-overlay {
         background:rgb(0,0,0); background:rgba(0,0,0,0.8);
-        position:absolute; width:100%; height:100%; z-index: 10; top:0; left:0;
+        position:absolute; width:100%; height:100%; 
+        z-index: 10; top:0; left:0; bottom:0; right:0;
     }
     .mr-card-shadow {
         -webkit-box-shadow: 0 1px 2px 0 rgba(0,0,0,0.12); box-shadow: 0 1px 2px 0 rgba(0,0,0,0.12);
@@ -421,6 +422,7 @@
         .ui-control__prev, .ui-control__next, .ui-control__view-list, .ui-context__close {
             width:8em;/*128px*/ height:3.75em;/*60px*/
             cursor:pointer; font-size:1em; background-color:transparent;
+            -webkit-tap-highlight-color: rgba(0,0,0,0);
         }
             .ui-control__prev:active .ui-control__activator, 
             .ui-control__next:active .ui-control__activator, 
@@ -489,7 +491,6 @@
 
     .ui-nav-left--landscape, .ui-nav-right--landscape {
         position:fixed; top:0; width:3.75em;/*60px*/ height:100%; z-index: 10000;
-
     }
         .ui-nav-left--landscape {
             left:0;
@@ -501,8 +502,9 @@
             width:3.75em; /*60px*/ height:4em;/*64px*/ margin:0;
         }
         .ui-nav__prev, .ui-nav__next {
-            width:3.75em;/*60px*/ height:5em;/*80px*/ top:37.5%;
+            width:3.75em;/*60px*/ height:5em;/*80px*/ top:4.25em;
             cursor:pointer; font-size:1em; background-color:transparent;
+            -webkit-tap-highlight-color: rgba(0,0,0,0);
         }
         .ui-nav__label {
             top:3.4375em; z-index: 10; width:100%; height:0; display:block; position:absolute;
@@ -520,20 +522,22 @@
         }
         .ui-nav__close {
             width:3.75em;/*60px*/ height:4em;/*64px*/
-            bottom:0;
+            top:9.5em;
+            -webkit-tap-highlight-color: rgba(0,0,0,0);
         }
             .ui-nav__close .ui-icon__close {
                 top:1.5625em; left:1.4375em; margin:0; right:auto;
             }
         .ui-nav__view-list {
             width:3.75em;/*60px*/ height:4em;/*64px*/
+            -webkit-tap-highlight-color: rgba(0,0,0,0);
         }
             .ui-nav__view-list:active .ui-control__activator {
                 opacity:0.7;
             }
         .ui-nav__counter {
             color:#fff; font-size:0.875em; font-weight:300; text-align: center;
-            position:absolute; width:100%; bottom:1.143em; margin:0;
+            position:absolute; width:100%; top:12em;
         }
 
 
