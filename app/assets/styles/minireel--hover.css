@@ -1,7 +1,6 @@
 /*  ==========================================================================
     .mr-pager__group classes
     ========================================================================== */
-    .mr-pager__icon, 
     .mr-pages__fader, 
     .mr-pages__current-indicator, 
     .mr-nav__btn {
@@ -10,16 +9,52 @@
         -o-transition: opacity 0.5s ease; 
         transition: opacity 0.5s ease;
     }
-        .mr-pager__btn:hover .mr-pager__icon, 
+    .mr-pager__btn, .mr-pager__btn:hover {
+        -webkit-transition: background 0.4s ease; 
+        -moz-transition: background 0.4s ease; 
+        -o-transition: background 0.4s ease; 
+        transition: background 0.4s ease;
+    }
+    .mr-pager__icon-path, 
+    .mr-pager__btn:hover .mr-pager__icon-path {
+        -webkit-transition: fill 0.4s ease; 
+        -moz-transition: fill 0.4s ease; 
+        -o-transition: fill 0.4s ease; 
+        transition: fill 0.4s ease;
+    }
+    .mr-pager__btn, .mr-pager__icon-path {
+        -webkit-transition-delay: 0.3s;
+        -moz-transition-delay: 0.3s;
+        -o-transition-delay: 0.3s;
+        transition-delay: 0.3s;
+    }
         .mr-nav__btn:hover {
             opacity:1;
         }
         .mr-pages__page:hover .mr-pages__fader {
             opacity:0;
         }
-        .mr-pager__btn--disabled:hover .mr-pager__icon {
-            opacity:0.5;
+        .mr-pager__btn:hover {
+            -webkit-transition-delay: 0;
+            -moz-transition-delay: 0;
+            -o-transition-delay: 0;
+            transition-delay: 0;
+            background:#fff no-repeat 50% 50%;
         }
+            .mr-pager__btn:hover .mr-pager__icon-path {
+                -webkit-transition-delay: 0;
+                -moz-transition-delay: 0;
+                -o-transition-delay: 0;
+                transition-delay: 0;
+                fill: #b69823;
+            }
+        .mr-pager__btn--disabled:hover {
+            background:#b69823 no-repeat 50% 50%;
+        }
+            .mr-pager__btn--disabled:hover .mr-pager__icon-path {
+                fill: #252626;
+            }
+
     .mr-pages__preview-img {
         -webkit-transition: -webkit-transform 0.5s ease; 
         -moz-transition: -moz-transform 0.5s ease; 
@@ -40,13 +75,6 @@
         -ms-transform: scale(1.12);
         transform: scale(1.12);
     }
-
-
-
-
-
-
-
 
 /*  ==========================================================================
     .ui-navbar classes
@@ -69,4 +97,31 @@
         }
         .ui-navbar__page:hover .ui-control__preview-img {
             opacity:1;
+        }
+
+
+/*  ==========================================================================
+    Mini Reel Cards classes
+    ========================================================================== */
+    .mr-card__copy {
+        -webkit-transition: height 0.3s ease-out; 
+        -moz-transition: height 0.3s ease-out; 
+        -o-transition: height 0.3s ease-out; 
+        transition: height 0.3s ease-out; 
+        -webkit-transition-delay: 0.25s; 
+        -moz-transition-delay: 0.25s; 
+        -o-transition-delay: 0.25s; 
+        transition-delay: 0.25s; 
+    }
+        .mr-card__copy:hover {
+            height: 7.5rem;/*121px*/
+        }
+
+    .mr-card__icon {
+        -webkit-transition: -webkit-transform 0.3s; transition: transform 0.3s; 
+    }
+        .mr-card__copy:hover .mr-card__icon {
+            transform: rotate(180deg);
+            -ms-transform: rotate(180deg);
+            -webkit-transform: rotate(180deg);
         }
