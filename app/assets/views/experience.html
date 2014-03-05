@@ -1,5 +1,26 @@
 <div class="mr-experience">
+    <div class="mr-titlebar" ng-hide="currentIndex < 0">
+        <h1 class="mr-titlebar__title">{{app.data.experience.title}}</h1>
+    </div>
+
     <div class="mr-card__container">
+        <nav class="mr-nav__group" ng-hide="currentIndex < 0">
+            <button class="mr-nav__btn mr-nav__prev" title="Previous Video" type="button" 
+                ng-click="RumbleCtrl.goBack()">
+                <span class="sprite--alpha-png mr-nav__icon mr-nav__icon-prev">
+                    <span class="ir">Previous Video</span>
+                </span>
+            </button>
+
+            <button ng-class="{'mr-nav__next--disabled': atTail}" 
+                class="mr-nav__btn mr-nav__next" title="Next Video" type="button" 
+                ng-click="RumbleCtrl.goForward()" ng-disabled="atTail">
+                <span class="sprite--alpha-png mr-nav__icon mr-nav__icon-next">
+                    <span class="ir">Next Video</span>
+                </span>
+            </button>
+        </nav>
+
         <ng-include src="app.views.deck"></ng-include>
     </div>
 
@@ -16,6 +37,13 @@
         </ul>
     </thumb-paginator><!--.mr-pager__group-->
 </div><!--.mr-experience-->
+
+<!--<table-of-contents ng-show="showTOC"
+    class="mr-toc__group c6-animate css-promote"
+    cards="tocCards"
+    on-select="RumbleCtrl.jumpTo(card)"
+    on-exit="showTOC = false">
+</table-of-contents>-->
 
 <article id="card" class="mr-container">
     <ng-switch on="app.state">
