@@ -41,13 +41,6 @@
         transform: scale(1.12);
     }
 
-
-
-
-
-
-
-
 /*  ==========================================================================
     .ui-navbar classes
     ========================================================================== */    
@@ -83,7 +76,7 @@
         }
 
     .mr-card__icon {
-        -webkit-transition: transform 0.3s; transition: transform 0.3s; 
+        -webkit-transition: -webkit-transform 0.3s; transition: transform 0.3s; 
     }
         .mr-card__copy:hover .mr-card__icon {
             transform: rotate(180deg);

@@ -75,6 +75,7 @@
     }
     .threshold-320 { 
         min-height:20rem;/*320px*/ 
+        min-height:18rem;/*288px*/ 
     }
 
     
@@ -120,6 +121,12 @@
     .mr-experience {
         padding: 0 0.625em 63% 0.625rem;/*10px*/ position:relative;
         height: 8.125rem;/*130px*/ min-width:28rem;/*448px*/
+    }
+
+    @media screen and (max-width: 30.375rem) { /*486px*/
+        .mr-experience {
+            padding: 0 0.625em; height: 26.625rem;/*426px*/
+        }
     }
 
 /*  ==========================================================================
@@ -432,7 +439,7 @@
                 height:1.75em; background:#8ac12a; border-right:1px solid #000;
             }
         .mr-results__watch-again {
-            display: block; margin: 3em auto 0; cursor: pointer; width: 8.75em;
+            display: block; margin: 3em auto 0; cursor: pointer; width: 10em;
         }
 
         .mr-results__close {
