@@ -11,6 +11,15 @@
 
             beforeEach(function() {
                 module('c6.rumble', function($provide) {
+                    $provide.value('c6AppData', {
+                        profile: {
+                            device: 'phone'
+                        },
+                        experience: {
+                            data: {}
+                        }
+                    });
+
                     $provide.value('rumbleVotes', {
 
                     });
