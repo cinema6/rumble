@@ -238,13 +238,12 @@
             };
         }])
         .value('c6AppData', {})
-        .controller('AppController', ['$scope','$log','cinema6','c6Computed','c6UrlMaker','c6AppData','$timeout','$document','$window','c6Debounce','$animate',
-        function                     ( $scope , $log , cinema6 , c6Computed , c6UrlMaker , c6AppData , $timeout , $document , $window , c6Debounce , $animate ) {
+        .controller('AppController', ['$scope','$log','cinema6','c6UrlMaker','c6AppData','$timeout','$document','$window','c6Debounce','$animate',
+        function                     ( $scope , $log , cinema6 , c6UrlMaker , c6AppData , $timeout , $document , $window , c6Debounce , $animate ) {
             $log = $log.context('AppCtrl');
-            var c = c6Computed($scope),
-                _app = {
-                    state: 'splash'
-                };
+            var _app = {
+                state: 'splash'
+            };
 
             var app = {
                 data: null
