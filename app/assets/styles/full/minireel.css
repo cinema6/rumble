@@ -251,7 +251,7 @@
             }
                 .mr-switch__btn {
                     width: 1.125rem;/*18px*/ height: 1.125rem;/*18px*/ border: 0; padding: 0;
-                    background: url('../img/switcher-sprite.png') #252626 no-repeat 0.75rem 3.125rem;
+                    background: url('../../img/switcher-sprite.png') #252626 no-repeat 0.75rem 3.125rem;
                     opacity: 0.5; cursor: pointer;
                 }
                     .mr-switch__btn--active {
@@ -271,12 +271,13 @@
             }
 
         .mr-card__reader {
-            position: absolute; width: 100%;
+            position: absolute; width: 100%; height: 0; padding: 0 0 63%;
         }
             .mr-card__copy {
-                background-color: #252626; margin: 0;
-                width: 56%; float: left;
+                background-color: #252626; margin: 0; height: 0;
+                width: 56%; float: left; padding: 0 0.625rem 54% 0;
                 box-sizing: border-box; -moz-box-sizing: border-box;
+                overflow:hidden;
             }
                 .mr-card__title-h1 {
                     font-size:1.25rem;/*20px*/ color:#fff; font-weight:normal; 
@@ -284,10 +285,10 @@
                     overflow:hidden; text-overflow: ellipsis; white-space:nowrap;
                 }
                 .mr-card__attributes {
-                    color:#999999; font-size:0.75em;/*12px*/ margin:0.16em 0 1em 0;
+                    color:#999999; font-size:0.75em;/*12px*/ margin:0.16em 0 2em 0;
                 }                        
                 .mr-card__desc {
-                    margin: -0.5em 0 0 0;/*8px*/ font-size:0.8125rem;/*13px*/ 
+                    margin: -0.5em 0 0 0;/*8px*/ font-size:0.875rem;/*14px*/ 
                     color:#c2c2c2; line-height:1.69; height: 3.5rem;/*56px*/
                 }   
 
@@ -295,16 +296,29 @@
                 width: 44%; float: right;
             }
                 .mr-preview__thumbnail {
-                    background: red; width: 100%; height: 0; padding: 0 0 100%;
+                    width: 100%; height: 0; padding: 0 0 100%; position: relative;
+                    background: 50% 50% / cover no-repeat; 
                 }
                 .mr-preview__button {
+                    width: 4.25rem;/*68px*/ height: 3.625rem;/*58px*/
+                    padding: 0; border: 0; border-radius: 6px; cursor: pointer;
+                    background: url('../../img/play-icon.png') rgba(182,152,35,0.7) 50% 50% no-repeat;
+                    position: absolute; left: 50%; top: 50%; margin: -1.8125rem 0 0 -2.125rem;
+                }
 
+            .mr-card__swapper {
+                width: 100%; height: 3.375rem;/*54px*/ padding: 0.375rem 0 0; 
+                position: absolute; bottom: 0; background: #252626;
+            }
+                .mr-card__btn-watch {
+                    font-size: 0.875em; height: 2.5714em;/*36px*/ width: 8.5714em;/*120px*/
+                    border:0; padding: 0; background: #b69823; color: #ffffff; font-weight: 800;
+                    font-family: 'Open Sans', Arial, Helvetica, sans-serif; cursor: pointer;
                 }
 
         .mr-card__video {
             position: absolute; display:none;
         }
-
 
         .mr-player__group {
             padding:0 0 64%; margin:0;

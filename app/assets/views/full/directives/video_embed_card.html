@@ -19,10 +19,12 @@
         </div><!--.mr-card__copy-->
         <div class="mr-card__preview">
             <div class="mr-preview__thumbnail" ng-style="{'background-image':config.thumbs.large ? 'url(' + config.thumbs.large + ')' : ''}">
-                <button class="mr-preview__button">Play Video</button>
+                <button class="mr-preview__button">
+                    <span class="ir">Play Video</span>
+                </button>
             </div>
         </div>
-        <div>
+        <div class="mr-card__swapper">
             <ballot-results-module ng-if="Ctrl.hasModule('ballot')"
                 active="config._data.modules.ballot.vote !== null"
                 ballot="config.ballot"
@@ -30,7 +32,7 @@
                 card-id="{{config.id}}"
                 fetch-when="onDeck || active">
             </ballot-results-module>
-            <button>Watch Now.</button>
+            <button class="mr-card__btn-watch">Watch Now.</button>
         </div>
     </section>
 
