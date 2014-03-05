@@ -1,2 +1,63 @@
 /* overall css stylesheet */
 html { height: 100%; width: 100%;}
+
+.c6-button {
+    margin: 0; padding: 7px 8px;
+    border: solid #A4B3B5 1px; background: linear-gradient(to bottom, #f2f5f6 0%,#e3eaed 37%,#c8d7dc 100%);
+    color: #353A3A;
+    border-radius: 2px;
+}
+    .c6-button:active {
+        background: #B2C1C4;
+    }
+    .c6-button--positive {
+        color: #1C3515;
+        border-color: #285623; background: linear-gradient(to bottom, #c9de96 0%,#8ab66b 100%);
+    }
+        .c6-button--positive:active {
+            background: #8ab66b;
+        }
+
+.manager__group {
+    position: absolute; top: 0; right: 0; bottom: 0; left: 0;
+    width: 45rem; height: 30rem; margin: auto;
+    border: solid 1px black;
+}
+    .manager__nav {
+        position: absolute; top: 0;
+        border: solid 1px black;
+        width: 100%; height: 2rem;
+    }
+        .manager-nav__group {
+            margin: 0.12rem 10px 0 10px; padding: 0;
+            list-style-type: none;
+        }
+            .manager-nav__item {
+                display: inline-block;
+            }
+
+    .manager__minireels {
+        position: absolute; top: 2rem; bottom: 0;
+        margin: 0; padding: 0;
+        display: block; overflow-y: scroll;
+    }
+        .mr__container {
+            display: inline-block; vertical-align: text-top;
+            width: 15rem; height: 15rem;
+            margin: 0; padding: 0;
+            list-style-type: none;
+        }
+            .manager-mr__group {
+                position: relative; height: 100%; overflow-y: hidden;
+                border: solid 1px black;
+            }
+                .manager-mr__header {
+                    
+                }
+                    .header__title {
+                        margin: 0; padding: 0;
+                    }
+                .manager-mr__actions {
+                    position: absolute; bottom: 0;
+                    width: 100%;
+                }

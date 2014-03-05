@@ -1,20 +1,22 @@
-<main c6-with="ManagerCtrl.model as minireels">
-    <nav>
-        <ul>
-            <li><button>Create New</button>
+<main class="manager__group" c6-with="ManagerCtrl.model as minireels">
+    <nav class="manager__nav">
+        <ul class="manager-nav__group">
+            <li class="manager-nav__item"><button class="c6-button c6-button--positive">Create New</button></li>
         </ul>
     </nav>
-    <ul>
-        <li ng-repeat="this in minireels">
-            <article>
-                <header>
-                    <h4>{{this.title}}</h4>
-                    <span>Unpublished</span>
+    <ul class="manager__minireels">
+        <li class="mr__container" ng-repeat="this in minireels">
+            <article class="manager-mr__group">
+                <header class="manager-mr__header">
+                    <h4 class="header__title">{{this.title}}</h4>
+                    <small class="header__status">Unpublished</small>
                 </header>
                 <p>{{this.summary}}</p>
-                <button>Edit</button>
-                <button>Copy</button>
-                <button>Delete</button>
+                <form class="manager-mr__actions">
+                    <button>Edit</button>
+                    <button>Copy</button>
+                    <button>Delete</button>
+                </form>
             </article>
         </li>
     </ul>
