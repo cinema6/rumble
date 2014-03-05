@@ -23,6 +23,15 @@
                 });
 
                 module('c6.rumble',function($provide){
+                    $provide.value('c6AppData', {
+                        profile: {
+                            device: 'phone'
+                        },
+                        experience: {
+                            data: {}
+                        }
+                    });
+
                     youtube.createPlayer = jasmine.createSpy('youtube.createPlayer')
                     .andCallFake(function(playerId,config,$parentElement){
                         var mockPlayer = {
