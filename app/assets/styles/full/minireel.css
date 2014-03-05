@@ -307,17 +307,18 @@
                 }
 
             .mr-card__swapper {
-                width: 100%; height: 3.375rem;/*54px*/ padding: 0.375rem 0 0; 
+                width: 100%; height: 3.125rem;/*50px*/ 
                 position: absolute; bottom: 0; background: #252626;
             }
                 .mr-card__btn-watch {
                     font-size: 0.875em; height: 2.5714em;/*36px*/ width: 8.5714em;/*120px*/
                     border:0; padding: 0; background: #b69823; color: #ffffff; font-weight: 800;
                     font-family: 'Open Sans', Arial, Helvetica, sans-serif; cursor: pointer;
+                    position: absolute; top: 0.375rem;
                 }
 
         .mr-card__video {
-            position: absolute; display:none;
+            position: absolute; 
         }
 
         .mr-player__group {
@@ -344,7 +345,7 @@
     ========================================================================== */
     .mr-ballot-module {
         position: absolute; width:100%; height: 0; padding: 0 0 64%;
-        z-index: 2; left:0; top:0;
+        z-index: 2; left:0; top:2.5625rem;/*41px*/
     }
     .mr-ballot__group {
         position: absolute; z-index: 500; top:26%; bottom: 0; width:100%;
@@ -411,15 +412,10 @@
     .mr-results__group
     ========================================================================== */
     .mr-results__group {
-        position: absolute; height: 0; padding: 0 6.25rem 64%;
-        z-index: 2; left:0; right: 0; top:0; background-color: rgba(0,0,0,0.8);
+        height: 3.625rem;/*58px*/ position: relative; background-color: #252626; z-index: 2;
     }
-        .mr-results__title {
-            color:#fff; font-size: 1.25em;/*20px*/ font-weight:normal; 
-            text-align: center; line-height: 1.4; margin-top: 26%;
-        }
         .mr-results__list {
-            margin:0; padding:0; list-style:none;
+            margin:0; padding:0; list-style:none; position: absolute; width: 100%;
         }
             .mr-results__item {
                 display:inline-block; width:50%;
@@ -428,17 +424,17 @@
                     text-align: right;
                 }
                 .mr-results__option {
-                    font-weight:400; font-style:italic; font-size:1em; line-height: 1.5;
+                    font-weight:400; font-style:italic; font-size:0.875em; line-height: 1.7;
                     margin:0;
                 }
                 .mr-results__tally {
-                    font-weight:900; font-style: italic; font-size:1.375em;/*22px*/ line-height: 1;
-                    margin:0 0 0.7273em;/*16px*/ 
+                    font-weight:900; font-style: italic; font-size:1.125em;/*18px*/ line-height: 1;
+                    margin:0.2778em 0.388em 0.5em; color: #fff;
                 }
-                    .mr-results__item0 .mr-results__option, .mr-results__item0 .mr-results__tally {
+                    .mr-results__item0 .mr-results__option {
                         color:#8ac12a;
                     }
-                    .mr-results__item1 .mr-results__option, .mr-results__item1 .mr-results__tally {
+                    .mr-results__item1 .mr-results__option {
                         color:#19cbe6;
                     }
         .mr-results__meter {
