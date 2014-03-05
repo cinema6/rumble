@@ -1,43 +1,63 @@
-<article class="mr-card__group clearfix">
-    <ballot-vote-module 
-        class="mr-ballot-module css-promote"
-        ng-if="Ctrl.hasModule('ballot')"
-        active="config._data.modules.ballot.active"
-        ballot="config.ballot"
-        vote="config._data.modules.ballot.vote"
-        on-dismiss="Ctrl.dismissBallot()">
-    </ballot-vote-module>
+<article class="mr-card__group c6-height-limiter">
+    <div class="mr-switch__group">
+        <div class="mr-switch__menu clearfix">
+            <button class="mr-switch__btn mr-switch__btn-reader mr-switch__btn--active">
+                <span class="ir">Show Reader</span>
+            </button>
+            <button class="mr-switch__btn mr-switch__btn-video">
+                <span class="ir">Show Video</span>
+            </button>
+        </div>
+        <div class="mr-switch__counter tk--hdr clearfix">1/16</div>
+    </div>
+    
+    <section class="mr-card__reader">
+        <div class="mr-card__copy">
+            <h1 class="mr-card__title-h1 tk--hdr">{{config.title}}</h1>
+            <p class="mr-card__attributes">via <a ng-href="{{Ctrl.videoUrl}}" target="_blank" title="YouTube">{{config.source}}</a></p>
+            <p class="mr-card__desc">{{config.note}}</p>
+        </div><!--.mr-card__copy-->
+        <div class="mr-card__preview">
+            <div class="mr-preview__thumbnail">
+                <button class="mr-preview__button">Play Video</button>
+            </div>
+        </div>
+        <div>
+            <ballot-results-module ng-if="Ctrl.hasModule('ballot')"
+                active="config._data.modules.ballot.vote !== null"
+                ballot="config.ballot"
+                vote="config._data.modules.ballot.vote"
+                card-id="{{config.id}}"
+                fetch-when="onDeck || active">
+            </ballot-results-module>
+            <button>Watch Now.</button>
+        </div>
+    </section>
 
-    <div class="mr-card__player">
+    <section class="mr-card__video">
+        <ballot-vote-module 
+            class="mr-ballot-module css-promote"
+            ng-if="Ctrl.hasModule('ballot')"
+            active="config._data.modules.ballot.active"
+            ballot="config.ballot"
+            vote="config._data.modules.ballot.vote"
+            on-dismiss="Ctrl.dismissBallot()">
+        </ballot-vote-module>
         <div class="mr-player__group">
-            <div ng-class="{'mr-player--fly-away': Ctrl.flyAway}" class="mr-player"><!-- actual player will be inserted into this container --></div>
-            <div ng-show="Ctrl.flyAway" class="mr-player__thumbnail"
+            <div ng-class="{'mr-player--fly-away': Ctrl.flyAway}" class="mr-player c6-height-limiter"><!-- actual player will be inserted into this container --></div>
+            <div ng-show="Ctrl.flyAway" class="mr-player__thumbnail c6-height-limiter"
                 ng-style="{'background-image':config.thumbs.large ? 'url(' + config.thumbs.large + ')' : ''}">
                 <span class="ir"><img ng-src="{{config.thumbs.large}}"></span>
             </div>
         </div>
-    </div>
-    
-    <div class="mr-card__copy">
-        <div class="mr-card__title">
-            <h1 class="mr-card__title-h1 tk--hdr">{{config.title}}</h1>
-            <p class="mr-card__attributes">via <a ng-href="{{Ctrl.videoUrl}}" target="_blank" title="YouTube">{{config.source}}</a></p>
-        </div>
-        <ballot-results-module ng-if="Ctrl.hasModule('ballot')"
-            active="config._data.modules.ballot.vote !== null"
-            ballot="config.ballot"
-            vote="config._data.modules.ballot.vote"
-            card-id="{{config.id}}"
-            fetch-when="onDeck || active">
-        </ballot-results-module>
-        <div class="mr-card__desc">{{config.note}}</div>
-    </div><!--.mr-card__copy-->
+        <display-ad-module ng-if="Ctrl.hasModule('displayAd')"
+            active="config._data.modules.displayAd.active"
+            ad-src="{{config.displayAd}}">
+        </display-ad-module>
+    </section>
+
     <!--<comments-module ng-if="Ctrl.hasModule('comments')"
         card-id="{{config.id}}"
         fetch-comments-when="onDeck || active">
     </comments-module>-->
-    <display-ad-module ng-if="Ctrl.hasModule('displayAd')"
-        active="config._data.modules.displayAd.active"
-        ad-src="{{config.displayAd}}">
-    </display-ad-module>
 </article>
