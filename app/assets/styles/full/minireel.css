@@ -127,6 +127,8 @@
     @media screen and (max-width: 20rem) { /*320px*/
         .mr-experience {
             padding: 0 0.625em; height: 20.625rem;/*330px*/
+        }
+    }
 
 /*  ==========================================================================
     .mr-pager__group classes

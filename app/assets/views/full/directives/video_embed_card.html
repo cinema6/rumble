@@ -18,7 +18,7 @@
             <p class="mr-card__desc">{{config.note}}</p>
         </div><!--.mr-card__copy-->
         <div class="mr-card__preview">
-            <div class="mr-preview__thumbnail">
+            <div class="mr-preview__thumbnail" ng-style="{'background-image':config.thumbs.large ? 'url(' + config.thumbs.large + ')' : ''}">
                 <button class="mr-preview__button">Play Video</button>
             </div>
         </div>
