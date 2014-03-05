@@ -194,8 +194,8 @@
 
         return service;
     }])
-    .directive('vimeoCard',['$log','$timeout','$q','vimeo','_default','numberify','playerInterface','c6UrlMaker','c6Profile',
-    function               ( $log , $timeout , $q , vimeo , _default , numberify , playerInterface , c6UrlMaker , c6Profile ) {
+    .directive('vimeoCard',['$log','$timeout','$q','vimeo','_default','numberify','playerInterface','c6UrlMaker','assetFilter',
+    function               ( $log , $timeout , $q , vimeo , _default , numberify , playerInterface , c6UrlMaker , assetFilter ) {
         $log = $log.context('<vimeo-card>');
         function fnLink(scope,$element,$attr){
             if (!$attr.videoid){
@@ -484,9 +484,7 @@
             link        : fnLink,
             controller  : 'VimeoCardController',
             controllerAs: 'Ctrl',
-            templateUrl : c6UrlMaker('views/directives/video_embed_card' +
-                                    ((c6Profile.device === 'phone') ? '--mobile' : '') +
-                                    '.html')
+            templateUrl : assetFilter('directives/video_embed_card.html', 'views')
         };
     }])
     .controller('VimeoCardController', ['$scope','ModuleService','ControlsService','EventService','c6Computed',

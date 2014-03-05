@@ -224,9 +224,22 @@
                 }
             };
         }])
-        .value('c6Profile', {})
-        .controller('AppController', ['$scope','$log','cinema6','c6Computed','c6UrlMaker','c6Profile','$timeout','$document','$window','c6Debounce','$animate',
-        function                     ( $scope , $log , cinema6 , c6Computed , c6UrlMaker , c6Profile , $timeout , $document , $window , c6Debounce , $animate ) {
+        .filter('asset', ['c6AppData','c6UrlMaker',
+        function         ( c6AppData , c6UrlMaker ) {
+            return function(url, base) {
+                var mode;
+
+                if (!url || !c6AppData.profile) { return null; }
+
+                mode = c6AppData.profile.device === 'phone' ?
+                    'mobile' : c6AppData.experience.data.mode || 'full';
+
+                return c6UrlMaker(base + '/' + mode + '/' + url);
+            };
+        }])
+        .value('c6AppData', {})
+        .controller('AppController', ['$scope','$log','cinema6','c6Computed','c6UrlMaker','c6AppData','$timeout','$document','$window','c6Debounce','$animate',
+        function                     ( $scope , $log , cinema6 , c6Computed , c6UrlMaker , c6AppData , $timeout , $document , $window , c6Debounce , $animate ) {
             $log = $log.context('AppCtrl');
             var c = c6Computed($scope),
                 _app = {
@@ -238,24 +251,6 @@
             };
 
             $animate.enabled(false);
-
-            c(app, 'views', function() {
-                var data = this.data,
-                    profile = data && data.profile,
-                    isMobile = profile && (profile.device === 'phone');
-
-                if (!profile) {
-                    return {
-                        experience: null,
-                        deck: null
-                    };
-                }
-
-                return {
-                    experience: c6UrlMaker('views/experience' + (isMobile ? '--mobile' : '') + '.html'),
-                    deck: c6UrlMaker('views/deck' + (isMobile ? '--mobile' : '') + '.html')
-                };
-            }, ['app.data.profile.device']);
 
             Object.defineProperties(app, {
                 state: {
@@ -287,7 +282,7 @@
                 setup: function(data) {
                     app.data = data;
 
-                    angular.copy(data.profile, c6Profile);
+                    angular.copy(data, c6AppData);
                 }.bind(this)
             });
         }]);

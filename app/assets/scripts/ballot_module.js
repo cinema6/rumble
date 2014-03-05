@@ -2,11 +2,11 @@
     'use strict';
 
     angular.module('c6.rumble')
-        .directive('ballotVoteModule', ['c6UrlMaker','$animate',
-        function                   ( c6UrlMaker , $animate ) {
+        .directive('ballotVoteModule', ['assetFilter','$animate',
+        function                       ( assetFilter , $animate ) {
             return {
                 restrict: 'E',
-                templateUrl: c6UrlMaker('views/directives/ballot_vote_module.html'),
+                templateUrl: assetFilter('directives/ballot_vote_module.html', 'views'),
                 controller: 'BallotVoteModuleController',
                 controllerAs: 'Ctrl',
                 scope: {
@@ -23,11 +23,11 @@
             };
         }])
 
-        .directive('ballotResultsModule', ['c6UrlMaker','$animate',
-        function                   ( c6UrlMaker , $animate ) {
+        .directive('ballotResultsModule', ['assetFilter','$animate',
+        function                          ( assetFilter , $animate ) {
             return {
                 restrict: 'E',
-                templateUrl: c6UrlMaker('views/directives/ballot_results_module.html'),
+                templateUrl: assetFilter('directives/ballot_results_module.html', 'views'),
                 controller: 'BallotResultsModuleController',
                 controllerAs: 'Ctrl',
                 scope: {

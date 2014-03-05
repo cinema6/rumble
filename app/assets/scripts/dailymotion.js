@@ -172,8 +172,8 @@
 
         return service;
     }])
-    .directive('dailymotionCard', ['$log','$timeout','$q','c6UserAgent','dailymotion','_default','numberify','playerInterface','c6UrlMaker','c6Profile',
-    function                      ( $log , $timeout , $q , c6UserAgent , dailymotion , _default , numberify , playerInterface , c6UrlMaker , c6Profile ) {
+    .directive('dailymotionCard', ['$log','$timeout','$q','c6UserAgent','dailymotion','_default','numberify','playerInterface','c6UrlMaker','assetFilter',
+    function                      ( $log , $timeout , $q , c6UserAgent , dailymotion , _default , numberify , playerInterface , c6UrlMaker , assetFilter ) {
         $log = $log.context('<dailymotion-card>');
         function fnLink(scope,$element,$attr){
             if (!$attr.videoid){
@@ -427,9 +427,7 @@
             link     : fnLink,
             controller  : 'DailymotionCardController',
             controllerAs: 'Ctrl',
-            templateUrl : c6UrlMaker('views/directives/video_embed_card' +
-                                    ((c6Profile.device === 'phone') ? '--mobile' : '') +
-                                    '.html')
+            templateUrl : assetFilter('directives/video_embed_card.html', 'views')
         };
     }])
     .controller('DailymotionCardController', ['$scope','ModuleService','ControlsService','EventService','c6Computed',

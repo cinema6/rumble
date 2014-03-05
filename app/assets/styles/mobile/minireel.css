@@ -118,7 +118,7 @@
         visibility: hidden;
     }
     .sprite {
-        background-image:url('../img/sprite.svg'); background-repeat:no-repeat; background-size:18.75em 18.75em;
+        background-image:url('../../img/sprite.svg'); background-repeat:no-repeat; background-size:18.75em 18.75em;
     }
     .mr-container {
         background:#dddddd; padding:3em 0.375em 4em 0.375em;
@@ -453,7 +453,7 @@
             }
             .ui-control__label-view-list {
                 width:4em;
-                background: url('../img/nav__index.svg') 50% 50% no-repeat; background-size:2em 1.375em;
+                background: url('../../img/nav__index.svg') 50% 50% no-repeat; background-size:2em 1.375em;
             }
         .ui-control__preview-img {
             background:no-repeat 50% 50%; background-size:cover; top:0; left:0;
@@ -510,7 +510,7 @@
         }
             .ui-nav__label-view-list {
                 width:4em;
-                background: url('../img/nav__index.svg') 50% 50% no-repeat; background-size:2em 1.375em;
+                background: url('../../img/nav__index.svg') 50% 50% no-repeat; background-size:2em 1.375em;
             }
         .ui-nav__prev .ui-icon__prev {
             top:1.125em; left:1.5em; margin:0;
@@ -718,7 +718,7 @@
 
     .mr-comments__list {
         margin:0; padding:1.125em 0 0 0; list-style:none; 
-        background:url('../img/border__ccc@2x.png') 17px 0 repeat-y; background-size:1px 1px;
+        background:url('../../img/border__ccc@2x.png') 17px 0 repeat-y; background-size:1px 1px;
     }
         .mr-comments__comment {
             margin:0 0 0.75em 0;
@@ -836,7 +836,7 @@
         }
     .more-reels__preview {
         width:100%; height:0; padding:0 0 58.515% 0; 
-        background:url('../img/more-reels__preview.jpg') 50% 50% / cover no-repeat;
+        background:url('../../img/more-reels__preview.jpg') 50% 50% / cover no-repeat;
     }
 
 
@@ -849,6 +849,6 @@
     }
     .mr-splash__start {
         position:absolute; width:100%; height:100%; top:0; left:0;
-        background:url('../img/splash__desktop.jpg') 50% 50% / cover no-repeat;
+        background:url('../../img/splash__desktop.jpg') 50% 50% / cover no-repeat;
         border:0; margin:0; padding:0;
     }

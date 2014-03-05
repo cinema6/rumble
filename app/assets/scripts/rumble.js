@@ -388,11 +388,11 @@
 
         $log.log('Rumble Controller is initialized!');
     }])
-    .directive('navbarButton', ['c6UrlMaker','c6Computed',
-    function                   ( c6UrlMaker , c6Computed ) {
+    .directive('navbarButton', ['assetFilter','c6Computed',
+    function                   ( assetFilter , c6Computed ) {
         return {
             restrict: 'E',
-            templateUrl: c6UrlMaker('views/directives/navbar_button.html'),
+            templateUrl: assetFilter('directives/navbar_button.html', 'views'),
             scope: {
                 index: '=',
                 currentIndex: '=',

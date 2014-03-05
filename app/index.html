@@ -8,7 +8,8 @@
         <meta name="viewport" content="width=device-width">
         <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
         <link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,400,700' rel='stylesheet' type='text/css'>
-        <link rel="stylesheet" ng-href="assets/styles/minireel{{app.data.profile.device === 'phone' ? '--mobile' : ''}}.css">
+        <link rel="stylesheet" ng-href="{{'minireel.css' | asset:'styles'}}">
+        <link ng-if="app.data.profile.touch === false" rel="stylesheet" ng-href="{{'minireel--hover.css' | asset:'styles'}}">
         <link rel="stylesheet" href="assets/styles/themes__elitedaily.css">
 
         <script type="text/javascript">
@@ -20,7 +21,7 @@
     </head>
     <body>
         <div ng-if="!!app.data" class="c6-minireel">
-            <ng-include src="app.views.experience" ng-controller="RumbleController as RumbleCtrl"></ng-include>
+            <ng-include src="'experience.html' | asset:'views'" ng-controller="RumbleController as RumbleCtrl"></ng-include>
         </div>
         <script>
             (function() {

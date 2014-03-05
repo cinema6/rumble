@@ -124,9 +124,6 @@
                     libUrl('angular/v1.2.12-0-g5cc5cc1/angular-touch.min.js') :
                     libUrl('angular/v1.2.12-0-g5cc5cc1/angular-touch.js')
             ],
-            nope: [
-                __C6_APP_BASE_URL__ + '/styles/minireel--hover.css'
-            ],
             complete: function() {
                 if (Modernizr.touch) { c6.kModDeps.push('ngTouch'); }
 
