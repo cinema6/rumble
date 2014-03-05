@@ -2,15 +2,15 @@
     'use strict';
 
     angular.module('c6.rumble')
-        .directive('mrPaginator', ['c6UrlMaker','c6Computed',
-        function                  ( c6UrlMaker , c6Computed ) {
+        .directive('mrPaginator', ['assetFilter','c6Computed',
+        function                  ( assetFilter , c6Computed ) {
             return {
                 restrict: 'E',
                 scope: {
                     length: '=',
                     current: '='
                 },
-                templateUrl: c6UrlMaker('views/directives/paginator.html'),
+                templateUrl: assetFilter('directives/paginator.html', 'views'),
                 link: function(scope) {
                     var c = c6Computed(scope);
 

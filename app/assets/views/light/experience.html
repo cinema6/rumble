@@ -1,6 +1,6 @@
 <div class="mr-experience">
     <div class="mr-card__container">
-        <ng-include src="app.views.deck"></ng-include>
+        <ng-include src="'deck.html' | asset:'views'"></ng-include>
     </div>
 
     <thumb-paginator active="tocIndex" ng-if="currentIndex > -1" 
@@ -20,7 +20,7 @@
 <article id="card" class="mr-container">
     <ng-switch on="app.state">
         <div class="splash-screen" ng-switch-when="splash">
-            <ng-include src="'assets/views/splash.html'"></ng-include>
+            <ng-include src="'splash.html' | asset:'views'"></ng-include>
         </div>
     </ng-switch>
 </article>

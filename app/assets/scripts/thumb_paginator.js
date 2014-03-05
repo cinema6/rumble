@@ -2,8 +2,8 @@
     'use strict';
 
     angular.module('c6.rumble')
-        .directive('thumbPaginator', ['c6UrlMaker','c6Debounce','$window',
-        function                     ( c6UrlMaker , c6Debounce , $window ) {
+        .directive('thumbPaginator', ['assetFilter','c6Debounce','$window',
+        function                     ( assetFilter , c6Debounce , $window ) {
             return {
                 restrict: 'E',
                 scope: {
@@ -21,7 +21,7 @@
                 },
                 controller: 'ThumbPaginatorController',
                 controllerAs: 'Ctrl',
-                templateUrl: c6UrlMaker('views/directives/thumb_paginator.html'),
+                templateUrl: assetFilter('directives/thumb_paginator.html', 'views'),
                 transclude: true
             };
         }])

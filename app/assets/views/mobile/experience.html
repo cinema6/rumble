@@ -93,16 +93,11 @@
 </div><!--.ui-control-->
 </div><!-- end of the ng-hide div-->
 
-<ng-switch on="app.state">
-    <div class="splash-screen" ng-switch-when="splash">
-        <ng-include src="'assets/views/splash.html'"></ng-include>
-    </div>
-</ng-switch>
 <article class="mr-container">
-    <ng-include src="app.views.deck"></ng-include>
+    <ng-include src="'deck.html' | asset:'views'"></ng-include>
     <ng-switch on="app.state">
         <div class="splash-screen" ng-switch-when="splash">
-            <ng-include src="'assets/views/splash.html'"></ng-include>
+            <ng-include src="'splash.html' | asset:'views'"></ng-include>
         </div>
     </ng-switch>
     <table-of-contents ng-show="showTOC"

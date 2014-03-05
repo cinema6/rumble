@@ -2,11 +2,11 @@
     'use strict';
 
     angular.module('c6.rumble')
-        .directive('tableOfContents', ['c6UrlMaker',
-        function                      ( c6UrlMaker ) {
+        .directive('tableOfContents', ['assetFilter',
+        function                      ( assetFilter ) {
             return {
                 restrict: 'E',
-                templateUrl: c6UrlMaker('views/directives/table_of_contents.html'),
+                templateUrl: assetFilter('directives/table_of_contents.html', 'views'),
                 controller: 'TableOfContentsController',
                 controllerAs: 'Ctrl',
                 scope: {

@@ -2,11 +2,11 @@
     'use strict';
 
     angular.module('c6.rumble')
-        .directive('displayAdModule', ['c6UrlMaker',
-        function                      ( c6UrlMaker ) {
+        .directive('displayAdModule', ['assetFilter',
+        function                      ( assetFilter ) {
             return {
                 restrict: 'E',
-                templateUrl: c6UrlMaker('views/directives/display_ad_module.html'),
+                templateUrl: assetFilter('directives/display_ad_module.html', 'views'),
                 scope: {
                     adSrc: '@',
                     active: '='

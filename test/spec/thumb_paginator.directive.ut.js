@@ -71,7 +71,16 @@
                 $testBox = $('<div style="width: 1024px; height: 768px; position: relative;">');
                 $testBox.appendTo('body');
 
-                module('c6.rumble');
+                module('c6.rumble', function($provide) {
+                    $provide.value('c6AppData', {
+                        profile: {
+                            device: 'desktop'
+                        },
+                        experience: {
+                            data: {}
+                        }
+                    });
+                });
 
                 inject(function($injector) {
                     $rootScope = $injector.get('$rootScope');

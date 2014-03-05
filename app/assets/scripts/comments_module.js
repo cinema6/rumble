@@ -2,11 +2,11 @@
     'use strict';
 
     angular.module('c6.rumble')
-        .directive('commentsModule', ['c6UrlMaker',
-        function                     ( c6UrlMaker ) {
+        .directive('commentsModule', ['assetFilter',
+        function                     ( assetFilter ) {
             return {
                 restrict: 'E',
-                templateUrl: c6UrlMaker('views/directives/comments_module.html'),
+                templateUrl: assetFilter('directives/comments_module.html', 'views'),
                 controller: 'CommentsModuleController',
                 controllerAs: 'Ctrl',
                 scope: {

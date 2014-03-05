@@ -156,8 +156,8 @@
                     expect($scope.app.data).toBe(appData);
                 });
 
-                it('should copy the profile onto the c6Profile injectable', inject(function(c6Profile) {
-                    expect(c6Profile).toEqual(appData.profile);
+                it('should copy the app data onto the c6AppData injectable', inject(function(c6AppData) {
+                    expect(c6AppData).toEqual(appData);
                 }));
             });
 
@@ -177,46 +177,6 @@
                         expect(function() {
                             $scope.app.state = 'foo';
                         }).toThrow();
-                    });
-                });
-
-                describe('views', function() {
-                    it('should have null locations for experience and deck', function() {
-                        expect($scope.app.views).toEqual({
-                            experience: null,
-                            deck: null
-                        });
-                    });
-
-                    describe('if the device is not a phone', function() {
-                        beforeEach(function() {
-                            $scope.$apply(function() {
-                                cinema6.init.mostRecentCall.args[0].setup(appData);
-                            });
-                        });
-
-                        it('should load desktop views', function() {
-                            expect($scope.app.views).toEqual({
-                                experience: 'assets/views/experience.html',
-                                deck: 'assets/views/deck.html'
-                            });
-                        });
-                    });
-
-                    describe('if the device is a phone', function() {
-                        beforeEach(function() {
-                            $scope.$apply(function() {
-                                appData.profile.device = 'phone';
-                                cinema6.init.mostRecentCall.args[0].setup(appData);
-                            });
-                        });
-
-                        it('should load mobile views', function() {
-                            expect($scope.app.views).toEqual({
-                                experience: 'assets/views/experience--mobile.html',
-                                deck: 'assets/views/deck--mobile.html'
-                            });
-                        });
                     });
                 });
             });
