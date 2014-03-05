@@ -41,6 +41,13 @@
         transform: scale(1.12);
     }
 
+
+
+
+
+
+
+
 /*  ==========================================================================
     .ui-navbar classes
     ========================================================================== */    
@@ -62,24 +69,4 @@
         }
         .ui-navbar__page:hover .ui-control__preview-img {
             opacity:1;
-        }
-
-
-/*  ==========================================================================
-    Mini Reel Cards classes
-    ========================================================================== */
-    .mr-card__copy {
-        -webkit-transition: height 0.3s ease-out; transition: height 0.3s ease-out; 
-    }
-        .mr-card__copy:hover {
-            height: 7.5rem;/*121px*/
-        }
-
-    .mr-card__icon {
-        -webkit-transition: -webkit-transform 0.3s; transition: transform 0.3s; 
-    }
-        .mr-card__copy:hover .mr-card__icon {
-            transform: rotate(180deg);
-            -ms-transform: rotate(180deg);
-            -webkit-transform: rotate(180deg);
         }

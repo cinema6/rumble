@@ -1,4 +1,8 @@
 <div class="mr-experience">
+    <div class="mr-titlebar" ng-hide="currentIndex < 0">
+        <h1 class="mr-titlebar__title">{{app.data.experience.title}}</h1>
+    </div>
+
     <div class="mr-card__container">
         <nav class="mr-nav__group" ng-hide="currentIndex < 0">
             <button class="mr-nav__btn mr-nav__prev" title="Previous Video" type="button" 
