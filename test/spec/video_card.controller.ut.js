@@ -64,7 +64,7 @@
                     beforeEach(function() {
                         origData = $scope.config._data = {};
 
-                        VideoCardCtrl = $controller('YoutubeCardController', { $scope: $scope });
+                        VideoCardCtrl = $controller('VideoCardController', { $scope: $scope });
                     });
 
                     it('should not overwrite the data', function() {

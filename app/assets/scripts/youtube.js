@@ -369,6 +369,11 @@
             };
 
             Object.defineProperties(playerIface, {
+                webHref: {
+                    get: function() {
+                        return 'https://www.youtube.com/watch?v=' + $attr.videoid;
+                    }
+                },
                 currentTime: {
                     get: function() {
                         if (!playerIsReady) { return 0; }
@@ -515,70 +520,9 @@
         return {
             restrict    : 'E',
             link        : fnLink,
-            controller  : 'YoutubeCardController',
+            controller  : 'VideoEmbedCardController',
             controllerAs: 'Ctrl',
             templateUrl : assetFilter('directives/video_embed_card.html', 'views')
         };
-    }])
-    .controller('YoutubeCardController', ['$scope','ModuleService','ControlsService','EventService','c6Computed',
-    function                             ( $scope , ModuleService , ControlsService , EventService , c6Computed ) {
-        var config = $scope.config,
-            _data = config._data = config._data || {
-                playerEvents: {},
-                modules: {
-                    ballot: {
-                        active: false,
-                        vote: null
-                    },
-                    displayAd: {
-                        active: false
-                    }
-                }
-            },
-            targetPlays = 0;
-
-        c6Computed($scope)(this, 'videoUrl', function() {
-            var id = $scope.config.data.videoid;
-
-            return ('https://www.youtube.com/watch?v=' + id);
-        }, ['config.data.videoid']);
-
-        Object.defineProperties(this, {
-            flyAway: {
-                get: function() {
-                    return ($scope.config._data.modules.ballot.active || !$scope.active) && this.hasModule('ballot');
-                }
-            }
-        });
-
-        this.hasModule = ModuleService.hasModule.bind(ModuleService, config.modules);
-
-        this.dismissBallot = function() {
-            targetPlays = _data.playerEvents.play.emitCount;
-        };
-
-        $scope.$on('playerAdd', function(event, player) {
-            _data.playerEvents = EventService.trackEvents(player, ['play']);
-
-            Object.defineProperty(_data.modules.ballot, 'active', {
-                get: function() {
-                    var playing = (!player.paused && !player.ended),
-                        voted = angular.isNumber(_data.modules.ballot.vote),
-                        hasPlayed = _data.playerEvents.play.emitCount > targetPlays;
-
-                    return !voted && !playing && hasPlayed && $scope.active;
-                }
-            });
-
-            player.once('play', function() {
-                _data.modules.displayAd.active = true;
-            });
-
-            $scope.$watch('active', function(active) {
-                if (active) {
-                    ControlsService.bindTo(player);
-                }
-            });
-        });
     }]);
 }());

@@ -415,6 +415,67 @@
             }
         };
     }])
+    .controller('VideoEmbedCardController', ['$scope','ModuleService','ControlsService','EventService',
+    function                                ( $scope , ModuleService , ControlsService , EventService ) {
+        var self = this,
+            config = $scope.config,
+            _data = config._data = config._data || {
+                playerEvents: {},
+                modules: {
+                    ballot: {
+                        active: false,
+                        vote: null
+                    },
+                    displayAd: {
+                        active: false
+                    }
+                }
+            },
+            targetPlays = 0;
+
+        Object.defineProperties(this, {
+            flyAway: {
+                get: function() {
+                    return ($scope.config._data.modules.ballot.active || !$scope.active) && this.hasModule('ballot');
+                }
+            }
+        });
+
+        this.videoUrl = null;
+
+        this.hasModule = ModuleService.hasModule.bind(ModuleService, config.modules);
+
+        this.dismissBallot = function() {
+            targetPlays = _data.playerEvents.play.emitCount;
+        };
+
+        $scope.$on('playerAdd', function(event, player) {
+            _data.playerEvents = EventService.trackEvents(player, ['play']);
+
+            Object.defineProperty(_data.modules.ballot, 'active', {
+                get: function() {
+                    var playing = (!player.paused && !player.ended),
+                        voted = angular.isNumber(_data.modules.ballot.vote),
+                        hasPlayed = _data.playerEvents.play.emitCount > targetPlays;
+
+                    return !voted && !playing && hasPlayed && $scope.active;
+                }
+            });
+
+            player.once('ready', function() {
+                self.videoUrl = player.webHref;
+            });
+            player.once('play', function() {
+                _data.modules.displayAd.active = true;
+            });
+
+            $scope.$watch('active', function(active) {
+                if (active) {
+                    ControlsService.bindTo(player);
+                }
+            });
+        });
+    }])
     .directive('mrCard',['$log','$compile','$window','c6UserAgent','InflectorService',
     function            ( $log , $compile , $window , c6UserAgent , InflectorService ){
         $log = $log.context('<mr-card>');

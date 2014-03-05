@@ -2,12 +2,12 @@
     'use strict';
 
     define(['youtube'], function() {
-        describe('DailymotionCardController', function() {
+        describe('VideoEmbedCardController', function() {
             var $rootScope,
                 $scope,
                 $controller,
                 c6EventEmitter,
-                DailymotionCardCtrl;
+                VideoEmbedCardCtrl;
 
             var ModuleService,
                 ControlsService;
@@ -36,16 +36,16 @@
                     $rootScope.config = {
                         modules: ['ballot', 'comments'],
                         data: {
-                            videoid: 'x1bx4ir'
+                            videoid: 'gy1B3agGNxw'
                         }
                     };
                     $scope = $rootScope.$new();
-                    DailymotionCardCtrl = $controller('DailymotionCardController', { $scope: $scope });
+                    VideoEmbedCardCtrl = $controller('VideoEmbedCardController', { $scope: $scope });
                 });
             });
 
             it('should exist', function() {
-                expect(DailymotionCardCtrl).toEqual(jasmine.any(Object));
+                expect(VideoEmbedCardCtrl).toEqual(jasmine.any(Object));
             });
 
             describe('initialization', function() {
@@ -55,7 +55,7 @@
                     beforeEach(function() {
                         origData = $rootScope.config._data = {};
 
-                        DailymotionCardCtrl = $controller('DailymotionCardController', { $scope: $scope });
+                        VideoEmbedCardCtrl = $controller('VideoEmbedCardController', { $scope: $scope });
                     });
 
                     it('should not overwrite the data', function() {
@@ -122,10 +122,18 @@
                     var iface;
 
                     beforeEach(function() {
-                        iface = c6EventEmitter({});
+                        iface = c6EventEmitter({
+                            webHref: 'https://www.youtube.com/watch?v=oMB5YFtWQTE'
+                        });
                         spyOn(iface, 'once').andCallThrough();
 
                         $scope.$emit('playerAdd', iface);
+                    });
+
+                    it('should set the controller\'s videoUrl property to the webHref property of the player', function() {
+                        iface.emit('ready', iface);
+
+                        expect(VideoEmbedCardCtrl.videoUrl).toBe(iface.webHref);
                     });
 
                     it('should attach a listener to the "play" event', function() {
@@ -187,7 +195,7 @@
                             expect(ballot.active).toBe(false);
                         });
 
-                        it('should be temporarily overrideable by DailymotionCardCtrl.dismissBallot()', function() {
+                        it('should be temporarily overrideable by VideoEmbedCardCtrl.dismissBallot()', function() {
                             $scope.$apply(function() {
                                 $scope.active = true;
                                 iface.emit('play', iface);
@@ -198,7 +206,7 @@
                             expect(ballot.active).toBe(true);
 
                             $scope.$apply(function() {
-                                DailymotionCardCtrl.dismissBallot();
+                                VideoEmbedCardCtrl.dismissBallot();
                             });
                             expect(ballot.active).toBe(false);
 
@@ -220,20 +228,15 @@
             describe('@public', function() {
                 describe('properties', function() {
                     describe('videoUrl', function() {
-                        it('should be computed based on the video\'s id', function() {
-                            expect(DailymotionCardCtrl.videoUrl).toBe('http://www.dailymotion.com/video/x1bx4ir');
-
-                            $scope.$apply(function() {
-                                $rootScope.config.data.videoid = 'x1btkdy';
-                            });
-                            expect(DailymotionCardCtrl.videoUrl).toBe('http://www.dailymotion.com/video/x1btkdy');
+                        it('should be initialized as null', function() {
+                            expect(VideoEmbedCardCtrl.videoUrl).toBeNull();
                         });
                     });
 
                     describe('flyAway', function() {
                         describe('if the ballot module is not enabled', function() {
                             beforeEach(function() {
-                                spyOn(DailymotionCardCtrl, 'hasModule').andCallFake(function(module) {
+                                spyOn(VideoEmbedCardCtrl, 'hasModule').andCallFake(function(module) {
                                     if (module === 'ballot') {
                                         return false;
                                     }
@@ -241,24 +244,24 @@
                             });
 
                             it('should be false', function() {
-                                expect(DailymotionCardCtrl.flyAway).toBe(false);
+                                expect(VideoEmbedCardCtrl.flyAway).toBe(false);
 
                                 $scope.$apply(function() {
                                     $scope.active = false;
                                 });
-                                expect(DailymotionCardCtrl.flyAway).toBe(false);
+                                expect(VideoEmbedCardCtrl.flyAway).toBe(false);
 
                                 $scope.$apply(function() {
                                     $scope.active = true;
                                     $scope.config._data.modules.ballot.active = true;
                                 });
-                                expect(DailymotionCardCtrl.flyAway).toBe(false);
+                                expect(VideoEmbedCardCtrl.flyAway).toBe(false);
                             });
                         });
 
                         describe('if the ballot module is enabled', function() {
                             beforeEach(function() {
-                                spyOn(DailymotionCardCtrl, 'hasModule').andCallFake(function(module) {
+                                spyOn(VideoEmbedCardCtrl, 'hasModule').andCallFake(function(module) {
                                     if (module === 'ballot') {
                                         return true;
                                     }
@@ -271,7 +274,7 @@
                                     $scope.active = true;
                                 });
 
-                                expect(DailymotionCardCtrl.flyAway).toBe(true);
+                                expect(VideoEmbedCardCtrl.flyAway).toBe(true);
                             });
 
                             it('should be true if the card is not active', function() {
@@ -279,7 +282,7 @@
                                     $scope.config._data.modules.ballot.active = false;
                                     $scope.active = false;
                                 });
-                                expect(DailymotionCardCtrl.flyAway).toBe(true);
+                                expect(VideoEmbedCardCtrl.flyAway).toBe(true);
                             });
                         });
                     });
@@ -288,10 +291,10 @@
                 describe('methods', function() {
                     describe('hasModule(module)', function() {
                         it('should call ModuleService.hasModule() with the configured modules and the provided module', function() {
-                            DailymotionCardCtrl.hasModule('ballot');
+                            VideoEmbedCardCtrl.hasModule('ballot');
                             expect(ModuleService.hasModule).toHaveBeenCalledWith($rootScope.config.modules, 'ballot');
 
-                            DailymotionCardCtrl.hasModule('comments');
+                            VideoEmbedCardCtrl.hasModule('comments');
                             expect(ModuleService.hasModule).toHaveBeenCalledWith($rootScope.config.modules, 'comments');
                         });
                     });
