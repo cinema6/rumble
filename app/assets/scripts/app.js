@@ -146,7 +146,7 @@
                 restrict: 'AC',
                 link: function(scope, element, attrs) {
                     attrs.$observe('c6BgImg', function(src) {
-                        element.css('background-image', (src || '') && ('url(' + src + ')'));
+                        element.css('background-image', (src || '') && ('url("' + src + '")'));
                     });
                 }
             };
