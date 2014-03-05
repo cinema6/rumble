@@ -292,6 +292,7 @@
                 }
         .mr-card__copy {
             position: relative; width:100%; background-color: #252626; margin: 0;
+            height: 2.875rem;/*46px*/ overflow: hidden;
         }
             .mr-card__title {
                 margin:0; 
@@ -313,15 +314,10 @@
                         background: url('../img/dropdown-arrow.png') no-repeat 0 0;
                         margin: 0 auto;
                     }
-                        .mr-card__icon--active {
-                            transform: rotateX(180deg);
-                            -ms-transform: rotateX(180deg);
-                            -webkit-transform: rotateX(180deg);
-                        }
+                        
             .mr-card__desc {
                 margin: -0.5em 0 0 0;/*8px*/ font-size:0.8125rem;/*13px*/ 
                 color:#c2c2c2; line-height:1.69; height: 4.875rem;/*78px*/
-                display:none;
             }   
 
 
