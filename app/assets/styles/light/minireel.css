@@ -388,12 +388,28 @@
         }
     }
 
+    @media screen and (max-width: 26.625rem) {
+        /*426px*/
+        .mr-ballot__group {
+            top:20%;
+        }
+        .mr-ballot__btn-label {
+            font-size: 0.875rem;
+        }
+        .mr-ballot__btn {
+            width:7.25em; height:4em;
+        }
+        .mr-ballot__textlink {
+            font-size: 0.75rem;
+        }
+    }
+
 
 /*  ==========================================================================
     .mr-results__group
     ========================================================================== */
     .mr-results__group {
-        position: absolute; height: 0; padding: 0 6.25rem 64%;
+        position: absolute; height: 0; padding: 0 10% 64%;
         z-index: 2; left:0; right: 0; top:0; background-color: rgba(0,0,0,0.8);
     }
         .mr-results__title {
@@ -441,6 +457,33 @@
             background-position: 0 -9.35rem; cursor: pointer;
         }
 
+    @media screen and (max-width: 33.75rem) {
+        /*540px*/
+        .mr-results__title {
+            font-size: 1em; margin-top: 20%;
+        }
+        .mr-results__meter {
+            height: 1.25em;
+        }
+            .mr-results__option {
+                font-size: 0.875em;
+            }
+            .mr-results__tally {
+                font-size: 1em;
+            }
+        .mr-results__watch-again {
+            font-size: 0.875em;
+        }
+    }
+    @media screen and (max-width: 25rem) {
+        /*400px*/
+        .mr-results__title {
+            margin-top: 15%;
+        }
+        .mr-results__watch-again {
+            margin: 1.5em auto 0;
+        }
+    }
 
 
 /*  ==========================================================================
