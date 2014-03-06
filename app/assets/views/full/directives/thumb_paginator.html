@@ -1,7 +1,8 @@
 <button thumb-paginator-button
     ng-style="{width: Ctrl.buttonWidth}"
-    ng-click="Ctrl.previousPage()"
-    ng-class="{'mr-pager__btn--disabled': !Ctrl.canGoBack}"
+    ng-click="onPrev()"
+    ng-class="{'mr-pager__btn--disabled': disablePrevWhen()}"
+    ng-disabled="disablePrevWhen()"
     class="mr-pager__btn mr-pager__prev"
     type="button"
     title="Previous Page">
@@ -14,8 +15,9 @@
 </button>
 <button thumb-paginator-button
     ng-style="{width: Ctrl.buttonWidth}"
-    ng-click="Ctrl.nextPage()"
-    ng-class="{'mr-pager__btn--disabled': !Ctrl.canGoForward}"
+    ng-click="onNext()"
+    ng-class="{'mr-pager__btn--disabled': disableNextWhen()}"
+    ng-disabled="disableNextWhen()"
     class="mr-pager__btn mr-pager__next"
     type="button"
     title="Next Page">

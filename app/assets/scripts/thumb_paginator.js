@@ -8,7 +8,11 @@
                 restrict: 'E',
                 scope: {
                     page: '=?',
-                    active: '&'
+                    active: '&',
+                    onNext: '&',
+                    onPrev: '&',
+                    disableNextWhen: '&',
+                    disablePrevWhen: '&'
                 },
                 link: function(scope, element, attr, controller) {
                     var resetWidth = c6Debounce(function() {
@@ -83,26 +87,6 @@
 
                 return (elementWidth - pageWidth) / 2;
             }, ['Ctrl.availableWidth', 'Ctrl.items.@each.width']);
-
-            c(this, 'canGoForward', function() {
-                return $scope.page < (this.pagesCount - 1);
-            }, ['page', 'Ctrl.pagesCount']);
-
-            c(this, 'canGoBack', function() {
-                return $scope.page > 0;
-            }, ['page']);
-
-            this.nextPage = function() {
-                if (this.canGoForward) {
-                    $scope.page++;
-                }
-            };
-
-            this.previousPage = function() {
-                if (this.canGoBack) {
-                    $scope.page--;
-                }
-            };
 
             this.addItem = function(data) {
                 this.items.push(data);
