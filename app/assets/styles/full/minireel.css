@@ -595,7 +595,7 @@
                 position: relative; height: 0; width: 100%; padding: 0 0 63%;
             }
                 .mr-more-reels__preview {
-                    background:url('../../img/more-reels__preview--full.jpg') 50% 50% / cover no-repeat; 
+                    background:url('../../img/more-reels__preview--full.jpg') #000 50% 50% / cover no-repeat; 
                     border:0; margin:0; padding:33% 0 0; width:100%; 
                 }
                     .mr-more-reels__preview-img {
@@ -622,10 +622,6 @@
             }
             .mr-more-reels__desc {
                 font-size: 0.8125em;/*13px*/
-            }
-            .mr-more-reels__preview { 
-                width: 80%; margin: 0 10%;
-                padding: 26% 0 0;
             }
         }
 
