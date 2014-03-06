@@ -20,7 +20,7 @@
         </script>
     </head>
     <body>
-        <div ng-if="!!app.data" class="c6-minireel">
+        <div ng-if="!!app.data.mode" class="c6-minireel">
             <ng-include src="'experience.html' | asset:'views'" ng-controller="RumbleController as RumbleCtrl"></ng-include>
         </div>
         <script>

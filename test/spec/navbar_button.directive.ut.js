@@ -11,12 +11,7 @@
         beforeEach(function() {
             module('c6.rumble', function($provide) {
                 $provide.value('c6AppData', {
-                    profile: {
-                        device: 'desktop'
-                    },
-                    experience: {
-                        data: {}
-                    }
+                    mode: 'full'
                 });
             });
 

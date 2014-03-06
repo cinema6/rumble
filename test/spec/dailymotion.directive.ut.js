@@ -20,12 +20,7 @@
                 });
                 module('c6.rumble',function($provide){
                     $provide.value('c6AppData', {
-                        profile: {
-                            device: 'phone'
-                        },
-                        experience: {
-                            data: {}
-                        }
+                        mode: 'mobile'
                     });
 
                     dailymotion.createPlayer = jasmine.createSpy('dm.createPlayer')

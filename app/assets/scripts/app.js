@@ -227,26 +227,42 @@
         .filter('asset', ['c6AppData','c6UrlMaker',
         function         ( c6AppData , c6UrlMaker ) {
             return function(url, base) {
-                var mode;
+                var mode = c6AppData.mode;
 
-                if (!url || !c6AppData.profile) { return null; }
-
-                mode = c6AppData.profile.device === 'phone' ?
-                    'mobile' : c6AppData.experience.data.mode || 'full';
-
-                return c6UrlMaker(base + '/' + mode + '/' + url);
+                return mode && c6UrlMaker(base + '/' + mode + '/' + url);
             };
         }])
-        .value('c6AppData', {})
-        .controller('AppController', ['$scope','$log','cinema6','c6UrlMaker','c6AppData','$timeout','$document','$window','c6Debounce','$animate',
-        function                     ( $scope , $log , cinema6 , c6UrlMaker , c6AppData , $timeout , $document , $window , c6Debounce , $animate ) {
+        .factory('c6AppData', ['cinema6',
+        function              ( cinema6 ) {
+            var c6AppData = {
+                mode: null
+            };
+
+            function setMode(obj, data) {
+                var device = data.profile.device,
+                    mode = data.experience.mode;
+
+                obj.mode = (device === 'phone') ? 'mobile' : (mode || 'full');
+            }
+
+            cinema6.getAppData()
+                .then(function(appData) {
+                    angular.copy(appData, c6AppData);
+
+                    setMode(c6AppData, appData);
+                });
+
+            return c6AppData;
+        }])
+        .controller('AppController', ['$scope','$log','cinema6','c6UrlMaker','$timeout','$document','$window','c6Debounce','$animate','c6AppData',
+        function                     ( $scope , $log , cinema6 , c6UrlMaker , $timeout , $document , $window , c6Debounce , $animate , c6AppData ) {
             $log = $log.context('AppCtrl');
             var _app = {
                 state: 'splash'
             };
 
             var app = {
-                data: null
+                data: c6AppData
             };
 
             $animate.enabled(false);
@@ -277,12 +293,6 @@
 
             $scope.app = app;
 
-            cinema6.init({
-                setup: function(data) {
-                    app.data = data;
-
-                    angular.copy(data, c6AppData);
-                }.bind(this)
-            });
+            cinema6.init();
         }]);
 }(window));
