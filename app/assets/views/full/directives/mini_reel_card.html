@@ -1,26 +1,18 @@
-<article class="mr-card__group mr-more-reels__group c6-height-limiter">
-    <!--<div class="mr-card__player">-->
-        <div class="mr-player__group">
-            <div class="mr-player c6-height-limiter">
-                <h3 class="mr-more-reels__intro">{{config.data.message}}</h3>
-                <button class="mr-more-reels__preview c6-height-limiter" type="button"
-                    title="{{this.title}}">
-                    <span class="ir"><img src="http://lorempixel.com/800/400/" class="more-reels__preview-img"></span>
-                </button>
-            </div>
+<article class="mr-card__group c6-height-limiter">
+    <div class="mr-switch__group">
+        <h3 class="mr-more-reels__intro tk--hdr clearfix">{{config.data.message}}</h3>
+        <div class="mr-switch__counter tk--hdr clearfix">1/16</div>
+    </div>
+
+    <div class="mr-more-reels__group">
+        <button class="mr-more-reels__preview" type="button"
+            title="{{this.title}}">
+            <span class="ir"><img src="http://lorempixel.com/800/400/" class="more-reels__preview-img"></span>
+        </button>
+        <div class="mr-more-reels__copy" ng-repeat="this in Ctrl.miniReels">
+            <h1 class="mr-more-reels__title tk--hdr">{{this.title}}</h1>
+            <p class="mr-more-reels__desc">{{this.summary}}</p>
+            <p class="mr-more-reels__link"><a>Watch Now</a></p>
         </div>
-    <!--</div>-->
-    <div class="mr-card__copy" ng-repeat="this in Ctrl.miniReels">
-        <header class="mr-card__title">
-            <h1 class="mr-card__title-h1 tk--hdr">{{this.title}}</h1>
-            <button class="mr-card__btn">
-                <span class="mr-card__icon">
-                    <span class="ir">Click to See More</span>
-                </span>
-            </button>
-        </header>
-        <div class="mr-card__dropdown">
-            <p class="mr-card__desc">{{this.summary}}</p>
-        </div>
-    </div><!--.mr-card__copy-->
+    </div>
 </article>
