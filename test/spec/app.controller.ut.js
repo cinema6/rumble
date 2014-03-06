@@ -13,6 +13,7 @@
                 $controller,
                 c6EventEmitter,
                 $window,
+                c6AppData,
                 AppCtrl;
 
             var cinema6,
@@ -88,10 +89,12 @@
                                 return cinema6._.requestTransitionStateResult.promise;
                             }),
                             fullscreen: jasmine.createSpy('cinema6.fullscreen()'),
+                            getAppData: jasmine.createSpy('cinema6.getAppData()')
+                                .andReturn($q.defer().promise),
                             _: {
                                 getSessionResult: $q.defer(),
                                 requestTransitionStateResult: $q.defer()
-                            }
+                            },
                         };
 
                         return cinema6;
@@ -116,6 +119,7 @@
                     $controller = $injector.get('$controller');
                     c6EventEmitter = $injector.get('c6EventEmitter');
                     $window = $injector.get('$window');
+                    c6AppData = $injector.get('c6AppData');
 
                     $document = $injector.get('$document');
                     myFrame$ = $injector.get('myFrame$');
@@ -144,27 +148,15 @@
             });
 
             describe('site integration', function() {
-                beforeEach(function() {
-                    cinema6.init.mostRecentCall.args[0].setup(appData);
-                });
-
                 it('should initialize a session with the site', function() {
                     expect(cinema6.init).toHaveBeenCalled();
                 });
-
-                it('should setup the session', function() {
-                    expect($scope.app.data).toBe(appData);
-                });
-
-                it('should copy the app data onto the c6AppData injectable', inject(function(c6AppData) {
-                    expect(c6AppData).toEqual(appData);
-                }));
             });
 
             describe('app', function() {
                 describe('data', function() {
-                    it('should be null', function() {
-                        expect($scope.app.data).toBeNull();
+                    it('should be a reference to the appData', function() {
+                        expect($scope.app.data).toBe(c6AppData);
                     });
                 });
 

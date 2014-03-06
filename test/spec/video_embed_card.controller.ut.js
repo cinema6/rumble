@@ -2,15 +2,16 @@
     'use strict';
 
     define(['youtube'], function() {
-        describe('DailymotionCardController', function() {
+        describe('VideoEmbedCardController', function() {
             var $rootScope,
                 $scope,
                 $controller,
                 c6EventEmitter,
-                DailymotionCardCtrl;
+                VideoEmbedCardCtrl;
 
             var ModuleService,
-                ControlsService;
+                ControlsService,
+                c6AppData;
 
             beforeEach(function() {
                 module('c6.rumble.services', function($provide) {
@@ -23,7 +24,12 @@
                     });
                 });
 
-                module('c6.rumble');
+                module('c6.rumble', function($provide) {
+                    $provide.value('c6AppData', {
+                        mode: null,
+                        behaviors: {}
+                    });
+                });
 
                 inject(function($injector) {
                     $rootScope = $injector.get('$rootScope');
@@ -32,20 +38,21 @@
 
                     ModuleService = $injector.get('ModuleService');
                     ControlsService = $injector.get('ControlsService');
+                    c6AppData = $injector.get('c6AppData');
 
                     $rootScope.config = {
                         modules: ['ballot', 'comments'],
                         data: {
-                            videoid: 'x1bx4ir'
+                            videoid: 'gy1B3agGNxw'
                         }
                     };
                     $scope = $rootScope.$new();
-                    DailymotionCardCtrl = $controller('DailymotionCardController', { $scope: $scope });
+                    VideoEmbedCardCtrl = $controller('VideoEmbedCardController', { $scope: $scope });
                 });
             });
 
             it('should exist', function() {
-                expect(DailymotionCardCtrl).toEqual(jasmine.any(Object));
+                expect(VideoEmbedCardCtrl).toEqual(jasmine.any(Object));
             });
 
             describe('initialization', function() {
@@ -55,7 +62,7 @@
                     beforeEach(function() {
                         origData = $rootScope.config._data = {};
 
-                        DailymotionCardCtrl = $controller('DailymotionCardController', { $scope: $scope });
+                        VideoEmbedCardCtrl = $controller('VideoEmbedCardController', { $scope: $scope });
                     });
 
                     it('should not overwrite the data', function() {
@@ -69,7 +76,8 @@
                             playerEvents: {},
                             modules: {
                                 ballot: {
-                                    active: false,
+                                    ballotActive: false,
+                                    resultsActive: false,
                                     vote: null
                                 },
                                 displayAd: {
@@ -122,10 +130,18 @@
                     var iface;
 
                     beforeEach(function() {
-                        iface = c6EventEmitter({});
+                        iface = c6EventEmitter({
+                            webHref: 'https://www.youtube.com/watch?v=oMB5YFtWQTE'
+                        });
                         spyOn(iface, 'once').andCallThrough();
 
                         $scope.$emit('playerAdd', iface);
+                    });
+
+                    it('should set the controller\'s videoUrl property to the webHref property of the player', function() {
+                        iface.emit('ready', iface);
+
+                        expect(VideoEmbedCardCtrl.videoUrl).toBe(iface.webHref);
                     });
 
                     it('should attach a listener to the "play" event', function() {
@@ -142,7 +158,116 @@
                         });
                     });
 
-                    describe('config._data.modules.ballot.active', function() {
+                    describe('config._data.modules.ballot.resultsActive', function() {
+                        var ballot;
+
+                        beforeEach(function() {
+                            ballot = $scope.config._data.modules.ballot;
+                        });
+
+                        describe('if the results are inline', function() {
+                            beforeEach(function() {
+                                c6AppData.behaviors.inlineVoteResults = true;
+                            });
+
+                            it('should be true as long as there are voting results', function() {
+                                expect(ballot.resultsActive).toBe(false);
+
+                                ballot.vote = 0;
+                                expect(ballot.resultsActive).toBe(true);
+
+                                ballot.vote = -1;
+                                expect(ballot.resultsActive).toBe(true);
+
+                                ballot.vote = 2;
+                                expect(ballot.resultsActive).toBe(true);
+                            });
+                        });
+
+                        describe('if the results are not inline', function() {
+                            beforeEach(function() {
+                                c6AppData.behaviors.inlineVoteResults = false;
+                            });
+
+                            it('should be true if the user has voted and the video is not playing (and has been played once)', function() {
+                                $scope.active = true;
+                                iface.paused = true;
+                                iface.ended = false;
+                                ballot.vote = null;
+
+                                expect(ballot.resultsActive).toBe(false);
+
+                                iface.paused = false;
+                                iface.emit('play', iface);
+
+                                expect(ballot.resultsActive).toBe(false);
+
+                                iface.paused = true;
+                                iface.emit('pause', iface);
+
+                                expect(ballot.resultsActive).toBe(false);
+
+                                ballot.vote = 0;
+
+                                expect(ballot.resultsActive).toBe(true);
+
+                                iface.paused = false;
+                                iface.emit('play', iface);
+
+                                expect(ballot.resultsActive).toBe(false);
+
+                                iface.paused = true;
+                                iface.ended = true;
+                                iface.emit('ended', iface);
+                                iface.emit('paused', iface);
+
+                                expect(ballot.resultsActive).toBe(true);
+                            });
+
+                            it('should be overrideable by VideoEmbedCardCtrl.dismissBallotResults()', function() {
+                                $scope.active = true;
+                                iface.paused = false;
+                                iface.emit('play', iface);
+
+                                iface.paused = true;
+                                iface.emit('pause', iface);
+
+                                ballot.vote = 1;
+
+                                expect(ballot.resultsActive).toBe(true);
+
+                                VideoEmbedCardCtrl.dismissBallotResults();
+
+                                expect(ballot.resultsActive).toBe(false);
+
+                                iface.paused = false;
+                                iface.emit('play', iface);
+
+                                iface.paused = true;
+                                iface.emit('pause', iface);
+
+                                expect(ballot.resultsActive).toBe(true);
+                            });
+
+                            it('should always be false if card is not active', function() {
+                                $scope.active = true;
+                                iface.paused = false;
+                                iface.emit('play', iface);
+
+                                iface.paused = true;
+                                iface.emit('pause', iface);
+
+                                ballot.vote = -1;
+
+                                expect(ballot.resultsActive).toBe(true);
+
+                                $scope.active = false;
+                                expect(ballot.resultsActive).toBe(false);
+                            });
+                        });
+                    });
+
+                    describe('config._data.modules.ballot.ballotActive', function() {
                         var ballot;
 
                         beforeEach(function() {
@@ -155,39 +280,39 @@
                                 iface.paused = true;
                                 iface.ended = false;
                             });
-                            expect(ballot.active).toBe(false);
+                            expect(ballot.ballotActive).toBe(false);
 
                             $scope.$apply(function() {
                                 iface.emit('play', iface);
                                 iface.paused = false;
                                 iface.ended = false;
                             });
-                            expect(ballot.active).toBe(false);
+                            expect(ballot.ballotActive).toBe(false);
 
                             $scope.$apply(function() {
                                 iface.ended = true;
                             });
-                            expect(ballot.active).toBe(true);
+                            expect(ballot.ballotActive).toBe(true);
 
                             $scope.$apply(function() {
                                 iface.paused = true;
                                 iface.ended = false;
                             });
-                            expect(ballot.active).toBe(true);
+                            expect(ballot.ballotActive).toBe(true);
 
                             $scope.$apply(function() {
                                 $scope.active = false;
                             });
-                            expect(ballot.active).toBe(false);
+                            expect(ballot.ballotActive).toBe(false);
 
                             $scope.$apply(function() {
                                 $scope.active = true;
                                 ballot.vote = 0;
                             });
-                            expect(ballot.active).toBe(false);
+                            expect(ballot.ballotActive).toBe(false);
                         });
 
-                        it('should be temporarily overrideable by DailymotionCardCtrl.dismissBallot()', function() {
+                        it('should be temporarily overrideable by VideoEmbedCardCtrl.dismissBallot()', function() {
                             $scope.$apply(function() {
                                 $scope.active = true;
                                 iface.emit('play', iface);
@@ -195,23 +320,23 @@
                                 iface.paused = true;
                                 iface.ended = false;
                             });
-                            expect(ballot.active).toBe(true);
+                            expect(ballot.ballotActive).toBe(true);
 
                             $scope.$apply(function() {
-                                DailymotionCardCtrl.dismissBallot();
+                                VideoEmbedCardCtrl.dismissBallot();
                             });
-                            expect(ballot.active).toBe(false);
+                            expect(ballot.ballotActive).toBe(false);
 
                             $scope.$apply(function() {
                                 iface.paused = false;
                                 iface.emit('play', iface);
                             });
-                            expect(ballot.active).toBe(false);
+                            expect(ballot.ballotActive).toBe(false);
 
                             $scope.$apply(function() {
                                 iface.ended = true;
                             });
-                            expect(ballot.active).toBe(true);
+                            expect(ballot.ballotActive).toBe(true);
                         });
                     });
                 });
@@ -220,66 +345,74 @@
             describe('@public', function() {
                 describe('properties', function() {
                     describe('videoUrl', function() {
-                        it('should be computed based on the video\'s id', function() {
-                            expect(DailymotionCardCtrl.videoUrl).toBe('http://www.dailymotion.com/video/x1bx4ir');
-
-                            $scope.$apply(function() {
-                                $rootScope.config.data.videoid = 'x1btkdy';
-                            });
-                            expect(DailymotionCardCtrl.videoUrl).toBe('http://www.dailymotion.com/video/x1btkdy');
+                        it('should be initialized as null', function() {
+                            expect(VideoEmbedCardCtrl.videoUrl).toBeNull();
                         });
                     });
 
                     describe('flyAway', function() {
                         describe('if the ballot module is not enabled', function() {
                             beforeEach(function() {
-                                spyOn(DailymotionCardCtrl, 'hasModule').andCallFake(function(module) {
+                                spyOn(VideoEmbedCardCtrl, 'hasModule').andCallFake(function(module) {
                                     if (module === 'ballot') {
                                         return false;
                                     }
                                 });
                             });
 
-                            it('should be false', function() {
-                                expect(DailymotionCardCtrl.flyAway).toBe(false);
+                            it('should be false if the ballot module is active, but not enabled', function() {
+                                $scope.active = true;
+                                $scope.config._data.modules.ballot.ballotActive = true;
 
-                                $scope.$apply(function() {
-                                    $scope.active = false;
-                                });
-                                expect(DailymotionCardCtrl.flyAway).toBe(false);
+                                expect(VideoEmbedCardCtrl.flyAway).toBe(false);
+                            });
 
-                                $scope.$apply(function() {
-                                    $scope.active = true;
-                                    $scope.config._data.modules.ballot.active = true;
-                                });
-                                expect(DailymotionCardCtrl.flyAway).toBe(false);
+                            it('should be true if the card is not active', function() {
+                                $scope.active = false;
+
+                                expect(VideoEmbedCardCtrl.flyAway).toBe(true);
                             });
                         });
 
-                        describe('if the ballot module is enabled', function() {
+                        describe(', if the ballot module is enabled,', function() {
                             beforeEach(function() {
-                                spyOn(DailymotionCardCtrl, 'hasModule').andCallFake(function(module) {
+                                spyOn(VideoEmbedCardCtrl, 'hasModule').andCallFake(function(module) {
                                     if (module === 'ballot') {
                                         return true;
                                     }
                                 });
                             });
 
-                            it('should be true if the ballot module is active', function() {
+                            it('should be true if the ballot is active', function() {
                                 $scope.$apply(function() {
-                                    $scope.config._data.modules.ballot.active = true;
+                                    $scope.config._data.modules.ballot.ballotActive = true;
                                     $scope.active = true;
                                 });
 
-                                expect(DailymotionCardCtrl.flyAway).toBe(true);
+                                expect(VideoEmbedCardCtrl.flyAway).toBe(true);
                             });
 
                             it('should be true if the card is not active', function() {
                                 $scope.$apply(function() {
-                                    $scope.config._data.modules.ballot.active = false;
+                                    $scope.config._data.modules.ballot.ballotActive = false;
                                     $scope.active = false;
                                 });
-                                expect(DailymotionCardCtrl.flyAway).toBe(true);
+                                expect(VideoEmbedCardCtrl.flyAway).toBe(true);
+                            });
+
+                            it('should be true if the ballot results are active and they are not inline', function() {
+                                var ballot = $scope.config._data.modules.ballot;
+
+                                $scope.active = true;
+                                c6AppData.behaviors.inlineVoteResults = true;
+                                ballot.ballotActive = false;
+                                ballot.resultsActive = true;
+
+                                expect(VideoEmbedCardCtrl.flyAway).toBe(false);
+
+                                c6AppData.behaviors.inlineVoteResults = false;
+
+                                expect(VideoEmbedCardCtrl.flyAway).toBe(true);
                             });
                         });
                     });
@@ -288,10 +421,10 @@
                 describe('methods', function() {
                     describe('hasModule(module)', function() {
                         it('should call ModuleService.hasModule() with the configured modules and the provided module', function() {
-                            DailymotionCardCtrl.hasModule('ballot');
+                            VideoEmbedCardCtrl.hasModule('ballot');
                             expect(ModuleService.hasModule).toHaveBeenCalledWith($rootScope.config.modules, 'ballot');
 
-                            DailymotionCardCtrl.hasModule('comments');
+                            VideoEmbedCardCtrl.hasModule('comments');
                             expect(ModuleService.hasModule).toHaveBeenCalledWith($rootScope.config.modules, 'comments');
                         });
                     });

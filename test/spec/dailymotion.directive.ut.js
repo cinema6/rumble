@@ -20,12 +20,8 @@
                 });
                 module('c6.rumble',function($provide){
                     $provide.value('c6AppData', {
-                        profile: {
-                            device: 'phone'
-                        },
-                        experience: {
-                            data: {}
-                        }
+                        mode: 'mobile',
+                        behaviors: {}
                     });
 
                     dailymotion.createPlayer = jasmine.createSpy('dm.createPlayer')
@@ -41,6 +37,7 @@
                             play            : jasmine.createSpy('dmPlayer.play'),
                             pause           : jasmine.createSpy('dmPlayer.pause'),
                             seekTo          : jasmine.createSpy('dmPlayer.seekTo'),
+                            getPlayerId     : jasmine.createSpy('dmPlayer.getPlayerId'),
 
                             _on             : {},
                             _once           : {},
@@ -67,6 +64,8 @@
                             }
                             mockPlayer._removes[eventName].push(listener);
                         });
+
+                        mockPlayer.getPlayerId.andReturn('x1bx4ir');
 
                         mockPlayers.push(mockPlayer);
                         return mockPlayer;
@@ -222,6 +221,12 @@
                             expect(mockPlayers[0].pause).not.toHaveBeenCalled();
                             iface.pause();
                             expect(mockPlayers[0].pause).toHaveBeenCalled();
+                        });
+                    });
+
+                    describe('webHref property', function() {
+                        it('should be computed based on the video\'s id', function() {
+                            expect(iface.webHref).toBe('http://www.dailymotion.com/video/abc123');
                         });
                     });
 

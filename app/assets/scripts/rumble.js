@@ -415,6 +415,95 @@
             }
         };
     }])
+    .controller('VideoEmbedCardController', ['$scope','ModuleService','ControlsService','EventService','c6AppData',
+    function                                ( $scope , ModuleService , ControlsService , EventService , c6AppData ) {
+        var self = this,
+            config = $scope.config,
+            _data = config._data = config._data || {
+                playerEvents: {},
+                modules: {
+                    ballot: {
+                        ballotActive: false,
+                        resultsActive: false,
+                        vote: null
+                    },
+                    displayAd: {
+                        active: false
+                    }
+                }
+            },
+            ballotTargetPlays = 0,
+            resultsTargetPlays = 0;
+
+        Object.defineProperties(this, {
+            flyAway: {
+                get: function() {
+                    var ballot = $scope.config._data.modules.ballot,
+                        behaviors = c6AppData.behaviors;
+
+                    if (!$scope.active) { return true; }
+
+                    return this.hasModule('ballot') &&
+                        (ballot.ballotActive || (ballot.resultsActive &&
+                                                 !behaviors.inlineVoteResults));
+                }
+            }
+        });
+
+        this.videoUrl = null;
+
+        this.hasModule = ModuleService.hasModule.bind(ModuleService, config.modules);
+
+        this.dismissBallot = function() {
+            ballotTargetPlays = _data.playerEvents.play.emitCount;
+        };
+
+        this.dismissBallotResults = function() {
+            resultsTargetPlays = _data.playerEvents.play.emitCount;
+        };
+
+        $scope.$on('playerAdd', function(event, player) {
+            _data.playerEvents = EventService.trackEvents(player, ['play']);
+
+            Object.defineProperties(_data.modules.ballot, {
+                ballotActive: {
+                    get: function() {
+                        var playing = (!player.paused && !player.ended),
+                            voted = angular.isNumber(_data.modules.ballot.vote),
+                            hasPlayed = _data.playerEvents.play.emitCount > ballotTargetPlays;
+
+                        return !voted && !playing && hasPlayed && $scope.active;
+                    }
+                },
+                resultsActive: {
+                    get: function() {
+                        var playing = (!player.paused && !player.ended),
+                            voted = angular.isNumber(this.vote),
+                            hasPlayed = _data.playerEvents.play.emitCount > resultsTargetPlays;
+
+                        if (c6AppData.behaviors.inlineVoteResults) {
+                            return voted;
+                        }
+
+                        return voted && !playing && hasPlayed && $scope.active;
+                    }
+                }
+            });
+
+            player.once('ready', function() {
+                self.videoUrl = player.webHref;
+            });
+            player.once('play', function() {
+                _data.modules.displayAd.active = true;
+            });
+
+            $scope.$watch('active', function(active) {
+                if (active) {
+                    ControlsService.bindTo(player);
+                }
+            });
+        });
+    }])
     .directive('mrCard',['$log','$compile','$window','c6UserAgent','InflectorService',
     function            ( $log , $compile , $window , c6UserAgent , InflectorService ){
         $log = $log.context('<mr-card>');

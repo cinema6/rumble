@@ -24,12 +24,8 @@
 
                 module('c6.rumble',function($provide){
                     $provide.value('c6AppData', {
-                        profile: {
-                            device: 'phone'
-                        },
-                        experience: {
-                            data: {}
-                        }
+                        mode: 'mobile',
+                        behaviors: {}
                     });
 
                     youtube.createPlayer = jasmine.createSpy('youtube.createPlayer')
@@ -47,6 +43,7 @@
                             getCurrentTime  : jasmine.createSpy('youtubePlayer.getCurrentTime'),
                             isPlaying       : jasmine.createSpy('YoutubePlayer.isPlaying'),
                             getDuration     : jasmine.createSpy('YoutubePlayer.getDuration'),
+                            getPlayerId     : jasmine.createSpy('YoutubePlayer.getPlayerId'),
 
                             _on             : {},
                             _once           : {},
@@ -87,6 +84,8 @@
                         mockPlayer.play.andCallFake(function() {
                             mockPlayer.isPlaying.andReturn(true);
                         });
+
+                        mockPlayer.getPlayerId.andReturn('gy1B3agGNxw');
 
                         mockPlayers.push(mockPlayer);
                         return mockPlayer;
@@ -283,6 +282,12 @@
                                     iface.twerked = true;
                                 }).toThrow();
                             });
+                        });
+                    });
+
+                    describe('webHref property', function() {
+                        it('should be computed based on the video\'s id', function() {
+                            expect(iface.webHref).toBe('https://www.youtube.com/watch?v=abc123');
                         });
                     });
 

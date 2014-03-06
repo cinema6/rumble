@@ -21,12 +21,8 @@
                 });
                 module('c6.rumble',function($provide){
                     $provide.value('c6AppData', {
-                        profile: {
-                            device: 'phone'
-                        },
-                        experience: {
-                            data: {}
-                        }
+                        mode: 'mobile',
+                        behaviors: {}
                     });
 
                     vimeo.createPlayer = jasmine.createSpy('vimeo.createPlayer')
@@ -44,6 +40,7 @@
                             seekTo              : jasmine.createSpy('vimeoPlayer.seekTo'),
                             getCurrentTimeAsync : jasmine.createSpy('VimeoPlayer.getCurrentTimeAsync()'),
                             getDurationAsync    : jasmine.createSpy('VimeoPlayer.getDurationAsync()'),
+                            getPlayerId         : jasmine.createSpy('VimeoPlayer.getPlayerId()'),
 
                             _on                 : {},
                             _once               : {},
@@ -81,6 +78,8 @@
                         });
 
                         mockPlayer.getDurationAsync.andReturn($q.defer().promise);
+
+                        mockPlayer.getPlayerId.andReturn('68160950');
 
                         mockPlayers.push(mockPlayer);
                         return mockPlayer;
@@ -235,6 +234,12 @@
                             expect(mockPlayers[0].pause).not.toHaveBeenCalled();
                             iface.pause();
                             expect(mockPlayers[0].pause).toHaveBeenCalled();
+                        });
+                    });
+
+                    describe('webHref property', function() {
+                        it('should be computed based on the video\'s id', function() {
+                            expect(iface.webHref).toBe('http://vimeo.com/abc123');
                         });
                     });
 
