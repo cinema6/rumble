@@ -374,7 +374,7 @@
                             });
                         });
 
-                        describe('if the ballot module is enabled', function() {
+                        describe(', if the ballot module is enabled,', function() {
                             beforeEach(function() {
                                 spyOn(VideoEmbedCardCtrl, 'hasModule').andCallFake(function(module) {
                                     if (module === 'ballot') {
@@ -383,7 +383,7 @@
                                 });
                             });
 
-                            it('should be true if the ballot module is active', function() {
+                            it('should be true if the ballot is active', function() {
                                 $scope.$apply(function() {
                                     $scope.config._data.modules.ballot.ballotActive = true;
                                     $scope.active = true;
@@ -397,6 +397,21 @@
                                     $scope.config._data.modules.ballot.ballotActive = false;
                                     $scope.active = false;
                                 });
+                                expect(VideoEmbedCardCtrl.flyAway).toBe(true);
+                            });
+
+                            it('should be true if the ballot results are active and they are not inline', function() {
+                                var ballot = $scope.config._data.modules.ballot;
+
+                                $scope.active = true;
+                                c6AppData.behaviors.inlineVoteResults = true;
+                                ballot.ballotActive = false;
+                                ballot.resultsActive = true;
+
+                                expect(VideoEmbedCardCtrl.flyAway).toBe(false);
+
+                                c6AppData.behaviors.inlineVoteResults = false;
+
                                 expect(VideoEmbedCardCtrl.flyAway).toBe(true);
                             });
                         });

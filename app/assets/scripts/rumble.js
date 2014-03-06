@@ -438,10 +438,14 @@
         Object.defineProperties(this, {
             flyAway: {
                 get: function() {
-                    var ballot = $scope.config._data.modules.ballot;
+                    var ballot = $scope.config._data.modules.ballot,
+                        behaviors = c6AppData.behaviors;
 
-                    return !$scope.active ||
-                        (ballot.ballotActive && this.hasModule('ballot'));
+                    if (!$scope.active) { return true; }
+
+                    return this.hasModule('ballot') &&
+                        (ballot.ballotActive || (ballot.resultsActive &&
+                                                 !behaviors.inlineVoteResults));
                 }
             }
         });

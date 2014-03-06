@@ -21,7 +21,8 @@
                 });
                 module('c6.rumble',function($provide){
                     $provide.value('c6AppData', {
-                        mode: 'mobile'
+                        mode: 'mobile',
+                        behaviors: {}
                     });
 
                     vimeo.createPlayer = jasmine.createSpy('vimeo.createPlayer')
