@@ -115,56 +115,6 @@
                     expect($pager.find('.mr-pager__prev').width()).toBe(62);
                     expect($pager.find('.mr-pager__next').width()).toBe(62);
                 });
-
-                describe('navigating', function() {
-                    var $prev, $next,
-                        $scroller, style;
-
-                    beforeEach(function() {
-                        $pager = create([
-                            '<ul>',
-                            '    <li ng-repeat="index in [0,1,2,3,4,5,6,7,8,9,10,11]">',
-                            '        <span thumb-paginator-item style="display: inline-block; width: 150px;">Foo</span>',
-                            '    </li>',
-                            '</ul>'
-                        ].join('\n'));
-                        $prev = $pager.find('.mr-pager__prev');
-                        $next = $pager.find('.mr-pager__next');
-                        $scroller = $pager.find('.mr-pages__scroller');
-                        style = $scroller.prop('style');
-                    });
-
-                    it('should change the left position of the scroller to navigate', function() {
-                        expect(style.left).toBe('0%');
-
-                        $next.click();
-                        expect(style.left).toBe('-100%');
-
-                        $prev.click();
-                        expect(style.left).toBe('0%');
-                    });
-
-                    it('should not allow you to navigate past the number of pages it has', function() {
-                        $next.click();
-                        expect(style.left).toBe('-100%');
-                        $next.click();
-                        expect(style.left).toBe('-100%');
-
-                        $prev.click();
-                        $prev.click();
-                        expect(style.left).toBe('0%');
-                    });
-
-                    it('should disable a button if clicking it does nothing', function() {
-                        expect($prev.hasClass('mr-pager__btn--disabled')).toBe(true);
-                        expect($next.hasClass('mr-pager__btn--disabled')).toBe(false);
-
-                        $next.click();
-
-                        expect($prev.hasClass('mr-pager__btn--disabled')).toBe(false);
-                        expect($next.hasClass('mr-pager__btn--disabled')).toBe(true);
-                    });
-                });
             });
 
             describe('the paginator', function() {
