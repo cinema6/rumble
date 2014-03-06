@@ -2,7 +2,7 @@
     <ballot-vote-module 
         class="mr-ballot-module css-promote"
         ng-if="Ctrl.hasModule('ballot')"
-        active="config._data.modules.ballot.active"
+        active="config._data.modules.ballot.ballotActive"
         ballot="config.ballot"
         vote="config._data.modules.ballot.vote"
         on-dismiss="Ctrl.dismissBallot()">
@@ -24,11 +24,12 @@
             <p class="mr-card__attributes">via <a ng-href="{{Ctrl.videoUrl}}" target="_blank" title="YouTube">{{config.source}}</a></p>
         </div>
         <ballot-results-module ng-if="Ctrl.hasModule('ballot')"
-            active="config._data.modules.ballot.vote !== null"
+            active="config._data.modules.ballot.resultsActive"
             ballot="config.ballot"
             vote="config._data.modules.ballot.vote"
             card-id="{{config.id}}"
-            fetch-when="onDeck || active">
+            fetch-when="onDeck || active"
+            on-dismiss="Ctrl.dismissBallotResults()">
         </ballot-results-module>
         <div class="mr-card__desc">{{config.note}}</div>
     </div><!--.mr-card__copy-->
