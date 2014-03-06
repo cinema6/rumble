@@ -9,18 +9,19 @@
         -o-transition: opacity 0.5s ease; 
         transition: opacity 0.5s ease;
     }
-    .mr-pager__btn {
-        -webkit-transition: background 0.5s ease; 
-        -moz-transition: background 0.5s ease; 
-        -o-transition: background 0.5s ease; 
-        transition: background 0.5s ease;
+    .mr-pager__btn, .mr-pager__btn:hover {
+        -webkit-transition: background 0.4s ease; 
+        -moz-transition: background 0.4s ease; 
+        -o-transition: background 0.4s ease; 
+        transition: background 0.4s ease;
     }
-    .mr-pager__icon-path {
-        -webkit-transition: fill 0.5s ease; 
-        -moz-transition: fill 0.5s ease; 
-        -o-transition: fill 0.5s ease; 
-        transition: fill 0.5s ease;
-    }
+    .mr-pager__icon-path, 
+    .mr-pager__btn:hover .mr-pager__icon-path {
+        -webkit-transition: fill 0.4s ease; 
+        -moz-transition: fill 0.4s ease; 
+        -o-transition: fill 0.4s ease; 
+        transition: fill 0.4s ease;
+}
     .mr-pager__btn, .mr-pager__icon-path {
         -webkit-transition-delay: 0.3s;
         -moz-transition-delay: 0.3s;
@@ -34,10 +35,6 @@
             opacity:0;
         }
         .mr-pager__btn:hover {
-            -webkit-transition: background 0.5s ease; 
-            -moz-transition: background 0.5s ease; 
-            -o-transition: background 0.5s ease; 
-            transition: background 0.5s ease;
             -webkit-transition-delay: 0;
             -moz-transition-delay: 0;
             -o-transition-delay: 0;
@@ -107,7 +104,14 @@
     Mini Reel Cards classes
     ========================================================================== */
     .mr-card__copy {
-        -webkit-transition: height 0.3s ease-out; transition: height 0.3s ease-out; 
+        -webkit-transition: height 0.3s ease-out; 
+        -moz-transition: height 0.3s ease-out; 
+        -o-transition: height 0.3s ease-out; 
+        transition: height 0.3s ease-out; 
+        -webkit-transition-delay: 0.25s; 
+        -moz-transition-delay: 0.25s; 
+        -o-transition-delay: 0.25s; 
+        transition-delay: 0.25s; 
     }
         .mr-card__copy:hover {
             height: 7.5rem;/*121px*/
