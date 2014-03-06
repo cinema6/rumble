@@ -74,9 +74,8 @@
         -webkit-transform: translateZ(0); /* Safari and Chrome */
     }
     .c6-height-limiter { 
-        min-height:12rem;/*192px*/
+        min-height:11.125rem;/*178px*/
     }
-
     
 /*  ==========================================================================
     ui-icons classes
@@ -118,16 +117,9 @@
     .mr-experience classes
     ========================================================================== */
     .mr-experience {
-        padding: 0 0.625em 63% 0.625rem;/*10px*/ position:relative;
-        height: 8.125rem;/*130px*/ min-width:18.75rem;/*300px*/ 
-        /*min-height: 26.625rem; /*426px*/
-        /*box-sizing: border-box; -moz-box-sizing: border-box;*/
-    }
-
-    @media screen and (max-width: 20rem) { /*320px*/
-        .mr-experience {
-            padding: 0 0.625em; height: 20.625rem;/*330px*/
-        }
+        padding: 8.125rem 0.625em 63% 0.625rem;/*10px*/ position:relative;
+        height: 0; min-width:18.75rem;/*300px*/ min-height: 19.625rem;/*314px*/
+        box-sizing: border-box; -moz-box-sizing: border-box;
     }
 
 /*  ==========================================================================
