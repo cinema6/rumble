@@ -8,6 +8,7 @@
         on-dismiss="Ctrl.dismissBallot()">
     </ballot-vote-module>
     <ballot-results-module ng-if="Ctrl.hasModule('ballot')"
+        class="mr-results-module css-promote"
         active="config._data.modules.ballot.resultsActive"
         ballot="config.ballot"
         vote="config._data.modules.ballot.vote"
@@ -26,7 +27,7 @@
     
     <div class="mr-card__copy">
         <div class="mr-card__title">
-            <h1 class="mr-card__title-h1 tk--hdr">{{config.title}}</h1>
+            <h1 class="mr-card__title-h1 tk--hdr">#. {{config.title}}</h1>
             <button class="mr-card__btn">
                 <span class="mr-card__icon">
                     <span class="ir">Click to See More</span>

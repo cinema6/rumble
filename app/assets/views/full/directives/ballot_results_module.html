@@ -1,19 +1,11 @@
-<section class="mr-results__group" ng-click="onDismiss()">
-    <h2 class="mr-results__title tk--hdr">Voting Results:</h2>
-
+<section class="mr-results__group">
     <ul class="mr-results__list">
         <li class="mr-results__item mr-results__item{{$index}}" ng-repeat="this in ballot.choices">
+            <p class="mr-results__tally tk--hdr">{{Ctrl.results[$index] | percent}}</p>
             <p class="mr-results__option">{{this.button}}</p>
-            <p class="mr-results__tally">{{Ctrl.results[$index] | percent}}</p>
         </li>
     </ul>
     <div class="mr-results__meter">
         <div class="mr-results__bar1" ng-style="{width: (Ctrl.results[0] | percent)}">&nbsp;</div>
     </div>
-
-    <p class="mr-results__watch-again">
-        <a ng-click="onDismiss()" title="Watch Video Again">Watch Video Again</a>
-    </p>
-
-    <button class="sprite mr-results__close"><span class="ir">Close</span></button>
 </section>
