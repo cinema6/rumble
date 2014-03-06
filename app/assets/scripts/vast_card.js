@@ -23,6 +23,14 @@
 
             this.videoSrc = null;
 
+            Object.defineProperties(this, {
+                showVideo: {
+                    get: function() {
+                        return $scope.active && !_data.modules.displayAd.active;
+                    }
+                }
+            });
+
             this.hasModule = ModuleService.hasModule.bind(ModuleService, config.modules);
 
             this.reset = function() {
@@ -53,7 +61,9 @@
                         }
                     })
                     .on('pause', function() {
-                        _data.modules.displayAd.active = true;
+                        if (self.hasModule('displayAd')) {
+                            _data.modules.displayAd.active = true;
+                        }
                     })
                     .on('play', function() {
                         _data.modules.displayAd.active = false;

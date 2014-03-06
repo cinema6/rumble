@@ -126,6 +126,24 @@
                         expect(VastCardCtrl.videoSrc).toBeNull();
                     });
                 });
+
+                describe('showVideo', function() {
+                    it('should be true if the card is active', function() {
+                        $scope.active = true;
+                        expect(VastCardCtrl.showVideo).toBe(true);
+
+                        $scope.active = false;
+                        expect(VastCardCtrl.showVideo).toBe(false);
+                    });
+
+                    it('should also be false if the displayAd module is active', function() {
+                        $scope.active = true;
+                        expect(VastCardCtrl.showVideo).toBe(true);
+
+                        $scope.config._data.modules.displayAd.active = true;
+                        expect(VastCardCtrl.showVideo).toBe(false);
+                    });
+                });
             });
 
             describe('@methods', function() {
@@ -208,12 +226,38 @@
                 });
 
                 describe('pause', function() {
-                    beforeEach(function() {
-                        iface.emit('pause', iface);
+                    describe('if the displayAd module is present', function() {
+                        beforeEach(function() {
+                            spyOn(VastCardCtrl, 'hasModule')
+                                .andCallFake(function(module) {
+                                    if (module === 'displayAd') { return true; }
+
+                                    return false;
+                                });
+
+                            iface.emit('pause', iface);
+                        });
+
+                        it('should activate the displayAd', function() {
+                            expect($scope.config._data.modules.displayAd.active).toBe(true);
+                        });
                     });
 
-                    it('should activate the displayAd', function() {
-                        expect($scope.config._data.modules.displayAd.active).toBe(true);
+                    describe('if the displayAd module is not present', function() {
+                        beforeEach(function() {
+                            spyOn(VastCardCtrl, 'hasModule')
+                                .andCallFake(function(module) {
+                                    if (module === 'displayAd') { return false; }
+
+                                    return true;
+                                });
+
+                            iface.emit('pause', iface);
+                        });
+
+                        it('should not activate the displayAd', function() {
+                            expect($scope.config._data.modules.displayAd.active).not.toBe(true);
+                        });
                     });
                 });
 

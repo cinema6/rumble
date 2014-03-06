@@ -1,19 +1,21 @@
 <div class="mr-card__group mr-vast__group c6-height-limiter">
     <div class="mr-switch__group">
         <div class="mr-switch__menu clearfix">
-            <button class="mr-switch__btn mr-switch__btn-video mr-switch__btn--active">
+            <button class="mr-switch__btn mr-switch__btn-video"
+                ng-class="{'mr-switch__btn--active': !config._data.modules.displayAd.active}">
                 <span class="ir">Show Reader</span>
             </button>
-            <button class="mr-switch__btn mr-switch__btn-img">
+            <button ng-show="Ctrl.hasModule('displayAd')"
+                class="mr-switch__btn mr-switch__btn-img"
+                ng-class="{'mr-switch__btn--active': config._data.modules.displayAd.active}">
                 <span class="ir">Show Video</span>
             </button>
         </div>
         <h1 class="mr-vast__title-h1 tk--hdr clearfix">Advertisement</h1>
     </div>
 
-    <div class="mr-vast__player">
+    <div ng-style="{visibility: Ctrl.showVideo ? 'visible' : 'hidden'}" class="mr-vast__player">
         <video class="mr-vast__video c6-height-limiter"
-            ng-style="{visibility: (active ? 'visible' : 'hidden')}" 
             c6-video id="{{config.id}}" c6-src="Ctrl.videoSrc"></video>
     </div>
     <section>
@@ -34,6 +36,6 @@
         </display-ad-module>
     </section>
     <p class="mr-vast__watch-again tk--hdr">
-        <a ng-click="onDismiss()" title="Watch the Video">Watch the Video</a>
+        <a ng-click="Ctrl.reset()" href="" title="Watch the Video">Watch the Video</a>
     </p>
 </div>
