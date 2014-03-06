@@ -1,7 +1,14 @@
 <div class="mr-card mr-card-shadow">
     <h2 class="mr-card__type">Advertisement</h2>
-    <video ng-style="{visibility: Ctrl.showVideo ? 'visible' : 'hidden'}" c6-video id="{{config.id}}" c6-src="Ctrl.videoSrc" style="width:100%;"></video>
-    <div class="mr-card__copy">Click Video to Watch</div>
+    <div class="mr-vast-video__container" ng-class="{'mr-vast-video__container--disabled' : !Ctrl.showVideo}">
+        <video c6-video id="{{config.id}}" c6-src="Ctrl.videoSrc" 
+            class="mr-vast-video"></video>
+    </div>
+    <display-ad-module ng-if="Ctrl.hasModule('displayAd')"
+        active="config._data.modules.displayAd.active"
+        ad-src="{{config.displayAd}}">
+    </display-ad-module>
+    <div class="mr-card__copy">Play Video</div>
     <section>
         <ballot-module ng-if="Ctrl.hasModule('ballot')"
             active="config._data.modules.ballot.active"
@@ -14,9 +21,5 @@
             card-id="{{config.id}}"
             fetch-comments-when="onDeck || active">
         </comments-module>
-        <display-ad-module ng-if="Ctrl.hasModule('displayAd')"
-            active="config._data.modules.displayAd.active"
-            ad-src="{{config.displayAd}}">
-        </display-ad-module>
     </section>
 </div>
