@@ -98,3 +98,27 @@
         .ui-navbar__page:hover .ui-control__preview-img {
             opacity:1;
         }
+
+
+/*  ==========================================================================
+    Mini Reel Cards classes
+    ========================================================================== */
+    .mr-preview__button, .mr-card__btn-watch {
+        -webkit-transition: background 0.4s ease; 
+        -moz-transition: background 0.4s ease; 
+        -o-transition: background 0.4s ease; 
+        transition: background 0.4s ease;
+    }
+        .mr-preview__button:hover, .mr-preview__thumbnail:hover .mr-preview__button {
+            background: url('../../img/play-icon.svg') #b69823 50% 50% / 32% auto no-repeat;
+        }
+    .mr-card__btn-watch {
+        -webkit-transition: all 0.4s ease; 
+        -moz-transition: all 0.4s ease; 
+        -o-transition: all 0.4s ease; 
+        transition: all 0.4s ease;
+    }
+        .mr-card__btn-watch:hover {
+            background-color: #fff;
+            color: #b69823;
+        }
