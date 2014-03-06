@@ -372,6 +372,20 @@
 /*  ==========================================================================
     .mr-results__group
     ========================================================================== */
+    .mr-results-module {
+        position: absolute; width:100%; height: 0; padding: 0 0 64%;
+        z-index: 2; left:0; top:0; opacity: 1;
+        -ms-transition: opacity 1s 0.15s;
+        -moz-transition: opacity 1s 0.15s;
+        -webkit-transition: opacity 1s 0.15s;
+        transition: opacity 1s 0.15s;
+    }
+        .mr-results-module.ng-hide {
+            opacity:0;
+        }
+        .mr-results-module.ng-hide-remove, .mr-results-module.ng-hide-add {
+            display: block !important;
+        }
     .mr-results__group {
         position: absolute; height: 0; padding: 0 10% 64%;
         z-index: 2; left:0; right: 0; top:0; background-color: rgba(0,0,0,0.8);
@@ -555,7 +569,7 @@
             position: absolute; bottom: -2.57em; left: 50%; margin-left: -3em;
         }
         .mr-vast__watch-again {
-            font-size: 1em; position: absolute; 
+            font-size: 1em; position: absolute;
             top: 50%; left: 50%; margin: 8.125rem 0 0 -3.6875em;
         }
 

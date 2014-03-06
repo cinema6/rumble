@@ -8,6 +8,7 @@
         on-dismiss="Ctrl.dismissBallot()">
     </ballot-vote-module>
     <ballot-results-module ng-if="Ctrl.hasModule('ballot')"
+        class="mr-results-module css-promote"
         active="config._data.modules.ballot.vote !== null"
         ballot="config.ballot"
         vote="config._data.modules.ballot.vote"
