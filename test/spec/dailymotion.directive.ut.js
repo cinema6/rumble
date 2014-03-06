@@ -402,26 +402,6 @@
             /* -- end describe('playerInterface' */
 
             describe('when the card becomes inavtive', function() {
-                describe('initialization', function() {
-                    beforeEach(function() {
-                        $scope.$apply(function() {
-                            $scope.active = false;
-
-                            $compile(
-                                '<dailymotion-card videoid="abc123" width="1" height="2"></dailymotion-card>'
-                            )($scope);
-                        });
-
-                        $timeout.flush();
-                        mockPlayers[0]._on.ready[0]({},mockPlayers[0]);
-                        $timeout.flush();
-                    });
-
-                    it('should not pause the player', function() {
-                        expect(mockPlayers[0].pause).not.toHaveBeenCalled();
-                    });
-                });
-
                 describe('when going from active to inactive', function() {
                     var iface;
 
@@ -451,93 +431,11 @@
                         });
                     });
 
-                    it('should pause the player', function() {
-                        expect(mockPlayers[0].pause).toHaveBeenCalled();
-                    });
-
                     it('should regenerate the player', function() {
                         $timeout.flush();
                         expect(mockPlayers.length).toEqual(2);
                         expect(mockPlayers[0].destroy.callCount).toEqual(1);
                         expect(iface.isReady()).toEqual(false);
-                    });
-                });
-            });
-
-            describe('autoplay', function() {
-                describe('if off', function() {
-                    beforeEach(function() {
-                        $scope.$apply(function() {
-                            $scope.active = true;
-
-                            $compile(
-                                '<dailymotion-card videoid="abc123" width="1" height="2"></dailymotion-card>'
-                            )($scope);
-                        });
-
-                        $timeout.flush();
-                        mockPlayers[0]._on.ready[0]({},mockPlayers[0]);
-                        $timeout.flush();
-                    });
-
-                    it('should not play the player', function() {
-                        expect(mockPlayers[0].play).not.toHaveBeenCalled();
-                    });
-                });
-
-                describe('if on, when becoming active', function() {
-                    var player;
-
-                    beforeEach(function() {
-                        $scope.$apply(function() {
-                            $compile(
-                                '<dailymotion-card videoid="abc123" width="1" height="2" autoplay="1"></dailymotion-card>'
-                            )($scope);
-                        });
-                        $timeout.flush();
-
-                        player = mockPlayers[0];
-                    });
-
-                    describe('before becoming active', function() {
-                        beforeEach(function() {
-                            mockPlayers[0]._on.ready[0]({},mockPlayers[0]);
-                            $timeout.flush();
-                        });
-
-                        it('should not play the player', function() {
-                            expect(player.play).not.toHaveBeenCalled();
-                        });
-                    });
-
-                    describe('when not ready', function() {
-                        beforeEach(function() {
-                            spyOn($log, 'warn');
-                        });
-
-                        it('should log a warning if the player becomes active', function() {
-                            $scope.$apply(function() {
-                                $scope.active = true;
-                            });
-
-                            expect(player.play).not.toHaveBeenCalled();
-                            expect($log.warn).toHaveBeenCalledWith('Player cannot autoplay because it is not ready.');
-                        });
-                    });
-
-                    describe(', when ready', function() {
-                        beforeEach(function() {
-                            mockPlayers[0]._on.ready[0]({},mockPlayers[0]);
-                            $timeout.flush();
-
-                            $scope.$apply(function() {
-                                $scope.active = true;
-                            });
-                        });
-
-                        it('should play the player', function() {
-                            expect(player.play).toHaveBeenCalled();
-                        });
                     });
                 });
             });
