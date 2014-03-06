@@ -245,11 +245,27 @@
                 obj.mode = (device === 'phone') ? 'mobile' : (mode || 'full');
             }
 
+            function setBehaviors(obj, mode) {
+                var behaviors = obj.behaviors = {};
+
+                switch (mode) {
+                case 'light':
+                    behaviors.autoplay = true;
+                    behaviors.inlineVoteResults = false;
+                    break;
+
+                default:
+                    behaviors.autoplay = false;
+                    behaviors.inlineVoteResults = true;
+                }
+            }
+
             cinema6.getAppData()
                 .then(function(appData) {
                     angular.copy(appData, c6AppData);
 
                     setMode(c6AppData, appData);
+                    setBehaviors(c6AppData, c6AppData.mode);
                 });
 
             return c6AppData;

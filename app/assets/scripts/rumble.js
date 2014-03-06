@@ -415,15 +415,16 @@
             }
         };
     }])
-    .controller('VideoEmbedCardController', ['$scope','ModuleService','ControlsService','EventService',
-    function                                ( $scope , ModuleService , ControlsService , EventService ) {
+    .controller('VideoEmbedCardController', ['$scope','ModuleService','ControlsService','EventService','c6AppData',
+    function                                ( $scope , ModuleService , ControlsService , EventService , c6AppData ) {
         var self = this,
             config = $scope.config,
             _data = config._data = config._data || {
                 playerEvents: {},
                 modules: {
                     ballot: {
-                        active: false,
+                        ballotActive: false,
+                        resultsActive: false,
                         vote: null
                     },
                     displayAd: {
@@ -431,12 +432,16 @@
                     }
                 }
             },
-            targetPlays = 0;
+            ballotTargetPlays = 0,
+            resultsTargetPlays = 0;
 
         Object.defineProperties(this, {
             flyAway: {
                 get: function() {
-                    return ($scope.config._data.modules.ballot.active || !$scope.active) && this.hasModule('ballot');
+                    var ballot = $scope.config._data.modules.ballot;
+
+                    return !$scope.active ||
+                        (ballot.ballotActive && this.hasModule('ballot'));
                 }
             }
         });
@@ -446,19 +451,38 @@
         this.hasModule = ModuleService.hasModule.bind(ModuleService, config.modules);
 
         this.dismissBallot = function() {
-            targetPlays = _data.playerEvents.play.emitCount;
+            ballotTargetPlays = _data.playerEvents.play.emitCount;
+        };
+
+        this.dismissBallotResults = function() {
+            resultsTargetPlays = _data.playerEvents.play.emitCount;
         };
 
         $scope.$on('playerAdd', function(event, player) {
             _data.playerEvents = EventService.trackEvents(player, ['play']);
 
-            Object.defineProperty(_data.modules.ballot, 'active', {
-                get: function() {
-                    var playing = (!player.paused && !player.ended),
-                        voted = angular.isNumber(_data.modules.ballot.vote),
-                        hasPlayed = _data.playerEvents.play.emitCount > targetPlays;
+            Object.defineProperties(_data.modules.ballot, {
+                ballotActive: {
+                    get: function() {
+                        var playing = (!player.paused && !player.ended),
+                            voted = angular.isNumber(_data.modules.ballot.vote),
+                            hasPlayed = _data.playerEvents.play.emitCount > ballotTargetPlays;
 
-                    return !voted && !playing && hasPlayed && $scope.active;
+                        return !voted && !playing && hasPlayed && $scope.active;
+                    }
+                },
+                resultsActive: {
+                    get: function() {
+                        var playing = (!player.paused && !player.ended),
+                            voted = angular.isNumber(this.vote),
+                            hasPlayed = _data.playerEvents.play.emitCount > resultsTargetPlays;
+
+                        if (c6AppData.behaviors.inlineVoteResults) {
+                            return voted;
+                        }
+
+                        return voted && !playing && hasPlayed && $scope.active;
+                    }
                 }
             });
 

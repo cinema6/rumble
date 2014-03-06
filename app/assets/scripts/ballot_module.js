@@ -35,7 +35,8 @@
                     vote: '=',
                     cardId: '@',
                     active: '=',
-                    fetchWhen: '='
+                    fetchWhen: '=',
+                    onDismiss: '&'
                 },
                 link: function(scope, element) {
                     scope.$watch('active', function(active) {

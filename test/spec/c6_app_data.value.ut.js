@@ -3,7 +3,8 @@
 
     define(['app'], function() {
         describe('c6AppData', function() {
-            var $rootScope;
+            var $rootScope,
+                c6AppDataProvider;
 
             var cinema6,
                 appData,
@@ -48,7 +49,9 @@
                     });
                 });
 
-                module('c6.rumble');
+                module('c6.rumble', function($injector) {
+                    c6AppDataProvider = $injector.get('c6AppDataProvider');
+                });
 
                 inject(function($injector) {
                     $rootScope = $injector.get('$rootScope');
@@ -73,6 +76,40 @@
 
                 expect(c6AppData).toEqual(jasmine.objectContaining(appData));
             }));
+
+            describe('behaviors', function() {
+                function c6AppData(mode) {
+                    var svc;
+
+                    appData.experience.mode = mode;
+
+                    inject(function($injector) {
+                        svc = $injector.invoke(c6AppDataProvider.$get);
+                    });
+
+                    $rootScope.$apply(function() {
+                        deferreds.getAppData.resolve(appData);
+                    });
+
+                    return svc;
+                }
+
+                describe('autoplay', function() {
+                    it('should be set based on the mode', function() {
+                        expect(c6AppData('full').behaviors.autoplay).toBe(false);
+                        expect(c6AppData('mobile').behaviors.autoplay).toBe(false);
+                        expect(c6AppData('light').behaviors.autoplay).toBe(true);
+                    });
+                });
+
+                describe('inlineVoteResults', function() {
+                    it('should be set based on the mode', function() {
+                        expect(c6AppData('full').behaviors.inlineVoteResults).toBe(true);
+                        expect(c6AppData('mobile').behaviors.inlineVoteResults).toBe(true);
+                        expect(c6AppData('light').behaviors.inlineVoteResults).toBe(false);
+                    });
+                });
+            });
 
             describe('mode', function() {
                 it('should be initialized as null', inject(function(c6AppData) {

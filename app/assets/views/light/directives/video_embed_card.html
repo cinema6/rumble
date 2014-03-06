@@ -2,17 +2,18 @@
     <ballot-vote-module 
         class="mr-ballot-module css-promote"
         ng-if="Ctrl.hasModule('ballot')"
-        active="config._data.modules.ballot.active"
+        active="config._data.modules.ballot.ballotActive"
         ballot="config.ballot"
         vote="config._data.modules.ballot.vote"
         on-dismiss="Ctrl.dismissBallot()">
     </ballot-vote-module>
     <ballot-results-module ng-if="Ctrl.hasModule('ballot')"
-        active="config._data.modules.ballot.vote !== null"
+        active="config._data.modules.ballot.resultsActive"
         ballot="config.ballot"
         vote="config._data.modules.ballot.vote"
         card-id="{{config.id}}"
-        fetch-when="onDeck || active">
+        fetch-when="onDeck || active"
+        on-dismiss="Ctrl.dismissBallotResults()">
     </ballot-results-module>
 
     <div class="mr-player__group">
