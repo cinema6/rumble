@@ -398,7 +398,6 @@
                     "id": "rc-392f3546f0cfc3",
                     "type": "vast",
                     "ad": true,
-                    "sponsored":false,
                     "modules": [],
                     "data": {
                         "autoplay": true
