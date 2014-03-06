@@ -497,9 +497,17 @@
                 _data.modules.displayAd.active = true;
             });
 
-            $scope.$watch('active', function(active) {
+            $scope.$watch('active', function(active, wasActive) {
+                if (active === wasActive) { return; }
+
                 if (active) {
                     ControlsService.bindTo(player);
+
+                    if (c6AppData.behaviors.autoplay) {
+                        player.play();
+                    }
+                } else {
+                    player.pause();
                 }
             });
         });

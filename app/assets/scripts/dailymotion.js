@@ -409,17 +409,7 @@
             scope.$watch('active', function(active, wasActive) {
                 if (active === wasActive) { return; }
 
-                if (active) {
-                    if (numberify($attr.autoplay, 0)) {
-                        if (!playerIsReady) {
-                            $log.warn('Player cannot autoplay because it is not ready.');
-                            return;
-                        }
-
-                        player.play();
-                    }
-                } else {
-                    player.pause();
+                if (!active) {
                     regeneratePlayer();
                 }
             });

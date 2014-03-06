@@ -27,7 +27,9 @@
                 module('c6.rumble', function($provide) {
                     $provide.value('c6AppData', {
                         mode: null,
-                        behaviors: {}
+                        behaviors: {
+                            autoplay: true
+                        }
                     });
                 });
 
@@ -94,13 +96,31 @@
                     var iface;
 
                     beforeEach(function() {
-                        iface = c6EventEmitter({});
+                        iface = c6EventEmitter({
+                            play: jasmine.createSpy('iface.play()'),
+                            pause: jasmine.createSpy('iface.pause()')
+                        });
 
                         $scope.$emit('playerAdd', iface);
                     });
 
+                    describe('when initialized', function() {
+                        beforeEach(function() {
+                            $rootScope.$digest();
+                        });
+
+                        it('should not play or paused the player', function() {
+                            expect(iface.play).not.toHaveBeenCalled();
+                            expect(iface.pause).not.toHaveBeenCalled();
+                        });
+                    });
+
                     describe('when not active', function() {
                         beforeEach(function() {
+                            $scope.$apply(function() {
+                                $scope.active = true;
+                            });
+
                             $scope.$apply(function() {
                                 $scope.active = false;
                             });
@@ -109,10 +129,18 @@
                         it('should not bind to the controls', function() {
                             expect(ControlsService.bindTo).not.toHaveBeenCalled();
                         });
+
+                        it('should pause the player', function() {
+                            expect(iface.pause).toHaveBeenCalled();
+                        });
                     });
 
                     describe('when active', function() {
                         beforeEach(function() {
+                            $scope.$apply(function() {
+                                $scope.active = false;
+                            });
+
                             $scope.$apply(function() {
                                 $scope.active = true;
                             });
@@ -120,6 +148,33 @@
 
                         it('should bind to the controls', function() {
                             expect(ControlsService.bindTo).toHaveBeenCalledWith(iface);
+                        });
+
+                        describe('if the behavior is autoplay', function() {
+                            it('should play the video', function() {
+                                expect(iface.play).toHaveBeenCalled();
+                            });
+                        });
+
+                        describe('if the behavior is not to autoplay', function() {
+                            var currentPlayCalls;
+
+                            beforeEach(function() {
+                                currentPlayCalls = iface.play.callCount;
+
+                                c6AppData.behaviors.autoplay = false;
+
+                                $scope.$apply(function() {
+                                    $scope.active = false;
+                                });
+                                $scope.$apply(function() {
+                                    $scope.active = true;
+                                });
+                            });
+
+                            it('should not play the video', function() {
+                                expect(iface.play.callCount).toBe(currentPlayCalls);
+                            });
                         });
                     });
                 });
@@ -131,7 +186,9 @@
 
                     beforeEach(function() {
                         iface = c6EventEmitter({
-                            webHref: 'https://www.youtube.com/watch?v=oMB5YFtWQTE'
+                            webHref: 'https://www.youtube.com/watch?v=oMB5YFtWQTE',
+                            play: jasmine.createSpy('iface.play()'),
+                            pause: jasmine.createSpy('iface.pause()')
                         });
                         spyOn(iface, 'once').andCallThrough();
 
