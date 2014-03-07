@@ -31,12 +31,12 @@
         
         <button ng-click="Ctrl.hideText()" 
             class="mr-card__btn-watch"
-            ng-hide="config._data.modules.ballot.resultsActive">
+            ng-hide="config._data.modules.ballot.resultsActive && active">
             Watch Now.
         </button>
         
         <ballot-results-module ng-if="Ctrl.hasModule('ballot')"
-            active="config._data.modules.ballot.resultsActive"
+            active="config._data.modules.ballot.resultsActive && active"
             ballot="config.ballot"
             vote="config._data.modules.ballot.vote"
             card-id="{{config.id}}"
@@ -49,7 +49,7 @@
     <ballot-vote-module 
         class="mr-ballot-module css-promote"
         ng-if="Ctrl.hasModule('ballot')"
-        active="config._data.modules.ballot.ballotActive"
+        active="config._data.modules.ballot.ballotActive && active"
         ballot="config.ballot"
         vote="config._data.modules.ballot.vote"
         on-dismiss="Ctrl.dismissBallot()">
