@@ -558,19 +558,6 @@
             var dasherize = InflectorService.dasherize.bind(InflectorService);
 
             $log.info('link:',scope);
-            function resize(event,noDigest){
-                var pw = Math.round($window.innerWidth * 1),
-                    ph = Math.round(pw * 0.5625);
-                /* $element.css({
-                    width : pw,
-                    height: ph
-                }); */
-                scope.playerWidth   = pw;
-                scope.playerHeight  = ph;
-                if(!noDigest){
-                    scope.$digest();
-                }
-            }
 
             var inner = '<' + dasherize(type) + '-card';
             for (var key in data){
@@ -578,8 +565,6 @@
                     inner += ' ' + key.toLowerCase() + '="' + data[key] + '"';
                 }
             }
-
-            // inner += ' width="{{playerWidth}}" height="{{playerHeight}}"';
 
             if (!scope.profile.inlineVideo){
                 $log.info('Will need to regenerate the player');
@@ -604,16 +589,6 @@
             inner += '></'  + dasherize(type) + '-card' + '>';
 
             $element.append($compile(inner)(scope));
-
-            scope.$watch('onDeck', function(onDeck) {
-                if (onDeck) { scope.$broadcast('onDeck'); }
-            });
-            scope.$watch('active', function(active) {
-                if (active) { scope.$broadcast('active'); }
-            });
-
-            $window.addEventListener('resize',resize);
-            resize({},true);
         }
 
         return {
@@ -623,7 +598,9 @@
                 config  : '=',
                 profile : '=',
                 active  : '=',
-                onDeck  : '='
+                onDeck  : '=',
+                number  : '@',
+                total   : '@'
             }
         };
 
