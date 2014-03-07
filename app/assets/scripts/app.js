@@ -266,7 +266,7 @@
                     var styles = promises[0].data,
                         session = promises[1];
 
-                    session.ping('getResponsiveStyles', styles[c6AppData.mode] || {});
+                    session.ping('responsiveStyles', styles[c6AppData.mode] || {});
                 });
 
             return c6AppData;

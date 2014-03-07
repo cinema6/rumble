@@ -120,7 +120,7 @@
                         deferreds.getSession.resolve(session);
                     });
 
-                    expect(session.ping).toHaveBeenCalledWith('getResponsiveStyles', responsive.full);
+                    expect(session.ping).toHaveBeenCalledWith('responsiveStyles', responsive.full);
                 }));
 
                 it('should send an empty object if there are no styles', inject(function(c6AppData) {
@@ -134,7 +134,7 @@
                         deferreds.getSession.resolve(session);
                     });
 
-                    expect(session.ping).toHaveBeenCalledWith('getResponsiveStyles', {});
+                    expect(session.ping).toHaveBeenCalledWith('responsiveStyles', {});
                 }));
             });
 
