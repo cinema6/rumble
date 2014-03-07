@@ -445,9 +445,10 @@
 
                     if (!$scope.active) { return true; }
 
-                    return this.hasModule('ballot') &&
-                        (ballot.ballotActive || (ballot.resultsActive &&
-                                                 !behaviors.inlineVoteResults));
+                            /* If we have a ballot:  If the ballot is being show.   If the results are a modal and they're being shown. */
+                    return (this.hasModule('ballot') && (ballot.ballotActive || (ballot.resultsActive && !behaviors.inlineVoteResults))) ||
+                        /* If there is a separate view for text, and if that mode is active: */
+                        (behaviors.separateTextView && _data.textMode);
                 }
             }
         });

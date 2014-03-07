@@ -109,6 +109,14 @@
                         expect(c6AppData('light').behaviors.inlineVoteResults).toBe(false);
                     });
                 });
+
+                describe('separateTextView', function() {
+                    it('should be set based on the mode', function() {
+                        expect(c6AppData('full').behaviors.separateTextView).toBe(true);
+                        expect(c6AppData('mobile').behaviors.separateTextView).toBe(false);
+                        expect(c6AppData('light').behaviors.separateTextView).toBe(false);
+                    });
+                });
             });
 
             describe('mode', function() {

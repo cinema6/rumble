@@ -246,18 +246,11 @@
             }
 
             function setBehaviors(obj, mode) {
-                var behaviors = obj.behaviors = {};
-
-                switch (mode) {
-                case 'light':
-                    behaviors.autoplay = true;
-                    behaviors.inlineVoteResults = false;
-                    break;
-
-                default:
-                    behaviors.autoplay = false;
-                    behaviors.inlineVoteResults = true;
-                }
+                obj.behaviors = {
+                    autoplay: (mode === 'light'),
+                    inlineVoteResults: (mode !== 'light'),
+                    separateTextView: (mode === 'full')
+                };
             }
 
             cinema6.getAppData()

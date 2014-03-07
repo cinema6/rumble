@@ -28,7 +28,8 @@
                     $provide.value('c6AppData', {
                         mode: null,
                         behaviors: {
-                            autoplay: true
+                            autoplay: true,
+                            separateTextView: false
                         }
                     });
                 });
@@ -493,6 +494,27 @@
                                 c6AppData.behaviors.inlineVoteResults = false;
 
                                 expect(VideoEmbedCardCtrl.flyAway).toBe(true);
+                            });
+                        });
+
+                        describe('if the app has a separate text view', function() {
+                            beforeEach(function() {
+                                spyOn(VideoEmbedCardCtrl, 'hasModule').andReturn(false);
+
+                                $scope.active = true;
+                                c6AppData.behaviors.separateTextView = true;
+                            });
+
+                            it('should be true if text mode is on', function() {
+                                $scope.config._data.textMode = true;
+
+                                expect(VideoEmbedCardCtrl.flyAway).toBe(true);
+                            });
+
+                            it('should be false if text mode is off', function() {
+                                $scope.config._data.textMode = false;
+
+                                expect(VideoEmbedCardCtrl.flyAway).toBe(false);
                             });
                         });
                     });
