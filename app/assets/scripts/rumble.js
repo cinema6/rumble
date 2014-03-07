@@ -550,6 +550,12 @@
 
             self.showText();
         });
+
+        $scope.$watch('config._data.textMode', function(textMode, wasTextMode) {
+            if (textMode === wasTextMode) { return; }
+
+            self.dismissBallot();
+        });
     }])
     .directive('mrCard',['$log','$compile','$window','c6UserAgent','InflectorService',
     function            ( $log , $compile , $window , c6UserAgent , InflectorService ){
