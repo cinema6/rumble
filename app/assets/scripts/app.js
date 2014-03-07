@@ -232,11 +232,12 @@
                 return mode && c6UrlMaker(base + '/' + mode + '/' + url);
             };
         }])
-        .factory('c6AppData', ['cinema6',
-        function              ( cinema6 ) {
+        .factory('c6AppData', ['cinema6','$http','c6UrlMaker','$q',
+        function              ( cinema6 , $http , c6UrlMaker , $q ) {
             var c6AppData = {
-                mode: null
-            };
+                    mode: null
+                },
+                getResponsiveStyles = $http.get(c6UrlMaker('config/responsive.json'));
 
             function setMode(obj, data) {
                 var device = data.profile.device,
@@ -259,6 +260,13 @@
 
                     setMode(c6AppData, appData);
                     setBehaviors(c6AppData, c6AppData.mode);
+
+                    return $q.all([getResponsiveStyles, cinema6.getSession()]);
+                }).then(function(promises) {
+                    var styles = promises[0].data,
+                        session = promises[1];
+
+                    session.ping('getResponsiveStyles', styles[c6AppData.mode] || {});
                 });
 
             return c6AppData;
