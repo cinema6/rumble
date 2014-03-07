@@ -585,6 +585,24 @@
     .mr-player__thumbnail {
         background:50% 50% / cover no-repeat;
     }
+    .mr-display-ad__group {
+        text-align: center;
+    }
+        .mr-display-ad__title-h1 {
+            display: none;
+        }
+        .mr-vast-video__container {
+            position:relative;
+        }
+            .mr-vast-video__container--disabled {
+                height:0; overflow: hidden;
+            }
+            .mr-vast-video {
+                width:100%; margin:0;
+            } 
+                .mr-vast-video__container--disabled .mr-vast-video {
+                    position:absolute; right:-200%;
+                }
 
     @media screen and (orientation:landscape) {
         .mr-card__title {
