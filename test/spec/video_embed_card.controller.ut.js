@@ -97,6 +97,38 @@
             });
 
             describe('$watchers', function() {
+                describe('config._data.textMode', function() {
+                    beforeEach(function() {
+                        spyOn(VideoEmbedCardCtrl, 'dismissBallot');
+                        $rootScope.$digest();
+                    });
+
+                    describe('initialization', function() {
+                        it('should not dismiss the ballot', function() {
+                            expect(VideoEmbedCardCtrl.dismissBallot).not.toHaveBeenCalled();
+                        });
+                    });
+
+                    describe('whenever the property changes', function() {
+                        function set(value) {
+                            $scope.$apply(function() {
+                                $scope.config._data.textMode = value;
+                            });
+                        }
+
+                        it('should dismiss the ballot', function() {
+                            set(false);
+                            expect(VideoEmbedCardCtrl.dismissBallot).toHaveBeenCalled();
+
+                            set(true);
+                            expect(VideoEmbedCardCtrl.dismissBallot.callCount).toBe(2);
+
+                            set(false);
+                            expect(VideoEmbedCardCtrl.dismissBallot.callCount).toBe(3);
+                        });
+                    });
+                });
+
                 describe('config._data.modules.ballot.vote', function() {
                     beforeEach(function() {
                         spyOn(VideoEmbedCardCtrl, 'showText');
