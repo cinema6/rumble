@@ -208,9 +208,9 @@
                 .mr-switch__btn {
                     width: 1.125rem;/*18px*/ height: 1.125rem;/*18px*/ border: 0; padding: 0;
                     background: url('../../img/switcher-sprite.png') #252626 no-repeat 0.75rem 3.125rem;
-                    opacity: 0.5; cursor: pointer;
+                    opacity: 0.5; cursor: pointer; border-bottom: 2px solid #252626;
                 }
-                    .mr-switch__btn--active {
+                    .mr-switch__btn--active, .mr-switch__btn:focus {
                         opacity: 1; border-bottom: 2px solid #b69823;
                     }
                 .mr-switch__btn-reader {
@@ -227,8 +227,8 @@
             }
 
         .mr-card__reader {
-            position: absolute; width: 100%; height: 0; padding: 0 0 64%;
-            overflow:hidden; z-index: 2; background-color: #252626;
+            position: absolute; width: 100%; height: 0; padding: 0.625rem 0 64%;
+            overflow:hidden; z-index: 3; background-color: #252626;
         }
             .mr-card__copy {
                 background-color: #252626; margin: 0; height: 100%; width: 100%;
@@ -544,7 +544,7 @@
     ========================================================================== */
     .mr-display-ad__group {
         width:100%; height:0; position:relative;
-        padding:0 0 64% 0; z-index: 1;
+        padding:0 0 64% 0; z-index: 0;
     }
         .mr-display-ad__title-h1 {
             font-size: 0.875em; color: #929292; text-align: center;

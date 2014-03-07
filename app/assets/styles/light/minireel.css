@@ -336,8 +336,8 @@
             background-position: 0 -9.35rem; cursor: pointer;
         }
 
-    @media screen and (max-width:31.25rem) {
-        /*max 500px*/
+    @media screen and (max-width:33.75rem) {
+        /*max 540px*/
         .mr-ballot__group {
             top:4rem;
         }
@@ -578,7 +578,7 @@
     ========================================================================== */
     .mr-display-ad__group {
         width:100%; height:0; position:relative;
-        padding:0 0 64% 0; z-index: 1;
+        padding:0 0 64% 0; z-index: 0;
     }
         .mr-display-ad__title-h1 {
             font-size: 0.875em; color: #929292; text-align: center;
