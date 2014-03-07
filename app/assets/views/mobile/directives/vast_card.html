@@ -6,7 +6,8 @@
     </div>
     <display-ad-module ng-if="Ctrl.hasModule('displayAd')"
         active="config._data.modules.displayAd.active"
-        ad-src="{{config.displayAd}}">
+        ad-src="{{config.displayAd}}"
+        ad-resource="{{Ctrl.companion}}">
     </display-ad-module>
     <a href="" ng-click="Ctrl.reset()" class="mr-card__copy">Play Video</a>
     <section>

@@ -22,6 +22,7 @@
                 player = null;
 
             this.videoSrc = null;
+            this.companion = null;
 
             Object.defineProperties(this, {
                 showVideo: {
@@ -49,6 +50,7 @@
                 if(onDeck) {
                     VASTService.getVAST().then(function(vast) {
                         self.videoSrc = vast.getVideoSrc('video/mp4');
+                        self.companion = vast.getCompanion();
                     });
 
                     _data.modules.displayAd.src = config.displayAd;

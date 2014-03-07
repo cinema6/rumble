@@ -65,6 +65,18 @@
                     '                        </MediaFiles>',
                     '                    </Linear>',
                     '                </Creative>',
+                    '                <Creative>',
+                    '                    <CompanionAds>',
+                    '                        <Companion width="300" height="250">',
+                    '                            <IFrameResource>',
+                    '                                <![CDATA[',
+                    '                                //ads.adap.tv/c/companion?cck=cck&creativeId=110497&melaveId=42657&key=tribal360llc&adSourceId=208567&bidId=&afppId=159224&exSId=639284&cb=9874983758324475&pageUrl=http%3A%2F%2Fcinema6.com&eov=eov',
+                    '                                ]]>',
+                    '                            </IFrameResource>',
+                    '                            <TrackingEvents></TrackingEvents>',
+                    '                        </Companion>',
+                    '                    </CompanionAds>',
+                    '                </Creative>',
                     '            </Creatives>',
                     '',
                     '            <Extensions>',
@@ -368,6 +380,12 @@
                                             }
                                         ],
                                     });
+                                    expect(vast.companions).toEqual([
+                                        {
+                                            adType:'iframe',
+                                            fileURI: '//ads.adap.tv/c/companion?cck=cck&creativeId=110497&melaveId=42657&key=tribal360llc&adSourceId=208567&bidId=&afppId=159224&exSId=639284&cb=9874983758324475&pageUrl=http%3A%2F%2Fcinema6.com&eov=eov'
+                                        }
+                                    ]);
                                 });
                             });
 
@@ -380,6 +398,15 @@
 
                                     it('should return null if the type is not found', function() {
                                         expect(vast.getVideoSrc('video/webm')).toBeNull();
+                                    });
+                                });
+
+                                describe('getCompanion()', function() {
+                                    it('should return a companion object', function() {
+                                        expect(vast.getCompanion()).toEqual({
+                                            adType:'iframe',
+                                            fileURI: '//ads.adap.tv/c/companion?cck=cck&creativeId=110497&melaveId=42657&key=tribal360llc&adSourceId=208567&bidId=&afppId=159224&exSId=639284&cb=9874983758324475&pageUrl=http%3A%2F%2Fcinema6.com&eov=eov'
+                                        });
                                     });
                                 });
                             });

@@ -71,12 +71,15 @@
                     _service = {};
 
                 _service.VAST = function(xml) {
-                    var $ = xml.querySelectorAll.bind(xml);
+                    var $ = xml.querySelectorAll.bind(xml),
+                        self = this;
 
                     this.video = {
                         duration: _service.getSecondsFromTimestamp($('Linear Duration')[0].childNodes[0].nodeValue),
                         mediaFiles: []
                     };
+
+                    this.companions = [];
 
                     angular.forEach($('MediaFiles MediaFile'), function(mediaFile) {
                         var file = {};
@@ -87,9 +90,39 @@
 
                         file.url = mediaFile.firstChild.nodeValue;
 
-                        this.video.mediaFiles.push(file);
-                    }.bind(this));
+                        self.video.mediaFiles.push(file);
+                    });
+
+                    angular.forEach($('CompanionAds Companion'), function(companion) {
+                        // this assumes that there's only one adType in each <Companion>
+                        // it also assumes a specific xml structure
+                        // might want to do a query for each adType instead
+
+                        var adType,
+                            fileURI,
+                            companionNode = companion.firstChild;
+
+                        switch (companionNode.tagName) {
+                        case 'IFrameResource':
+                            adType = 'iframe';
+                            break;
+                        case 'StaticResource':
+                            adType = 'image';
+                            break;
+                        case 'HTMLResource':
+                            adType = 'html';
+                            break;
+                        }
+
+                        fileURI = companionNode.firstChild.nodeValue.replace(/\s/g, '');
+
+                        self.companions.push({
+                            adType : adType,
+                            fileURI : fileURI
+                        });
+                    });
                 };
+
                 _service.VAST.prototype = {
                     getVideoSrc: function(type) {
                         var src = null;
@@ -102,6 +135,12 @@
                         });
 
                         return src;
+                    },
+                    getCompanion: function() {
+                        // this just returns the first one
+                        // probably want to have some logic here
+                        // maybe we want to pass in a size?
+                        return this.companions.length ? this.companions[0] : null;
                     }
                 };
 
