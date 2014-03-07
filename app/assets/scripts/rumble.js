@@ -415,6 +415,19 @@
             }
         };
     }])
+    .directive('copyExpander', ['assetFilter',
+    function                   ( assetFilter ) {
+        return {
+            restrict: 'E',
+            templateUrl: assetFilter('directives/copy_expander.html', 'views'),
+            scope: {
+                title: '@',
+                source: '@',
+                sourceUrl: '@',
+                note: '@'
+            }
+        };
+    }])
     .controller('VideoEmbedCardController', ['$scope','ModuleService','ControlsService','EventService','c6AppData',
     function                                ( $scope , ModuleService , ControlsService , EventService , c6AppData ) {
         var self = this,

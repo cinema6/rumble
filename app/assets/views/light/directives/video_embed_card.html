@@ -24,22 +24,13 @@
             <span class="ir"><img ng-src="{{config.thumbs.large}}"></span>
         </div>
     </div>
-    
-    <div class="mr-card__copy">
-        <div class="mr-card__title">
-            <h1 class="mr-card__title-h1 tk--hdr">#{{number}}. {{config.title}}</h1>
-            <button class="mr-card__btn">
-                <span class="mr-card__icon">
-                    <span class="ir">Click to See More</span>
-                </span>
-            </button>
-        </div>
-        <div class="mr-card__dropdown">
-            <p class="mr-card__attributes">via <a ng-href="{{Ctrl.videoUrl}}" target="_blank" title="YouTube">{{config.source}}</a></p>
-            <p class="mr-card__desc">{{config.note}}</p>
-        </div>
-    </div><!--.mr-card__copy-->
-    
+
+    <copy-expander title="#{{number}}. {{config.title}}"
+        source="{{config.source}}"
+        source-url="{{Ctrl.videoUrl}}"
+        note="{{config.note}}">
+    </copy-expander>
+
     <!--<comments-module ng-if="Ctrl.hasModule('comments')"
         card-id="{{config.id}}"
         fetch-comments-when="onDeck || active">

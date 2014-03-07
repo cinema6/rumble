@@ -1,0 +1,14 @@
+<div class="mr-card__copy" ng-class="{'mr-card__copy--expanded': showCopy}">
+    <div class="mr-card__title">
+        <h1 class="mr-card__title-h1 tk--hdr">{{title}}</h1>
+        <button ng-click="showCopy = !showCopy" class="mr-card__btn">
+            <span ng-class="{'mr-card__icon--active': showCopy}" class="mr-card__icon">
+                <span class="ir">Click to See More</span>
+            </span>
+        </button>
+    </div>
+    <div class="mr-card__dropdown">
+        <p class="mr-card__attributes">via <a ng-href="{{sourceUrl}}" target="_blank" title="YouTube">{{source}}</a></p>
+        <p class="mr-card__desc">{{note}}</p>
+    </div>
+</div>
