@@ -1,21 +1,25 @@
 <article class="mr-card__group c6-height-limiter">
     <div class="mr-switch__group">
         <div class="mr-switch__menu clearfix">
-            <button class="mr-switch__btn mr-switch__btn-reader mr-switch__btn--active">
+            <button class="mr-switch__btn mr-switch__btn-reader"
+                ng-click="Ctrl.showText()"
+                ng-class="{'mr-switch__btn--active': config._data.textMode}">
                 <span class="ir">Show Reader</span>
             </button>
-            <button class="mr-switch__btn mr-switch__btn-video">
+            <button class="mr-switch__btn mr-switch__btn-video"
+                ng-click="Ctrl.hideText()"
+                ng-class="{'mr-switch__btn--active': !config._data.textMode}">
                 <span class="ir">Show Video</span>
             </button>
         </div>
         <div class="mr-switch__counter tk--hdr clearfix">1/16</div>
     </div>
     
-    <section class="mr-card__reader">
+    <section ng-show="config._data.textMode" class="mr-card__reader">
         <div class="mr-card__copy">
             <div class="mr-card__preview">
                 <div class="mr-preview__thumbnail" ng-style="{'background-image':config.thumbs.large ? 'url(' + config.thumbs.large + ')' : ''}">
-                    <button class="mr-preview__button">
+                    <button ng-click="Ctrl.hideText()" class="mr-preview__button">
                         <span class="ir">Play Video</span>
                     </button>
                 </div>
@@ -34,7 +38,7 @@
                 fetch-when="onDeck || active"
                 on-dismiss="Ctrl.dismissBallotResults()">
             </ballot-results-module>
-            <button class="mr-card__btn-watch">Watch Now.</button>
+            <button ng-click="Ctrl.hideText()" class="mr-card__btn-watch">Watch Now.</button>
         </div>
     </section>
 

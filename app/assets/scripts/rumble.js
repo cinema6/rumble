@@ -421,6 +421,7 @@
             config = $scope.config,
             _data = config._data = config._data || {
                 playerEvents: {},
+                textMode: true,
                 modules: {
                     ballot: {
                         ballotActive: false,
@@ -432,6 +433,7 @@
                     }
                 }
             },
+            player = null,
             ballotTargetPlays = 0,
             resultsTargetPlays = 0;
 
@@ -462,13 +464,25 @@
             resultsTargetPlays = _data.playerEvents.play.emitCount;
         };
 
-        $scope.$on('playerAdd', function(event, player) {
-            _data.playerEvents = EventService.trackEvents(player, ['play']);
+        this.showText = function() {
+            player.pause();
+            _data.textMode = true;
+        };
+
+        this.hideText = function() {
+            player.play();
+            _data.textMode = false;
+        };
+
+        $scope.$on('playerAdd', function(event, iface) {
+            player = iface;
+
+            _data.playerEvents = EventService.trackEvents(iface, ['play']);
 
             Object.defineProperties(_data.modules.ballot, {
                 ballotActive: {
                     get: function() {
-                        var playing = (!player.paused && !player.ended),
+                        var playing = (!iface.paused && !iface.ended),
                             voted = angular.isNumber(_data.modules.ballot.vote),
                             hasPlayed = _data.playerEvents.play.emitCount > ballotTargetPlays;
 
@@ -477,7 +491,7 @@
                 },
                 resultsActive: {
                     get: function() {
-                        var playing = (!player.paused && !player.ended),
+                        var playing = (!iface.paused && !iface.ended),
                             voted = angular.isNumber(this.vote),
                             hasPlayed = _data.playerEvents.play.emitCount > resultsTargetPlays;
 
@@ -490,10 +504,10 @@
                 }
             });
 
-            player.once('ready', function() {
+            iface.once('ready', function() {
                 self.videoUrl = player.webHref;
             });
-            player.once('play', function() {
+            iface.once('play', function() {
                 _data.modules.displayAd.active = true;
             });
 
@@ -504,12 +518,18 @@
                     ControlsService.bindTo(player);
 
                     if (c6AppData.behaviors.autoplay) {
-                        player.play();
+                        iface.play();
                     }
                 } else {
-                    player.pause();
+                    iface.pause();
                 }
             });
+        });
+
+        $scope.$watch('config._data.modules.ballot.vote', function(vote, prevVote) {
+            if (vote === prevVote) { return; }
+
+            self.showText();
         });
     }])
     .directive('mrCard',['$log','$compile','$window','c6UserAgent','InflectorService',
