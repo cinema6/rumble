@@ -103,25 +103,12 @@
 /*  ==========================================================================
     Mini Reel Cards classes
     ========================================================================== */
-    .mr-card__copy {
-        -webkit-transition: height 0.3s ease-out; 
-        -moz-transition: height 0.3s ease-out; 
-        -o-transition: height 0.3s ease-out; 
-        transition: height 0.3s ease-out; 
-        -webkit-transition-delay: 0.25s; 
-        -moz-transition-delay: 0.25s; 
-        -o-transition-delay: 0.25s; 
-        transition-delay: 0.25s; 
+    .mr-card__copy:hover {
+        height: 7.5rem;/*121px*/
     }
-        .mr-card__copy:hover {
-            height: 7.5rem;/*121px*/
-        }
 
-    .mr-card__icon {
-        -webkit-transition: -webkit-transform 0.3s; transition: transform 0.3s; 
+    .mr-card__copy:hover .mr-card__icon {
+        transform: rotate(180deg);
+        -ms-transform: rotate(180deg);
+        -webkit-transform: rotate(180deg);
     }
-        .mr-card__copy:hover .mr-card__icon {
-            transform: rotate(180deg);
-            -ms-transform: rotate(180deg);
-            -webkit-transform: rotate(180deg);
-        }
