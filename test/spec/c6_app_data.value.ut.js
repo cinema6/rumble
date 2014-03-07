@@ -7,10 +7,28 @@
                 c6AppDataProvider;
 
             var cinema6,
+                $httpBackend,
                 appData,
-                deferreds;
+                deferreds,
+                responsive,
+                session;
 
             beforeEach(function() {
+                session = {
+                    ping: jasmine.createSpy('session.ping()')
+                };
+
+                responsive = {
+                    full: {
+                        width: '50%',
+                        height: '100px'
+                    },
+                    light: {
+                        minHeight: '75%',
+                        padding: '200px'
+                    }
+                };
+
                 appData = {
                     experience: {
                         id: 'foo',
@@ -42,6 +60,13 @@
 
                                         return deferreds.getAppData.promise;
                                     });
+
+                                this.getSession = jasmine.createSpy('cinema6.getSession()')
+                                    .andCallFake(function() {
+                                        deferreds.getSession = $q.defer();
+
+                                        return deferreds.getSession.promise;
+                                    });
                             }
 
                             return new Cinema6();
@@ -55,9 +80,13 @@
 
                 inject(function($injector) {
                     $rootScope = $injector.get('$rootScope');
+                    $httpBackend = $injector.get('$httpBackend');
 
                     cinema6 = $injector.get('cinema6');
                 });
+
+                $httpBackend.expectGET('assets/config/responsive.json')
+                    .respond(200, responsive);
             });
 
             it('should exist', inject(function(c6AppData) {
@@ -77,11 +106,46 @@
                 expect(c6AppData).toEqual(jasmine.objectContaining(appData));
             }));
 
+            describe('providing responsive styles', function() {
+                beforeEach(function() {
+                    appData.experience.mode = 'full';
+                });
+
+                it('should ping cinema6 with responsive styles based on mode', inject(function(c6AppData) {
+                    $httpBackend.flush();
+                    $rootScope.$apply(function() {
+                        deferreds.getAppData.resolve(appData);
+                    });
+                    $rootScope.$apply(function() {
+                        deferreds.getSession.resolve(session);
+                    });
+
+                    expect(session.ping).toHaveBeenCalledWith('getResponsiveStyles', responsive.full);
+                }));
+
+                it('should send an empty object if there are no styles', inject(function(c6AppData) {
+                    appData.experience.mode = 'foo';
+
+                    $httpBackend.flush();
+                    $rootScope.$apply(function() {
+                        deferreds.getAppData.resolve(appData);
+                    });
+                    $rootScope.$apply(function() {
+                        deferreds.getSession.resolve(session);
+                    });
+
+                    expect(session.ping).toHaveBeenCalledWith('getResponsiveStyles', {});
+                }));
+            });
+
             describe('behaviors', function() {
                 function c6AppData(mode) {
                     var svc;
 
                     appData.experience.mode = mode;
+
+                    $httpBackend.whenGET('assets/config/responsive.json')
+                        .respond(200, {});
 
                     inject(function($injector) {
                         svc = $injector.invoke(c6AppDataProvider.$get);
