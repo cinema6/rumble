@@ -17,7 +17,7 @@
     
     <section ng-show="config._data.textMode" class="mr-card__copy">
         <div class="mr-card__preview">
-            <div class="mr-preview__thumbnail" ng-style="{'background-image':config.thumbs.large ? 'url(' + config.thumbs.large + ')' : ''}">
+            <div class="mr-preview__thumbnail" ng-style="{'background-image':config.thumbs.large ? 'url(' + config.thumbs.large + ')' : ''}" ng-click="Ctrl.hideText()">
                 <button ng-click="Ctrl.hideText()" class="mr-preview__button">
                     <span class="ir">Play Video</span>
                 </button>
