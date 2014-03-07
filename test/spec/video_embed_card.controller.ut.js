@@ -27,8 +27,12 @@
                 module('c6.rumble', function($provide) {
                     $provide.value('c6AppData', {
                         mode: null,
-                        behaviors: {
+                        profile: {
                             autoplay: true
+                        },
+                        behaviors: {
+                            autoplay: true,
+                            separateTextView: false
                         }
                     });
                 });
@@ -176,6 +180,27 @@
                         describe('if the behavior is autoplay', function() {
                             it('should play the video', function() {
                                 expect(iface.play).toHaveBeenCalled();
+                            });
+                        });
+
+                        describe('if the device does not support autoplay', function() {
+                            var currentPlayCalls;
+
+                            beforeEach(function() {
+                                currentPlayCalls = iface.play.callCount;
+
+                                c6AppData.profile.autoplay = false;
+
+                                $scope.$apply(function() {
+                                    $scope.active = false;
+                                });
+                                $scope.$apply(function() {
+                                    $scope.active = true;
+                                });
+                            });
+
+                            it('should not play the video', function() {
+                                expect(iface.play.callCount).toBe(currentPlayCalls);
                             });
                         });
 
@@ -493,6 +518,27 @@
                                 c6AppData.behaviors.inlineVoteResults = false;
 
                                 expect(VideoEmbedCardCtrl.flyAway).toBe(true);
+                            });
+                        });
+
+                        describe('if the app has a separate text view', function() {
+                            beforeEach(function() {
+                                spyOn(VideoEmbedCardCtrl, 'hasModule').andReturn(false);
+
+                                $scope.active = true;
+                                c6AppData.behaviors.separateTextView = true;
+                            });
+
+                            it('should be true if text mode is on', function() {
+                                $scope.config._data.textMode = true;
+
+                                expect(VideoEmbedCardCtrl.flyAway).toBe(true);
+                            });
+
+                            it('should be false if text mode is off', function() {
+                                $scope.config._data.textMode = false;
+
+                                expect(VideoEmbedCardCtrl.flyAway).toBe(false);
                             });
                         });
                     });

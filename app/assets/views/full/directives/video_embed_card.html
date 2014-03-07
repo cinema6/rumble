@@ -12,7 +12,7 @@
                 <span class="ir">Show Video</span>
             </button>
         </div>
-        <div class="mr-switch__counter tk--hdr clearfix">1/16</div>
+        <div class="mr-switch__counter tk--hdr clearfix">{{number}}/{{total}}</div>
     </div>
     
     <section ng-show="config._data.textMode" class="mr-card__reader">
@@ -24,7 +24,7 @@
                     </button>
                 </div>
             </div>
-            <h1 class="mr-card__title-h1 tk--hdr">#. {{config.title}}</h1>
+            <h1 class="mr-card__title-h1 tk--hdr">#{{number}}. {{config.title}}</h1>
             <p class="mr-card__attributes">via <a ng-href="{{Ctrl.videoUrl}}" target="_blank" title="YouTube">{{config.source}}</a></p>
             <p class="mr-card__desc">{{config.note}}
         </div><!--.mr-card__copy-->

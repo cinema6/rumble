@@ -256,7 +256,14 @@
         .mr-card__copy {
             position: relative; width:100%; background-color: #252626; margin: 0;
             height: 2.875rem;/*46px*/ overflow: hidden;
+            -webkit-transition: height 0.3s ease-out; -moz-transition: height 0.3s ease-out; 
+            -o-transition: height 0.3s ease-out; transition: height 0.3s ease-out; 
+            -webkit-transition-delay: 0.25s; -moz-transition-delay: 0.25s; 
+            -o-transition-delay: 0.25s; transition-delay: 0.25s; 
         }
+            .mr-card__copy--expanded {
+                height: 7.5rem;/*121px*/
+            }
             .mr-card__title {
                 margin:0; 
             }
@@ -275,10 +282,15 @@
                 }
                     .mr-card__icon {
                         height: 0.4375rem;/*7px*/ width: 0.3125rem;/*5px*/ display:block;
-                        background: url('../../img/dropdown-arrow.png') no-repeat 0 0;
-                        margin: 0 auto;
+                        background: url('../../img/dropdown-arrow.png') no-repeat 0 0; margin: 0 auto;
+                        -webkit-transition: -webkit-transform 0.3s; transition: transform 0.3s; 
                     }
-                        
+                    .mr-card__icon--active {
+                        transform: rotate(180deg);
+                        -ms-transform: rotate(180deg);
+                        -webkit-transform: rotate(180deg);
+                    }
+     
             .mr-card__desc {
                 margin: -0.5em 0 0 0;/*8px*/ font-size:0.8125rem;/*13px*/ 
                 color:#c2c2c2; line-height:1.69; height: 3.5rem;/*56px*/
