@@ -27,6 +27,9 @@
                 module('c6.rumble', function($provide) {
                     $provide.value('c6AppData', {
                         mode: null,
+                        profile: {
+                            autoplay: true
+                        },
                         behaviors: {
                             autoplay: true
                         }
@@ -176,6 +179,27 @@
                         describe('if the behavior is autoplay', function() {
                             it('should play the video', function() {
                                 expect(iface.play).toHaveBeenCalled();
+                            });
+                        });
+
+                        describe('if the device does not support autoplay', function() {
+                            var currentPlayCalls;
+
+                            beforeEach(function() {
+                                currentPlayCalls = iface.play.callCount;
+
+                                c6AppData.profile.autoplay = false;
+
+                                $scope.$apply(function() {
+                                    $scope.active = false;
+                                });
+                                $scope.$apply(function() {
+                                    $scope.active = true;
+                                });
+                            });
+
+                            it('should not play the video', function() {
+                                expect(iface.play.callCount).toBe(currentPlayCalls);
                             });
                         });
 
