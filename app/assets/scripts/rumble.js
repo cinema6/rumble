@@ -495,12 +495,13 @@
 
             Object.defineProperties(_data.modules.ballot, {
                 ballotActive: {
+                    configurable: true,
                     get: function() {
                         var playing = (!iface.paused && !iface.ended),
                             voted = angular.isNumber(_data.modules.ballot.vote),
                             hasPlayed = _data.playerEvents.play.emitCount > ballotTargetPlays;
 
-                        return !voted && !playing && hasPlayed && $scope.active;
+                        return !voted && !playing && hasPlayed;
                     }
                 },
                 resultsActive: {
@@ -513,7 +514,7 @@
                             return voted;
                         }
 
-                        return voted && !playing && hasPlayed && $scope.active;
+                        return voted && !playing && hasPlayed;
                     }
                 }
             });
@@ -535,6 +536,10 @@
                         iface.play();
                     }
                 } else {
+                    if (_data.modules.ballot.ballotActive) {
+                        _data.modules.ballot.vote = -1;
+                    }
+
                     iface.pause();
                 }
             });
