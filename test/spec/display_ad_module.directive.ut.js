@@ -10,9 +10,7 @@
             beforeEach(function() {
                 module('c6.rumble', function($provide) {
                     $provide.value('c6AppData', {
-                        profile: {
-                            device: 'desktop'
-                        },
+                        mode: 'full',
                         experience: {
                             data: {}
                         }
@@ -27,29 +25,30 @@
                 });
             });
 
-            describe('properties', function() {
+            describe('$watcher', function() {
                 var scope, adModule;
 
                 beforeEach(function() {
-                    $scope.active = true;
-                    $scope.adResource = {
-                        adType: 'iframe',
-                        fileURI: '//ads.adap.tv/c/companion?cck=cck&creativeId=110497&melaveId=42657&key=tribal360llc&adSourceId=208567&bidId=&afppId=159224&exSId=639284&cb=9874983758324475&pageUrl=http%3A%2F%2Fcinema6.com&eov=eov'
-                    };
                     $scope.$apply(function() {
-                        adModule = $compile('<display-ad-module ad-resource="adResource" active="active"></display-ad-module>')($scope);
+                        adModule = $compile('<display-ad-module ad-object="adObject"></display-ad-module>')($scope);
                     });
 
                     scope = adModule.children().scope();
                 });
 
-                describe('active', function() {
-                    it('should be fine', function() {
+                describe('when an adObject is loaded', function() {
+                    beforeEach(function() {
                         $scope.$apply(function() {
-                            $scope.active = false;
+                            $scope.adObject = {
+                                adType: 'iframe',
+                                fileURI: '//ads.adap.tv/c/companion?cck=cck&creativeId=110497&melaveId=42657&key=tribal360llc&adSourceId=208567&bidId=&afppId=159224&exSId=639284&cb=9874983758324475&pageUrl=http%3A%2F%2Fcinema6.com&eov=eov'
+                            };
                         });
+                    });
 
-                        expect(scope).toEqual($scope);
+                    it('should set the adType and fileURI props', function() {
+                        expect(scope.adType).toBe('iframe');
+                        expect(scope.fileURI).toBe('//ads.adap.tv/c/companion?cck=cck&creativeId=110497&melaveId=42657&key=tribal360llc&adSourceId=208567&bidId=&afppId=159224&exSId=639284&cb=9874983758324475&pageUrl=http%3A%2F%2Fcinema6.com&eov=eov');
                     });
 
                 });

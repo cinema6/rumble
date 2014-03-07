@@ -9,14 +9,16 @@
                 templateUrl: assetFilter('directives/display_ad_module.html', 'views'),
                 scope: {
                     adSrc: '@',
-                    adResource: '=',
+                    adObject: '=',
                     active: '='
                 },
                 link: function(scope) {
-                    if(scope.adResource) {
-                        scope.adType = scope.adResource.adType;
-                        scope.fileURI = scope.adResource.fileURI;
-                    }
+                    scope.$watchCollection('adObject', function(curr) {
+                        if(curr) {
+                            scope.adType = scope.adObject.adType;
+                            scope.fileURI = scope.adObject.fileURI;
+                        }
+                    });
                 }
             };
         }]);

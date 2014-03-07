@@ -129,6 +129,12 @@
                     });
                 });
 
+                describe('companion', function() {
+                    it('should be null', function() {
+                        expect(VastCardCtrl.companion).toBeNull();
+                    });
+                });
+
                 describe('showVideo', function() {
                     it('should be true if the card is active', function() {
                         $scope.active = true;
@@ -416,6 +422,7 @@
                             it('should set videoSrc to vast video ad url', function() {
                                 expect(vast.getVideoSrc).toHaveBeenCalledWith('video/mp4');
                                 expect(VastCardCtrl.videoSrc).toBe('http://www.videos.com/video.mp4');
+                                expect(VastCardCtrl.companion).toEqual({adType:'iframe', fileURI: '//ads.adap.tv/c/companion?cck=cck&creativeId=110497&melaveId=42657&key=tribal360llc&adSourceId=208567&bidId=&afppId=159224&exSId=639284&cb=9874983758324475&pageUrl=http%3A%2F%2Fcinema6.com&eov=eov'});
                             });
                         });
                     });
