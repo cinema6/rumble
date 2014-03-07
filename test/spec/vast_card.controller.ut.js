@@ -175,6 +175,17 @@
                     });
                 });
 
+                describe('showDisplayAd', function() {
+                    beforeEach(function() {
+                        VastCardCtrl.showDisplayAd();
+                    });
+
+                    it('should pause the video and activate the displayAd', function() {
+                        expect(iface.pause).toHaveBeenCalled();
+                        expect($scope.config._data.modules.displayAd.active).toBe(true);
+                    });
+                });
+
                 describe('hasModule(module)', function() {
                     it('should call ModuleService.hasModule() with the configured modules and the provided module', function() {
                         VastCardCtrl.hasModule('ballot');

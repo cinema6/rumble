@@ -40,6 +40,11 @@
                 player.play();
             };
 
+            this.showDisplayAd = function() {
+                player.pause();
+                _data.modules.displayAd.active = true;
+            };
+
             $scope.$watch('onDeck', function(onDeck) {
                 if(onDeck) {
                     VASTService.getVAST().then(function(vast) {

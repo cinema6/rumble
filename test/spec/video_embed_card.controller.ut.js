@@ -76,6 +76,7 @@
                     it('should create some data', function() {
                         expect($scope.config._data).toEqual({
                             playerEvents: {},
+                            textMode: true,
                             modules: {
                                 ballot: {
                                     ballotActive: false,
@@ -92,6 +93,28 @@
             });
 
             describe('$watchers', function() {
+                describe('config._data.modules.ballot.vote', function() {
+                    beforeEach(function() {
+                        spyOn(VideoEmbedCardCtrl, 'showText');
+
+                        $scope.$apply(function() {
+                            $scope.config._data.modules.ballot.vote = null;
+                        });
+                    });
+
+                    it('should not switch to text mode on initialization', function() {
+                        expect(VideoEmbedCardCtrl.showText).not.toHaveBeenCalled();
+                    });
+
+                    it('should switch to text mode after a vote is recorded', function() {
+                        $scope.$apply(function() {
+                            $scope.config._data.modules.ballot.vote = 0;
+                        });
+
+                        expect(VideoEmbedCardCtrl.showText).toHaveBeenCalled();
+                    });
+                });
+
                 describe('active', function() {
                     var iface;
 
@@ -483,6 +506,46 @@
 
                             VideoEmbedCardCtrl.hasModule('comments');
                             expect(ModuleService.hasModule).toHaveBeenCalledWith($rootScope.config.modules, 'comments');
+                        });
+                    });
+
+                    describe('mode methods', function() {
+                        var iface;
+
+                        beforeEach(function() {
+                            iface = c6EventEmitter({
+                                webHref: 'https://www.youtube.com/watch?v=oMB5YFtWQTE',
+                                play: jasmine.createSpy('iface.play()'),
+                                pause: jasmine.createSpy('iface.pause()')
+                            });
+
+                            $scope.$emit('playerAdd', iface);
+                        });
+
+                        describe('showText()', function() {
+                            beforeEach(function() {
+                                $scope.config._data.textMode = false;
+
+                                VideoEmbedCardCtrl.showText();
+                            });
+
+                            it('should pause the player and show the text', function() {
+                                expect(iface.pause).toHaveBeenCalled();
+                                expect($scope.config._data.textMode).toBe(true);
+                            });
+                        });
+
+                        describe('hideText()', function() {
+                            beforeEach(function() {
+                                $scope.config._data.textMode = true;
+
+                                VideoEmbedCardCtrl.hideText();
+                            });
+
+                            it('should play the player and hide the text', function() {
+                                expect(iface.play).toHaveBeenCalled();
+                                expect($scope.config._data.textMode).toBe(false);
+                            });
                         });
                     });
                 });
