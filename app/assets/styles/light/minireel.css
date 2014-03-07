@@ -589,18 +589,6 @@
             left: 50%; top: 50%; margin: -7.8125rem 0 0 -9.375rem;
         }
 
-    @media screen and (max-width: 35.625rem) { /*570px*/
-        .mr-display-ad__thumbnail {
-            height: 10.9375rem;/*175px*/ width: 13.125rem;/*210px*/
-            margin: -5.5rem 0 0 -6.5625rem;
-        }
-            .mr-display-ad__title-h1 {
-                margin: -7.0625rem 0 0 -3em;
-            }
-            .mr-vast__watch-again {
-                margin: 5.75rem 0 0 -3.6875em;
-            }
-    }
 /*  ==========================================================================
     More Reels card classes
     ========================================================================== */
