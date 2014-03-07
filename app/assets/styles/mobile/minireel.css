@@ -641,7 +641,7 @@
         margin:0 0 2em 0; padding:0; list-style: none;
     }
         .mr-ballot__item {
-            display:inline-block; margin:0 0.625em;
+            display:inline-block; margin:0 0.625em; vertical-align:top;
         }
             .mr-ballot__btn {
                 border-radius:3px; border:0; 
