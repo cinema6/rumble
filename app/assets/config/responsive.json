@@ -8,5 +8,8 @@
         "minWidth"      : "18.75em",
         "minHeight"     : "19.625em",
         "padding"       : "8.125em 0 63% 0"
+    },
+    "mobile" : {
+        "height"        : "13em"
     }
 }
