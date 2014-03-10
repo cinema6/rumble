@@ -162,47 +162,48 @@
 /*  ==========================================================================
     Animation classes
     ========================================================================== */
-    .c6-toc-slide {
-        animation: slide-out 0.7s; 
-        -webkit-animation: slide-out 0.7s
-    }   
-        .c6-toc-slide.ng-hide {
-            animation: slide-in 0.7s; 
-            -webkit-animation: slide-in 0.7s;
-        }
+    .c6-toc-slide.ng-hide-remove {
+        animation: slide-out 0.7s !important; 
+        -webkit-animation: slide-out 0.7s !important;
+    }
+    .c6-toc-slide.ng-hide-add {
+        animation: slide-in 0.7s; 
+        -webkit-animation: slide-in 0.7s;
+    }
         .c6-toc-slide.ng-hide-add, .c6-toc-slide.ng-hide-remove {
             display:block !important;
         }
 
-    .c6-slide-bar--left {
-        animation: slide-left-enter 0.25s 0.3s backwards; 
-        -webkit-animation: slide-left-enter 0.25s 0.3s backwards;
-    }
-        .c6-slide-bar--left.ng-hide {
-            animation: slide-left-leave 0.25s 0.2s backwards; 
-            -webkit-animation: slide-left-leave  0.25s 0.2s backwards;
-        }
-        .c6-side-bar--right {
-            animation: slide-right-enter 0.25s 0.3s backwards; 
-            -webkit-animation: slide-right-enter 0.25s 0.3s backwards;
-        }
-        
-    .c6-slide-bar--top {
-        animation: slide-top-enter 0.25s 0.3s backwards; 
-        -webkit-animation: slide-top-enter 0.25s 0.3s backwards;
-    }
-        .c6-slide-bar--top.ng-hide {
-            animation: slide-top-leave 0.25s 0.2s backwards; 
-            -webkit-animation: slide-top-leave  0.25s 0.2s backwards;
-        }
-        .c6-slide-bar--bottom {
-            animation: slide-bottom-enter 0.25s 0.3s backwards; 
-            -webkit-animation: slide-bottom-enter 0.25s 0.3s backwards;
-        }
 
-        .mr-ballot-module.ng-hide-add, .mr-ballot-module.ng-hide-remove {
-            display:block !important;
-        }
+    .c6-slide-bar--left.ng-hide-remove {
+        animation: slide-left-enter 0.25s 0.53s backwards !important; 
+        -webkit-animation: slide-left-enter 0.25s 0.53s backwards !important;
+    }
+    .c6-slide-bar--left.ng-hide-add {
+        animation: slide-left-leave 0.25s 0.2s backwards; 
+        -webkit-animation: slide-left-leave  0.25s 0.2s backwards;
+    }
+    .c6-side-bar--right {
+        animation: slide-right-enter 0.25s 0.3s backwards; 
+        -webkit-animation: slide-right-enter 0.25s 0.3s backwards;
+    }
+        
+    .c6-slide-bar--top.ng-hide-remove {
+        animation: slide-top-enter 0.25s 0.3s backwards !important; 
+        -webkit-animation: slide-top-enter 0.25s 0.3s backwards !important;
+    }
+    .c6-slide-bar--top.ng-hide-add {
+        animation: slide-top-leave 0.25s 0.2s backwards; 
+        -webkit-animation: slide-top-leave  0.25s 0.2s backwards;
+    }
+    .c6-slide-bar--bottom {
+        animation: slide-bottom-enter 0.25s 0.3s backwards; 
+        -webkit-animation: slide-bottom-enter 0.25s 0.3s backwards;
+    }
+
+    .mr-ballot-module.ng-hide-add, .mr-ballot-module.ng-hide-remove {
+        display:block !important;
+    }
 
     @media screen and (orientation: portrait) {
         @keyframes slide-out {
