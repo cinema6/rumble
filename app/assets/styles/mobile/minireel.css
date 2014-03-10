@@ -175,26 +175,34 @@
         }
 
 
-    .c6-slide-bar--left.ng-hide-remove {
-        animation: slide-left-enter 0.25s 0.53s backwards !important; 
-        -webkit-animation: slide-left-enter 0.25s 0.53s backwards !important;
+    .c6-slide-bar--left {
+        animation: slide-left-enter 0.25s 0.2s backwards; 
+        -webkit-animation: slide-left-enter 0.25s 0.2s backwards;
     }
-    .c6-slide-bar--left.ng-hide-add {
-        animation: slide-left-leave 0.25s 0.2s backwards; 
-        -webkit-animation: slide-left-leave  0.25s 0.2s backwards;
-    }
+        .c6-slide-bar--left.ng-hide-remove {
+            animation: slide-left-enter 0.25s 0.2s backwards !important; 
+            -webkit-animation: slide-left-enter 0.25s 0.2s backwards !important;
+        }
+        .c6-slide-bar--left.ng-hide-add {
+            animation: slide-left-leave 0.25s 0.2s backwards; 
+            -webkit-animation: slide-left-leave  0.25s 0.2s backwards;
+        }
     .c6-side-bar--right {
         animation: slide-right-enter 0.25s 0.3s backwards; 
         -webkit-animation: slide-right-enter 0.25s 0.3s backwards;
     }
-        
-    .c6-slide-bar--top.ng-hide-remove {
-        animation: slide-top-enter 0.25s 0.3s backwards !important; 
-        -webkit-animation: slide-top-enter 0.25s 0.3s backwards !important;
+            
+    .c6-slide-bar--top {
+        animation: slide-top-enter 0.25s 0.3s backwards; 
+        -webkit-animation: slide-top-enter 0.25s 0.3s backwards;
     }
-    .c6-slide-bar--top.ng-hide-add {
-        animation: slide-top-leave 0.25s 0.2s backwards; 
-        -webkit-animation: slide-top-leave  0.25s 0.2s backwards;
+        .c6-slide-bar--top.ng-hide-remove {
+            animation: slide-top-enter 0.25s 0.3s backwards !important; 
+            -webkit-animation: slide-top-enter 0.25s 0.3s backwards !important;
+        }
+        .c6-slide-bar--top.ng-hide-add {
+            animation: slide-top-leave 0.25s 0.2s backwards; 
+            -webkit-animation: slide-top-leave  0.25s 0.2s backwards;
     }
     .c6-slide-bar--bottom {
         animation: slide-bottom-enter 0.25s 0.3s backwards; 
