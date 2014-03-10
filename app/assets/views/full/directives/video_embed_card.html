@@ -26,7 +26,7 @@
 
         <h1 class="mr-card__title-h1 tk--hdr">{{config.title}}</h1>
         <p class="mr-card__attributes">via <a ng-href="{{Ctrl.videoUrl}}" target="_blank" title="YouTube">{{config.source}}</a></p>
-        <p class="mr-card__desc" ng-bind-html="config.note"></p>
+        <div class="mr-card__desc" ng-bind-html="config.note"></div>
 
         
         <button ng-click="Ctrl.hideText()" 
@@ -34,6 +34,11 @@
             ng-hide="config._data.modules.ballot.resultsActive && active">
             Watch Now.
         </button>
+        <p ng-click="Ctrl.hideText()" 
+            class="mr-card__text-watch"
+            ng-hide="config._data.modules.ballot.resultsActive && active">
+            <a>Watch Now</a>
+        </p>
         
         <ballot-results-module ng-if="Ctrl.hasModule('ballot')"
             active="config._data.modules.ballot.resultsActive && active"
