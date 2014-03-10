@@ -259,7 +259,8 @@
 
                                     $httpBackend.flush();
 
-                                    expect(_service.VAST.callCount).toBe(1);
+                                    // changing this cuz my current system calls VAST() again with the wrapper to capture all the pixels
+                                    expect(_service.VAST.callCount).toBe(2);
 
                                     expect(spy).toHaveBeenCalledWith(vast);
                                 });

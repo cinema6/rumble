@@ -68,18 +68,49 @@
             this.$get = ['$http','$window',
             function    ( $http , $window ) {
                 var service = {},
-                    _service = {};
+                    _service = {
+                        wrappers: []
+                    };
 
                 _service.VAST = function(xml) {
                     var $ = xml.querySelectorAll.bind(xml),
                         self = this;
 
+                    if(!$('Wrapper')[0]) {
+                        this.wrappers = _service.wrappers;
+                    }
+
                     this.video = {
-                        duration: _service.getSecondsFromTimestamp($('Linear Duration')[0].childNodes[0].nodeValue),
+                        duration: $('Linear Duration')[0] ? _service.getSecondsFromTimestamp($('Linear Duration')[0].childNodes[0].nodeValue) : null,
                         mediaFiles: []
                     };
 
                     this.companions = [];
+                    this.pixels = {
+                        // this does not include non-linear tracking
+                        errorPixel: [],
+                        impression: [],
+                        creativeView: [],
+                        start: [],
+                        firstQuartile: [],
+                        midpoint: [],
+                        thirdQuartile: [],
+                        complete: [],
+                        mute: [],
+                        unmute: [],
+                        pause: [],
+                        rewind: [],
+                        resume: [],
+                        fullscreen: [],
+                        expand: [],
+                        collapse: [],
+                        acceptInvitation: [],
+                        close: [],
+                        videoClickThrough: [],
+                        videoClickTracking: [],
+                        videoCustomClick: [],
+                        companionCreativeView: []
+                    };
 
                     angular.forEach($('MediaFiles MediaFile'), function(mediaFile) {
                         var file = {};
@@ -121,6 +152,45 @@
                             fileURI : fileURI
                         });
                     });
+
+                    angular.forEach($('Error'), function(error) {
+                        self.pixels.errorPixel.push(error.firstChild.nodeValue);
+                    });
+
+                    angular.forEach($('Impression'), function(impression) {
+                        self.pixels.impression.push(impression.firstChild.nodeValue);
+                    });
+
+                    angular.forEach($('Linear Tracking'), function(tracking) {
+                        var eventName;
+
+                        angular.forEach(tracking.attributes, function(attribute) {
+                            if(attribute.name === 'event') {
+                                eventName = attribute.value;
+                            }
+                        });
+
+                        self.pixels[eventName].push(tracking.firstChild.nodeValue);
+                    });
+
+                    angular.forEach($('VideoClicks ClickThrough'), function(clickThrough) {
+                        self.pixels.videoClickThrough.push(clickThrough.firstChild.nodeValue);
+                    });
+
+                    angular.forEach($('VideoClicks ClickTracking'), function(clickTracking) {
+                        self.pixels.videoClickTracking.push(clickTracking.firstChild.nodeValue);
+                    });
+
+                    angular.forEach($('VideoClicks CustomClick'), function(customClick) {
+                        self.pixels.videoCustomClick.push(customClick.firstChild.nodeValue);
+                    });
+
+                    angular.forEach($('Companion Tracking'), function(companionTracking) {
+                        // creativeView is the only event supported for companion tracking, so no need to read the event attr
+                        self.pixels.companionCreativeView.push(companionTracking.firstChild.nodeValue);
+                    });
+
+                    window.console.log(this.wrappers);
                 };
 
                 _service.VAST.prototype = {
@@ -161,6 +231,11 @@
                     return parser.parseFromString(string.replace(/\n/g, '').replace(/>\s+</g, '><'), 'text/xml');
                 };
 
+                // _service.processWrapper = function(vast) {
+                //     // might want to do special processing of wrapper vast instead of sending to VAST constructor
+                //     var wrapper;
+                // };
+
                 service.getVAST = function(url) {
                     function fetchVAST(url) {
                         function recurse(response) {
@@ -168,6 +243,8 @@
                                 uriNodes = vast.querySelectorAll('VASTAdTagURI');
 
                             if (uriNodes.length > 0) {
+                                _service.wrappers.push(createVast(vast));
+                                // _service.wrappers.push(_service.processWrapper(vast));
                                 return fetchVAST(uriNodes[0].firstChild.nodeValue);
                             }
 

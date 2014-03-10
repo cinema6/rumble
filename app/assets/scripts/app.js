@@ -69,8 +69,8 @@
         }])
         .config(['VASTServiceProvider',
         function( VASTServiceProvider ) {
-            // VASTServiceProvider.adServerUrl('http://u-ads.adap.tv/a/h/CbyYsMcIh10+XoGWvwRuGArwmci9atPoLiGQaGjtyrT4ht6z4qOJpQ==?cb=%5BCACHE_BREAKER%5D&pageUrl=http%3A%2F%2Ftest.com&eov=eov');
-            VASTServiceProvider.adServerUrl('http://u-ads.adap.tv/a/h/5+_0LDFk+KwoWa_HApVt0qDrdJaixbMD?cb=9874983758324475&pageUrl=http%3A%2F%2Fcinema6.com&eov=eov');
+            VASTServiceProvider.adServerUrl('http://u-ads.adap.tv/a/h/CbyYsMcIh10+XoGWvwRuGArwmci9atPoLiGQaGjtyrT4ht6z4qOJpQ==?cb=%5BCACHE_BREAKER%5D&pageUrl=http%3A%2F%2Ftest.com&eov=eov');
+            // VASTServiceProvider.adServerUrl('http://u-ads.adap.tv/a/h/5+_0LDFk+KwoWa_HApVt0qDrdJaixbMD?cb=9874983758324475&pageUrl=http%3A%2F%2Fcinema6.com&eov=eov');
         }])
         .run(   ['cinema6',
         function( cinema6 ) {
