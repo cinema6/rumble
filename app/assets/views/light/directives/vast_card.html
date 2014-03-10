@@ -1,4 +1,4 @@
-<div class="mr-card__group mr-vast__group c6-height-limiter">
+<div class="mr-card__group mr-vast__group">
     <div ng-style="{visibility: Ctrl.showVideo ? 'visible' : 'hidden'}" class="mr-vast__player">
         <video class="mr-vast__video c6-height-limiter"
             c6-video id="{{config.id}}" c6-src="Ctrl.videoSrc">
@@ -22,7 +22,8 @@
             ad-src="{{config.displayAd}}">
         </display-ad-module>
     </section>
-    <p class="mr-vast__watch-again tk--hdr">
+    <p class="mr-vast__watch-again tk--hdr"
+        ng-show="config._data.modules.displayAd.active">
         <a ng-click="Ctrl.reset()" href="" title="Watch the Video">Watch the Video</a>
     </p>
 </div>
