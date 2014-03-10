@@ -280,7 +280,7 @@
                     width:100%; height:100%; position:absolute;
                 }
                 .mr-player--fly-away {
-                    right: -500%;
+                    right: -500%; width:0; height:0;
                 }
             .mr-player__thumbnail {
                 background:50% 50% / cover no-repeat;
