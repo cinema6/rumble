@@ -432,6 +432,7 @@
     function                                ( $scope , ModuleService , ControlsService , EventService , c6AppData ) {
         var self = this,
             config = $scope.config,
+            profile = $scope.profile,
             _data = config._data = config._data || {
                 playerEvents: {},
                 textMode: true,
@@ -484,7 +485,10 @@
         };
 
         this.hideText = function() {
-            player.play();
+            if (profile.autoplay) {
+                player.play();
+            }
+
             _data.textMode = false;
         };
 

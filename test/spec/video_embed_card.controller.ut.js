@@ -52,6 +52,9 @@
                             videoid: 'gy1B3agGNxw'
                         }
                     };
+                    $rootScope.profile = {
+                        autoplay: true
+                    };
                     $scope = $rootScope.$new();
                     VideoEmbedCardCtrl = $controller('VideoEmbedCardController', { $scope: $scope });
                 });
@@ -647,6 +650,13 @@
                             it('should play the player and hide the text', function() {
                                 expect(iface.play).toHaveBeenCalled();
                                 expect($scope.config._data.textMode).toBe(false);
+                            });
+
+                            it('should not play the player if the device does not support autoplay', function() {
+                                $rootScope.profile.autoplay = false;
+
+                                VideoEmbedCardCtrl.hideText();
+                                expect(iface.play.callCount).toBe(1);
                             });
                         });
                     });
