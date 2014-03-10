@@ -26,7 +26,7 @@
 
         <h1 class="mr-card__title-h1 tk--hdr">{{config.title}}</h1>
         <p class="mr-card__attributes">via <a ng-href="{{Ctrl.videoUrl}}" target="_blank" title="YouTube">{{config.source}}</a></p>
-        <p class="mr-card__desc">{{config.note}}</p>
+        <p class="mr-card__desc" ng-bind-html="config.note"></p>
 
         
         <button ng-click="Ctrl.hideText()" 
