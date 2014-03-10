@@ -94,7 +94,7 @@
         margin:0; display: block; left: 0.625em; right: 0.625em; bottom: 0.625em;/*10px*/
     }
     .mr-pager__btn {
-        min-width:1.4375rem;/*23px*/ height:3.75rem;/*60px*/ position:absolute;
+        min-width:5rem;/*80px*/ height:3.75rem;/*60px*/ position:absolute;
         background:#b69823 no-repeat 50% 50%; border:0; padding:0; margin:0;
         cursor:pointer;
     }
