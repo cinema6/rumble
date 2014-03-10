@@ -98,17 +98,3 @@
         .ui-navbar__page:hover .ui-control__preview-img {
             opacity:1;
         }
-
-
-/*  ==========================================================================
-    Mini Reel Cards classes
-    ========================================================================== */
-    .mr-card__copy:hover {
-        height: 7.5rem;/*121px*/
-    }
-
-    .mr-card__copy:hover .mr-card__icon {
-        transform: rotate(180deg);
-        -ms-transform: rotate(180deg);
-        -webkit-transform: rotate(180deg);
-    }
