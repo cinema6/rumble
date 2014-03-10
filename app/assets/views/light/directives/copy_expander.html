@@ -9,6 +9,6 @@
     </div>
     <div class="mr-card__dropdown">
         <p class="mr-card__attributes">via <a ng-href="{{sourceUrl}}" target="_blank" title="YouTube">{{source}}</a></p>
-        <div class="mr-card__desc">{{note}}</div>
+        <div class="mr-card__desc" ng-bind-html="note"></div>
     </div>
 </div>

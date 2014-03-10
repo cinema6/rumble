@@ -27,7 +27,7 @@
             fetch-when="onDeck || active"
             on-dismiss="Ctrl.dismissBallotResults()">
         </ballot-results-module>
-        <div class="mr-card__copy">{{config.note}}</div>
+        <div class="mr-card__copy" ng-bind-html="config.note"></div>
     </div><!--.mr-card-->
     <comments-module ng-if="Ctrl.hasModule('comments')"
         card-id="{{config.id}}"
