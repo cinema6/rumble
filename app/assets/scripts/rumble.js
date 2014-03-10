@@ -424,7 +424,8 @@
                 title: '@',
                 source: '@',
                 sourceUrl: '@',
-                note: '@'
+                note: '@',
+                touch: '&'
             }
         };
     }])
