@@ -227,7 +227,7 @@
             }
 
         .mr-card__copy {
-            position: absolute; width: 100%; height: 0; padding: 0 0 64%;
+            position: absolute; width: 100%; height: 0; padding: 0 0 65%;
             overflow:hidden; z-index: 3; background-color: #252626; opacity: 1;
             -ms-transition: opacity 1s ease;-moz-transition: opacity 1s ease;
             -webkit-transition: opacity 1s ease; transition: opacity 1s ease;
@@ -265,7 +265,10 @@
                     font-size: 0.875rem; height: 2.5714em;/*36px*/ width: 8.5714em;/*120px*/
                     border:0; padding: 0; background: #b69823; color: #ffffff; font-weight: 800;
                     font-family: 'Open Sans', Arial, Helvetica, sans-serif; cursor: pointer;
-                    margin: 0.75em 0 0;
+                    margin: 0.2857em 0 0; /*4px*/
+                }
+                .mr-card__text-watch {
+                    display:none;
                 }
 
         .mr-player__group {
@@ -290,53 +293,62 @@
                 margin:0; line-height: 1.3; position:absolute; 
                 top: -1.9375rem; left: 4.125rem; right: 4.125rem;
                 white-space: nowrap; overflow:hidden; text-overflow: ellipsis;
-
             }
 
-    @media screen and (min-width:62.5rem) {
-        /*1000px*/
+    @media screen and (min-width: 45.625rem) {
+        .mr-card__title-h1 {
+            font-size:1.375rem;/*22px*/
+        }
+        .mr-card__desc {
+            font-size: 1rem;
+        }
+        .mr-card__btn-watch {
+            margin: 0.7143em 0 0;/*10px*/
+        }
         .mr-preview__button {
-            width: 6.25rem;/*100px*/ height: 5.375rem;/*86px*/
-            margin: -2.6875rem 0 0 -3.125rem;
+            width: 5.5rem;/*88px*/ height: 4.6875rem;/*75px*/
+            margin: -2.375rem 0 0 -2.75rem;
         }
     }
 
-    @media screen and (max-width: 672px) {
-        /*660px*/
+    @media screen and (max-width: 37.5rem) {
+        /*600px*/
         .mr-card__preview {
-            width: 33%;
+            width: 38%;
         }
+            .mr-preview__thumbnail {
+                padding: 0 0 83%;
+            }
+            .mr-preview__button {
+                width: 3.75rem;/*60px*/ height: 3.1875rem;/*51px*/
+                margin: -1.875rem 0 0 -1.5625rem;
+            }
+        .mr-card__text-watch {
+            display:inline;  font-size:0.875rem;/*14px*/ line-height:1; 
+            font-weight: 800; margin: 0; cursor: pointer;
+        }
+            .mr-card__btn-watch {
+                display:none;
+            }
     }
 
-    @media screen and (max-width: 605px) {
-        /*605px*/
+    @media screen and (max-width: 33.125rem) {
+        /*530px*/
         .mr-card__preview {
-            width: 23%;
+            width: 26%; float: left; padding: 0  0.625rem 0 0;
         }
+            .mr-preview__button {
+                width: 3.125rem;/*50px*/ height: 2.625rem;/*42px*/
+                margin: -1.3125rem 0 0 -1.5625rem;
+            }
         .mr-card__title-h1 {
             font-size: 1em;/*16px*/
         }
         .mr-card__desc {
             line-height: 1.42; margin: 0.5em 0;
         }
+ 
     }
-
-    @media screen and (max-width: 562px) {
-        /*520px*/
-        .mr-card__desc {
-            font-size: 0.8125em;/*13px*/
-        }
-        .mr-card__btn-watch {
-            margin: 0;
-        }
-    }
-
-    @media screen and (max-width: 490px) {
-        .mr-card__preview {
-            display:none;
-        }
-    }
-        
 
 /*  ==========================================================================
     .mr-ballot__module styles
@@ -464,7 +476,7 @@
             background-position: 0 -9.35rem; cursor: pointer;
         }
 
-    @media screen and (max-width: 532px) {
+    @media screen and (max-width: 640px) {
         /*550px*/
         .mr-results__group {
             padding: 0.25rem 0; 
@@ -641,7 +653,7 @@
                     }
                     .mr-more-reels__link {
                         font-size:0.875rem;/*14px*/ line-height:1; font-weight: 800;
-                        margin: 0;
+                        margin: 0; cursor: pointer;
                     }
         @media screen and (max-width: 37.4rem) {
             /*600px*/
