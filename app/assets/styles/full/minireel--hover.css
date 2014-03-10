@@ -110,7 +110,7 @@
         transition: background 0.4s ease;
     }
         .mr-preview__button:hover, .mr-preview__thumbnail:hover .mr-preview__button {
-            background: url('../../img/play-icon.svg') #b69823 50% 50% / 32% auto no-repeat;
+            background-color: #b69823;
         }
     .mr-card__btn-watch {
         -webkit-transition: all 0.4s ease; 

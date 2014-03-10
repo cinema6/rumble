@@ -258,9 +258,14 @@
                 .mr-preview__button {
                     width: 4.25rem;/*68px*/ height: 3.625rem;/*58px*/
                     padding: 0; border: 0; border-radius: 6px; cursor: pointer;
-                    background: url('../../img/play-icon.svg') rgba(182,152,35,0.7) 50% 50% / 32% auto no-repeat;
+                    background-color: rgba(182,152,35,0.7);
                     position: absolute; left: 50%; top: 50%; margin: -1.8125rem 0 0 -2.125rem;
                 }
+                    .mr-preview__play-icon {
+                        height: 45%; width: 100%;
+                        background: url('../../img/play-icon.svg') 50% 50% / contain no-repeat;
+
+                    }
                 .mr-card__btn-watch {
                     font-size: 0.875rem; height: 2.5714em;/*36px*/ width: 8.5714em;/*120px*/
                     border:0; padding: 0; background: #b69823; color: #ffffff; font-weight: 800;
