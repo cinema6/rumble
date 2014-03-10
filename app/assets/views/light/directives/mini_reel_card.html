@@ -10,17 +10,10 @@
             </div>
         </div>
     <!--</div>-->
-    <div class="mr-card__copy" ng-repeat="this in Ctrl.miniReels">
-        <header class="mr-card__title">
-            <h1 class="mr-card__title-h1 tk--hdr">{{this.title}}</h1>
-            <button class="mr-card__btn">
-                <span class="mr-card__icon">
-                    <span class="ir">Click to See More</span>
-                </span>
-            </button>
-        </header>
-        <div class="mr-card__dropdown">
-            <p class="mr-more-reels__desc">{{this.summary}}</p>
-        </div>
-    </div><!--.mr-card__copy-->
+    <c6-alias model="Ctrl.miniReels[0]" as="this">
+        <copy-expander title="{{this.title}}"
+            note="{{this.summary}}"
+            touch="profile.touch">
+        </copy-expander>
+    </c6-alias>
 </article>
