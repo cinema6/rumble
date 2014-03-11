@@ -4,96 +4,96 @@
     div in so the git diff is not coma-inducing. After this gets merged,
     Feel Free to delete this comment and tab everything in. -->
 <div ng-hide="currentIndex < 0">
-<div ng-hide="showTOC" class="ui-nav-left--landscape c6-slide-bar--left css-promote">
-    <button class="publisher__branding-logo" type="button" title="Elite Daily">
-        <span class="ir">Elite Daily</span>
-    </button>
-    <button class="ui-nav__prev" title="Previous Video" type="button" ng-click="RumbleCtrl.goBack()">
-        <span class="ui-nav__label ui-nav__label-prev">
-            Prev
-        </span>
-        <span class="ui-control__preview-img" 
-            ng-style="{'background-image': prevThumb && 'url(' + prevThumb + ')'}">
-            &nbsp;
-        </span>
-        <span class="sprite ui-icon__prev">&nbsp;</span>
-        <span class="ui-control__activator">&nbsp;</span>
-    </button>
-    <button ng-click="RumbleCtrl.setPosition(-1);" class="ui-nav__close" title="Close" type="button">
-        <span class="ir">Close</span>
-        <span class="sprite ui-icon__close">&nbsp;</span>
-        <span class="ui-control__activator">&nbsp;</span>
-    </button>
-</div><!--.ui-nav-left--landscape-->
+    <div ng-hide="showTOC" class="ui-nav-left--landscape c6-slide-bar--left css-promote">
+        <button class="publisher__branding-logo" type="button" title="Elite Daily">
+            <span class="ir">Elite Daily</span>
+        </button>
+        <button class="ui-nav__prev" title="Previous Video" type="button" ng-click="RumbleCtrl.goBack()">
+            <span class="ui-nav__label ui-nav__label-prev">
+                Prev
+            </span>
+            <span class="ui-control__preview-img" 
+                ng-style="{'background-image': prevThumb && 'url(' + prevThumb + ')'}">
+                &nbsp;
+            </span>
+            <span class="sprite ui-icon__prev">&nbsp;</span>
+            <span class="ui-control__activator">&nbsp;</span>
+        </button>
+        <button ng-click="RumbleCtrl.setPosition(-1);" class="ui-nav__close" title="Close" type="button">
+            <span class="ir">Close</span>
+            <span class="sprite ui-icon__close">&nbsp;</span>
+            <span class="ui-control__activator">&nbsp;</span>
+        </button>
+    </div><!--.ui-nav-left--landscape-->
 
-<div class="ui-nav-right--landscape c6-side-bar--right css-promote">
-    <button ng-class="{'ui-nav__view-list--open': showTOC}" class="ui-nav__view-list" ng-click="showTOC = !showTOC;" title="View List Pane" type="button" >
-        <span class="ir">List Pane</span>
-        <span class="sprite ui-icon__list">&nbsp;</span>
-        <span class="ui-control__activator">&nbsp;</span>
-    </button>
-    <button ng-hide="showTOC" ng-class="{'ui-nav__next--disabled': atTail}" class="ui-nav__next" title="Previous Video" type="button" ng-click="RumbleCtrl.goForward()" ng-disabled="atTail">
-        <span class="ui-nav__label ui-nav__label-next">
-            Next
-        </span>
-        <span class="ui-control__preview-img" 
-            ng-style="{'background-image': nextThumb && 'url(' + nextThumb + ')'}">
-            &nbsp;
-        </span>
-        <span class="sprite ui-icon__next">&nbsp;</span>
-        <span class="ui-control__activator">&nbsp;</span>
-    </button>
-    <h2 ng-hide="showTOC" class="ui-nav__counter">
-        {{currentIndex + 1}} of {{deck.length}}
-    </h2>
-</div><!--.ui-nav-right--landscape-->
+    <div class="ui-nav-right--landscape c6-side-bar--right css-promote">
+        <button ng-class="{'ui-nav__view-list--open': showTOC}" class="ui-nav__view-list" ng-click="showTOC = !showTOC;" title="View List Pane" type="button" >
+            <span class="ir">List Pane</span>
+            <span class="sprite ui-icon__list">&nbsp;</span>
+            <span class="ui-control__activator">&nbsp;</span>
+        </button>
+        <button ng-hide="showTOC" ng-class="{'ui-nav__next--disabled': atTail}" class="ui-nav__next" title="Previous Video" type="button" ng-click="RumbleCtrl.goForward()" ng-disabled="atTail">
+            <span class="ui-nav__label ui-nav__label-next">
+                Next
+            </span>
+            <span class="ui-control__preview-img" 
+                ng-style="{'background-image': nextThumb && 'url(' + nextThumb + ')'}">
+                &nbsp;
+            </span>
+            <span class="sprite ui-icon__next">&nbsp;</span>
+            <span class="ui-control__activator">&nbsp;</span>
+        </button>
+        <h2 ng-hide="showTOC" class="ui-nav__counter">
+            {{currentIndex + 1}} of {{deck.length}}
+        </h2>
+    </div><!--.ui-nav-right--landscape-->
 
-<div ng-hide="showTOC" class="ui-context--portrait c6-slide-bar--top css-promote">
-    <button class="publisher__branding-logo" type="button" title="Elite Daily">
-        <span class="ir">Elite Daily</span>
-    </button>
-    <button ng-click="RumbleCtrl.setPosition(-1);" class="ui-context__close" title="Close" type="button">
-        <span class="ui-context__label ui-context__label-close">
-            Close
-        </span>
-        <span class="sprite ui-icon__close">&nbsp;</span>
-        <span class="ui-control__activator">&nbsp;</span>
-    </button>
-    <mr-paginator length="tocCards.length" current="tocIndex" class="ui-context__paginator"></mr-paginator>
-</div><!--.ui-context-->
+    <div ng-hide="showTOC" class="ui-context--portrait c6-slide-bar--top css-promote">
+        <button class="publisher__branding-logo" type="button" title="Elite Daily">
+            <span class="ir">Elite Daily</span>
+        </button>
+        <button ng-click="RumbleCtrl.setPosition(-1);" class="ui-context__close" title="Close" type="button">
+            <span class="ui-context__label ui-context__label-close">
+                Close
+            </span>
+            <span class="sprite ui-icon__close">&nbsp;</span>
+            <span class="ui-control__activator">&nbsp;</span>
+        </button>
+        <mr-paginator length="tocCards.length" current="tocIndex" class="ui-context__paginator"></mr-paginator>
+    </div><!--.ui-context-->
 
-<div class="ui-control--portrait c6-slide-bar--bottom  css-promote">
-    <button ng-hide="showTOC" class="ui-control__prev" title="Previous Video" type="button" ng-click="RumbleCtrl.goBack()">
-        <span class="ui-control__label ui-control__label-prev">
-            Prev
-        </span>
-        <span class="ui-control__preview-img" 
-            ng-style="{'background-image': prevThumb && 'url(' + prevThumb + ')'}">
-            &nbsp;
-        </span>
-        <span class="sprite ui-icon__prev">&nbsp;</span>
-        <span class="ui-control__activator">&nbsp;</span>
-    </button>
-    <button ng-class="{'ui-control__view-list--open': showTOC}" class="ui-control__view-list" ng-click="showTOC = !showTOC;" title="View List Pane" type="button" >
-        <span class="ir">List Pane</span>
-        <span class="sprite ui-icon__list">&nbsp;</span>
-        <span class="ui-control__activator">&nbsp;</span>
-    </button>
-    <button ng-hide="showTOC" ng-class="{'ui-control__next--disabled': atTail}" class="ui-control__next" title="Next Video" type="button" ng-click="RumbleCtrl.goForward()" ng-disabled="atTail">
-        <span class="ui-control__label ui-control__label-next">
-            Next
-        </span>
-        <span class="ui-control__preview-img" 
-            ng-style="{'background-image': nextThumb && 'url(' + nextThumb + ')'}">
-            &nbsp;
-        </span>
-        <span class="sprite ui-icon__next">&nbsp;</span>
-        <span class="ui-control__activator">&nbsp;</span>
-    </button>
-</div><!--.ui-control-->
+    <div class="ui-control--portrait c6-slide-bar--bottom  css-promote">
+        <button ng-hide="showTOC" class="ui-control__prev" title="Previous Video" type="button" ng-click="RumbleCtrl.goBack()">
+            <span class="ui-control__label ui-control__label-prev">
+                Prev
+            </span>
+            <span class="ui-control__preview-img" 
+                ng-style="{'background-image': prevThumb && 'url(' + prevThumb + ')'}">
+                &nbsp;
+            </span>
+            <span class="sprite ui-icon__prev">&nbsp;</span>
+            <span class="ui-control__activator">&nbsp;</span>
+        </button>
+        <button ng-class="{'ui-control__view-list--open': showTOC}" class="ui-control__view-list" ng-click="showTOC = !showTOC;" title="View List Pane" type="button" >
+            <span class="ir">List Pane</span>
+            <span class="sprite ui-icon__list">&nbsp;</span>
+            <span class="ui-control__activator">&nbsp;</span>
+        </button>
+        <button ng-hide="showTOC" ng-class="{'ui-control__next--disabled': atTail}" class="ui-control__next" title="Next Video" type="button" ng-click="RumbleCtrl.goForward()" ng-disabled="atTail">
+            <span class="ui-control__label ui-control__label-next">
+                Next
+            </span>
+            <span class="ui-control__preview-img" 
+                ng-style="{'background-image': nextThumb && 'url(' + nextThumb + ')'}">
+                &nbsp;
+            </span>
+            <span class="sprite ui-icon__next">&nbsp;</span>
+            <span class="ui-control__activator">&nbsp;</span>
+        </button>
+    </div><!--.ui-control-->
 </div><!-- end of the ng-hide div-->
 
-<article class="mr-container">
+<article class="mr-container ed-humor">
     <ng-include src="'deck.html' | asset:'views'"></ng-include>
     <ng-switch on="app.state">
         <div class="splash-screen" ng-switch-when="splash">

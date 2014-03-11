@@ -110,7 +110,7 @@
         transition: background 0.4s ease;
     }
         .mr-preview__button:hover, .mr-preview__thumbnail:hover .mr-preview__button {
-            background-color: #b69823;
+            background: #b69823;
         }
     .mr-card__btn-watch {
         -webkit-transition: all 0.4s ease; 
