@@ -34,7 +34,7 @@
     }
 
 /*  ==========================================================================
-    Navigation classes
+    Navigation classes (mobile only)
     ========================================================================== */
     .ui-control--portrait, .ui-context--portrait, .ui-nav-left--landscape, .ui-nav-right--landscape {
         background:#2a2a2a;
@@ -47,24 +47,44 @@
     }
 
 /*  ==========================================================================
+    .mr-pager__group classes
+    ========================================================================== */
+    .mr-pager__btn--disabled .mr-pager__icon-path,
+    .mr-pager-btn--disabled:hover .mr-pager__icon-path {
+        fill: #252626;
+    }
+
+/*  ==========================================================================
     Mini Reel Cards classes
     ========================================================================== */
     .mr-card__type, .mr-card__title-h1, .mr-ballot__title, .mr-results__title, .mr-comments__textarea, 
     .mr-comm-meta__timestamp, .mr-toc-item__title, .more-reels__intro {
         font-weight: 400;
     }
+    .mr-card__copy {
+        background-color: #252626; 
+    }
+        .mr-card__btn-watch {
+            /* full only */
+            font-family: 'Open Sans', Arial, Helvetica, sans-serif;
+        }
+        .mr-switch__btn {
+            /* full only */
+            background-color: #252626; border-bottom: 2px solid #252626;
+        }
+        .mr-more-reels__intro {
+            /* light only */
+            background-color: #252626; 
+        }
 
 
 /*  ==========================================================================
-    table of contents
+    table of contents (mobile only)
     ========================================================================== */
     .mr-toc {
         border-top:0.25em solid #2a2a2a;
     }
 
 /*  ==========================================================================
-    theme sports
+    Theme Styles: Sports
     ========================================================================== */
-    .mr-titlebar--sports {
-        background:#e67e22;
-    }
