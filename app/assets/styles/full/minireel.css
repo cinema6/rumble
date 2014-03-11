@@ -200,19 +200,19 @@
             }
         
         .mr-switch__group {
-            height: 1.9375rem;/*31px*/ width: 100%; margin-bottom: 0.625rem;/*10px*/
+            height: 1.5625rem;/*25px*/ width: 100%; 
+            margin: 0 0 0.625rem;/*10px*/ padding: 0.375rem 0 0; /*6px*/
         }
-            .mr-switch__menu {
-                width: 2.625rem;/*42px*/ float: left;
+            .mr-switch__btn {
+                width: 1.125rem;/*18px*/ height: 1.125rem;/*18px*/ border: 0; padding: 0;
+                margin: 0 0.33em 0 0;
+                background: url('../../img/switcher-sprite.png') #252626 no-repeat 0.75rem 3.125rem;
+                opacity: 0.5; cursor: pointer; border-bottom: 2px solid #252626; display:inline;
+                float: left;
             }
-                .mr-switch__btn {
-                    width: 1.125rem;/*18px*/ height: 1.125rem;/*18px*/ border: 0; padding: 0;
-                    background: url('../../img/switcher-sprite.png') #252626 no-repeat 0.75rem 3.125rem;
-                    opacity: 0.5; cursor: pointer; border-bottom: 2px solid #252626;
+                .mr-switch__btn--active, .mr-switch__btn:focus {
+                    opacity: 1; border-bottom: 2px solid #b69823;
                 }
-                    .mr-switch__btn--active, .mr-switch__btn:focus {
-                        opacity: 1; border-bottom: 2px solid #b69823;
-                    }
                 .mr-switch__btn-reader {
                     background-position: 0.1875rem 0.0625rem;
                 }
@@ -223,7 +223,7 @@
                     background-position: 0.1875rem -2.375rem;
                 }
             .mr-switch__counter {
-                font-size: 0.875em;/*14px*/ float: right; color: #929292; margin-top: 0.375rem;
+                font-size: 0.875em;/*14px*/ float: right; color: #929292;
             }
 
         .mr-card__copy {
@@ -602,7 +602,7 @@
         }
         .mr-vast__title-h1 {
             font-size: 0.875em; color: #929292; text-align: right; 
-            margin: 0.428em 0 0 0; float: right;
+            margin: 0; float: right;
         }
         .mr-vast__watch-again {
             font-size: 1em; position: absolute; 
