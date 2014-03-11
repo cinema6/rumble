@@ -27,8 +27,12 @@
                 module('c6.rumble', function($provide) {
                     $provide.value('c6AppData', {
                         mode: null,
-                        behaviors: {
+                        profile: {
                             autoplay: true
+                        },
+                        behaviors: {
+                            autoplay: true,
+                            separateTextView: false
                         }
                     });
                 });
@@ -47,6 +51,9 @@
                         data: {
                             videoid: 'gy1B3agGNxw'
                         }
+                    };
+                    $rootScope.profile = {
+                        autoplay: true
                     };
                     $scope = $rootScope.$new();
                     VideoEmbedCardCtrl = $controller('VideoEmbedCardController', { $scope: $scope });
@@ -93,6 +100,38 @@
             });
 
             describe('$watchers', function() {
+                describe('config._data.textMode', function() {
+                    beforeEach(function() {
+                        spyOn(VideoEmbedCardCtrl, 'dismissBallot');
+                        $rootScope.$digest();
+                    });
+
+                    describe('initialization', function() {
+                        it('should not dismiss the ballot', function() {
+                            expect(VideoEmbedCardCtrl.dismissBallot).not.toHaveBeenCalled();
+                        });
+                    });
+
+                    describe('whenever the property changes', function() {
+                        function set(value) {
+                            $scope.$apply(function() {
+                                $scope.config._data.textMode = value;
+                            });
+                        }
+
+                        it('should dismiss the ballot', function() {
+                            set(false);
+                            expect(VideoEmbedCardCtrl.dismissBallot).toHaveBeenCalled();
+
+                            set(true);
+                            expect(VideoEmbedCardCtrl.dismissBallot.callCount).toBe(2);
+
+                            set(false);
+                            expect(VideoEmbedCardCtrl.dismissBallot.callCount).toBe(3);
+                        });
+                    });
+                });
+
                 describe('config._data.modules.ballot.vote', function() {
                     beforeEach(function() {
                         spyOn(VideoEmbedCardCtrl, 'showText');
@@ -136,6 +175,10 @@
                             expect(iface.play).not.toHaveBeenCalled();
                             expect(iface.pause).not.toHaveBeenCalled();
                         });
+
+                        it('should not put in a dummy vote', function() {
+                            expect($scope.config._data.modules.ballot.vote).toBeNull();
+                        });
                     });
 
                     describe('when not active', function() {
@@ -158,6 +201,42 @@
                         });
                     });
 
+                    describe('putting a dummy vote in', function() {
+                        beforeEach(function() {
+                            $scope.$apply(function() {
+                                $scope.active = true;
+                            });
+                        });
+
+                        it('should happen when the card becomes inactive if the voting module is active', function() {
+                            Object.defineProperty($scope.config._data.modules.ballot, 'ballotActive', {
+                                configurable: true,
+                                value: false
+                            });
+
+                            $scope.$apply(function() {
+                                $scope.active = false;
+                            });
+
+                            expect($scope.config._data.modules.ballot.vote).toBeNull();
+
+                            $scope.$apply(function() {
+                                $scope.active = true;
+                            });
+
+                            Object.defineProperty($scope.config._data.modules.ballot, 'ballotActive', {
+                                configurable: true,
+                                value: true
+                            });
+
+                            $scope.$apply(function() {
+                                $scope.active = false;
+                            });
+
+                            expect($scope.config._data.modules.ballot.vote).toBe(-1);
+                        });
+                    });
+
                     describe('when active', function() {
                         beforeEach(function() {
                             $scope.$apply(function() {
@@ -176,6 +255,27 @@
                         describe('if the behavior is autoplay', function() {
                             it('should play the video', function() {
                                 expect(iface.play).toHaveBeenCalled();
+                            });
+                        });
+
+                        describe('if the device does not support autoplay', function() {
+                            var currentPlayCalls;
+
+                            beforeEach(function() {
+                                currentPlayCalls = iface.play.callCount;
+
+                                c6AppData.profile.autoplay = false;
+
+                                $scope.$apply(function() {
+                                    $scope.active = false;
+                                });
+                                $scope.$apply(function() {
+                                    $scope.active = true;
+                                });
+                            });
+
+                            it('should not play the video', function() {
+                                expect(iface.play.callCount).toBe(currentPlayCalls);
                             });
                         });
 
@@ -328,22 +428,6 @@
 
                                 expect(ballot.resultsActive).toBe(true);
                             });
-
-                            it('should always be false if card is not active', function() {
-                                $scope.active = true;
-                                iface.paused = false;
-                                iface.emit('play', iface);
-
-                                iface.paused = true;
-                                iface.emit('pause', iface);
-
-                                ballot.vote = -1;
-
-                                expect(ballot.resultsActive).toBe(true);
-
-                                $scope.active = false;
-                                expect(ballot.resultsActive).toBe(false);
-                            });
                         });
                     });
 
@@ -495,6 +579,27 @@
                                 expect(VideoEmbedCardCtrl.flyAway).toBe(true);
                             });
                         });
+
+                        describe('if the app has a separate text view', function() {
+                            beforeEach(function() {
+                                spyOn(VideoEmbedCardCtrl, 'hasModule').andReturn(false);
+
+                                $scope.active = true;
+                                c6AppData.behaviors.separateTextView = true;
+                            });
+
+                            it('should be true if text mode is on', function() {
+                                $scope.config._data.textMode = true;
+
+                                expect(VideoEmbedCardCtrl.flyAway).toBe(true);
+                            });
+
+                            it('should be false if text mode is off', function() {
+                                $scope.config._data.textMode = false;
+
+                                expect(VideoEmbedCardCtrl.flyAway).toBe(false);
+                            });
+                        });
                     });
                 });
 
@@ -545,6 +650,13 @@
                             it('should play the player and hide the text', function() {
                                 expect(iface.play).toHaveBeenCalled();
                                 expect($scope.config._data.textMode).toBe(false);
+                            });
+
+                            it('should not play the player if the device does not support autoplay', function() {
+                                $rootScope.profile.autoplay = false;
+
+                                VideoEmbedCardCtrl.hideText();
+                                expect(iface.play.callCount).toBe(1);
                             });
                         });
                     });

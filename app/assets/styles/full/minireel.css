@@ -94,7 +94,7 @@
         margin:0; display: block; left: 0.625em; right: 0.625em; bottom: 0.625em;/*10px*/
     }
     .mr-pager__btn {
-        min-width:1.4375rem;/*23px*/ height:3.75rem;/*60px*/ position:absolute;
+        min-width:5rem;/*80px*/ height:3.75rem;/*60px*/ position:absolute;
         background:#b69823 no-repeat 50% 50%; border:0; padding:0; margin:0;
         cursor:pointer;
     }
@@ -223,15 +223,20 @@
                     background-position: 0.1875rem -2.375rem;
                 }
             .mr-switch__counter {
-                font-size: 0.875em;/*14px*/ float: right; color: #929292;
+                font-size: 0.875em;/*14px*/ float: right; color: #929292; margin-top: 0.375rem;
             }
 
-        .mr-card__reader {
-            position: absolute; width: 100%; height: 0; padding: 0.625rem 0 64%;
-            overflow:hidden; z-index: 3; background-color: #252626;
+        .mr-card__copy {
+            position: absolute; width: 100%; height: 0; padding: 0 0 65%;
+            overflow:hidden; z-index: 3; background-color: #252626; opacity: 1;
+            -ms-transition: opacity 1s ease;-moz-transition: opacity 1s ease;
+            -webkit-transition: opacity 1s ease; transition: opacity 1s ease;
         }
-            .mr-card__copy {
-                background-color: #252626; margin: 0; height: 100%; width: 100%;
+            .mr-card__reader.ng-hide {
+                opacity: 0;
+            }
+            .mr-card__reader.ng-hide-remove, .mr-card__reader.ng-hide-add {
+                display: block !important;
             }
                 .mr-card__title-h1 {
                     font-size:1.25rem;/*20px*/ color:#fff; font-weight:normal; 
@@ -248,23 +253,27 @@
             }
                 .mr-preview__thumbnail {
                     width: 100%; height: 0; padding: 0 0 100%; position: relative;
-                    background: 50% 50% / 180% auto no-repeat; 
+                    background: 50% 50% / 180% auto no-repeat; cursor: pointer;
                 }
                 .mr-preview__button {
                     width: 4.25rem;/*68px*/ height: 3.625rem;/*58px*/
                     padding: 0; border: 0; border-radius: 6px; cursor: pointer;
-                    background: url('../../img/play-icon.svg') rgba(182,152,35,0.7) 50% 50% / 32% auto no-repeat;
+                    background-color: rgba(182,152,35,0.7);
                     position: absolute; left: 50%; top: 50%; margin: -1.8125rem 0 0 -2.125rem;
                 }
-            .mr-card__swapper {
-                width: 100%; height: 3.125rem;/*50px*/ 
-                position: absolute; bottom: 0; background: #252626;
-            }
+                    .mr-preview__play-icon {
+                        height: 45%; width: 100%;
+                        background: url('../../img/play-icon.svg') 50% 50% / contain no-repeat;
+
+                    }
                 .mr-card__btn-watch {
-                    font-size: 0.875em; height: 2.5714em;/*36px*/ width: 8.5714em;/*120px*/
+                    font-size: 0.875rem; height: 2.5714em;/*36px*/ width: 8.5714em;/*120px*/
                     border:0; padding: 0; background: #b69823; color: #ffffff; font-weight: 800;
                     font-family: 'Open Sans', Arial, Helvetica, sans-serif; cursor: pointer;
-                    position: absolute; top: 0.375rem;
+                    margin: 0.2857em 0 0; /*4px*/
+                }
+                .mr-card__text-watch {
+                    display:none;
                 }
 
         .mr-player__group {
@@ -279,39 +288,72 @@
                     width:100%; height:100%; position:absolute;
                 }
                 .mr-player--fly-away {
-                    left:-500%;
+                    right: -500%; width:0; height:0;
                 }
             .mr-player__thumbnail {
                 background:50% 50% / cover no-repeat;
             }
-    @media screen and (min-width:62.5rem) {
-        /*1000px*/
+            .mr-player__title {
+                font-size:0.875rem;/*14px*/ color:#fff; font-weight:normal; text-align: center;
+                margin:0; line-height: 1.3; position:absolute; 
+                top: -1.9375rem; left: 4.125rem; right: 4.125rem;
+                white-space: nowrap; overflow:hidden; text-overflow: ellipsis;
+            }
+
+    @media screen and (min-width: 45.625rem) {
+        .mr-card__title-h1 {
+            font-size:1.375rem;/*22px*/
+        }
+        .mr-card__desc {
+            font-size: 1rem;
+        }
+        .mr-card__btn-watch {
+            margin: 0.7143em 0 0;/*10px*/
+        }
         .mr-preview__button {
-            width: 6.25rem;/*100px*/ height: 5.375rem;/*86px*/
-            margin: -2.6875rem 0 0 -3.125rem;
+            width: 5.5rem;/*88px*/ height: 4.6875rem;/*75px*/
+            margin: -2.375rem 0 0 -2.75rem;
         }
     }
 
-    @media screen and (max-width: 37.4rem) {
+    @media screen and (max-width: 37.5rem) {
         /*600px*/
         .mr-card__preview {
-            width: 28%;
+            width: 38%;
         }
+            .mr-preview__thumbnail {
+                padding: 0 0 83%;
+            }
+            .mr-preview__button {
+                width: 3.75rem;/*60px*/ height: 3.1875rem;/*51px*/
+                margin: -1.875rem 0 0 -1.5625rem;
+            }
+        .mr-card__text-watch {
+            display:inline;  font-size:0.875rem;/*14px*/ line-height:1; 
+            font-weight: 800; margin: 0; cursor: pointer;
+        }
+            .mr-card__btn-watch {
+                display:none;
+            }
+    }
+
+    @media screen and (max-width: 33.125rem) {
+        /*530px*/
+        .mr-card__preview {
+            width: 26%; float: left; padding: 0  0.625rem 0 0;
+        }
+            .mr-preview__button {
+                width: 3.125rem;/*50px*/ height: 2.625rem;/*42px*/
+                margin: -1.3125rem 0 0 -1.5625rem;
+            }
         .mr-card__title-h1 {
             font-size: 1em;/*16px*/
         }
         .mr-card__desc {
-            font-size: 0.8125em;/*13px*/
+            line-height: 1.42; margin: 0.5em 0;
         }
+ 
     }
-
-    @media screen and (max-width: 31.25rem) {
-        /*500px*/
-        .mr-card__preview {
-            display:none;
-        }
-    }
-        
 
 /*  ==========================================================================
     .mr-ballot__module styles
@@ -385,7 +427,7 @@
     .mr-results__group
     ========================================================================== */
     .mr-results__group {
-        height: 3.625rem;/*58px*/ position: relative; background-color: #252626; z-index: 2;
+        height: 3.625rem;/*58px*/ width: 100%; padding: 0.675rem 0 0; float:right; 
     }
         .mr-results__list {
             margin:0; padding:0; list-style:none; position: absolute; width: 100%;
@@ -404,12 +446,23 @@
                     font-weight:900; font-style: italic; font-size:1.125em;/*18px*/ line-height: 1;
                     margin:0.2778em 0.388em 0.5em; color: #fff;
                 }
-                    .mr-results__item0 .mr-results__option {
+                    .mr-results__item0 .mr-results__option, .mr-results__item0 .mr-results__tiny-tally {
                         color:#8ac12a;
                     }
-                    .mr-results__item1 .mr-results__option {
+                        .mr-results__item0 .mr-results__tiny-tally {
+                            float: left;
+                        }
+                    .mr-results__item1 .mr-results__option, .mr-results__item1 .mr-results__tiny-tally {
                         color:#19cbe6;
                     }
+                        .mr-results__item1 .mr-results__tiny-tally {
+                            float:right;
+                        }
+
+                .mr-results__tiny-tally {
+                    display: none;
+                }
+
         .mr-results__meter {
             background:#19cbe6;
             height:1.75em;/*28px*/ width:100%;
@@ -428,7 +481,24 @@
             background-position: 0 -9.35rem; cursor: pointer;
         }
 
-
+    @media screen and (max-width: 640px) {
+        /*550px*/
+        .mr-results__group {
+            padding: 0.25rem 0; 
+        }
+        .mr-results__meter {
+            height: 4px; 
+        }
+            .mr-results__item {
+                padding-top: 4px;
+            }
+        .mr-results__tally { 
+            display: none;
+        }
+        .mr-results__tiny-tally {
+            display: inline;
+        }
+    }
 
 /*  ==========================================================================
     .mr-comments
@@ -555,32 +625,7 @@
             left: 50%; top: 50%; margin: -7.8125rem 0 0 -9.375rem;
         }
 
-    @media screen and (max-width: 35.625rem) { 
-        /*570px*/
-        .mr-display-ad__thumbnail {
-            height: 10.9375rem;/*175px*/ width: 13.125rem;/*210px*/
-            margin: -5.5rem 0 0 -6.5625rem;
-        }
-            .mr-display-ad__title-h1 {
-                margin: -7.0625rem 0 0 -3em;
-            }
-            .mr-vast__watch-again {
-                margin: 7rem 0 0 -3.6875em;
-            }
-    }
-    @media screen and (max-width: 25.625rem) {
-        /*410px*/
-        .mr-display-ad__thumbnail {
-            height: 8.125rem;/*130px*/ width: 9.75rem;/*156px*/
-            margin: -4.0625rem 0 0 -4.875rem;
-        }
-            .mr-display-ad__title-h1 {
-                margin: -5.62rem 0 0 -3em;
-            }
-            .mr-vast__watch-again {
-                margin: 5.62rem 0 0 -3.6875em;
-            }
-    }
+
 /*  ==========================================================================
     More Reels card classes
     ========================================================================== */
@@ -613,7 +658,7 @@
                     }
                     .mr-more-reels__link {
                         font-size:0.875rem;/*14px*/ line-height:1; font-weight: 800;
-                        margin: 0;
+                        margin: 0; cursor: pointer;
                     }
         @media screen and (max-width: 37.4rem) {
             /*600px*/

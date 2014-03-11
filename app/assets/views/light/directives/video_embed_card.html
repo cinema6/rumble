@@ -2,14 +2,14 @@
     <ballot-vote-module 
         class="mr-ballot-module css-promote"
         ng-if="Ctrl.hasModule('ballot')"
-        active="config._data.modules.ballot.ballotActive"
+        active="config._data.modules.ballot.ballotActive && active"
         ballot="config.ballot"
         vote="config._data.modules.ballot.vote"
         on-dismiss="Ctrl.dismissBallot()">
     </ballot-vote-module>
     <ballot-results-module ng-if="Ctrl.hasModule('ballot')"
         class="mr-results-module css-promote"
-        active="config._data.modules.ballot.resultsActive"
+        active="config._data.modules.ballot.resultsActive && active"
         ballot="config.ballot"
         vote="config._data.modules.ballot.vote"
         card-id="{{config.id}}"
@@ -24,22 +24,14 @@
             <span class="ir"><img ng-src="{{config.thumbs.large}}"></span>
         </div>
     </div>
-    
-    <div class="mr-card__copy">
-        <div class="mr-card__title">
-            <h1 class="mr-card__title-h1 tk--hdr">#. {{config.title}}</h1>
-            <button class="mr-card__btn">
-                <span class="mr-card__icon">
-                    <span class="ir">Click to See More</span>
-                </span>
-            </button>
-        </div>
-        <div class="mr-card__dropdown">
-            <p class="mr-card__attributes">via <a ng-href="{{Ctrl.videoUrl}}" target="_blank" title="YouTube">{{config.source}}</a></p>
-            <p class="mr-card__desc">{{config.note}}</p>
-        </div>
-    </div><!--.mr-card__copy-->
-    
+
+    <copy-expander title="{{config.title}}"
+        source="{{config.source}}"
+        source-url="{{Ctrl.videoUrl}}"
+        note="{{config.note}}"
+        touch="profile.touch">
+    </copy-expander>
+
     <!--<comments-module ng-if="Ctrl.hasModule('comments')"
         card-id="{{config.id}}"
         fetch-comments-when="onDeck || active">

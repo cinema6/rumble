@@ -1,8 +1,8 @@
-<div class="mr-display-ad__group">
+<div ng-show="active" class="mr-display-ad__group">
     <h1 class="mr-display-ad__title-h1 tk--hdr">Advertisement</h1>
     <div ng-switch on="adType">
 		<div ng-switch-when="iframe"><iframe ng-src="{{fileURI}}" width="300" height="250"></iframe></div>
-		<div ng-switch-when="image"><img class="mr-display-ad__thumbnail" ng-show="active" ng-src="{{fileURI}}" /></div>
+		<div ng-switch-when="image"><img class="mr-display-ad__thumbnail" ng-src="{{fileURI}}" /></div>
 		<div ng-switch-when="html">{{fileURI}}</div>
 	</div>
 </div>

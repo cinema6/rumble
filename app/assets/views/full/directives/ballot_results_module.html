@@ -1,8 +1,11 @@
-<section class="mr-results__group">
+<section class="mr-results__group clearfix">
     <ul class="mr-results__list">
         <li class="mr-results__item mr-results__item{{$index}}" ng-repeat="this in ballot.choices">
             <p class="mr-results__tally tk--hdr">{{Ctrl.results[$index] | percent}}</p>
-            <p class="mr-results__option">{{this.button}}</p>
+            <p class="mr-results__option">
+                {{this.button}}
+                <span class="mr-results__tally mr-results__tiny-tally tk--hdr">{{Ctrl.results[$index] | percent}}</span>
+            </p>
         </li>
     </ul>
     <div class="mr-results__meter">

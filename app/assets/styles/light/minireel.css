@@ -94,7 +94,7 @@
         margin:0; display: block; left: 0.625em; right: 0.625em; bottom: 0.625em;/*10px*/
     }
     .mr-pager__btn {
-        min-width:1.4375rem;/*23px*/ height:3.75rem;/*60px*/ position:absolute;
+        min-width:5rem;/*80px*/ height:3.75rem;/*60px*/ position:absolute;
         background:#b69823 no-repeat 50% 50%; border:0; padding:0; margin:0;
         cursor:pointer;
     }
@@ -239,7 +239,7 @@
             .mr-player__group {
                 padding:0 0 64%; margin:0;
                 width:100%; height:0; position:relative;
-                background:#000; 
+                background:#000;
             }
                 .mr-player, .mr-player__thumbnail {
                     position:absolute; width:100%; height:100%;
@@ -248,7 +248,7 @@
                         width:100%; height:100%; position:absolute;
                     }
                     .mr-player--fly-away {
-                        left:-500%;
+                        left:-500%; height:0; width:0;
                     }
                 .mr-player__thumbnail {
                     background:50% 50% / cover no-repeat;
@@ -256,7 +256,14 @@
         .mr-card__copy {
             position: relative; width:100%; background-color: #252626; margin: 0;
             height: 2.875rem;/*46px*/ overflow: hidden;
+            -webkit-transition: height 0.3s ease-out; -moz-transition: height 0.3s ease-out; 
+            -o-transition: height 0.3s ease-out; transition: height 0.3s ease-out; 
+            -webkit-transition-delay: 0.25s; -moz-transition-delay: 0.25s; 
+            -o-transition-delay: 0.25s; transition-delay: 0.25s; 
         }
+            .mr-card__copy--expanded {
+                height: 7.5rem;/*121px*/
+            }
             .mr-card__title {
                 margin:0; 
             }
@@ -275,14 +282,19 @@
                 }
                     .mr-card__icon {
                         height: 0.4375rem;/*7px*/ width: 0.3125rem;/*5px*/ display:block;
-                        background: url('../../img/dropdown-arrow.png') no-repeat 0 0;
-                        margin: 0 auto;
+                        background: url('../../img/dropdown-arrow.png') no-repeat 0 0; margin: 0 auto;
+                        -webkit-transition: -webkit-transform 0.3s; transition: transform 0.3s; 
                     }
-                        
+                    .mr-card__icon--active {
+                        transform: rotate(180deg);
+                        -ms-transform: rotate(180deg);
+                        -webkit-transform: rotate(180deg);
+                    }
+     
             .mr-card__desc {
                 margin: -0.5em 0 0 0;/*8px*/ font-size:0.8125rem;/*13px*/ 
                 color:#c2c2c2; line-height:1.69; height: 3.5rem;/*56px*/
-            }   
+            }  
 
 
 /*  ==========================================================================
@@ -555,7 +567,8 @@
     VAST Ad styles
     ========================================================================== */
     .mr-vast__group {
-        position: relative; height: 100%; width: 100%;
+        position: relative; height: 0; width: 100%; 
+        overflow:hidden; padding: 1.5625rem 0 64%;
     }
     .mr-vast__player {
         width:100%; height:0; position:absolute;
@@ -569,16 +582,15 @@
             position: absolute; bottom: -2.57em; left: 50%; margin-left: -3em;
         }
         .mr-vast__watch-again {
-            font-size: 1em; position: absolute;
-            top: 50%; left: 50%; margin: 8.125rem 0 0 -3.6875em;
+            font-size: 1em; position: absolute; z-index: 1;
+            top: 50%; left: 50%; margin: 9.125rem 0 0 -3.6875em;
         }
-
 /*  ==========================================================================
     Display ad styles
     ========================================================================== */
     .mr-display-ad__group {
         width:100%; height:0; position:relative;
-        padding:0 0 64% 0; z-index: 0;
+        padding:0 0 64% 0; z-index: 0; text-align: center;
     }
         .mr-display-ad__title-h1 {
             font-size: 0.875em; color: #929292; text-align: center;
@@ -588,19 +600,16 @@
             position: absolute; width: 18.75rem;/*300px*/ height: 15.625rem;/*250px*/
             left: 50%; top: 50%; margin: -7.8125rem 0 0 -9.375rem;
         }
-
-    @media screen and (max-width: 35.625rem) { /*570px*/
-        .mr-display-ad__thumbnail {
-            height: 10.9375rem;/*175px*/ width: 13.125rem;/*210px*/
-            margin: -5.5rem 0 0 -6.5625rem;
+    @media screen and (max-width: 500px) {
+        /*500px*/
+        .mr-display-ad__title-h1 {
+            margin: 0 0 0.2857em; position: static; 
         }
-            .mr-display-ad__title-h1 {
-                margin: -7.0625rem 0 0 -3em;
-            }
-            .mr-vast__watch-again {
-                margin: 5.75rem 0 0 -3.6875em;
-            }
+        .mr-display-ad__thumbnail {
+            position: static; margin: 0 auto;
+        }
     }
+
 /*  ==========================================================================
     More Reels card classes
     ========================================================================== */

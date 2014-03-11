@@ -59,8 +59,9 @@
                     libUrl('jquery/2.0.3-0-gf576d00/jquery.min.js'),
                     libUrl('angular/v1.2.12-0-g5cc5cc1/angular.min.js'),
                     libUrl('angular/v1.2.12-0-g5cc5cc1/angular-animate.min.js'),
-                    libUrl('c6ui/v2.2.1-0-g89204c8/c6uilib.min.js'),
-                    libUrl('c6ui/v2.2.1-0-g89204c8/c6log.min.js'),
+                    libUrl('angular/v1.2.12-0-g5cc5cc1/angular-sanitize.min.js'),
+                    libUrl('c6ui/v2.4.1-0-gfb81912/c6uilib.min.js'),
+                    libUrl('c6ui/v2.4.1-0-gfb81912/c6log.min.js'),
                     'https://www.youtube.com/iframe_api'
                 ];
             } else {
@@ -69,8 +70,9 @@
                     libUrl('jquery/2.0.3-0-gf576d00/jquery.js'),
                     libUrl('angular/v1.2.12-0-g5cc5cc1/angular.js'),
                     libUrl('angular/v1.2.12-0-g5cc5cc1/angular-animate.js'),
-                    libUrl('c6ui/v2.2.1-0-g89204c8/c6uilib.js'),
-                    libUrl('c6ui/v2.2.1-0-g89204c8/c6log.js'),
+                    libUrl('angular/v1.2.12-0-g5cc5cc1/angular-sanitize.js'),
+                    libUrl('c6ui/v2.4.1-0-gfb81912/c6uilib.js'),
+                    libUrl('c6ui/v2.4.1-0-gfb81912/c6log.js'),
                     'https://www.youtube.com/iframe_api'
                 ];
             }
@@ -106,7 +108,7 @@
         dev: 'http://s3.amazonaws.com/c6.dev/media/src/site/collateral',
         cdn: 'http://cinema6.com/collateral'
     };
-    c6.kModDeps = ['c6.rumble.services', 'ngAnimate','c6.ui', 'c6.log'];
+    c6.kModDeps = ['c6.rumble.services', 'ngAnimate', 'ngSanitize', 'c6.ui', 'c6.log'];
     
     if (window.location.host.match(/\/\/(www\.)*cinema6.com/) !== null){
         ga('create', 'UA-44457821-2', 'cinema6.com');

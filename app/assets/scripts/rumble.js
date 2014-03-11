@@ -415,10 +415,25 @@
             }
         };
     }])
+    .directive('copyExpander', ['assetFilter',
+    function                   ( assetFilter ) {
+        return {
+            restrict: 'E',
+            templateUrl: assetFilter('directives/copy_expander.html', 'views'),
+            scope: {
+                title: '@',
+                source: '@',
+                sourceUrl: '@',
+                note: '@',
+                touch: '&'
+            }
+        };
+    }])
     .controller('VideoEmbedCardController', ['$scope','ModuleService','ControlsService','EventService','c6AppData',
     function                                ( $scope , ModuleService , ControlsService , EventService , c6AppData ) {
         var self = this,
             config = $scope.config,
+            profile = $scope.profile,
             _data = config._data = config._data || {
                 playerEvents: {},
                 textMode: true,
@@ -445,9 +460,10 @@
 
                     if (!$scope.active) { return true; }
 
-                    return this.hasModule('ballot') &&
-                        (ballot.ballotActive || (ballot.resultsActive &&
-                                                 !behaviors.inlineVoteResults));
+                            /* If we have a ballot:  If the ballot is being show.   If the results are a modal and they're being shown. */
+                    return (this.hasModule('ballot') && (ballot.ballotActive || (ballot.resultsActive && !behaviors.inlineVoteResults))) ||
+                        /* If there is a separate view for text, and if that mode is active: */
+                        (behaviors.separateTextView && _data.textMode);
                 }
             }
         });
@@ -470,7 +486,10 @@
         };
 
         this.hideText = function() {
-            player.play();
+            if (profile.autoplay) {
+                player.play();
+            }
+
             _data.textMode = false;
         };
 
@@ -481,12 +500,13 @@
 
             Object.defineProperties(_data.modules.ballot, {
                 ballotActive: {
+                    configurable: true,
                     get: function() {
                         var playing = (!iface.paused && !iface.ended),
                             voted = angular.isNumber(_data.modules.ballot.vote),
                             hasPlayed = _data.playerEvents.play.emitCount > ballotTargetPlays;
 
-                        return !voted && !playing && hasPlayed && $scope.active;
+                        return !voted && !playing && hasPlayed;
                     }
                 },
                 resultsActive: {
@@ -499,7 +519,7 @@
                             return voted;
                         }
 
-                        return voted && !playing && hasPlayed && $scope.active;
+                        return voted && !playing && hasPlayed;
                     }
                 }
             });
@@ -517,10 +537,14 @@
                 if (active) {
                     ControlsService.bindTo(player);
 
-                    if (c6AppData.behaviors.autoplay) {
+                    if (c6AppData.behaviors.autoplay && c6AppData.profile.autoplay) {
                         iface.play();
                     }
                 } else {
+                    if (_data.modules.ballot.ballotActive) {
+                        _data.modules.ballot.vote = -1;
+                    }
+
                     iface.pause();
                 }
             });
@@ -530,6 +554,12 @@
             if (vote === prevVote) { return; }
 
             self.showText();
+        });
+
+        $scope.$watch('config._data.textMode', function(textMode, wasTextMode) {
+            if (textMode === wasTextMode) { return; }
+
+            self.dismissBallot();
         });
     }])
     .directive('mrCard',['$log','$compile','$window','c6UserAgent','InflectorService',
@@ -558,19 +588,6 @@
             var dasherize = InflectorService.dasherize.bind(InflectorService);
 
             $log.info('link:',scope);
-            function resize(event,noDigest){
-                var pw = Math.round($window.innerWidth * 1),
-                    ph = Math.round(pw * 0.5625);
-                /* $element.css({
-                    width : pw,
-                    height: ph
-                }); */
-                scope.playerWidth   = pw;
-                scope.playerHeight  = ph;
-                if(!noDigest){
-                    scope.$digest();
-                }
-            }
 
             var inner = '<' + dasherize(type) + '-card';
             for (var key in data){
@@ -578,8 +595,6 @@
                     inner += ' ' + key.toLowerCase() + '="' + data[key] + '"';
                 }
             }
-
-            // inner += ' width="{{playerWidth}}" height="{{playerHeight}}"';
 
             if (!scope.profile.inlineVideo){
                 $log.info('Will need to regenerate the player');
@@ -604,16 +619,6 @@
             inner += '></'  + dasherize(type) + '-card' + '>';
 
             $element.append($compile(inner)(scope));
-
-            scope.$watch('onDeck', function(onDeck) {
-                if (onDeck) { scope.$broadcast('onDeck'); }
-            });
-            scope.$watch('active', function(active) {
-                if (active) { scope.$broadcast('active'); }
-            });
-
-            $window.addEventListener('resize',resize);
-            resize({},true);
         }
 
         return {
@@ -623,7 +628,9 @@
                 config  : '=',
                 profile : '=',
                 active  : '=',
-                onDeck  : '='
+                onDeck  : '=',
+                number  : '@',
+                total   : '@'
             }
         };
 
