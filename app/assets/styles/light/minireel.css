@@ -180,40 +180,6 @@
 
 
 /*  ==========================================================================
-    .mr-nav__group classes
-    ========================================================================== */
-    .mr-nav__group {
-        position:absolute; z-index: 10; left:0; top:50%;
-        width:100%;
-    }
-        .mr-nav__btn {
-            display: block; width:3rem;/*48px*/ height:4.25rem;/*68px*/
-            border:0; margin:-2.125rem 0 0 0; padding:0; background:#b69823;
-            position: absolute;
-            cursor:pointer; opacity:0.3;
-        }
-                .mr-nav__prev--disabled {
-                    display: none;
-                }
-                .mr-nav__next {
-                    right:0;
-                }
-                    .mr-nav__next--disabled {
-                        display: none;
-                    }
-            .mr-nav__icon {
-                display: block; width:0.9375rem;/*15px*/  height:1.5rem;/*24px*/
-                position:absolute; top:1.4375rem;/*23px*/
-            }
-                .mr-nav__icon-prev {
-                    left:0.875rem;/*14px*/ background-position:0 -1.25rem;
-                }
-                .mr-nav__icon-next {
-                    left:1.125rem;/*18px*/ background-position:-1.25rem -1.25rem;
-                }
-
-
-/*  ==========================================================================
     Mini Reel Cards classes
     ========================================================================== */
     .mr-card__container {
