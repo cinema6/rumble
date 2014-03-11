@@ -9,6 +9,7 @@
                 _data = config._data = config._data || {
                     playerEvents: {},
                     vastEvents: {},
+                    vastData: {},
                     modules: {
                         ballot: {
                             active: false,
@@ -20,11 +21,16 @@
                     }
                 },
                 data = config.data,
-                player = null,
-                _VASTService;
+                player = null;
 
             this.videoSrc = null;
             this.companion = null;
+
+            function firePixels(event) {
+                if(_data.vastData.firePixels) {
+                    _data.vastData.firePixels(event);
+                }
+            }
 
             Object.defineProperties(this, {
                 showVideo: {
@@ -51,7 +57,7 @@
             $scope.$watch('onDeck', function(onDeck) {
                 if(onDeck) {
                     VASTService.getVAST().then(function(vast) {
-                        _VASTService = vast;
+                        _data.vastData = vast;
                         self.videoSrc = vast.getVideoSrc('video/mp4');
                         self.companion = vast.getCompanion();
                     });
@@ -69,22 +75,19 @@
                         if (!_data.modules.displayAd.src) {
                             $scope.$emit('<vast-card>:contentEnd', config);
                         }
-                        // fire ended pixel
+                        firePixels('complete');
                     })
                     .on('pause', function() {
                         if (self.hasModule('displayAd')) {
                             _data.modules.displayAd.active = true;
                         }
-                        if($scope.active) {
-                            _VASTService.firePausePixels();
-                        }
+                        firePixels('pause');
                     })
                     .on('play', function() {
                         _data.modules.displayAd.active = false;
 
-                        // for some reason play is called when the ad prepared onDeck
-                        if(_data.playerEvents.play.emitCount === 2) {
-                            _VASTService.fireImpressionPixels();
+                        if(_data.playerEvents.play.emitCount === 1) {
+                            firePixels('impression');
                         }
                     })
                     .on('timeupdate', function() {
@@ -92,16 +95,16 @@
                             duration = player.duration;
 
                         if((currTime === Math.round(duration * 0.25)) && !_data.vastEvents.firstQuartile) {
-                            _VASTService.fireFirstQuartilePixels();
+                            firePixels('firstQuartile');
                             _data.vastEvents.firstQuartile = true;
                         }
-                        if((currTime === Math.round(duration * 0.5)) && !_data.vastEvents.firstQuartile) {
-                            _VASTService.fireMidpointPixels();
-                            _data.vastEvents.firstQuartile = true;
+                        if((currTime === Math.round(duration * 0.5)) && !_data.vastEvents.midpoint) {
+                            firePixels('midpoint');
+                            _data.vastEvents.midpoint = true;
                         }
-                        if((currTime === Math.round(duration * 0.75)) && !_data.vastEvents.firstQuartile) {
-                            _VASTService.fireThirdQuartilePixels();
-                            _data.vastEvents.firstQuartile = true;
+                        if((currTime === Math.round(duration * 0.75)) && !_data.vastEvents.thirdQuartile) {
+                            firePixels('thirdQuartile');
+                            _data.vastEvents.thirdQuartile = true;
                         }
                     });
 

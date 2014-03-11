@@ -69,23 +69,10 @@
             function    ( $http , $window ) {
                 var service = {},
                     _service = {};
-                    // _service = {
-                    //     wrappers: []
-                    // };
 
                 _service.VAST = function(xml) {
                     var $ = xml.querySelectorAll.bind(xml),
                         self = this;
-                    // window.console.log(xml);
-
-                    // if(!$('Wrapper')[0]) {
-                    //     this.wrappers = _service.wrappers;
-                    // }
-
-                    // this.video = {
-                    //     duration: $('Linear Duration')[0] ? _service.getSecondsFromTimestamp($('Linear Duration')[0].childNodes[0].nodeValue) : null,
-                    //     mediaFiles: []
-                    // };
 
                     this.video = {
                         duration: _service.getSecondsFromTimestamp($('Linear Duration')[0].childNodes[0].nodeValue),
@@ -197,7 +184,6 @@
                         self.pixels.companionCreativeView.push(companionTracking.firstChild.nodeValue);
                     });
 
-                    // window.console.log(this);
                 };
 
                 _service.VAST.prototype = {
@@ -219,20 +205,12 @@
                         // maybe we want to pass in a size?
                         return this.companions.length ? this.companions[0] : null;
                     },
-                    fireImpressionPixels: function() {
-                        window.console.log('fired impression pixel');
-                    },
-                    firePausePixels: function() {
-                        window.console.log('fired pause pixels');
-                    },
-                    fireFirstQuartilePixels: function() {
-                        window.console.log('fired firstQuartile pixels');
-                    },
-                    fireMidpointPixels: function() {
-                        window.console.log('fired midpoint pixels');
-                    },
-                    fireThirdQuartilePixels: function() {
-                        window.console.log('fired thirdQuartile pixels');
+                    firePixels: function(event) {
+                        var self = this;
+                        angular.forEach(self.pixels[event], function(url) {
+                            var image = new Image();
+                            image.src = url;
+                        });
                     }
                 };
 
