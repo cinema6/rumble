@@ -68,20 +68,27 @@
             this.$get = ['$http','$window',
             function    ( $http , $window ) {
                 var service = {},
-                    _service = {
-                        wrappers: []
-                    };
+                    _service = {};
+                    // _service = {
+                    //     wrappers: []
+                    // };
 
                 _service.VAST = function(xml) {
                     var $ = xml.querySelectorAll.bind(xml),
                         self = this;
+                    // window.console.log(xml);
 
-                    if(!$('Wrapper')[0]) {
-                        this.wrappers = _service.wrappers;
-                    }
+                    // if(!$('Wrapper')[0]) {
+                    //     this.wrappers = _service.wrappers;
+                    // }
+
+                    // this.video = {
+                    //     duration: $('Linear Duration')[0] ? _service.getSecondsFromTimestamp($('Linear Duration')[0].childNodes[0].nodeValue) : null,
+                    //     mediaFiles: []
+                    // };
 
                     this.video = {
-                        duration: $('Linear Duration')[0] ? _service.getSecondsFromTimestamp($('Linear Duration')[0].childNodes[0].nodeValue) : null,
+                        duration: _service.getSecondsFromTimestamp($('Linear Duration')[0].childNodes[0].nodeValue),
                         mediaFiles: []
                     };
 
@@ -190,7 +197,7 @@
                         self.pixels.companionCreativeView.push(companionTracking.firstChild.nodeValue);
                     });
 
-                    window.console.log(this.wrappers);
+                    // window.console.log(this);
                 };
 
                 _service.VAST.prototype = {
@@ -211,6 +218,21 @@
                         // probably want to have some logic here
                         // maybe we want to pass in a size?
                         return this.companions.length ? this.companions[0] : null;
+                    },
+                    fireImpressionPixels: function() {
+                        window.console.log('fired impression pixel');
+                    },
+                    firePausePixels: function() {
+                        window.console.log('fired pause pixels');
+                    },
+                    fireFirstQuartilePixels: function() {
+                        window.console.log('fired firstQuartile pixels');
+                    },
+                    fireMidpointPixels: function() {
+                        window.console.log('fired midpoint pixels');
+                    },
+                    fireThirdQuartilePixels: function() {
+                        window.console.log('fired thirdQuartile pixels');
                     }
                 };
 
@@ -231,24 +253,26 @@
                     return parser.parseFromString(string.replace(/\n/g, '').replace(/>\s+</g, '><'), 'text/xml');
                 };
 
-                // _service.processWrapper = function(vast) {
-                //     // might want to do special processing of wrapper vast instead of sending to VAST constructor
-                //     var wrapper;
-                // };
-
                 service.getVAST = function(url) {
+                    // make an xml container for all the vast responses, including wrappers
+                    var parser = new $window.DOMParser(),
+                        combinedVast = parser.parseFromString('<?xml version="1.0" encoding="UTF-8"?><container></container>', 'text/xml');
+
                     function fetchVAST(url) {
                         function recurse(response) {
                             var vast = response.data,
                                 uriNodes = vast.querySelectorAll('VASTAdTagURI');
 
+                            // append the VAST node to the xml container
+                            combinedVast.firstChild.appendChild(vast.querySelectorAll('VAST')[0]);
+
                             if (uriNodes.length > 0) {
-                                _service.wrappers.push(createVast(vast));
-                                // _service.wrappers.push(_service.processWrapper(vast));
                                 return fetchVAST(uriNodes[0].firstChild.nodeValue);
                             }
 
-                            return vast;
+                            // after we've recursed through all the wrappers return
+                            // the xml container with all the vast data
+                            return combinedVast;
 
                         }
 

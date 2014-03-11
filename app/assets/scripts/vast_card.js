@@ -8,6 +8,7 @@
                 config = $scope.config,
                 _data = config._data = config._data || {
                     playerEvents: {},
+                    vastEvents: {},
                     modules: {
                         ballot: {
                             active: false,
@@ -19,7 +20,8 @@
                     }
                 },
                 data = config.data,
-                player = null;
+                player = null,
+                _VASTService;
 
             this.videoSrc = null;
             this.companion = null;
@@ -49,6 +51,7 @@
             $scope.$watch('onDeck', function(onDeck) {
                 if(onDeck) {
                     VASTService.getVAST().then(function(vast) {
+                        _VASTService = vast;
                         self.videoSrc = vast.getVideoSrc('video/mp4');
                         self.companion = vast.getCompanion();
                     });
@@ -60,20 +63,46 @@
             $scope.$on('playerAdd', function(event, iface) {
                 player = iface;
 
-                _data.playerEvents = EventService.trackEvents(iface, ['play']);
+                _data.playerEvents = EventService.trackEvents(iface, ['play', 'pause']);
 
                 iface.on('ended', function() {
                         if (!_data.modules.displayAd.src) {
                             $scope.$emit('<vast-card>:contentEnd', config);
                         }
+                        // fire ended pixel
                     })
                     .on('pause', function() {
                         if (self.hasModule('displayAd')) {
                             _data.modules.displayAd.active = true;
                         }
+                        if($scope.active) {
+                            _VASTService.firePausePixels();
+                        }
                     })
                     .on('play', function() {
                         _data.modules.displayAd.active = false;
+
+                        // for some reason play is called when the ad prepared onDeck
+                        if(_data.playerEvents.play.emitCount === 2) {
+                            _VASTService.fireImpressionPixels();
+                        }
+                    })
+                    .on('timeupdate', function() {
+                        var currTime = Math.round(player.currentTime),
+                            duration = player.duration;
+
+                        if((currTime === Math.round(duration * 0.25)) && !_data.vastEvents.firstQuartile) {
+                            _VASTService.fireFirstQuartilePixels();
+                            _data.vastEvents.firstQuartile = true;
+                        }
+                        if((currTime === Math.round(duration * 0.5)) && !_data.vastEvents.firstQuartile) {
+                            _VASTService.fireMidpointPixels();
+                            _data.vastEvents.firstQuartile = true;
+                        }
+                        if((currTime === Math.round(duration * 0.75)) && !_data.vastEvents.firstQuartile) {
+                            _VASTService.fireThirdQuartilePixels();
+                            _data.vastEvents.firstQuartile = true;
+                        }
                     });
 
                 $scope.$watch('active', function(active, wasActive) {
@@ -149,7 +178,6 @@
 
                     iface.play = function() {
                         if (!c6Video) { return; }
-
                         c6Video.player.play();
                     };
 
@@ -216,6 +244,7 @@
 
                         angular.forEach(['play', 'pause', 'timeupdate'], function(event) {
                             video.on(event, function() {
+                                // window.console.log('VIDEO EVENT:', event);
                                 iface.emit(event, iface);
                             });
                         });
