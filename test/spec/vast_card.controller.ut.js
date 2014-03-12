@@ -35,6 +35,7 @@
                         mediaFiles:[]
                     },
                     companions : [],
+                    firePixels : jasmine.createSpy('firePixels()').andReturn(undefined),
                     getVideoSrc : jasmine.createSpy('getVideoSrc()').andReturn('http://www.videos.com/video.mp4'),
                     getCompanion : jasmine.createSpy('getCompanion()').andReturn({adType:'iframe', fileURI: '//ads.adap.tv/c/companion?cck=cck&creativeId=110497&melaveId=42657&key=tribal360llc&adSourceId=208567&bidId=&afppId=159224&exSId=639284&cb=9874983758324475&pageUrl=http%3A%2F%2Fcinema6.com&eov=eov'}),
                 };
@@ -208,14 +209,12 @@
             });
 
             describe('player events', function() {
-                var iface,
-                    _VASTService;
+                var iface;
 
                 beforeEach(function() {
                     iface = new IFace();
 
                     $scope.$apply(function() {
-                        _VASTService = vast;
                         $scope.$emit('playerAdd', iface);
                     });
                 });
@@ -244,6 +243,19 @@
 
                         it('should emit the contentEnd event', function() {
                             expect($scope.$emit).toHaveBeenCalledWith('<vast-card>:contentEnd', $scope.config);
+                        });
+                    });
+                    describe('pixel firing', function() {
+                        beforeEach(function() {
+                            $scope.$apply(function() {
+                                $scope.onDeck = true;
+                            });
+
+                            iface.emit('ended', iface);
+                        });
+
+                        it('should fire the "complete" pixel', function() {
+                            expect(vast.firePixels).toHaveBeenCalledWith('complete');
                         });
                     });
                 });
@@ -282,18 +294,92 @@
                             expect($scope.config._data.modules.displayAd.active).not.toBe(true);
                         });
                     });
+
+                    describe('pixel firing', function() {
+                        beforeEach(function() {
+                            $scope.$apply(function() {
+                                $scope.onDeck = true;
+                            });
+
+                            iface.emit('pause', iface);
+                        });
+
+                        it('should fire the "pause" pixel', function() {
+                            expect(vast.firePixels).toHaveBeenCalledWith('pause');
+                        });
+                    });
                 });
 
                 describe('play', function() {
-                    beforeEach(function() {
-                        iface.emit('play', iface);
-                    });
-
                     it('should deactivate the displayAd', function() {
+                        iface.emit('play', iface);
                         iface.emit('pause', iface);
                         iface.emit('play', iface);
 
                         expect($scope.config._data.modules.displayAd.active).toBe(false);
+                    });
+
+                    describe('pixel firing', function() {
+                        beforeEach(function() {
+                            $scope.$apply(function() {
+                                $scope.onDeck = true;
+                            });
+
+                            iface.emit('play', iface);
+                        });
+
+                        it('should fire the "play" pixel', function() {
+                            expect(vast.firePixels).toHaveBeenCalledWith('impression');
+                            iface.emit('pause', iface);
+                            iface.emit('play', iface);
+                            expect(vast.firePixels.mostRecentCall.args[0]).toEqual('pause');
+                        });
+                    });
+                });
+
+                describe('timeupdate', function() {
+                    describe('pixel firing', function() {
+                        beforeEach(function() {
+                            $scope.$apply(function() {
+                                $scope.onDeck = true;
+                            });
+                        });
+
+                        it('should fire the "firstQuartile" pixel', function() {
+                            iface.currentTime = 5;
+                            iface.duration = 20;
+                            iface.emit('timeupdate', iface);
+                            expect(vast.firePixels).toHaveBeenCalledWith('firstQuartile');
+
+                            iface.currentTime = 5;
+                            iface.duration = 20;
+                            iface.emit('timeupdate', iface);
+                            expect(vast.firePixels.calls.length).toEqual(1);
+                        });
+
+                        it('should fire the "midpoint" pixel', function() {
+                            iface.currentTime = 10;
+                            iface.duration = 20;
+                            iface.emit('timeupdate', iface);
+                            expect(vast.firePixels).toHaveBeenCalledWith('midpoint');
+
+                            iface.currentTime = 10;
+                            iface.duration = 20;
+                            iface.emit('timeupdate', iface);
+                            expect(vast.firePixels.calls.length).toEqual(1);
+                        });
+
+                        it('should fire the "thirdQuartile" pixel', function() {
+                            iface.currentTime = 15;
+                            iface.duration = 20;
+                            iface.emit('timeupdate', iface);
+                            expect(vast.firePixels).toHaveBeenCalledWith('thirdQuartile');
+
+                            iface.currentTime = 15;
+                            iface.duration = 20;
+                            iface.emit('timeupdate', iface);
+                            expect(vast.firePixels.calls.length).toEqual(1);
+                        });
                     });
                 });
             });
