@@ -11,6 +11,17 @@
             var BallotService;
 
             beforeEach(function() {
+                module(function($provide) {
+                    $provide.value('$log', {
+                        context: function() {
+                            return {
+                                info: function() {},
+                                error: function() {}
+                            };
+                        }
+                    });
+                });
+
                 module('c6.rumble', function($provide) {
                     $provide.service('BallotService', ['$q',
                     function                          ( $q ) {

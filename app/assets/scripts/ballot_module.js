@@ -46,14 +46,22 @@
             };
         }])
 
-        .controller('BallotVoteModuleController', ['$scope','BallotService',
-        function                                  ( $scope , BallotService ) {
+        .controller('BallotVoteModuleController', ['$scope','BallotService','$log',
+        function                                  ( $scope , BallotService , $log ) {
             var self = this;
 
+            $log = $log.context('BallotVoteModuleController');
+
             this.vote = function(vote) {
+                var voteName = (self.ballot[vote] || {}).name;
+
                 $scope.vote = vote;
 
-                BallotService.vote($scope.cardId, (self.ballot[vote] || {}).name);
+                $log.info('Submitting vote for card %1: %2', $scope.cardId, voteName);
+                BallotService.vote($scope.cardId, voteName)
+                    .catch(function(error) {
+                        $log.error(error);
+                    });
 
                 $scope.$emit('<ballot-vote-module>:vote', vote);
             };
@@ -65,25 +73,37 @@
             $scope.$watch('fetchWhen', function(shouldFetch) {
                 if (!shouldFetch) { return; }
 
+                $log.info('Fetching ballot for card: %1', $scope.cardId);
                 BallotService.getBallot($scope.cardId)
                     .then(function(ballot) {
+                        $log.info('Got ballot for card: ' + $scope.cardId, ballot);
                         self.ballot = ballot;
+                    })
+                    .catch(function(error) {
+                        $log.error(error);
                     });
             });
         }])
 
-        .controller('BallotResultsModuleController', ['$scope','BallotService',
-        function                                     ( $scope , BallotService ) {
+        .controller('BallotResultsModuleController', ['$scope','BallotService','$log',
+        function                                     ( $scope , BallotService , $log ) {
             var self = this;
+
+            $log = $log.context('BallotResultsModuleController');
 
             this.ballot = null;
 
             $scope.$watch('fetchWhen', function(shouldFetch) {
                 if (!shouldFetch) { return; }
 
+                $log.info('Fetching ballot for card: %1', $scope.cardId);
                 BallotService.getBallot($scope.cardId)
                     .then(function(ballot) {
+                        $log.info('Got ballot for card: ' + $scope.cardId, ballot);
                         self.ballot = ballot;
+                    })
+                    .catch(function(error) {
+                        $log.error(error);
                     });
             });
         }]);
