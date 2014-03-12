@@ -174,7 +174,7 @@
             return $http.get(c6UrlMaker(
                     ('election/' + electionId + '/ballot/' + id),
                     'api'
-                ))
+                ), { cache: true })
                 .then(process);
         };
 
