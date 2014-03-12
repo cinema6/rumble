@@ -11,7 +11,7 @@
                 $controller,
                 c6UserAgent,
                 RumbleCtrl,
-                rumbleVotes,
+                BallotService,
                 CommentsService,
                 deck,
                 appData,
@@ -35,8 +35,6 @@
                                     vote: -1,
                                     view: 'video'
                                 };
-
-                                rumbleVotes.mockReturnsData(data.id, video.id, video.voting);
                             });
 
                             return playlist;
@@ -134,6 +132,7 @@
                         device: 'desktop'
                     },
                     experience: {
+                        id: 'e-722bd3c4942331',
                         data : {
                             id: 'r-43yt3fh85',
                             deck : deck 
@@ -162,7 +161,7 @@
                     $log.context = function() { return $log; };
                     $window     = $injector.get('$window');
                     c6UserAgent = $injector.get('c6UserAgent');
-                    rumbleVotes = $injector.get('rumbleVotes');
+                    BallotService = $injector.get('BallotService');
                     CommentsService = $injector.get('CommentsService');
                     ControlsService = $injector.get('ControlsService');
 
@@ -174,7 +173,7 @@
                     $scope.AppCtrl = {};
 
                     spyOn(CommentsService, 'init');
-                    spyOn(rumbleVotes, 'init');
+                    spyOn(BallotService, 'init');
                     RumbleCtrl = $controller('RumbleController', {
                         $scope  : $scope,
                         $log    : $log
@@ -194,12 +193,12 @@
                     expect($scope.ready).toEqual(false);
                 });
 
-                it('should initialize rumbleVotes with the id', function() {
-                    expect(rumbleVotes.init).toHaveBeenCalledWith(appData.experience.data.id);
+                it('should initialize BallotService with the id', function() {
+                    expect(BallotService.init).toHaveBeenCalledWith(appData.experience.id);
                 });
 
                 it('should initialize the CommentsService with the id', function() {
-                    expect(CommentsService.init).toHaveBeenCalledWith(appData.experience.data.id);
+                    expect(CommentsService.init).toHaveBeenCalledWith(appData.experience.id);
                 });
             });
 

@@ -23,6 +23,11 @@
         local: 'assets/media',
         cdn: 'http://foo.cinema6.com/media/app'
     };
+    c6.kApiUrls = {
+        local: '/api',
+        beta: 'http://beta.cinema6.com/api',
+        prod: 'http://cinema6.com/api'
+    };
     c6.kModDeps = ['c6.rumble.services', 'c6.ui', 'c6.log'];
 
     packageRequest.onload = function(event) {

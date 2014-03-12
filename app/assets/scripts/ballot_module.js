@@ -10,9 +10,10 @@
                 controller: 'BallotVoteModuleController',
                 controllerAs: 'Ctrl',
                 scope: {
-                    ballot: '=',
                     vote: '=',
+                    cardId: '@',
                     active: '=',
+                    fetchWhen: '=',
                     onDismiss: '&'
                 },
                 link: function(scope, element) {
@@ -31,7 +32,6 @@
                 controller: 'BallotResultsModuleController',
                 controllerAs: 'Ctrl',
                 scope: {
-                    ballot: '=',
                     vote: '=',
                     cardId: '@',
                     active: '=',
@@ -46,10 +46,14 @@
             };
         }])
 
-        .controller('BallotVoteModuleController', ['$scope',
-        function                                  ( $scope  ) {
+        .controller('BallotVoteModuleController', ['$scope','BallotService',
+        function                                  ( $scope , BallotService ) {
+            var self = this;
+
             this.vote = function(vote) {
                 $scope.vote = vote;
+
+                BallotService.vote($scope.cardId, (self.ballot[vote] || {}).name);
 
                 $scope.$emit('<ballot-vote-module>:vote', vote);
             };
@@ -57,20 +61,29 @@
             this.pass = function() {
                 $scope.vote = -1;
             };
-        }])
-
-        .controller('BallotResultsModuleController', ['$scope','rumbleVotes',
-        function                                     ( $scope , rumbleVotes ) {
-            var self = this;
-
-            this.results = null;
 
             $scope.$watch('fetchWhen', function(shouldFetch) {
                 if (!shouldFetch) { return; }
 
-                rumbleVotes.getReturnsForItem($scope.cardId)
-                    .then(function(results) {
-                        self.results = results;
+                BallotService.getBallot($scope.cardId)
+                    .then(function(ballot) {
+                        self.ballot = ballot;
+                    });
+            });
+        }])
+
+        .controller('BallotResultsModuleController', ['$scope','BallotService',
+        function                                     ( $scope , BallotService ) {
+            var self = this;
+
+            this.ballot = null;
+
+            $scope.$watch('fetchWhen', function(shouldFetch) {
+                if (!shouldFetch) { return; }
+
+                BallotService.getBallot($scope.cardId)
+                    .then(function(ballot) {
+                        self.ballot = ballot;
                     });
             });
         }]);

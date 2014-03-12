@@ -8,21 +8,21 @@
                 $controller,
                 BallotResultsModuleCtrl;
 
-            var rumbleVotes;
+            var BallotService;
 
             beforeEach(function() {
                 module('c6.rumble', function($provide) {
-                    $provide.service('rumbleVotes', ['$q',
-                    function                        ( $q ) {
+                    $provide.service('BallotService', ['$q',
+                    function                          ( $q ) {
                         var self = this;
 
-                        this.getReturnsForItem = jasmine.createSpy('rumbleVotes.getReturnsForItem()')
+                        this.getBallot = jasmine.createSpy('rumbleVotes.getReturnsForItem()')
                             .andCallFake(function() {
-                                return self._.getReturnsForItemDeferred.promise;
+                                return self._.getBallotDeferred.promise;
                             });
 
                         this._ = {
-                            getReturnsForItemDeferred: $q.defer()
+                            getBallotDeferred: $q.defer()
                         };
                     }]);
                 });
@@ -31,7 +31,7 @@
                     $rootScope = $injector.get('$rootScope');
                     $controller = $injector.get('$controller');
 
-                    rumbleVotes = $injector.get('rumbleVotes');
+                    BallotService = $injector.get('BallotService');
 
                     $scope = $rootScope.$new();
                     $scope.cardId = 'rc-76tfg5467ug';
@@ -48,7 +48,7 @@
             describe('$watchers', function() {
                 describe('fetchWhen', function() {
                     beforeEach(function() {
-                        expect(rumbleVotes.getReturnsForItem).not.toHaveBeenCalled();
+                        expect(BallotService.getBallot).not.toHaveBeenCalled();
 
                         $scope.$apply(function() {
                             $scope.fetchWhen = true;
@@ -56,24 +56,33 @@
                     });
 
                     it('should get vote results', function() {
-                        var votes = [0.44, 0.22, 0.99];
+                        var ballot = [
+                            {
+                                name: 'Foo',
+                                votes: 0.25
+                            },
+                            {
+                                name: 'Bar',
+                                votes: 0.75
+                            }
+                        ];
 
-                        expect(rumbleVotes.getReturnsForItem).toHaveBeenCalledWith($scope.cardId);
+                        expect(BallotService.getBallot).toHaveBeenCalledWith($scope.cardId);
 
                         $scope.$apply(function() {
-                            rumbleVotes._.getReturnsForItemDeferred.resolve(votes);
+                            BallotService._.getBallotDeferred.resolve(ballot);
                         });
 
-                        expect(BallotResultsModuleCtrl.results).toBe(votes);
+                        expect(BallotResultsModuleCtrl.ballot).toBe(ballot);
                     });
                 });
             });
 
             describe('@public', function() {
                 describe('properties', function() {
-                    describe('results', function() {
+                    describe('ballot', function() {
                         it('should be initialized as null', function() {
-                            expect(BallotResultsModuleCtrl.results).toBeNull();
+                            expect(BallotResultsModuleCtrl.ballot).toBeNull();
                         });
                     });
                 });

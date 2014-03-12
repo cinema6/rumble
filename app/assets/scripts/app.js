@@ -66,6 +66,11 @@
                 c6Defines.kCollateralUrls[c6Defines.kDebug ? 'dev' : 'cdn'],
                 'collateral'
             );
+            c6UrlMakerProvider.location(
+                c6Defines.kApiUrls[c6Defines.kLocal ? 'local' :
+                    (c6Defines.kDebug ? 'beta' : 'prod')],
+                'api'
+            );
         }])
         .config(['VASTServiceProvider',
         function( VASTServiceProvider ) {
