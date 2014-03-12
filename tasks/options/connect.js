@@ -9,10 +9,17 @@
             hostname: '0.0.0.0'
         },
         sandbox: {
+            proxies: [
+                {
+                    context: '/api',
+                    host: '33.33.33.20'
+                }
+            ],
             options: {
                 port: '<%= settings.sandboxPort %>',
                 middleware: function() {
                     return [
+                        require('grunt-connect-proxy/lib/utils').proxyRequest,
                         require('connect-livereload')(),
                         c6Sandbox({
                             landingContentDir: grunt.template.process('<%= settings.collateralDir %>'),
