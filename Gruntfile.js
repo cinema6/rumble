@@ -5,6 +5,8 @@ module.exports = function(grunt) {
         _ =require('underscore');
 
     var settings = grunt.file.readJSON('settings.json'),
+        personal = grunt.file.exists('personal.json') ?
+            grunt.file.readJSON('personal.json') : {},
         c6Settings = (function(settings) {
             function loadGlobalConfig(relPath) {
                 var configPath = path.join(process.env.HOME, relPath),
@@ -31,7 +33,8 @@ module.exports = function(grunt) {
     require('load-grunt-config')(grunt, {
         configPath: path.join(__dirname, 'tasks/options'),
         config: {
-            settings: c6Settings
+            settings: c6Settings,
+            personal: personal
         }
     });
 

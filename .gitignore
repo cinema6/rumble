@@ -18,3 +18,4 @@ dist/
 reports/
 .vagrant/
 Berksfile.lock
+personal.json

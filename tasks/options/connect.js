@@ -12,7 +12,7 @@
             proxies: [
                 {
                     context: '/api',
-                    host: '33.33.33.20'
+                    host: '<%= personal.apiHost %>'
                 }
             ],
             options: {
