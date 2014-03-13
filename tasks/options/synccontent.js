@@ -1,6 +1,6 @@
 module.exports = {
     options: {
-        apiBase: 'http://33.33.33.20/api',
+        apiBase: 'http://staging.cinema6.com/api',
         authenticate: '/auth/login',
         username: '<%= personal.auth.username %>',
         password: '<%= personal.auth.password %>'
