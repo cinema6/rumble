@@ -7,7 +7,8 @@
                 VASTServiceProvider,
                 $rootScope,
                 $q,
-                $window;
+                $window,
+                c6ImagePreloader;
 
             var $httpBackend;
 
@@ -173,6 +174,10 @@
                     '</VAST>'
                 ].join('\n');
 
+                // module('c6.ui', function($provide) {
+                //     c6ImagePreloader = $provide.service('c6ImagePreloader');
+                // });
+                module('c6.ui');
                 module('c6.rumble.services', function($injector) {
                     VASTServiceProvider = $injector.get('VASTServiceProvider');
 
@@ -380,6 +385,9 @@
                                             }
                                         ],
                                     });
+
+                                    vast.companions[0].fileURI = vast.companions[0].fileURI.replace(/\s/g, '');
+
                                     expect(vast.companions).toEqual([
                                         {
                                             adType:'iframe',
@@ -403,7 +411,10 @@
 
                                 describe('getCompanion()', function() {
                                     it('should return a companion object', function() {
-                                        expect(vast.getCompanion()).toEqual({
+                                        var companion = vast.getCompanion();
+                                        companion.fileURI = companion.fileURI.replace(/\s/g, '');
+
+                                        expect(companion).toEqual({
                                             adType:'iframe',
                                             fileURI: '//ads.adap.tv/c/companion?cck=cck&creativeId=110497&melaveId=42657&key=tribal360llc&adSourceId=208567&bidId=&afppId=159224&exSId=639284&cb=9874983758324475&pageUrl=http%3A%2F%2Fcinema6.com&eov=eov'
                                         });

@@ -1,7 +1,7 @@
 (function() {
     'use strict';
 
-    angular.module('c6.rumble.services', [])
+    angular.module('c6.rumble.services', ['c6.ui'])
         .service('VideoThumbService', ['$http','$q',
         function                      ( $http , $q ) {
             var _private = {};
@@ -65,8 +65,8 @@
                 _provider.serverUrl = url;
             };
 
-            this.$get = ['$http','$window',
-            function    ( $http , $window ) {
+            this.$get = ['$http','$window', 'c6ImagePreloader',
+            function    ( $http , $window ,  c6ImagePreloader ) {
                 var service = {},
                     _service = {};
 
@@ -124,7 +124,6 @@
                         // might want to do a query for each adType instead
 
                         var adType,
-                            fileURI,
                             companionNode = companion.firstChild;
 
                         switch (companionNode.tagName) {
@@ -139,11 +138,9 @@
                             break;
                         }
 
-                        fileURI = companionNode.firstChild.nodeValue.replace(/\s/g, '');
-
                         self.companions.push({
                             adType : adType,
-                            fileURI : fileURI
+                            fileURI : companionNode.firstChild.nodeValue
                         });
                     });
 
@@ -206,11 +203,7 @@
                         return this.companions.length ? this.companions[0] : null;
                     },
                     firePixels: function(event) {
-                        var self = this;
-                        angular.forEach(self.pixels[event], function(url) {
-                            var image = new Image();
-                            image.src = url;
-                        });
+                        c6ImagePreloader.load(this.pixels[event]);
                     }
                 };
 
