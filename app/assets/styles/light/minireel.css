@@ -644,6 +644,9 @@
         background: 50% 50% / cover no-repeat;
         border:0; margin:0; padding:0; cursor:pointer;
     }
+        .mr-splash__start {
+            z-index: 5;
+        }
 
     .mr-splash__copy {
         display:block; width: 100%; height: 0; padding: 0 0 13.5%;
@@ -652,7 +655,7 @@
         background-color: #252626; border-top: #fff 4px solid; border-bottom: #fff 4px solid;
     }
 
-    .mr-splash__mosiac {
+    .mr-splash__mosaic {
         height: 100%; width: 101%; margin: 0; padding: 0;
     }
         .mr-splash__thumbnail {
@@ -660,15 +663,15 @@
             border-right: 4px #fff solid; background: 50% 50% / auto 135% no-repeat;
             -moz-box-sizing: border-box; box-sizing: border-box;
         }
-            .mr-splash__mosiac--6img .mr-splash__thumbnail {
+            .mr-splash__mosaic--6img .mr-splash__thumbnail {
                 width: 33.333%; 
             }
-            .mr-splash__mosiac--4img .mr-splash__thumbnail, 
-            .mr-splash__mosiac--3img .mr-splash__thumbnail {
+            .mr-splash__mosaic--4img .mr-splash__thumbnail, 
+            .mr-splash__mosaic--3img .mr-splash__thumbnail {
                 width: 50%;
             }
-            .mr-splash__mosiac--3img .mr-splash__thumbnail:first-child, 
-            .mr-splash__mosiac--2img .mr-splash__thumbnail{
+            .mr-splash__mosaic--3img .mr-splash__thumbnail:first-child, 
+            .mr-splash__mosaic--2img .mr-splash__thumbnail{
                 width: 100%; background-size: cover;
             }
 
