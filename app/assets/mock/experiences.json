@@ -13,47 +13,7 @@
         "mode": "light",
         "data": {
             "id": "r-738c2403d83ddc",
-            "ballots": [
-                {
-                    "id": "rb-01eb03bc062c15",
-                    "choices": [
-                        {
-                            "button": "Good",
-                            "most": "The Goodest video"
-                        },
-                        {
-                            "button": "Bad",
-                            "most": "The Badest video"
-                        }
-                    ]
-                },
-                {
-                    "id": "rb-716ffbdfc356af",
-                    "choices": [
-                        {
-                            "button": "Catchy",
-                            "most": "The Goodest video"
-                        },
-                        {
-                            "button": "Painful",
-                            "most": "The Badest video"
-                        }
-                    ]
-                },
-                {
-                    "id": "rb-d1f60e2d64a0ba",
-                    "choices": [
-                        {
-                            "button": "Too Cool",
-                            "most": "The Goodest video"
-                        },
-                        {
-                            "button": "Too Geeky",
-                            "most": "The Badest video"
-                        }
-                    ]
-                }
-            ],
+            "electionId": "el-662dd344a98698",
             "conversations": [
                 {
                     "id": "rcv-f9efca48d85143",
@@ -98,11 +58,6 @@
                         "ballot",
                         "comments"
                     ],
-                    "voting": [
-                        0.63,
-                        0.31,
-                        0.06
-                    ],
                     "data": {
                         "videoid": "gy1B3agGNxw",
                         "start": 42,
@@ -110,7 +65,6 @@
                         "rel": 0,
                         "modestbranding": 1
                     },
-                    "ballotId": "rb-716ffbdfc356af",
                     "conversationId": "rcv-f9efca48d85143"
                 },
                 {
@@ -134,16 +88,10 @@
                     "modules": [
                         "ballot"
                     ],
-                    "voting": [
-                        0.77,
-                        0.19,
-                        0.04
-                    ],
                     "data": {
                         "videoid": "x18b09a",
                         "related": 0
-                    },
-                    "ballotId": "rb-01eb03bc062c15"
+                    }
                 },
                 {
                     "id": "rc-e489d1c6359fb3",
@@ -154,17 +102,11 @@
                     "modules": [
                         "ballot"
                     ],
-                    "voting": [
-                        0.83,
-                        0.14,
-                        0.03
-                    ],
                     "data": {
                         "videoid": "81766071",
                         "start": 35,
                         "end": 45
-                    },
-                    "ballotId": "rb-01eb03bc062c15"
+                    }
                 },
                 {
                     "id": "rc-e2947c9bec017e",
@@ -175,18 +117,12 @@
                     "modules": [
                         "ballot"
                     ],
-                    "voting": [
-                        0.87,
-                        0.11,
-                        0.02
-                    ],
                     "data": {
                         "videoid": "Cn9yJrrm2tk",
                         "rel": 0,
                         "modestbranding": 1,
                         "end": 18
-                    },
-                    "ballotId": "rb-d1f60e2d64a0ba"
+                    }
                 },
                 {
                     "id": "rc-99b87ea709d7ac",
@@ -197,16 +133,10 @@
                     "modules": [
                         "ballot"
                     ],
-                    "voting": [
-                        0.89,
-                        0.09,
-                        0.02
-                    ],
                     "data": {
                         "videoid": "xorbb7",
                         "related": 0
-                    },
-                    "ballotId": "rb-01eb03bc062c15"
+                    }
                 },
                 {
                     "id": "rc-235d41cde02032",
@@ -238,21 +168,7 @@
         },
         "data": {
             "id": "r-ea8caee7de7582",
-            "ballots": [
-                {
-                    "id": "rb-8e76295e41625f",
-                    "choices": [
-                        {
-                            "button": "Way Rad",
-                            "most": "The Goodest video"
-                        },
-                        {
-                            "button": "Way Lame",
-                            "most": "The Badest video"
-                        }
-                    ]
-                }
-            ],
+            "electionId": "el-2f173cf1a9a8ef",
             "deck": [
                 {
                     "id": "rc-22119a8cf9f755",
@@ -263,16 +179,11 @@
                     "modules": [
                         "ballot"
                     ],
-                    "voting": [
-                        0.81,
-                        0.19
-                    ],
                     "data": {
                         "videoid": "IqVPwcvgOWQ",
                         "rel": 0,
                         "modestbranding": 1
-                    },
-                    "ballotId": "rb-8e76295e41625f"
+                    }
                 },
                 {
                     "id": "rc-337f092e881524",
@@ -283,16 +194,11 @@
                     "modules": [
                         "ballot"
                     ],
-                    "voting": [
-                        0.74,
-                        0.26
-                    ],
                     "data": {
                         "videoid": "MNCzSfv4hX8",
                         "rel": 0,
                         "modestbranding": 1
-                    },
-                    "ballotId": "rb-8e76295e41625f"
+                    }
                 },
                 {
                     "id": "rc-facb167546a4ff",
@@ -303,16 +209,11 @@
                     "modules": [
                         "ballot"
                     ],
-                    "voting": [
-                        0.95,
-                        0.05
-                    ],
                     "data": {
                         "videoid": "HrqXTHCGVEo",
                         "rel": 0,
                         "modestbranding": 1
-                    },
-                    "ballotId": "rb-8e76295e41625f"
+                    }
                 },
                 {
                     "id": "rc-4b9dc6b9651428",
@@ -323,16 +224,11 @@
                     "modules": [
                         "ballot"
                     ],
-                    "voting": [
-                        0.65,
-                        0.35
-                    ],
                     "data": {
                         "videoid": "x76VEPXYaI0",
                         "rel": 0,
                         "modestbranding": 1
-                    },
-                    "ballotId": "rb-8e76295e41625f"
+                    }
                 },
                 {
                     "id": "rc-9b524d0c0535db",
@@ -343,16 +239,11 @@
                     "modules": [
                         "ballot"
                     ],
-                    "voting": [
-                        0.7,
-                        0.3
-                    ],
                     "data": {
                         "videoid": "af2m0gf6TtA",
                         "rel": 0,
                         "modestbranding": 1
-                    },
-                    "ballotId": "rb-8e76295e41625f"
+                    }
                 },
                 {
                     "id": "rc-828007b55441ca",
@@ -363,16 +254,11 @@
                     "modules": [
                         "ballot"
                     ],
-                    "voting": [
-                        0.9,
-                        0.1
-                    ],
                     "data": {
                         "videoid": "GdEKSyad_rk",
                         "rel": 0,
                         "modestbranding": 1
-                    },
-                    "ballotId": "rb-8e76295e41625f"
+                    }
                 },
                 {
                     "id": "rc-4ea854fd34d960",
@@ -383,16 +269,11 @@
                     "modules": [
                         "ballot"
                     ],
-                    "voting": [
-                        0.82,
-                        0.18
-                    ],
                     "data": {
                         "videoid": "T8F8WR2rzPA",
                         "rel": 0,
                         "modestbranding": 1
-                    },
-                    "ballotId": "rb-8e76295e41625f"
+                    }
                 },
                 {
                     "id": "rc-392f3546f0cfc3",
@@ -415,16 +296,11 @@
                     "modules": [
                         "ballot"
                     ],
-                    "voting": [
-                        0.97,
-                        0.03
-                    ],
                     "data": {
                         "videoid": "SwbP9WLX3fY",
                         "rel": 0,
                         "modestbranding": 1
-                    },
-                    "ballotId": "rb-8e76295e41625f"
+                    }
                 },
                 {
                     "id": "rc-389f9dea3498d2",
@@ -435,16 +311,11 @@
                     "modules": [
                         "ballot"
                     ],
-                    "voting": [
-                        0.67,
-                        0.33
-                    ],
                     "data": {
                         "videoid": "ZCAnLxRvNNc",
                         "rel": 0,
                         "modestbranding": 1
-                    },
-                    "ballotId": "rb-8e76295e41625f"
+                    }
                 },
                 {
                     "id": "rc-065050baf27d98",
@@ -455,16 +326,11 @@
                     "modules": [
                         "ballot"
                     ],
-                    "voting": [
-                        0.78,
-                        0.22
-                    ],
                     "data": {
                         "videoid": "pOoy7_l2EbI",
                         "rel": 0,
                         "modestbranding": 1
-                    },
-                    "ballotId": "rb-8e76295e41625f"
+                    }
                 },
                 {
                     "id": "rc-3194c992829ad5",
@@ -475,16 +341,11 @@
                     "modules": [
                         "ballot"
                     ],
-                    "voting": [
-                        0.9,
-                        0.1
-                    ],
                     "data": {
                         "videoid": "rIu5B3Fsstg",
                         "rel": 0,
                         "modestbranding": 1
-                    },
-                    "ballotId": "rb-8e76295e41625f"
+                    }
                 },
                 {
                     "id": "rc-974e99904a58fd",
@@ -495,16 +356,11 @@
                     "modules": [
                         "ballot"
                     ],
-                    "voting": [
-                        0.86,
-                        0.14
-                    ],
                     "data": {
                         "videoid": "oEG1V7rkIK8",
                         "rel": 0,
                         "modestbranding": 1
-                    },
-                    "ballotId": "rb-8e76295e41625f"
+                    }
                 },
                 {
                     "id": "rc-0518f251954d3d",
@@ -515,16 +371,11 @@
                     "modules": [
                         "ballot"
                     ],
-                    "voting": [
-                        0.75,
-                        0.25
-                    ],
                     "data": {
                         "videoid": "zqIjZFV4YAU",
                         "rel": 0,
                         "modestbranding": 1
-                    },
-                    "ballotId": "rb-8e76295e41625f"
+                    }
                 },
                 {
                     "id": "rc-3502759494071f",
@@ -535,19 +386,14 @@
                     "modules": [
                         "ballot"
                     ],
-                    "voting": [
-                        0.98,
-                        0.02
-                    ],
                     "data": {
                         "videoid": "CjB_oVeq8Lo",
                         "rel": 0,
                         "modestbranding": 1
-                    },
-                    "ballotId": "rb-8e76295e41625f"
+                    }
                 },
                 {
-                    "id": "rc-3502759494071f",
+                    "id": "rc-6c107d42d383ec",
                     "type": "youtube",
                     "title": "Red Sox Victory!",
                     "note": "Shane Victorino captures the moment the Red Sox won the World Series.",
@@ -555,16 +401,11 @@
                     "modules": [
                         "ballot"
                     ],
-                    "voting": [
-                        0.64,
-                        0.36
-                    ],
                     "data": {
                         "videoid": "eesJwsJoczY",
                         "rel": 0,
                         "modestbranding": 1
-                    },
-                    "ballotId": "rb-8e76295e41625f"
+                    }
                 },
                 {
                     "id": "rc-ee5f1c11d8d42f",
@@ -596,21 +437,7 @@
         },
         "data": {
             "id": "r-a798237d2e522f",
-            "ballots": [
-                {
-                    "id": "rb-f59f9c044594e7",
-                    "choices": [
-                        {
-                            "button": "All Skill",
-                            "most": "The Goodest video"
-                        },
-                        {
-                            "button": "All Luck",
-                            "most": "The Badest video"
-                        }
-                    ]
-                }
-            ],
+            "electionId": "el-8b1b6847d575ac",
             "deck": [
                 {
                     "id": "rc-080fb573e704cf",
@@ -621,16 +448,11 @@
                     "modules": [
                         "ballot"
                     ],
-                    "voting": [
-                        0.81,
-                        0.19
-                    ],
                     "data": {
                         "videoid": "WpJaJM4Cy8o",
                         "rel": 0,
                         "modestbranding": 1
-                    },
-                    "ballotId": "rb-f59f9c044594e7"
+                    }
                 },
                 {
                     "id": "rc-7311404ad44b52",
@@ -641,16 +463,11 @@
                     "modules": [
                         "ballot"
                     ],
-                    "voting": [
-                        0.74,
-                        0.26
-                    ],
                     "data": {
                         "videoid": "-T1D_H-vOSA",
                         "rel": 0,
                         "modestbranding": 1
-                    },
-                    "ballotId": "rb-f59f9c044594e7"
+                    }
                 },
                 {
                     "id": "rc-df375fb28cc776",
@@ -661,16 +478,11 @@
                     "modules": [
                         "ballot"
                     ],
-                    "voting": [
-                        0.95,
-                        0.05
-                    ],
                     "data": {
                         "videoid": "oPrm4PpOStA",
                         "rel": 0,
                         "modestbranding": 1
-                    },
-                    "ballotId": "rb-f59f9c044594e7"
+                    }
                 },
                 {
                     "id": "rc-4f9cb78c41dcd9",
@@ -681,16 +493,11 @@
                     "modules": [
                         "ballot"
                     ],
-                    "voting": [
-                        0.65,
-                        0.35
-                    ],
                     "data": {
                         "videoid": "u_Hrv5TNb2Y",
                         "rel": 0,
                         "modestbranding": 1
-                    },
-                    "ballotId": "rb-f59f9c044594e7"
+                    }
                 },
                 {
                     "id": "rc-b0f8f58e21f202",
@@ -701,16 +508,11 @@
                     "modules": [
                         "ballot"
                     ],
-                    "voting": [
-                        0.7,
-                        0.3
-                    ],
                     "data": {
                         "videoid": "MVT91mNMS8A",
                         "rel": 0,
                         "modestbranding": 1
-                    },
-                    "ballotId": "rb-f59f9c044594e7"
+                    }
                 },
                 {
                     "id": "rc-ca8adce82b632f",
@@ -721,16 +523,11 @@
                     "modules": [
                         "ballot"
                     ],
-                    "voting": [
-                        0.9,
-                        0.1
-                    ],
                     "data": {
                         "videoid": "O-5mLe8n9QI",
                         "rel": 0,
                         "modestbranding": 1
-                    },
-                    "ballotId": "rb-f59f9c044594e7"
+                    }
                 },
                 {
                     "id": "rc-cd2a90ac077d87",
@@ -741,16 +538,11 @@
                     "modules": [
                         "ballot"
                     ],
-                    "voting": [
-                        0.82,
-                        0.18
-                    ],
                     "data": {
                         "videoid": "xKaGdvnQUz4",
                         "rel": 0,
                         "modestbranding": 1
-                    },
-                    "ballotId": "rb-f59f9c044594e7"
+                    }
                 },
                 {
                     "id": "rc-392f3546f0cfc3",
@@ -770,16 +562,11 @@
                     "modules": [
                         "ballot"
                     ],
-                    "voting": [
-                        0.97,
-                        0.03
-                    ],
                     "data": {
                         "videoid": "lmvQVz1-bOU",
                         "rel": 0,
                         "modestbranding": 1
-                    },
-                    "ballotId": "rb-f59f9c044594e7"
+                    }
                 },
                 {
                     "id": "rc-ef6ffe2bab25f5",
@@ -790,16 +577,11 @@
                     "modules": [
                         "ballot"
                     ],
-                    "voting": [
-                        0.67,
-                        0.33
-                    ],
                     "data": {
                         "videoid": "27XeNefwABw",
                         "rel": 0,
                         "modestbranding": 1
-                    },
-                    "ballotId": "rb-f59f9c044594e7"
+                    }
                 },
                 {
                     "id": "rc-7c2c6b5040f21b",
@@ -810,16 +592,11 @@
                     "modules": [
                         "ballot"
                     ],
-                    "voting": [
-                        0.78,
-                        0.22
-                    ],
                     "data": {
                         "videoid": "RqnQwKAI4OE",
                         "rel": 0,
                         "modestbranding": 1
-                    },
-                    "ballotId": "rb-f59f9c044594e7"
+                    }
                 },
                 {
                     "id": "rc-1a327c199e4387",
@@ -851,21 +628,7 @@
         },
         "data": {
             "id": "r-ea8caee7de7582",
-            "ballots": [
-                {
-                    "id": "rb-148edd87e67134",
-                    "choices": [
-                        {
-                            "button": "Hulk-Strong",
-                            "most": "The Goodest video"
-                        },
-                        {
-                            "button": "Too Weak",
-                            "most": "The Badest video"
-                        }
-                    ]
-                }
-            ],
+            "electionId": "el-8b1b6847d575ac",
             "deck": [
                 {
                     "id": "rc-0c4d7938b6fe3c",
@@ -876,16 +639,11 @@
                     "modules": [
                         "ballot"
                     ],
-                    "voting": [
-                        0.81,
-                        0.19
-                    ],
                     "data": {
                         "videoid": "E0q7PPu_NIg",
                         "rel": 0,
                         "modestbranding": 1
-                    },
-                    "ballotId": "rb-148edd87e67134"
+                    }
                 },
                 {
                     "id": "rc-29bd38a14dc46b",
@@ -896,16 +654,11 @@
                     "modules": [
                         "ballot"
                     ],
-                    "voting": [
-                        0.74,
-                        0.26
-                    ],
                     "data": {
                         "videoid": "SrliMvIPALU",
                         "rel": 0,
                         "modestbranding": 1
-                    },
-                    "ballotId": "rb-148edd87e67134"
+                    }
                 },
                 {
                     "id": "rc-9e477d23518112",
@@ -916,16 +669,11 @@
                     "modules": [
                         "ballot"
                     ],
-                    "voting": [
-                        0.95,
-                        0.05
-                    ],
                     "data": {
                         "videoid": "Z5lMOIFAJVI",
                         "rel": 0,
                         "modestbranding": 1
-                    },
-                    "ballotId": "rb-148edd87e67134"
+                    }
                 },
                 {
                     "id": "rc-e1919a486fccfb",
@@ -936,16 +684,11 @@
                     "modules": [
                         "ballot"
                     ],
-                    "voting": [
-                        0.65,
-                        0.35
-                    ],
                     "data": {
                         "videoid": "5oJtvopJoAU",
                         "rel": 0,
                         "modestbranding": 1
-                    },
-                    "ballotId": "rb-148edd87e67134"
+                    }
                 },
                 {
                     "id": "rc-11df958a25966d",
@@ -965,16 +708,11 @@
                     "modules": [
                         "ballot"
                     ],
-                    "voting": [
-                        0.7,
-                        0.3
-                    ],
                     "data": {
                         "videoid": "HBq-FYvAFmk",
                         "rel": 0,
                         "modestbranding": 1
-                    },
-                    "ballotId": "rb-148edd87e67134"
+                    }
                 },
                 {
                     "id": "rc-26eb95e7e9d2ca",
@@ -985,16 +723,11 @@
                     "modules": [
                         "ballot"
                     ],
-                    "voting": [
-                        0.9,
-                        0.1
-                    ],
                     "data": {
                         "videoid": "GQly9YfEhpA",
                         "rel": 0,
                         "modestbranding": 1
-                    },
-                    "ballotId": "rb-148edd87e67134"
+                    }
                 },
                 {
                     "id": "rc-cf6102c95f8d91",
@@ -1005,16 +738,11 @@
                     "modules": [
                         "ballot"
                     ],
-                    "voting": [
-                        0.82,
-                        0.18
-                    ],
                     "data": {
                         "videoid": "MNhe8ghamyE",
                         "rel": 0,
                         "modestbranding": 1
-                    },
-                    "ballotId": "rb-148edd87e67134"
+                    }
                 },
                 {
                     "id": "rc-b4b209132e2674",

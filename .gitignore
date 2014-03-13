@@ -16,3 +16,6 @@ node_modules/
 dist/
 .tmp/
 reports/
+.vagrant/
+Berksfile.lock
+personal.json

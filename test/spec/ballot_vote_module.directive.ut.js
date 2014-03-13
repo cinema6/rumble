@@ -10,6 +10,17 @@
             var $animate;
 
             beforeEach(function() {
+                module(function($provide) {
+                    $provide.value('$log', {
+                        context: function() {
+                            return {
+                                info: function() {},
+                                error: function() {}
+                            };
+                        }
+                    });
+                });
+
                 module('c6.rumble', function($provide) {
                     $provide.value('c6AppData', {
                         mode: 'mobile'
