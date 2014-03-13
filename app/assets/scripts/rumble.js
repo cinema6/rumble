@@ -137,45 +137,88 @@
             return playlist;
         };
     }])
-    .service('BallotService', ['$http','c6UrlMaker',
-    function                  ( $http , c6UrlMaker ) {
-        var electionId = null;
+    .service('BallotService', ['$http','$cacheFactory','$q','c6UrlMaker',
+    function                  ( $http , $cacheFactory , $q , c6UrlMaker ) {
+        var electionId = null,
+            electionCache = $cacheFactory('BallotService:elections');
+
+        function processBallot(ballot) {
+            var totalItems = Object.keys(ballot).length,
+                choices = [],
+                isBlank = (function() {
+                    var empty = true;
+
+                    angular.forEach(ballot, function(votes) {
+                        if (votes > 0) { empty = false; }
+                    });
+
+                    return empty;
+                }());
+
+            angular.forEach(ballot, function(votes, name) {
+                choices.push({
+                    name: name,
+                    votes: isBlank ? (1 / totalItems) : votes
+                });
+            });
+
+            return choices;
+        }
 
         this.init = function(id) {
             electionId = id;
         };
 
-        this.getBallot = function(id) {
+        this.getElection = function() {
             function process(response) {
-                var data = response.data,
-                    ballotItems = data.ballot[id],
-                    totalItems = Object.keys(ballotItems).length,
-                    choices = [],
-                    isBlank = (function() {
-                        var empty = true;
+                var data = response.data.ballot,
+                    election = {};
 
-                        angular.forEach(ballotItems, function(votes) {
-                            if (votes > 0) { empty = false; }
-                        });
-
-                        return empty;
-                    }());
-
-                angular.forEach(ballotItems, function(votes, name) {
-                    choices.push({
-                        name: name,
-                        votes: isBlank ? (1 / totalItems) : votes
-                    });
+                angular.forEach(data, function(ballot, id) {
+                    election[id] = processBallot(ballot);
                 });
 
-                return choices;
+                return election;
+            }
+
+            function cache(election) {
+                return electionCache.put(electionId, election);
             }
 
             return $http.get(c6UrlMaker(
-                    ('election/' + electionId + '/ballot/' + id),
+                    ('election/' + electionId),
                     'api'
                 ), { cache: true })
-                .then(process);
+                .then(process)
+                .then(cache);
+        };
+
+        this.getBallot = function(id) {
+            function fetchFromCache() {
+                var election = electionCache.get(electionId);
+
+                return election ?
+                    $q.when(election[id]) :
+                    $q.reject('Election ' + electionId + ' is not in the cache.');
+            }
+
+            function fetchFromService() {
+                function process(response) {
+                    var data = response.data,
+                        ballotItems = data.ballot[id];
+
+                    return processBallot(ballotItems);
+                }
+
+                return $http.get(c6UrlMaker(
+                        ('election/' + electionId + '/ballot/' + id),
+                        'api'
+                    ), { cache: true })
+                    .then(process);
+            }
+
+            return fetchFromCache()
+                .catch(fetchFromService);
         };
 
         this.vote = function(id, name) {
@@ -203,6 +246,10 @@
         }
 
         BallotService.init(id);
+        // This will load the election into the BallotService\'s cache so
+        // requests for individual ballots will not hit the vote service.
+        BallotService.getElection();
+
         CommentsService.init(id);
 
         $scope.deviceProfile    = appData.profile;

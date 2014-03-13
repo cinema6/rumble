@@ -36,6 +36,130 @@
                         });
                     });
 
+                    describe('getElection()', function() {
+                        var success, failure;
+
+                        beforeEach(function() {
+                            success = jasmine.createSpy('getElection() success');
+                            failure = jasmine.createSpy('getElection() failure');
+
+                            $httpBackend.expectGET('/api/election/' + id)
+                                .respond(200, {
+                                    id: 'e-80fcd03196b3d2',
+                                    ballot: {
+                                        'rc-22119a8cf9f755': {
+                                            'Catchy': 0.5,
+                                            'Painful': 0.5
+                                        },
+                                        'rc-4770a2d7f85ce0': {
+                                            'Funny': 0,
+                                            'Lame': 1
+                                        },
+                                        'rc-e489d1c6359fb3': {
+                                            'Cute': 0,
+                                            'Ugly': 0
+                                        },
+                                        'rc-e2947c9bec017e': {
+                                            'Cool': 0,
+                                            'Geeky': 0
+                                        },
+                                        'rc-99b87ea709d7ac': {
+                                            'Funny': 0,
+                                            'Gross': 0
+                                        }
+                                    }
+                                });
+
+                            BallotService.init(id);
+
+                            BallotService.getElection().then(success, failure);
+                        });
+
+                        it('should make a request to the vote service', function() {
+                            $httpBackend.flush();
+                        });
+
+                        it('should resolve with the processed results of the election', function() {
+                            $httpBackend.flush();
+
+                            expect(success).toHaveBeenCalledWith({
+                                'rc-22119a8cf9f755': [
+                                    {
+                                        name: 'Catchy',
+                                        votes: 0.5
+                                    },
+                                    {
+                                        name: 'Painful',
+                                        votes: 0.5
+                                    }
+                                ],
+                                'rc-4770a2d7f85ce0': [
+                                    {
+                                        name: 'Funny',
+                                        votes: 0
+                                    },
+                                    {
+                                        name: 'Lame',
+                                        votes: 1
+                                    }
+                                ],
+                                'rc-e489d1c6359fb3': [
+                                    {
+                                        name: 'Cute',
+                                        votes: 0.5
+                                    },
+                                    {
+                                        name: 'Ugly',
+                                        votes: 0.5
+                                    }
+                                ],
+                                'rc-e2947c9bec017e': [
+                                    {
+                                        name: 'Cool',
+                                        votes: 0.5
+                                    },
+                                    {
+                                        name: 'Geeky',
+                                        votes: 0.5
+                                    }
+                                ],
+                                'rc-99b87ea709d7ac': [
+                                    {
+                                        name: 'Funny',
+                                        votes: 0.5
+                                    },
+                                    {
+                                        name: 'Gross',
+                                        votes: 0.5
+                                    }
+                                ]
+                            });
+                        });
+
+                        it('should cache the election for the getBallot() method', function() {
+                            success = jasmine.createSpy('getBallot() success');
+
+                            $httpBackend.flush();
+
+                            expect(function() {
+                                $rootScope.$apply(function() {
+                                    BallotService.getBallot('rc-4770a2d7f85ce0').then(success);
+                                });
+                            }).not.toThrow();
+
+                            expect(success).toHaveBeenCalledWith([
+                                {
+                                    name: 'Funny',
+                                    votes: 0
+                                },
+                                {
+                                    name: 'Lame',
+                                    votes: 1
+                                }
+                            ]);
+                        });
+                    });
+
                     describe('getBallot(id)', function() {
                         var success, failure;
 

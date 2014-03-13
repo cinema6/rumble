@@ -174,6 +174,7 @@
 
                     spyOn(CommentsService, 'init');
                     spyOn(BallotService, 'init');
+                    spyOn(BallotService, 'getElection');
                     RumbleCtrl = $controller('RumbleController', {
                         $scope  : $scope,
                         $log    : $log
@@ -195,6 +196,10 @@
 
                 it('should initialize BallotService with the id', function() {
                     expect(BallotService.init).toHaveBeenCalledWith(appData.experience.id);
+                });
+
+                it('should get the election', function() {
+                    expect(BallotService.getElection).toHaveBeenCalled();
                 });
 
                 it('should initialize the CommentsService with the id', function() {
