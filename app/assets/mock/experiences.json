@@ -1,6 +1,6 @@
 [
     {
-        "id": "e-80fcd03196b3d2",
+        "id": "e-d0e407bb69675b",
         "uri": "rumble",
         "appUriPrefix": "<%= settings.appUrl %>",
         "appUri": "rumble",
@@ -58,6 +58,10 @@
                         "ballot",
                         "comments"
                     ],
+                    "ballot": [
+                        "Catchy",
+                        "Painful"
+                    ],
                     "data": {
                         "videoid": "gy1B3agGNxw",
                         "start": 42,
@@ -88,6 +92,10 @@
                     "modules": [
                         "ballot"
                     ],
+                    "ballot": [
+                        "Funny",
+                        "Lame"
+                    ],
                     "data": {
                         "videoid": "x18b09a",
                         "related": 0
@@ -101,6 +109,10 @@
                     "source": "Vimeo",
                     "modules": [
                         "ballot"
+                    ],
+                    "ballot": [
+                        "Cute",
+                        "Ugly"
                     ],
                     "data": {
                         "videoid": "81766071",
@@ -117,6 +129,10 @@
                     "modules": [
                         "ballot"
                     ],
+                    "ballot": [
+                        "Cool",
+                        "Geeky"
+                    ],
                     "data": {
                         "videoid": "Cn9yJrrm2tk",
                         "rel": 0,
@@ -132,6 +148,10 @@
                     "source": "DailyMotion",
                     "modules": [
                         "ballot"
+                    ],
+                    "ballot": [
+                        "Funny",
+                        "Gross"
                     ],
                     "data": {
                         "videoid": "xorbb7",
@@ -156,7 +176,7 @@
         }
     },
     {
-        "id": "e-220f09b2398217",
+        "id": "e-dde721e25274a7",
         "uri": "gopro",
         "appUriPrefix": "<%= settings.appUrl %>",
         "appUri": "rumble",
@@ -179,6 +199,10 @@
                     "modules": [
                         "ballot"
                     ],
+                    "ballot": [
+                        "Cool",
+                        "Lame"
+                    ],
                     "data": {
                         "videoid": "IqVPwcvgOWQ",
                         "rel": 0,
@@ -193,6 +217,10 @@
                     "source": "YouTube",
                     "modules": [
                         "ballot"
+                    ],
+                    "ballot": [
+                        "Funny",
+                        "Gross"
                     ],
                     "data": {
                         "videoid": "MNCzSfv4hX8",
@@ -209,6 +237,10 @@
                     "modules": [
                         "ballot"
                     ],
+                    "ballot": [
+                        "Cool",
+                        "Lame"
+                    ],
                     "data": {
                         "videoid": "HrqXTHCGVEo",
                         "rel": 0,
@@ -223,6 +255,10 @@
                     "source": "YouTube",
                     "modules": [
                         "ballot"
+                    ],
+                    "ballot": [
+                        "Cool",
+                        "Lame"
                     ],
                     "data": {
                         "videoid": "x76VEPXYaI0",
@@ -239,6 +275,10 @@
                     "modules": [
                         "ballot"
                     ],
+                    "ballot": [
+                        "Cool",
+                        "Lame"
+                    ],
                     "data": {
                         "videoid": "af2m0gf6TtA",
                         "rel": 0,
@@ -254,6 +294,10 @@
                     "modules": [
                         "ballot"
                     ],
+                    "ballot": [
+                        "Cool",
+                        "Lame"
+                    ],
                     "data": {
                         "videoid": "GdEKSyad_rk",
                         "rel": 0,
@@ -268,6 +312,10 @@
                     "source": "YouTube",
                     "modules": [
                         "ballot"
+                    ],
+                    "ballot": [
+                        "Cute",
+                        "Lame"
                     ],
                     "data": {
                         "videoid": "T8F8WR2rzPA",
@@ -296,6 +344,10 @@
                     "modules": [
                         "ballot"
                     ],
+                    "ballot": [
+                        "Cool",
+                        "Lame"
+                    ],
                     "data": {
                         "videoid": "SwbP9WLX3fY",
                         "rel": 0,
@@ -310,6 +362,10 @@
                     "source": "YouTube",
                     "modules": [
                         "ballot"
+                    ],
+                    "ballot": [
+                        "Cool",
+                        "Lame"
                     ],
                     "data": {
                         "videoid": "ZCAnLxRvNNc",
@@ -326,6 +382,10 @@
                     "modules": [
                         "ballot"
                     ],
+                    "ballot": [
+                        "Awesome",
+                        "Stupid"
+                    ],
                     "data": {
                         "videoid": "pOoy7_l2EbI",
                         "rel": 0,
@@ -340,6 +400,10 @@
                     "source": "YouTube",
                     "modules": [
                         "ballot"
+                    ],
+                    "ballot": [
+                        "Cool",
+                        "Lame"
                     ],
                     "data": {
                         "videoid": "rIu5B3Fsstg",
@@ -356,6 +420,10 @@
                     "modules": [
                         "ballot"
                     ],
+                    "ballot": [
+                        "Cool",
+                        "Lame"
+                    ],
                     "data": {
                         "videoid": "oEG1V7rkIK8",
                         "rel": 0,
@@ -370,6 +438,10 @@
                     "source": "YouTube",
                     "modules": [
                         "ballot"
+                    ],
+                    "ballot": [
+                        "Cool",
+                        "Lame"
                     ],
                     "data": {
                         "videoid": "zqIjZFV4YAU",
@@ -386,6 +458,10 @@
                     "modules": [
                         "ballot"
                     ],
+                    "ballot": [
+                        "Cute",
+                        "Lame"
+                    ],
                     "data": {
                         "videoid": "CjB_oVeq8Lo",
                         "rel": 0,
@@ -400,6 +476,10 @@
                     "source": "YouTube",
                     "modules": [
                         "ballot"
+                    ],
+                    "ballot": [
+                        "YAY!",
+                        "ARGH!"
                     ],
                     "data": {
                         "videoid": "eesJwsJoczY",
@@ -425,7 +505,7 @@
         }
     },
     {
-        "id": "e-d222ba38f50e09",
+        "id": "e-6ab02642b45eb8",
         "uri": "superbowl",
         "appUriPrefix": "<%= settings.appUrl %>",
         "appUri": "rumble",
@@ -448,6 +528,10 @@
                     "modules": [
                         "ballot"
                     ],
+                    "ballot": [
+                        "All Skill",
+                        "All Luck"
+                    ],
                     "data": {
                         "videoid": "WpJaJM4Cy8o",
                         "rel": 0,
@@ -462,6 +546,10 @@
                     "source": "YouTube",
                     "modules": [
                         "ballot"
+                    ],
+                    "ballot": [
+                        "All Skill",
+                        "All Luck"
                     ],
                     "data": {
                         "videoid": "-T1D_H-vOSA",
@@ -478,6 +566,10 @@
                     "modules": [
                         "ballot"
                     ],
+                    "ballot": [
+                        "All Skill",
+                        "All Luck"
+                    ],
                     "data": {
                         "videoid": "oPrm4PpOStA",
                         "rel": 0,
@@ -492,6 +584,10 @@
                     "source": "YouTube",
                     "modules": [
                         "ballot"
+                    ],
+                    "ballot": [
+                        "All Skill",
+                        "All Luck"
                     ],
                     "data": {
                         "videoid": "u_Hrv5TNb2Y",
@@ -508,6 +604,10 @@
                     "modules": [
                         "ballot"
                     ],
+                    "ballot": [
+                        "All Skill",
+                        "All Luck"
+                    ],
                     "data": {
                         "videoid": "MVT91mNMS8A",
                         "rel": 0,
@@ -523,6 +623,10 @@
                     "modules": [
                         "ballot"
                     ],
+                    "ballot": [
+                        "All Skill",
+                        "All Luck"
+                    ],
                     "data": {
                         "videoid": "O-5mLe8n9QI",
                         "rel": 0,
@@ -537,6 +641,10 @@
                     "source": "YouTube",
                     "modules": [
                         "ballot"
+                    ],
+                    "ballot": [
+                        "All Skill",
+                        "All Luck"
                     ],
                     "data": {
                         "videoid": "xKaGdvnQUz4",
@@ -562,6 +670,10 @@
                     "modules": [
                         "ballot"
                     ],
+                    "ballot": [
+                        "All Skill",
+                        "All Luck"
+                    ],
                     "data": {
                         "videoid": "lmvQVz1-bOU",
                         "rel": 0,
@@ -577,6 +689,10 @@
                     "modules": [
                         "ballot"
                     ],
+                    "ballot": [
+                        "All Skill",
+                        "All Luck"
+                    ],
                     "data": {
                         "videoid": "27XeNefwABw",
                         "rel": 0,
@@ -591,6 +707,10 @@
                     "source": "YouTube",
                     "modules": [
                         "ballot"
+                    ],
+                    "ballot": [
+                        "All Skill",
+                        "All Luck"
                     ],
                     "data": {
                         "videoid": "RqnQwKAI4OE",
@@ -616,7 +736,7 @@
         }
     },
     {
-        "id": "e-0bf9209b8cf08f",
+        "id": "e-55b499581cb19e",
         "uri": "wrestling",
         "appUriPrefix": "<%= settings.appUrl %>",
         "appUri": "rumble",
@@ -639,6 +759,10 @@
                     "modules": [
                         "ballot"
                     ],
+                    "ballot": [
+                        "Strong",
+                        "Weak"
+                    ],
                     "data": {
                         "videoid": "E0q7PPu_NIg",
                         "rel": 0,
@@ -653,6 +777,10 @@
                     "source": "YouTube",
                     "modules": [
                         "ballot"
+                    ],
+                    "ballot": [
+                        "Strong",
+                        "Weak"
                     ],
                     "data": {
                         "videoid": "SrliMvIPALU",
@@ -669,6 +797,10 @@
                     "modules": [
                         "ballot"
                     ],
+                    "ballot": [
+                        "Strong",
+                        "Weak"
+                    ],
                     "data": {
                         "videoid": "Z5lMOIFAJVI",
                         "rel": 0,
@@ -683,6 +815,10 @@
                     "source": "YouTube",
                     "modules": [
                         "ballot"
+                    ],
+                    "ballot": [
+                        "Strong",
+                        "Weak"
                     ],
                     "data": {
                         "videoid": "5oJtvopJoAU",
@@ -708,6 +844,10 @@
                     "modules": [
                         "ballot"
                     ],
+                    "ballot": [
+                        "Strong",
+                        "Weak"
+                    ],
                     "data": {
                         "videoid": "HBq-FYvAFmk",
                         "rel": 0,
@@ -723,6 +863,10 @@
                     "modules": [
                         "ballot"
                     ],
+                    "ballot": [
+                        "Strong",
+                        "Weak"
+                    ],
                     "data": {
                         "videoid": "GQly9YfEhpA",
                         "rel": 0,
@@ -737,6 +881,10 @@
                     "source": "YouTube",
                     "modules": [
                         "ballot"
+                    ],
+                    "ballot": [
+                        "Strong",
+                        "Weak"
                     ],
                     "data": {
                         "videoid": "MNhe8ghamyE",

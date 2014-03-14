@@ -8,6 +8,35 @@
             port:  27017,
             pass: 'password'
         },
+        users: {
+            options: {
+                db: 'c6Db',
+                user: 'auth'
+            },
+            data: [
+                {
+                    id : 'u-e1d2c19c42d6ee',
+                    created : new Date(),
+                    username : 'josh',
+                    password : '$2a$10$ik8VD1MLOJT.VBBISmLPI.q2Okr4LvGYIE9ZOt4UjCU7iIVI.Qurq',
+                    permissions: {
+                        experiences: {
+                            read: 'all',
+                            create: 'all',
+                            delete: 'all',
+                            edit: 'all'
+                        },
+                        users: {
+                            read: 'all',
+                            create: 'all',
+                            delete: 'all',
+                            edit: 'all'
+                        }
+                    },
+                    status: 'active'
+                }
+            ]
+        },
         elections: {
             options: {
                 db: 'voteDb',

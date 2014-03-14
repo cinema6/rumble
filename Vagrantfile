@@ -36,6 +36,24 @@ Vagrant.configure("2") do |config|
                 :auth => true
             }
         },
+        :auth => {
+            :source => {
+                :branch => "master",
+            },
+            :cfg => {
+                :loglevel => "trace"
+            },
+            :mongo => {
+                :host => 'localhost'
+            },
+            :secrets => {
+                :cookieParser => "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" ,
+                :mongoCredentials => {
+                    :user => "auth",
+                    :password => "password"
+                }
+            }
+        },
         :content => {
             :source => {
                 :branch => "master",
@@ -76,6 +94,7 @@ Vagrant.configure("2") do |config|
 
     chef.run_list = [
         "recipe[c6mongo]",
+        "recipe[auth]",
         "recipe[content]",
         "recipe[vote]"
     ]
