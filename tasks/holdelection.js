@@ -9,6 +9,21 @@ module.exports = function(grunt) {
 
     grunt.registerTask('holdelection', 'Initialize the vote service with an election for each new (uninitialized) minireel', function() {
         /* jshint camelcase:false */
+
+        /********PROMISE FLOW CHART********\
+         * authenticate()
+         * .then(getMinireels)
+         * .then(createElections)
+         *     connectToMongo()
+         *     all(minireels)
+         *         verifyNonExistence()
+         *             query()
+         *             .then(count)
+         *         .then(insert, warn)
+         *             generateElection()
+         *             .then(writeToDb)
+         **********************************/
+
         var done = this.async(),
             options = this.options(),
             mongo = new mongodb.MongoClient(

@@ -9,6 +9,19 @@ module.exports = function(grunt) {
     grunt.template.addDelimiters('url-segment', '{{', '}}');
 
     grunt.registerMultiTask('synccontent', 'Synchronize local content JSON files with cinema6 persistence services', function() {
+        /********PROMISE FLOW CHART********\
+         * authenticate()
+         * .then(fetchContent)
+         * .catch(normalize)
+         * .then(syncContent)
+         *     all(jsonContent):
+         *         getId()
+         *         .then(updateContent, createContent)
+         *             sendToServer()
+         *             .then(updateLocalId)
+         * .then(updateLocal)
+         **********************************/
+
         var done = this.async(),
             options = this.options({
                 apiBase: 'http://33.33.33.20/api',
