@@ -12,7 +12,8 @@
             proxies: [
                 {
                     context: '/api',
-                    host: '<%= personal.apiHost %>'
+                    host: '<%= personal.apiHost %>',
+                    changeOrigin: true
                 }
             ],
             options: {
