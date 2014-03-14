@@ -13,9 +13,15 @@ module.exports = function(grunt) {
             options = this.options({
                 apiBase: 'http://33.33.33.20/api',
                 authenticate: '/auth/login',
+                identifier: 'uri',
                 decorate: {}
             }),
-            jsonContent = grunt.file.readJSON(this.filesSrc[0]);
+            file = this.files[0],
+            jsonContent = grunt.file.readJSON(file.src);
+
+        function copy(object) {
+            return JSON.parse(JSON.stringify(object));
+        }
 
         function api(route) {
             return options.apiBase + route;
@@ -71,6 +77,8 @@ module.exports = function(grunt) {
 
         function syncContent(content) {
             function decorateContent(content) {
+                content = copy(content);
+
                 delete content.id;
                 delete content.user;
                 delete content.created;
@@ -82,60 +90,74 @@ module.exports = function(grunt) {
                 return content;
             }
 
-            function getId(object) {
-                var id = null;
-
-                content.forEach(function(serverObject) {
-                    if (serverObject.uri === object.uri) {
-                        id = serverObject.id;
-                    }
-                });
-
-                return id ?
-                    q.when({
-                        id: id,
-                        data: object
-                    }) :
-                    q.reject({
-                        message: 'Could not find an ID for local object: ' + object.id,
-                        data: object
-                    });
-            }
-
-            function updateContent(data) {
-                var url = api(grunt.template.process(options.update.url, {
-                        data: { id: data.id },
-                        delimiters: 'url-segment'
-                    })),
-                    content = decorateContent(data.data);
-
-                log.writeln('Update content: ' + content.uri);
-
-                return send('PUT', url, content);
-            }
-
-            function createContent(error) {
-                var content = decorateContent(error.data);
-
-                log.writeln('Create content: ' + content.uri);
-
-                return send(options.create.method, api(options.create.url), content);
-            }
-
             log.ok('Success!');
 
             log.subhead('Synchronizing Content');
 
             return q.all(jsonContent.map(function(object) {
+                function getId(object) {
+                    var id = null,
+                        identifier = options.identifier;
+
+                    content.forEach(function(serverObject) {
+                        if (serverObject[identifier] === object[identifier]) {
+                            id = serverObject.id;
+                        }
+                    });
+
+                    return id ?
+                        q.when(id) :
+                        q.reject('Could not find an ID for local object: ' + object.id);
+                }
+
+                function updateLocalId(serverData) {
+                    object.id = serverData.id;
+                }
+
+                function updateContent(id) {
+                    var url = api(grunt.template.process(options.update.url, {
+                            data: { id: id },
+                            delimiters: 'url-segment'
+                        })),
+                        content = decorateContent(object);
+
+                    log.writeln('Update content: ' + content[options.identifier]);
+
+                    function sendToServer() {
+                        return send(options.update.method, url, content);
+                    }
+
+                    return sendToServer()
+                        .then(updateLocalId);
+                }
+
+                function createContent() {
+                    var content = decorateContent(object);
+
+                    log.writeln('Create content: ' + content[options.identifier]);
+
+                    function sendToServer() {
+                        return send(options.create.method, api(options.create.url), content);
+                    }
+
+                    return sendToServer()
+                        .then(updateLocalId);
+                }
+
                 return getId(object)
                     .then(updateContent, createContent);
             }));
+        }
+
+        function updateLocal() {
+            grunt.file.write(file.dest, JSON.stringify(jsonContent, null, '    '));
         }
 
         authenticate()
             .then(fetchContent)
             .catch(normalize)
             .then(syncContent)
+            .then(updateLocal)
             .then(done, grunt.fail.fatal.bind(grunt.fail));
     });
 };

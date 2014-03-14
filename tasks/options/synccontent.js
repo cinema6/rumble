@@ -23,6 +23,7 @@ module.exports = {
                 url: '/content/experience/{{= id }}'
             }
         },
-        src: ['<%= settings.experiencesJSON %>']
+        src: ['<%= settings.experiencesJSON %>'],
+        dest: '<%= settings.experiencesJSON %>'
     }
 };
