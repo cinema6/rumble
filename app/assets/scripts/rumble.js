@@ -67,65 +67,8 @@
             }
         };
     }])
-    .factory('rumbleVotes',['$log','$q','$timeout',function($log,$q,$timeout){
-        $log = $log.context('rumbleVotes');
-        var service = {}, mocks = {},
-            rumbleId = null;
-
-        service.mockReturnsData = function(rumbleId,itemId,votes, delay){
-            $log.warn('Setting Mock Data');
-            if (mocks[rumbleId] === undefined){
-                mocks[rumbleId] = {};
-            }
-
-            if (delay === undefined){
-                delay = 1000;
-            }
-
-            mocks[rumbleId][itemId] = {
-                'votes' : votes,
-                'delay' : delay
-            };
-
-            return this;
-        };
-
-        service.init = function(id) {
-            rumbleId = id;
-        };
-
-        service.getReturnsForItem = function(itemId){
-            var deferred = $q.defer(), mock;
-            if (mocks[rumbleId] === undefined){
-                $timeout(function(){
-                    deferred.reject(
-                        new Error('Unable to locate rumble [' + rumbleId + ']')
-                    );
-                },250);
-                return deferred.promise;
-            }
-            
-            if (mocks[rumbleId][itemId] === undefined){
-                $timeout(function(){
-                    deferred.reject(
-                        new Error('Unable to locate item [' + itemId + ']')
-                    );
-                },250);
-                return deferred.promise;
-            }
-            
-            mock = mocks[rumbleId][itemId];
-            $timeout(function(){
-                deferred.resolve(mock.votes);
-            }, mock.delay);
-
-            return deferred.promise;
-        };
-
-        return service;
-    }])
-    .service('MiniReelService', ['InflectorService','rumbleVotes','CommentsService','VideoThumbService',
-    function                    ( InflectorService , rumbleVotes , CommentsService , VideoThumbService ) {
+    .service('MiniReelService', ['InflectorService','CommentsService','VideoThumbService',
+    function                    ( InflectorService , CommentsService , VideoThumbService ) {
         this.createDeck = function(data) {
             var playlist = angular.copy(data.deck);
 
@@ -185,8 +128,6 @@
                 fetchThumb(video);
 
                 //TODO: remove this when the service works for real
-                rumbleVotes.mockReturnsData(data.id, video.id, video.voting);
-                delete video.voting;
                 CommentsService.push(video.id, (video.conversation && video.conversation.comments));
                 delete video.conversation;
 
@@ -196,19 +137,119 @@
             return playlist;
         };
     }])
-    .controller('RumbleController',['$log','$scope','$timeout','rumbleVotes','c6Computed','cinema6','MiniReelService','CommentsService','ControlsService',
-    function                       ( $log , $scope , $timeout , rumbleVotes , c6Computed , cinema6 , MiniReelService , CommentsService , ControlsService ){
+    .service('BallotService', ['$http','$cacheFactory','$q','c6UrlMaker',
+    function                  ( $http , $cacheFactory , $q , c6UrlMaker ) {
+        var electionId = null,
+            electionCache = $cacheFactory('BallotService:elections');
+
+        function processBallot(ballot) {
+            var totalItems = Object.keys(ballot).length,
+                choices = [],
+                isBlank = (function() {
+                    var empty = true;
+
+                    angular.forEach(ballot, function(votes) {
+                        if (votes > 0) { empty = false; }
+                    });
+
+                    return empty;
+                }());
+
+            angular.forEach(ballot, function(votes, name) {
+                choices.push({
+                    name: name,
+                    votes: isBlank ? (1 / totalItems) : votes
+                });
+            });
+
+            return choices;
+        }
+
+        this.init = function(id) {
+            electionId = id;
+        };
+
+        this.getElection = function() {
+            function process(response) {
+                var data = response.data.ballot,
+                    election = {};
+
+                angular.forEach(data, function(ballot, id) {
+                    election[id] = processBallot(ballot);
+                });
+
+                return election;
+            }
+
+            function cache(election) {
+                return electionCache.put(electionId, election);
+            }
+
+            return $http.get(c6UrlMaker(
+                    ('election/' + electionId),
+                    'api'
+                ), { cache: true })
+                .then(process)
+                .then(cache);
+        };
+
+        this.getBallot = function(id) {
+            function fetchFromCache() {
+                var election = electionCache.get(electionId);
+
+                return election ?
+                    $q.when(election[id]) :
+                    $q.reject('Election ' + electionId + ' is not in the cache.');
+            }
+
+            function fetchFromService() {
+                function process(response) {
+                    var data = response.data,
+                        ballotItems = data.ballot[id];
+
+                    return processBallot(ballotItems);
+                }
+
+                return $http.get(c6UrlMaker(
+                        ('election/' + electionId + '/ballot/' + id),
+                        'api'
+                    ), { cache: true })
+                    .then(process);
+            }
+
+            return fetchFromCache()
+                .catch(fetchFromService);
+        };
+
+        this.vote = function(id, name) {
+            function process() {
+                return true;
+            }
+
+            return $http.post(c6UrlMaker('vote', 'api'), {
+                election: electionId,
+                ballotItem: id,
+                vote: name
+            }).then(process);
+        };
+    }])
+    .controller('RumbleController',['$log','$scope','$timeout','BallotService','c6Computed','cinema6','MiniReelService','CommentsService','ControlsService',
+    function                       ( $log , $scope , $timeout , BallotService , c6Computed , cinema6 , MiniReelService , CommentsService , ControlsService ){
         $log = $log.context('RumbleCtrl');
         var self    = this, readyTimeout,
             appData = $scope.app.data,
-            id = appData.experience.data.id,
+            id = appData.experience.id,
             c = c6Computed($scope);
 
         function isAd(card) {
             return (card || null) && (card.ad && !card.sponsored);
         }
 
-        rumbleVotes.init(id);
+        BallotService.init(id);
+        // This will load the election into the BallotService\'s cache so
+        // requests for individual ballots will not hit the vote service.
+        BallotService.getElection();
+
         CommentsService.init(id);
 
         $scope.deviceProfile    = appData.profile;
