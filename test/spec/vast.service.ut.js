@@ -174,10 +174,8 @@
                     '</VAST>'
                 ].join('\n');
 
-                // module('c6.ui', function($provide) {
-                //     c6ImagePreloader = $provide.service('c6ImagePreloader');
-                // });
                 module('c6.ui');
+
                 module('c6.rumble.services', function($injector) {
                     VASTServiceProvider = $injector.get('VASTServiceProvider');
 
