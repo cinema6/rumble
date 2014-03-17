@@ -2,8 +2,7 @@
     .mr-pager__group classes
     ========================================================================== */
     .mr-pages__fader, 
-    .mr-pages__current-indicator, 
-    .mr-nav__btn {
+    .mr-pages__current-indicator {
         -webkit-transition: opacity 0.5s ease; 
         -moz-transition: opacity 0.5s ease; 
         -o-transition: opacity 0.5s ease; 
@@ -28,9 +27,6 @@
         -o-transition-delay: 0.1s;
         transition-delay: 0.1s;
     }
-        .mr-nav__btn:hover {
-            opacity:1;
-        }
         .mr-pages__page:hover .mr-pages__fader {
             opacity:0;
         }
