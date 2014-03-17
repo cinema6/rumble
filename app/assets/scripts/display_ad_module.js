@@ -9,7 +9,16 @@
                 templateUrl: assetFilter('directives/display_ad_module.html', 'views'),
                 scope: {
                     adSrc: '@',
+                    adObject: '=',
                     active: '='
+                },
+                link: function(scope) {
+                    scope.$watchCollection('adObject', function(curr) {
+                        if(curr) {
+                            scope.adType = scope.adObject.adType;
+                            scope.fileURI = scope.adObject.fileURI;
+                        }
+                    });
                 }
             };
         }]);

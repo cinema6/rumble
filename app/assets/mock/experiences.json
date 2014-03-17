@@ -830,7 +830,9 @@
                     "id": "rc-11df958a25966d",
                     "type": "vast",
                     "ad": true,
-                    "modules": [],
+                    "modules": [
+                        "displayAd"
+                    ],
                     "data": {
                         "autoplay": true
                     }

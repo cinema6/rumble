@@ -8,6 +8,8 @@
                 config = $scope.config,
                 _data = config._data = config._data || {
                     playerEvents: {},
+                    vastEvents: {},
+                    vastData: {},
                     modules: {
                         ballot: {
                             active: false,
@@ -22,6 +24,13 @@
                 player = null;
 
             this.videoSrc = null;
+            this.companion = null;
+
+            function firePixels(event) {
+                if(_data.vastData.firePixels) {
+                    _data.vastData.firePixels(event);
+                }
+            }
 
             Object.defineProperties(this, {
                 showVideo: {
@@ -48,7 +57,9 @@
             $scope.$watch('onDeck', function(onDeck) {
                 if(onDeck) {
                     VASTService.getVAST().then(function(vast) {
+                        _data.vastData = vast;
                         self.videoSrc = vast.getVideoSrc('video/mp4');
+                        self.companion = vast.getCompanion();
                     });
 
                     _data.modules.displayAd.src = config.displayAd;
@@ -58,20 +69,43 @@
             $scope.$on('playerAdd', function(event, iface) {
                 player = iface;
 
-                _data.playerEvents = EventService.trackEvents(iface, ['play']);
+                _data.playerEvents = EventService.trackEvents(iface, ['play', 'pause']);
 
                 iface.on('ended', function() {
                         if (!_data.modules.displayAd.src) {
                             $scope.$emit('<vast-card>:contentEnd', config);
                         }
+                        firePixels('complete');
                     })
                     .on('pause', function() {
                         if (self.hasModule('displayAd')) {
                             _data.modules.displayAd.active = true;
                         }
+                        firePixels('pause');
                     })
                     .on('play', function() {
                         _data.modules.displayAd.active = false;
+
+                        if(_data.playerEvents.play.emitCount === 1) {
+                            firePixels('impression');
+                        }
+                    })
+                    .on('timeupdate', function() {
+                        var currTime = Math.round(player.currentTime),
+                            duration = player.duration;
+
+                        if((currTime === Math.round(duration * 0.25)) && !_data.vastEvents.firstQuartile) {
+                            firePixels('firstQuartile');
+                            _data.vastEvents.firstQuartile = true;
+                        }
+                        if((currTime === Math.round(duration * 0.5)) && !_data.vastEvents.midpoint) {
+                            firePixels('midpoint');
+                            _data.vastEvents.midpoint = true;
+                        }
+                        if((currTime === Math.round(duration * 0.75)) && !_data.vastEvents.thirdQuartile) {
+                            firePixels('thirdQuartile');
+                            _data.vastEvents.thirdQuartile = true;
+                        }
                     });
 
                 $scope.$watch('active', function(active, wasActive) {
@@ -147,7 +181,6 @@
 
                     iface.play = function() {
                         if (!c6Video) { return; }
-
                         c6Video.player.play();
                     };
 
