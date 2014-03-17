@@ -1,7 +1,7 @@
 (function() {
     'use strict';
 
-    angular.module('c6.rumble.services', [])
+    angular.module('c6.rumble.services', ['c6.ui'])
         .service('VideoThumbService', ['$http','$q',
         function                      ( $http , $q ) {
             var _private = {};
@@ -65,17 +65,51 @@
                 _provider.serverUrl = url;
             };
 
-            this.$get = ['$http','$window',
-            function    ( $http , $window ) {
+            this.$get = ['$log', '$http','$window', 'c6ImagePreloader',
+            function    ( $log ,  $http , $window ,  c6ImagePreloader ) {
                 var service = {},
                     _service = {};
 
                 _service.VAST = function(xml) {
-                    var $ = xml.querySelectorAll.bind(xml);
+                    var $ = xml.querySelectorAll.bind(xml),
+                        self = this;
 
                     this.video = {
                         duration: _service.getSecondsFromTimestamp($('Linear Duration')[0].childNodes[0].nodeValue),
                         mediaFiles: []
+                    };
+
+                    this.companions = [];
+                    this.pixels = {
+                        // this does not include non-linear tracking
+                        errorPixel: [],
+                        impression: [],
+                        creativeView: [],
+                        start: [],
+                        firstQuartile: [],
+                        midpoint: [],
+                        thirdQuartile: [],
+                        complete: [],
+                        mute: [],
+                        unmute: [],
+                        pause: [],
+                        rewind: [],
+                        resume: [],
+                        fullscreen: [],
+                        expand: [],
+                        collapse: [],
+                        acceptInvitation: [],
+                        close: [],
+                        videoClickThrough: [],
+                        videoClickTracking: [],
+                        videoCustomClick: [],
+                        companionCreativeView: [],
+                        playing: [],
+                        companionDisplay: [],
+                        companionClick: [],
+                        loaded: [],
+                        stopped: [],
+                        linearChange: []
                     };
 
                     angular.forEach($('MediaFiles MediaFile'), function(mediaFile) {
@@ -87,9 +121,74 @@
 
                         file.url = mediaFile.firstChild.nodeValue;
 
-                        this.video.mediaFiles.push(file);
-                    }.bind(this));
+                        self.video.mediaFiles.push(file);
+                    });
+
+                    angular.forEach($('CompanionAds Companion'), function(companion) {
+                        // this assumes that there's only one adType in each <Companion>
+                        // it also assumes a specific xml structure
+                        // might want to do a query for each adType instead
+
+                        var adType,
+                            companionNode = companion.firstChild;
+
+                        switch (companionNode.tagName) {
+                        case 'IFrameResource':
+                            adType = 'iframe';
+                            break;
+                        case 'StaticResource':
+                            adType = 'image';
+                            break;
+                        case 'HTMLResource':
+                            adType = 'html';
+                            break;
+                        }
+
+                        self.companions.push({
+                            adType : adType,
+                            fileURI : companionNode.firstChild.nodeValue
+                        });
+                    });
+
+                    angular.forEach($('Error'), function(error) {
+                        self.pixels.errorPixel.push(error.firstChild.nodeValue);
+                    });
+
+                    angular.forEach($('Impression'), function(impression) {
+                        self.pixels.impression.push(impression.firstChild.nodeValue);
+                    });
+
+                    angular.forEach($('Linear Tracking'), function(tracking) {
+                        var eventName;
+
+                        angular.forEach(tracking.attributes, function(attribute) {
+                            if(attribute.name === 'event') {
+                                eventName = attribute.value;
+                            }
+                        });
+
+                        self.pixels[eventName].push(tracking.firstChild.nodeValue);
+                    });
+
+                    angular.forEach($('VideoClicks ClickThrough'), function(clickThrough) {
+                        self.pixels.videoClickThrough.push(clickThrough.firstChild.nodeValue);
+                    });
+
+                    angular.forEach($('VideoClicks ClickTracking'), function(clickTracking) {
+                        self.pixels.videoClickTracking.push(clickTracking.firstChild.nodeValue);
+                    });
+
+                    angular.forEach($('VideoClicks CustomClick'), function(customClick) {
+                        self.pixels.videoCustomClick.push(customClick.firstChild.nodeValue);
+                    });
+
+                    angular.forEach($('Companion Tracking'), function(companionTracking) {
+                        // creativeView is the only event supported for companion tracking, so no need to read the event attr
+                        self.pixels.companionCreativeView.push(companionTracking.firstChild.nodeValue);
+                    });
+
                 };
+
                 _service.VAST.prototype = {
                     getVideoSrc: function(type) {
                         var src = null;
@@ -102,6 +201,16 @@
                         });
 
                         return src;
+                    },
+                    getCompanion: function() {
+                        // this just returns the first one
+                        // probably want to have some logic here
+                        // maybe we want to pass in a size?
+                        return this.companions.length ? this.companions[0] : null;
+                    },
+                    firePixels: function(event) {
+                        $log.info('Event Pixel: ', event);
+                        c6ImagePreloader.load(this.pixels[event]);
                     }
                 };
 
@@ -123,16 +232,25 @@
                 };
 
                 service.getVAST = function(url) {
+                    // make an xml container for all the vast responses, including wrappers
+                    var parser = new $window.DOMParser(),
+                        combinedVast = parser.parseFromString('<?xml version="1.0" encoding="UTF-8"?><container></container>', 'text/xml');
+
                     function fetchVAST(url) {
                         function recurse(response) {
                             var vast = response.data,
                                 uriNodes = vast.querySelectorAll('VASTAdTagURI');
 
+                            // append the VAST node to the xml container
+                            combinedVast.firstChild.appendChild(vast.querySelectorAll('VAST')[0]);
+
                             if (uriNodes.length > 0) {
                                 return fetchVAST(uriNodes[0].firstChild.nodeValue);
                             }
 
-                            return vast;
+                            // after we've recursed through all the wrappers return
+                            // the xml container with all the vast data
+                            return combinedVast;
 
                         }
 

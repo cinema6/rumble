@@ -1,18 +1,16 @@
 <div class="mr-card__group mr-vast__group c6-height-limiter">
     <div class="mr-switch__group">
-        <div class="mr-switch__menu clearfix">
-            <button class="mr-switch__btn mr-switch__btn-video"
-                ng-click="Ctrl.reset()"
-                ng-class="{'mr-switch__btn--active': !config._data.modules.displayAd.active}">
-                <span class="ir">Show Reader</span>
-            </button>
-            <button ng-show="Ctrl.hasModule('displayAd')"
-                ng-click="Ctrl.showDisplayAd()"
-                class="mr-switch__btn mr-switch__btn-img"
-                ng-class="{'mr-switch__btn--active': config._data.modules.displayAd.active}">
-                <span class="ir">Show Video</span>
-            </button>
-        </div>
+        <button class="mr-switch__btn mr-switch__btn-video clearfix"
+            ng-click="Ctrl.reset()"
+            ng-class="{'mr-switch__btn--active': !config._data.modules.displayAd.active}">
+            <span class="ir">Show Reader</span>
+        </button>
+        <button ng-show="Ctrl.hasModule('displayAd')"
+            ng-click="Ctrl.showDisplayAd()"
+            class="mr-switch__btn mr-switch__btn-img clearfix"
+            ng-class="{'mr-switch__btn--active': config._data.modules.displayAd.active}">
+            <span class="ir">Show Video</span>
+        </button>
         <h1 class="mr-vast__title-h1 tk--hdr clearfix">Advertisement</h1>
     </div>
 
@@ -34,7 +32,8 @@
         </comments-module>
         <display-ad-module ng-if="Ctrl.hasModule('displayAd')"
             active="config._data.modules.displayAd.active"
-            ad-src="{{config.displayAd}}">
+            ad-src="{{config.displayAd}}"
+            ad-object="Ctrl.companion">
         </display-ad-module>
     </section>
     <p class="mr-vast__watch-again tk--hdr">

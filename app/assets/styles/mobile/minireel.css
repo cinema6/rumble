@@ -585,6 +585,7 @@
             }
         .mr-card__copy {
             margin:1em 0.5em 0.143em 0.5em; font-size:0.875em;/*14px*/ color:#747474; line-height:1.75;
+            background: transparent !important;
         }
     .mr-player, .mr-player__thumbnail {
         padding:0 0 56.25%; margin:0;

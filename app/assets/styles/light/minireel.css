@@ -180,40 +180,6 @@
 
 
 /*  ==========================================================================
-    .mr-nav__group classes
-    ========================================================================== */
-    .mr-nav__group {
-        position:absolute; z-index: 10; left:0; top:50%;
-        width:100%;
-    }
-        .mr-nav__btn {
-            display: block; width:3rem;/*48px*/ height:4.25rem;/*68px*/
-            border:0; margin:-2.125rem 0 0 0; padding:0; background:#b69823;
-            position: absolute;
-            cursor:pointer; opacity:0.3;
-        }
-                .mr-nav__prev--disabled {
-                    display: none;
-                }
-                .mr-nav__next {
-                    right:0;
-                }
-                    .mr-nav__next--disabled {
-                        display: none;
-                    }
-            .mr-nav__icon {
-                display: block; width:0.9375rem;/*15px*/  height:1.5rem;/*24px*/
-                position:absolute; top:1.4375rem;/*23px*/
-            }
-                .mr-nav__icon-prev {
-                    left:0.875rem;/*14px*/ background-position:0 -1.25rem;
-                }
-                .mr-nav__icon-next {
-                    left:1.125rem;/*18px*/ background-position:-1.25rem -1.25rem;
-                }
-
-
-/*  ==========================================================================
     Mini Reel Cards classes
     ========================================================================== */
     .mr-card__container {
@@ -254,7 +220,7 @@
                     background:50% 50% / cover no-repeat;
                 }
         .mr-card__copy {
-            position: relative; width:100%; background-color: #252626; margin: 0;
+            position: relative; width:100%; background: #252626; margin: 0;
             height: 2.875rem;/*46px*/ overflow: hidden;
             -webkit-transition: height 0.3s ease-out; -moz-transition: height 0.3s ease-out; 
             -o-transition: height 0.3s ease-out; transition: height 0.3s ease-out; 
@@ -277,7 +243,7 @@
                 }
                 .mr-card__btn {
                     height: 1.5rem;/*24px*/ width: 1.5rem;/*24px*/ right: 0; top: 0.75rem;/*12px*/
-                    position: absolute; padding: 0; border: 0; background-color: #b69823;
+                    position: absolute; padding: 0; border: 0; background: #b69823;
                     cursor: pointer;
                 }
                     .mr-card__icon {
@@ -615,7 +581,7 @@
     ========================================================================== */
     .mr-more-reels__intro {
         font-size:0.875rem; color:#929292; font-weight:300; text-align: center;
-        background-color: #252626; margin:0; padding: 0.125rem 0 0.4375rem 0;
+        background: #252626; margin:0; padding: 0.125rem 0 0.4375rem 0;
     }
         .mr-more-reels__preview {
             background:url('../../img/more-reels__preview.jpg') 50% 50% / cover no-repeat; 
@@ -639,11 +605,18 @@
         position: absolute; top:0; z-index:5; min-width:18.75rem;/*300px*/ 
         overflow:hidden;
     }
-    .mr-splash__start, .mr-splash__loading {
-        position:absolute; width:100%; height:100%; top:0; left: 0; min-height: 20.625rem;/*350px*/
-        background: 50% 50% / cover no-repeat;
-        border:0; margin:0; padding:0; cursor:pointer;
-    }
+        .mr-splash__start, .mr-splash__loading {
+            position:absolute; width:100%; height:100%; top:0; left: 0; min-height: 20.625rem;/*350px*/
+            background: 50% 50% / cover no-repeat;
+            border:0; margin:0; padding:0; cursor:pointer;
+        }
+        .mr-splash__copy {
+            display:block; width: 100%; height: 0; padding: 0 0 13.5%;
+            position: absolute; top:50%; left:0; margin-top: -6.93%; z-index:2;
+            background: url('../../img/click-to-start.svg') 50% 50% / 55% auto no-repeat;
+            background-color: #252626; border-top: #fff 4px solid; border-bottom: #fff 4px solid;
+        }
+
     .mr-splash__loading {
         background:#fff url('../../img/spinner-dots.gif') 50% 50% / 2rem auto no-repeat;
     }

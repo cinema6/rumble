@@ -7,7 +7,8 @@
                 VASTServiceProvider,
                 $rootScope,
                 $q,
-                $window;
+                $window,
+                c6ImagePreloader;
 
             var $httpBackend;
 
@@ -64,6 +65,18 @@
                     '                            <MediaFile delivery="progressive" width="480" height="360" bitrate="4000" type="video/x-flv"><![CDATA[http://cdn.adap.tv/integration_test/Vincent-081110124715584-13503_1-122011141453375-82609.flv]]></MediaFile>',
                     '                        </MediaFiles>',
                     '                    </Linear>',
+                    '                </Creative>',
+                    '                <Creative>',
+                    '                    <CompanionAds>',
+                    '                        <Companion width="300" height="250">',
+                    '                            <IFrameResource>',
+                    '                                <![CDATA[',
+                    '                                //ads.adap.tv/c/companion?cck=cck&creativeId=110497&melaveId=42657&key=tribal360llc&adSourceId=208567&bidId=&afppId=159224&exSId=639284&cb=9874983758324475&pageUrl=http%3A%2F%2Fcinema6.com&eov=eov',
+                    '                                ]]>',
+                    '                            </IFrameResource>',
+                    '                            <TrackingEvents></TrackingEvents>',
+                    '                        </Companion>',
+                    '                    </CompanionAds>',
                     '                </Creative>',
                     '            </Creatives>',
                     '',
@@ -161,6 +174,8 @@
                     '</VAST>'
                 ].join('\n');
 
+                module('c6.ui');
+
                 module('c6.rumble.services', function($injector) {
                     VASTServiceProvider = $injector.get('VASTServiceProvider');
 
@@ -173,6 +188,7 @@
                     $q = $injector.get('$q');
                     $httpBackend = $injector.get('$httpBackend');
                     $window = $injector.get('$window');
+                    c6ImagePreloader = $injector.get('c6ImagePreloader');
 
                     _service = VASTService._private;
                 });
@@ -339,10 +355,20 @@
                 describe('@private', function() {
                     describe('contructors', function() {
                         describe('VAST', function() {
-                            var vast;
+                            var vast,
+                                parser,
+                                combinedVast;
 
                             beforeEach(function() {
-                                vast = new _service.VAST(_service.getXML(XML));
+                                parser = new $window.DOMParser(),
+                                combinedVast = parser.parseFromString('<?xml version="1.0" encoding="UTF-8"?><container></container>', 'text/xml');
+
+                                angular.forEach([wrapperXML, XML], function(xml) {
+                                    vast = _service.getXML(xml);
+                                    combinedVast.firstChild.appendChild(vast.querySelectorAll('VAST')[0]);
+                                });
+
+                                vast = new _service.VAST(combinedVast);
                             });
 
                             describe('properties', function() {
@@ -368,6 +394,21 @@
                                             }
                                         ],
                                     });
+
+                                    vast.companions[0].fileURI = vast.companions[0].fileURI.replace(/\s/g, '');
+
+                                    expect(vast.companions).toEqual([
+                                        {
+                                            adType:'iframe',
+                                            fileURI: '//ads.adap.tv/c/companion?cck=cck&creativeId=110497&melaveId=42657&key=tribal360llc&adSourceId=208567&bidId=&afppId=159224&exSId=639284&cb=9874983758324475&pageUrl=http%3A%2F%2Fcinema6.com&eov=eov'
+                                        }
+                                    ]);
+
+                                    expect(vast.pixels.start[0]).toEqual('http://log.adap.tv/log?3a=progressDisplay0&25=89442&5=115439&14=&2=115440&37=113540&a=&65=preroll&6a=-2&6b=-2&4f=&3=-2&c=&55=true&5c=alexorlovstestpublisher&5b=&18=14168&2e=test.com&2f=&30=test.com&31=&32=1&90=&86=&83=&82=&af=&80=3922791298847480813&42=false&8f=&41=&21=&1b=&76=&77=402051622&67=&d6=&bf=0&74=ah&d5=1&d8=m2-31&ae=&8e=-1&d7=&c0=&c4=0&c5=0&92=&93=&91=ONLINE_VIDEO&45=23.31.224.169&b5=-1&33=14818764&a.cv=1');
+                                    expect(vast.pixels.start[1]).toEqual('http://log.adap.tv/log?3a=progressDisplay0&25=16242&5=73833&14=&2=73834&37=57916&a=&65=preroll&6a=-2&6b=-2&4f=&3=-2&c=&55=true&5c=alexorlovstestpublisher&5b=&18=14168&2e=test.com&2f=&30=test.com&31=&32=1&90=&86=&83=&82=&af=&80=3922791298847480813&42=false&8f=&41=&21=&1b=&76=&77=402051622&67=&d6=&bf=0&74=ah&d5=1&d8=m1-58&ae=&8e=-1&d7=&c0=&c4=0&c5=0&92=&93=&91=ONLINE_VIDEO&45=23.31.224.169&b5=-1&33=86007638&a.cv=1');
+
+                                    expect(vast.pixels.errorPixel[0]).toEqual('http://log.adap.tv/log?event=error&lastBid=&errNo=&pricingInfo=&nF=&adSourceTime=&adSourceId=115439&bidId=&afppId=115440&exSId=113540&adSpotId=&pet=preroll&pod=-2&position=-2&marketplaceId=&adPlanId=-2&adaptag=&nap=true&key=alexorlovstestpublisher&buyerId=&campaignId=14168&pageUrl=test.com&adapDetD=&sellRepD=test.com&urlDetMeth=&targDSellRep=1&zid=&url=&id=&duration=&a.geostrings=&uid=3922791298847480813&htmlEnabled=false&width=&height=&context=&categories=&sessionId=&serverRev=402051622&playerRev=&a.rid=&a.cluster=0&rtype=ah&a.ssc=1&a.asn=m2-31&a.profile_id=&p.vw.viewable=-1&a.sdk=&a.sdkType=&a.appReq=0&a.sscCap=0&a.carrier_mcc=&a.carrier_mnc=&a.platformDevice=ONLINE_VIDEO&ipAddressOverride=23.31.224.169&p.vw.active=-1&eov=14818764');
+                                    expect(vast.pixels.errorPixel[1]).toEqual('http://log.adap.tv/log?event=error&lastBid=&errNo=&pricingInfo=&nF=&adSourceTime=&adSourceId=73833&bidId=&afppId=73834&exSId=57916&adSpotId=&pet=preroll&pod=-2&position=-2&marketplaceId=&adPlanId=-2&adaptag=&nap=true&key=alexorlovstestpublisher&buyerId=&campaignId=14168&pageUrl=test.com&adapDetD=&sellRepD=test.com&urlDetMeth=&targDSellRep=1&zid=&url=&id=&duration=&a.geostrings=&uid=3922791298847480813&htmlEnabled=false&width=&height=&context=&categories=&sessionId=&serverRev=402051622&playerRev=&a.rid=&a.cluster=0&rtype=ah&a.ssc=1&a.asn=m1-58&a.profile_id=&p.vw.viewable=-1&a.sdk=&a.sdkType=&a.appReq=0&a.sscCap=0&a.carrier_mcc=&a.carrier_mnc=&a.platformDevice=ONLINE_VIDEO&ipAddressOverride=23.31.224.169&p.vw.active=-1&eov=86007638');
                                 });
                             });
 
@@ -381,6 +422,32 @@
                                     it('should return null if the type is not found', function() {
                                         expect(vast.getVideoSrc('video/webm')).toBeNull();
                                     });
+                                });
+
+                                describe('getCompanion()', function() {
+                                    it('should return a companion object', function() {
+                                        var companion = vast.getCompanion();
+                                        companion.fileURI = companion.fileURI.replace(/\s/g, '');
+
+                                        expect(companion).toEqual({
+                                            adType:'iframe',
+                                            fileURI: '//ads.adap.tv/c/companion?cck=cck&creativeId=110497&melaveId=42657&key=tribal360llc&adSourceId=208567&bidId=&afppId=159224&exSId=639284&cb=9874983758324475&pageUrl=http%3A%2F%2Fcinema6.com&eov=eov'
+                                        });
+                                    });
+                                });
+
+                                describe('firePixels()', function() {
+                                    beforeEach(function() {
+                                        spyOn(c6ImagePreloader, 'load').andReturn(true);
+                                    });
+                                    it('should call the c6ImagePreloader with an array of pixels', function() {
+                                        vast.firePixels('start');
+                                        expect(c6ImagePreloader.load.callCount).toBe(1);
+                                        expect(c6ImagePreloader.load).toHaveBeenCalledWith(vast.pixels.start);
+
+                                        vast.firePixels('errorPixel');
+                                        expect(c6ImagePreloader.load).toHaveBeenCalledWith(vast.pixels.errorPixel);
+                                    })
                                 });
                             });
                         });
