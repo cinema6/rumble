@@ -12,7 +12,7 @@
         <link rel="stylesheet" href="assets/styles/themes__elitedaily.css">
         
         <link ng-if="app.data.profile.touch === false" rel="stylesheet" ng-href="{{'minireel--hover.css' | asset:'styles'}}">
-        <link rel="stylesheet" href="assets/styles/themes__elitedaily--hover.css">
+        <link ng-if="app.data.profile.touch === false" rel="stylesheet" href="assets/styles/themes__elitedaily--hover.css">
 
         <script type="text/javascript">
             (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
