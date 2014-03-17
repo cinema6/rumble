@@ -8,7 +8,6 @@
                 $compile,
                 $timeout,
                 $log,
-                VASTService,
                 vast;
 
             function C6Video() {
@@ -80,26 +79,11 @@
                     });
                 });
 
-                module('c6.rumble.services', function($provide) {
-                    $provide.provider('VASTService', function() {
-                        this.$get = function($q) {
-                            return {
-                                getVAST : jasmine.createSpy('getVAST()').andReturn($q.when(vast))
-                            };
-                        };
-
-                        this.adServerUrl = angular.noop;
-                    });
-                });
-
-
                 inject(function($injector) {
                     $rootScope = $injector.get('$rootScope');
                     $compile = $injector.get('$compile');
                     $timeout = $injector.get('$timeout');
                     $log = $injector.get('$log');
-
-                    VASTService = $injector.get('VASTService');
 
                     $rootScope.config = {
                         data: {

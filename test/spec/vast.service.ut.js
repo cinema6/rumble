@@ -8,7 +8,6 @@
                 $rootScope,
                 $q,
                 $window,
-                $log,
                 c6ImagePreloader;
 
             var $httpBackend;
@@ -189,7 +188,6 @@
                     $q = $injector.get('$q');
                     $httpBackend = $injector.get('$httpBackend');
                     $window = $injector.get('$window');
-                    $log = $injector.get('$log');
                     c6ImagePreloader = $injector.get('c6ImagePreloader');
 
                     _service = VASTService._private;
