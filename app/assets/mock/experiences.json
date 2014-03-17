@@ -11,6 +11,7 @@
             "splash": "experiences/rumble/splash-6thumb.jpg"
         },
         "mode": "light",
+        "theme": "ed-entertainment",
         "data": {
             "id": "r-738c2403d83ddc",
             "electionId": "el-662dd344a98698",
@@ -186,6 +187,8 @@
         "img": {
             "splash": "experiences/gopro/splash-6thumb.jpg"
         },
+        "mode": "light",
+        "theme": "ed-videos",
         "data": {
             "id": "r-ea8caee7de7582",
             "electionId": "el-2f173cf1a9a8ef",
@@ -515,6 +518,7 @@
         "img": {
             "splash": "experiences/superbowl/splash-6thumb.jpg"
         },
+        "theme": "ed-sports",
         "data": {
             "id": "r-a798237d2e522f",
             "electionId": "el-8b1b6847d575ac",
@@ -746,6 +750,7 @@
         "img": {
             "splash": "experiences/wrestling/splash-6thumb.jpg"
         },
+        "theme": "ed-sports",
         "data": {
             "id": "r-ea8caee7de7582",
             "electionId": "el-8b1b6847d575ac",
