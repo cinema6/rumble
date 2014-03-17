@@ -65,8 +65,8 @@
                 _provider.serverUrl = url;
             };
 
-            this.$get = ['$http','$window', 'c6ImagePreloader',
-            function    ( $http , $window ,  c6ImagePreloader ) {
+            this.$get = ['$log', '$http','$window', 'c6ImagePreloader',
+            function    ( $log ,  $http , $window ,  c6ImagePreloader ) {
                 var service = {},
                     _service = {};
 
@@ -103,7 +103,13 @@
                         videoClickThrough: [],
                         videoClickTracking: [],
                         videoCustomClick: [],
-                        companionCreativeView: []
+                        companionCreativeView: [],
+                        playing: [],
+                        companionDisplay: [],
+                        companionClick: [],
+                        loaded: [],
+                        stopped: [],
+                        linearChange: []
                     };
 
                     angular.forEach($('MediaFiles MediaFile'), function(mediaFile) {
@@ -203,6 +209,7 @@
                         return this.companions.length ? this.companions[0] : null;
                     },
                     firePixels: function(event) {
+                        $log.info('Event Pixel: ', event);
                         c6ImagePreloader.load(this.pixels[event]);
                     }
                 };
