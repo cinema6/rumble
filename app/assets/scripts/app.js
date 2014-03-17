@@ -147,6 +147,37 @@
                 });
             };
         }])
+        .directive('c6Touch', ['$parse',
+        function              ( $parse ) {
+            return {
+                restrict: 'AC',
+                link: function(scope, element, attrs) {
+                    var fn = $parse(attrs.c6Touch),
+                        touching = false;
+
+                    function cancel() {
+                        touching = false;
+                    }
+
+                    function resume() {
+                        touching = true;
+                    }
+
+                    element.on('touchstart touchenter', resume);
+                    element.on('touchleave touchcancel', cancel);
+
+                    element.on('touchend', function(event) {
+                        if (!touching) { return; }
+
+                        scope.$apply(function() {
+                            fn(scope, {
+                                $event: event
+                            });
+                        });
+                    });
+                }
+            };
+        }])
         .directive('c6BgImg', [function() {
             return {
                 restrict: 'AC',
