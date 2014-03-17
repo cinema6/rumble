@@ -2,8 +2,9 @@
     class="mr-ballot-module css-promote"
     ng-if="Ctrl.hasModule('ballot')"
     active="config._data.modules.ballot.ballotActive && active"
-    ballot="config.ballot"
     vote="config._data.modules.ballot.vote"
+    card-id="{{config.id}}"
+    fetch-when="onDeck || active"
     on-dismiss="Ctrl.dismissBallot()">
 </ballot-vote-module>
 <article>
@@ -21,7 +22,6 @@
         </div>
         <ballot-results-module ng-if="Ctrl.hasModule('ballot')"
             active="config._data.modules.ballot.resultsActive && active"
-            ballot="config.ballot"
             vote="config._data.modules.ballot.vote"
             card-id="{{config.id}}"
             fetch-when="onDeck || active"

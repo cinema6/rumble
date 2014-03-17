@@ -71,3 +71,39 @@
         -ms-transform: scale(1.12);
         transform: scale(1.12);
     }
+
+/*  ==========================================================================
+    .ui-navbar classes
+    ========================================================================== */    
+    .ui-control__preview-img {
+        -webkit-transition:opacity 0.5s; transition:opacity 0.5s;
+    }
+        .ui-nav__prev:hover .ui-control__preview-img, 
+        .ui-nav__next:hover .ui-control__preview-img {
+            opacity:0.76;
+        }
+    .ui-navbar__page {
+        -webkit-transition:background 0.5s; transition:background 0.5s;
+    }
+        .ui-navbar__page:hover {
+            background:#4c4c4c;
+        }
+        .ui-navbar__page .ui-control__preview-img--active {
+            opacity:1;
+        }
+        .ui-navbar__page:hover .ui-control__preview-img {
+            opacity:1;
+        }
+
+/*  ==========================================================================
+    Splash Screen classes
+    ========================================================================== */
+    .mr-splash__copy {
+        -webkit-transition: background 0.2s ease; 
+        -moz-transition: background 0.2s ease; 
+        -o-transition: background 0.2s ease; 
+        transition: background 0.2s ease;
+    }
+        .mr-splash__start:hover .mr-splash__copy {
+            background-color: #b69823;
+        }

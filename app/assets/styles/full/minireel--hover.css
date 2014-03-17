@@ -133,3 +133,16 @@
         .mr-card__text-watch a:hover, .mr-more-reels__link a:hover {
             color: #fff; border-bottom: 1px dotted #fff;
         }
+
+/*  ==========================================================================
+    Splash Screen classes
+    ========================================================================== */
+    .mr-splash__copy {
+        -webkit-transition: background 0.2s ease; 
+        -moz-transition: background 0.2s ease; 
+        -o-transition: background 0.2s ease; 
+        transition: background 0.2s ease;
+    }
+        .mr-splash__start:hover .mr-splash__copy {
+            background-color: #b69823;
+        }
