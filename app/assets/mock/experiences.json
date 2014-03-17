@@ -8,7 +8,7 @@
         "subtitle": "You choose",
         "summary": "Pick the best",
         "img": {
-            "splash": "experiences/rumble/splash.jpg"
+            "splash": "experiences/rumble/splash-6thumb.jpg"
         },
         "mode": "light",
         "data": {
@@ -184,7 +184,7 @@
         "subtitle": "",
         "summary": "GoPro cameras are the only tech inventions we were introduced to in 2013 that we think deserve to continue trending in 2014. These handy-dandy cameras are perfect for just about any activity, including skydiving, surfing, or rescuing a baby kitten from a tree.",
         "img": {
-            "splash": "experiences/gopro/splash.jpg"
+            "splash": "experiences/gopro/splash-6thumb.jpg"
         },
         "data": {
             "id": "r-ea8caee7de7582",
@@ -513,7 +513,7 @@
         "subtitle": "",
         "summary": "From touchdowns, to big hits, spectacular catches and defensive stops, the highest level of competition never disappoints. To really appreciate what this Super Bowl will bring us on Sunday, it's important to remember some of the greatness of the past.",
         "img": {
-            "splash": "experiences/superbowl/splash.jpg"
+            "splash": "experiences/superbowl/splash-6thumb.jpg"
         },
         "data": {
             "id": "r-a798237d2e522f",
@@ -744,7 +744,7 @@
         "subtitle": "",
         "summary": "Nothing electrifies a crowd like a good wrestling entrance. Finishing moves are cool, but most of them don't even hurt!",
         "img": {
-            "splash": "experiences/wrestling/splash.jpg"
+            "splash": "experiences/wrestling/splash-6thumb.jpg"
         },
         "data": {
             "id": "r-ea8caee7de7582",
