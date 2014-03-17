@@ -247,7 +247,6 @@
 
                         angular.forEach(['play', 'pause', 'timeupdate'], function(event) {
                             video.on(event, function() {
-                                // window.console.log('VIDEO EVENT:', event);
                                 iface.emit(event, iface);
                             });
                         });
