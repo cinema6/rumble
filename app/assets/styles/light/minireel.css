@@ -610,12 +610,17 @@
             background: 50% 50% / cover no-repeat;
             border:0; margin:0; padding:0; cursor:pointer;
         }
-        .mr-splash__copy {
+        .mr-splash__bar, .mr-splash__copy {
             display:block; width: 100%; height: 0; padding: 0 0 13.5%;
-            position: absolute; top:50%; left:0; margin-top: -6.93%; z-index:2;
-            background: url('../../img/click-to-start.svg') 50% 50% / 55% auto no-repeat;
-            background-color: #252626; border-top: #fff 4px solid; border-bottom: #fff 4px solid;
+            position:absolute; top: 50%; margin-top: -7%; z-index:2;
+            border-top: #fff 4px solid; border-bottom: #fff 4px solid;
         }
+            .mr-splash__bar {
+                background: #252626;
+            }
+            .mr-splash__copy {
+                background: url('../../img/click-to-start.svg') 50% 50% / 55% auto no-repeat;
+            }
 
     .mr-splash__loading {
         background:#fff url('../../img/spinner-dots.gif') 50% 50% / 2rem auto no-repeat;
