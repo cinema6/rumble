@@ -453,8 +453,12 @@
                 .ui-control__view-list--open .ui-icon__list {
                     opacity:0.5;
                 }
+            .ui-control__next, .ui-control__prev, .ui-nav__next, .ui-nav__prev {
+                background-color: #b69823;
+            }
         .ui-control__label {
-            top:1.375em; z-index: 10; color:#fff; font-weight:700; width:auto; height:0; line-height: 1;
+            top:1em; z-index: 10; color:#fff; width:auto; height:0; line-height: 1;
+            font-size: 1.25em; font-weight:700; 
         }
             .ui-control__label-prev {
                 left:2.25em;
@@ -472,8 +476,8 @@
         }
 
         .ui-control__preview-img {
-            background:no-repeat 50% 50%; background-size:cover; top:0; left:0;
-            opacity:0.7;
+            background:no-repeat 50% 50%; background-size: 115% auto; top:0; left:0;
+            opacity:0.35;
         }
         .ui-control__activator {
            background:#fff; opacity:0; left:0; top:0;
@@ -517,7 +521,7 @@
         }
         .ui-nav__prev, .ui-nav__next {
             width:3.75em;/*60px*/ height:5em;/*80px*/ top:4.25em;
-            cursor:pointer; font-size:1em; background-color:transparent;
+            cursor:pointer; font-size:1em; 
             -webkit-tap-highlight-color: rgba(0,0,0,0);
         }
         .ui-nav__label {
@@ -554,6 +558,11 @@
             position:absolute; width:100%; top:12em;
         }
 
+    @media screen and (orientation:landscape) {
+        .ui-control__preview-img {
+            background-size: auto 135%;
+        }
+    }
 
 /*  ==========================================================================
     Mini Reel Cards classes
@@ -620,11 +629,14 @@
                 }
 
     @media screen and (orientation:landscape) {
+        .mr-card {
+            -webkit-text-size-adjust: 100%;
+        }
         .mr-card__title {
-            width:25%; float:left; margin-right:0;
+            width:23%; float:left; margin-right:0;
         }
         .mr-player, .mr-player__thumbnail {
-            width:70%; float:right; margin-right:0.5em; padding:0 0 39.375%;
+            width:70%; float:right; margin: 0 0.5em 0.5em 0.5em; padding:0 0 39.375%;
         }
         .mr-cards__item.ng-animate {
             top: 0.375em; left: 4.125em; right: 4.125em;
