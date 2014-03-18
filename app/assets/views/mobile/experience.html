@@ -1,9 +1,4 @@
-<!-- Moo, I'm wrapping all of the toolbars in this div so
-    I don't have to add that ng-hide directive to every div in here.
-    I hope that's okay. I'm also *not* tabbing everything inside this
-    div in so the git diff is not coma-inducing. After this gets merged,
-    Feel Free to delete this comment and tab everything in. -->
-<div ng-hide="currentIndex < 0">
+<div ng-hide="currentIndex < 0" ng-class="app.data.experience.theme">
     <div ng-hide="showTOC" class="ui-nav-left--landscape c6-slide-bar--left css-promote">
         <button class="publisher__branding-logo" type="button" title="Elite Daily">
             <span class="ir">Elite Daily</span>
