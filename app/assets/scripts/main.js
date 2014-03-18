@@ -60,8 +60,8 @@
                     libUrl('angular/v1.2.12-0-g5cc5cc1/angular.min.js'),
                     libUrl('angular/v1.2.12-0-g5cc5cc1/angular-animate.min.js'),
                     libUrl('angular/v1.2.12-0-g5cc5cc1/angular-sanitize.min.js'),
-                    libUrl('c6ui/v2.4.2-0-g0757ebd/c6uilib.min.js'),
-                    libUrl('c6ui/v2.4.2-0-g0757ebd/c6log.min.js'),
+                    libUrl('c6ui/v2.5.0-0-gc58e712/c6uilib.min.js'),
+                    libUrl('c6ui/v2.5.0-0-gc58e712/c6log.min.js'),
                     'https://www.youtube.com/iframe_api'
                 ];
             } else {
@@ -71,8 +71,8 @@
                     libUrl('angular/v1.2.12-0-g5cc5cc1/angular.js'),
                     libUrl('angular/v1.2.12-0-g5cc5cc1/angular-animate.js'),
                     libUrl('angular/v1.2.12-0-g5cc5cc1/angular-sanitize.js'),
-                    libUrl('c6ui/v2.4.2-0-g0757ebd/c6uilib.js'),
-                    libUrl('c6ui/v2.4.2-0-g0757ebd/c6log.js'),
+                    libUrl('c6ui/v2.5.0-0-gc58e712/c6uilib.js'),
+                    libUrl('c6ui/v2.5.0-0-gc58e712/c6log.js'),
                     'https://www.youtube.com/iframe_api'
                 ];
             }
@@ -113,7 +113,7 @@
         beta: 'http://staging.cinema6.com/api',
         prod: 'http://www.cinema6.com/api'
     };
-    c6.kModDeps = ['c6.rumble.services', 'ngAnimate', 'ngSanitize', 'c6.ui', 'c6.log'];
+    c6.kModDeps = ['c6.rumble.services', 'ngAnimate', 'ngSanitize', 'c6.ui', 'c6.log', 'c6.http'];
     
     if (window.location.host.match(/\/\/(www\.)*cinema6.com/) !== null){
         ga('create', 'UA-44457821-2', 'cinema6.com');
