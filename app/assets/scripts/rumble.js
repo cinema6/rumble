@@ -124,8 +124,8 @@
 
         return service;
     }])
-    .service('MiniReelService', ['InflectorService','rumbleVotes','CommentsService','VideoThumbService',
-    function                    ( InflectorService , rumbleVotes , CommentsService , VideoThumbService ) {
+    .service('MiniReelService', ['InflectorService','rumbleVotes','CommentsService','VideoThumbService','c6ImagePreloader',
+    function                    ( InflectorService , rumbleVotes , CommentsService , VideoThumbService , c6ImagePreloader ) {
         this.createDeck = function(data) {
             var playlist = angular.copy(data.deck);
 
@@ -177,6 +177,7 @@
                 VideoThumbService.getThumbs(card.type, card.data.videoid)
                     .then(function(thumbs) {
                         card.thumbs = thumbs;
+                        c6ImagePreloader.load([thumbs.small]);
                     });
             }
 
@@ -429,8 +430,8 @@
             }
         };
     }])
-    .controller('VideoEmbedCardController', ['$scope','ModuleService','ControlsService','EventService','c6AppData',
-    function                                ( $scope , ModuleService , ControlsService , EventService , c6AppData ) {
+    .controller('VideoEmbedCardController', ['$scope','ModuleService','ControlsService','EventService','c6AppData','c6ImagePreloader',
+    function                                ( $scope , ModuleService , ControlsService , EventService , c6AppData , c6ImagePreloader ) {
         var self = this,
             config = $scope.config,
             profile = $scope.profile,
@@ -548,6 +549,12 @@
                     iface.pause();
                 }
             });
+        });
+
+        $scope.$watch('onDeck', function(onDeck) {
+            if (onDeck && config.thumbs) {
+                c6ImagePreloader.load([config.thumbs.large]);
+            }
         });
 
         $scope.$watch('config._data.modules.ballot.vote', function(vote, prevVote) {
