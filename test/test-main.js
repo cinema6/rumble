@@ -77,6 +77,9 @@
                 app: {
                     deps: ['angular', 'angularMocks', 'modernizr', 'timelinemax', 'c6ui', 'c6_state', 'c6log']
                 },
+                services: {
+                    deps: ['app']
+                },
                 c6_state: {
                     deps: ['angularMocks']
                 },
