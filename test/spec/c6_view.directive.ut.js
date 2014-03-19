@@ -22,12 +22,12 @@
                     $provide.factory('c6State', function(c6EventEmitter) {
                         var c6State = c6EventEmitter({});
 
-                        spyOn(c6State, 'emit').andCallThrough();
+                        spyOn(c6State, 'emit').and.callThrough();
 
                         return c6State;
                     });
 
-                    $controllerProvider.register('HomeController', ['$scope', HomeController]);
+                    $controllerProvider.register('HomeController', ['$scope', 'cModel', HomeController]);
                 });
 
                 inject(function($injector) {
@@ -86,7 +86,7 @@
                         },
                         oldScope = view.find('c6-view div').scope();
 
-                    spyOn(oldScope, '$destroy').andCallThrough();
+                    spyOn(oldScope, '$destroy').and.callThrough();
 
                     $scope.$apply(function() {
                         c6State.emit('viewChangeStart', contactsState);
@@ -114,7 +114,7 @@
                         name: 'home',
                         controller: 'HomeController',
                         cTemplate: '<div>foo</div>',
-                        cModel: null
+                        cModel: {}
                     };
 
                     $scope.$apply(function() {
@@ -125,7 +125,7 @@
                 });
 
                 it('should invoke the controller with the new scope', function() {
-                    expect(HomeController).toHaveBeenCalledWith(newScope);
+                    expect(HomeController).toHaveBeenCalledWith(newScope, homeState.cModel);
                 });
             });
 

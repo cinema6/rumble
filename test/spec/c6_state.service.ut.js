@@ -7,6 +7,7 @@
                 $q,
                 c6StateProvider,
                 $templateCache,
+                $log,
                 c6State,
                 c6StateParams,
                 _service;
@@ -22,6 +23,7 @@
                     $rootScope = $injector.get('$rootScope');
                     $q = $injector.get('$q');
                     $templateCache = $injector.get('$templateCache');
+                    $log = $injector.get('$log');
 
                     $httpBackend = $injector.get('$httpBackend');
 
@@ -56,16 +58,16 @@
 
                     aboutModelSpy = jasmine.createSpy('aboutModelSpy');
                     contactBeforeModelSpy = jasmine.createSpy('contactBeforeModelSpy')
-                        .andCallFake(function($q) {
+                        .and.callFake(function($q) {
                             return $q.reject('I am rejected');
                         });
                     contactModelSpy = jasmine.createSpy('contactModelSpy')
-                        .andCallFake(function($q) {
+                        .and.callFake(function($q) {
                             return $q.when(fakeUser);
                         });
                     contactAfterModelSpy = jasmine.createSpy('contactAfterModelSpy');
                     handleErrorSpy = jasmine.createSpy('handleErrorSpy')
-                        .andCallFake(function() {
+                        .and.callFake(function() {
                             return {};
                         });
 
@@ -96,8 +98,13 @@
                 });
 
                 describe('when viewReady is emitted', function() {
+                    var transition;
+
                     beforeEach(function() {
-                        spyOn(c6State, 'transitionTo');
+                        transition = $q.defer();
+
+                        spyOn($log, 'error');
+                        spyOn(c6State, 'transitionTo').and.returnValue(transition.promise);
                     });
 
                     describe('if there is no current state', function() {
@@ -107,6 +114,18 @@
 
                         it('should transition to the index state', function() {
                             expect(c6State.transitionTo).toHaveBeenCalledWith('home');
+                        });
+
+                        describe('if the transition fails', function() {
+                            beforeEach(function() {
+                                $rootScope.$apply(function() {
+                                    transition.reject('I failed for blah blah blah.');
+                                });
+                            });
+
+                            it('should log the error', function() {
+                                expect($log.error).toHaveBeenCalledWith('I failed for blah blah blah.');
+                            });
                         });
                     });
 
@@ -130,7 +149,7 @@
                             beforeEach(function() {
                                 resolveStateSpy = jasmine.createSpy('resolve state');
 
-                                spyOn(_service, 'resolveState').andCallThrough();
+                                spyOn(_service, 'resolveState').and.callThrough();
                             });
 
                             it('should call all the hooks in order', function() {
@@ -151,6 +170,20 @@
 
                                 $rootScope.$digest();
                                 expect(resolveStateSpy).toHaveBeenCalledWith({ cTemplate: null, cModel: null });
+                            });
+
+                            it('should propagate a failure if there is no error hander', function() {
+                                var errorSpy = jasmine.createSpy('error');
+
+                                $rootScope.$apply(function() {
+                                    _service.resolveState({
+                                        beforeModel: function() {
+                                            return $q.reject('I failed!');
+                                        }
+                                    }).catch(errorSpy);
+                                });
+
+                                expect(errorSpy).toHaveBeenCalledWith('I failed!');
                             });
 
                             describe('if there is no template or templateUrl', function() {
@@ -221,6 +254,14 @@
                     });
 
                     describe('methods', function() {
+                        describe('get(state)', function() {
+                            it('should get the state object for a given name', function() {
+                                expect(c6State.get('home')).toBe(homeState);
+                                expect(c6State.get('about')).toBe(aboutState);
+                                expect(c6State.get('contact')).toBe(contactState);
+                            });
+                        });
+
                         describe('transitionTo(state, params)', function() {
                             var transition1,
                                 transition2,
@@ -240,8 +281,8 @@
                                 transition2 = $q.defer();
                                 resolveState = $q.defer();
 
-                                spyOn(_service, 'resolveState').andReturn(resolveState.promise);
-                                spyOn(c6State, 'emit').andCallThrough();
+                                spyOn(_service, 'resolveState').and.returnValue(resolveState.promise);
+                                spyOn(c6State, 'emit').and.callThrough();
                             });
 
                             it('should emit transitionStart with the new and previous state', function() {

@@ -35,7 +35,9 @@
             } else {
                 return [
                     'scripts/app',
-                    'scripts/c6_state'
+                    'scripts/manager',
+                    'scripts/c6_state',
+                    'scripts/c6_with'
                 ];
             }
         }()),
@@ -46,9 +48,9 @@
                     libUrl('jquery/2.0.3-0-gf576d00/jquery.min.js'),
                     libUrl('gsap/1.11.2-0-g79f8c87/TweenMax.min.js'),
                     libUrl('gsap/1.11.2-0-g79f8c87/TimelineMax.min.js'),
-                    libUrl('angular/v1.2.12-0-g5cc5cc1/angular.min.js'),
-                    libUrl('c6ui/v2.2.1-0-g89204c8/c6uilib.min.js'),
-                    libUrl('c6ui/v2.2.1-0-g89204c8/c6log.min.js')
+                    libUrl('angular/v1.2.14-0-g729fb13/angular.min.js'),
+                    libUrl('c6ui/v2.4.0-0-gb74a3dd/c6uilib.min.js'),
+                    libUrl('c6ui/v2.4.0-0-gb74a3dd/c6log.min.js')
                 ];
             } else {
                 return [
@@ -56,9 +58,9 @@
                     libUrl('jquery/2.0.3-0-gf576d00/jquery.js'),
                     libUrl('gsap/1.11.2-0-g79f8c87/TweenMax.min.js'),
                     libUrl('gsap/1.11.2-0-g79f8c87/TimelineMax.min.js'),
-                    libUrl('angular/v1.2.12-0-g5cc5cc1/angular.js'),
-                    libUrl('c6ui/v2.2.1-0-g89204c8/c6uilib.js'),
-                    libUrl('c6ui/v2.2.1-0-g89204c8/c6log.js')
+                    libUrl('angular/v1.2.14-0-g729fb13/angular.js'),
+                    libUrl('c6ui/v2.4.0-0-gb74a3dd/c6uilib.js'),
+                    libUrl('c6ui/v2.4.0-0-gb74a3dd/c6log.js')
                 ];
             }
         }());
@@ -90,7 +92,7 @@
         dev: 'http://s3.amazonaws.com/c6.dev/media/src/stub',
         cdn: 'http://cdn1.cinema6.com/src/stub'
     };
-    c6.kModDeps = ['c6.ui', 'c6.log'];
+    c6.kModDeps = ['c6.ui', 'c6.state', 'c6.log'];
 
     if (window.location.host.match(/\/\/(www\.)*cinema6.com/) !== null){
         ga('create', 'UA-44457821-2', 'cinema6.com');
@@ -106,18 +108,18 @@
             test: Modernizr.touch,
             yep: [
                 __C6_BUILD_VERSION__ ?
-                    libUrl('angular/v1.2.12-0-g5cc5cc1/angular-touch.min.js') :
-                    libUrl('angular/v1.2.12-0-g5cc5cc1/angular-touch.js')
+                    libUrl('angular/v1.2.14-0-g729fb13/angular-touch.min.js') :
+                    libUrl('angular/v1.2.14-0-g729fb13/angular-touch.js')
             ],
             nope: [
-                libUrl('c6ui/v2.2.1-0-g89204c8/css/c6uilib--hover.min.css'),
+                libUrl('c6ui/v2.4.0-0-gb74a3dd/css/c6uilib--hover.min.css'),
                 __C6_APP_BASE_URL__ + '/styles/main--hover.css'
             ],
             complete: function() {
                 if (Modernizr.touch) { c6.kModDeps.push('ngTouch'); }
 
                 loadScriptsInOrder(appScripts, function() {
-                    angular.bootstrap(document.documentElement, ['c6.stub']);
+                    angular.bootstrap(document.documentElement, ['c6.mrmaker']);
                 });
             }
         });

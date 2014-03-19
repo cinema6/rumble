@@ -30,7 +30,8 @@
                             ctrl = state.controller,
                             controllerAs = state.controllerAs,
                             controller = ctrl ? $controller(ctrl, {
-                                $scope: newScope
+                                $scope: newScope,
+                                cModel: state.cModel
                             }) : null;
 
                         newScope.model = state.cModel;
@@ -77,8 +78,8 @@
                 return this;
             };
 
-            this.$get = ['c6StateParams','c6EventEmitter','$injector','$q','$http','$templateCache',
-            function    ( c6StateParams , c6EventEmitter , $injector , $q , $http , $templateCache ) {
+            this.$get = ['c6StateParams','c6EventEmitter','$injector','$q','$http','$templateCache','$log',
+            function    ( c6StateParams , c6EventEmitter , $injector , $q , $http , $templateCache , $log ) {
                 var c6State = c6EventEmitter({}),
                     _service = {};
 
@@ -111,7 +112,11 @@
                     }
 
                     function handleError(error) {
-                        return $injector.invoke(state.handleError || angular.noop, state, { error: error });
+                        if (!state.handleError) {
+                            return $q.reject(error);
+                        }
+
+                        return $injector.invoke(state.handleError, state, { error: error });
                     }
 
                     function returnState() {
@@ -128,6 +133,10 @@
 
                 c6State.current = null;
                 c6State.transitions = {};
+
+                c6State.get = function(name) {
+                    return states[name];
+                };
 
                 c6State.transitionTo = function(name, params) {
                     var promise,
@@ -181,7 +190,8 @@
 
                 c6State.on('viewReady', function() {
                     if (!c6State.current) {
-                        c6State.transitionTo(indexState);
+                        c6State.transitionTo(indexState)
+                            .catch($log.error);
                     }
                 });
 
