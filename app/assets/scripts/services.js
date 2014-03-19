@@ -55,7 +55,7 @@
                 /******************************************************\
                  * * * * * * * * CONFIGURATION DEFINITION * * * * * * *
                 \******************************************************/
-                // template: this is for every part of every card with the
+                // template: this is for every property of every card with the
                 // exception of the "data" object.
                 // IMPORTANT: when this configuration is read, every function
                 // will be called with the name of the current property and
