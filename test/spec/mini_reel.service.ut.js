@@ -8,12 +8,19 @@
                 $rootScope,
                 $q;
 
-            var VideoThumbService;
+            var VideoThumbService,
+                c6ImagePreloader;
 
             var copy;
 
             beforeEach(function() {
                 copy = angular.copy.bind(angular);
+
+                module('c6.ui', function($provide) {
+                    $provide.value('c6ImagePreloader', {
+                        load: jasmine.createSpy('c6ImagePreloader.load()')
+                    });
+                });
 
                 module('c6.rumble', function($provide) {
                     $provide.value('rumbleVotes', {
@@ -36,6 +43,7 @@
                     CommentsService.init('r-738c2403d83ddc');
 
                     VideoThumbService = $injector.get('VideoThumbService');
+                    c6ImagePreloader = $injector.get('c6ImagePreloader');
                 });
             });
 
@@ -301,6 +309,17 @@
                                     small: 'http://img.youtube.com/vi/Cn9yJrrm2tk/2.jpg',
                                     large: 'http://img.youtube.com/vi/Cn9yJrrm2tk/0.jpg'
                                 });
+                            });
+
+                            it('should preload all of the small images', function() {
+                                $rootScope.$digest();
+
+                                expect(c6ImagePreloader.load.callCount).toBe(4);
+
+                                expect(c6ImagePreloader.load).toHaveBeenCalledWith(['http://img.youtube.com/vi/gy1B3agGNxw/2.jpg']);
+                                expect(c6ImagePreloader.load).toHaveBeenCalledWith(['http://s2.dmcdn.net/Dm9Np/x120-6Xz.jpg']);
+                                expect(c6ImagePreloader.load).toHaveBeenCalledWith(['http://b.vimeocdn.com/ts/462/944/462944068_100.jpg']);
+                                expect(c6ImagePreloader.load).toHaveBeenCalledWith(['http://img.youtube.com/vi/Cn9yJrrm2tk/2.jpg']);
                             });
                         });
                     });
