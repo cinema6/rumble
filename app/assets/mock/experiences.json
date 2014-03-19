@@ -74,7 +74,7 @@
                 },
                 {
                     "id": "rc-2d46a04b21b073",
-                    "type": "vast",
+                    "type": "ad",
                     "ad": true,
                     "modules": [
                         "displayAd"
