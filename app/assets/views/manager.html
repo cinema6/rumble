@@ -1,4 +1,4 @@
-<main c6-with="ManagerCtrl.model as minireels">
+<main c6-alias="ManagerCtrl.model as minireels">
     <nav>
         <ul>
             <li><button>Create New</button></li>
@@ -13,7 +13,7 @@
                 </header>
                 <p>{{this.summary}}</p>
                 <form>
-                    <button>Edit</button>
+                    <button ng-click="ManagerCtrl.edit(this)">Edit</button>
                     <button>Copy</button>
                     <button>Delete</button>
                 </form>
