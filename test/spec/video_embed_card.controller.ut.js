@@ -11,9 +11,16 @@
 
             var ModuleService,
                 ControlsService,
+                c6ImagePreloader,
                 c6AppData;
 
             beforeEach(function() {
+                module('c6.ui', function($provide) {
+                    $provide.value('c6ImagePreloader', {
+                        load: jasmine.createSpy('c6ImagePreloader.load()')
+                    });
+                });
+
                 module('c6.rumble.services', function($provide) {
                     $provide.value('ModuleService', {
                         hasModule: jasmine.createSpy('ModuleService.hasModule()')
@@ -44,12 +51,17 @@
 
                     ModuleService = $injector.get('ModuleService');
                     ControlsService = $injector.get('ControlsService');
+                    c6ImagePreloader = $injector.get('c6ImagePreloader');
                     c6AppData = $injector.get('c6AppData');
 
                     $rootScope.config = {
                         modules: ['ballot', 'comments'],
                         data: {
                             videoid: 'gy1B3agGNxw'
+                        },
+                        thumbs: {
+                            small: 'small.jpg',
+                            large: 'large.jpg'
                         }
                     };
                     $rootScope.profile = {
@@ -151,6 +163,45 @@
                         });
 
                         expect(VideoEmbedCardCtrl.showText).toHaveBeenCalled();
+                    });
+                });
+
+                describe('onDeck', function() {
+                    describe('when true', function() {
+                        beforeEach(function() {
+                            $scope.$apply(function() {
+                                $scope.onDeck = true;
+                            });
+                        });
+
+                        it('should preload the large thumbnail', function() {
+                            expect(c6ImagePreloader.load).toHaveBeenCalledWith(['large.jpg']);
+                        });
+
+                        it('should not preload anything if there are no thumbs', function() {
+                            $scope.$apply(function() {
+                                $scope.onDeck = false;
+                                $rootScope.config.thumbs = null;
+                            });
+
+                            $scope.$apply(function() {
+                                $scope.onDeck = true;
+                            });
+
+                            expect(c6ImagePreloader.load.callCount).toBe(1);
+                        });
+                    });
+
+                    describe('when false', function() {
+                        beforeEach(function() {
+                            $scope.$apply(function() {
+                                $scope.onDeck = false;
+                            });
+                        });
+
+                        it('should not preload the large image', function() {
+                            expect(c6ImagePreloader.load).not.toHaveBeenCalled();
+                        });
                     });
                 });
 
