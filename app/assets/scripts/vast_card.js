@@ -2,8 +2,8 @@
     'use strict';
 
     angular.module('c6.rumble')
-        .controller('VastCardController', ['$scope','VASTService','ControlsService','EventService','ModuleService',
-        function                          ( $scope , VASTService , ControlsService , EventService , ModuleService ) {
+        .controller('VastCardController', ['$scope','$window', 'VASTService','ControlsService','EventService','ModuleService',
+        function                          ( $scope , $window ,  VASTService , ControlsService , EventService , ModuleService ) {
             var self = this,
                 config = $scope.config,
                 _data = config._data = config._data || {
@@ -88,6 +88,10 @@
 
                         if(_data.playerEvents.play.emitCount === 1) {
                             firePixels('impression');
+                            firePixels('loaded');
+                            firePixels('creativeView');
+                            firePixels('start');
+                            firePixels('playing');
                         }
                     })
                     .on('timeupdate', function() {
@@ -105,6 +109,15 @@
                         if((currTime === Math.round(duration * 0.75)) && !_data.vastEvents.thirdQuartile) {
                             firePixels('thirdQuartile');
                             _data.vastEvents.thirdQuartile = true;
+                        }
+                    })
+                    .on('click', function() {
+                        if(iface.paused) {
+                            iface.play();
+                        } else {
+                            iface.pause();
+                            $window.open(_data.vastData.pixels.videoClickThrough[0]);
+                            firePixels('videoClickTracking');
                         }
                     });
 
@@ -245,7 +258,7 @@
                     scope.$on('c6video-ready', function(event, video) {
                         c6Video = video;
 
-                        angular.forEach(['play', 'pause', 'timeupdate'], function(event) {
+                        angular.forEach(['play', 'pause', 'timeupdate', 'click'], function(event) {
                             video.on(event, function() {
                                 iface.emit(event, iface);
                             });
