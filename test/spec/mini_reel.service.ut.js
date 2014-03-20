@@ -13,6 +13,7 @@
                     title: 'My MiniReel',
                     subtitle: 'I <3 Turtles',
                     summary: 'I AM THE TURTLE MONSTER!',
+                    type: 'minireel',
                     mode: 'lightbox',
                     theme: 'ed-videos',
                     data: {
@@ -141,6 +142,7 @@
                                 title: 'My MiniReel',
                                 subtitle: 'I <3 Turtles',
                                 summary: 'I AM THE TURTLE MONSTER!',
+                                type: 'minireel',
                                 mode: 'lightbox',
                                 theme: 'ed-videos',
                                 data: jasmine.any(Object)

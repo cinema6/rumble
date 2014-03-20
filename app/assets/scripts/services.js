@@ -22,8 +22,8 @@
                 // Copy the value from the raw source with an optional
                 // default.
                 function copy(def) {
-                    return function(key) {
-                        var value = this[key];
+                    return function(data, key) {
+                        var value = data[key];
 
                         return angular.isUndefined(value) ?
                             def : angular.copy(value);
@@ -34,8 +34,8 @@
                 // cards. This is needed because the start/end for
                 // Dailymotion must be "undefined" rather than
                 // "null".
-                function trim() {
-                    return function(key, card) {
+                function trimmer() {
+                    return function(data, key, card) {
                         var value = card.data[key],
                             def = (card.type === 'dailymotion') ?
                                 undefined : null;
@@ -58,12 +58,12 @@
                 // template: this is for every property of every card with the
                 // exception of the "data" object.
                 // IMPORTANT: when this configuration is read, every function
-                // will be called with the name of the current property and
-                // a reference to the untranspiled card as arguments. It will
-                // also set "this" to be a reference to the untranspiled card.
+                // will be called with three arguments: a reference to the card,
+                // the current property key and another reference to the card
+                // (for the sake of consistency.)
                 template = {
                     id: copy(),
-                    type: function(key, card) {
+                    type: function(card) {
                         switch(card.type) {
 
                         case 'youtube':
@@ -84,21 +84,20 @@
                 // videoDataTemplate: this is the base template for all
                 // video cards.
                 videoDataTemplate = {
-                    service: function(key, card) {
+                    service: function(data, key, card) {
                         return card.type;
                     },
                     videoid: copy(),
-                    start: trim(),
-                    end: trim()
+                    start: trimmer(),
+                    end: trimmer()
                 };
 
                 // dataTemplates: configuration for the "data" section of
                 // every card, organized by card type.
                 // IMPORTANT: when this configuration is read, every function
-                // will be called with the name of the current property and
-                // a reference to the untranspiled card as arguments. It will
-                // also set "this" to be a reference to the untranspiled card's
-                // "data" object.
+                // will be called with three arguments: a reference to the,
+                // card's data, the current property key and a reference to
+                // the card.
                 dataTemplates = {
                     video: videoDataTemplate,
                     videoBallot: angular.extend(angular.copy(videoDataTemplate), {
@@ -133,13 +132,13 @@
                     // Use the template defined above to populate the
                     // properties of the card.
                     angular.forEach(template, function(fn, key) {
-                        card[key] = fn.call(rawCard, key, rawCard);
+                        card[key] = fn(rawCard, key, rawCard);
                     });
 
                     // Use the dataTemplates defined above to populate
                     // the data object of the card.
                     angular.forEach(dataTemplates[card.type], function(fn, key) {
-                        card.data[key] = fn.call(rawCard.data, key, rawCard);
+                        card.data[key] = fn(rawCard.data, key, rawCard);
                     });
 
                     // Add the card to our deck.
