@@ -35,9 +35,10 @@
             } else {
                 return [
                     'scripts/app',
+                    'scripts/services',
                     'scripts/manager',
-                    'scripts/c6_state',
-                    'scripts/c6_with'
+                    'scripts/editor',
+                    'scripts/c6_state'
                 ];
             }
         }()),
@@ -49,8 +50,8 @@
                     libUrl('gsap/1.11.2-0-g79f8c87/TweenMax.min.js'),
                     libUrl('gsap/1.11.2-0-g79f8c87/TimelineMax.min.js'),
                     libUrl('angular/v1.2.14-0-g729fb13/angular.min.js'),
-                    libUrl('c6ui/v2.4.0-0-gb74a3dd/c6uilib.min.js'),
-                    libUrl('c6ui/v2.4.0-0-gb74a3dd/c6log.min.js')
+                    libUrl('c6ui/v2.5.0-0-gc58e712/c6uilib.min.js'),
+                    libUrl('c6ui/v2.5.0-0-gc58e712/c6log.min.js')
                 ];
             } else {
                 return [
@@ -59,8 +60,8 @@
                     libUrl('gsap/1.11.2-0-g79f8c87/TweenMax.min.js'),
                     libUrl('gsap/1.11.2-0-g79f8c87/TimelineMax.min.js'),
                     libUrl('angular/v1.2.14-0-g729fb13/angular.js'),
-                    libUrl('c6ui/v2.4.0-0-gb74a3dd/c6uilib.js'),
-                    libUrl('c6ui/v2.4.0-0-gb74a3dd/c6log.js')
+                    libUrl('c6ui/v2.5.0-0-gc58e712/c6uilib.js'),
+                    libUrl('c6ui/v2.5.0-0-gc58e712/c6log.js')
                 ];
             }
         }());
@@ -112,7 +113,7 @@
                     libUrl('angular/v1.2.14-0-g729fb13/angular-touch.js')
             ],
             nope: [
-                libUrl('c6ui/v2.4.0-0-gb74a3dd/css/c6uilib--hover.min.css'),
+                libUrl('c6ui/v2.5.0-0-gc58e712/css/c6uilib--hover.min.css'),
                 __C6_APP_BASE_URL__ + '/styles/main--hover.css'
             ],
             complete: function() {

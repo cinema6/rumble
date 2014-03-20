@@ -94,6 +94,18 @@
                             });
                     }]
                 })
+                .state('editor', {
+                    controller: 'EditorController',
+                    controllerAs: 'EditorCtrl',
+                    templateUrl: assets('views/editor.html'),
+                    model:  ['cinema6','c6StateParams','MiniReelService',
+                    function( cinema6 , c6StateParams , MiniReelService ) {
+                        return cinema6.db.find('experience', c6StateParams.id)
+                            .then(function(minireel) {
+                                return MiniReelService.open(minireel);
+                            });
+                    }]
+                })
                 .index('manager');
         }])
 
