@@ -41,8 +41,31 @@
                 });
 
                 $rootScope.$apply(function() {
-                    view = $compile('<div><c6-view></c6-view></div>')($scope);
+                    view = $compile('<div><c6-view id="parent"></c6-view></div>')($scope);
                 });
+            });
+
+            it('should support nested views', function() {
+                var parentState = {
+                        name: 'parent',
+                        cTemplate: '<div><c6-view id="child"></c6-view></div>',
+                        cModel: null
+                    },
+                    childState = {
+                        name: 'parent.child',
+                        cTemplate: '<p>I\'m a child!</p>',
+                        cModel: null
+                    };
+
+                $scope.$apply(function() {
+                    c6State.emit('viewChangeStart', parentState, null);
+                });
+                expect(view.find('c6-view>div').length).toBe(1);
+
+                $scope.$apply(function() {
+                    c6State.emit('viewChangeStart', childState, parentState);
+                });
+                expect(view.text()).toBe('I\'m a child!');
             });
 
             describe('initialization', function() {
