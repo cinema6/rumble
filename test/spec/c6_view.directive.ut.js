@@ -68,6 +68,36 @@
                 expect(view.text()).toBe('I\'m a child!');
             });
 
+            it('should support "backing out" of a nested view without re-rendering the parent', function() {
+                var parentState = {
+                        name: 'parent',
+                        cTemplate: '<p>Parent</p><c6-view></c6-view>',
+                        cModel: null
+                    },
+                    childState = {
+                        name: 'parent.child',
+                        cTemplate: '<p>Child</p>',
+                        cModel: null
+                    },
+                    $c6View;
+
+                $scope.$apply(function() {
+                    c6State.emit('viewChangeStart', parentState, null);
+                });
+                $scope.$apply(function() {
+                    c6State.emit('viewChangeStart', childState, parentState);
+                });
+                $c6View = view.children('c6-view');
+
+                expect(view.text()).toBe('ParentChild');
+
+                $scope.$apply(function() {
+                    c6State.emit('viewChangeStart', parentState, childState);
+                });
+                expect(view.children('c6-view')[0]).toBe($c6View[0]);
+                expect(view.text()).toBe('Parent');
+            });
+
             describe('initialization', function() {
                 it('should emit viewReady', function() {
                     expect(c6State.emit).toHaveBeenCalledWith('viewReady');
@@ -121,10 +151,6 @@
                     expect($animate.queue[0].event).toBe('enter');
                     expect($animate.queue[1].event).toBe('enter');
                     expect($animate.queue[2].event).toBe('leave');
-                });
-
-                it('should put the cModel on the new scope', function() {
-                    expect(scope.model).toBe(homeState.cModel);
                 });
             });
 

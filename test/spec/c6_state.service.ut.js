@@ -311,6 +311,26 @@
                                 spyOn(c6State, 'emit').and.callThrough();
                             });
 
+                            it('should just resolve to the current state if an attempt is made to transitionTo the current state', function() {
+                                var success = jasmine.createSpy('transitionTo() success');
+
+                                $rootScope.$apply(function() {
+                                    c6State.transitionTo('home');
+                                });
+                                finish(homeState);
+
+                                c6State.emit.calls.reset();
+                                _service.resolveState.calls.reset();
+
+                                $rootScope.$apply(function() {
+                                    c6State.transitionTo('home').then(success);
+                                });
+
+                                expect(c6State.emit).not.toHaveBeenCalled();
+                                expect(_service.resolveState).not.toHaveBeenCalled();
+                                expect(success).toHaveBeenCalledWith(homeState);
+                            });
+
                             it('should transition to nested states', function() {
                                 var success = jasmine.createSpy('transitionTo() success');
 
@@ -333,6 +353,27 @@
                                 finish(childState1);
 
                                 expect(success).toHaveBeenCalledWith(childState1);
+                            });
+
+                            it('should support "backing out" of nested states', function() {
+                                $rootScope.$apply(function() {
+                                    c6State.transitionTo('parent.child2.grandchild');
+                                });
+                                finish(parentState);
+                                finish(childState2);
+                                finish(grandchildState);
+
+                                c6State.emit.calls.reset();
+                                _service.resolveState.calls.reset();
+
+                                $rootScope.$apply(function() {
+                                    c6State.transitionTo('parent.child2');
+                                });
+                                expect(_service.resolveState).not.toHaveBeenCalled();
+                                expect(c6State.emit).toHaveBeenCalledWith('viewChangeStart', childState2, grandchildState);
+                                finish(childState2);
+
+                                expect(c6State.current).toBe(childState2);
                             });
 
                             it('should emit transitionStart with the new and previous state', function() {
