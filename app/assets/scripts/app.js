@@ -56,6 +56,16 @@
             });
         }])
 
+        .config(['$sceDelegateProvider',
+        function( $sceDelegateProvider ) {
+            $sceDelegateProvider.resourceUrlWhitelist([
+                'self',
+                '*://www.youtube.com/**',
+                '*://player.vimeo.com/**',
+                '*://www.dailymotion.com/**'
+            ]);
+        }])
+
         .config(['c6UrlMakerProvider', 'c6Defines',
         function( c6UrlMakerProvider ,  c6Defines ) {
             c6UrlMakerProvider.location(c6Defines.kBaseUrl,'default');
@@ -104,7 +114,22 @@
                             .then(function(minireel) {
                                 return MiniReelService.open(minireel);
                             });
-                    }]
+                    }],
+                    children: {
+                        editCard: {
+                            controller: 'EditCardController',
+                            controllerAs: 'EditCardCtrl',
+                            templateUrl: assets('views/editor/edit_card.html'),
+                            model:  ['c6StateParams',
+                            function( c6StateParams ) {
+                                var minireel = this.cParent.cModel;
+
+                                return minireel.data.deck.filter(function(card) {
+                                    return card.id === c6StateParams.id;
+                                })[0];
+                            }]
+                        }
+                    }
                 })
                 .index('manager');
         }])
