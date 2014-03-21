@@ -2,8 +2,8 @@
     'use strict';
 
     angular.module('c6.rumble')
-        .controller('VastCardController', ['$scope','VASTService','ControlsService','EventService','ModuleService',
-        function                          ( $scope , VASTService , ControlsService , EventService , ModuleService ) {
+        .controller('VastCardController', ['$scope','$window', 'VASTService','ControlsService','EventService','ModuleService',
+        function                          ( $scope , $window ,  VASTService , ControlsService , EventService , ModuleService ) {
             var self = this,
                 config = $scope.config,
                 _data = config._data = config._data || {
@@ -54,6 +54,16 @@
                 _data.modules.displayAd.active = true;
             };
 
+            this.clickThrough = function() {
+                if(player.paused) {
+                    player.play();
+                } else {
+                    player.pause();
+                    $window.open(_data.vastData.clickThrough[0]);
+                    firePixels('videoClickTracking');
+                }
+            };
+
             $scope.$watch('onDeck', function(onDeck) {
                 if(onDeck) {
                     VASTService.getVAST().then(function(vast) {
@@ -88,6 +98,10 @@
 
                         if(_data.playerEvents.play.emitCount === 1) {
                             firePixels('impression');
+                            firePixels('loaded');
+                            firePixels('creativeView');
+                            firePixels('start');
+                            firePixels('playing');
                         }
                     })
                     .on('timeupdate', function() {

@@ -6,6 +6,7 @@
             var $rootScope,
                 $scope,
                 $controller,
+                $window,
                 c6EventEmitter,
                 VastCardCtrl;
 
@@ -34,6 +35,7 @@
                     video : {
                         mediaFiles:[]
                     },
+                    clickThrough : ['http://www.advertiser.com'],
                     companions : [],
                     firePixels : jasmine.createSpy('firePixels()').andReturn(undefined),
                     getVideoSrc : jasmine.createSpy('getVideoSrc()').andReturn('http://www.videos.com/video.mp4'),
@@ -64,6 +66,7 @@
                 inject(function($injector) {
                     $rootScope = $injector.get('$rootScope');
                     $controller = $injector.get('$controller');
+                    $window = $injector.get('$window');
                     c6EventEmitter = $injector.get('c6EventEmitter');
 
                     VASTService = $injector.get('VASTService');
@@ -204,6 +207,36 @@
 
                         VastCardCtrl.hasModule('comments');
                         expect(ModuleService.hasModule).toHaveBeenCalledWith($scope.config.modules, 'comments');
+                    });
+                });
+
+                describe('clickThrough()', function() {
+                    beforeEach(function() {
+                        $scope.$apply(function() {
+                            $scope.onDeck = true;
+                        });
+
+                        spyOn($window, 'open').andReturn(true);
+
+                        VastCardCtrl.clickThrough();
+                    });
+
+                    it('should pause the video if playing', function() {
+                        expect(iface.pause).toHaveBeenCalled();
+                    });
+
+                    it('should play the video if paused', function() {
+                        iface.paused = true;
+                        VastCardCtrl.clickThrough();
+                        expect(iface.play).toHaveBeenCalled();
+                    });
+
+                    it('should open a new window', function() {
+                        expect($window.open).toHaveBeenCalledWith('http://www.advertiser.com');
+                    });
+
+                    it('should fire the click event pixel', function() {
+                        expect(vast.firePixels).toHaveBeenCalledWith('videoClickTracking');
                     });
                 });
             });
