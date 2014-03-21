@@ -68,6 +68,37 @@
                 expect(view.text()).toBe('I\'m a child!');
             });
 
+            it('should support transitioning to the same state', function() {
+                var parentState = {
+                        name: 'parent',
+                        cTemplate: '<c6-view></c6-view>',
+                        cModel: null
+                    },
+                    childState = {
+                        name: 'parent.child',
+                        cTemplate: '<p>{{foo}}</p>',
+                        cModel: { data: 'Hello!' },
+                        controller: function(cModel, $scope) {
+                            $scope.foo = cModel.data;
+                        }
+                    };
+
+                $scope.$apply(function() {
+                    c6State.emit('viewChangeStart', parentState, null);
+                });
+                $scope.$apply(function() {
+                    c6State.emit('viewChangeStart', childState, parentState);
+                });
+
+                expect(view.text()).toBe('Hello!');
+
+                childState.cModel.data = 'World!';
+                $scope.$apply(function() {
+                    c6State.emit('viewChangeStart', childState, childState);
+                });
+                expect(view.text()).toBe('World!');
+            });
+
             it('should support "backing out" of a nested view without re-rendering the parent', function() {
                 var parentState = {
                         name: 'parent',

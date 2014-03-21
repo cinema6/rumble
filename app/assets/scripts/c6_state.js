@@ -25,7 +25,7 @@
                         }
                     }
 
-                    function update(state) {
+                    function update(state, prevState) {
                         var newScope, ctrl, controllerAs, controller, clone$,
                             stateLevel = state.name.split('.').length,
                             data = (currentElement$ && currentElement$.data('cView')) || {};
@@ -42,7 +42,11 @@
                             });
                         }
 
-                        if (stateLevel > viewLevel || state === data.state) { return; }
+                        // We have nothing to do if the transition was not intended for this view or
+                        // the state being requested is already loaded into the view (and this is not
+                        // a deliberate transition to the current state again (but maybe with different
+                        // data.)
+                        if (stateLevel > viewLevel || (state === data.state && state !== prevState)) { return; }
 
                         newScope = scope.$new();
                         ctrl = state.controller;
@@ -162,8 +166,7 @@
                 };
 
                 c6State.transitionTo = function(name, params) {
-                    var tree, currentTree,
-                        to = states[name];
+                    var tree, currentTree;
 
                     function climbTree(tree) {
                         var item = tree[0],
@@ -181,10 +184,6 @@
                         var from = c6State.current;
 
                         function resolveState(state) {
-                            if (currentTree.indexOf(state) > -1) {
-                                return $q.when(state);
-                            }
-
                             angular.copy(params, c6StateParams);
 
                             return _service.resolveState(state);
@@ -247,10 +246,6 @@
 
                     tree = climbTree([states[name]]);
                     currentTree = climbTree([c6State.current]);
-
-                    if (to === c6State.current) {
-                        return $q.when(to);
-                    }
 
                     return $q.all(this.transitions)
                         .then(execute)
