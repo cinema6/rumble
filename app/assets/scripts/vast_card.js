@@ -62,7 +62,7 @@
                     $window.open(_data.vastData.clickThrough[0]);
                     firePixels('videoClickTracking');
                 }
-            }
+            };
 
             $scope.$watch('onDeck', function(onDeck) {
                 if(onDeck) {
