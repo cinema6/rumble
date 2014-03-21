@@ -80,6 +80,7 @@
                     };
 
                     this.companions = [];
+                    this.clickThrough = [];
                     this.pixels = {
                         // this does not include non-linear tracking
                         errorPixel: [],
@@ -171,7 +172,7 @@
                     });
 
                     angular.forEach($('VideoClicks ClickThrough'), function(clickThrough) {
-                        self.pixels.videoClickThrough.push(clickThrough.firstChild.nodeValue);
+                        self.clickThrough.push(clickThrough.firstChild.nodeValue);
                     });
 
                     angular.forEach($('VideoClicks ClickTracking'), function(clickTracking) {

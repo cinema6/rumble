@@ -54,6 +54,16 @@
                 _data.modules.displayAd.active = true;
             };
 
+            this.clickThrough = function() {
+                if(player.paused) {
+                    player.play();
+                } else {
+                    player.pause();
+                    $window.open(_data.vastData.clickThrough[0]);
+                    firePixels('videoClickTracking');
+                }
+            }
+
             $scope.$watch('onDeck', function(onDeck) {
                 if(onDeck) {
                     VASTService.getVAST().then(function(vast) {
@@ -109,15 +119,6 @@
                         if((currTime === Math.round(duration * 0.75)) && !_data.vastEvents.thirdQuartile) {
                             firePixels('thirdQuartile');
                             _data.vastEvents.thirdQuartile = true;
-                        }
-                    })
-                    .on('click', function() {
-                        if(iface.paused) {
-                            iface.play();
-                        } else {
-                            iface.pause();
-                            $window.open(_data.vastData.pixels.videoClickThrough[0]);
-                            firePixels('videoClickTracking');
                         }
                     });
 
@@ -258,7 +259,7 @@
                     scope.$on('c6video-ready', function(event, video) {
                         c6Video = video;
 
-                        angular.forEach(['play', 'pause', 'timeupdate', 'click'], function(event) {
+                        angular.forEach(['play', 'pause', 'timeupdate'], function(event) {
                             video.on(event, function() {
                                 iface.emit(event, iface);
                             });
