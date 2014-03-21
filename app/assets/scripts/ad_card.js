@@ -11,7 +11,7 @@
 			directive: ad_card.js
 			template: none
 			controller: none
-			tests: 
+			tests:
 				ad_card.ut.js
 				ad_card.directive.ut.js
 
@@ -61,7 +61,7 @@
 					innerCard;
 
 				if(scope.profile.flash) { // this is just to get things working
-					innerCard = '<vast-card';
+					innerCard = '<vpaid-card';
 					for (var key in data) {
 						if((key !== 'type') && (data.hasOwnProperty(key))) {
 							innerCard += ' ' + key.toLowerCase() + '="' + data[key] + '"';
@@ -84,7 +84,7 @@
 						innerCard += ' controls="1"';
 					}
 
-					innerCard += '></vast-card>';
+					innerCard += '></vpaid-card>';
 				}
 
 				$element.append($compile(innerCard)(scope));
