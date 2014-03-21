@@ -49,7 +49,11 @@
                 var fakeUser,
                     homeState,
                     aboutState,
-                    contactState;
+                    contactState,
+                    parentState,
+                    childState1,
+                    childState2,
+                    grandchildState;
 
                 beforeEach(function() {
                     fakeUser = {
@@ -85,11 +89,30 @@
                         afterModel: ['model', contactAfterModelSpy],
                         handleError: ['error', handleErrorSpy]
                     };
+                    grandchildState = {
+                        controller: 'GrandchildController'
+                    };
+                    childState1 = {
+                        controller: 'Child1Controller'
+                    };
+                    childState2 = {
+                        controller: 'Child2Controller',
+                        children: {
+                            grandchild: grandchildState
+                        }
+                    };
+                    parentState = {
+                        children: {
+                            child1: childState1,
+                            child2: childState2
+                        }
+                    };
 
                     c6StateProvider
                         .state('home', homeState)
                         .state('about', aboutState)
                         .state('contact', contactState)
+                        .state('parent', parentState)
                         .index('home');
                 });
 
@@ -279,18 +302,90 @@
                             beforeEach(function() {
                                 transition1 = $q.defer();
                                 transition2 = $q.defer();
-                                resolveState = $q.defer();
 
-                                spyOn(_service, 'resolveState').and.returnValue(resolveState.promise);
+                                spyOn(_service, 'resolveState').and.callFake(function() {
+                                    resolveState = $q.defer();
+
+                                    return resolveState.promise;
+                                });
                                 spyOn(c6State, 'emit').and.callThrough();
                             });
 
+                            it('should just resolve to the current state if an attempt is made to transitionTo the current state', function() {
+                                var success = jasmine.createSpy('transitionTo() success');
+
+                                $rootScope.$apply(function() {
+                                    c6State.transitionTo('home');
+                                });
+                                finish(homeState);
+
+                                c6State.emit.calls.reset();
+                                _service.resolveState.calls.reset();
+
+                                $rootScope.$apply(function() {
+                                    c6State.transitionTo('home').then(success);
+                                });
+
+                                expect(c6State.emit).not.toHaveBeenCalled();
+                                expect(_service.resolveState).not.toHaveBeenCalled();
+                                expect(success).toHaveBeenCalledWith(homeState);
+                            });
+
+                            it('should transition to nested states', function() {
+                                var success = jasmine.createSpy('transitionTo() success');
+
+                                $rootScope.$apply(function() {
+                                    c6State.transitionTo('parent.child1').then(success);
+                                });
+
+                                expect(c6State.emit).toHaveBeenCalledWith('transitionStart', parentState, null);
+                                $rootScope.$apply(function() {
+                                    resolveState.resolve(parentState);
+                                });
+                                expect(c6State.emit).toHaveBeenCalledWith('viewChangeStart', parentState, null);
+
+                                finish(parentState);
+                                expect(c6State.emit).toHaveBeenCalledWith('transitionStart', childState1, parentState);
+                                $rootScope.$apply(function() {
+                                    resolveState.resolve(childState1);
+                                });
+                                expect(c6State.emit).toHaveBeenCalledWith('viewChangeStart', childState1, parentState);
+                                finish(childState1);
+
+                                expect(success).toHaveBeenCalledWith(childState1);
+                            });
+
+                            it('should support "backing out" of nested states', function() {
+                                $rootScope.$apply(function() {
+                                    c6State.transitionTo('parent.child2.grandchild');
+                                });
+                                finish(parentState);
+                                finish(childState2);
+                                finish(grandchildState);
+
+                                c6State.emit.calls.reset();
+                                _service.resolveState.calls.reset();
+
+                                $rootScope.$apply(function() {
+                                    c6State.transitionTo('parent.child2');
+                                });
+                                expect(_service.resolveState).not.toHaveBeenCalled();
+                                expect(c6State.emit).toHaveBeenCalledWith('viewChangeStart', childState2, grandchildState);
+                                finish(childState2);
+
+                                expect(c6State.current).toBe(childState2);
+                            });
+
                             it('should emit transitionStart with the new and previous state', function() {
-                                c6State.transitionTo('home');
+                                $rootScope.$apply(function() {
+                                    c6State.transitionTo('home');
+                                });
                                 expect(c6State.emit).toHaveBeenCalledWith('transitionStart', homeState, null);
                                 finish(homeState);
 
-                                c6State.transitionTo('about');
+                                $rootScope.$apply(function() {
+                                    c6State.transitionTo('about');
+                                });
                                 expect(c6State.emit).toHaveBeenCalledWith('transitionStart', aboutState, homeState);
                             });
 
@@ -312,7 +407,10 @@
                             });
 
                             it('should change the current property after the state change', function() {
-                                c6State.transitionTo('home');
+                                $rootScope.$apply(function() {
+                                    c6State.transitionTo('home');
+                                });
+
                                 expect(c6State.current).toBeNull();
                                 finish(homeState);
                                 expect(c6State.current).toBe(homeState);
@@ -368,7 +466,9 @@
                             it('should resolve the promise when viewChangeSuccess is emitted with a state of the same name', function() {
                                 var transitionSpy = jasmine.createSpy('transitionSpy');
 
-                                c6State.transitionTo('home').then(transitionSpy);
+                                $rootScope.$apply(function() {
+                                    c6State.transitionTo('home').then(transitionSpy);
+                                });
                                 $rootScope.$apply(function() {
                                     resolveState.resolve(homeState);
                                 });

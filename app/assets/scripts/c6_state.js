@@ -11,7 +11,9 @@
                 transclude: 'element',
                 link: function(scope, element, attrs, controller, transclude) {
                     var currentScope = null,
-                        currentElement$ = null;
+                        currentElement$ = null,
+                        parentData = element.inheritedData('cView') || {},
+                        viewLevel = (parentData.level || 0) + 1;
 
                     function leave() {
                         if (currentScope) {
@@ -23,35 +25,48 @@
                         }
                     }
 
-                    c6State.emit('viewReady');
-
                     function update(state) {
-                        var newScope = scope.$new(),
-                            ctrl = state.controller,
-                            controllerAs = state.controllerAs,
-                            controller = ctrl ? $controller(ctrl, {
-                                $scope: newScope,
-                                cModel: state.cModel
-                            }) : null;
+                        var newScope, ctrl, controllerAs, controller, clone$,
+                            stateLevel = state.name.split('.').length,
+                            data = (currentElement$ && currentElement$.data('cView')) || {};
 
-                        newScope.model = state.cModel;
+                        function enter() {
+                            clone$ = transclude(function(clone$) {
+                                clone$.html(state.cTemplate);
+                                clone$.data('cView', { level: viewLevel, state: state });
+                                $compile(clone$.contents())(newScope);
+
+                                $animate.enter(clone$, null, currentElement$ || element, function() {
+                                    c6State.emit('viewChangeSuccess', state);
+                                });
+                            });
+                        }
+
+                        if (stateLevel > viewLevel || state === data.state) { return; }
+
+                        newScope = scope.$new();
+                        ctrl = state.controller;
+                        controllerAs = state.controllerAs;
+                        controller = ctrl ? $controller(ctrl, {
+                            $scope: newScope,
+                            cModel: state.cModel
+                        }) : null;
+
                         if (controllerAs) {
                             newScope[controllerAs] = controller;
                         }
 
-                        var clone$ = transclude(function(clone$) {
-                            clone$.html(state.cTemplate);
-                            $compile(clone$.contents())(newScope);
+                        if (stateLevel === viewLevel) {
+                            enter();
+                        }
 
-                            $animate.enter(clone$, null, currentElement$ || element, function() {
-                                c6State.emit('viewChangeSuccess', state);
-                            });
-                            leave();
-                        });
+                        leave();
 
                         currentScope = newScope;
                         currentElement$ = clone$;
                     }
+
+                    c6State.emit('viewReady');
 
                     c6State.on('viewChangeStart', update);
                 }
@@ -62,13 +77,21 @@
             var states = {},
                 indexState = null;
 
-            this.state = function(name, state) {
+            function setupState(name, state, parent) {
                 state.name = name;
                 state.cModel = null;
                 state.cTemplate = null;
+                state.cParent = parent || null;
+
+                angular.forEach(state.children, function(child, childName) {
+                    setupState((name + '.' + childName), child, state);
+                });
 
                 states[name] = state;
+            }
 
+            this.state = function() {
+                setupState.apply(null, arguments);
                 return this;
             };
 
@@ -139,53 +162,99 @@
                 };
 
                 c6State.transitionTo = function(name, params) {
-                    var promise,
-                        to = states[name],
-                        from = this.current;
+                    var tree, currentTree,
+                        to = states[name];
 
-                    function resolveState() {
-                        angular.copy(params, c6StateParams);
+                    function climbTree(tree) {
+                        var item = tree[0],
+                            parent = (item || {}).cParent;
+
+                        if (parent) {
+                            tree.unshift(parent);
+                            return climbTree(tree);
+                        }
+
+                        return tree;
+                    }
+
+                    function doTransition(state) {
+                        var from = c6State.current;
+
+                        function resolveState(state) {
+                            if (currentTree.indexOf(state) > -1) {
+                                return $q.when(state);
+                            }
+
+                            angular.copy(params, c6StateParams);
+
+                            return _service.resolveState(state);
+                        }
+
+                        function changeView(state) {
+                            var deferred = $q.defer();
+
+                            function handleViewChangeSuccess(toState) {
+                                if (toState === state) {
+                                    deferred.resolve(state);
+                                    c6State.removeListener('viewChangeSuccess', handleViewChangeSuccess);
+                                }
+                            }
+
+                            c6State.on('viewChangeSuccess', handleViewChangeSuccess);
+                            c6State.emit('viewChangeStart', state, from);
+
+                            return deferred.promise;
+                        }
+
+                        function setCurrent(state) {
+                            c6State.current = state;
+
+                            return state;
+                        }
+
+                        c6State.emit('transitionStart', state, from);
+
+                        return resolveState(state)
+                            .then(changeView)
+                            .then(setCurrent);
+                    }
+
+                    function execute() {
+                        var promise,
+                            length = tree.length;
+
+                        angular.forEach(tree, function(state, index) {
+                            if (state === currentTree[index] && (index < (length - 1))) {
+                                promise = promise ? promise.then(function() {
+                                    return $q.when(state);
+                                }) : $q.when(state);
+                                return;
+                            }
+
+                            promise = promise ? promise.then(function() {
+                                return doTransition(state);
+                            }) : doTransition(state);
+                        });
 
                         c6State.transitions[name] = promise;
 
-                        return _service.resolveState(to);
-                    }
-
-                    function changeView(state) {
-                        var deferred = $q.defer();
-
-                        function handleViewChangeSuccess(toState) {
-                            if (toState === state) {
-                                deferred.resolve(state);
-                                c6State.removeListener('viewChangeSuccess', handleViewChangeSuccess);
-                            }
-                        }
-
-                        c6State.on('viewChangeSuccess', handleViewChangeSuccess);
-                        c6State.emit('viewChangeStart', to, from);
-
-                        return deferred.promise;
+                        return promise;
                     }
 
                     function removeTransition() {
                         delete c6State.transitions[name];
                     }
 
-                    function setCurrent(state) {
-                        c6State.current = state;
+                    tree = climbTree([states[name]]);
+                    currentTree = climbTree([c6State.current]);
 
-                        return state;
+                    if (to === c6State.current) {
+                        return $q.when(to);
                     }
 
-                    this.emit('transitionStart', to, from);
-
-                    promise = $q.all(this.transitions)
-                        .then(resolveState)
-                        .then(changeView)
-                        .then(setCurrent)
+                    return $q.all(this.transitions)
+                        .then(execute)
                         .finally(removeTransition);
-
-                    return promise;
                 };
 
                 c6State.on('viewReady', function() {
