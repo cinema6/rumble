@@ -369,7 +369,7 @@
 
 							player.on('play', function() {
 								// do stuff
-								iface.paused = false;
+								_iface.paused = false;
 								iface.emit('play', iface);
 							});
 
