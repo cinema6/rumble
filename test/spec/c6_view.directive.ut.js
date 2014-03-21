@@ -127,6 +127,7 @@
                 });
                 expect(view.children('c6-view')[0]).toBe($c6View[0]);
                 expect(view.text()).toBe('Parent');
+                expect(c6State.emit).toHaveBeenCalledWith('viewChangeSuccess', parentState);
             });
 
             describe('initialization', function() {

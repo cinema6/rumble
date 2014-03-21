@@ -62,6 +62,8 @@
 
                         if (stateLevel === viewLevel) {
                             enter();
+                        } else {
+                            c6State.emit('viewChangeSuccess', state);
                         }
 
                         leave();
