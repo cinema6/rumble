@@ -193,7 +193,6 @@
 					};
 
 					function handlePostMessage(e) {
-						$log.info(e);
 						var data = JSON.parse(e.data);
 
 						if(!data.__vpaid__) { return; }
