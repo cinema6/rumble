@@ -20,9 +20,32 @@
 				function VPAIDPlayer(element$, playerId, $win) {
 					var self = this;
 
-					$log.info(playerId, element$);
+					// $log.info(playerId, element$);
 
 					c6EventEmitter(self);
+
+					var player = function() {
+						var obj = element$.find('#c6VPAIDplayer')[0],
+							val;
+
+						try {
+							val = obj.isCinema6player();
+
+							if (val){ return obj; }
+
+						} catch(e) {}
+
+						obj = element$.find('#c6VPAIDplayer_ie')[0];
+
+						try {
+							val = obj.isCinema6player();
+
+							if (val) { return obj; }
+
+						} catch(e) {}
+
+						return null;
+					};
 
 					self.getParamCode = function(obj, param, defaultValue, isFirst, prefix) {
 						var amp = '&';
@@ -58,7 +81,8 @@
 
 					self.getPlayerHTML = function() {
 						// set up all the html and return it for embedding
-						return '<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" width="__WIDTH__" id="cinema6player" height="__HEIGHT__" align="left" margin="0" style= "margin: 0; padding:0; border: none">' +
+						// IE requires the classid attribute and the movie param
+						return '<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" width="__WIDTH__" id="c6VPAIDplayer_ie" height="__HEIGHT__">' +
 						'<param name="movie" value="__SWF__" />' +
 						'<param name="quality" value="high" />' +
 						'<param name="bgcolor" value="#000000" />' +
@@ -71,7 +95,7 @@
 						'<param name="allowScriptAccess" value="always" />' +
 						'<param name="allowFullscreen" value="true" />' +
 						'<!--[if !IE]>-->' +
-						'<object type="application/x-shockwave-flash" data="__SWF__" id="cinema6player_alt" width="__WIDTH__" height="__HEIGHT__" margin="0" style= "margin: 0; padding:0; border: none">' +
+						'<object type="application/x-shockwave-flash" data="__SWF__" id="c6VPAIDplayer" width="__WIDTH__" height="__HEIGHT__">' +
 						'<param name="movie" value="__SWF__" />' +
 						'<param name="quality" value="high" />' +
 						'<param name="bgcolor" value="#000000" />' +
@@ -91,7 +115,8 @@
 					};
 
 					self.loadAd = function() {
-						element$.innerHTML = self.setup();
+						element$.prepend(self.setup());
+						// _player = element$;
 					};
 
 					self.setup = function() {
@@ -102,10 +127,10 @@
 						// obj.playerId
 						// obj.params
 						var obj = {
-							swf: '../player.swf',
+							swf: c6UrlMaker('swf/player.swf'),
 							width: 640,
 							height: 360,
-							adXmlUrl: 'ttp://u-ads.adap.tv/a/h/AiVnje_CA3BJsRMP0_gPXAtRyCRFRZSd?cb=[CACHE_BREAKER]&pageUrl=http%3A%2F%2Ftribal360.com&description=[params.videoDesc]&duration=[params.videoDuration]&id=[params.videoId]&keywords=[params.keywords]&title=[params.videoTitle]&url=VIDEO_URL&eov=eov'
+							adXmlUrl: 'http://u-ads.adap.tv/a/h/AiVnje_CA3BJsRMP0_gPXAtRyCRFRZSd?cb=[CACHE_BREAKER]&pageUrl=http%3A%2F%2Ftribal360.com&description=[params.videoDesc]&duration=[params.videoDuration]&id=[params.videoId]&keywords=[params.keywords]&title=[params.videoTitle]&url=VIDEO_URL&eov=eov'
 						};
 
 						var html = self.getPlayerHTML().replace(/__SWF__/g, obj.swf);
@@ -129,11 +154,13 @@
 					};
 
 					self.play = function() {
-						return self.post('play');
+						// return self.post('play');
+						player().play();
 					};
 
 					self.pause = function() {
-						return self.post('pause');
+						// return self.post('pause');
+						player().pauseAd();
 					};
 
 					// move callback into a named function with more logic
@@ -149,6 +176,7 @@
 							// scope.companionBanner = $element.getDisplayBanners();
 						}
 					});
+
 				}
 
 				return new VPAIDPlayer($playerElement, playerId, $window);
@@ -156,13 +184,37 @@
 
 		}])
 
-		.controller('VpaidCardController', ['$log',
-		function							($log ) {
+		.controller('VpaidCardController', ['$scope', '$log', 'ModuleService',
+		function							($scope ,  $log , ModuleService ) {
 			$log = $log.context('VpaidCardController');
+			var self = this,
+				config = $scope.config,
+				_data = config._data = config._data || {
+					modules: {
+						displayAd: {
+							active: false
+						}
+					}
+				};
+
+			this.showVideo = true;
+
+			// _data.modules.displayAd.active = true;
+
+			this.hasModule = ModuleService.hasModule.bind(ModuleService, config.modules);
+
+			$scope.$on('VPAIDPlayerAdd', function(event, player) {
+				self.playAd = function() {
+					player.loadAd();
+				};
+				self.pauseAd = function() {
+					player.pause();
+				};
+			});
 		}])
 
-		.directive('vpaidCard', ['$log', 'assetFilter', 'VPAIDService', '$window',
-		function				( $log ,  assetFilter ,  VPAIDService ,  $window ) {
+		.directive('vpaidCard', ['$log', 'assetFilter', 'VPAIDService',
+		function				( $log ,  assetFilter ,  VPAIDService) {
 			$log = $log.context('<vpaid-card>');
 			return {
 				restrict: 'E',
@@ -170,16 +222,16 @@
 				controllerAs: 'Ctrl',
 				templateUrl: assetFilter('directives/vpaid_card.html', 'views'),
 				link: function(scope, $element) {
-					// get config variables passed into directive from parent scopes
-					// call VPAIDService.methods() to set things and get the ad
 
-					// append it to element
-					// or bind to scope variable!
-					// $element.append(VPAIDService.getAd());
-					// scope.adHTML = VPAIDService.getAd();
-					$log.info(VPAIDService.createPlayer(scope.config.id, scope.config, $element.find('.mr-player')));
+					$log.info('hello');
 
-					$window.player = VPAIDService.createPlayer(scope.config.id, scope.config, $element.find('.mr-player'));
+					var player = VPAIDService.createPlayer(scope.config.id, scope.config, $element.find('.mr-player'));
+
+					scope.$emit('VPAIDPlayerAdd', player);
+
+					// window.player = function() {
+					// 	VPAIDService.createPlayer(scope.config.id, scope.config, $element.find('.mr-player'));
+					// };
 
 				}
 			};

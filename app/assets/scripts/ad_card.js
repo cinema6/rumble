@@ -60,32 +60,35 @@
 					data = scope.config.data,
 					innerCard;
 
-				if(scope.profile.flash) { // this is just to get things working
-					innerCard = '<vpaid-card';
-					for (var key in data) {
-						if((key !== 'type') && (data.hasOwnProperty(key))) {
-							innerCard += ' ' + key.toLowerCase() + '="' + data[key] + '"';
-						}
-					}
+				var type = scope.profile.flash ? 'vpaid' : 'vast';
 
-					if(!scope.profile.inlineVideo) {
-						innerCard += ' regenerate="1"';
-					}
+				// if(scope.profile.flash) { // this is just to get things working
+				innerCard = '<' + type + '-card';
 
-					if(canTwerk) {
-						innerCard += ' twerk="1"';
+				for (var key in data) {
+					if((key !== 'type') && (data.hasOwnProperty(key))) {
+						innerCard += ' ' + key.toLowerCase() + '="' + data[key] + '"';
 					}
-
-					if(scope.profile.autoplay) {
-						innerCard += ' autoplay="1"';
-					}
-
-					if(scope.profile.device === 'phone') {
-						innerCard += ' controls="1"';
-					}
-
-					innerCard += '></vpaid-card>';
 				}
+
+				if(!scope.profile.inlineVideo) {
+					innerCard += ' regenerate="1"';
+				}
+
+				if(canTwerk) {
+					innerCard += ' twerk="1"';
+				}
+
+				if(scope.profile.autoplay) {
+					innerCard += ' autoplay="1"';
+				}
+
+				if(scope.profile.device === 'phone') {
+					innerCard += ' controls="1"';
+				}
+
+				innerCard += '></' + type + '-card>';
+				// }
 
 				$element.append($compile(innerCard)(scope));
 
