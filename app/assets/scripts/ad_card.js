@@ -37,32 +37,15 @@
 	*/
 
 	angular.module('c6.rumble')
-		.directive('adCard',[ '$log', '$compile', 'c6UserAgent',
-		function			(  $log ,  $compile ,  c6UserAgent ) {
+		.directive('adCard',[ '$log', '$compile',
+		function			(  $log ,  $compile ) {
 			$log = $log.context('<ad-card>');
 
-			function fnLink(scope, $element, $attr) {
-				$log.info('----------------',$attr);
-				var canTwerk = (function() {
-						if ((c6UserAgent.app.name !== 'chrome') &&
-							(c6UserAgent.app.name !== 'firefox') &&
-							(c6UserAgent.app.name !== 'safari')) {
-
-							return false;
-						}
-
-						if (!scope.profile.multiPlayer || !scope.profile.autoplay){
-							return false;
-						}
-
-						return true;
-					}()),
-					data = scope.config.data,
+			function fnLink(scope, $element) {
+				var data = scope.config.data,
+					type = scope.profile.flash ? 'vpaid' : 'vast',
 					innerCard;
 
-				var type = scope.profile.flash ? 'vpaid' : 'vast';
-
-				// if(scope.profile.flash) { // this is just to get things working
 				innerCard = '<' + type + '-card';
 
 				for (var key in data) {
@@ -75,10 +58,6 @@
 					innerCard += ' regenerate="1"';
 				}
 
-				if(canTwerk) {
-					innerCard += ' twerk="1"';
-				}
-
 				if(scope.profile.autoplay) {
 					innerCard += ' autoplay="1"';
 				}
@@ -88,7 +67,6 @@
 				}
 
 				innerCard += '></' + type + '-card>';
-				// }
 
 				$element.append($compile(innerCard)(scope));
 
