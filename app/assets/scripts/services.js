@@ -286,11 +286,12 @@
 
             this.$get = ['$log', '$q', '$window', 'c6EventEmitter', 'c6UrlMaker',
             function    ( $log ,  $q ,  $window ,  c6EventEmitter ,  c6UrlMaker ) {
-                var service = {};
+                var service = {},
+                    _service = {};
 
                 $log = $log.context('VPAIDService');
 
-                service.createPlayer = function(playerId,config,$parentElement) {
+                service.createPlayer = function(playerId, config, $parentElement) {
                     var $playerElement = angular.element('<div style="text-align:center;"></div>');
 
                     if(!$parentElement) {
@@ -301,7 +302,7 @@
 
                     $parentElement.prepend($playerElement);
 
-                    function VPAIDPlayer(element$, playerId, $win) {
+                    _service.VPAIDPlayer = function(element$, playerId, $win) {
                         var self = this;
 
                         c6EventEmitter(self);
@@ -473,10 +474,15 @@
                         };
 
                         self.destroy = function() {
+                            // self.player.stopAd();
                             // element$[0].parentNode.removeChild(element$[0]);
                         };
 
                         function handlePostMessage(e) {
+                            // this player interface doesn't fire timeupdates
+                            // we're relying on the events coming from the Player instead
+                            // we have no controls on this player so the only thing time-related
+                            // will be firing our own tracking pixels for reporting/analytics
                             var data = JSON.parse(e.data);
 
                             if(!data.__vpaid__) { return; }
@@ -511,12 +517,12 @@
 
                         $win.addEventListener('message', handlePostMessage);
 
-                    }
+                    }; // end _service.VPAIDPlayer()
 
-                    return new VPAIDPlayer($playerElement, playerId, $window);
+                    return new _service.VPAIDPlayer($playerElement, playerId, $window);
                 };
 
-                if (window.c6.kHasKarma) { service._private = service; }
+                if (window.c6.kHasKarma) { service._private = _service; }
 
                 return service;
             }]; // end $get

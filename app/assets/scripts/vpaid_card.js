@@ -2,8 +2,8 @@
 	'use strict';
 
 	angular.module('c6.rumble')
-		.controller('VpaidCardController', ['$scope', '$log', 'ModuleService',
-		function							($scope ,  $log ,  ModuleService ) {
+		.controller('VpaidCardController', ['$scope', '$log', 'ModuleService', 'c6AppData',
+		function							($scope ,  $log ,  ModuleService ,  c6AppData ) {
 			$log = $log.context('VpaidCardController');
 			var self = this,
 				config = $scope.config;
@@ -27,6 +27,16 @@
 				self.pauseAd = function() {
 					iface.pause();
 				};
+
+				$scope.$watch('active', function(active, wasActive) {
+					if(active === wasActive) { return; }
+
+					if(active) {
+						if(c6AppData.behaviors.autoplay && c6AppData.profile.autoplay) {
+							iface.loadAd();
+						}
+					}
+				});
 			});
 		}])
 
@@ -50,11 +60,15 @@
 					Object.defineProperties(iface, {
 						currentTime: {
 							get: function() {
+								// maybe just check if player is ready? no need for isC6VpaidPlayer?
 								return player.isC6VpaidPlayer ? player.currentTime : 0;
 							}
 						},
 						duration: {
 							get: function() {
+								// maybe no need for $attr end or start?
+								// maybe this returns a private prop that's set when player is loaded?
+								// return _iface.duration
 								return (($attr.end || player.getDuration()) - ($attr.start || 0)) || NaN;
 							}
 						},
@@ -112,10 +126,9 @@
 						player = VPAIDService.createPlayer(scope.config.id, scope.config, $element.find('.mr-player'));
 
 						player.on('ready', function() {
+							// currently this happens when AdLoaded is fired from Player
+							// when prefetching is working maybe it should be fired when isCinema6player is true?
 							playerIsReady = true;
-							// player.on('playProgress', function(e) {
-							// 	// do stuff
-							// });
 
 							iface.emit('ready', iface);
 
@@ -151,8 +164,6 @@
 					// }
 
 					createPlayer();
-
-					// scope.$emit('VPAIDPlayerAdd', player);
 
 				}
 			};

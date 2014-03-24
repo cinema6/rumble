@@ -54,9 +54,9 @@
 					}
 				}
 
-				if(!scope.profile.inlineVideo) {
-					innerCard += ' regenerate="1"';
-				}
+				// if(!scope.profile.inlineVideo) {
+				// 	innerCard += ' regenerate="1"';
+				// }
 
 				if(scope.profile.autoplay) {
 					innerCard += ' autoplay="1"';
