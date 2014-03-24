@@ -48,6 +48,18 @@
                         expect(c6State.transitionTo).toHaveBeenCalledWith('editor.editCard', { id: 'rc-c98312239510db' });
                     });
                 });
+
+                describe('newCard()', function() {
+                    beforeEach(function() {
+                        spyOn(c6State, 'transitionTo');
+
+                        EditorCtrl.newCard();
+                    });
+
+                    it('should transition to the editor.newCard.type state', function() {
+                        expect(c6State.transitionTo).toHaveBeenCalledWith('editor.newCard.type');
+                    });
+                });
             });
         });
     });

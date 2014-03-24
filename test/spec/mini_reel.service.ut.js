@@ -127,6 +127,195 @@
 
             describe('@public', function() {
                 describe('methods', function() {
+                    describe('createCard(type)', function() {
+                        it('should create a new card based on the type provided', function() {
+                            var videoCard = MiniReelService.createCard('video'),
+                                videoBallotCard = MiniReelService.createCard('videoBallot'),
+                                adCard = MiniReelService.createCard('ad'),
+                                linksCard = MiniReelService.createCard('links');
+
+                            expect(videoCard).toEqual({
+                                id: jasmine.any(String),
+                                type: 'video',
+                                title: null,
+                                note: null,
+                                ad: false,
+                                data: {
+                                    service: null,
+                                    videoid: null,
+                                    start: null,
+                                    end: null
+                                }
+                            });
+
+                            expect(videoBallotCard).toEqual({
+                                id: jasmine.any(String),
+                                type: 'videoBallot',
+                                title: null,
+                                note: null,
+                                ad: false,
+                                data: {
+                                    service: null,
+                                    videoid: null,
+                                    start: null,
+                                    end: null,
+                                    ballot: []
+                                }
+                            });
+
+                            expect(adCard).toEqual({
+                                id: jasmine.any(String),
+                                type: 'ad',
+                                title: null,
+                                note: null,
+                                ad: true,
+                                data: {
+                                    autoplay: false,
+                                    publisher: false
+                                }
+                            });
+
+                            expect(linksCard).toEqual({
+                                id: jasmine.any(String),
+                                type: 'links',
+                                title: null,
+                                note: null,
+                                ad: false,
+                                data: {
+                                    links: []
+                                }
+                            });
+                        });
+
+                        it('should generate unique IDs for each card', function() {
+                            var ids = [
+                                MiniReelService.createCard('video'),
+                                MiniReelService.createCard('videoBallot'),
+                                MiniReelService.createCard('video'),
+                                MiniReelService.createCard('ad')
+                            ].map(function(card) {
+                                return card.id;
+                            });
+
+                            ids.forEach(function(id) {
+                                expect(ids.filter(function(thisId) {
+                                    return id === thisId;
+                                }).length).toBe(1);
+
+                                expect(id).toMatch(/rc-[a-zA-Z0-9]{14}/);
+                            });
+                        });
+
+                        it('should support creating a typeless card', function() {
+                            var card = MiniReelService.createCard();
+
+                            expect(card).toEqual({
+                                id: jasmine.any(String),
+                                type: null,
+                                title: null,
+                                note: null,
+                                ad: false,
+                                data: {}
+                            });
+                        });
+                    });
+
+                    describe('setCardType(card, type)', function() {
+                        it('should change the type of a card to the specified type', function() {
+                            var card = MiniReelService.createCard(),
+                                id = card.id,
+                                videoCard, videoBallotCard, adCard, linksCard;
+
+                            videoCard = MiniReelService.setCardType(card, 'video');
+                            expect(videoCard).toBe(card);
+                            expect(videoCard).toEqual({
+                                id: id,
+                                type: 'video',
+                                title: null,
+                                note: null,
+                                ad: false,
+                                data: {
+                                    service: null,
+                                    videoid: null,
+                                    start: null,
+                                    end: null
+                                }
+                            });
+
+                            videoBallotCard = MiniReelService.setCardType(card, 'videoBallot');
+                            expect(videoBallotCard).toBe(card);
+                            expect(videoBallotCard).toEqual({
+                                id: id,
+                                type: 'videoBallot',
+                                title: null,
+                                note: null,
+                                ad: false,
+                                data: {
+                                    service: null,
+                                    videoid: null,
+                                    start: null,
+                                    end: null,
+                                    ballot: []
+                                }
+                            });
+
+                            adCard = MiniReelService.setCardType(card, 'ad');
+                            expect(adCard).toBe(card);
+                            expect(adCard).toEqual({
+                                id: id,
+                                type: 'ad',
+                                title: null,
+                                note: null,
+                                ad: true,
+                                data: {
+                                    autoplay: false,
+                                    publisher: false
+                                }
+                            });
+
+                            linksCard = MiniReelService.setCardType(card, 'links');
+                            expect(linksCard).toBe(card);
+                            expect(linksCard).toEqual({
+                                id: id,
+                                type: 'links',
+                                title: null,
+                                note: null,
+                                ad: false,
+                                data: {
+                                    links: []
+                                }
+                            });
+                        });
+                    });
+
+                    describe('findCard(deck, id)', function() {
+                        it('should fetch a card from the deck', function() {
+                            var deck = [
+                                {
+                                    id: 'rc-08dcca381411bf'
+                                },
+                                {
+                                    id: 'rc-3a6be290d90577'
+                                },
+                                {
+                                    id: 'rc-a8fa60e6e80174'
+                                },
+                                {
+                                    id: 'rc-351a409bf1493e'
+                                },
+                                {
+                                    id: 'rc-54dffdc85035fd'
+                                }
+                            ];
+
+                            expect(MiniReelService.findCard(deck, 'rc-08dcca381411bf')).toBe(deck[0]);
+                            expect(MiniReelService.findCard(deck, 'rc-a8fa60e6e80174')).toBe(deck[2]);
+                            expect(MiniReelService.findCard(deck, 'rc-54dffdc85035fd')).toBe(deck[4]);
+                            expect(MiniReelService.findCard(deck, 'rc-3a6be290d90577')).toBe(deck[1]);
+                            expect(MiniReelService.findCard(deck, 'rc-351a409bf1493e')).toBe(deck[3]);
+                        });
+                    });
+
                     describe('open(minireel)', function() {
                         it('should not mutate the minireel', function() {
                             var copy = angular.copy(minireel);
@@ -156,6 +345,8 @@
                                 id: jasmine.any(String),
                                 type: 'intro'
                             });
+
+                            expect(deck[0].id).toMatch(/rc-[a-zA-Z0-9]{14}/);
                         });
 
                         it('should transpile the various video cards into two cards', function() {

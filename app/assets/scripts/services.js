@@ -2,19 +2,123 @@
     'use strict';
 
     angular.module('c6.mrmaker')
-        .service('MiniReelService', [function() {
-            this.open = function(minireel) {
-                var model = {
-                        data: {
-                            deck: [
-                                {
-                                    id: 'foo',
-                                    type: 'intro'
-                                }
-                            ]
+        .service('VideoService', ['c6UrlParser',
+        function                 ( c6UrlParser ) {
+            var VideoService = this;
+
+            this.createVideoUrl = function(computed, ctrl, ctrlName) {
+                ctrl.videoUrlBuffer = '';
+
+                computed(ctrl, 'videoUrl', function(url) {
+                    var data = this.model.data,
+                        service = data.service,
+                        id = data.videoid,
+                        self = this;
+
+                    function setVideoData(url) {
+                        var info = VideoService.dataFromUrl(url) || {
+                            service: null,
+                            id: null
+                        };
+
+                        data.service = info.service;
+                        data.videoid = info.id;
+
+                        self.videoUrlBuffer = url;
+
+                        return url;
+                    }
+
+                    if (arguments.length) {
+                        return setVideoData(url);
+                    }
+
+                    if (!service || !id) {
+                        return this.videoUrlBuffer;
+                    }
+
+                    return VideoService.urlFromData(service, id);
+                }, [
+                    ctrlName + '.model.data.service',
+                    ctrlName + '.model.data.videoid',
+                    ctrlName + '.videoUrlBuffer'
+                ]);
+            };
+
+            this.urlFromData = function(service, id) {
+                switch (service) {
+
+                case 'youtube':
+                    return 'https://www.youtube.com/watch?v=' + id;
+                case 'vimeo':
+                    return 'http://vimeo.com/' + id;
+                case 'dailymotion':
+                    return 'http://www.dailymotion.com/video/' + id;
+
+                }
+            };
+
+            this.dataFromUrl = function(url) {
+                var parsed = c6UrlParser(url),
+                    service = (parsed.hostname.match(/youtube|dailymotion|vimeo/) || [])[0],
+                    id,
+                    idFetchers = {
+                        youtube: function(url) {
+                            return params(url.search).v;
+                        },
+                        vimeo: function(url) {
+                            return url.pathname.replace(/^\//, '');
+                        },
+                        dailymotion: function(url) {
+                            return (url.pathname
+                                .replace(/\/video\//, '')
+                                .match(/[a-zA-Z0-9]+/) || [])[0];
                         }
-                    },
-                    template, dataTemplates, videoDataTemplate;
+                    };
+
+                function params(search) {
+                    var pairs = search.split('&'),
+                        object = {};
+
+                    angular.forEach(pairs, function(pair) {
+                        pair = pair.split('=');
+
+                        object[pair[0]] = pair[1];
+                    });
+
+                    return object;
+                }
+
+                if (!service) { return null; }
+
+                id = idFetchers[service](parsed);
+
+                if (!id) { return null; }
+
+                return {
+                    service: service,
+                    id: id
+                };
+            };
+        }])
+
+        .service('MiniReelService', ['crypto','$window',
+        function                    ( crypto , $window ) {
+            function generateId(prefix) {
+                return prefix + '-' +
+                    crypto.SHA1(
+                        $window.navigator.userAgent +
+                        $window.Date.now() +
+                        Math.random($window.Date.now())
+                    ).toString(crypto.enc.Hex).substr(0, 14);
+            }
+
+            function makeCard(rawData, base) {
+                var template, dataTemplates, videoDataTemplate,
+                    dataTemplate,
+                    card = base || {
+                        data: {}
+                    };
 
                 /******************************************************\
                  * * * * * * * * * * HELPER FUNCTIONS * * * * * * * * *
@@ -36,7 +140,7 @@
                 // "null".
                 function trimmer() {
                     return function(data, key, card) {
-                        var value = card.data[key],
+                        var value = data[key],
                             def = (card.type === 'dailymotion') ?
                                 undefined : null;
 
@@ -72,22 +176,27 @@
                             return 'video' + ((card.modules.indexOf('ballot') > -1) ?
                                 'Ballot' : '');
                         default:
-                            return card.type;
+                            return card.type || null;
 
                         }
                     },
                     title: copy(null),
                     note: copy(null),
-                    ad: copy(false)
+                    ad: function(card) {
+                        return card.ad || card.type === 'ad';
+                    }
                 };
 
                 // videoDataTemplate: this is the base template for all
                 // video cards.
                 videoDataTemplate = {
                     service: function(data, key, card) {
-                        return card.type;
+                        var type = card.type;
+
+                        return type.search(/^(youtube|dailymotion|vimeo)$/) > -1 ?
+                            type : null;
                     },
-                    videoid: copy(),
+                    videoid: copy(null),
                     start: trimmer(),
                     end: trimmer()
                 };
@@ -104,17 +213,67 @@
                         ballot: value([])
                     }),
                     ad: {
-                        autoplay: copy(),
-                        publisher: copy()
+                        autoplay: copy(false),
+                        publisher: copy(false)
                     },
                     links: {
-                        links: copy()
+                        links: copy([])
                     }
                 };
 
                 /******************************************************\
                  * * * * * * * * * READ CONFIGURATION * * * * * * * * *
                 \******************************************************/
+                // Use the template defined above to populate the
+                // properties of the card.
+                angular.forEach(template, function(fn, key) {
+                    card[key] = fn(rawData, key, rawData);
+                });
+
+                // Use the dataTemplates defined above to populate
+                // the data object of the card.
+                dataTemplate = dataTemplates[card.type];
+                angular.forEach(dataTemplate, function(fn, key) {
+                    card.data[key] = fn((rawData.data || {}), key, rawData);
+                });
+                angular.forEach(card.data, function(value, key) {
+                    if (!dataTemplate.hasOwnProperty(key)) {
+                        delete card.data[key];
+                    }
+                });
+
+                return card;
+            }
+
+            this.findCard = function(deck, id) {
+                return deck.filter(function(card) {
+                    return card.id === id;
+                })[0];
+            };
+
+            this.setCardType = function(card, type) {
+                card.type = type;
+                card.ad = undefined;
+
+                return makeCard(card, card);
+            };
+
+            this.createCard = function(type) {
+                return makeCard({
+                    id: generateId('rc'),
+                    type: type
+                });
+            };
+
+            this.open = function(minireel) {
+                var model = {
+                    data: {
+                        deck: minireel.data.deck.map(function(card) {
+                            return makeCard(card);
+                        })
+                    }
+                };
+
                 // Loop through the experience and copy everything but
                 // the "data" object.
                 angular.forEach(minireel, function(value, key) {
@@ -123,26 +282,9 @@
                     }
                 });
 
-                // Loop through the deck.
-                angular.forEach(minireel.data.deck, function(rawCard) {
-                    var card = {
-                        data: {}
-                    };
-
-                    // Use the template defined above to populate the
-                    // properties of the card.
-                    angular.forEach(template, function(fn, key) {
-                        card[key] = fn(rawCard, key, rawCard);
-                    });
-
-                    // Use the dataTemplates defined above to populate
-                    // the data object of the card.
-                    angular.forEach(dataTemplates[card.type], function(fn, key) {
-                        card.data[key] = fn(rawCard.data, key, rawCard);
-                    });
-
-                    // Add the card to our deck.
-                    model.data.deck.push(card);
+                model.data.deck.unshift({
+                    id: generateId('rc'),
+                    type: 'intro'
                 });
 
                 return model;
