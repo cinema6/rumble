@@ -410,7 +410,7 @@
                         self.setup = function() {
                             var obj = {
                                 params: {},
-                                playerId: '',
+                                playerId: playerId,
                                 swf: c6UrlMaker('swf/player.swf'),
                                 width: 640,
                                 height: 360,
@@ -483,39 +483,41 @@
                             // we're relying on the events coming from the Player instead
                             // we have no controls on this player so the only thing time-related
                             // will be firing our own tracking pixels for reporting/analytics
-                            var data = JSON.parse(e.data);
+                            try {
+                                var data = JSON.parse(e.data);
 
-                            if(!data.__vpaid__) { return; }
+                                if(!data.__vpaid__ || (data.__vpaid__.id !== playerId)) { return; }
 
-                            $log.info('EVENT: ', data.__vpaid__.type);
+                                $log.info('EVENT: ', data.__vpaid__.type);
 
-                            switch(data.__vpaid__.type) {
-                                case 'AdLoaded':
-                                    {
-                                        self.emit('ready', self);
-                                        break;
-                                    }
-                                case 'AdStarted':
-                                    {
-                                        self.emit('play', self);
-                                        break;
-                                    }
-                                case 'AdPaused':
-                                    {
-                                        self.emit('pause', self);
-                                        break;
-                                    }
-                                case 'AdVideoComplete':
-                                    {
-                                        self.emit('ended', self);
-                                        break;
-                                    }
-                            }
+                                switch(data.__vpaid__.type) {
+                                    case 'AdLoaded':
+                                        {
+                                            self.emit('ready', self);
+                                            break;
+                                        }
+                                    case 'AdStarted':
+                                        {
+                                            self.emit('play', self);
+                                            break;
+                                        }
+                                    case 'AdPaused':
+                                        {
+                                            self.emit('pause', self);
+                                            break;
+                                        }
+                                    case 'AdVideoComplete':
+                                        {
+                                            self.emit('ended', self);
+                                            break;
+                                        }
+                                }
 
-                            self.emit(data.__vpaid__.type, self);
+                                self.emit(data.__vpaid__.type, self);
+                            } catch (err) {}
                         }
 
-                        $win.addEventListener('message', handlePostMessage);
+                        $win.addEventListener('message', handlePostMessage, false);
 
                     }; // end _service.VPAIDPlayer()
 
