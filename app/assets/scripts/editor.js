@@ -4,7 +4,6 @@
     angular.module('c6.mrmaker')
         .controller('EditorController', ['cModel','c6State','$scope',
         function                        ( cModel , c6State , $scope ) {
-            console.log('CREATING!');
             this.model = cModel;
 
             this.editCard = function(card) {
