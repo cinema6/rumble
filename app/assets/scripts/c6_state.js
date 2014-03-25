@@ -31,6 +31,18 @@
                             data = (currentElement$ && currentElement$.data('cView')) || {};
 
                         function enter() {
+                            newScope = scope.$new();
+                            ctrl = state.controller;
+                            controllerAs = state.controllerAs;
+                            controller = ctrl ? $controller(ctrl, {
+                                $scope: newScope,
+                                cModel: state.cModel
+                            }) : null;
+
+                            if (controllerAs) {
+                                newScope[controllerAs] = controller;
+                            }
+
                             clone$ = transclude(function(clone$) {
                                 clone$.html(state.cTemplate);
                                 clone$.data('cView', { level: viewLevel, state: state });
@@ -48,17 +60,6 @@
                         // data.)
                         if (stateLevel > viewLevel || (state === data.state && state !== prevState)) { return; }
 
-                        newScope = scope.$new();
-                        ctrl = state.controller;
-                        controllerAs = state.controllerAs;
-                        controller = ctrl ? $controller(ctrl, {
-                            $scope: newScope,
-                            cModel: state.cModel
-                        }) : null;
-
-                        if (controllerAs) {
-                            newScope[controllerAs] = controller;
-                        }
 
                         if (stateLevel === viewLevel) {
                             enter();
