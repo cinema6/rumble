@@ -33,7 +33,7 @@
 			tests:
 				vpaid_card.directive.ut.js
 				vpaid_card.controller.ut.js
-				vpaid_card.service.ut.js
+				vpaid.service.ut.js
 	*/
 
 	angular.module('c6.rumble')

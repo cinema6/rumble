@@ -6,15 +6,14 @@
 		function							($scope ,  $log ,  ModuleService ) {
 			$log = $log.context('VpaidCardController');
 			var self = this,
-				config = $scope.config;
-
-			config._data = config._data || {
-				modules: {
-					displayAd: {
-						active: false
+				config = $scope.config,
+				_data = config._data = config._data || {
+					modules: {
+						displayAd: {
+							active: false
+						}
 					}
-				}
-			};
+				};
 
 			this.showVideo = true;
 
@@ -27,6 +26,16 @@
 				self.pauseAd = function() {
 					iface.pause();
 				};
+
+				iface.on('ended', function() {
+					if(!_data.modules.displayAd.src) {
+						$scope.$emit('<vpaid-card>:contentEnd', config);
+					}
+				});
+
+				iface.on('play', function() {
+					_data.modules.displayAd.active = false;
+				});
 
 				$scope.$watch('active', function(active, wasActive) {
 					if(active === wasActive) { return; }
@@ -152,14 +161,6 @@
 							});
 						});
 					}
-
-					// function regeneratePlayer() {
-					// 	if(player) {
-					// 		player.destroy();
-					// 		player = undefined;
-					// 	}
-					// 	$timeout(createPlayer);
-					// }
 
 					createPlayer();
 
