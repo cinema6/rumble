@@ -111,10 +111,7 @@
                     templateUrl: assets('views/editor.html'),
                     model:  ['cinema6','c6StateParams','MiniReelService',
                     function( cinema6 , c6StateParams , MiniReelService ) {
-                        return cinema6.db.find('experience', c6StateParams.id)
-                            .then(function(minireel) {
-                                return MiniReelService.open(minireel);
-                            });
+                        return MiniReelService.open(c6StateParams.id);
                     }],
                     children: {
                         editCard: {

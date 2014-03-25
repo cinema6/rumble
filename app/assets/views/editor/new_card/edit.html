@@ -11,9 +11,9 @@
         </label>
         <label class="field">
             Video URL:
-            <input type="text" ng-model="EditCardCtrl.videoUrl">
+            <input type="text" ng-model="NewCardEditCtrl.videoUrl">
         </label>
+        <button ng-click="NewCardEditCtrl.save()">Save</button>
     </form>
     <video-preview service="{{card.data.service}}" videoid="{{card.data.videoid}}"></video-preview>
-    <button ng-click="EditCardCtrl.close()">Save</button>
 </c6-alias>

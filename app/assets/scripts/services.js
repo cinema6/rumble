@@ -102,8 +102,10 @@
             };
         }])
 
-        .service('MiniReelService', ['crypto','$window',
-        function                    ( crypto , $window ) {
+        .service('MiniReelService', ['crypto','$window','cinema6','$cacheFactory','$q',
+        function                    ( crypto , $window , cinema6 , $cacheFactory , $q ) {
+            var cache = $cacheFactory('MiniReelService:minireels');
+
             function generateId(prefix) {
                 return prefix + '-' +
                     crypto.SHA1(
@@ -265,29 +267,52 @@
                 });
             };
 
-            this.open = function(minireel) {
-                var model = {
-                    data: {
-                        deck: minireel.data.deck.map(function(card) {
-                            return makeCard(card);
-                        })
+            this.open = function(id) {
+                function fetchFromCache() {
+                    var minireel = cache.get(id);
+
+                    return minireel ?
+                        $q.when(minireel) :
+                        $q.reject('No minireel with id [' + id + '] in cache.');
+                }
+
+                function fetchFromServer() {
+                    function putInCache(minireel) {
+                        return cache.put(minireel.id, minireel);
                     }
-                };
 
-                // Loop through the experience and copy everything but
-                // the "data" object.
-                angular.forEach(minireel, function(value, key) {
-                    if (key !== 'data') {
-                        model[key] = value;
+                    function transform(minireel) {
+                        var model = {
+                            data: {
+                                deck: minireel.data.deck.map(function(card) {
+                                    return makeCard(card);
+                                })
+                            }
+                        };
+
+                        // Loop through the experience and copy everything but
+                        // the "data" object.
+                        angular.forEach(minireel, function(value, key) {
+                            if (key !== 'data') {
+                                model[key] = value;
+                            }
+                        });
+
+                        model.data.deck.unshift({
+                            id: generateId('rc'),
+                            type: 'intro'
+                        });
+
+                        return model;
                     }
-                });
 
-                model.data.deck.unshift({
-                    id: generateId('rc'),
-                    type: 'intro'
-                });
+                    return cinema6.db.find('experience', id)
+                        .then(transform)
+                        .then(putInCache);
+                }
 
-                return model;
+                return fetchFromCache()
+                    .catch(fetchFromServer);
             };
         }]);
 }());

@@ -5,6 +5,7 @@
         describe('EditorController', function() {
             var $rootScope,
                 $scope,
+                $childScope,
                 $controller,
                 c6State,
                 EditorCtrl;
@@ -12,7 +13,15 @@
             var cModel;
 
             beforeEach(function() {
-                cModel = {};
+                cModel = {
+                    data: {
+                        deck: [
+                            {},
+                            {},
+                            {}
+                        ]
+                    }
+                };
 
                 module('c6.mrmaker');
 
@@ -22,6 +31,7 @@
                     c6State = $injector.get('c6State');
 
                     $scope = $rootScope.$new();
+                    $childScope = $scope.$new();
                     EditorCtrl = $controller('EditorController', { $scope: $scope, cModel: cModel });
                 });
             });
@@ -58,6 +68,24 @@
 
                     it('should transition to the editor.newCard.type state', function() {
                         expect(c6State.transitionTo).toHaveBeenCalledWith('editor.newCard.type');
+                    });
+                });
+            });
+
+            describe('events', function() {
+                describe('addCard', function() {
+                    var card;
+
+                    beforeEach(function() {
+                        card = {};
+
+                        $childScope.$emit('addCard', card);
+                    });
+
+                    it('should push the card onto the deck', function() {
+                        var deck = cModel.data.deck;
+
+                        expect(deck[deck.length - 1]).toBe(card);
                     });
                 });
             });

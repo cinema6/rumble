@@ -3,7 +3,10 @@
 
     define(['services'], function() {
         describe('MiniReelService', function() {
-            var MiniReelService;
+            var MiniReelService,
+                $rootScope,
+                cinema6,
+                $q;
 
             var minireel;
 
@@ -117,7 +120,10 @@
                 module('c6.mrmaker');
 
                 inject(function($injector) {
+                    $rootScope = $injector.get('$rootScope');
                     MiniReelService = $injector.get('MiniReelService');
+                    cinema6 = $injector.get('cinema6');
+                    $q = $injector.get('$q');
                 });
             });
 
@@ -316,17 +322,40 @@
                         });
                     });
 
-                    describe('open(minireel)', function() {
-                        it('should not mutate the minireel', function() {
-                            var copy = angular.copy(minireel);
+                    describe('open(id)', function() {
+                        var success,
+                            deck;
 
-                            MiniReelService.open(minireel);
+                        beforeEach(function() {
+                            success = jasmine.createSpy('open() success');
+                            spyOn(cinema6.db, 'find').and.returnValue($q.when(minireel));
 
-                            expect(minireel).toEqual(copy);
+                            $rootScope.$apply(function() {
+                                MiniReelService.open('e-15aa87f5da34c3')
+                                    .then(success);
+                            });
+
+                            deck = success.calls.mostRecent().args[0].data.deck;
+                        });
+
+                        it('should fetch the minireel from the database', function() {
+                            expect(cinema6.db.find).toHaveBeenCalledWith('experience', 'e-15aa87f5da34c3');
+                        });
+
+                        it('should resolve to a cached minireel if it has already been opened', function() {
+                            var secondSuccess = jasmine.createSpy('open() success');
+
+                            $rootScope.$apply(function() {
+                                MiniReelService.open('e-15aa87f5da34c3')
+                                    .then(secondSuccess);
+                            });
+
+                            expect(success.calls.mostRecent().args[0])
+                                .toBe(secondSuccess.calls.mostRecent().args[0]);
                         });
 
                         it('should return an object with all the non-data content of the original', function() {
-                            expect(MiniReelService.open(minireel)).toEqual({
+                            expect(success).toHaveBeenCalledWith({
                                 id: 'e-15aa87f5da34c3',
                                 title: 'My MiniReel',
                                 subtitle: 'I <3 Turtles',
@@ -339,8 +368,6 @@
                         });
 
                         it('should insert an intro card', function() {
-                            var deck = MiniReelService.open(minireel).data.deck;
-
                             expect(deck[0]).toEqual({
                                 id: jasmine.any(String),
                                 type: 'intro'
@@ -350,8 +377,6 @@
                         });
 
                         it('should transpile the various video cards into two cards', function() {
-                            var deck = MiniReelService.open(minireel).data.deck;
-
                             expect(deck[1]).toEqual({
                                 id: 'rc-c9cf24e87307ac',
                                 type: 'video',
@@ -412,8 +437,6 @@
                         });
 
                         it('should transpile the ad cards', function() {
-                            var deck = MiniReelService.open(minireel).data.deck;
-
                             expect(deck[3]).toEqual({
                                 id: 'rc-1c7a46097a5d4a',
                                 type: 'ad',
@@ -439,8 +462,6 @@
                         });
 
                         it('should transpile the links cards', function() {
-                            var deck = MiniReelService.open(minireel).data.deck;
-
                             expect(deck[7]).toEqual({
                                 id: 'rc-25c1f60b933186',
                                 type: 'links',
