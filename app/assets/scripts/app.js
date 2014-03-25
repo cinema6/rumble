@@ -36,7 +36,8 @@
                     'SteppedEase',
                     'Strong'
                 ],
-                googleAnalytics: 'ga'
+                googleAnalytics: 'ga',
+                crypto: 'CryptoJS'
             };
 
             angular.forEach(config, function(value, key) {
@@ -110,24 +111,50 @@
                     templateUrl: assets('views/editor.html'),
                     model:  ['cinema6','c6StateParams','MiniReelService',
                     function( cinema6 , c6StateParams , MiniReelService ) {
-                        return cinema6.db.find('experience', c6StateParams.id)
-                            .then(function(minireel) {
-                                return MiniReelService.open(minireel);
-                            });
+                        return MiniReelService.open(c6StateParams.id);
                     }],
                     children: {
                         editCard: {
                             controller: 'EditCardController',
                             controllerAs: 'EditCardCtrl',
                             templateUrl: assets('views/editor/edit_card.html'),
-                            model:  ['c6StateParams',
-                            function( c6StateParams ) {
+                            model:  ['c6StateParams','MiniReelService',
+                            function( c6StateParams , MiniReelService ) {
                                 var minireel = this.cParent.cModel;
 
-                                return minireel.data.deck.filter(function(card) {
-                                    return card.id === c6StateParams.id;
-                                })[0];
+                                return MiniReelService.findCard(
+                                    minireel.data.deck,
+                                    c6StateParams.id
+                                );
                             }]
+                        },
+                        newCard: {
+                            templateUrl: assets('views/editor/new_card.html'),
+                            model:  ['MiniReelService',
+                            function( MiniReelService ) {
+                                return MiniReelService.createCard();
+                            }],
+                            children: {
+                                type: {
+                                    controller: 'NewCardTypeController',
+                                    controllerAs: 'NewCardTypeCtrl',
+                                    templateUrl: assets('views/editor/new_card/type.html'),
+                                    model: [function() {
+                                        return this.cParent.cModel;
+                                    }]
+                                },
+                                edit: {
+                                    controller: 'NewCardEditController',
+                                    controllerAs: 'NewCardEditCtrl',
+                                    templateUrl: assets('views/editor/new_card/edit.html'),
+                                    model:  ['c6StateParams','MiniReelService',
+                                    function( c6StateParams , MiniReelService ) {
+                                        var card = this.cParent.cModel;
+
+                                        return MiniReelService.setCardType(card, c6StateParams.type);
+                                    }]
+                                }
+                            }
                         }
                     }
                 })

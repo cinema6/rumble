@@ -103,6 +103,7 @@
                 var parentState = {
                         name: 'parent',
                         cTemplate: '<p>Parent</p><c6-view></c6-view>',
+                        controller: jasmine.createSpy('ParentController'),
                         cModel: null
                     },
                     childState = {
@@ -122,11 +123,15 @@
 
                 expect(view.text()).toBe('ParentChild');
 
+                spyOn($scope, '$new').and.callThrough();
+                parentState.controller.calls.reset();
                 $scope.$apply(function() {
                     c6State.emit('viewChangeStart', parentState, childState);
                 });
                 expect(view.children('c6-view')[0]).toBe($c6View[0]);
                 expect(view.text()).toBe('Parent');
+                expect($scope.$new).not.toHaveBeenCalled();
+                expect(parentState.controller).not.toHaveBeenCalled();
                 expect(c6State.emit).toHaveBeenCalledWith('viewChangeSuccess', parentState);
             });
 

@@ -49,6 +49,7 @@
                 timelinemax: libUrl('gsap/1.11.2-0-g79f8c87/TimelineMax.min'),
                 c6ui: libUrl('c6ui/v2.5.0-0-gc58e712/c6uilib'),
                 c6log: libUrl('c6ui/v2.5.0-0-gc58e712/c6log'),
+                sha1: libUrl('cryptojs/v3.1.2/sha1'),
                 templates: '/base/.tmp/templates'
             },
 
@@ -75,7 +76,7 @@
                     deps: ['app']
                 },
                 app: {
-                    deps: ['angular', 'angularMocks', 'modernizr', 'timelinemax', 'c6ui', 'c6_state', 'c6log']
+                    deps: ['angular', 'angularMocks', 'modernizr', 'timelinemax', 'c6ui', 'c6_state', 'c6log', 'sha1']
                 },
                 services: {
                     deps: ['app']

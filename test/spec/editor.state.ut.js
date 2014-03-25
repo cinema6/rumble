@@ -13,13 +13,10 @@
             var c6StateParams,
                 MiniReelService;
 
-            var experience = {
-                    id: 'e-9990920583a712'
-                },
-                minireel = {
-                    id: 'e-9990920583a712',
-                    processed: true
-                };
+            var minireel = {
+                id: 'e-9990920583a712',
+                processed: true
+            };
 
             beforeEach(function() {
                 module('c6.state', function($provide) {
@@ -27,9 +24,9 @@
                 });
 
                 module('c6.mrmaker', function($provide) {
-                    $provide.value('MiniReelService', {
-                        open: jasmine.createSpy('MiniReelService.open()')
-                            .and.returnValue(minireel)
+                    $provide.service('MiniReelService', function($q) {
+                        this.open = jasmine.createSpy('MiniReelService.open()')
+                            .and.returnValue($q.when(minireel));
                     });
                 });
 
@@ -59,11 +56,6 @@
                 beforeEach(function() {
                     success = jasmine.createSpy('model() success');
 
-                    spyOn(cinema6.db, 'find')
-                        .and.callFake(function() {
-                            return $q.when(experience);
-                        });
-
                     c6StateParams.id = 'e-9990920583a712';
 
                     $rootScope.$apply(function() {
@@ -76,12 +68,8 @@
                     expect(result.then).toEqual(jasmine.any(Function));
                 });
 
-                it('should find the experience based on the state params', function() {
-                    expect(cinema6.db.find).toHaveBeenCalledWith('experience', c6StateParams.id);
-                });
-
                 it('should "open" the minireel for editing', function() {
-                    expect(MiniReelService.open).toHaveBeenCalledWith(experience);
+                    expect(MiniReelService.open).toHaveBeenCalledWith('e-9990920583a712');
                 });
 
                 it('should resolve to the transpiled minireel', function() {

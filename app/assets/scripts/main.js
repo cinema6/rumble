@@ -49,6 +49,7 @@
                     libUrl('jquery/2.0.3-0-gf576d00/jquery.min.js'),
                     libUrl('gsap/1.11.2-0-g79f8c87/TweenMax.min.js'),
                     libUrl('gsap/1.11.2-0-g79f8c87/TimelineMax.min.js'),
+                    libUrl('cryptojs/v3.1.2/sha1.js'),
                     libUrl('angular/v1.2.14-0-g729fb13/angular.min.js'),
                     libUrl('c6ui/v2.5.0-0-gc58e712/c6uilib.min.js'),
                     libUrl('c6ui/v2.5.0-0-gc58e712/c6log.min.js')
@@ -59,6 +60,7 @@
                     libUrl('jquery/2.0.3-0-gf576d00/jquery.js'),
                     libUrl('gsap/1.11.2-0-g79f8c87/TweenMax.min.js'),
                     libUrl('gsap/1.11.2-0-g79f8c87/TimelineMax.min.js'),
+                    libUrl('cryptojs/v3.1.2/sha1.js'),
                     libUrl('angular/v1.2.14-0-g729fb13/angular.js'),
                     libUrl('c6ui/v2.5.0-0-gc58e712/c6uilib.js'),
                     libUrl('c6ui/v2.5.0-0-gc58e712/c6log.js')

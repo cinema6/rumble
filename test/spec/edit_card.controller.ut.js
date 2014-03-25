@@ -119,7 +119,7 @@
                                     EditCardCtrl.videoUrl = 'http://www.youtube.com/';
                                 });
                             }).not.toThrow();
-                            expect(model.data.service).toBe('youtube');
+                            expect(model.data.service).toBeNull();
                             expect(EditCardCtrl.videoUrl).toBe('http://www.youtube.com/');
 
                             expect(function() {
@@ -127,7 +127,7 @@
                                     EditCardCtrl.videoUrl = 'http://www.vimeo.com/';
                                 });
                             }).not.toThrow();
-                            expect(model.data.service).toBe('vimeo');
+                            expect(model.data.service).toBeNull();
                             expect(EditCardCtrl.videoUrl).toBe('http://www.vimeo.com/');
 
                             expect(function() {
@@ -135,7 +135,7 @@
                                     EditCardCtrl.videoUrl = 'http://www.dailymotion.com/';
                                 });
                             }).not.toThrow();
-                            expect(model.data.service).toBe('dailymotion');
+                            expect(model.data.service).toBeNull();
                             expect(EditCardCtrl.videoUrl).toBe('http://www.dailymotion.com/');
 
                             expect(function() {
