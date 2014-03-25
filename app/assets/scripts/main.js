@@ -6,10 +6,6 @@
         __C6_APP_BASE_URL__ = window.__C6_APP_BASE_URL__ = __C6_BUILD_VERSION__ || 'assets',
         c6 = window.c6;
 
-    require.config({
-        baseUrl:  __C6_APP_BASE_URL__
-    });
-
     var libUrl = function(url) {
             var libBase = (function() {
                 switch (c6.kEnv) {
@@ -38,7 +34,8 @@
                     'scripts/services',
                     'scripts/manager',
                     'scripts/editor',
-                    'scripts/c6_state'
+                    'scripts/c6_state',
+                    'scripts/c6_drag'
                 ];
             }
         }()),
@@ -84,6 +81,15 @@
         done();
     }
 
+    require.config({
+        baseUrl:  __C6_APP_BASE_URL__,
+        paths: {
+            hammer: __C6_BUILD_VERSION__ ?
+                libUrl('hammer.js/1.0.9-0-g308cb9a/hammer.min') :
+                libUrl('hammer.js/1.0.9-0-g308cb9a/hammer')
+        }
+    });
+
     c6.kBaseUrl = __C6_APP_BASE_URL__;
     c6.kLocal = (c6.kBaseUrl === 'assets');
     c6.kDebug = (c6.kEnv === 'dev' || c6.kEnv === 'staging');
@@ -95,7 +101,7 @@
         dev: 'http://s3.amazonaws.com/c6.dev/media/src/stub',
         cdn: 'http://cdn1.cinema6.com/src/stub'
     };
-    c6.kModDeps = ['c6.ui', 'c6.state', 'c6.log'];
+    c6.kModDeps = ['c6.ui', 'c6.state', 'c6.log', 'c6.drag'];
 
     if (window.location.host.match(/\/\/(www\.)*cinema6.com/) !== null){
         ga('create', 'UA-44457821-2', 'cinema6.com');
