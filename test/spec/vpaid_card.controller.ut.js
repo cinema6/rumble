@@ -63,15 +63,11 @@
 
 			describe('initialization', function() {
 				describe('if the config already has _data', function() {
-					var origData;
-
-					beforeEach(function() {
-						origData = $scope.config._data = {};
+					it('should not overwrite the data', function() {
+						var origData = $scope.config._data = {};
 
 						VpaidCardController = $controller('VpaidCardController', { $scope: $scope });
-					});
 
-					it('should not overwrite the data', function() {
 						expect($scope.config._data).toBe(origData);
 					});
 				});
@@ -115,31 +111,25 @@
 					$scope.$apply(function() {
 						$scope.$emit('playerAdd', iface);
 					});
+
+					spyOn($scope, '$emit').andCallThrough();
 				});
 
 				describe('ended', function() {
-					beforeEach(function() {
-						spyOn($scope, '$emit').andCallThrough();
-					});
-
 					describe('if there is a displayAd', function() {
-						beforeEach(function() {
+						it('should not $emit the contentEnd event', function() {
 							$scope.config._data.modules.displayAd.src = 'foo.jpg';
 
 							iface.emit('ended', iface);
-						});
 
-						it('should not $emit the contentEnd event', function() {
 							expect($scope.$emit).not.toHaveBeenCalledWith('<vpaid-card>:contentEnd', $scope.config);
 						});
 					});
 
 					describe('if there is no displayAd', function() {
-						beforeEach(function() {
-							iface.emit('ended', iface);
-						});
-
 						it('should emit the contentEnd event', function() {
+							iface.emit('ended', iface);
+
 							expect($scope.$emit).toHaveBeenCalledWith('<vpaid-card>:contentEnd', $scope.config);
 						});
 					});
@@ -148,6 +138,7 @@
 				describe('play', function() {
 					it('should deactivate the displayAd', function() {
 						iface.emit('play', iface);
+
 						expect($scope.config._data.modules.displayAd.active).toBe(false);
 					});
 				});
@@ -172,13 +163,10 @@
 					});
 
 					describe('when true', function() {
-						beforeEach(function() {
+						it('should play the ad', function() {
 							$scope.$apply(function() {
 								$scope.active = true;
 							});
-						});
-
-						it('should play the ad', function() {
 							expect(iface.loadAd).toHaveBeenCalled();
 						});
 					});

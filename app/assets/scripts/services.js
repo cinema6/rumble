@@ -473,6 +473,10 @@
                             return self.player.getAdProperties().adCurrentTime;
                         };
 
+                        self.getDuration = function() {
+                            return self.player.getAdProperties().adDuration;
+                        };
+
                         self.destroy = function() {
                             // self.player.stopAd();
                             // element$[0].parentNode.removeChild(element$[0]);

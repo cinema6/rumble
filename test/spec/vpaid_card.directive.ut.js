@@ -62,15 +62,13 @@
 			});
 
 			describe('initialization', function() {
-				beforeEach(function() {
+				it('should $emit the playerAdd event with an interface', function() {
 					spyOn($scope, '$emit').andCallThrough();
 
 					$scope.$apply(function() {
 						$compile('<vpaid-card></vpaid-card>')($scope);
 					});
-				});
 
-				it('should $emit the playerAdd event with an interface', function() {
 					expect($scope.$emit).toHaveBeenCalledWith('playerAdd', jasmine.any(Object));
 				});
 			});

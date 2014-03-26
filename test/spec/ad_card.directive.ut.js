@@ -38,35 +38,31 @@
 
 			describe('initialization', function() {
 				describe('with flash enabled', function() {
-					var element$;
+					it('should compile a vpaid-card', function() {
+						var element$;
 
-					beforeEach(function() {
 						$scope.$apply(function() {
 							$scope.profile = {
 								flash: true
 							};
 							element$ = $compile('<ad-card></ad-card>')($scope);
 						});
-					});
 
-					it('should compile a vpaid-card', function() {
 						expect(element$.find('vpaid-card').length).toBe(1);
 					});
 				});
 
 				describe('without flash enabled', function() {
-					var element$;
+					it('should compile a vast-card', function() {
+						var element$;
 
-					beforeEach(function() {
 						$scope.$apply(function() {
 							$scope.profile = {
 								flash: false
 							};
 							element$ = $compile('<ad-card></ad-card>')($scope);
 						});
-					});
 
-					it('should compile a vast-card', function() {
 						expect(element$.find('vast-card').length).toBe(1);
 					});
 				});
