@@ -101,7 +101,10 @@
                             .then(function(currentUsers) {
                                 var user = currentUsers[0];
 
-                                return cinema6.db.findAll('experience', { appUri: 'rumble', org: user.org });
+                                return cinema6.db.findAll(
+                                    'experience',
+                                    { appUri: 'rumble', org: user.org }
+                                );
                             });
                     }]
                 })
@@ -151,7 +154,9 @@
                                     function( c6StateParams , MiniReelService ) {
                                         var card = this.cParent.cModel;
 
-                                        return MiniReelService.setCardType(card, c6StateParams.type);
+                                        return MiniReelService.setCardType(
+                                            card, c6StateParams.type
+                                        );
                                     }]
                                 }
                             }

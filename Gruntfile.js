@@ -91,10 +91,14 @@ module.exports = function(grunt) {
         grunt.task.run(protractorTask);
     });
 
-    grunt.registerTask('test:e2e:debug', 'run e2e tests locally whenever files change', function(browser) {
-        grunt.task.run('test:e2e:' + (browser || '') + ':local');
-        grunt.task.run('watch:e2e:' + (browser || ''));
-    });
+    grunt.registerTask(
+        'test:e2e:debug',
+        'run e2e tests locally whenever files change',
+        function(browser) {
+            grunt.task.run('test:e2e:' + (browser || '') + ':local');
+            grunt.task.run('watch:e2e:' + (browser || ''));
+        }
+    );
 
     /*********************************************************************************************
      *
