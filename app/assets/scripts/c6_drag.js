@@ -193,8 +193,8 @@
                             $element.css({
                                 position: 'static'
                             });
-
                             dragState.refresh();
+
                             dragState.emit('move', dragState, dragState.display);
                             dragState.emit('end', dragState);
                         }
