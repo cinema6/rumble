@@ -43,6 +43,7 @@ define(['hammer'], function(hammer) {
 
                 this.dragStart.x = NaN;
                 this.dragStart.y = NaN;
+                this.isDragging = false;
             }
 
             this.touching.trigger('release', {

@@ -48,10 +48,11 @@
                     $div;
 
                 testFrame.$body.append('<div style="width: 100%; height: 100px;"></div>');
-                $scope.$apply(function() {
-                    $div = $compile('<div c6-draggable style="width: 50px; height: 50px;"></div>')($scope);
-                });
+                $div = $('<div c6-draggable style="width: 50px; height: 50px;"></div>');
                 testFrame.$body.append($div);
+                $scope.$apply(function() {
+                    $compile($div)($scope);
+                });
 
                 finger.placeOn($div);
                 // Drag 10px to the right
@@ -75,10 +76,61 @@
                 expect($div.css('left')).toBe('auto');
 
                 domEvents.forEach(function(event) {
-                    if (event.type.search(/^(drag|dragstart|dragend)$/) > -1) {
+                    if (event.type.search(/^(drag)$/) > -1) {
                         expect(event.gesture.preventDefault).toHaveBeenCalled();
                     }
                 });
+            });
+
+            it('should support multiple drags/drops', function() {
+                var finger = new Finger(),
+                    $div = $('<div c6-draggable style="width: 50px; height: 50px;"></div>');
+
+                testFrame.$body.append($div);
+                $scope.$apply(function() {
+                    $compile($div)($scope);
+                });
+
+                finger.placeOn($div);
+                finger.drag(0, 0);
+                expect($div.css('top')).toBe('0px');
+                expect($div.css('left')).toBe('0px');
+
+                finger.drag(10, 10);
+                expect($div.css('top')).toBe('10px');
+                expect($div.css('left')).toBe('10px');
+
+                finger.lift();
+
+                finger.placeOn($div);
+                finger.drag(0, 0);
+                expect($div.css('top')).toBe('0px');
+                expect($div.css('left')).toBe('0px');
+
+                finger.drag(10, 10);
+                expect($div.css('top')).toBe('10px');
+                expect($div.css('left')).toBe('10px');
+            });
+
+            it('should add the "c6-dragging" class to the element while it is being dragged', function() {
+                var finger = new Finger(),
+                    $div;
+
+                $scope.$apply(function() {
+                    $div = $compile('<div c6-draggable>')($scope);
+                });
+                testFrame.$body.append($div);
+                expect($div.hasClass('c6-dragging')).toBe(false);
+
+                finger.placeOn($div);
+                finger.drag(0, 0);
+                expect($div.hasClass('c6-dragging')).toBe(true);
+
+                finger.drag(5, 10);
+                expect($div.hasClass('c6-dragging')).toBe(true);
+
+                finger.lift();
+                expect($div.hasClass('c6-dragging')).toBe(false);
             });
 
             afterEach(function() {
