@@ -13,6 +13,16 @@
     document.getElementsByTagName('head')[0].appendChild(styles);
 
     define(['hammer'], function(hammer) {
+        var copy = angular.copy;
+
+        function refreshMethod() {
+            /*jshint validthis:true */
+            // This function is used as a method on two contructors, defined below: DragState() and
+            // ZoneState(). Rather than duplicating code, the method is defined up here and put on
+            // the contructor prototypes via reference.
+            return copy(this.element.getBoundingClientRect(), this.display);
+        }
+
         angular.module('c6.drag', ['c6.ui'])
             .value('hammer', hammer)
 
@@ -110,8 +120,6 @@
 
             .directive('c6DragZone', ['c6EventEmitter','$animate',
             function                 ( c6EventEmitter , $animate ) {
-                var copy = angular.copy;
-
                 function ZoneState(id, element) {
                     this.id = id;
                     this.currentlyUnder = [];
@@ -131,9 +139,7 @@
                             rect.left > myRect.right
                         );
                     },
-                    refresh: function() {
-                        return copy(this.element.getBoundingClientRect(), this.display);
-                    }
+                    refresh: refreshMethod
                 };
 
                 return {
@@ -204,8 +210,7 @@
 
             .directive('c6Draggable', ['hammer','c6EventEmitter','$animate',
             function                  ( hammer , c6EventEmitter , $animate ) {
-                var copy = angular.copy,
-                    noop = angular.noop;
+                var noop = angular.noop;
 
                 function DragState(id, element) {
                     this.id = id;
@@ -217,9 +222,7 @@
                     c6EventEmitter(this);
                 }
                 DragState.prototype = {
-                    refresh: function() {
-                        return copy(this.element.getBoundingClientRect(), this.display);
-                    }
+                    refresh: refreshMethod
                 };
 
                 return {
@@ -229,26 +232,6 @@
                         var touchable = hammer($element[0]),
                             dragState = new DragState($attrs.id, $element[0]),
                             currentlyOver = dragState.currentlyOver;
-
-                        function enterZone(zone) {
-                            currentlyOver.push(zone);
-
-                            if (currentlyOver.length === 1) {
-                                $animate.addClass($element, 'c6-over-zone');
-                            }
-
-                            $animate.addClass($element, 'c6-over-' + zone.id);
-                        }
-
-                        function leaveZone(zone) {
-                            currentlyOver.splice(currentlyOver.indexOf(zone), 1);
-
-                            if (!currentlyOver.length) {
-                                $animate.removeClass($element, 'c6-over-zone');
-                            }
-
-                            $animate.removeClass($element, 'c6-over-' + zone.id);
-                        }
 
                         function px(num) {
                             return num + 'px';
@@ -407,15 +390,30 @@
                             }
                         }
 
+                        function enterZone(zone) {
+                            currentlyOver.push(zone);
+
+                            if (currentlyOver.length === 1) {
+                                $animate.addClass($element, 'c6-over-zone');
+                            }
+
+                            $animate.addClass($element, 'c6-over-' + zone.id);
+                        }
+
+                        function leaveZone(zone) {
+                            currentlyOver.splice(currentlyOver.indexOf(zone), 1);
+
+                            if (!currentlyOver.length) {
+                                $animate.removeClass($element, 'c6-over-zone');
+                            }
+
+                            $animate.removeClass($element, 'c6-over-' + zone.id);
+                        }
+
                         if (C6DragSpaceCtrl) {
                             C6DragSpaceCtrl.addDragable(dragState);
 
                             dragState.on('move', computePrimaryZone);
-
-                            scope.$on('$destroy', function() {
-                                dragState.removeAllListeners();
-                                C6DragSpaceCtrl.removeDraggable(dragState);
-                            });
                         }
 
                         $element.data('cDrag', dragState);
@@ -424,6 +422,14 @@
 
                         dragState.on('enterZone', enterZone)
                             .on('leaveZone', leaveZone);
+
+                        scope.$on('$destroy', function() {
+                            dragState.removeAllListeners();
+
+                            if (C6DragSpaceCtrl) {
+                                C6DragSpaceCtrl.removeDraggable(dragState);
+                            }
+                        });
                     }
                 };
             }]);
