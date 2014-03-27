@@ -1,0 +1,42 @@
+<article class="mr-card__group c6-height-limiter">
+    <ballot-vote-module class="mr-ballot-module css-promote"
+        ng-if="Ctrl.hasModule('ballot')"
+        active="config._data.modules.ballot.ballotActive && active"
+        vote="config._data.modules.ballot.vote"
+        card-id="{{config.id}}"
+        fetch-when="onDeck || active"
+        on-dismiss="Ctrl.dismissBallot()">
+    </ballot-vote-module>
+    <ballot-results-module ng-if="Ctrl.hasModule('ballot')"
+        class="mr-results-module css-promote"
+        active="config._data.modules.ballot.resultsActive && active"
+        vote="config._data.modules.ballot.vote"
+        card-id="{{config.id}}"
+        fetch-when="onDeck || active"
+        on-dismiss="Ctrl.dismissBallotResults()">
+    </ballot-results-module>
+
+    <div class="mr-player__group">
+        <div ng-class="{'mr-player--fly-away': Ctrl.flyAway}" class="mr-player c6-height-limiter"><!-- actual player will be inserted into this container --></div>
+        <div ng-show="Ctrl.flyAway" class="mr-player__thumbnail c6-height-limiter"
+            ng-style="{'background-image':config.thumbs.large ? 'url(' + config.thumbs.large + ')' : ''}">
+            <span class="ir"><img ng-src="{{config.thumbs.large}}"></span>
+        </div>
+    </div>
+
+    <copy-expander title="{{config.title}}"
+        source="{{config.source}}"
+        source-url="{{Ctrl.videoUrl}}"
+        note="{{config.note}}"
+        touch="profile.touch">
+    </copy-expander>
+
+    <!--<comments-module ng-if="Ctrl.hasModule('comments')"
+        card-id="{{config.id}}"
+        fetch-comments-when="onDeck || active">
+    </comments-module>-->
+    <display-ad-module ng-if="Ctrl.hasModule('displayAd')"
+        active="config._data.modules.displayAd.active"
+        ad-src="{{config.displayAd}}">
+    </display-ad-module>
+</article>

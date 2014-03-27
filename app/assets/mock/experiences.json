@@ -10,7 +10,7 @@
         "img": {
             "splash": "experiences/rumble/splash-6thumb.jpg"
         },
-        "mode": "light",
+        "mode": "lightbox-ads",
         "theme": "ed-entertainment",
         "data": {
             "id": "r-738c2403d83ddc",

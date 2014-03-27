@@ -1,0 +1,29 @@
+<div class="mr-card__group mr-vast__group">
+    <div ng-style="{visibility: Ctrl.showVideo ? 'visible' : 'hidden'}" class="mr-vast__player">
+        <video class="mr-vast__video c6-height-limiter" ng-click="Ctrl.clickThrough()"
+            c6-video id="{{config.id}}" c6-src="Ctrl.videoSrc">
+        </video>
+    <h1 class="mr-vast__title-h1 tk--hdr">Advertisement</h1>
+    </div>
+    <section>
+        <ballot-module ng-if="Ctrl.hasModule('ballot')"
+            active="config._data.modules.ballot.active"
+            fetch-results-when="onDeck || active"
+            card-id="{{config.id}}"
+            ballot="config.ballot"
+            vote="config._data.modules.ballot.vote">
+        </ballot-module>
+        <comments-module ng-if="Ctrl.hasModule('comments')"
+            card-id="{{config.id}}"
+            fetch-comments-when="onDeck || active">
+        </comments-module>
+        <display-ad-module ng-if="Ctrl.hasModule('displayAd')"
+            active="config._data.modules.displayAd.active"
+            ad-src="{{config.displayAd}}">
+        </display-ad-module>
+    </section>
+    <p class="mr-vast__watch-again tk--hdr"
+        ng-show="config._data.modules.displayAd.active">
+        <a ng-click="Ctrl.reset()" href="" title="Watch the Video">Watch the Video</a>
+    </p>
+</div>
