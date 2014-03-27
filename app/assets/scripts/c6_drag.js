@@ -163,11 +163,36 @@
                             $animate.removeClass($element, 'c6-drag-zone-under-' + draggable.id);
                         }
 
+                        function wonPrimary(draggable) {
+                            $animate.addClass(
+                                $element,
+                                'c6-drag-zone-primary'
+                            );
+                            $animate.addClass(
+                                $element,
+                                'c6-drag-zone-primary-of-' + draggable.id
+                            );
+                        }
+
+                        function lostPrimary(draggable) {
+                            $animate.removeClass(
+                                $element,
+                                'c6-drag-zone-primary'
+                            );
+                            $animate.removeClass(
+                                $element,
+                                'c6-drag-zone-primary-of-' + draggable.id
+                            );
+                        }
+
                         zoneState
                             .on('draggableEnter', draggableEnter)
-                            .on('draggableLeave', draggableLeave);
+                            .on('draggableLeave', draggableLeave)
+                            .on('wonPrimary', wonPrimary)
+                            .on('lostPrimary', lostPrimary);
 
                         C6DragSpaceCtrl.addZone(zoneState);
+                        $element.data('cDragZone', zoneState);
 
                         scope.$on('$destroy', function() {
                             zoneState.removeAllListeners();
@@ -187,6 +212,7 @@
                     this.element = element;
                     this.display = this.refresh();
                     this.currentlyOver = [];
+                    this.primaryZone = null;
 
                     c6EventEmitter(this);
                 }
@@ -313,14 +339,86 @@
                             touchable.on('dragstart drag dragend', delegate);
                         }
 
+                        function intersectArea(rect1, rect2) {
+                            var top = Math.max(rect1.top, rect2.top),
+                                right = Math.min(rect1.right, rect2.right),
+                                bottom = Math.min(rect1.bottom, rect2.bottom),
+                                left = Math.max(rect1.left, rect2.left),
+                                width = right - left,
+                                height = bottom - top;
+
+                            return width * height;
+                        }
+
+                        function findLargestIntersectionWith(rect, items) {
+                            var areaCache = {};
+
+                            items.sort(function(a, b) {
+                                var aArea = areaCache[a.id] ||
+                                    (areaCache[a.id] = intersectArea(a.display, rect)),
+                                    bArea = areaCache[b.id] ||
+                                        (areaCache[b.id] = intersectArea(b.display, rect));
+
+                                if (aArea > bArea) {
+                                    return -1;
+                                } else if (aArea < bArea) {
+                                    return 1;
+                                }
+
+                                return 0;
+                            });
+
+                            return currentlyOver[0];
+                        }
+
+                        function computePrimaryZone(draggable, myRect) {
+                            var currentlyOver = draggable.currentlyOver,
+                                prevPrimary = draggable.primaryZone,
+                                currPrimary;
+
+                            switch (currentlyOver.length) {
+
+                            case 0:
+                                currPrimary = null;
+                                break;
+
+                            case 1:
+                                currPrimary = currentlyOver[0];
+                                break;
+
+                            default:
+                                currPrimary = findLargestIntersectionWith(myRect, currentlyOver);
+                                break;
+
+                            }
+
+                            if (prevPrimary !== currPrimary) {
+                                scope.$apply(function() {
+                                    draggable.primaryZone = currPrimary;
+
+                                    if (currPrimary) {
+                                        currPrimary.emit('wonPrimary', draggable);
+                                    }
+
+                                    if (prevPrimary) {
+                                        prevPrimary.emit('lostPrimary', draggable);
+                                    }
+                                });
+                            }
+                        }
+
                         if (C6DragSpaceCtrl) {
                             C6DragSpaceCtrl.addDragable(dragState);
+
+                            dragState.on('move', computePrimaryZone);
 
                             scope.$on('$destroy', function() {
                                 dragState.removeAllListeners();
                                 C6DragSpaceCtrl.removeDraggable(dragState);
                             });
                         }
+
+                        $element.data('cDrag', dragState);
 
                         listenForEvents();
 

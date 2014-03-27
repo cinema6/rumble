@@ -223,6 +223,10 @@
                     });
 
                     describe('draggables', function() {
+                        function ZoneElement(id) {
+                            return $('<span id="' + id + '" c6-drag-zone style="display: inline-block; width: 50px; height: 50px;"></span>');
+                        }
+
                         it('should be an object with each draggable\'s state, keyed by its ID', function() {
                             var drag1 = Controller.draggables.drag1,
                                 $drag1 = $dragSpace.find('#drag1'),
@@ -264,10 +268,6 @@
                         });
 
                         it('should keep an array of zones it is "currentlyOver"', function() {
-                            function ZoneElement(id) {
-                                return $('<span id="' + id + '" c6-drag-zone style="display: inline-block; width: 50px; height: 50px;"></span>');
-                            }
-
                             var finger = new Finger(),
                                 $drag1 = $dragSpace.find('#drag1'),
                                 $zone1 = new ZoneElement('zone1'),
@@ -329,6 +329,63 @@
                             // Move 60px down
                             finger.drag(0, 60);
                             expect(drag1.currentlyOver).toEqual([]);
+                        });
+
+                        it('should have a primaryZone (the zone the majority of the draggable is over)', function() {
+                            var finger = new Finger(),
+                                $zone1 = new ZoneElement('zone1'),
+                                $zone2 = new ZoneElement('zone2'),
+                                $drag1 = $dragSpace.find('#drag1'),
+                                drag1, zone1, zone2,
+                                $watchSpy = jasmine.createSpy('$watch()'),
+                                scope = $dragSpace.children().scope();
+
+                            scope.$watch('Ctrl.draggables.drag1.primaryZone', $watchSpy);
+
+                            $zone2.css('margin-right', '1px');
+
+                            $dragSpace.prepend($zone2);
+                            $dragSpace.prepend($zone1);
+                            $scope.$apply(function() {
+                                $compile($zone1)($scope);
+                                $compile($zone2)($scope);
+                            });
+                            drag1 = Controller.draggables.drag1;
+                            zone1 = Controller.zones.zone1;
+                            zone2 = Controller.zones.zone2;
+
+                            finger.placeOn($drag1);
+                            finger.drag(0, 0);
+                            expect(drag1.primaryZone).toBeNull();
+                            expect($watchSpy.calls.count()).toBe(1);
+
+                            // Drag 26px to the left
+                            finger.drag(-26, 0);
+                            expect(drag1.primaryZone).toBe(zone2);
+                            expect($watchSpy.calls.count()).toBe(2);
+
+                            // Drag 35px to the left
+                            finger.drag(-35, 0);
+                            expect(drag1.primaryZone).toBe(zone2);
+
+                            // Drag 10px to the left
+                            finger.drag(-10, 0);
+                            expect(drag1.primaryZone).toBe(zone2);
+
+                            // Drag 10px to the left
+                            finger.drag(-10, 0);
+                            expect(drag1.primaryZone).toBe(zone1);
+                            expect($watchSpy.calls.count()).toBe(3);
+
+                            // Drag 10px to the left
+                            finger.drag(10, 0);
+                            expect(drag1.primaryZone).toBe(zone2);
+                            expect($watchSpy.calls.count()).toBe(4);
+
+                            // Drag 60px down
+                            finger.drag(0, 60);
+                            expect(drag1.primaryZone).toBeNull();
+                            expect($watchSpy.calls.count()).toBe(5);
                         });
 
                         it('should remove the draggable if it is destroyed', function() {

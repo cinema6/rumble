@@ -133,6 +133,23 @@
                 expect($div.hasClass('c6-dragging')).toBe(false);
             });
 
+            it('should make its state available via jqLite data()', function() {
+                var $dragSpace, $draggable, scope, Ctrl;
+
+                $scope.$apply(function() {
+                    $dragSpace = $compile([
+                        '<c6-drag-space controller-as="Ctrl">',
+                        '    <div id="drag" c6-draggable>Drag</div>',
+                        '</c6-drag-space>'
+                    ].join('\n'))($scope);
+                });
+                $draggable = $dragSpace.find('#drag');
+                scope = $draggable.scope();
+                Ctrl = scope.Ctrl;
+
+                expect($draggable.data('cDrag')).toBe(Ctrl.draggables.drag);
+            });
+
             describe('zone interaction', function() {
                 var $dragSpace;
 

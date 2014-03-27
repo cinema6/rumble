@@ -1,18 +1,13 @@
 <c6-alias model="EditorCtrl.model" as="minireel">
     <h1>{{minireel.title}}</h1>
     <ul c6-drag-space controller-as="DragCtrl">
-        <li class="card" id="card{{$index}}" c6-draggable ng-repeat="this in minireel.data.deck">
+        <li class="card" c6-draggable ng-repeat="this in minireel.data.deck">
             <h3>{{this.title}}</h3>
             <button ng-click="EditorCtrl.editCard(this)">Edit</button>
         </li>
         <li>
             <button ng-click="EditorCtrl.newCard()">New Card</button>
         </li>
-        <li id="drop1" c6-drag-zone style="display: block; width: 200px; height: 200px; border: black 1px solid;">Drop Me!</li>
-        <li id="drop2" c6-drag-zone style="display: block; width: 200px; height: 200px; border: black 1px solid;">Drop Me!</li>
-        <li id="drop3" c6-drag-zone style="display: block; width: 200px; height: 200px; border: black 1px solid;">Drop Me!</li>
-        <li id="drop4" c6-drag-zone style="display: block; width: 200px; height: 200px; border: black 1px solid;">Drop Me!</li>
-        <li>{{DragCtrl.zones.drop3.currentlyUnder.length}}</li>
     </ul>
 </c6-alias>
 <c6-view></c6-view>
