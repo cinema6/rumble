@@ -284,8 +284,8 @@
                 _provider.serverUrl = url;
             };
 
-            this.$get = ['$log', '$q', '$window', 'c6EventEmitter', 'c6UrlMaker',
-            function    ( $log ,  $q ,  $window ,  c6EventEmitter ,  c6UrlMaker ) {
+            this.$get = ['$log', '$q', '$window', '$interval', 'c6EventEmitter', 'c6UrlMaker',
+            function    ( $log ,  $q ,  $window ,  $interval ,  c6EventEmitter ,  c6UrlMaker ) {
                 var service = {},
                     _service = {};
 
@@ -374,6 +374,22 @@
                             ].join('\n');
                         }
 
+                        function emitReady() {
+                            var current = 0,
+                                limit = 5000,
+                                check = $interval(function() {
+                                    if(self.player && self.player.isCinema6player()) {
+                                        $interval.cancel(check);
+                                        self.emit('ready', self);
+                                    } else {
+                                        current += 100;
+                                        if(current > limit) {
+                                            $interval.cancel(check);
+                                        }
+                                    }
+                                }, 100);
+                        }
+
                         Object.defineProperties(this, {
                             player : {
                                 get: function() {
@@ -398,13 +414,25 @@
 
                                     return null;
                                 }
+                            },
+                            currentTime : {
+                                get: function() {
+                                    return self.player.getAdProperties().adCurrentTime;
+                                }
                             }
                         });
 
-                        self.loadAd = function() {
+                        self.insertHTML = function() {
                             // currently the ad starts right when html is inserted
                             // we need to add a vast prefetcher to the swf
                             element$.prepend(self.setup());
+                            emitReady();
+                            // self.emit('ready', self);
+                        };
+
+                        self.loadAd = function() {
+                            // starts the prefetched ad at a later time
+                            self.player.loadAd();
                         };
 
                         self.setup = function() {
@@ -437,9 +465,9 @@
                             return html;
                         };
 
-                        self.play = function() {
-                            self.player.play();
-                        };
+                        // self.play = function() {
+                        //     self.player.play();
+                        // };
 
                         self.pause = function() {
                             self.player.pauseAd();
@@ -479,7 +507,8 @@
 
                         self.destroy = function() {
                             // self.player.stopAd();
-                            // element$[0].parentNode.removeChild(element$[0]);
+                            // element$[0].removeChild(element$[0].childNodes[0]);
+                            // self.insertHTML();
                         };
 
                         function handlePostMessage(e) {
@@ -495,11 +524,6 @@
                                 $log.info('EVENT: ', data.__vpaid__.type);
 
                                 switch(data.__vpaid__.type) {
-                                    case 'AdLoaded':
-                                        {
-                                            self.emit('ready', self);
-                                            break;
-                                        }
                                     case 'AdStarted':
                                         {
                                             self.emit('play', self);

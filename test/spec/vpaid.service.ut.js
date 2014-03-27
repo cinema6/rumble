@@ -42,19 +42,19 @@
 					'       </object>',
 					'   <!--<![endif]-->',
 					'</object>'
-				].join('\n');
+				].join('\n'),
+				isCinema6playerMock = true;
 
 			function MockFlashPlayer() {
 				c6EventEmitter(this);
 
-				this.play = jasmine.createSpy('player.play()');
+				this.loadAd = jasmine.createSpy('player.loadAd()');
 				this.pauseAd = jasmine.createSpy('player.pause()');
-				this.getAdProperties = jasmine.createSpy('player.getAdProperties()');
 				this.getDisplayBanners = jasmine.createSpy('player.getDisplayBanners()');
 				this.setVolume = jasmine.createSpy('player.setVolume()');
 				this.resumeAd = jasmine.createSpy('player.resumeAd()');
 				this.stopAd = jasmine.createSpy('player.resumeAd()');
-				this.isCinema6player = jasmine.createSpy('player.isCinema6player()').andReturn(true);
+				this.isCinema6player = function() { return isCinema6playerMock; };
 				this.getAdProperties = jasmine.createSpy('player.getAdProperties()').andReturn({
 					width: 640,
 					height: 360,
@@ -168,19 +168,19 @@
 								player = VPAIDService.createPlayer('testId',{},parentElementMock);
 							});
 
-							describe('loadAd()', function() {
+							describe('insertHTML()', function() {
 								it('should insert HTML into the player element', function() {
 									spyOn(player, 'setup').andCallThrough();
-									player.loadAd();
+									player.insertHTML();
 									expect(player.setup).toHaveBeenCalled();
 									expect(playerElementMock.prepend).toHaveBeenCalledWith(playerHTML);
 								});
 							});
 
-							describe('play()', function() {
+							describe('loadAd()', function() {
 								it('should call play() on the flash object', function() {
-									player.play();
-									expect(mockFlashPlayer.play).toHaveBeenCalled();
+									player.loadAd();
+									expect(mockFlashPlayer.loadAd).toHaveBeenCalled();
 								});
 							});
 
@@ -228,6 +228,7 @@
 
 							describe('isC6VpaidPlayer()', function() {
 								it('should call isCinema6player() on the flash object', function() {
+									spyOn(mockFlashPlayer, 'isCinema6player').andCallThrough();
 									player.isC6VpaidPlayer();
 									expect(mockFlashPlayer.isCinema6player).toHaveBeenCalled();
 								});
@@ -259,13 +260,28 @@
 							});
 
 							describe('ready', function() {
-								it('should emit when AdLoaded is postMessaged', function() {
-									var message = {
-										data: '{ "__vpaid__" : { "type" : "AdLoaded", "id" : "testId" } }',
+								it('should emit when isCinema6player returns true', function() {
+									var emitReady = function() {
+										setInterval(function() {
+											// console.log(player.isC6VpaidPlayer());
+		                                    if(player.player && player.player.isCinema6player()) {
+		                                        player.emit('ready', player);
+		                                    }
+		                                }, 100);
 									};
 
-									messageHandler(message);
+									jasmine.Clock.useMock();
 
+									isCinema6playerMock = false;
+
+									emitReady();
+									expect(player.emit).not.toHaveBeenCalledWith('ready', player);
+
+									jasmine.Clock.tick(110);
+									expect(player.emit).not.toHaveBeenCalledWith('ready', player);
+
+									isCinema6playerMock = true;
+									jasmine.Clock.tick(210);
 									expect(player.emit).toHaveBeenCalledWith('ready', player);
 								});
 

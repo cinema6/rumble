@@ -20,11 +20,15 @@
 			this.hasModule = ModuleService.hasModule.bind(ModuleService, config.modules);
 
 			$scope.$on('playerAdd', function(event, iface) {
-				self.playAd = function() {
-					iface.loadAd();
+				self.resumeAd = function() {
+					iface.resume();
 				};
 				self.pauseAd = function() {
 					iface.pause();
+				};
+
+				self.destroy = function() {
+					iface.destroy();
 				};
 
 				iface.on('ended', function() {
@@ -35,6 +39,12 @@
 
 				iface.on('play', function() {
 					_data.modules.displayAd.active = false;
+				});
+
+				$scope.$watch('onDeck', function(onDeck) {
+					if(onDeck) {
+						iface.insertHTML();
+					}
 				});
 
 				$scope.$watch('active', function(active, wasActive) {
@@ -90,12 +100,19 @@
 						}
 					});
 
+					iface.insertHTML = function() {
+						player.insertHTML();
+					};
+
 					iface.loadAd = function() {
-						player.loadAd();
+						if(playerIsReady) {
+							player.loadAd();
+						}
 					};
 
 					iface.getType = function() {
-						return 'vpaid';
+						// return 'vpaid';
+						return 'ad';
 					};
 
 					iface.getVideoId = function() {
@@ -108,13 +125,25 @@
 
 					iface.play = function() {
 						if(playerIsReady) {
-							player.play();
+							player.loadAd();
+						}
+					};
+
+					iface.resume = function() {
+						if(playerIsReady) {
+							player.resumeAd();
 						}
 					};
 
 					iface.pause = function() {
 						if (playerIsReady) {
 							player.pause();
+						}
+					};
+
+					iface.destroy = function() {
+						if(playerIsReady) {
+							player.destroy();
 						}
 					};
 
@@ -132,18 +161,10 @@
 						player = VPAIDService.createPlayer(scope.config.id, scope.config, $element.find('.mr-player'));
 
 						player.on('ready', function() {
-							// currently this happens when AdLoaded is fired from Player
-							// when prefetching is working maybe it should be fired when isCinema6player is true?
+							// this fires when the flash object exists and responds to isCinema6player()
 							playerIsReady = true;
-							_iface.duration = player.getDuration();
 
 							iface.emit('ready', iface);
-
-							scope.$watch('onDeck', function(onDeck) {
-								if(onDeck) {
-									// do stuff
-								}
-							});
 
 							player.on('ended', function() {
 								_iface.ended = true;
@@ -152,6 +173,7 @@
 
 							player.on('play', function() {
 								_iface.paused = false;
+								_iface.duration = player.getDuration();
 								iface.emit('play', iface);
 							});
 
@@ -159,6 +181,12 @@
 								_iface.paused = true;
 								iface.emit('pause', iface);
 							});
+
+							// scope.$watch('onDeck', function(onDeck) {
+							// 	if(onDeck) {
+							// 		// do stuff
+							// 	}
+							// });
 						});
 					}
 
