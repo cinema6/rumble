@@ -2,6 +2,16 @@
     'use strict';
     /* global define:true */
 
+    var styles = document.createElement('style');
+
+    styles.type = 'text/css';
+    styles.appendChild(document.createTextNode([
+        '.c6-dragging {',
+        '    position: fixed !important;',
+        '}'
+    ].join('\n')));
+    document.getElementsByTagName('head')[0].appendChild(styles);
+
     define(['hammer'], function(hammer) {
         angular.module('c6.drag', ['c6.ui'])
             .value('hammer', hammer)
@@ -78,6 +88,10 @@
 
                 this.addZone = function(zone) {
                     this.zones[zone.id] = zone;
+                };
+
+                this.removeZone = function(zone) {
+                    delete this.zones[zone.id];
                 };
             }])
 
@@ -157,6 +171,7 @@
 
                         scope.$on('$destroy', function() {
                             zoneState.removeAllListeners();
+                            C6DragSpaceCtrl.removeZone(zoneState);
                         });
                     }
                 };
@@ -193,20 +208,20 @@
                             currentlyOver.push(zone);
 
                             if (currentlyOver.length === 1) {
-                                $animate.addClass($element, 'c6-dragging-over-zone');
+                                $animate.addClass($element, 'c6-over-zone');
                             }
 
-                            $animate.addClass($element, 'c6-dragging-over-' + zone.id);
+                            $animate.addClass($element, 'c6-over-' + zone.id);
                         }
 
                         function leaveZone(zone) {
                             currentlyOver.splice(currentlyOver.indexOf(zone), 1);
 
                             if (!currentlyOver.length) {
-                                $animate.removeClass($element, 'c6-dragging-over-zone');
+                                $animate.removeClass($element, 'c6-over-zone');
                             }
 
-                            $animate.removeClass($element, 'c6-dragging-over-' + zone.id);
+                            $animate.removeClass($element, 'c6-over-' + zone.id);
                         }
 
                         function px(num) {
@@ -216,7 +231,7 @@
                         function listenForEvents() {
                             var context,
                                 // The "draggable" directive only cares about three events:
-                                // dragstart, drag and dragend. These three events, executed in
+                                // dragstart, drag+ and dragend. These three events, executed in
                                 // that particular order, make up one "drag lifecycle."
                                 // Different business must be taken care of during each individual
                                 // event, but there is a similar pattern. For this reason, each
@@ -239,7 +254,6 @@
                                         modify: function() {
                                             $animate.addClass($element, 'c6-dragging');
                                             $element.css({
-                                                position: 'fixed',
                                                 top: px(this.start.top),
                                                 left: px(this.start.left)
                                             });
@@ -266,9 +280,6 @@
                                     dragend: {
                                         modify: function() {
                                             $animate.removeClass($element, 'c6-dragging');
-                                            $element.css({
-                                                position: 'static'
-                                            });
                                         },
                                         notify: function() {
                                             dragState.refresh();
@@ -279,7 +290,8 @@
                                 };
 
                             function delegate(event) {
-                                var type = event.type;
+                                var type = event.type,
+                                    eventPhases = events[type];
 
                                 if (type === 'dragstart') {
                                     // Create a new context at the start of the drag lifecycle
@@ -293,7 +305,7 @@
                                     // number.
                                     index < 3;
                                     index++) {
-                                    (events[type][hooks[index]] || noop).call(context, event);
+                                    (eventPhases[hooks[index]] || noop).call(context, event);
                                 }
                             }
 

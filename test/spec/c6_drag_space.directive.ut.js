@@ -204,6 +204,22 @@
 
                             expect(zone1.currentlyUnder).toEqual([drag1]);
                         });
+
+                        it('should remove a zone when it is destroyed', function() {
+                            var $zone1 = $('<div id="zone1" c6-drag-zone></div>');
+
+                            $dragSpace.append($zone1);
+                            $scope.$apply(function() {
+                                $compile($zone1)($scope);
+                            });
+
+                            expect(Controller.zones.zone1).toBeDefined();
+
+                            $zone1.scope().$destroy();
+                            $zone1.remove();
+
+                            expect(Controller.zones.zone1).not.toBeDefined();
+                        });
                     });
 
                     describe('draggables', function() {

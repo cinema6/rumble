@@ -81,6 +81,14 @@ define(['hammer'], function(hammer) {
         $('body').append(this.$testFrame);
 
         this.$document = $(this.$testFrame[0].contentWindow.document);
+        this.$document[0].write([
+            '<style type="text/css">',
+            '    .c6-dragging {',
+            '        position: fixed;',
+            '    }',
+            '</style>'
+        ].join('\n'));
+        this.$document[0].close();
         this.$body = this.$document.find('body');
 
         this.$body.css({

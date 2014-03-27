@@ -151,59 +151,59 @@
                     });
                 });
 
-                it('should add the "c6-dragging-over-zone" class when it is over a zone', function() {
+                it('should add the "c6-over-zone" class when it is over a zone', function() {
                     var finger = new Finger(),
                         $draggable = $dragSpace.find('#drag1');
 
                     finger.placeOn($draggable);
                     finger.drag(0, 0);
-                    expect($draggable.hasClass('c6-dragging-over-zone')).toBe(false);
+                    expect($draggable.hasClass('c6-over-zone')).toBe(false);
 
                     // Drag 26px to the left
                     finger.drag(-26, 0);
-                    expect($draggable.hasClass('c6-dragging-over-zone')).toBe(true);
+                    expect($draggable.hasClass('c6-over-zone')).toBe(true);
 
                     // Drag 50px to the left
                     finger.drag(-50, 0);
-                    expect($draggable.hasClass('c6-dragging-over-zone')).toBe(true);
+                    expect($draggable.hasClass('c6-over-zone')).toBe(true);
 
                     // Drag 50px to the left
                     finger.drag(-50, 0);
-                    expect($draggable.hasClass('c6-dragging-over-zone')).toBe(true);
+                    expect($draggable.hasClass('c6-over-zone')).toBe(true);
 
                     // Drag 60px down
                     finger.drag(0, 60);
-                    expect($draggable.hasClass('c6-dragging-over-zone')).toBe(false);
+                    expect($draggable.hasClass('c6-over-zone')).toBe(false);
                 });
 
-                it('should add a "c6-dragging-over-zoneId" class for every zone it is over', function() {
+                it('should add a "c6-over-zoneId" class for every zone it is over', function() {
                     var finger = new Finger(),
                         $draggable = $dragSpace.find('#drag1');
 
                     finger.placeOn($draggable);
                     finger.drag(0, 0);
-                    expect($draggable.hasClass('c6-dragging-over-zone1')).toBe(false);
-                    expect($draggable.hasClass('c6-dragging-over-zone2')).toBe(false);
+                    expect($draggable.hasClass('c6-over-zone1')).toBe(false);
+                    expect($draggable.hasClass('c6-over-zone2')).toBe(false);
 
                     // Drag 26px to the left
                     finger.drag(-26, 0);
-                    expect($draggable.hasClass('c6-dragging-over-zone1')).toBe(false);
-                    expect($draggable.hasClass('c6-dragging-over-zone2')).toBe(true);
+                    expect($draggable.hasClass('c6-over-zone1')).toBe(false);
+                    expect($draggable.hasClass('c6-over-zone2')).toBe(true);
 
                     // Drag 50px to the left
                     finger.drag(-50, 0);
-                    expect($draggable.hasClass('c6-dragging-over-zone1')).toBe(true);
-                    expect($draggable.hasClass('c6-dragging-over-zone2')).toBe(true);
+                    expect($draggable.hasClass('c6-over-zone1')).toBe(true);
+                    expect($draggable.hasClass('c6-over-zone2')).toBe(true);
 
                     // Drag 50px to the left
                     finger.drag(-50, 0);
-                    expect($draggable.hasClass('c6-dragging-over-zone1')).toBe(true);
-                    expect($draggable.hasClass('c6-dragging-over-zone2')).toBe(false);
+                    expect($draggable.hasClass('c6-over-zone1')).toBe(true);
+                    expect($draggable.hasClass('c6-over-zone2')).toBe(false);
 
                     // Drag 60px down
                     finger.drag(0, 60);
-                    expect($draggable.hasClass('c6-dragging-over-zone1')).toBe(false);
-                    expect($draggable.hasClass('c6-dragging-over-zone2')).toBe(false);
+                    expect($draggable.hasClass('c6-over-zone1')).toBe(false);
+                    expect($draggable.hasClass('c6-over-zone2')).toBe(false);
                 });
             });
 
