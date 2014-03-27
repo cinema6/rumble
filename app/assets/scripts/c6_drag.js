@@ -31,11 +31,13 @@
                         zones = C6DragSpaceCtrl.zones;
 
                     function add() {
-                        currentlyUnder.push(draggable);
+                        zone.emit('draggableEnter', draggable);
+                        draggable.emit('enterZone', zone);
                     }
 
                     function remove() {
-                        currentlyUnder.splice(currentlyUnder.indexOf(draggable), 1);
+                        zone.emit('draggableLeave', draggable);
+                        draggable.emit('leaveZone', zone);
                     }
 
                     for (id in zones) {
@@ -92,7 +94,8 @@
                 };
             }])
 
-            .directive('c6DragZone', [function() {
+            .directive('c6DragZone', ['c6EventEmitter','$animate',
+            function                 ( c6EventEmitter , $animate ) {
                 var copy = angular.copy;
 
                 function ZoneState(id, element) {
@@ -100,6 +103,8 @@
                     this.currentlyUnder = [];
                     this.element = element;
                     this.display = this.refresh();
+
+                    c6EventEmitter(this);
                 }
                 ZoneState.prototype = {
                     collidesWith: function(rect) {
@@ -121,21 +126,52 @@
                     restrict: 'EAC',
                     require: '^c6DragSpace',
                     link: function(scope, $element, $attrs, C6DragSpaceCtrl) {
-                        var zoneState = new ZoneState($attrs.id, $element[0]);
+                        var zoneState = new ZoneState($attrs.id, $element[0]),
+                            currentlyUnder = zoneState.currentlyUnder;
+
+                        function draggableEnter(draggable) {
+                            currentlyUnder.push(draggable);
+
+                            if (currentlyUnder.length === 1) {
+                                $animate.addClass($element, 'c6-drag-zone-active');
+                            }
+
+                            $animate.addClass($element, 'c6-drag-zone-under-' + draggable.id);
+                        }
+
+                        function draggableLeave(draggable) {
+                            currentlyUnder.splice(currentlyUnder.indexOf(draggable), 1);
+
+                            if (!currentlyUnder.length) {
+                                $animate.removeClass($element, 'c6-drag-zone-active');
+                            }
+
+                            $animate.removeClass($element, 'c6-drag-zone-under-' + draggable.id);
+                        }
+
+                        zoneState
+                            .on('draggableEnter', draggableEnter)
+                            .on('draggableLeave', draggableLeave);
 
                         C6DragSpaceCtrl.addZone(zoneState);
+
+                        scope.$on('$destroy', function() {
+                            zoneState.removeAllListeners();
+                        });
                     }
                 };
             }])
 
             .directive('c6Draggable', ['hammer','c6EventEmitter','$animate',
             function                  ( hammer , c6EventEmitter , $animate ) {
-                var copy = angular.copy;
+                var copy = angular.copy,
+                    noop = angular.noop;
 
                 function DragState(id, element) {
                     this.id = id;
                     this.element = element;
                     this.display = this.refresh();
+                    this.currentlyOver = [];
 
                     c6EventEmitter(this);
                 }
@@ -150,53 +186,119 @@
                     require: '?^c6DragSpace',
                     link: function(scope, $element, $attrs, C6DragSpaceCtrl) {
                         var touchable = hammer($element[0]),
-                            position = null,
-                            dragState = new DragState($attrs.id, $element[0]);
+                            dragState = new DragState($attrs.id, $element[0]),
+                            currentlyOver = dragState.currentlyOver;
+
+                        function enterZone(zone) {
+                            currentlyOver.push(zone);
+
+                            if (currentlyOver.length === 1) {
+                                $animate.addClass($element, 'c6-dragging-over-zone');
+                            }
+
+                            $animate.addClass($element, 'c6-dragging-over-' + zone.id);
+                        }
+
+                        function leaveZone(zone) {
+                            currentlyOver.splice(currentlyOver.indexOf(zone), 1);
+
+                            if (!currentlyOver.length) {
+                                $animate.removeClass($element, 'c6-dragging-over-zone');
+                            }
+
+                            $animate.removeClass($element, 'c6-dragging-over-' + zone.id);
+                        }
 
                         function px(num) {
                             return num + 'px';
                         }
 
-                        function beforeDrag() {
-                            dragState.refresh();
-                            dragState.emit('begin', dragState);
+                        function listenForEvents() {
+                            var context,
+                                // The "draggable" directive only cares about three events:
+                                // dragstart, drag and dragend. These three events, executed in
+                                // that particular order, make up one "drag lifecycle."
+                                // Different business must be taken care of during each individual
+                                // event, but there is a similar pattern. For this reason, each
+                                // event can further be broken down into three phases: setup,
+                                // modify and notify. Below, all three events and their phases are
+                                // mapped out. Each function is invoked with a context object ({})
+                                // as "this" that is created at the beginning of every lifecycle
+                                // (the "dragstart" event.) So, for example, "this" is the same in
+                                // the setup phase of dragstart AND the notify phase of dragend.
+                                events = {
+                                    dragstart: {
+                                        setup: function() {
+                                            dragState.refresh();
 
-                            position = {
-                                top: dragState.display.top,
-                                left: dragState.display.left
-                            };
+                                            this.start = {
+                                                top: dragState.display.top,
+                                                left: dragState.display.left
+                                            };
+                                        },
+                                        modify: function() {
+                                            $animate.addClass($element, 'c6-dragging');
+                                            $element.css({
+                                                position: 'fixed',
+                                                top: px(this.start.top),
+                                                left: px(this.start.left)
+                                            });
+                                        },
+                                        notify: function() {
+                                            dragState.emit('begin', dragState);
+                                        }
+                                    },
+                                    drag: {
+                                        setup: function(event) {
+                                            event.gesture.preventDefault();
+                                        },
+                                        modify: function(event) {
+                                            $element.css({
+                                                top: px(this.start.top + event.gesture.deltaY),
+                                                left: px(this.start.left + event.gesture.deltaX)
+                                            });
+                                        },
+                                        notify: function() {
+                                            dragState.refresh();
+                                            dragState.emit('move', dragState, dragState.display);
+                                        }
+                                    },
+                                    dragend: {
+                                        modify: function() {
+                                            $animate.removeClass($element, 'c6-dragging');
+                                            $element.css({
+                                                position: 'static'
+                                            });
+                                        },
+                                        notify: function() {
+                                            dragState.refresh();
+                                            dragState.emit('move', dragState, dragState.display);
+                                            dragState.emit('end', dragState);
+                                        }
+                                    }
+                                };
 
-                            $animate.addClass($element, 'c6-dragging');
-                            $element.css({
-                                position: 'fixed',
-                                top: px(position.top),
-                                left: px(position.left)
-                            });
-                        }
+                            function delegate(event) {
+                                var type = event.type;
 
-                        function drag(event) {
-                            var gesture = event.gesture;
+                                if (type === 'dragstart') {
+                                    // Create a new context at the start of the drag lifecycle
+                                    context = {};
+                                }
 
-                            gesture.preventDefault();
+                                // Call the hook for every phase
+                                for (var hooks = ['setup', 'modify', 'notify'], index = 0;
+                                    // Length of the array is hardcoded here for performance
+                                    // reasons. If you add a hook, don't forget to increase this
+                                    // number.
+                                    index < 3;
+                                    index++) {
+                                    (events[type][hooks[index]] || noop).call(context, event);
+                                }
+                            }
 
-                            $element.css({
-                                top: px(position.top + gesture.deltaY),
-                                left: px(position.left + gesture.deltaX)
-                            });
-                            dragState.refresh();
-
-                            dragState.emit('move', dragState, dragState.display);
-                        }
-
-                        function afterDrag() {
-                            $animate.removeClass($element, 'c6-dragging');
-                            $element.css({
-                                position: 'static'
-                            });
-                            dragState.refresh();
-
-                            dragState.emit('move', dragState, dragState.display);
-                            dragState.emit('end', dragState);
+                            // Attach touch event listeners to element
+                            touchable.on('dragstart drag dragend', delegate);
                         }
 
                         if (C6DragSpaceCtrl) {
@@ -208,9 +310,10 @@
                             });
                         }
 
-                        touchable.on('dragstart', beforeDrag)
-                            .on('drag', drag)
-                            .on('dragend', afterDrag);
+                        listenForEvents();
+
+                        dragState.on('enterZone', enterZone)
+                            .on('leaveZone', leaveZone);
                     }
                 };
             }]);

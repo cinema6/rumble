@@ -38,20 +38,74 @@
                 });
 
                 it('should add the "c6-drag-zone-active" class when there is a draggable on top of it', function() {
-                    var finger = new Finger(),
+                    var indexFinger = new Finger(),
+                        middleFinger = new Finger(),
                         $zone1 = $dragSpace.find('#zone1'),
-                        $drag1 = $dragSpace.find('#drag1');
+                        $drag1 = $dragSpace.find('#drag1'),
+                        $drag2 = $('<span id="drag2" c6-draggable style="display: inline-block; width: 50px; height: 50px;">Drag 2</span>');
+
+                    $dragSpace.append($drag2);
+                    $scope.$apply(function() {
+                        $compile($drag2)($scope);
+                    });
 
                     expect($zone1.hasClass('c6-drag-zone-active')).toBe(false);
 
-                    finger.placeOn($drag1);
+                    indexFinger.placeOn($drag1);
                     // Drag 10px up
-                    finger.drag(0, -10);
+                    indexFinger.drag(0, -10);
+                    expect($zone1.hasClass('c6-drag-zone-active')).toBe(true);
+
+                    middleFinger.placeOn($drag2);
+                    // Drag 10px up
+                    middleFinger.drag(0, -10);
                     expect($zone1.hasClass('c6-drag-zone-active')).toBe(true);
 
                     // Drag 10px down
-                    finger.drag(0, 10);
+                    middleFinger.drag(0, 10);
+                    expect($zone1.hasClass('c6-drag-zone-active')).toBe(true);
+
+                    // Drag 10px down
+                    indexFinger.drag(0, 10);
                     expect($zone1.hasClass('c6-drag-zone-active')).toBe(false);
+                });
+
+                it('should add a "c6-drag-zone-under-draggableId" class for every draggable it is covered by', function() {
+                    var indexFinger = new Finger(),
+                        middleFinger = new Finger(),
+                        $zone1 = $dragSpace.find('#zone1'),
+                        $drag1 = $dragSpace.find('#drag1'),
+                        $drag2 = $('<span id="drag2" c6-draggable style="display: inline-block; width: 50px; height: 50px;">Drag 2</span>');
+
+                    $dragSpace.append($drag2);
+                    $scope.$apply(function() {
+                        $compile($drag2)($scope);
+                    });
+
+                    expect($zone1.hasClass('c6-drag-zone-under-drag1')).toBe(false);
+                    expect($zone1.hasClass('c6-drag-zone-under-drag2')).toBe(false);
+
+                    indexFinger.placeOn($drag1);
+                    //Drag 10px up
+                    indexFinger.drag(0, -10);
+                    expect($zone1.hasClass('c6-drag-zone-under-drag1')).toBe(true);
+                    expect($zone1.hasClass('c6-drag-zone-under-drag2')).toBe(false);
+
+                    middleFinger.placeOn($drag2);
+                    // Drag 10px up
+                    middleFinger.drag(0, -10);
+                    expect($zone1.hasClass('c6-drag-zone-under-drag1')).toBe(true);
+                    expect($zone1.hasClass('c6-drag-zone-under-drag2')).toBe(true);
+
+                    // Drag 10px down
+                    middleFinger.drag(0, 10);
+                    expect($zone1.hasClass('c6-drag-zone-under-drag1')).toBe(true);
+                    expect($zone1.hasClass('c6-drag-zone-under-drag2')).toBe(false);
+
+                    // Drag 10px down
+                    indexFinger.drag(0, 10);
+                    expect($zone1.hasClass('c6-drag-zone-under-drag1')).toBe(false);
+                    expect($zone1.hasClass('c6-drag-zone-under-drag2')).toBe(false);
                 });
             });
 

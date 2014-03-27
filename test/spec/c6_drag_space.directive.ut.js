@@ -185,6 +185,25 @@
                             expect($watchSpy.calls.count()).toBe(11);
                             expect(zone1.currentlyUnder).toEqual([]);
                         });
+
+                        it('should get the latest position of a zone when dragging starts', function() {
+                            var finger = new Finger(),
+                                $drag1 = $dragSpace.find('#drag1'),
+                                $zone1 = $('<div id="zone1" c6-drag-zone style="margin-top: 5px; height: 50px; width: 100%;"></div>'),
+                                zone1, drag1;
+
+                            $dragSpace.append($zone1);
+                            $scope.$apply(function() {
+                                $compile($zone1)($scope);
+                            });
+                            zone1 = Controller.zones.zone1;
+                            drag1 = Controller.draggables.drag1;
+
+                            finger.placeOn($drag1);
+                            finger.drag(0, 0);
+
+                            expect(zone1.currentlyUnder).toEqual([drag1]);
+                        });
                     });
 
                     describe('draggables', function() {
@@ -226,6 +245,74 @@
                                 width: 50,
                                 height: jasmine.any(Number)
                             });
+                        });
+
+                        it('should keep an array of zones it is "currentlyOver"', function() {
+                            function ZoneElement(id) {
+                                return $('<span id="' + id + '" c6-drag-zone style="display: inline-block; width: 50px; height: 50px;"></span>');
+                            }
+
+                            var finger = new Finger(),
+                                $drag1 = $dragSpace.find('#drag1'),
+                                $zone1 = new ZoneElement('zone1'),
+                                $zone2 = new ZoneElement('zone2'),
+                                $zone3 = new ZoneElement('zone3'),
+                                $zone4 = new ZoneElement('zone4'),
+                                $zone5 = new ZoneElement('zone5'),
+                                drag1 = Controller.draggables.drag1,
+                                zone1, zone2, zone3, zone4, zone5;
+
+                            $zone5.css('margin-right', '1px');
+
+                            $dragSpace.prepend($zone5);
+                            $dragSpace.prepend($zone4);
+                            $dragSpace.prepend($zone3);
+                            $dragSpace.prepend($zone2);
+                            $dragSpace.prepend($zone1);
+                            $scope.$apply(function() {
+                                $compile($zone1)($scope);
+                                $compile($zone2)($scope);
+                                $compile($zone3)($scope);
+                                $compile($zone4)($scope);
+                                $compile($zone5)($scope);
+                            });
+                            zone1 = Controller.zones.zone1;
+                            zone2 = Controller.zones.zone2;
+                            zone3 = Controller.zones.zone3;
+                            zone4 = Controller.zones.zone4;
+                            zone5 = Controller.zones.zone5;
+
+                            finger.placeOn($drag1);
+                            finger.drag(0, 0);
+                            expect(drag1.currentlyOver).toEqual([]);
+
+                            // Move 26px to the left
+                            finger.drag(-26, 0);
+                            expect(drag1.currentlyOver).toEqual([zone5]);
+
+                            // Move 50px to the left
+                            finger.drag(-50, 0);
+                            expect(drag1.currentlyOver).toEqual([zone5, zone4]);
+
+                            // Move 50px to the left
+                            finger.drag(-50, 0);
+                            expect(drag1.currentlyOver).toEqual([zone4, zone3]);
+
+                            // Move 50px to the left
+                            finger.drag(-50, 0);
+                            expect(drag1.currentlyOver).toEqual([zone3, zone2]);
+
+                            // Move 50px to the left
+                            finger.drag(-50, 0);
+                            expect(drag1.currentlyOver).toEqual([zone2, zone1]);
+
+                            // Move 50px to the left
+                            finger.drag(-50, 0);
+                            expect(drag1.currentlyOver).toEqual([zone1]);
+
+                            // Move 60px down
+                            finger.drag(0, 60);
+                            expect(drag1.currentlyOver).toEqual([]);
                         });
 
                         it('should remove the draggable if it is destroyed', function() {
