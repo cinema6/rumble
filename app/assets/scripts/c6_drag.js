@@ -20,6 +20,13 @@
             function                   ( $animate , c6EventEmitter ) {
                 var copy = angular.copy;
 
+                // PositionState: This is the base constructor for objects that represent a DOM
+                // element with a position in the viewport. Its most important methods all center
+                // around its "display" property. The "display" property is an object representing
+                // the position and size of the element in the viewport. The "display" property has
+                // the following properties: "top", "right", "bottom", "left", "width" and
+                // "height". Objects with these properties are commonly referred to as (a)
+                // "rect(s)".
                 function PositionState() {}
                 PositionState.prototype = {
                     init: function(id, $element) {
@@ -29,6 +36,8 @@
 
                         c6EventEmitter(this);
                     },
+                    // This method, given a rect object, will return a bool indicating if this
+                    // element is colliding with the provided rect.
                     collidesWith: function(rect) {
                         var myRect = this.display;
 
@@ -39,6 +48,8 @@
                             rect.left > myRect.right
                         );
                     },
+                    // This method, given a rect object, will return a new rect object that
+                    // represents the intersection of this element with the provided rect.
                     intersectionWith: function(rect) {
                         var myRect = this.display,
                             intersection = {
@@ -53,6 +64,8 @@
 
                         return intersection;
                     },
+                    // This method updates the "display" rect with the most up-to-date position of
+                    // the element in the viewport.
                     refresh: function() {
                         var $element = this.$element;
 
@@ -60,6 +73,8 @@
 
                         return copy($element[0].getBoundingClientRect(), this.display);
                     },
+                    // This method animates the addition of a class to the element and gets the
+                    // most recent position information after the animation completes.
                     addClass: function(className) {
                         var self = this;
 
@@ -67,6 +82,8 @@
                             self.refresh();
                         });
                     },
+                    // This method animates the removal of a class to the element and gets the most
+                    // recent position information after the animation completes.
                     removeClass: function(className) {
                         var self = this;
 
@@ -80,6 +97,15 @@
             }])
             .factory('_Draggable', ['_PositionState','$rootScope',
             function               (  PositionState , $rootScope ) {
+                // This function, given an object that was constructed with Draggable, will iterate
+                // over the zones the draggable element is over and determine which zone it is
+                // most over (by computing the area of all the zones' intersections with the
+                // draggable item.
+                //
+                // This function is only used in the setPrimaryZone() method below, but the
+                // function is defined here (as opposed to in that method) to keep memory usage
+                // lower (because that method is called rapidly while the user is dragging an
+                // element.
                 function largestZoneIntersectionOf(draggable) {
                     var areaCache = {},
                         myRect = draggable.display;
@@ -92,11 +118,15 @@
 
                         intersection = zone.intersectionWith(myRect);
 
+                        // To prevent the computing of an intersection/area multiple times for the
+                        // same zone, we cache the area of the intersection by zone id.
                         area = areaCache[zone.id] = intersection.width * intersection.height;
 
                         return area;
                     }
 
+                    // Sort the zones we're currently over by the area of their intersection with
+                    // the draggable element from highest to lowest. Return the first item.
                     return draggable.currentlyOver.sort(function(a, b) {
                         var aArea = intersectArea(a),
                             bArea = intersectArea(b);
@@ -111,15 +141,22 @@
                     })[0];
                 }
 
+                // This constructor represents a draggable DOM element. It inherits methods from
+                // the PositionState constructor's prototype above.
                 function Draggable() {
-                    var self = this,
-                        currentlyOver;
+                    var self = this;
 
-                    function setPrimaryZone(self) {
+                    // After this draggable item's collisions with the "zones" has been computed,
+                    // figure out which zone we are primarily over (because we could be hovering
+                    // over multiple zones.
+                    function collisionsComputed(self) {
                         self.setPrimaryZone();
                     }
 
+                    // Respond to entering a zone.
                     function enterZone(zone) {
+                        var currentlyOver = self.currentlyOver;
+
                         currentlyOver.push(zone);
 
                         if (currentlyOver.length === 1) {
@@ -129,7 +166,10 @@
                         self.addClass('c6-over-' + zone.id);
                     }
 
+                    // Respond to leaving a zone.
                     function leaveZone(zone) {
+                        var currentlyOver = self.currentlyOver;
+
                         currentlyOver.splice(currentlyOver.indexOf(zone), 1);
 
                         if (!currentlyOver.length) {
@@ -139,33 +179,44 @@
                         self.removeClass('c6-over-' + zone.id);
                     }
 
-                    this.currentlyOver = currentlyOver = [];
+                    this.currentlyOver = [];
                     this.primaryZone = null;
 
                     this.init.apply(this, arguments);
 
+                    // Setup handlers for events relating to our interactions with "zones." These
+                    // events are triggered by a function in the C6DragSpaceController, a
+                    // controller that has references to all draggable and zone elements.
                     this.on('enterZone', enterZone)
                         .on('leaveZone', leaveZone)
-                        .on('collisionsComputed', setPrimaryZone);
+                        .on('collisionsComputed', collisionsComputed);
 
                 }
                 Draggable.prototype = new PositionState();
+                // This method will set the "primaryZone" property of the draggable. The primary
+                // zone is the zone that the majority of our surface are is over.
                 Draggable.prototype.setPrimaryZone = function() {
                     var prevPrimary = this.primaryZone,
                         currentlyOver = this.currentlyOver,
                         self = this,
                         currPrimary;
 
+                    // This switch statement helps up bail out of uneccessary collision rectangle
+                    // computation.
                     switch (currentlyOver.length) {
 
+                    // If the draggable is not over any zones, it can't have a primary zone.
                     case 0:
                         currPrimary = null;
                         break;
 
+                    // If the draggable is only over one zone, that zone must be its primary zone.
                     case 1:
                         currPrimary = currentlyOver[0];
                         break;
 
+                    // If the draggable is over multiple zones, we have to compute which zone is
+                    // the primary one.
                     default:
                         currPrimary = largestZoneIntersectionOf(this);
                         break;
@@ -191,11 +242,16 @@
             }])
             .factory('_Zone', ['_PositionState',
             function          (  PositionState ) {
+                // This constructor creates an object that will represent a "zone" DOM element. A
+                // zone is an element that is not draggable itself, but reacts when draggable
+                // elements are dragged on top of it. This objects created by this constructor
+                // prototypically inherit from a PositionState object.
                 function Zone() {
-                    var self = this,
-                        currentlyUnder;
+                    var self = this;
 
                     function draggableEnter(draggable) {
+                        var currentlyUnder = self.currentlyUnder;
+
                         currentlyUnder.push(draggable);
 
                         if (currentlyUnder.length === 1) {
@@ -206,6 +262,8 @@
                     }
 
                     function draggableLeave(draggable) {
+                        var currentlyUnder = self.currentlyUnder;
+
                         currentlyUnder.splice(currentlyUnder.indexOf(draggable), 1);
 
                         if (!currentlyUnder.length) {
@@ -225,12 +283,18 @@
                         self.removeClass('c6-drag-zone-primary-of-' + draggable.id);
                     }
 
-                    this.currentlyUnder = currentlyUnder = [];
+                    this.currentlyUnder = [];
 
                     this.init.apply(this, arguments);
 
+                    // These events are triggered by a function in the C6DragSpaceController. This
+                    // controller has references to all the draggables and zones, so as such, it is
+                    // responsible for computing collisions between the two.
                     this.on('draggableEnter', draggableEnter)
                         .on('draggableLeave', draggableLeave)
+                        // These events are triggered by a draggable element when a zone becomes
+                        // its primary zone. The concept of a primary zone is explained in further
+                        // detail above.
                         .on('wonPrimary', wonPrimary)
                         .on('lostPrimary', lostPrimary);
                 }
@@ -239,6 +303,10 @@
                 return Zone;
             }])
 
+            // The controller is instantiated by the <drag-space> directive. It receives references
+            // to all draggable and zone items that it contains. Its primary responsibility is to
+            // detect collisions between draggables and zones, and notify those items about the
+            // collision.
             .controller('C6DragSpaceController', ['$scope',
             function                             ( $scope ) {
                 var forEach = angular.forEach;
@@ -247,6 +315,9 @@
 
                 this.draggables = {};
                 this.zones = {};
+                // This is a reference to all draggables currently being dragged. There could
+                // theoretically be more than one item being dragged at a time on a multitouch
+                // device.
                 this.currentDrags = [];
 
                 function draggableBeginDrag(draggable) {
@@ -299,6 +370,8 @@
                 }
 
                 this.addDragable = function(draggable) {
+                    // These events are triggered by HammerJS drag events that are handled below in
+                    // the c6-draggable directive.
                     draggable
                         .on('begin', draggableBeginDrag)
                         .on('move', draggableMove)
@@ -428,12 +501,14 @@
                                     }
                                 };
 
+                            // This single event handler listens to all drag events of concern and
+                            // delegates to the function defined on the "events" object above.
                             function delegate(event) {
                                 var type = event.type,
                                     eventPhases = events[type];
 
                                 if (type === 'dragstart') {
-                                    // Create a new context at the start of the drag lifecycle
+                                    // Create a new context at the start of the drag lifecycle.
                                     context = {};
                                 }
 
@@ -448,7 +523,7 @@
                                 }
                             }
 
-                            // Attach touch event listeners to element
+                            // Attach touch event listeners to the element.
                             touchable.on('dragstart drag dragend', delegate);
                         }
 
