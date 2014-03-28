@@ -5,7 +5,8 @@
         describe('c6-draggable=""', function() {
             var $rootScope,
                 $scope,
-                $compile;
+                $compile,
+                $animate;
 
             var testFrame,
                 domEvents;
@@ -21,11 +22,13 @@
                 domEvents = [];
                 domEvents.mostRecent = null;
 
+                module('ngAnimateMock');
                 module('c6.drag');
 
                 inject(function($injector) {
                     $rootScope = $injector.get('$rootScope');
                     $compile = $injector.get('$compile');
+                    $animate = $injector.get('$animate');
 
                     $scope = $rootScope.$new();
                 });
@@ -148,6 +151,29 @@
                 Ctrl = scope.Ctrl;
 
                 expect($draggable.data('cDrag')).toBe(Ctrl.draggables.drag);
+            });
+
+            it('should refresh its position after adding or removing a class', function() {
+                var $draggable,
+                    draggable;
+
+                $scope.$apply(function() {
+                    $draggable = $compile('<span c6-draggable></span>')($scope);
+                });
+                draggable = $draggable.data('cDrag');
+                spyOn(draggable, 'refresh');
+
+                draggable.addClass('foo');
+                expect(draggable.refresh).not.toHaveBeenCalled();
+
+                $animate.triggerCallbacks();
+                expect(draggable.refresh).toHaveBeenCalled();
+
+                draggable.removeClass('foo');
+                expect(draggable.refresh.calls.count()).toBe(1);
+
+                $animate.triggerCallbacks();
+                expect(draggable.refresh.calls.count()).toBe(2);
             });
 
             describe('zone interaction', function() {

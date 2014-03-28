@@ -15,16 +15,211 @@
     define(['hammer'], function(hammer) {
         var copy = angular.copy;
 
-        function refreshMethod() {
-            /*jshint validthis:true */
-            // This function is used as a method on two contructors, defined below: DragState() and
-            // ZoneState(). Rather than duplicating code, the method is defined up here and put on
-            // the contructor prototypes via reference.
-            return copy(this.element.getBoundingClientRect(), this.display);
-        }
-
         angular.module('c6.drag', ['c6.ui'])
             .value('hammer', hammer)
+
+            .factory('_PositionState', ['$animate','c6EventEmitter',
+            function                   ( $animate , c6EventEmitter ) {
+                function PositionState() {}
+                PositionState.prototype = {
+                    init: function(id, $element) {
+                        this.id = id;
+                        this.$element = $element || null;
+                        this.display = this.refresh();
+
+                        c6EventEmitter(this);
+                    },
+                    collidesWith: function(rect) {
+                        var myRect = this.display;
+
+                        return !(
+                            rect.bottom < myRect.top ||
+                            rect.top > myRect.bottom ||
+                            rect.right < myRect.left ||
+                            rect.left > myRect.right
+                        );
+                    },
+                    refresh: function() {
+                        var $element = this.$element;
+
+                        if (!$element) { return null; }
+
+                        return copy($element[0].getBoundingClientRect(), this.display);
+                    },
+                    addClass: function(className) {
+                        var self = this;
+
+                        $animate.addClass(this.$element, className, function() {
+                            self.refresh();
+                        });
+                    },
+                    removeClass: function(className) {
+                        var self = this;
+
+                        $animate.removeClass(this.$element, className, function() {
+                            self.refresh();
+                        });
+                    }
+                };
+
+                return PositionState;
+            }])
+            .factory('_Draggable', ['_PositionState','$rootScope',
+            function               (  PositionState , $rootScope ) {
+                function Draggable() {
+                    var self = this,
+                        currentlyOver;
+
+                    function intersectArea(rect1, rect2) {
+                        var top = Math.max(rect1.top, rect2.top),
+                            right = Math.min(rect1.right, rect2.right),
+                            bottom = Math.min(rect1.bottom, rect2.bottom),
+                            left = Math.max(rect1.left, rect2.left),
+                            width = right - left,
+                            height = bottom - top;
+
+                        return width * height;
+                    }
+
+                    function findLargestIntersectionWith(rect, items) {
+                        var areaCache = {};
+
+                        items.sort(function(a, b) {
+                            var aArea = areaCache[a.id] ||
+                                    (areaCache[a.id] = intersectArea(a.display, rect)),
+                                bArea = areaCache[b.id] ||
+                                    (areaCache[b.id] = intersectArea(b.display, rect));
+
+                            if (aArea > bArea) {
+                                return -1;
+                            } else if (aArea < bArea) {
+                                return 1;
+                            }
+
+                            return 0;
+                        });
+
+                        return currentlyOver[0];
+                    }
+
+                    function computePrimaryZone(draggable, myRect, currentlyOver) {
+                        var prevPrimary = draggable.primaryZone,
+                            currPrimary;
+
+                        switch (currentlyOver.length) {
+
+                        case 0:
+                            currPrimary = null;
+                            break;
+
+                        case 1:
+                            currPrimary = currentlyOver[0];
+                            break;
+
+                        default:
+                            currPrimary = findLargestIntersectionWith(myRect, currentlyOver);
+                            break;
+
+                        }
+
+                        if (prevPrimary !== currPrimary) {
+                            $rootScope.$apply(function() {
+                                draggable.primaryZone = currPrimary;
+
+                                if (currPrimary) {
+                                    currPrimary.emit('wonPrimary', draggable);
+                                }
+
+                                if (prevPrimary) {
+                                    prevPrimary.emit('lostPrimary', draggable);
+                                }
+                            });
+                        }
+                    }
+
+                    function enterZone(zone) {
+                        currentlyOver.push(zone);
+
+                        if (currentlyOver.length === 1) {
+                            self.addClass('c6-over-zone');
+                        }
+
+                        self.addClass('c6-over-' + zone.id);
+                    }
+
+                    function leaveZone(zone) {
+                        currentlyOver.splice(currentlyOver.indexOf(zone), 1);
+
+                        if (!currentlyOver.length) {
+                            self.removeClass('c6-over-zone');
+                        }
+
+                        self.removeClass('c6-over-' + zone.id);
+                    }
+
+                    this.currentlyOver = currentlyOver = [];
+                    this.primaryZone = null;
+
+                    this.init.apply(this, arguments);
+
+                    this.on('enterZone', enterZone)
+                        .on('leaveZone', leaveZone)
+                        .on('collisionsComputed', computePrimaryZone);
+
+                }
+                Draggable.prototype = new PositionState();
+
+                return Draggable;
+            }])
+            .factory('_Zone', ['_PositionState',
+            function          (  PositionState ) {
+                function Zone() {
+                    var self = this,
+                        currentlyUnder;
+
+                    function draggableEnter(draggable) {
+                        currentlyUnder.push(draggable);
+
+                        if (currentlyUnder.length === 1) {
+                            self.addClass('c6-drag-zone-active');
+                        }
+
+                        self.addClass('c6-drag-zone-under-' + draggable.id);
+                    }
+
+                    function draggableLeave(draggable) {
+                        currentlyUnder.splice(currentlyUnder.indexOf(draggable), 1);
+
+                        if (!currentlyUnder.length) {
+                            self.removeClass('c6-drag-zone-active');
+                        }
+
+                        self.removeClass('c6-drag-zone-under-' + draggable.id);
+                    }
+
+                    function wonPrimary(draggable) {
+                        self.addClass('c6-drag-zone-primary');
+                        self.addClass('c6-drag-zone-primary-of-' + draggable.id);
+                    }
+
+                    function lostPrimary(draggable) {
+                        self.removeClass('c6-drag-zone-primary');
+                        self.removeClass('c6-drag-zone-primary-of-' + draggable.id);
+                    }
+
+                    this.currentlyUnder = currentlyUnder = [];
+
+                    this.init.apply(this, arguments);
+
+                    this.on('draggableEnter', draggableEnter)
+                        .on('draggableLeave', draggableLeave)
+                        .on('wonPrimary', wonPrimary)
+                        .on('lostPrimary', lostPrimary);
+                }
+                Zone.prototype = new PositionState();
+
+                return Zone;
+            }])
 
             .controller('C6DragSpaceController', ['$scope',
             function                             ( $scope ) {
@@ -73,6 +268,13 @@
                             $scope.$apply(remove);
                         }
                     }
+
+                    draggable.emit(
+                        'collisionsComputed',
+                        draggable,
+                        draggable.display,
+                        draggable.currentlyOver
+                    );
                 }
 
                 function draggableEndDrag(draggable) {
@@ -118,120 +320,35 @@
                 };
             }])
 
-            .directive('c6DragZone', ['c6EventEmitter','$animate',
-            function                 ( c6EventEmitter , $animate ) {
-                function ZoneState(id, element) {
-                    this.id = id;
-                    this.currentlyUnder = [];
-                    this.element = element;
-                    this.display = this.refresh();
-
-                    c6EventEmitter(this);
-                }
-                ZoneState.prototype = {
-                    collidesWith: function(rect) {
-                        var myRect = this.display;
-
-                        return !(
-                            rect.bottom < myRect.top ||
-                            rect.top > myRect.bottom ||
-                            rect.right < myRect.left ||
-                            rect.left > myRect.right
-                        );
-                    },
-                    refresh: refreshMethod
-                };
-
+            .directive('c6DragZone', ['_Zone',
+            function                 (  Zone ) {
                 return {
                     restrict: 'EAC',
                     require: '^c6DragSpace',
                     link: function(scope, $element, $attrs, C6DragSpaceCtrl) {
-                        var zoneState = new ZoneState($attrs.id, $element[0]),
-                            currentlyUnder = zoneState.currentlyUnder;
+                        var zone = new Zone($attrs.id, $element);
 
-                        function draggableEnter(draggable) {
-                            currentlyUnder.push(draggable);
-
-                            if (currentlyUnder.length === 1) {
-                                $animate.addClass($element, 'c6-drag-zone-active');
-                            }
-
-                            $animate.addClass($element, 'c6-drag-zone-under-' + draggable.id);
-                        }
-
-                        function draggableLeave(draggable) {
-                            currentlyUnder.splice(currentlyUnder.indexOf(draggable), 1);
-
-                            if (!currentlyUnder.length) {
-                                $animate.removeClass($element, 'c6-drag-zone-active');
-                            }
-
-                            $animate.removeClass($element, 'c6-drag-zone-under-' + draggable.id);
-                        }
-
-                        function wonPrimary(draggable) {
-                            $animate.addClass(
-                                $element,
-                                'c6-drag-zone-primary'
-                            );
-                            $animate.addClass(
-                                $element,
-                                'c6-drag-zone-primary-of-' + draggable.id
-                            );
-                        }
-
-                        function lostPrimary(draggable) {
-                            $animate.removeClass(
-                                $element,
-                                'c6-drag-zone-primary'
-                            );
-                            $animate.removeClass(
-                                $element,
-                                'c6-drag-zone-primary-of-' + draggable.id
-                            );
-                        }
-
-                        zoneState
-                            .on('draggableEnter', draggableEnter)
-                            .on('draggableLeave', draggableLeave)
-                            .on('wonPrimary', wonPrimary)
-                            .on('lostPrimary', lostPrimary);
-
-                        C6DragSpaceCtrl.addZone(zoneState);
-                        $element.data('cDragZone', zoneState);
+                        C6DragSpaceCtrl.addZone(zone);
+                        $element.data('cDragZone', zone);
 
                         scope.$on('$destroy', function() {
-                            zoneState.removeAllListeners();
-                            C6DragSpaceCtrl.removeZone(zoneState);
+                            zone.removeAllListeners();
+                            C6DragSpaceCtrl.removeZone(zone);
                         });
                     }
                 };
             }])
 
-            .directive('c6Draggable', ['hammer','c6EventEmitter','$animate',
-            function                  ( hammer , c6EventEmitter , $animate ) {
+            .directive('c6Draggable', ['hammer','_Draggable',
+            function                  ( hammer ,  Draggable ) {
                 var noop = angular.noop;
-
-                function DragState(id, element) {
-                    this.id = id;
-                    this.element = element;
-                    this.display = this.refresh();
-                    this.currentlyOver = [];
-                    this.primaryZone = null;
-
-                    c6EventEmitter(this);
-                }
-                DragState.prototype = {
-                    refresh: refreshMethod
-                };
 
                 return {
                     restrict: 'AC',
                     require: '?^c6DragSpace',
                     link: function(scope, $element, $attrs, C6DragSpaceCtrl) {
                         var touchable = hammer($element[0]),
-                            dragState = new DragState($attrs.id, $element[0]),
-                            currentlyOver = dragState.currentlyOver;
+                            draggable = new Draggable($attrs.id, $element);
 
                         function px(num) {
                             return num + 'px';
@@ -253,22 +370,22 @@
                                 events = {
                                     dragstart: {
                                         setup: function() {
-                                            dragState.refresh();
+                                            draggable.refresh();
 
                                             this.start = {
-                                                top: dragState.display.top,
-                                                left: dragState.display.left
+                                                top: draggable.display.top,
+                                                left: draggable.display.left
                                             };
                                         },
                                         modify: function() {
-                                            $animate.addClass($element, 'c6-dragging');
+                                            draggable.addClass('c6-dragging');
                                             $element.css({
                                                 top: px(this.start.top),
                                                 left: px(this.start.left)
                                             });
                                         },
                                         notify: function() {
-                                            dragState.emit('begin', dragState);
+                                            draggable.emit('begin', draggable);
                                         }
                                     },
                                     drag: {
@@ -282,18 +399,18 @@
                                             });
                                         },
                                         notify: function() {
-                                            dragState.refresh();
-                                            dragState.emit('move', dragState, dragState.display);
+                                            draggable.refresh();
+                                            draggable.emit('move', draggable, draggable.display);
                                         }
                                     },
                                     dragend: {
                                         modify: function() {
-                                            $animate.removeClass($element, 'c6-dragging');
+                                            draggable.removeClass('c6-dragging');
                                         },
                                         notify: function() {
-                                            dragState.refresh();
-                                            dragState.emit('move', dragState, dragState.display);
-                                            dragState.emit('end', dragState);
+                                            draggable.refresh();
+                                            draggable.emit('move', draggable, draggable.display);
+                                            draggable.emit('end', draggable);
                                         }
                                     }
                                 };
@@ -322,112 +439,21 @@
                             touchable.on('dragstart drag dragend', delegate);
                         }
 
-                        function intersectArea(rect1, rect2) {
-                            var top = Math.max(rect1.top, rect2.top),
-                                right = Math.min(rect1.right, rect2.right),
-                                bottom = Math.min(rect1.bottom, rect2.bottom),
-                                left = Math.max(rect1.left, rect2.left),
-                                width = right - left,
-                                height = bottom - top;
-
-                            return width * height;
-                        }
-
-                        function findLargestIntersectionWith(rect, items) {
-                            var areaCache = {};
-
-                            items.sort(function(a, b) {
-                                var aArea = areaCache[a.id] ||
-                                    (areaCache[a.id] = intersectArea(a.display, rect)),
-                                    bArea = areaCache[b.id] ||
-                                        (areaCache[b.id] = intersectArea(b.display, rect));
-
-                                if (aArea > bArea) {
-                                    return -1;
-                                } else if (aArea < bArea) {
-                                    return 1;
-                                }
-
-                                return 0;
-                            });
-
-                            return currentlyOver[0];
-                        }
-
-                        function computePrimaryZone(draggable, myRect) {
-                            var currentlyOver = draggable.currentlyOver,
-                                prevPrimary = draggable.primaryZone,
-                                currPrimary;
-
-                            switch (currentlyOver.length) {
-
-                            case 0:
-                                currPrimary = null;
-                                break;
-
-                            case 1:
-                                currPrimary = currentlyOver[0];
-                                break;
-
-                            default:
-                                currPrimary = findLargestIntersectionWith(myRect, currentlyOver);
-                                break;
-
-                            }
-
-                            if (prevPrimary !== currPrimary) {
-                                scope.$apply(function() {
-                                    draggable.primaryZone = currPrimary;
-
-                                    if (currPrimary) {
-                                        currPrimary.emit('wonPrimary', draggable);
-                                    }
-
-                                    if (prevPrimary) {
-                                        prevPrimary.emit('lostPrimary', draggable);
-                                    }
-                                });
-                            }
-                        }
-
-                        function enterZone(zone) {
-                            currentlyOver.push(zone);
-
-                            if (currentlyOver.length === 1) {
-                                $animate.addClass($element, 'c6-over-zone');
-                            }
-
-                            $animate.addClass($element, 'c6-over-' + zone.id);
-                        }
-
-                        function leaveZone(zone) {
-                            currentlyOver.splice(currentlyOver.indexOf(zone), 1);
-
-                            if (!currentlyOver.length) {
-                                $animate.removeClass($element, 'c6-over-zone');
-                            }
-
-                            $animate.removeClass($element, 'c6-over-' + zone.id);
-                        }
 
                         if (C6DragSpaceCtrl) {
-                            C6DragSpaceCtrl.addDragable(dragState);
-
-                            dragState.on('move', computePrimaryZone);
+                            C6DragSpaceCtrl.addDragable(draggable);
                         }
 
-                        $element.data('cDrag', dragState);
+                        $element.data('cDrag', draggable);
 
                         listenForEvents();
 
-                        dragState.on('enterZone', enterZone)
-                            .on('leaveZone', leaveZone);
 
                         scope.$on('$destroy', function() {
-                            dragState.removeAllListeners();
+                            draggable.removeAllListeners();
 
                             if (C6DragSpaceCtrl) {
-                                C6DragSpaceCtrl.removeDraggable(dragState);
+                                C6DragSpaceCtrl.removeDraggable(draggable);
                             }
                         });
                     }

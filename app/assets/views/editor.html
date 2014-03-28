@@ -1,6 +1,6 @@
 <c6-alias model="EditorCtrl.model" as="minireel">
     <h1>{{minireel.title}}</h1>
-    <ul c6-drag-space controller-as="DragCtrl">
+    <ul>
         <li class="card" c6-draggable ng-repeat="this in minireel.data.deck">
             <h3>{{this.title}}</h3>
             <button ng-click="EditorCtrl.editCard(this)">Edit</button>
