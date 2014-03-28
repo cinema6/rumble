@@ -115,6 +115,27 @@
                 expect($div.css('left')).toBe('10px');
             });
 
+            it('should emit a $scope event when it is dropped', function() {
+                var finger = new Finger(),
+                    eventSpy = jasmine.createSpy('event: c6-draggable:drop')
+                        .and.callFake(function() {
+                            expect(draggable.display.top).toBe(50);
+                            expect(draggable.display.left).toBe(50);
+                        }),
+                    $draggable = $compile('<span c6-draggable style="display: inline-block; width: 50px; height: 50px;">Drag Me</span>')($scope),
+                    draggable = $draggable.data('cDrag');
+
+                testFrame.$body.append($draggable);
+
+                $scope.$on('c6-draggable:drop', eventSpy);
+
+                finger.placeOn($draggable);
+                finger.drag(50, 50);
+                finger.lift();
+
+                expect(eventSpy).toHaveBeenCalledWith(jasmine.any(Object), draggable);
+            });
+
             it('should add the "c6-dragging" class to the element while it is being dragged', function() {
                 var finger = new Finger(),
                     $div;

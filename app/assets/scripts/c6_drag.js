@@ -98,7 +98,7 @@
             .factory('_Draggable', ['_PositionState','$rootScope',
             function               (  PositionState , $rootScope ) {
                 // This function, given an object that was constructed with Draggable, will iterate
-                // over the zones the draggable element is over and determine which zone it is
+                // through the zones the draggable element is over and determine which zone it is
                 // most over (by computing the area of all the zones' intersections with the
                 // draggable item.
                 //
@@ -146,13 +146,6 @@
                 function Draggable() {
                     var self = this;
 
-                    // After this draggable item's collisions with the "zones" has been computed,
-                    // figure out which zone we are primarily over (because we could be hovering
-                    // over multiple zones.
-                    function collisionsComputed(self) {
-                        self.setPrimaryZone();
-                    }
-
                     // Respond to entering a zone.
                     function enterZone(zone) {
                         var currentlyOver = self.currentlyOver;
@@ -179,6 +172,27 @@
                         self.removeClass('c6-over-' + zone.id);
                     }
 
+                    // After this draggable item's collisions with the "zones" have been computed,
+                    // figure out which zone we are primarily over (because we could be hovering
+                    // over multiple zones.
+                    function collisionsComputed(self) {
+                        self.setPrimaryZone();
+                    }
+
+                    // Here, we'll notify all of the zones we are currently over that we're
+                    // dropping on top of them.
+                    function dropStart(self) {
+                        var currentlyOver = self.currentlyOver,
+                            length = currentlyOver.length, index = 0,
+                            zone;
+
+                        for ( ; index < length; index++) {
+                            zone = currentlyOver[index];
+
+                            zone.emit('drop', self, (zone === self.primaryZone));
+                        }
+                    }
+
                     this.currentlyOver = [];
                     this.primaryZone = null;
 
@@ -189,7 +203,10 @@
                     // controller that has references to all draggable and zone elements.
                     this.on('enterZone', enterZone)
                         .on('leaveZone', leaveZone)
-                        .on('collisionsComputed', collisionsComputed);
+                        .on('collisionsComputed', collisionsComputed)
+                        // This event is triggered by a HammerJS event listener as the beginning of
+                        // the "dragend" event phase.
+                        .on('dropStart', dropStart);
 
                 }
                 Draggable.prototype = new PositionState();
@@ -414,6 +431,18 @@
                     link: function(scope, $element, $attrs, C6DragSpaceCtrl) {
                         var zone = new Zone($attrs.id, $element);
 
+                        function drop(draggable, isPrimary) {
+                            scope.$emit('c6-drag-zone:drop', zone.id, zone, draggable);
+
+                            if (isPrimary) {
+                                scope.$emit('c6-drag-zone:primaryDrop', zone.id, zone, draggable);
+                            }
+                        }
+
+                        // This event is triggered by a draggable when it is dropped over this
+                        // zone.
+                        zone.on('drop', drop);
+
                         C6DragSpaceCtrl.addZone(zone);
                         $element.data('cDragZone', zone);
 
@@ -490,6 +519,14 @@
                                         }
                                     },
                                     dragend: {
+                                        setup: function() {
+                                            // The public $scope event for the drop must be
+                                            // $emitted in the setup phase so that listeners will
+                                            // notified before the element is further modified
+                                            // (and it potentially snaps to another position.)
+                                            draggable.emit('dropStart', draggable);
+                                            scope.$emit('c6-draggable:drop', draggable);
+                                        },
                                         modify: function() {
                                             draggable.removeClass('c6-dragging');
                                         },

@@ -75,6 +75,71 @@
                     });
                 });
 
+                it('should $emit a $scope event when any draggable is dropped on it, and an event when it is the primary zone for the drop', function() {
+                    var finger = new Finger(),
+                        $zone1 = $dragSpace.find('#zone1'),
+                        $zone2 = $('<div id="zone2" c6-drag-zone style="height: 50px; margin-bottom: 5px;"></div>'),
+                        $drag1 = $dragSpace.find('#drag1'),
+                        zone1, zone2, drag1,
+                        dropSpy = jasmine.createSpy('c6-drag-zone:drop'),
+                        primaryDropSpy = jasmine.createSpy('c6-drag-zone:primaryDrop');
+
+                    $scope.$on('c6-drag-zone:drop', dropSpy);
+                    $scope.$on('c6-drag-zone:primaryDrop', primaryDropSpy);
+
+                    $zone2.insertAfter($zone1);
+                    $scope.$apply(function() {
+                        $compile($zone2)($scope);
+                    });
+                    zone1 = $zone1.data('cDragZone');
+                    zone2 = $zone2.data('cDragZone');
+                    drag1 = $drag1.data('cDrag');
+
+                    finger.placeOn($drag1);
+                    // Move 30px up
+                    finger.drag(0, -30);
+                    finger.lift();
+
+                    expect(dropSpy).toHaveBeenCalledWith(jasmine.any(Object), 'zone2', zone2, drag1);
+                    expect(primaryDropSpy).toHaveBeenCalledWith(jasmine.any(Object), 'zone2', zone2, drag1);
+                    dropSpy.calls.reset();
+                    primaryDropSpy.calls.reset();
+
+                    finger.placeOn($drag1);
+                    // Move 75px up
+                    finger.drag(0, -75);
+                    finger.lift();
+
+                    expect(dropSpy).toHaveBeenCalledWith(jasmine.any(Object), 'zone1', zone1, drag1);
+                    expect(dropSpy).toHaveBeenCalledWith(jasmine.any(Object), 'zone2', zone2, drag1);
+                    expect(primaryDropSpy).toHaveBeenCalledWith(jasmine.any(Object), 'zone2', zone2, drag1);
+                    expect(primaryDropSpy).not.toHaveBeenCalledWith(jasmine.any(Object), 'zone1', zone1, drag1);
+                    dropSpy.calls.reset();
+                    primaryDropSpy.calls.reset();
+
+                    finger.placeOn($drag1);
+                    // Move 90px up
+                    finger.drag(0, -90);
+                    finger.lift();
+
+                    expect(dropSpy).toHaveBeenCalledWith(jasmine.any(Object), 'zone1', zone1, drag1);
+                    expect(dropSpy).toHaveBeenCalledWith(jasmine.any(Object), 'zone2', zone2, drag1);
+                    expect(primaryDropSpy).not.toHaveBeenCalledWith(jasmine.any(Object), 'zone2', zone2, drag1);
+                    expect(primaryDropSpy).toHaveBeenCalledWith(jasmine.any(Object), 'zone1', zone1, drag1);
+                    dropSpy.calls.reset();
+                    primaryDropSpy.calls.reset();
+
+                    finger.placeOn($drag1);
+                    // Move 135px up
+                    finger.drag(0, -135);
+                    finger.lift();
+
+                    expect(dropSpy).toHaveBeenCalledWith(jasmine.any(Object), 'zone1', zone1, drag1);
+                    expect(primaryDropSpy).toHaveBeenCalledWith(jasmine.any(Object), 'zone1', zone1, drag1);
+                    dropSpy.calls.reset();
+                    primaryDropSpy.calls.reset();
+                });
+
                 it('should add the "c6-drag-zone-primary" "c6-drag-zone-primary-of-draggableId" when it is a draggable\'s primaryZone', function() {
                     var finger = new Finger(),
                         $zone1 = $dragSpace.find('#zone1'),
