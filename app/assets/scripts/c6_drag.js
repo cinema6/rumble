@@ -13,13 +13,13 @@
     document.getElementsByTagName('head')[0].appendChild(styles);
 
     define(['hammer'], function(hammer) {
-        var copy = angular.copy;
-
         angular.module('c6.drag', ['c6.ui'])
             .value('hammer', hammer)
 
             .factory('_PositionState', ['$animate','c6EventEmitter',
             function                   ( $animate , c6EventEmitter ) {
+                var copy = angular.copy;
+
                 function PositionState() {}
                 PositionState.prototype = {
                     init: function(id, $element) {
@@ -38,6 +38,20 @@
                             rect.right < myRect.left ||
                             rect.left > myRect.right
                         );
+                    },
+                    intersectionWith: function(rect) {
+                        var myRect = this.display,
+                            intersection = {
+                                top: Math.max(myRect.top, rect.top),
+                                right: Math.min(myRect.right, rect.right),
+                                bottom: Math.min(myRect.bottom, rect.bottom),
+                                left: Math.max(myRect.left, rect.left)
+                            };
+
+                        intersection.width = intersection.right - intersection.left;
+                        intersection.height = intersection.bottom - intersection.top;
+
+                        return intersection;
                     },
                     refresh: function() {
                         var $element = this.$element;
@@ -66,75 +80,43 @@
             }])
             .factory('_Draggable', ['_PositionState','$rootScope',
             function               (  PositionState , $rootScope ) {
+                function largestZoneIntersectionOf(draggable) {
+                    var areaCache = {},
+                        myRect = draggable.display;
+
+                    function intersectArea(zone) {
+                        var area = areaCache[zone.id],
+                            intersection;
+
+                        if (area) { return area; }
+
+                        intersection = zone.intersectionWith(myRect);
+
+                        area = areaCache[zone.id] = intersection.width * intersection.height;
+
+                        return area;
+                    }
+
+                    return draggable.currentlyOver.sort(function(a, b) {
+                        var aArea = intersectArea(a),
+                            bArea = intersectArea(b);
+
+                        if (aArea > bArea) {
+                            return -1;
+                        } else if (aArea < bArea) {
+                            return 1;
+                        }
+
+                        return 0;
+                    })[0];
+                }
+
                 function Draggable() {
                     var self = this,
                         currentlyOver;
 
-                    function intersectArea(rect1, rect2) {
-                        var top = Math.max(rect1.top, rect2.top),
-                            right = Math.min(rect1.right, rect2.right),
-                            bottom = Math.min(rect1.bottom, rect2.bottom),
-                            left = Math.max(rect1.left, rect2.left),
-                            width = right - left,
-                            height = bottom - top;
-
-                        return width * height;
-                    }
-
-                    function findLargestIntersectionWith(rect, items) {
-                        var areaCache = {};
-
-                        items.sort(function(a, b) {
-                            var aArea = areaCache[a.id] ||
-                                    (areaCache[a.id] = intersectArea(a.display, rect)),
-                                bArea = areaCache[b.id] ||
-                                    (areaCache[b.id] = intersectArea(b.display, rect));
-
-                            if (aArea > bArea) {
-                                return -1;
-                            } else if (aArea < bArea) {
-                                return 1;
-                            }
-
-                            return 0;
-                        });
-
-                        return currentlyOver[0];
-                    }
-
-                    function computePrimaryZone(draggable, myRect, currentlyOver) {
-                        var prevPrimary = draggable.primaryZone,
-                            currPrimary;
-
-                        switch (currentlyOver.length) {
-
-                        case 0:
-                            currPrimary = null;
-                            break;
-
-                        case 1:
-                            currPrimary = currentlyOver[0];
-                            break;
-
-                        default:
-                            currPrimary = findLargestIntersectionWith(myRect, currentlyOver);
-                            break;
-
-                        }
-
-                        if (prevPrimary !== currPrimary) {
-                            $rootScope.$apply(function() {
-                                draggable.primaryZone = currPrimary;
-
-                                if (currPrimary) {
-                                    currPrimary.emit('wonPrimary', draggable);
-                                }
-
-                                if (prevPrimary) {
-                                    prevPrimary.emit('lostPrimary', draggable);
-                                }
-                            });
-                        }
+                    function setPrimaryZone(self) {
+                        self.setPrimaryZone();
                     }
 
                     function enterZone(zone) {
@@ -164,10 +146,46 @@
 
                     this.on('enterZone', enterZone)
                         .on('leaveZone', leaveZone)
-                        .on('collisionsComputed', computePrimaryZone);
+                        .on('collisionsComputed', setPrimaryZone);
 
                 }
                 Draggable.prototype = new PositionState();
+                Draggable.prototype.setPrimaryZone = function() {
+                    var prevPrimary = this.primaryZone,
+                        currentlyOver = this.currentlyOver,
+                        self = this,
+                        currPrimary;
+
+                    switch (currentlyOver.length) {
+
+                    case 0:
+                        currPrimary = null;
+                        break;
+
+                    case 1:
+                        currPrimary = currentlyOver[0];
+                        break;
+
+                    default:
+                        currPrimary = largestZoneIntersectionOf(this);
+                        break;
+
+                    }
+
+                    if (prevPrimary !== currPrimary) {
+                        $rootScope.$apply(function() {
+                            self.primaryZone = currPrimary;
+
+                            if (currPrimary) {
+                                currPrimary.emit('wonPrimary', self);
+                            }
+
+                            if (prevPrimary) {
+                                prevPrimary.emit('lostPrimary', self);
+                            }
+                        });
+                    }
+                };
 
                 return Draggable;
             }])
@@ -269,12 +287,7 @@
                         }
                     }
 
-                    draggable.emit(
-                        'collisionsComputed',
-                        draggable,
-                        draggable.display,
-                        draggable.currentlyOver
-                    );
+                    draggable.emit('collisionsComputed', draggable);
                 }
 
                 function draggableEndDrag(draggable) {
@@ -439,7 +452,6 @@
                             touchable.on('dragstart drag dragend', delegate);
                         }
 
-
                         if (C6DragSpaceCtrl) {
                             C6DragSpaceCtrl.addDragable(draggable);
                         }
@@ -447,7 +459,6 @@
                         $element.data('cDrag', draggable);
 
                         listenForEvents();
-
 
                         scope.$on('$destroy', function() {
                             draggable.removeAllListeners();
