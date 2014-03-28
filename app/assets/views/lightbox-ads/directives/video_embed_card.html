@@ -15,7 +15,6 @@
         fetch-when="onDeck || active"
         on-dismiss="Ctrl.dismissBallotResults()">
     </ballot-results-module>
-
     <div class="mr-player__group">
         <div ng-class="{'mr-player--fly-away': Ctrl.flyAway}" class="mr-player c6-height-limiter"><!-- actual player will be inserted into this container --></div>
         <div ng-show="Ctrl.flyAway" class="mr-player__thumbnail c6-height-limiter"
@@ -24,12 +23,13 @@
         </div>
     </div>
 
-    <copy-expander title="{{config.title}}"
-        source="{{config.source}}"
-        source-url="{{Ctrl.videoUrl}}"
-        note="{{config.note}}"
-        touch="profile.touch">
-    </copy-expander>
+    <div class="mr-card__copy">
+        <h1 class="mr-card__title tk--hdr">{{config.title}}</h1>
+        <p ng-show="!!config.source" class="mr-card__attributes">via <a ng-href="{{Ctrl.videoUrl}}" target="_blank" title="YouTube">{{config.source}}</a></p>
+        <div class="mr-card__desc">{{config.note}}</div>
+    </div>
+    <div class="mr-ad__med-rect">&nbsp;</div>
+
 
     <!--<comments-module ng-if="Ctrl.hasModule('comments')"
         card-id="{{config.id}}"

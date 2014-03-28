@@ -11,29 +11,50 @@
     }])
     .animation('.mr-cards__item',['$log', function($log){
         $log = $log.context('.mr-cards__item');
+        var oldCard, newCard;
         return {
             beforeAddClass: function(element,className,done) {
                 $log.log('addClass setup:',className);
-                element.css({ opacity : 1, 'visibility' : 'visible'});
+                oldCard     = element;
+                //element.css({ 'opacity' : 1, 'visibility' : 'visible' });
                 $log.info('addClass start',className);
+                //element.css({ 'opacity' : 0, 'visibility' : 'hidden'});
+                $log.info('addClass end',className);
+                done();
+                
+                /*
                 element.animate({
                     opacity: 0
                 }, 500, function() {
                     $log.info('addClass end',className);
-                    element.css('visibility', 'hidden');
+                    element.css({'visibility' : 'hidden'});
                     done();
-                });
+                });*/
             },
             removeClass: function(element,className,done) {
                 $log.log('removeClass setup:',className);
-                element.css({ opacity : 0, visibility : 'visible' });
+                newCard     = element;
+                //element.css({ 'opacity' : 0, 'visibility' : 'visible' });
+                $log.info('removeClass start',className);
+                //element.css({ 'opacity' : 1});
+                $log.info('removeClass end',className);
+                
+
+                oldCard.css({'position' : 'relative', 'top' : 0, 'zIndex' : 0});
+                newCard.css({'position' : 'absolute', 'top' : 0, 'zIndex' : 1, 'left' : '-100%'});
+                newCard.animate({
+                    'left' : 0
+                }, 500, function() {
+                    done();
+                });
+                /* element.css({ 'opacity' : 0, 'visibility' : 'visible' });
                 $log.info('removeClass start',className);
                 element.delay(1000).animate({
                     opacity: 1
                 }, 500, function() {
                     $log.info('removeClass end',className);
                     done();
-                });
+                });*/
             }
         };
     }])

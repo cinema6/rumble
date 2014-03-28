@@ -66,8 +66,9 @@
         }
     }
     .mr-overlay {
+        width:100%; height:100%;
         background:rgb(0,0,0); background:rgba(0,0,0,0.8);
-        position:absolute; width:100%; height:100%; z-index: 1; left:0;
+        position:absolute; z-index: 0; left:0; top:0;
     }
     .css-promote {
         transform: translateZ(0);
@@ -76,25 +77,33 @@
     .c6-height-limiter { 
         min-height:11.125rem;/*178px*/
     }
+    .mr-ad__med-rect {
+        width:300px; height:250px;
+        position:absolute; bottom:1.125rem; right:1.125rem;
+        background:#ccc;
+    }
     
 /*  ==========================================================================
     .mr-experience classes
     ========================================================================== */
     .mr-experience {
-        padding: 8.125rem 0.625em 63% 0.625rem;/*10px*/ position:relative;
-        height: 0; min-width:18.75rem;/*300px*/ min-height: 19.625rem;/*314px*/
-        box-sizing: border-box; -moz-box-sizing: border-box;
+        position:absolute; z-index:1; top:50%; left:50%;
+        margin:-16.625em 0 0 -29.625em;
     }
+        .mr-title {
+            font-size:1.75em; font-weight:normal; color:#fff; text-align: center; line-height:1;
+            margin:0 0 0.875rem 0;
+        }
 
 /*  ==========================================================================
     .mr-pager__group classes
     ========================================================================== */
     .mr-pager__group {
-        height:3.75rem;/*60px*/ position: absolute; z-index: 1;
-        margin:0; display: block; left: 0.625em; right: 0.625em; bottom: 0.625em;/*10px*/
+        height:3rem;/*48px*/ margin:0; display: block;
+        position: absolute; left: 1.125rem; right: 20.625rem; bottom:1.125rem;
     }
     .mr-pager__btn {
-        min-width:5rem;/*80px*/ height:3.75rem;/*60px*/ position:absolute;
+        min-width:3.25rem;/*52px*/ height:3rem;/*48px*/ position:absolute;
         background:#b69823 no-repeat 50% 50%; border:0; padding:0; margin:0;
         cursor:pointer;
     }
@@ -136,7 +145,7 @@
                     float:left; margin:0 0.125rem 0 0;
                 }
                     .mr-pages__page {
-                        width:5.625rem;/*90px*/ height:3.75rem;/*60px*/
+                        width:4.5625rem;/*73px*/ height:3rem;/*48px*/
                         margin:0; padding:0; border:0; background:black;
                         position:relative; overflow: hidden;
                         cursor: pointer;
@@ -183,28 +192,28 @@
     Mini Reel Cards classes
     ========================================================================== */
     .mr-card__container {
-        position: absolute; z-index: 2; padding: 0 0.625rem;/*10px*/
-        left: 0; right: 0; top: 0.625rem;/*10px*/ bottom: 4.375rem;/*70px*/
+        background:#fff; padding: 1.125rem 20.625rem 4.5rem 1.125rem; /*18px 330px 72px 18px*/
+        position: relative; overflow: hidden;
     }
     .mr-cards__list, .mr-cards__item {
         margin:0; padding:0; list-style:none;
     }
         .mr-cards__list {
-            width:100%;
+            width:100%; height:0; padding-bottom:66.67%;
         }
         .mr-cards__item {
-            position:absolute; left: 0.625rem; right: 0.625rem;
+            
         }
             .mr-cards__item.squished {
-                height:0; overflow:hidden;
+                height:0; overflow:hidden; position: absolute;
             }
-            .mr-cards__item.ng-animate {
-                top: 0;
+            .mr-cards__item.inactive {
+                position:absolute;
             }
 
             .mr-player__group {
-                padding:0 0 64%; margin:0;
-                width:100%; height:0; position:relative;
+                padding:0 0 66.67%; margin:0;
+                width:100%; min-width:37.5em; height:0; position:relative;
                 background:#000;
             }
                 .mr-player, .mr-player__thumbnail {
@@ -220,47 +229,35 @@
                     background:50% 50% / cover no-repeat;
                 }
         .mr-card__copy {
-            position: relative; width:100%; background: #252626; margin: 0;
-            height: 2.875rem;/*46px*/ overflow: hidden;
-            -webkit-transition: height 0.3s ease-out; -moz-transition: height 0.3s ease-out; 
-            -o-transition: height 0.3s ease-out; transition: height 0.3s ease-out; 
-            -webkit-transition-delay: 0.25s; -moz-transition-delay: 0.25s; 
-            -o-transition-delay: 0.25s; transition-delay: 0.25s; 
+            position: absolute; width:18.75rem; /*300px*/ top:1.125rem; right:1.125rem;
         }
-            .mr-card__copy--expanded {
-                height: 7.5rem;/*121px*/
-            }
             .mr-card__title {
-                margin:0; 
+                font-size:1.125rem;/*18px*/ color:#000; font-weight:normal; 
+                padding: 0; margin:0; line-height: 1.4;
             }
-                .mr-card__title-h1 {
-                    font-size:1.125rem;/*18px*/ color:#fff; font-weight:normal; 
-                    padding: 0.8125rem 2.25rem 1rem 0; margin:0; line-height: 1;
-                    overflow:hidden; text-overflow: ellipsis; white-space:nowrap;
+            .mr-card__attributes {
+                color:#999999; font-size:0.75em;/*12px*/ margin:0.16em 0 1em 0;
+            }
+            .mr-card__btn {
+                height: 1.5rem;/*24px*/ width: 1.5rem;/*24px*/ right: 0; top: 0.75rem;/*12px*/
+                position: absolute; padding: 0; border: 0; background: #b69823;
+                cursor: pointer;
+            }
+                .mr-card__icon {
+                    height: 0.4375rem;/*7px*/ width: 0.3125rem;/*5px*/ display:block;
+                    background: url('../../img/dropdown-arrow.png') no-repeat 0 0; margin: 0 auto;
+                    -webkit-transition: -webkit-transform 0.3s; transition: transform 0.3s; 
                 }
-                .mr-card__attributes {
-                    color:#999999; font-size:0.75em;/*12px*/ margin:0.16em 0 1em 0;
+                .mr-card__icon--active {
+                    transform: rotate(180deg);
+                    -ms-transform: rotate(180deg);
+                    -webkit-transform: rotate(180deg);
                 }
-                .mr-card__btn {
-                    height: 1.5rem;/*24px*/ width: 1.5rem;/*24px*/ right: 0; top: 0.75rem;/*12px*/
-                    position: absolute; padding: 0; border: 0; background: #b69823;
-                    cursor: pointer;
-                }
-                    .mr-card__icon {
-                        height: 0.4375rem;/*7px*/ width: 0.3125rem;/*5px*/ display:block;
-                        background: url('../../img/dropdown-arrow.png') no-repeat 0 0; margin: 0 auto;
-                        -webkit-transition: -webkit-transform 0.3s; transition: transform 0.3s; 
-                    }
-                    .mr-card__icon--active {
-                        transform: rotate(180deg);
-                        -ms-transform: rotate(180deg);
-                        -webkit-transform: rotate(180deg);
-                    }
-     
+ 
             .mr-card__desc {
                 margin: -0.5em 0 0 0;/*8px*/ font-size:0.8125rem;/*13px*/ 
-                color:#c2c2c2; line-height:1.69; height: 3.5rem;/*56px*/
-            }  
+                color:#444444; line-height:1.69; height: 3.5rem;/*56px*/
+            }
 
 
 /*  ==========================================================================

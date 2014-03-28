@@ -1,26 +1,29 @@
 <div class="mr-experience" ng-class="app.data.experience.theme">
+    <h1 class="mr-title tk--hdr">The Title of the MiniReel Goes Here</h1>
     <div class="mr-card__container">
         <ng-include src="'deck.html' | asset:'views'"></ng-include>
-    </div>
 
-    <thumb-paginator active="tocIndex"
-        ng-if="currentIndex > -1"
-        class="mr-pager__group"
-        disable-prev-when="false"
-        disable-next-when="atTail"
-        on-prev="RumbleCtrl.goBack()"
-        on-next="RumbleCtrl.goForward()">
-        <ul class="mr-pages__list">
-            <li thumb-paginator-item ng-repeat="this in tocCards" class="mr-pages__item">
-                <navbar-button index="$index"
-                    current-index="tocIndex"
-                    card="this"
-                    on-select="RumbleCtrl.setPosition(deck.indexOf(this));">
-                </navbar-button>
-            </li>
-        </ul>
-    </thumb-paginator><!--.mr-pager__group-->
+        <thumb-paginator active="tocIndex"
+            ng-if="currentIndex > -1"
+            class="mr-pager__group"
+            disable-prev-when="false"
+            disable-next-when="atTail"
+            on-prev="RumbleCtrl.goBack()"
+            on-next="RumbleCtrl.goForward()">
+            <ul class="mr-pages__list">
+                <li thumb-paginator-item ng-repeat="this in tocCards" class="mr-pages__item">
+                    <navbar-button index="$index"
+                        current-index="tocIndex"
+                        card="this"
+                        on-select="RumbleCtrl.setPosition(deck.indexOf(this));">
+                    </navbar-button>
+                </li>
+            </ul>
+        </thumb-paginator><!--.mr-pager__group-->
+    </div>
 </div><!--.mr-experience-->
+
+<div class="mr-overlay">&nbsp;</div>
 
 <article id="card" class="mr-container">
     <ng-switch on="app.state">
