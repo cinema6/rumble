@@ -26,13 +26,15 @@
 				this.play = jasmine.createSpy('player.play()');
 				this.pause = jasmine.createSpy('player.pause()');
 				this.loadAd = jasmine.createSpy('player.loadAd()');
+				this.insertHTML = jasmine.createSpy('player.insertHTML()');
 				this.getCurrentTime = function() { return 2; };
 				this.getDuration = function() { return 5; };
 				this.getAdProperties = function() {};
 				this.getDisplayBanners = function() {};
 				this.setVolume = function(volume) {};
-				this.resumeAd = function() {};
-				this.stopAd = function() {};
+				this.resumeAd = jasmine.createSpy('player.resumeAd()');
+				this.stopAd = jasmine.createSpy('player.stopAd()');
+				this.destroy = jasmine.createSpy('player.destroy()');
 				this.isC6VpaidPlayer = function() {};
 			}
 
@@ -277,6 +279,152 @@
 								iface.ended = true;
 							}).toThrow('setting a property that has only a getter');
 						});
+					});
+				});
+
+				describe('insertHTML', function() {
+					it('should call insertHTML() on the player', function() {
+						iface.insertHTML();
+						expect(_player.insertHTML).toHaveBeenCalled();
+					});
+				});
+
+				describe('loadAd', function() {
+					it('should not call loadAd() on the player if player isn\'t ready', function() {
+						iface.loadAd();
+						expect(_player.loadAd).not.toHaveBeenCalled();
+					});
+
+					it('should call loadAd() on the player if it\'s ready', function() {
+						_player.emit('ready', _player);
+						iface.loadAd();
+						expect(_player.loadAd).toHaveBeenCalled();
+					});
+				});
+
+				describe('getType', function() {
+					it('should return "ad"', function() {
+						expect(iface.getType()).toBe('ad');
+					});
+				});
+
+				describe('getVideoId', function() {
+					it('should return the id from the directive attribute', function() {
+						expect(iface.getVideoId()).toBe(undefined);
+
+						$scope.$apply(function() {
+							$compile('<vpaid-card videoid="testId"></vpaid-card>')($scope);
+						});
+
+						expect(iface.getVideoId()).toBe('testId');
+					});
+				});
+
+				describe('isReady', function() {
+					it('should return false if player hasn\'t emitted "ready"', function() {
+						expect(iface.isReady()).toBe(false);
+					});
+
+					it('should return true once player has emitted "ready"', function() {
+						_player.emit('ready', _player);
+						expect(iface.isReady()).toBe(true);
+					});
+				});
+
+				describe('play', function() {
+					// this is the exact same function as loadAd(),
+					// I just liked to keep loadAd() cuz it matches the player method
+					it('should not call loadAd() on the player if player isn\'t ready', function() {
+						iface.play();
+						expect(_player.loadAd).not.toHaveBeenCalled();
+					});
+
+					it('should call loadAd() on the player if it\'s ready', function() {
+						_player.emit('ready', _player);
+						iface.play();
+						expect(_player.loadAd).toHaveBeenCalled();
+					});
+				});
+
+				describe('resume', function() {
+					it('should not call resumeAd() on the player if player isn\'t ready', function() {
+						iface.resume();
+						expect(_player.resumeAd).not.toHaveBeenCalled();
+					});
+
+					it('should call loadAd() on the player if it\'s ready', function() {
+						_player.emit('ready', _player);
+						iface.resume();
+						expect(_player.resumeAd).toHaveBeenCalled();
+					});
+				});
+
+				describe('pause', function() {
+					it('should not call pause() on the player if player isn\'t ready', function() {
+						iface.pause();
+						expect(_player.pause).not.toHaveBeenCalled();
+					});
+
+					it('should call pause() on the player if it\'s ready', function() {
+						_player.emit('ready', _player);
+						iface.pause();
+						expect(_player.pause).toHaveBeenCalled();
+					});
+				});
+
+				describe('destroy', function() {
+					it('should not call destroy() on the player if player isn\'t ready', function() {
+						iface.destroy();
+						expect(_player.destroy).not.toHaveBeenCalled();
+					});
+
+					it('should call destroy() on the player if it\'s ready', function() {
+						_player.emit('ready', _player);
+						iface.destroy();
+						expect(_player.destroy).toHaveBeenCalled();
+					});
+				});
+
+				describe('twerk', function() {
+					var success = jasmine.createSpy('promise success'),
+						failure = jasmine.createSpy('promise failure');
+
+					it('should return a promise', function() {
+						expect(iface.twerk().then).toEqual(jasmine.any(Function));
+					});
+
+					it('should reject the promise', function() {
+						$scope.$apply(function() {
+							iface.twerk().catch(failure);
+						});
+
+						expect(failure).toHaveBeenCalledWith('Twerking is not supported in the VPAID player.');
+					});
+
+					it('should never successfully return', function() {
+						$scope.$apply(function() {
+							iface.twerk().then(success);
+						});
+
+						expect(success).not.toHaveBeenCalled();
+					});
+				});
+
+				describe('webHref', function() {
+					it('should always be null cuz we never get one', function() {
+						expect(iface.webHref).toBe(null);
+						_player.emit('ready', _player);
+						_player.emit('play', _player);
+						expect(iface.webHref).toBe(null);
+					});
+				});
+
+				describe('twerked', function() {
+					it('should always be false cuz twerking isn\'t supported with Flash', function() {
+						expect(iface.twerked).toBe(false);
+						_player.emit('ready', _player);
+						_player.emit('play', _player);
+						expect(iface.twerked).toBe(false);
 					});
 				});
 			});
