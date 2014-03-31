@@ -68,6 +68,78 @@
                     Controller = scope.Ctrl;
                 });
 
+                describe('events', function() {
+                    describe('draggableAdded', function() {
+                        it('should emit the event whenever a draggable is registered with the controller', function() {
+                            var draggable = {
+                                    on: function() {
+                                        return this;
+                                    }
+                                },
+                                spy = jasmine.createSpy('draggableAdded spy');
+
+                            Controller.on('draggableAdded', spy);
+
+                            Controller.addDraggable(draggable);
+
+                            expect(spy).toHaveBeenCalledWith(draggable);
+                        });
+                    });
+
+                    describe('draggableRemoved', function() {
+                        it('should be emitted whenever a draggable is removed', function() {
+                            var draggable = {
+                                    id: 'foo',
+                                    on: function() {
+                                        return this;
+                                    }
+                                },
+                                spy = jasmine.createSpy('draggableRemoved spy');
+
+                            Controller.on('draggableRemoved', spy);
+                            Controller.addDraggable(draggable);
+
+                            Controller.removeDraggable(draggable);
+                            expect(spy).toHaveBeenCalledWith(draggable);
+                        });
+                    });
+
+                    describe('zoneAdded', function() {
+                        it('should emit the event whenever a zone is registered with the controller', function() {
+                            var zone = {
+                                    on: function() {
+                                        return this;
+                                    }
+                                },
+                                spy = jasmine.createSpy('zoneAdded spy');
+
+                            Controller.on('zoneAdded', spy);
+
+                            Controller.addZone(zone);
+
+                            expect(spy).toHaveBeenCalledWith(zone);
+                        });
+                    });
+
+                    describe('zoneRemoved', function() {
+                        it('should be emitted whenever a zone is removed', function() {
+                            var zone = {
+                                    id: 'foo',
+                                    on: function() {
+                                        return this;
+                                    }
+                                },
+                                spy = jasmine.createSpy('zoneRemoved spy');
+
+                            Controller.on('zoneRemoved', spy);
+                            Controller.addZone(zone);
+
+                            Controller.removeZone(zone);
+                            expect(spy).toHaveBeenCalledWith(zone);
+                        });
+                    });
+                });
+
                 describe('properties', function() {
                     describe('zones', function() {
                         it('should be an object with each zone\'s state, keyed by its ID', function() {
@@ -93,7 +165,11 @@
                                 bottom: 50,
                                 left: 0,
                                 width: 50,
-                                height: 50
+                                height: 50,
+                                center: {
+                                    x: 25,
+                                    y: 25
+                                }
                             });
 
                             expect(zone2.display).toEqual({
@@ -102,7 +178,11 @@
                                 bottom: 50,
                                 left: 50,
                                 width: 50,
-                                height: 50
+                                height: 50,
+                                center: {
+                                    x: 75,
+                                    y: 25
+                                }
                             });
                         });
 
@@ -239,7 +319,11 @@
                                 bottom: 50,
                                 right: 50,
                                 width: 50,
-                                height: 50
+                                height: 50,
+                                center: {
+                                    x: 25,
+                                    y: 25
+                                }
                             });
 
                             finger.placeOn($drag1);
@@ -252,7 +336,11 @@
                                 bottom: 55,
                                 right: 55,
                                 width: 50,
-                                height: 50
+                                height: 50,
+                                center: {
+                                    x: 30,
+                                    y: 30
+                                }
                             });
 
                             // Drag 770px to the right
@@ -263,7 +351,11 @@
                                 bottom: jasmine.any(Number),
                                 right: 825,
                                 width: 50,
-                                height: jasmine.any(Number)
+                                height: jasmine.any(Number),
+                                center: {
+                                    x: 800,
+                                    y: jasmine.any(Number)
+                                }
                             });
                         });
 
@@ -329,63 +421,6 @@
                             // Move 60px down
                             finger.drag(0, 60);
                             expect(drag1.currentlyOver).toEqual([]);
-                        });
-
-                        it('should have a primaryZone (the zone the majority of the draggable is over)', function() {
-                            var finger = new Finger(),
-                                $zone1 = new ZoneElement('zone1'),
-                                $zone2 = new ZoneElement('zone2'),
-                                $drag1 = $dragSpace.find('#drag1'),
-                                drag1, zone1, zone2,
-                                $watchSpy = jasmine.createSpy('$watch()'),
-                                scope = $dragSpace.children().scope();
-
-                            scope.$watch('Ctrl.draggables.drag1.primaryZone', $watchSpy);
-
-                            $zone2.css('margin-right', '1px');
-
-                            $dragSpace.prepend($zone2);
-                            $dragSpace.prepend($zone1);
-                            $scope.$apply(function() {
-                                $compile($zone1)($scope);
-                                $compile($zone2)($scope);
-                            });
-                            drag1 = Controller.draggables.drag1;
-                            zone1 = Controller.zones.zone1;
-                            zone2 = Controller.zones.zone2;
-
-                            finger.placeOn($drag1);
-                            finger.drag(0, 0);
-                            expect(drag1.primaryZone).toBeNull();
-                            expect($watchSpy.calls.count()).toBe(1);
-
-                            // Drag 26px to the left
-                            finger.drag(-26, 0);
-                            expect(drag1.primaryZone).toBe(zone2);
-                            expect($watchSpy.calls.count()).toBe(2);
-
-                            // Drag 35px to the left
-                            finger.drag(-35, 0);
-                            expect(drag1.primaryZone).toBe(zone2);
-
-                            // Drag 10px to the left
-                            finger.drag(-10, 0);
-                            expect(drag1.primaryZone).toBe(zone2);
-
-                            // Drag 10px to the left
-                            finger.drag(-10, 0);
-                            expect(drag1.primaryZone).toBe(zone1);
-                            expect($watchSpy.calls.count()).toBe(3);
-
-                            // Drag 10px to the left
-                            finger.drag(10, 0);
-                            expect(drag1.primaryZone).toBe(zone2);
-                            expect($watchSpy.calls.count()).toBe(4);
-
-                            // Drag 60px down
-                            finger.drag(0, 60);
-                            expect(drag1.primaryZone).toBeNull();
-                            expect($watchSpy.calls.count()).toBe(5);
                         });
 
                         it('should remove the draggable if it is destroyed', function() {

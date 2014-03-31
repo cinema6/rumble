@@ -75,8 +75,6 @@
 
                 finger.lift();
                 expect($div.css('position')).toBe('static');
-                expect($div.css('top')).toBe('auto');
-                expect($div.css('left')).toBe('auto');
 
                 domEvents.forEach(function(event) {
                     if (event.type.search(/^(drag)$/) > -1) {
