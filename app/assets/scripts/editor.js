@@ -19,8 +19,10 @@
             });
         }])
 
-        .controller('EditCardController', ['$scope','cModel','c6Computed','c6State','VideoService',
-        function                          ( $scope , cModel , c6Computed , c6State , VideoService ) {
+        .controller('EditCardController', ['$scope','cModel','c6Computed','c6State',
+                                           'VideoService',
+        function                          ( $scope , cModel , c6Computed , c6State ,
+                                            VideoService ) {
             var c = c6Computed($scope);
 
             this.model = cModel;
@@ -47,8 +49,10 @@
             };
         }])
 
-        .controller('NewCardEditController', ['cModel','c6Computed','$scope','VideoService','c6State',
-        function                             ( cModel , c6Computed , $scope , VideoService , c6State ) {
+        .controller('NewCardEditController', ['cModel','c6Computed','$scope','VideoService',
+                                              'c6State',
+        function                             ( cModel , c6Computed , $scope , VideoService ,
+                                               c6State ) {
             var c = c6Computed($scope);
 
             this.model = cModel;

@@ -48,17 +48,23 @@
                                 clone$.data('cView', { level: viewLevel, state: state });
                                 $compile(clone$.contents())(newScope);
 
-                                $animate.enter(clone$, null, currentElement$ || element, function() {
-                                    c6State.emit('viewChangeSuccess', state);
-                                });
+                                $animate.enter(
+                                    clone$,
+                                    null,
+                                    currentElement$ || element,
+                                    function() {
+                                        c6State.emit('viewChangeSuccess', state);
+                                    }
+                                );
                             });
                         }
 
                         // We have nothing to do if the transition was not intended for this view or
-                        // the state being requested is already loaded into the view (and this is not
-                        // a deliberate transition to the current state again (but maybe with different
-                        // data.)
-                        if (stateLevel > viewLevel || (state === data.state && state !== prevState)) { return; }
+                        // the state being requested is already loaded into the view (and this is
+                        // not a deliberate transition to the current state again (but maybe with
+                        // different data.)
+                        if (stateLevel > viewLevel ||
+                            (state === data.state && state !== prevState)) { return; }
 
 
                         if (stateLevel === viewLevel) {
@@ -108,8 +114,10 @@
                 return this;
             };
 
-            this.$get = ['c6StateParams','c6EventEmitter','$injector','$q','$http','$templateCache','$log',
-            function    ( c6StateParams , c6EventEmitter , $injector , $q , $http , $templateCache , $log ) {
+            this.$get = ['c6StateParams','c6EventEmitter','$injector','$q','$http',
+                         '$templateCache','$log',
+            function    ( c6StateParams , c6EventEmitter , $injector , $q , $http ,
+                          $templateCache , $log ) {
                 var c6State = c6EventEmitter({}),
                     _service = {};
 
@@ -138,7 +146,11 @@
                     function afterModel(model) {
                         state.cModel = model || null;
 
-                        return $injector.invoke(state.afterModel || angular.noop, state, { model: model });
+                        return $injector.invoke(
+                            state.afterModel || angular.noop,
+                            state,
+                            { model: model }
+                        );
                     }
 
                     function handleError(error) {
@@ -198,7 +210,10 @@
                             function handleViewChangeSuccess(toState) {
                                 if (toState === state) {
                                     deferred.resolve(state);
-                                    c6State.removeListener('viewChangeSuccess', handleViewChangeSuccess);
+                                    c6State.removeListener(
+                                        'viewChangeSuccess',
+                                        handleViewChangeSuccess
+                                    );
                                 }
                             }
 

@@ -16,6 +16,7 @@ module.exports = function(config) {
             { pattern: (settings.appDir + '/assets/scripts/**/*.js'), included: false },
             { pattern: '.tmp/templates.js', included: false },
             { pattern: 'test/spec/*.js', included: false },
+            { pattern: 'test/helpers/*.js', included: false },
             'test/test-main.js'
         ],
 
@@ -52,10 +53,10 @@ module.exports = function(config) {
         // - Safari (only Mac)
         // - PhantomJS
         // - IE (only Windows)
-        browsers: ['PhantomJS'],
+        browsers: ['Chrome'],
 
         // If browser does not capture in given timeout [ms], kill it
-        captureTimeout: 5000,
+        captureTimeout: 10000,
 
         // Continuous Integration mode
         // if true, it capture browsers, run tests and exit
