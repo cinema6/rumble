@@ -288,6 +288,15 @@
                     });
                 }
 
+                this.refresh = function() {
+                    function refresh(item) {
+                        item.refresh();
+                    }
+
+                    forEach(this.draggables, refresh);
+                    forEach(this.zones, refresh);
+                };
+
                 this.addDraggable = function(draggable) {
                     // These events are triggered by HammerJS drag events that are handled below in
                     // the c6-draggable directive.
@@ -328,6 +337,8 @@
                     controller: 'C6DragSpaceController',
                     scope: true,
                     link: function(scope, $element, $attrs, Controller) {
+                        $element.data('cDragCtrl', Controller);
+
                         if ($attrs.controllerAs) {
                             scope[$attrs.controllerAs] = Controller;
                         }

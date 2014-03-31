@@ -68,6 +68,46 @@
                     Controller = scope.Ctrl;
                 });
 
+                it('should be accessible via the jqLite .data() method', function() {
+                    expect($dragSpace.data('cDragCtrl')).toBe(Controller);
+                });
+
+                describe('methods', function() {
+                    describe('refresh()', function() {
+                        it('should call the refresh() method on all zones and draggables', function() {
+                            var $drag2 = $('<div c6-draggable id="drag2">'),
+                                $zone1 = $('<div c6-drag-zone id="zone1">'),
+                                $zone2 = $('<div c6-drag-zone id="zone2">'),
+                                drag1, drag2, zone1, zone2;
+
+                            $dragSpace.append($drag2);
+                            $dragSpace.append($zone1);
+                            $dragSpace.append($zone2);
+                            $scope.$apply(function() {
+                                $compile($drag2)($scope);
+                                $compile($zone1)($scope);
+                                $compile($zone2)($scope);
+                            });
+                            drag1 = Controller.draggables.drag1;
+                            drag2 = Controller.draggables.drag2;
+                            zone1 = Controller.zones.zone1;
+                            zone2 = Controller.zones.zone2;
+
+                            spyOn(drag1, 'refresh');
+                            spyOn(drag2, 'refresh');
+                            spyOn(zone1, 'refresh');
+                            spyOn(zone2, 'refresh');
+
+                            Controller.refresh();
+
+                            expect(drag1.refresh).toHaveBeenCalled();
+                            expect(drag2.refresh).toHaveBeenCalled();
+                            expect(zone1.refresh).toHaveBeenCalled();
+                            expect(zone2.refresh).toHaveBeenCalled();
+                        });
+                    });
+                });
+
                 describe('events', function() {
                     describe('draggableAdded', function() {
                         it('should emit the event whenever a draggable is registered with the controller', function() {
