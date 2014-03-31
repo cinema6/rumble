@@ -56,6 +56,7 @@
                     "note": "He's back, and saxier than ever.",
                     "source": "YouTube",
                     "modules": [
+                        "displayAd",
                         "ballot",
                         "comments"
                     ],
@@ -70,6 +71,7 @@
                         "rel": 0,
                         "modestbranding": 1
                     },
+                    "displayAd": "http://2.bp.blogspot.com/-TlM_3FT89Y0/UMzLr7kVykI/AAAAAAAACjs/lKrdhgp6OQg/s1600/brad-turner.jpg",
                     "conversationId": "rcv-f9efca48d85143"
                 },
                 {
@@ -200,7 +202,8 @@
                     "note": "This guy recorded himself in an F18 fighter jet.",
                     "source": "YouTube",
                     "modules": [
-                        "ballot"
+                        "ballot",
+                        "displayAd"
                     ],
                     "ballot": [
                         "Cool",
@@ -210,7 +213,8 @@
                         "videoid": "IqVPwcvgOWQ",
                         "rel": 0,
                         "modestbranding": 1
-                    }
+                    },
+                    "displayAd": "http://2.bp.blogspot.com/-TlM_3FT89Y0/UMzLr7kVykI/AAAAAAAACjs/lKrdhgp6OQg/s1600/brad-turner.jpg"
                 },
                 {
                     "id": "rc-337f092e881524",
@@ -219,7 +223,8 @@
                     "note": "If you ever get the chance to hang out with lions, record it.",
                     "source": "YouTube",
                     "modules": [
-                        "ballot"
+                        "ballot",
+                        "displayAd"
                     ],
                     "ballot": [
                         "Funny",
@@ -229,7 +234,8 @@
                         "videoid": "MNCzSfv4hX8",
                         "rel": 0,
                         "modestbranding": 1
-                    }
+                    },
+                    "displayAd": "http://2.bp.blogspot.com/-TlM_3FT89Y0/UMzLr7kVykI/AAAAAAAACjs/lKrdhgp6OQg/s1600/brad-turner.jpg"
                 },
                 {
                     "id": "rc-facb167546a4ff",
@@ -238,7 +244,8 @@
                     "note": "Vertical skydiving looks like a breeze, doesn't it?",
                     "source": "YouTube",
                     "modules": [
-                        "ballot"
+                        "ballot",
+                        "displayAd"
                     ],
                     "ballot": [
                         "Cool",
@@ -248,7 +255,8 @@
                         "videoid": "HrqXTHCGVEo",
                         "rel": 0,
                         "modestbranding": 1
-                    }
+                    },
+                    "displayAd": "http://2.bp.blogspot.com/-TlM_3FT89Y0/UMzLr7kVykI/AAAAAAAACjs/lKrdhgp6OQg/s1600/brad-turner.jpg"
                 },
                 {
                     "id": "rc-4b9dc6b9651428",
@@ -257,7 +265,8 @@
                     "note": "Kelly McGarry flips over a 72-foot-long canyon gap.",
                     "source": "YouTube",
                     "modules": [
-                        "ballot"
+                        "ballot",
+                        "displayAd"
                     ],
                     "ballot": [
                         "Cool",
@@ -267,7 +276,8 @@
                         "videoid": "x76VEPXYaI0",
                         "rel": 0,
                         "modestbranding": 1
-                    }
+                    },
+                    "displayAd": "http://2.bp.blogspot.com/-TlM_3FT89Y0/UMzLr7kVykI/AAAAAAAACjs/lKrdhgp6OQg/s1600/brad-turner.jpg"
                 },
                 {
                     "id": "rc-9b524d0c0535db",
@@ -276,7 +286,8 @@
                     "note": "Six months in Afghanistan in a two-minute video.",
                     "source": "YouTube",
                     "modules": [
-                        "ballot"
+                        "ballot",
+                        "displayAd"
                     ],
                     "ballot": [
                         "Cool",
@@ -286,7 +297,8 @@
                         "videoid": "af2m0gf6TtA",
                         "rel": 0,
                         "modestbranding": 1
-                    }
+                    },
+                    "displayAd": "http://2.bp.blogspot.com/-TlM_3FT89Y0/UMzLr7kVykI/AAAAAAAACjs/lKrdhgp6OQg/s1600/brad-turner.jpg"
                 },
                 {
                     "id": "rc-828007b55441ca",
@@ -295,7 +307,8 @@
                     "note": "Yes, there is such a thing as waterski-breakdancing.",
                     "source": "YouTube",
                     "modules": [
-                        "ballot"
+                        "ballot",
+                        "displayAd"
                     ],
                     "ballot": [
                         "Cool",
@@ -305,7 +318,8 @@
                         "videoid": "GdEKSyad_rk",
                         "rel": 0,
                         "modestbranding": 1
-                    }
+                    },
+                    "displayAd": "http://2.bp.blogspot.com/-TlM_3FT89Y0/UMzLr7kVykI/AAAAAAAACjs/lKrdhgp6OQg/s1600/brad-turner.jpg"
                 },
                 {
                     "id": "rc-4ea854fd34d960",
@@ -314,7 +328,8 @@
                     "note": "This guy rides all around Philly with his cat on his shoulder.",
                     "source": "YouTube",
                     "modules": [
-                        "ballot"
+                        "ballot",
+                        "displayAd"
                     ],
                     "ballot": [
                         "Cute",
@@ -324,7 +339,8 @@
                         "videoid": "T8F8WR2rzPA",
                         "rel": 0,
                         "modestbranding": 1
-                    }
+                    },
+                    "displayAd": "http://2.bp.blogspot.com/-TlM_3FT89Y0/UMzLr7kVykI/AAAAAAAACjs/lKrdhgp6OQg/s1600/brad-turner.jpg"
                 },
                 {
                     "id": "rc-392f3546f0cfc3",

@@ -1,6 +1,7 @@
 <div class="mr-experience" ng-class="app.data.experience.theme">
-    <h1 class="mr-title tk--hdr">The Title of the MiniReel Goes Here</h1>
     <div class="mr-card__container">
+        <h1 class="mr-title tk--hdr">The Title of the MiniReel Goes Here</h1>
+
         <ng-include src="'deck.html' | asset:'views'"></ng-include>
 
         <thumb-paginator active="tocIndex"
@@ -23,7 +24,7 @@
     </div>
 </div><!--.mr-experience-->
 
-<div class="mr-overlay">&nbsp;</div>
+<div class="mr-overlay" ng-click="RumbleCtrl.setPosition(-1);">&nbsp;</div>
 
 <article id="card" class="mr-container">
     <ng-switch on="app.state">
