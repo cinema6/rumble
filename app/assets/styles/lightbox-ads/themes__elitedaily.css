@@ -72,7 +72,8 @@
     .ed-news .ui-control__prev, 
     .ed-news .ui-nav__next, 
     .ed-news .ui-nav__prev,
-    .mr-pages__current-indicator {
+    .ed-news .mr-nav__btn:hover,
+    .ed-news .mr-pages__current-indicator {
         background-color: #2391d7;
     }
 
@@ -97,7 +98,8 @@
     .ed-life .ui-control__prev, 
     .ed-life .ui-nav__next, 
     .ed-life .ui-nav__prev,
-    .mr-pages__current-indicator {
+    .ed-life .mr-nav__btn:hover,
+    .ed-life .mr-pages__current-indicator {
         background-color: #c0392b;
     }
 
@@ -122,7 +124,8 @@
     .ed-money .ui-control__prev, 
     .ed-money .ui-nav__next, 
     .ed-money .ui-nav__prev,
-    .mr-pages__current-indicator {
+    .ed-money .mr-nav__btn:hover,
+    .ed-money .mr-pages__current-indicator {
         background-color: #27ae60;
     }
 
@@ -147,7 +150,8 @@
     .ed-sports .ui-control__prev, 
     .ed-sports .ui-nav__next, 
     .ed-sports .ui-nav__prev,
-    .mr-pages__current-indicator {
+    .ed-sports .mr-nav__btn:hover,
+    .ed-sports .mr-pages__current-indicator {
         background-color: #e67e22;
     }
 
@@ -172,7 +176,8 @@
     .ed-dating .ui-control__prev, 
     .ed-dating .ui-nav__next, 
     .ed-dating .ui-nav__prev,
-    .mr-pages__current-indicator {
+    .ed-dating .mr-nav__btn:hover,
+    .ed-dating .mr-pages__current-indicator {
         background-color: #8e44ad;
     }
 
@@ -197,7 +202,8 @@
     .ed-entertainment .ui-control__prev, 
     .ed-entertainment .ui-nav__next, 
     .ed-entertainment .ui-nav__prev,
-    .mr-pages__current-indicator {
+    .ed-entertainment .mr-nav__btn:hover,
+    .ed-entertainment .mr-pages__current-indicator {
         background-color: #f1c40f;
     }
 
@@ -222,7 +228,8 @@
     .ed-music .ui-control__prev, 
     .ed-music .ui-nav__next, 
     .ed-music .ui-nav__prev,
-    .mr-pages__current-indicator {
+    .ed-music .mr-nav__btn:hover,
+    .ed-music .mr-pages__current-indicator {
         background-color: #2c3e50;
     }
 
@@ -247,7 +254,8 @@
     .ed-women .ui-control__prev, 
     .ed-women .ui-nav__next, 
     .ed-women .ui-nav__prev,
-    .mr-pages__current-indicator {
+    .ed-women .mr-nav__btn:hover,
+    .ed-women .mr-pages__current-indicator {
         background-color: #c35d9e;
     }
 
@@ -272,7 +280,8 @@
     .ed-envision .ui-control__prev, 
     .ed-envision .ui-nav__next, 
     .ed-envision .ui-nav__prev,
-    .mr-pages__current-indicator {
+    .ed-envision .mr-nav__btn:hover,
+    .ed-envision .mr-pages__current-indicator {
         background-color: #b69823;
     }
 
@@ -297,7 +306,8 @@
     .ed-humor .ui-control__prev, 
     .ed-humor .ui-nav__next, 
     .ed-humor .ui-nav__prev,
-    .mr-pages__current-indicator {
+    .ed-humor .mr-nav__btn:hover,
+    .ed-humor .mr-pages__current-indicator {
         background-color: #16a085;
     }
 
@@ -322,7 +332,8 @@
     .ed-videos .ui-control__prev, 
     .ed-videos .ui-nav__next, 
     .ed-videos .ui-nav__prev,
-    .mr-pages__current-indicator {
+    .ed-videos .mr-nav__btn:hover,
+    .ed-videos .mr-pages__current-indicator {
         background-color: #d5161d;
     }
 

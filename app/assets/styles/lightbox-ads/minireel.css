@@ -79,6 +79,11 @@
         position:absolute; bottom:-3.375rem; right:-19rem;
         background:#ccc;
     }
+    .mr-icons__close {
+        width: 1.25rem;/*20px*/ height: 1.25rem;/*20px*/
+        margin:0; padding: 0; border: 0; display: block;
+        font-size: 1em; background-position: 1px -123px;
+    }
         
     
 /*  ==========================================================================
@@ -128,6 +133,41 @@
             font-size:1em; font-weight:normal; color:#6b6b6b; line-height:1;
             margin:0 0 0.875rem 0;
         }
+        .mr-ui__close {
+            padding:6px; border-radius:50% 50%; border:3px solid white; 
+            background:black;
+            position:absolute; top:-21px; right:-21px; z-index: 1;
+            cursor:pointer;
+            -webkit-box-shadow: 0 3px 3px 0 rgba(0,0,0,0.5);
+            box-shadow: 0 3px 3px 0 rgba(0,0,0,0.5);
+        }
+            .mr-ui__close:active {
+                -webkit-box-shadow: 0 1px 1px 0 rgba(0,0,0,0.5);
+                box-shadow: 0 1px 1px 0 rgba(0,0,0,0.5);
+                top:-19px; right:-23px;
+                border:3px solid white; 
+            }
+        .mr-nav__btn {
+            width:3rem; height:5.5rem; margin:-2.75rem 0 0 0;
+            position:absolute; top:50%; left:1.125rem; z-index: 10;
+            background:rgba(0,0,0,0.8);
+            border:0;
+            cursor:pointer;
+        }
+            .mr-nav__next {
+                right:20.125rem; left:auto;
+            }
+            .mr-nav__icon {
+                display:block; width:0.875rem;/*14px*/ height:1.1875rem;/*19px*/
+                position:absolute; top:2.125rem;/*34px*/ left:1.0625rem;/*17px*/ margin:0;
+                z-index:1;
+            }
+                .mr-nav__icon-next {
+                    right:1.0625rem;/*17px*/ left:auto;
+                }
+                .mr-nav__icon-path {
+                    fill: #fff;
+                }
     
 
 /*  ==========================================================================

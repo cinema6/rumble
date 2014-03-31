@@ -56,7 +56,7 @@
         .ui-nav__next:hover .ui-control__preview-img {
             opacity:0.76;
         }
-    .ui-navbar__page {
+    .ui-navbar__page, .mr-nav__btn {
         -webkit-transition:background 0.5s; transition:background 0.5s;
     }
         .ui-navbar__page:hover {
