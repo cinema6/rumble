@@ -1,7 +1,163 @@
 (function() {
     'use strict';
 
+    function refresh($element) {
+        $element.inheritedData('cDragCtrl').refresh();
+    }
+
     angular.module('c6.mrmaker')
+        .animation('.card__drop-zone', function() {
+            return {
+                beforeRemoveClass: function($element, className, done) {
+                    function shrink($element, done) {
+                        $element
+                            .animate({
+                                width: '0px'
+                            },{
+                                complete: done,
+                                progress: function() {
+                                    refresh($element);
+                                }
+                            });
+
+                        return function() {
+                            $element.stop();
+                        };
+                    }
+
+                    switch (className) {
+                    case 'c6-drag-zone-active':
+                        return shrink($element, done);
+                    default:
+                        return done();
+                    }
+                },
+                beforeAddClass: function($element, className, done) {
+                    function grow($element, done) {
+                        $element
+                            .animate({
+                                width: '10rem'
+                            },{
+                                complete: done,
+                                progress: function() {
+                                    refresh($element);
+                                }
+                            });
+
+                        return function() {
+                            $element.stop();
+                        };
+                    }
+
+                    switch (className) {
+                    case 'c6-drag-zone-active':
+                        return grow($element, done);
+                    default:
+                        return done();
+                    }
+                }
+            };
+        })
+
+        .animation('.new__container', function() {
+            var width = null;
+
+            return {
+                beforeAddClass: function($element, className, done) {
+                    function hide($element, done) {
+                        width = $element.width();
+
+                        $element.animate({
+                            width: 0
+                        },{
+                            complete: done,
+                            progress: function() {
+                                refresh($element);
+                            }
+                        });
+
+                        return function() {
+                            $element.stop();
+                        };
+                    }
+
+                    switch (className) {
+                    case 'ng-hide':
+                        return hide($element, done);
+                    default:
+                        return done();
+                    }
+                },
+                removeClass: function($element, className, done) {
+                    function show($element, done) {
+                        $element.animate({
+                            width: width + 'px'
+                        },{
+                            complete: done,
+                            progress: function() {
+                                refresh($element);
+                            }
+                        });
+
+                        return function() {
+                            $element.stop();
+                        };
+                    }
+
+                    switch (className) {
+                    case 'ng-hide':
+                        return show($element, done);
+                    default:
+                        return done();
+                    }
+                }
+            };
+        })
+
+        .animation('.card__item', function() {
+            var draggableStartPositions = {};
+
+            return {
+                addClass: function($element, className, done) {
+                    var draggable;
+
+                    if (className !== 'c6-dragging') {
+                        return done();
+                    }
+
+                    draggable = $element.data('cDrag');
+
+                    draggableStartPositions[draggable.id] = {
+                        top: draggable.display.top,
+                        left: draggable.display.left
+                    };
+
+                    return done();
+                },
+                beforeRemoveClass: function($element, className, done) {
+                    function zipBack() {
+                        var draggable = $element.data('cDrag');
+
+                        $element.animate({
+                            top: draggableStartPositions[draggable.id].top,
+                            left: draggableStartPositions[draggable.id].left
+                        }, {
+                            complete: done,
+                            progress: function() {
+                                draggable.refresh();
+                            }
+                        });
+                    }
+
+                    if (className !== 'c6-dragging') {
+                        return done();
+                    } else {
+                        return zipBack();
+                    }
+                }
+            };
+        })
+
         .controller('EditorController', ['cModel','c6State','$scope',
         function                        ( cModel , c6State , $scope ) {
             this.model = cModel;
