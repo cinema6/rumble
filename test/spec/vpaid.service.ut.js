@@ -168,7 +168,7 @@
 								player = VPAIDService.createPlayer('testId',{},parentElementMock);
 							});
 
-							describe('insertHTML()', function() {
+							xdescribe('insertHTML()', function() {
 								it('should insert HTML into the player element', function() {
 									spyOn(player, 'setup').andCallThrough();
 									player.insertHTML();

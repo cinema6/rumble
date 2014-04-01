@@ -41,11 +41,11 @@
 					_data.modules.displayAd.active = false;
 				});
 
-				$scope.$watch('onDeck', function(onDeck) {
-					if(onDeck) {
-						iface.insertHTML();
-					}
-				});
+				// $scope.$watch('onDeck', function(onDeck) {
+				// 	// if(onDeck) {
+				// 	// 	iface.insertHTML();
+				// 	// }
+				// });
 
 				$scope.$watch('active', function(active, wasActive) {
 					if(active === wasActive) { return; }
@@ -73,6 +73,7 @@
 							duration: NaN
 						},
 						playerIsReady = false,
+						adIsReady = false,
 						player;
 
 					Object.defineProperties(iface, {
@@ -100,12 +101,12 @@
 						}
 					});
 
-					iface.insertHTML = function() {
-						player.insertHTML();
-					};
+					// iface.insertHTML = function() {
+					// 	player.insertHTML();
+					// };
 
 					iface.loadAd = function() {
-						if(playerIsReady) {
+						if(adIsReady) {
 							player.loadAd();
 						}
 					};
@@ -166,6 +167,10 @@
 
 							iface.emit('ready', iface);
 
+							player.on('adReady', function() {
+								adIsReady = true;
+							});
+
 							player.on('ended', function() {
 								_iface.ended = true;
 								iface.emit('ended', iface);
@@ -188,6 +193,8 @@
 							// 	}
 							// });
 						});
+
+						player.insertHTML();
 					}
 
 					createPlayer();

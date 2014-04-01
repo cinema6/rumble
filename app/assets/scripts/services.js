@@ -284,8 +284,8 @@
                 _provider.serverUrl = url;
             };
 
-            this.$get = ['$log', '$q', '$window', '$interval', 'c6EventEmitter', 'c6UrlMaker',
-            function    ( $log ,  $q ,  $window ,  $interval ,  c6EventEmitter ,  c6UrlMaker ) {
+            this.$get = ['$log', '$http', '$q', '$window', '$interval', 'c6EventEmitter', 'c6UrlMaker',
+            function    ( $log ,  $http ,  $q ,  $window ,  $interval ,  c6EventEmitter ,  c6UrlMaker ) {
                 var service = {},
                     _service = {};
 
@@ -340,38 +340,11 @@
                         }
 
                         function getPlayerHTML() {
-                            // set up all the html and return it for embedding
-                            // IE requires the classid attribute and the movie param
-                            return [
-                                '<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" width="__WIDTH__" id="c6VPAIDplayer_ie" height="__HEIGHT__">',
-                                '   <param name="movie" value="__SWF__" />',
-                                '   <param name="quality" value="high" />',
-                                '   <param name="bgcolor" value="#000000" />',
-                                '   <param name="play" value="false" />',
-                                '   <param name="loop" value="false" />',
-                                '   <param name="wmode" value="opaque" />',
-                                '   <param name="scale" value="noscale" />',
-                                '   <param name="salign" value="lt" />',
-                                '   <param name="flashvars" value="__FLASHVARS__" />',
-                                '   <param name="allowScriptAccess" value="always" />',
-                                '   <param name="allowFullscreen" value="true" />',
-                                '   <!--[if !IE]>-->',
-                                '       <object type="application/x-shockwave-flash" data="__SWF__" id="c6VPAIDplayer" width="__WIDTH__" height="__HEIGHT__">',
-                                '           <param name="movie" value="__SWF__" />',
-                                '           <param name="quality" value="high" />',
-                                '           <param name="bgcolor" value="#000000" />',
-                                '           <param name="play" value="false" />',
-                                '           <param name="loop" value="false" />',
-                                '           <param name="wmode" value="opaque" />',
-                                '           <param name="scale" value="noscale" />',
-                                '           <param name="salign" value="lt" />',
-                                '           <param name="flashvars" value="__FLASHVARS__" />',
-                                '           <param name="allowScriptAccess" value="always" />',
-                                '           <param name="allowFullscreen" value="true" />',
-                                '       </object>',
-                                '   <!--<![endif]-->',
-                                '</object>'
-                            ].join('\n');
+                            return $http({
+                                method: 'GET',
+                                url: c6UrlMaker('views/vpaid_object_embed.html'),
+                                cache: true
+                            });
                         }
 
                         function emitReady() {
@@ -385,6 +358,7 @@
                                         current += 100;
                                         if(current > limit) {
                                             $interval.cancel(check);
+                                            // throw error
                                         }
                                     }
                                 }, 100);
@@ -423,11 +397,12 @@
                         });
 
                         self.insertHTML = function() {
-                            // currently the ad starts right when html is inserted
-                            // we need to add a vast prefetcher to the swf
-                            element$.prepend(self.setup());
-                            emitReady();
-                            // self.emit('ready', self);
+                            // element$.prepend(self.setup());
+                            // getPlayerHTML().then(self.setup)
+                            getPlayerHTML().then(function(template) {
+                                element$.prepend(self.setup(template));
+                                emitReady();
+                            });
                         };
 
                         self.loadAd = function() {
@@ -435,7 +410,7 @@
                             self.player.loadAd();
                         };
 
-                        self.setup = function() {
+                        self.setup = function(template) {
                             var obj = {
                                 params: {},
                                 playerId: playerId,
@@ -445,7 +420,7 @@
                                 adXmlUrl: _provider.serverUrl
                             };
 
-                            var html = getPlayerHTML().replace(/__SWF__/g, obj.swf);
+                            var html = template.data.replace(/__SWF__/g, obj.swf);
                             html = html.replace(/__WIDTH__/g, obj.width);
                             html = html.replace(/__HEIGHT__/g, obj.height);
 
@@ -537,6 +512,11 @@
                                     case 'AdVideoComplete':
                                         {
                                             self.emit('ended', self);
+                                            break;
+                                        }
+                                    case 'onAdResponse':
+                                        {
+                                            self.emit('adReady', self);
                                             break;
                                         }
                                 }

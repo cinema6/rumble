@@ -37,7 +37,7 @@
 			});
 
 			describe('initialization', function() {
-				describe('with flash enabled', function() {
+				xdescribe('with flash enabled', function() {
 					it('should compile a vpaid-card', function() {
 						var element$;
 

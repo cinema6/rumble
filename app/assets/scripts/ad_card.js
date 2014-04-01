@@ -19,18 +19,6 @@
 					}
 				}
 
-				// if(!scope.profile.inlineVideo) {
-				// 	innerCard += ' regenerate="1"';
-				// }
-
-				if(scope.profile.autoplay) {
-					innerCard += ' autoplay="1"';
-				}
-
-				if(scope.profile.device === 'phone') {
-					innerCard += ' controls="1"';
-				}
-
 				innerCard += '></' + type + '-card>';
 
 				$element.append($compile(innerCard)(scope));

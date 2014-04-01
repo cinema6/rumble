@@ -282,14 +282,14 @@
 					});
 				});
 
-				describe('insertHTML', function() {
+				xdescribe('insertHTML', function() {
 					it('should call insertHTML() on the player', function() {
 						iface.insertHTML();
 						expect(_player.insertHTML).toHaveBeenCalled();
 					});
 				});
 
-				describe('loadAd', function() {
+				xdescribe('loadAd', function() {
 					it('should not call loadAd() on the player if player isn\'t ready', function() {
 						iface.loadAd();
 						expect(_player.loadAd).not.toHaveBeenCalled();
