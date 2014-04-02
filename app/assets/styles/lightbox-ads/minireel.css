@@ -97,36 +97,36 @@
         @media screen and (min-width:50rem) and (max-width:59.9375rem) {
             /*800px - 959px*/
             .mr-experience {
-                width:50em;
-                margin:-13.25em 0 0 -25em; /* 212 0 0 400*/
+                width:48em; /*768*/
+                margin:-13.5625em 0 0 -24em; /* 217 0 0 384*/
             }
         }
         @media screen and (min-width:60rem) and (max-width:64.9375rem) {
             /*960px - 1039px*/
             .mr-experience {
-                width:60em; /*960*/
-                margin:-16.625em 0 0 -30em; /* 266 0 0 480*/
+                width:58em; /*928*/
+                margin:-16.5625em 0 0 -29em; /* 265 0 0 464*/
             }
         }
         @media screen and (min-width:65rem) and (max-width:75.9375rem) {
             /*1040px - 1215px*/
             .mr-experience {
-                width:65em;
-                margin:-18.25em 0 0 -32.5em; /* 292 0 0 520*/
+                width:62em; /*992*/
+                margin:-17.8125em 0 0 -31em; /* 285 0 0 496*/
             }
         }
         @media screen and (min-width:76rem) and (max-width:88.6875rem) {
             /*1216px - 1419px*/
             .mr-experience {
-                width:76em;
-                margin:-21.875em 0 0 -38em; /* 350 0 0 608*/
+                width:74em; /*1184*/
+                margin:-21.875em 0 0 -37em; /* 350 0 0 592*/
             }
         }
         @media screen and (min-width:88.75rem) {
             /*1420px +*/
             .mr-experience {
-                width:88em;
-                margin:-25.9375em 0 0 -44em; /* 415 0 0 704*/
+                width:86em; /*1376*/
+                margin:-25.875em 0 0 -43em; /* 414 0 0 688*/
             }
         }
         .mr-title {

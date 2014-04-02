@@ -91,52 +91,53 @@
     ========================================================================== */
     .mr-experience {
         position:absolute; z-index:1; top:50%; left:50%;
-        width:39.625em;
-        margin:-9.75em 0 0 -19.8125em; /* 156 0 0 317*/
+        width:39.625em; /*634*/
+        margin:-10.375em 0 0 -19.8125em; /* 166 0 0 317*/
     }
         @media screen and (min-width:50rem) and (max-width:59.9375rem) {
             /*800px - 959px*/
             .mr-experience {
-                width:50em;
-                margin:-13.25em 0 0 -25em; /* 212 0 0 400*/
+                width:48em; /*768*/
+                margin:-13.5625em 0 0 -24em; /* 217 0 0 384*/
             }
         }
         @media screen and (min-width:60rem) and (max-width:64.9375rem) {
             /*960px - 1039px*/
             .mr-experience {
-                width:60em; /*960*/
-                margin:-16.625em 0 0 -30em; /* 266 0 0 480*/
+                width:58em; /*928*/
+                margin:-16.5625em 0 0 -29em; /* 265 0 0 464*/
             }
         }
         @media screen and (min-width:65rem) and (max-width:75.9375rem) {
             /*1040px - 1215px*/
             .mr-experience {
-                width:65em;
-                margin:-18.25em 0 0 -32.5em; /* 292 0 0 520*/
+                width:62em; /*992*/
+                margin:-17.8125em 0 0 -31em; /* 285 0 0 496*/
             }
         }
         @media screen and (min-width:76rem) and (max-width:88.6875rem) {
             /*1216px - 1419px*/
             .mr-experience {
-                width:76em;
-                margin:-21.875em 0 0 -38em; /* 350 0 0 608*/
+                width:74em; /*1184*/
+                margin:-21.875em 0 0 -37em; /* 350 0 0 592*/
             }
         }
         @media screen and (min-width:88.75rem) {
             /*1420px +*/
             .mr-experience {
-                width:88em;
-                margin:-25.9375em 0 0 -44em; /* 415 0 0 704*/
+                width:86em; /*1376*/
+                margin:-25.875em 0 0 -43em; /* 414 0 0 688*/
             }
         }
         .mr-title {
-            font-size:1em; font-weight:normal; color:#6b6b6b; line-height:1;
-            margin:0 0 0.875rem 0;
+            font-size:1em; font-weight:normal; color:#fff; line-height:1; text-align: center;
+            margin:0; width:100%;
+            position:absolute; top:-1.5em;
         }
         .mr-ui__close {
             padding:6px; border-radius:50% 50%; border:3px solid white; 
             background:black;
-            position:absolute; top:-21px; right:-21px; z-index: 1;
+            position:absolute; top:-1.25rem; right:-0.75rem; z-index: 1;
             cursor:pointer;
             -webkit-box-shadow: 0 3px 3px 0 rgba(0,0,0,0.5);
             box-shadow: 0 3px 3px 0 rgba(0,0,0,0.5);
@@ -149,13 +150,13 @@
             }
         .mr-nav__btn {
             width:3rem; height:5.5rem; margin:-2.75rem 0 0 0;
-            position:absolute; top:50%; left:1.125rem; z-index: 10;
+            position:absolute; top:50%; left:0; z-index: 10;
             background:rgba(0,0,0,0.8);
             border:0;
             cursor:pointer;
         }
             .mr-nav__next {
-                right:20.125rem; left:auto;
+                right:12.75rem; left:auto;
             }
             .mr-nav__icon {
                 display:block; width:0.875rem;/*14px*/ height:1.1875rem;/*19px*/
@@ -175,7 +176,7 @@
     ========================================================================== */
     .mr-pager__group {
         height:3rem;/*48px*/ margin:0; display: block;
-        position: absolute; left: 1.125rem; right: 20.125rem; bottom:1.125rem;
+        position: absolute; left:0; right: 12.75rem; bottom:0;
     }
     .mr-pager__btn {
         min-width:3.25rem;/*52px*/ height:3rem;/*48px*/ position:absolute;
@@ -185,9 +186,6 @@
         .mr-pager__btn--disabled {
             opacity:0.25; cursor:default;
         }
-            .mr-pager__btn--disabled .mr-pager__icon-path {
-                fill: #252626;
-            }
         .mr-pager__prev {
             left:0;
         }
@@ -273,7 +271,7 @@
                         .mr-pages__current-indicator {
                             opacity:0; display: block; width:100%; height:0.125rem;
                             position: absolute; bottom:0; left:0; z-index: 2;
-                            border-top:1px solid #fff;
+                            border-top:1px solid #000;
                         }
                             .mr-pages__page--active .mr-pages__current-indicator {
                                 opacity:1;
@@ -284,8 +282,7 @@
     Mini Reel Cards classes
     ========================================================================== */
     .mr-card__container {
-        background:#fff; padding:0.9375rem 20.125rem 4.5rem 1.125rem; /*15px 322px 72px 18px*/
-        -webkit-border-radius: 3px; border-radius: 3px; 
+        background:#000; padding:0 12.75rem 3rem 0; /*0 204px 48px 0*/
         position:relative; overflow:hidden;
     }
     .mr-cards__list, .mr-cards__item {
@@ -318,34 +315,18 @@
                     background:50% 50% / cover no-repeat;
                 }
         .mr-card__copy {
-            position: absolute; width:18.25rem; /*292px*/ top:0; right:-19rem;
+            position: absolute; width:12rem; top:1rem; right:-12.5rem;
         }
             .mr-card__title {
-                font-size:1.125rem;/*18px*/ color:#000; font-weight:normal; 
+                font-size:1.125rem;/*18px*/ color:#fff; font-weight:normal; 
                 padding: 0; margin:0; line-height: 1.4;
             }
             .mr-card__attributes {
                 color:#999999; font-size:0.75em;/*12px*/ margin:0.16em 0 1em 0;
             }
-            .mr-card__btn {
-                height: 1.5rem;/*24px*/ width: 1.5rem;/*24px*/ right: 0; top: 0.75rem;/*12px*/
-                position: absolute; padding: 0; border: 0; background: #b69823;
-                cursor: pointer;
-            }
-                .mr-card__icon {
-                    height: 0.4375rem;/*7px*/ width: 0.3125rem;/*5px*/ display:block;
-                    background: url('../../img/dropdown-arrow.png') no-repeat 0 0; margin: 0 auto;
-                    -webkit-transition: -webkit-transform 0.3s; transition: transform 0.3s; 
-                }
-                .mr-card__icon--active {
-                    transform: rotate(180deg);
-                    -ms-transform: rotate(180deg);
-                    -webkit-transform: rotate(180deg);
-                }
- 
             .mr-card__desc {
-                margin: -0.5em 0 0 0;/*8px*/ font-size:0.8125rem;/*13px*/ 
-                color:#444444; line-height:1.69; height: 3.5rem;/*56px*/
+                margin: 1em 0 0 0; font-size:0.8125rem;/*13px*/ 
+                color:#ccc; line-height:1.69;
             }
 
 
@@ -528,99 +509,14 @@
     }
 
 
-/*  ==========================================================================
-    .mr-comments
-    ========================================================================== */
-    .mr-comments__title {
-        color:#747474; font-weight:700; font-size:1em; margin:1.0625em 0 0.3125em 0;
-    }
-    .mr-comments__body {
-        -webkit-border-radius: 3px; border-radius: 3px; overflow: hidden;
-        margin:0 0 0.875em 0;
-    }
-        .mr-comments__hdr-bar {
-            background:#747474; color:#f2f2f2;
-            border-bottom:1px solid #5e5e5e;
-        }
-            .mr-comments__hdr-label {
-                margin:3px 0 2px 8px; font-weight:700; font-size:14px;
-            }
-        .mr-comments__textbox {
-            background:#fff;
-        }
-            .mr-comments__textarea {
-                width:80%; margin:3px 0 3px 8px; font-size:1em; font-weight:300; color:#999999; float:left; display: block;
-                border:0;
-            }
-            .mr-comments__post-btn {
-                border-radius:3px; font-size:0.75em; font-weight:700; color:#fff; text-align:center;
-                border:0; margin:0.67em 0.67em 1em 0; padding:0;
-                float:right; width:12%; height:3.83em;
-            }
-    .mr-comments__select {
-        width:100%; border-radius:3px; border:0; height:2.25em;/*36px*/
-    }
-
-    .mr-comments__list {
-        margin:0; padding:1.125em 0 0 0; list-style:none; 
-        background:url('../../img/border__ccc@2x.png') 17px 0 repeat-y; background-size:1px 1px;
-    }
-        .mr-comments__comment {
-            margin:0 0 0.75em 0;
-        }
-            .mr-comments__userpic {
-                border-radius:5px; overflow: hidden; background:#fff; padding:2px;
-                width:1.75em; height:1.75em; /*28px*/ float:left; margin:0 0.875em 0 0;
-            }
-                .mr-comments__userpic-img {
-                    display:block; width:1.75em; height:1.75em; /*28px*/
-                    border-radius:3px; overflow: hidden;
-                }
-            .mr-comments__comment--friend .mr-comments__userpic, .mr-comments__comment--friend .mr-comments__meta {
-                background:#e2f7ff;
-            }
-        .mr-comments__comment .mr-comments__body {
-            background:#fff; margin:0;
-        }
-            .mr-comments__meta {
-                background:#f2f2f2; padding:0.3125em 0.5em 0.1875em 0.5em; border-bottom:1px solid #eeeeee;
-            }
-                .mr-comments__comment--friend .mr-comments__meta {
-                    border-bottom:1px solid #daf5ff;
-                }
-                .mr-comm-meta__username {
-                    float:left; color:#747474; font-weight:700; font-size:0.875em; /*14px*/
-                    width:68%; margin:0;
-                }
-                    .mr-comments__comment--friend .mr-comm-meta__username {
-                        color:#0086b9;
-                    }
-                .mr-comm-meta__timestamp {
-                    float:right; color:#999999; font-weight:300; font-size:0.75em; /*12px*/ text-align: right;
-                    width:32%; margin:0.167em 0 0 0;
-                }
-            .mr-comments__copy {
-                padding:0.4167em 0.667em 0.583em 0.667em; color:#747474; font-size:0.75em;/*12px*/ 
-            }
-            .mr-comments__breaker {
-                display:block; width:2.25em; height:0.375em; margin:0 auto 0.75em auto;
-                background-position:-2.5em -12.5em; opacity:0.1;
-            }
-        .mr-comments__terminator-outer {
-            background:#ddd;
-        }
-            .mr-comments__terminator {
-                width:0.375em;/*6px*/ height:0.375em;/*6px*/ background-position:-2.5em -12.5em;
-                display:block; margin:1em 0 0 0.9375em; opacity:0.3;
-            }
 
 
 /*  ==========================================================================
     VAST Ad styles
     ========================================================================== */
-    .mr-vast__group {
-        height: 0; width: 100%; 
-        padding: 0 0 66.67% 0; background:black;
+    .mr-vast__group { 
+        margin:0 6rem 0 0; height:100%;
+        position:relative;
     }
     .mr-vast__player {
         width:100%; height:0; position:absolute;
@@ -644,7 +540,7 @@
         text-align: center;
     }
         .mr-vast__group .mr-ad__med-rect {
-            top:0; bottom:auto;
+            top:0; bottom:auto; right:-18.75rem;
         }
         .mr-display-ad__title-h1 {
             display: none;
@@ -671,8 +567,8 @@
     More Reels card classes
     ========================================================================== */
     .mr-more-reels__intro {
-        font-size:0.875rem; color:#929292; font-weight:300; text-align: center;
-        background: #252626; margin:0; padding: 0.125rem 0 0.4375rem 0;
+        font-size:0.875rem; color:#929292; font-weight:300;
+        margin:0; padding: 0.125rem 0 0.4375rem 0;
     }
         .mr-more-reels__preview {
             background:url('../../img/more-reels__preview.jpg') 50% 50% / cover no-repeat; 

@@ -28,12 +28,6 @@
         <p ng-show="!!config.source" class="mr-card__attributes">via <a ng-href="{{Ctrl.videoUrl}}" target="_blank" title="YouTube">{{config.source}}</a></p>
         <div class="mr-card__desc">{{config.note}}</div>
     </div>
-    <div class="mr-ad__med-rect">
-        <display-ad-module ng-if="Ctrl.hasModule('displayAd')"
-            active="true"
-            ad-src="{{config.displayAd}}">
-        </display-ad-module>
-    </div>
 
 
     <!--<comments-module ng-if="Ctrl.hasModule('comments')"
