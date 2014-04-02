@@ -317,12 +317,16 @@
         .mr-card__copy {
             position: absolute; width:12rem; top:1rem; right:-12.5rem;
         }
+            .mr-card__counter {
+                text-align: right; margin-right:1rem; font-size:0.875em; color:#999;
+                font-family: 'Georgia', 'Times New Roman', serif;
+            }
             .mr-card__title {
                 font-size:1.125rem;/*18px*/ color:#fff; font-weight:normal; 
                 padding: 0; margin:0; line-height: 1.4;
             }
             .mr-card__attributes {
-                color:#999999; font-size:0.75em;/*12px*/ margin:0.16em 0 1em 0;
+                color:#999; font-size:0.75em;/*12px*/ margin:0.16em 0 1em 0;
             }
             .mr-card__desc {
                 margin: 1em 0 0 0; font-size:0.8125rem;/*13px*/ 
