@@ -6,10 +6,9 @@
         <h1 class="mr-title tk--hdr">The Title of the MiniReel Goes Here</h1>
         <ng-include src="'deck.html' | asset:'views'"></ng-include>
         
-        <button thumb-paginator-button
-            ng-click="onPrev()"
-            ng-class="{'mr-nav__btn--disabled': disablePrevWhen()}"
-            ng-disabled="disablePrevWhen()"
+        <button ng-click="RumbleCtrl.goBack()"
+            ng-class="{'mr-nav__btn--disabled': false}"
+            ng-disabled="false"
             class="mr-nav__btn mr-nav__prev"
             type="button"
             title="Previous Page">
@@ -20,10 +19,9 @@
             </svg>
             <span class="ir">Previous Page</span>
         </button>
-        <button thumb-paginator-button
-            ng-click="onNext()"
-            ng-class="{'mr-nav__btn--disabled': disableNextWhen()}"
-            ng-disabled="disableNextWhen()"
+        <button ng-click="RumbleCtrl.goForward()"
+            ng-class="{'mr-nav__btn--disabled': atTail}"
+            ng-disabled="atTail"
             class="mr-nav__btn mr-nav__next"
             type="button"
             title="Next Page">

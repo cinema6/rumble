@@ -6,10 +6,9 @@
     <div class="mr-card__container">
         <ng-include src="'deck.html' | asset:'views'"></ng-include>
         
-        <button
-            ng-click="RumbleCtrl.goBack()"
-            ng-class="{'mr-nav__btn--disabled': disablePrevWhen()}"
-            ng-disabled="disablePrevWhen()"
+        <button ng-click="RumbleCtrl.goBack()"
+            ng-class="{'mr-nav__btn--disabled': false}"
+            ng-disabled="false"
             class="mr-nav__btn mr-nav__prev"
             type="button"
             title="Previous Page">
@@ -20,8 +19,7 @@
             </svg>
             <span class="ir">Previous Page</span>
         </button>
-        <button 
-            ng-click="RumbleCtrl.goForward()"
+        <button ng-click="RumbleCtrl.goForward()"
             ng-class="{'mr-nav__btn--disabled': atTail, 'ad_card_style': currentCard.type === 'vast'}"
             ng-disabled="atTail"
             class="mr-nav__btn mr-nav__next"
