@@ -163,6 +163,8 @@
                         expect(c6AppData('full').behaviors.autoplay).toBe(false);
                         expect(c6AppData('mobile').behaviors.autoplay).toBe(false);
                         expect(c6AppData('light').behaviors.autoplay).toBe(true);
+                        expect(c6AppData('lightbox').behaviors.autoplay).toBe(false);
+                        expect(c6AppData('lightbox-ads').behaviors.autoplay).toBe(false);
                     });
                 });
 
@@ -171,6 +173,8 @@
                         expect(c6AppData('full').behaviors.inlineVoteResults).toBe(true);
                         expect(c6AppData('mobile').behaviors.inlineVoteResults).toBe(true);
                         expect(c6AppData('light').behaviors.inlineVoteResults).toBe(false);
+                        expect(c6AppData('lightbox').behaviors.autoplay).toBe(false);
+                        expect(c6AppData('lightbox-ads').behaviors.autoplay).toBe(false);
                     });
                 });
 
@@ -179,6 +183,18 @@
                         expect(c6AppData('full').behaviors.separateTextView).toBe(true);
                         expect(c6AppData('mobile').behaviors.separateTextView).toBe(false);
                         expect(c6AppData('light').behaviors.separateTextView).toBe(false);
+                        expect(c6AppData('lightbox').behaviors.autoplay).toBe(false);
+                        expect(c6AppData('lightbox-ads').behaviors.autoplay).toBe(false);
+                    });
+                });
+
+                describe('fullscreen', function() {
+                    it('should be set based on the mode', function() {
+                        expect(c6AppData('full').behaviors.fullscreen).toBe(false);
+                        expect(c6AppData('mobile').behaviors.fullscreen).toBe(true);
+                        expect(c6AppData('light').behaviors.fullscreen).toBe(false);
+                        expect(c6AppData('lightbox').behaviors.fullscreen).toBe(true);
+                        expect(c6AppData('lightbox-ads').behaviors.fullscreen).toBe(true);
                     });
                 });
             });

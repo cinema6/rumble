@@ -137,7 +137,8 @@
                             id: 'r-43yt3fh85',
                             deck : deck 
                         }
-                    }
+                    },
+                    behaviors: {}
                 };
 
                 module('c6.ui', function($provide) {
@@ -549,10 +550,10 @@
             });
 
             describe('starting the mini reel', function() {
-                describe('if the device is a phone', function() {
+                describe('if the behavior allows fullscreen', function() {
                     beforeEach(function() {
                         spyOn($scope, '$emit');
-                        appData.profile.device = 'phone';
+                        appData.behaviors.fullscreen = true;
 
                         RumbleCtrl.start();
                     });
@@ -566,10 +567,10 @@
                     });
                 });
 
-                describe('if the device is not a phone', function() {
+                describe('if the behavior does not allow fullscreen', function() {
                     beforeEach(function() {
                         spyOn($scope, '$emit');
-                        appData.profile.device = 'tablet';
+                        appData.behaviors.fullscreen = false;
 
                         RumbleCtrl.start();
                     });
