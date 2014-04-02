@@ -10,6 +10,7 @@
         "padding"       : "8.125em 0 63% 0"
     },
     "mobile" : {
-        "height"        : "13em"
+        "height"        : "0",
+        "paddingBottom" : "50%"
     }
 }
