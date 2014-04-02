@@ -10,7 +10,7 @@
         "img": {
             "splash": "experiences/rumble/splash-6thumb.jpg"
         },
-        "mode": "full",
+        "mode": "light",
         "theme": "ed-entertainment",
         "data": {
             "id": "r-738c2403d83ddc",
@@ -56,7 +56,6 @@
                     "note": "He's back, and saxier than ever.",
                     "source": "YouTube",
                     "modules": [
-                        "displayAd",
                         "ballot",
                         "comments"
                     ],
@@ -71,7 +70,6 @@
                         "rel": 0,
                         "modestbranding": 1
                     },
-                    "displayAd": "http://2.bp.blogspot.com/-TlM_3FT89Y0/UMzLr7kVykI/AAAAAAAACjs/lKrdhgp6OQg/s1600/brad-turner.jpg",
                     "conversationId": "rcv-f9efca48d85143"
                 },
                 {
@@ -183,14 +181,14 @@
         "uri": "gopro",
         "appUriPrefix": "<%= settings.appUrl %>",
         "appUri": "rumble",
-        "title": "The 10 Most Amazing GoPro Videos Ever Recorded",
+        "title": "The 15 Most Amazing GoPro Videos Ever Recorded",
         "subtitle": "",
         "summary": "GoPro cameras are the only tech inventions we were introduced to in 2013 that we think deserve to continue trending in 2014. These handy-dandy cameras are perfect for just about any activity, including skydiving, surfing, or rescuing a baby kitten from a tree.",
         "img": {
             "splash": "experiences/gopro/splash-6thumb.jpg"
         },
-        "mode": "lightbox",
-        "theme": "ed-money",
+        "mode": "light",
+        "theme": "ed-videos",
         "data": {
             "id": "r-ea8caee7de7582",
             "electionId": "el-2f173cf1a9a8ef",
@@ -199,11 +197,10 @@
                     "id": "rc-22119a8cf9f755",
                     "type": "youtube",
                     "title": "F18 Fighter",
-                    "note": "This guy recorded himself in an F18 fighter jet. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec odio. Quisque volutpat mattis eros. Nullam malesuada erat ut turpis. Suspendisse urna nibh, viverra non, semper suscipit, posuere a, pede.",
+                    "note": "This guy recorded himself in an F18 fighter jet.",
                     "source": "YouTube",
                     "modules": [
-                        "ballot",
-                        "displayAd"
+                        "ballot"
                     ],
                     "ballot": [
                         "Cool",
@@ -213,18 +210,16 @@
                         "videoid": "IqVPwcvgOWQ",
                         "rel": 0,
                         "modestbranding": 1
-                    },
-                    "displayAd": "http://2.bp.blogspot.com/-TlM_3FT89Y0/UMzLr7kVykI/AAAAAAAACjs/lKrdhgp6OQg/s1600/brad-turner.jpg"
+                    }
                 },
                 {
                     "id": "rc-337f092e881524",
                     "type": "youtube",
                     "title": "Lions",
-                    "note": "If you ever get the chance to hang out with lions, record it. Donec nec justo eget felis facilisis fermentum. Aliquam porttitor mauris sit amet orci. Aenean dignissim pellentesque felis.",
+                    "note": "If you ever get the chance to hang out with lions, record it.",
                     "source": "YouTube",
                     "modules": [
-                        "ballot",
-                        "displayAd"
+                        "ballot"
                     ],
                     "ballot": [
                         "Funny",
@@ -234,18 +229,16 @@
                         "videoid": "MNCzSfv4hX8",
                         "rel": 0,
                         "modestbranding": 1
-                    },
-                    "displayAd": "http://2.bp.blogspot.com/-TlM_3FT89Y0/UMzLr7kVykI/AAAAAAAACjs/lKrdhgp6OQg/s1600/brad-turner.jpg"
+                    }
                 },
                 {
                     "id": "rc-facb167546a4ff",
                     "type": "youtube",
                     "title": "Vetical Skydive",
-                    "note": "Vertical skydiving looks like a breeze, doesn't it? Morbi in sem quis dui placerat ornare. Pellentesque odio nisi, euismod in, pharetra a, ultricies in, diam. Sed arcu. Cras consequat.",
+                    "note": "Vertical skydiving looks like a breeze, doesn't it?",
                     "source": "YouTube",
                     "modules": [
-                        "ballot",
-                        "displayAd"
+                        "ballot"
                     ],
                     "ballot": [
                         "Cool",
@@ -255,18 +248,16 @@
                         "videoid": "HrqXTHCGVEo",
                         "rel": 0,
                         "modestbranding": 1
-                    },
-                    "displayAd": "http://2.bp.blogspot.com/-TlM_3FT89Y0/UMzLr7kVykI/AAAAAAAACjs/lKrdhgp6OQg/s1600/brad-turner.jpg"
+                    }
                 },
                 {
                     "id": "rc-4b9dc6b9651428",
                     "type": "youtube",
                     "title": "Canyon Backflip",
-                    "note": "Kelly McGarry flips over a 72-foot-long canyon gap. Praesent dapibus, neque id cursus faucibus, tortor neque egestas augue, eu vulputate magna eros eu erat. Aliquam erat volutpat. Nam dui mi, tincidunt quis, accumsan porttitor, facilisis luctus, metus.",
+                    "note": "Kelly McGarry flips over a 72-foot-long canyon gap.",
                     "source": "YouTube",
                     "modules": [
-                        "ballot",
-                        "displayAd"
+                        "ballot"
                     ],
                     "ballot": [
                         "Cool",
@@ -276,18 +267,16 @@
                         "videoid": "x76VEPXYaI0",
                         "rel": 0,
                         "modestbranding": 1
-                    },
-                    "displayAd": "http://2.bp.blogspot.com/-TlM_3FT89Y0/UMzLr7kVykI/AAAAAAAACjs/lKrdhgp6OQg/s1600/brad-turner.jpg"
+                    }
                 },
                 {
                     "id": "rc-9b524d0c0535db",
                     "type": "youtube",
                     "title": "Afghanistan",
-                    "note": "Six months in Afghanistan in a two-minute video. Phasellus ultrices nulla quis nibh. Quisque a lectus. Donec consectetuer ligula vulputate sem tristique cursus. Nam nulla quam, gravida non, commodo a, sodales sit amet, nisi.",
+                    "note": "Six months in Afghanistan in a two-minute video.",
                     "source": "YouTube",
                     "modules": [
-                        "ballot",
-                        "displayAd"
+                        "ballot"
                     ],
                     "ballot": [
                         "Cool",
@@ -297,18 +286,16 @@
                         "videoid": "af2m0gf6TtA",
                         "rel": 0,
                         "modestbranding": 1
-                    },
-                    "displayAd": "http://2.bp.blogspot.com/-TlM_3FT89Y0/UMzLr7kVykI/AAAAAAAACjs/lKrdhgp6OQg/s1600/brad-turner.jpg"
+                    }
                 },
                 {
                     "id": "rc-828007b55441ca",
                     "type": "youtube",
                     "title": "Waterski Breakdancing",
-                    "note": "Yes, there is such a thing as waterski-breakdancing. Pellentesque fermentum dolor. Aliquam quam lectus, facilisis auctor, ultrices ut, elementum vulputate, nunc.",
+                    "note": "Yes, there is such a thing as waterski-breakdancing.",
                     "source": "YouTube",
                     "modules": [
-                        "ballot",
-                        "displayAd"
+                        "ballot"
                     ],
                     "ballot": [
                         "Cool",
@@ -318,18 +305,16 @@
                         "videoid": "GdEKSyad_rk",
                         "rel": 0,
                         "modestbranding": 1
-                    },
-                    "displayAd": "http://2.bp.blogspot.com/-TlM_3FT89Y0/UMzLr7kVykI/AAAAAAAACjs/lKrdhgp6OQg/s1600/brad-turner.jpg"
+                    }
                 },
                 {
                     "id": "rc-4ea854fd34d960",
                     "type": "youtube",
                     "title": "Cat Bike Guy",
-                    "note": "This guy rides all around Philly with his cat on his shoulder. Sed adipiscing ornare risus. Morbi est est, blandit sit amet, sagittis vel, euismod vel, velit. Pellentesque egestas sem. Suspendisse commodo ullamcorper magna.",
+                    "note": "This guy rides all around Philly with his cat on his shoulder.",
                     "source": "YouTube",
                     "modules": [
-                        "ballot",
-                        "displayAd"
+                        "ballot"
                     ],
                     "ballot": [
                         "Cute",
@@ -339,8 +324,7 @@
                         "videoid": "T8F8WR2rzPA",
                         "rel": 0,
                         "modestbranding": 1
-                    },
-                    "displayAd": "http://2.bp.blogspot.com/-TlM_3FT89Y0/UMzLr7kVykI/AAAAAAAACjs/lKrdhgp6OQg/s1600/brad-turner.jpg"
+                    }
                 },
                 {
                     "id": "rc-392f3546f0cfc3",
@@ -358,7 +342,7 @@
                     "id": "rc-77d0ea2794cc6b",
                     "type": "youtube",
                     "title": "Avalanche Cliff Jump",
-                    "note": "You're going to want to add avalanche cliff jumping to your bucket list. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec odio. Quisque volutpat mattis eros. Nullam malesuada erat ut turpis. Suspendisse urna nibh, viverra non, semper suscipit, posuere a, pede.",
+                    "note": "You're going to want to add avalanche cliff jumping to your bucket list.",
                     "source": "YouTube",
                     "modules": [
                         "ballot"
@@ -377,7 +361,7 @@
                     "id": "rc-389f9dea3498d2",
                     "type": "youtube",
                     "title": "Toy Robot in Space",
-                    "note": "Who said sending a toy robot to space was impossible?! Donec nec justo eget felis facilisis fermentum. Aliquam porttitor mauris sit amet orci. Aenean dignissim pellentesque felis.",
+                    "note": "Who said sending a toy robot to space was impossible?!",
                     "source": "YouTube",
                     "modules": [
                         "ballot"
@@ -396,7 +380,7 @@
                     "id": "rc-065050baf27d98",
                     "type": "youtube",
                     "title": "Flash Flood Biker",
-                    "note": "Genius biker thinks he can make it through a flood on his motorcycle. Morbi in sem quis dui placerat ornare. Pellentesque odio nisi, euismod in, pharetra a, ultricies in, diam. Sed arcu. Cras consequat.",
+                    "note": "Genius biker thinks he can make it through a flood on his motorcycle.",
                     "source": "YouTube",
                     "modules": [
                         "ballot"
@@ -407,6 +391,101 @@
                     ],
                     "data": {
                         "videoid": "pOoy7_l2EbI",
+                        "rel": 0,
+                        "modestbranding": 1
+                    }
+                },
+                {
+                    "id": "rc-3194c992829ad5",
+                    "type": "youtube",
+                    "title": "Seagull GoPro Thief!",
+                    "note": "Oh, what about the time a seagull stole a GoPro? Insane.",
+                    "source": "YouTube",
+                    "modules": [
+                        "ballot"
+                    ],
+                    "ballot": [
+                        "Cool",
+                        "Lame"
+                    ],
+                    "data": {
+                        "videoid": "rIu5B3Fsstg",
+                        "rel": 0,
+                        "modestbranding": 1
+                    }
+                },
+                {
+                    "id": "rc-974e99904a58fd",
+                    "type": "youtube",
+                    "title": "Rattlesnake Attack!",
+                    "note": "Want to see what an angry rattlesnake looks like?",
+                    "source": "YouTube",
+                    "modules": [
+                        "ballot"
+                    ],
+                    "ballot": [
+                        "Cool",
+                        "Lame"
+                    ],
+                    "data": {
+                        "videoid": "oEG1V7rkIK8",
+                        "rel": 0,
+                        "modestbranding": 1
+                    }
+                },
+                {
+                    "id": "rc-0518f251954d3d",
+                    "type": "youtube",
+                    "title": "Rope-Swing!",
+                    "note": "Rope-swinging from a moving boat sounds like fun.",
+                    "source": "YouTube",
+                    "modules": [
+                        "ballot"
+                    ],
+                    "ballot": [
+                        "Cool",
+                        "Lame"
+                    ],
+                    "data": {
+                        "videoid": "zqIjZFV4YAU",
+                        "rel": 0,
+                        "modestbranding": 1
+                    }
+                },
+                {
+                    "id": "rc-3502759494071f",
+                    "type": "youtube",
+                    "title": "Kitten Rescue!",
+                    "note": "The world's greatest fireman rescues a kitten.",
+                    "source": "YouTube",
+                    "modules": [
+                        "ballot"
+                    ],
+                    "ballot": [
+                        "Cute",
+                        "Lame"
+                    ],
+                    "data": {
+                        "videoid": "CjB_oVeq8Lo",
+                        "rel": 0,
+                        "modestbranding": 1
+                    }
+                },
+                {
+                    "id": "rc-6c107d42d383ec",
+                    "type": "youtube",
+                    "title": "Red Sox Victory!",
+                    "note": "Shane Victorino captures the moment the Red Sox won the World Series.",
+                    "source": "YouTube",
+                    "modules": [
+                        "ballot"
+                    ],
+                    "ballot": [
+                        "YAY!",
+                        "ARGH!"
+                    ],
+                    "data": {
+                        "videoid": "eesJwsJoczY",
                         "rel": 0,
                         "modestbranding": 1
                     }
