@@ -185,9 +185,6 @@
         .mr-pager__btn--disabled {
             opacity:0.25; cursor:default;
         }
-            .mr-pager__btn--disabled .mr-pager__icon-path {
-                fill: #252626;
-            }
         .mr-pager__prev {
             left:0;
         }
@@ -327,25 +324,9 @@
             .mr-card__attributes {
                 color:#999999; font-size:0.75em;/*12px*/ margin:0.16em 0 1em 0;
             }
-            .mr-card__btn {
-                height: 1.5rem;/*24px*/ width: 1.5rem;/*24px*/ right: 0; top: 0.75rem;/*12px*/
-                position: absolute; padding: 0; border: 0; background: #b69823;
-                cursor: pointer;
-            }
-                .mr-card__icon {
-                    height: 0.4375rem;/*7px*/ width: 0.3125rem;/*5px*/ display:block;
-                    background: url('../../img/dropdown-arrow.png') no-repeat 0 0; margin: 0 auto;
-                    -webkit-transition: -webkit-transform 0.3s; transition: transform 0.3s; 
-                }
-                .mr-card__icon--active {
-                    transform: rotate(180deg);
-                    -ms-transform: rotate(180deg);
-                    -webkit-transform: rotate(180deg);
-                }
- 
             .mr-card__desc {
-                margin: -0.5em 0 0 0;/*8px*/ font-size:0.8125rem;/*13px*/ 
-                color:#444444; line-height:1.69; height: 3.5rem;/*56px*/
+                margin: 1em 0 0 0; font-size:0.8125rem;/*13px*/ 
+                color:#444444; line-height:1.69;
             }
 
 
@@ -671,7 +652,7 @@
     More Reels card classes
     ========================================================================== */
     .mr-more-reels__intro {
-        font-size:0.875rem; color:#929292; font-weight:300; text-align: center;
+        font-size:0.875rem; color:#929292; font-weight:300;
         background: #252626; margin:0; padding: 0.125rem 0 0.4375rem 0;
     }
         .mr-more-reels__preview {

@@ -8,9 +8,6 @@
     .ed-news .mr-card__btn-watch:hover {
         color: #2391d7;
     }
-    .ed-news .mr-pager__btn--disabled:hover .mr-pager__icon-path {
-        fill: #252626;
-    }
 
 
 /*  ==========================================================================
@@ -22,9 +19,6 @@
     }
     .ed-life .mr-card__btn-watch:hover {
         color: #c0392b;
-    }
-    .ed-life .mr-pager__btn--disabled:hover .mr-pager__icon-path {
-        fill: #252626;
     }
 
 
@@ -38,9 +32,6 @@
     .ed-money .mr-card__btn-watch:hover {
         color: #27ae60;
     }
-    .ed-money .mr-pager__btn--disabled:hover .mr-pager__icon-path {
-        fill: #252626;
-    }
 
 
 /*  ==========================================================================
@@ -52,9 +43,6 @@
     }
     .ed-sports .mr-card__btn-watch:hover {
         color: #e67e22;
-    }
-    .ed-sports .mr-pager__btn--disabled:hover .mr-pager__icon-path {
-        fill: #252626;
     }
 
 
@@ -68,9 +56,6 @@
     .ed-dating .mr-card__btn-watch:hover {
         color: #8e44ad;
     }
-    .ed-dating .mr-pager__btn--disabled:hover .mr-pager__icon-path {
-        fill: #252626;
-    }
 
 
 /*  ==========================================================================
@@ -82,9 +67,6 @@
     }
     .ed-entertainment .mr-card__btn-watch:hover {
         color: #f1c40f;
-    }
-    .ed-entertainment .mr-pager__btn--disabled:hover .mr-pager__icon-path {
-        fill: #252626;
     }
 
 
@@ -98,9 +80,6 @@
     .ed-music .mr-card__btn-watch:hover {
         color: #2c3e50;
     }
-    .ed-music .mr-pager__btn--disabled:hover .mr-pager__icon-path {
-        fill: #252626;
-    }
 
 
 /*  ==========================================================================
@@ -113,10 +92,6 @@
     .ed-women .mr-card__btn-watch:hover {
         color: #c35d9e;
     }
-    .ed-women .mr-pager__btn--disabled:hover .mr-pager__icon-path {
-        fill: #252626;
-    }
-
 
 
 /*  ==========================================================================
@@ -128,9 +103,6 @@
     }
     .ed-envision .mr-card__btn-watch:hover {
         color: #b69823;
-    }
-    .ed-envision .mr-pager__btn--disabled:hover .mr-pager__icon-path {
-        fill: #252626;
     }
 
 
@@ -145,9 +117,6 @@
     .ed-humor .mr-card__btn-watch:hover {
         color: #16a085;
     }
-    .ed-humor .mr-pager__btn--disabled:hover .mr-pager__icon-path {
-        fill: #252626;
-    }
 
 
 
@@ -160,7 +129,4 @@
     }
     .ed-videos .mr-card__btn-watch:hover {
         color: #d5161d;
-    }
-    .ed-videos .mr-pager__btn--disabled:hover .mr-pager__icon-path {
-        fill: #252626;
     }
