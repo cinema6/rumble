@@ -1,0 +1,18 @@
+<section class="mr-ballot__group">
+    <h2 class="mr-ballot__title tk--hdr" ng-click="onDismiss()">What did you think of this video?</h2>
+    <ul class="mr-ballot__list" ng-click="onDismiss()">
+        <li class="mr-ballot__item mr-ballot__item{{$index}}" ng-repeat="choice in Ctrl.ballot">
+            <button class="mr-ballot__btn mr-ballot__btn{{$index}}" ng-click="Ctrl.vote($index)"><span class="mr-ballot__btn-label">{{choice.name}}</span></button>
+        </li>
+    </ul>
+    <p class="mr-ballot__textlink mr-ballot__results">
+        <a ng-click="Ctrl.pass()" title="Show Voting Results">Show Voting Results</a>
+    </p>
+    <p class="mr-ballot__textlink mr-ballot__watch-again">
+        <a ng-click="onDismiss()" title="Watch Video Again">Watch Video Again</a>
+    </p>
+</section>
+
+<div class="mr-overlay" ng-click="onDismiss()">
+    <button class="sprite mr-ballot__close"><span class="ir">Close</span></button>
+</div>
