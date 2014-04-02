@@ -1,0 +1,12 @@
+<ul class="mr-cards__list">
+    <li class="mr-cards__item" ng-repeat="item in players" ng-class="{ inactive : ($index !== currentIndex)}" >
+        <mr-card
+            x-number="{{tocCards.indexOf(item) + 1}}"
+            x-total="{{tocCards.length}}"
+            x-config="item"
+            x-profile="deviceProfile"
+            x-active="($index === currentIndex)"
+            x-on-deck="($index === (currentIndex + 1))">
+        </mr-card>
+    </li>
+</ul>

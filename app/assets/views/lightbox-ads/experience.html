@@ -1,0 +1,66 @@
+<div class="mr-experience" ng-class="app.data.experience.theme">
+    <button class="mr-ui__close" ng-click="RumbleCtrl.setPosition(-1);" type="button">
+        <span class="sprite mr-icons__close"><span class="ir">Close</span></span>
+    </button>
+    <div class="mr-card__container">
+        <h1 class="mr-title tk--hdr">The Title of the MiniReel Goes Here</h1>
+        <ng-include src="'deck.html' | asset:'views'"></ng-include>
+        
+        <button thumb-paginator-button
+            ng-click="onPrev()"
+            ng-class="{'mr-nav__btn--disabled': disablePrevWhen()}"
+            ng-disabled="disablePrevWhen()"
+            class="mr-nav__btn mr-nav__prev"
+            type="button"
+            title="Previous Page">
+            <svg class="mr-nav__icon mr-nav__icon-prev" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+             viewBox="0 0 27.213 45.941" enable-background="new 0 0 27.213 45.941" xml:space="preserve">
+                <path class="mr-nav__icon-path" fill-rule="evenodd" clip-rule="evenodd" d="M22.971,0L0,22.971l22.971,22.97l4.243-4.243L8.485,22.971
+                    L27.213,4.243L22.971,0z"/>
+            </svg>
+            <span class="ir">Previous Page</span>
+        </button>
+        <button thumb-paginator-button
+            ng-click="onNext()"
+            ng-class="{'mr-nav__btn--disabled': disableNextWhen()}"
+            ng-disabled="disableNextWhen()"
+            class="mr-nav__btn mr-nav__next"
+            type="button"
+            title="Next Page">
+            <svg class="mr-nav__icon mr-nav__icon-next" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+             viewBox="0 0 27.213 45.941" enable-background="new 0 0 27.213 45.941" xml:space="preserve">
+                <path class="mr-nav__icon-path" fill-rule="evenodd" clip-rule="evenodd" d="M4.243,0l22.971,22.971L4.243,45.941L0,41.699l18.728-18.728L0,4.243
+                L4.243,0z"/>
+            </svg>
+            <span class="ir">Next Page</span>
+        </button>
+
+        <thumb-paginator active="tocIndex"
+            ng-if="currentIndex > -1"
+            class="mr-pager__group"
+            disable-prev-when="false"
+            disable-next-when="atTail"
+            on-prev="RumbleCtrl.goBack()"
+            on-next="RumbleCtrl.goForward()">
+            <ul class="mr-pages__list">
+                <li thumb-paginator-item ng-repeat="this in tocCards" class="mr-pages__item">
+                    <navbar-button index="$index"
+                        current-index="tocIndex"
+                        card="this"
+                        on-select="RumbleCtrl.setPosition(deck.indexOf(this));">
+                    </navbar-button>
+                </li>
+            </ul>
+        </thumb-paginator><!--.mr-pager__group-->
+    </div>
+</div><!--.mr-experience-->
+
+<div class="mr-overlay">&nbsp;</div>
+
+<article id="card" class="mr-container">
+    <ng-switch on="app.state">
+        <div class="splash-screen" ng-switch-when="splash">
+            <ng-include src="'splash.html' | asset:'views'"></ng-include>
+        </div>
+    </ng-switch>
+</article>
