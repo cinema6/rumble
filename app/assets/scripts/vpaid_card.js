@@ -101,10 +101,6 @@
 						}
 					});
 
-					// iface.insertHTML = function() {
-					// 	player.insertHTML();
-					// };
-
 					iface.loadAd = function() {
 						if(adIsReady) {
 							player.loadAd();
@@ -194,7 +190,11 @@
 							// });
 						});
 
-						player.insertHTML();
+						player.insertHTML().then(function(result) {
+							$log.info(result);
+						}, function(error) {
+							$log.error(error);
+						});
 					}
 
 					createPlayer();

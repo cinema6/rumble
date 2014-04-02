@@ -298,7 +298,7 @@
                         throw new Error('Parent element is required for vpaid.createPlayer');
                     }
 
-                    $log.info(config); // do we need to use config for width and height???
+                    $log.info(config);
 
                     $parentElement.prepend($playerElement);
 
@@ -307,39 +307,7 @@
 
                         c6EventEmitter(self);
 
-                        function getParamCode(obj, param, defaultValue, isFirst, prefix) {
-                            var amp = '&';
-                            var pre = '';
-                            if (isFirst) { amp = ''; }
-                            if (prefix) { pre = prefix; }
-
-                            if (obj && obj[param]){
-                                if (typeof obj[param] === 'string' && obj[param].length > 0){
-                                    return amp + pre + param + '=' + encodeURIComponent(obj[param]);
-                                } else if (typeof (obj[param] === 'object')){
-                                    var value = '';
-                                    var firstInObj = true;
-                                    for (var i=0;i<obj[param].length;i++){
-                                        if (firstInObj){
-                                            firstInObj = false;
-                                        }else{
-                                            value += '||';
-                                        }
-                                        value += obj[param][i];
-                                    }
-
-                                    return amp + pre + param + '=' + encodeURIComponent(value);
-                                }
-                            }
-
-                            if (defaultValue){
-                                return amp + pre + param + '=' + defaultValue;
-                            }
-
-                            return '';
-                        }
-
-                        function getPlayerHTML() {
+                        function getPlayerTemplate() {
                             return $http({
                                 method: 'GET',
                                 url: c6UrlMaker('views/vpaid_object_embed.html'),
@@ -348,20 +316,26 @@
                         }
 
                         function emitReady() {
+                            var deferred = $q.defer();
+
                             var current = 0,
                                 limit = 5000,
                                 check = $interval(function() {
                                     if(self.player && self.player.isCinema6player()) {
                                         $interval.cancel(check);
                                         self.emit('ready', self);
+                                        return deferred.resolve('successfully inserted and loaded player');
                                     } else {
                                         current += 100;
                                         if(current > limit) {
                                             $interval.cancel(check);
-                                            // throw error
+                                            $log.error('VPAID player never responded');
+                                            return deferred.reject('error, do something');
                                         }
                                     }
                                 }, 100);
+
+                            return deferred.promise;
                         }
 
                         Object.defineProperties(this, {
@@ -397,52 +371,29 @@
                         });
 
                         self.insertHTML = function() {
-                            // element$.prepend(self.setup());
-                            // getPlayerHTML().then(self.setup)
-                            getPlayerHTML().then(function(template) {
-                                element$.prepend(self.setup(template));
-                                emitReady();
-                            });
+                            return getPlayerTemplate().then(setup);
                         };
 
                         self.loadAd = function() {
-                            // starts the prefetched ad at a later time
                             self.player.loadAd();
                         };
 
-                        self.setup = function(template) {
-                            var obj = {
-                                params: {},
-                                playerId: playerId,
-                                swf: c6UrlMaker('swf/player.swf'),
-                                width: 640,
-                                height: 360,
-                                adXmlUrl: _provider.serverUrl
-                            };
+                        function setup(template) {
+                            var html,
+                                flashvars;
 
-                            var html = template.data.replace(/__SWF__/g, obj.swf);
-                            html = html.replace(/__WIDTH__/g, obj.width);
-                            html = html.replace(/__HEIGHT__/g, obj.height);
+                            html = template.data.replace(/__SWF__/g, c6UrlMaker('swf/player.swf'));
 
-                            var flashvars = '';
-
-                            flashvars += getParamCode(obj, 'adXmlUrl');
-                            flashvars += getParamCode(obj, 'playerId');
-
-                            if (obj.params){
-                                for (var i in obj.params){
-                                    flashvars += getParamCode(obj.params, i, null, false, 'params.');
-                                }
-                            }
+                            flashvars = '';
+                            flashvars += 'adXmlUrl=' + encodeURIComponent(_provider.serverUrl);
+                            flashvars += '&playerId=' + encodeURIComponent(playerId);
 
                             html = html.replace(/__FLASHVARS__/g, flashvars);
 
-                            return html;
-                        };
+                            element$.prepend(html);
 
-                        // self.play = function() {
-                        //     self.player.play();
-                        // };
+                            return emitReady();
+                        }
 
                         self.pause = function() {
                             self.player.pauseAd();

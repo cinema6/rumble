@@ -7,11 +7,15 @@
 				$scope,
 				$compile,
 				$log,
+				$q,
 				VPAIDService,
 				c6EventEmitter;
 
+			// var $httpBackend;
+
 			function MockPlayer() {
-				var self = this;
+				var self = this,
+					deferred = $q.defer();
 
 				c6EventEmitter(self);
 
@@ -26,7 +30,8 @@
 				this.play = jasmine.createSpy('player.play()');
 				this.pause = jasmine.createSpy('player.pause()');
 				this.loadAd = jasmine.createSpy('player.loadAd()');
-				this.insertHTML = jasmine.createSpy('player.insertHTML()');
+				this.insertHTML = jasmine.createSpy('player.insertHTML()')
+					.andReturn(deferred.promise);
 				this.getCurrentTime = function() { return 2; };
 				this.getDuration = function() { return 5; };
 				this.getAdProperties = function() {};
@@ -60,6 +65,8 @@
 					$rootScope = $injector.get('$rootScope');
 					$compile = $injector.get('$compile');
 					$log = $injector.get('$log');
+                    $q = $injector.get('$q');
+                    // $httpBackend = $injector.get('$httpBackend');
 					c6EventEmitter = $injector.get('c6EventEmitter');
 					VPAIDService = $injector.get('VPAIDService');
 
@@ -80,6 +87,19 @@
 					});
 
 					expect($scope.$emit).toHaveBeenCalledWith('playerAdd', jasmine.any(Object));
+				});
+
+				it('should create the player', function() {
+					var _player = VPAIDService.createPlayer();
+					
+					spyOn(VPAIDService, 'createPlayer').andReturn(_player);
+					
+					$scope.$apply(function() {
+						$compile('<vpaid-card></vpaid-card>')($scope);
+					});
+					
+					expect(VPAIDService.createPlayer).toHaveBeenCalled();
+					expect(_player.insertHTML).toHaveBeenCalled();
 				});
 			});
 
@@ -105,7 +125,7 @@
 					_player.emit('ready', _player);
 				});
 
-				it('the iface should should emit ready', function() {
+				it('the iface should emit ready', function() {
 					expect(iface.emit).toHaveBeenCalledWith('ready', iface);
 				});
 
@@ -282,21 +302,15 @@
 					});
 				});
 
-				xdescribe('insertHTML', function() {
-					it('should call insertHTML() on the player', function() {
-						iface.insertHTML();
-						expect(_player.insertHTML).toHaveBeenCalled();
-					});
-				});
-
-				xdescribe('loadAd', function() {
+				describe('loadAd', function() {
 					it('should not call loadAd() on the player if player isn\'t ready', function() {
 						iface.loadAd();
 						expect(_player.loadAd).not.toHaveBeenCalled();
 					});
 
-					it('should call loadAd() on the player if it\'s ready', function() {
+					it('should call loadAd() on the player if it\'s ready and the ad is ready', function() {
 						_player.emit('ready', _player);
+						_player.emit('adReady', _player);
 						iface.loadAd();
 						expect(_player.loadAd).toHaveBeenCalled();
 					});

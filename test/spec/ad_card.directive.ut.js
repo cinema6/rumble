@@ -6,7 +6,8 @@
 			var $rootScope,
 				$scope,
 				$compile,
-				$log;
+				$log,
+				$httpBackend;
 
 			beforeEach(function() {
 				module('c6.ui', function($provide) {
@@ -25,6 +26,7 @@
 					$rootScope = $injector.get('$rootScope');
 					$compile = $injector.get('$compile');
 					$log = $injector.get('$log');
+                    $httpBackend = $injector.get('$httpBackend');
 
 					$scope = $rootScope.$new();
 					$scope.config = {
@@ -37,9 +39,12 @@
 			});
 
 			describe('initialization', function() {
-				xdescribe('with flash enabled', function() {
+				describe('with flash enabled', function() {
 					it('should compile a vpaid-card', function() {
 						var element$;
+
+						$httpBackend.expectGET('assets/views/vpaid_object_embed.html')
+							.respond(200, '<vpaid-card></vpaid-card>');
 
 						$scope.$apply(function() {
 							$scope.profile = {

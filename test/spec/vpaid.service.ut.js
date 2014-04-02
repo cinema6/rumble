@@ -8,6 +8,7 @@
 				$rootScope,
 				$window,
 				$log,
+				$httpBackend,
 				c6EventEmitter;
 
 			var _provider,
@@ -81,6 +82,7 @@
 					$window = $injector.get('$window');
 					$log = $injector.get('$log');
 					$log.context = function() { return $log; };
+					$httpBackend = $injector.get('$httpBackend');
 
 					VPAIDService = $injector.get('VPAIDService');
 					c6EventEmitter = $injector.get('c6EventEmitter');
@@ -170,10 +172,13 @@
 
 							xdescribe('insertHTML()', function() {
 								it('should insert HTML into the player element', function() {
-									spyOn(player, 'setup').andCallThrough();
-									player.insertHTML();
-									expect(player.setup).toHaveBeenCalled();
-									expect(playerElementMock.prepend).toHaveBeenCalledWith(playerHTML);
+									// spyOn(player, 'setup').andCallThrough();
+									$httpBackend.expectGET('assets/views/vpaid_object_embed.html')
+										.respond(200, '<object></object>');
+									
+									// player.insertHTML();
+									// expect(player.setup).toHaveBeenCalled();
+									// expect(playerElementMock.prepend).toHaveBeenCalledWith(playerHTML);
 								});
 							});
 
