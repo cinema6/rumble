@@ -403,7 +403,6 @@
                 return {
                     restrict: 'EAC',
                     controller: 'C6DragSpaceController',
-                    scope: true,
                     link: function(scope, $element, $attrs, Controller) {
                         $element.data('cDragCtrl', Controller);
 

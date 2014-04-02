@@ -35,7 +35,8 @@
                     'scripts/manager',
                     'scripts/editor',
                     'scripts/c6_state',
-                    'scripts/c6_drag'
+                    'scripts/c6_drag',
+                    'scripts/card_table'
                 ];
             }
         }()),

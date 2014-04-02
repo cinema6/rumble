@@ -68,7 +68,8 @@
                         width = $element.width();
 
                         $element.animate({
-                            width: 0
+                            width: 0,
+                            margin: 0
                         },{
                             complete: done,
                             progress: function() {
@@ -91,7 +92,8 @@
                 removeClass: function($element, className, done) {
                     function show($element, done) {
                         $element.animate({
-                            width: width + 'px'
+                            width: width + 'px',
+                            margin: '0 10px'
                         },{
                             complete: done,
                             progress: function() {
@@ -114,45 +116,123 @@
             };
         })
 
-        .animation('.card__item', function() {
-            var draggableStartPositions = {};
-
+        .animation('.card__container', function() {
             return {
-                addClass: function($element, className, done) {
-                    var draggable;
-
-                    if (className !== 'c6-dragging') {
-                        return done();
-                    }
-
-                    draggable = $element.data('cDrag');
-
-                    draggableStartPositions[draggable.id] = {
-                        top: draggable.display.top,
-                        left: draggable.display.left
-                    };
-
-                    return done();
-                },
-                beforeRemoveClass: function($element, className, done) {
-                    function zipBack() {
-                        var draggable = $element.data('cDrag');
-
+                beforeAddClass: function($element, className, done) {
+                    function shrink($element, done) {
                         $element.animate({
-                            top: draggableStartPositions[draggable.id].top,
-                            left: draggableStartPositions[draggable.id].left
+                            width: '0px'
                         }, {
                             complete: done,
                             progress: function() {
-                                draggable.refresh();
+                                refresh($element);
                             }
                         });
                     }
 
-                    if (className !== 'c6-dragging') {
+                    switch (className) {
+                    case 'card__container--dragging':
+                        return shrink($element, done);
+                    default:
                         return done();
-                    } else {
-                        return zipBack();
+                    }
+                },
+                removeClass: function($element, className, done) {
+                    function grow($element, done) {
+                        var zone = $element.data('cDragZone');
+
+                        $element.animate({
+                            width: '10rem'
+                        }, {
+                            complete: function() {
+                                zone.emit('animationComplete');
+                                done();
+                            },
+                            progress: function() {
+                                refresh($element);
+                            }
+                        });
+                    }
+
+                    switch (className) {
+                    case 'card__container--dragging':
+                        return grow($element, done);
+                    default:
+                        return done();
+                    }
+                }
+            };
+        })
+
+        .animation('.card__item', function() {
+            return {
+                beforeRemoveClass: function($element, className, done) {
+                    function zipBack($element, done) {
+                        var draggable = $element.data('cDrag'),
+                            dropZone = draggable.currentlyOver.filter(function(zone) {
+                                return zone.id.search(/drop-zone-\w+/) > -1;
+                            })[0],
+                            zone = $element.inheritedData('cDragZone');
+
+                        function backToStart() {
+                            zone
+                                .once('animationComplete', function() {
+                                    $element.animate({
+                                        top: zone.display.top,
+                                        left: zone.display.left
+                                    }, {
+                                        complete: done,
+                                        progress: function() {
+                                            refresh($element);
+                                        }
+                                    });
+                                });
+                        }
+
+                        function toNewPosition() {
+                            var $container = $element.parent(),
+                                $newButton = $container.nextAll('.new__container').first();
+
+                            $container.addClass('card__container--reordering');
+                            dropZone.$element.addClass('card__drop-zone--reordering');
+                            $newButton.insertBefore(dropZone.$element);
+
+                            zone.once('animationComplete', function() {
+                                $element.animate({
+                                    top: dropZone.display.center.y - (draggable.display.height / 2),
+                                    left: dropZone.display.center.x - (draggable.display.width / 2)
+                                }, {
+                                    complete: function() {
+                                        refresh($element);
+                                        draggable.emit('reorderAnimated', dropZone);
+                                        $container.removeClass(
+                                            'card__container--reordering'
+                                        );
+                                        dropZone.$element.removeClass(
+                                            'card__drop-zone--reordering'
+                                        );
+                                        refresh($element);
+                                    },
+                                    progress: function() {
+                                        refresh($element);
+                                    }
+                                });
+                            });
+                        }
+
+
+                        if (dropZone) {
+                            toNewPosition();
+                        } else {
+                            backToStart();
+                        }
+                    }
+
+                    switch (className) {
+                    case 'c6-dragging':
+                        return zipBack($element, done);
+                    default:
+                        return done();
                     }
                 }
             };
