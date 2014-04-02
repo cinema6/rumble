@@ -187,7 +187,7 @@
         "img": {
             "splash": "experiences/gopro/splash-6thumb.jpg"
         },
-        "mode": "lightbox",
+        "mode": "light",
         "theme": "ed-videos",
         "data": {
             "id": "r-ea8caee7de7582",
