@@ -292,7 +292,7 @@
                 $log = $log.context('VPAIDService');
 
                 service.createPlayer = function(playerId, config, $parentElement) {
-                    var $playerElement = angular.element('<div style="text-align:center;"></div>');
+                    var $playerElement = angular.element('<div style="text-align:center;position:relative;padding-bottom:56.25%;"></div>');
 
                     if(!$parentElement) {
                         throw new Error('Parent element is required for vpaid.createPlayer');

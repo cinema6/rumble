@@ -12,11 +12,15 @@
                     adObject: '=',
                     active: '='
                 },
-                link: function(scope) {
+                link: function(scope, $element) {
                     scope.$watchCollection('adObject', function(curr) {
                         if(curr) {
                             scope.adType = scope.adObject.adType;
                             scope.fileURI = scope.adObject.fileURI;
+                            if(curr.sourceCode) {
+                                scope.vpaidCompanion = true;
+                                $element.find('.vpaidCompanion')[0].innerHTML = curr.sourceCode;
+                            }
                         }
                     });
                 }

@@ -1,7 +1,5 @@
 <div class="mr-card__group mr-vast__group c6-height-limiter">
-    <div ng-style="{visibility: Ctrl.showVideo ? 'visible' : 'hidden'}" class="mr-player">
-    </div>
-
+    <div ng-style="{visibility: Ctrl.showVideo ? 'visible' : 'hidden'}" class="mr-player"></div>
     <section>
         <display-ad-module ng-if="Ctrl.hasModule('displayAd')"
             active="config._data.modules.displayAd.active"
@@ -9,8 +7,4 @@
             ad-object="Ctrl.companion">
         </display-ad-module>
     </section>
-    <p class="mr-vast__watch-again tk--hdr"
-        ng-show="config._data.modules.displayAd.active">
-        <a ng-click="Ctrl.reset()" href="" title="Watch the Video">Watch the Video</a>
-    </p>
 </div>
