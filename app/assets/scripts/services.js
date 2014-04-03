@@ -310,8 +310,7 @@
                         function getPlayerTemplate() {
                             return $http({
                                 method: 'GET',
-                                url: c6UrlMaker('views/vpaid_object_embed.html'),
-                                cache: true
+                                url: c6UrlMaker('views/vpaid_object_embed.html')
                             });
                         }
 
@@ -336,6 +335,23 @@
                                 }, 100);
 
                             return deferred.promise;
+                        }
+
+                        function setup(template) {
+                            var html,
+                                flashvars;
+
+                            html = template.data.replace(/__SWF__/g, c6UrlMaker('swf/player.swf'));
+
+                            flashvars = '';
+                            flashvars += 'adXmlUrl=' + encodeURIComponent(_provider.serverUrl);
+                            flashvars += '&playerId=' + encodeURIComponent(playerId);
+
+                            html = html.replace(/__FLASHVARS__/g, flashvars);
+
+                            element$.prepend(html);
+
+                            return emitReady();
                         }
 
                         Object.defineProperties(this, {
@@ -378,23 +394,6 @@
                             self.player.loadAd();
                         };
 
-                        function setup(template) {
-                            var html,
-                                flashvars;
-
-                            html = template.data.replace(/__SWF__/g, c6UrlMaker('swf/player.swf'));
-
-                            flashvars = '';
-                            flashvars += 'adXmlUrl=' + encodeURIComponent(_provider.serverUrl);
-                            flashvars += '&playerId=' + encodeURIComponent(playerId);
-
-                            html = html.replace(/__FLASHVARS__/g, flashvars);
-
-                            element$.prepend(html);
-
-                            return emitReady();
-                        }
-
                         self.pause = function() {
                             self.player.pauseAd();
                         };
@@ -432,6 +431,9 @@
                         };
 
                         self.destroy = function() {
+                            // TO DO: graceful way to destroy and rebuild
+                            // this will depend on whether we actually want to re-initialize a new vpaid ad
+                            
                             // self.player.stopAd();
                             // element$[0].removeChild(element$[0].childNodes[0]);
                             // self.insertHTML();
@@ -468,6 +470,11 @@
                                     case 'onAdResponse':
                                         {
                                             self.emit('adReady', self);
+                                            break;
+                                        }
+                                    case 'displayBanners':
+                                        {
+                                            self.emit('companionsReady', self);
                                             break;
                                         }
                                 }

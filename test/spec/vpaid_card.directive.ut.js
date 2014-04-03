@@ -177,6 +177,13 @@
 						expect(iface.emit).toHaveBeenCalledWith('ended', iface);
 					});
 				});
+
+				describe('and when the player fires "companionsReady"', function() {
+					it('the iface should emit "ended"', function() {
+						_player.emit('companionsReady', _player);
+						expect(iface.emit).toHaveBeenCalledWith('getCompanions', _player);
+					});
+				});
 			});
 
 			describe('playerInterface', function() {
@@ -302,20 +309,6 @@
 					});
 				});
 
-				describe('loadAd', function() {
-					it('should not call loadAd() on the player if player isn\'t ready', function() {
-						iface.loadAd();
-						expect(_player.loadAd).not.toHaveBeenCalled();
-					});
-
-					it('should call loadAd() on the player if it\'s ready and the ad is ready', function() {
-						_player.emit('ready', _player);
-						_player.emit('adReady', _player);
-						iface.loadAd();
-						expect(_player.loadAd).toHaveBeenCalled();
-					});
-				});
-
 				describe('getType', function() {
 					it('should return "ad"', function() {
 						expect(iface.getType()).toBe('ad');
@@ -353,22 +346,24 @@
 						expect(_player.loadAd).not.toHaveBeenCalled();
 					});
 
+					it('should not call loadAd() on the player if adReady hasn\'t fired', function() {
+						iface.play();
+						_player.emit('ready', _player);
+						expect(_player.loadAd).not.toHaveBeenCalled();
+					});
+
 					it('should call loadAd() on the player if it\'s ready', function() {
 						_player.emit('ready', _player);
+						_player.emit('adReady', _player);
 						iface.play();
 						expect(_player.loadAd).toHaveBeenCalled();
 					});
-				});
 
-				describe('resume', function() {
-					it('should not call resumeAd() on the player if player isn\'t ready', function() {
-						iface.resume();
-						expect(_player.resumeAd).not.toHaveBeenCalled();
-					});
-
-					it('should call loadAd() on the player if it\'s ready', function() {
+					it('should call resumeAd() if the player is paused', function() {
 						_player.emit('ready', _player);
-						iface.resume();
+						_player.emit('adReady', _player);
+						_player.emit('pause', _player);
+						iface.play();
 						expect(_player.resumeAd).toHaveBeenCalled();
 					});
 				});

@@ -170,20 +170,25 @@
 								player = VPAIDService.createPlayer('testId',{},parentElementMock);
 							});
 
-							xdescribe('insertHTML()', function() {
+							describe('insertHTML()', function() {
+								it('should return a promise', function() {
+									expect(player.insertHTML().then).toEqual(jasmine.any(Function));
+								});
+
 								it('should insert HTML into the player element', function() {
-									// spyOn(player, 'setup').andCallThrough();
-									$httpBackend.expectGET('assets/views/vpaid_object_embed.html')
-										.respond(200, '<object></object>');
+									$httpBackend.expectGET('/views/vpaid_object_embed.html')
+										.respond(200, playerHTML);
 									
-									// player.insertHTML();
-									// expect(player.setup).toHaveBeenCalled();
-									// expect(playerElementMock.prepend).toHaveBeenCalledWith(playerHTML);
+									player.insertHTML();
+									
+									$httpBackend.flush();
+									
+									expect(playerElementMock.prepend).toHaveBeenCalledWith(playerHTML);
 								});
 							});
 
 							describe('loadAd()', function() {
-								it('should call play() on the flash object', function() {
+								it('should call loadAd() on the flash object', function() {
 									player.loadAd();
 									expect(mockFlashPlayer.loadAd).toHaveBeenCalled();
 								});

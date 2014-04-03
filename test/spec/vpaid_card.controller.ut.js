@@ -75,6 +75,7 @@
 				describe('if the config has no _data', function() {
 					it('should create some data', function() {
 						expect($scope.config._data).toEqual({
+							playerEvents: {},
 							modules: {
 								displayAd: {
 									active: false
@@ -87,8 +88,20 @@
 
 			describe('@properties', function() {
 				describe('showVideo', function() {
-					it('should be true', function() {
+					it('should be true if the card is active', function() {
+						$scope.active = true;
 						expect(VpaidCardController.showVideo).toBe(true);
+
+						$scope.active = false;
+						expect(VpaidCardController.showVideo).toBe(false);
+					});
+
+					it('should be false if the display ad is active', function() {
+						$scope.active = true;
+						expect(VpaidCardController.showVideo).toBe(true);
+
+						$scope.config._data.modules.displayAd.active = true;
+						expect(VpaidCardController.showVideo).toBe(false);
 					});
 				});
 			});
@@ -98,6 +111,31 @@
 					it('should call ModuleService.hasModule() with the configured modules and the provided module', function() {
 						VpaidCardController.hasModule('displayAd');
 						expect(ModuleService.hasModule).toHaveBeenCalledWith($scope.config.modules, 'displayAd');
+					});
+				});
+
+				describe('reset()', function() {
+					var iface;
+					
+					beforeEach(function() {
+						iface = new IFace();
+
+						$scope.$apply(function() {
+							$scope.$emit('playerAdd', iface);
+						});
+						
+						$scope.config._data.modules.displayAd.active = true;
+						iface.paused = true;
+
+						VpaidCardController.reset();
+					});
+					
+					it('should hide the displayAd', function() {
+						expect($scope.config._data.modules.displayAd.active).toBe(false);
+					});
+
+					it('should restart the video from the beginning', function() {
+						expect(iface.play).toHaveBeenCalled();
 					});
 				});
 			});
@@ -158,7 +196,7 @@
 
 					describe('when initialized', function() {
 						it('should not call loadAd', function() {
-							expect(iface.loadAd).not.toHaveBeenCalled();
+							expect(iface.play).not.toHaveBeenCalled();
 						});
 					});
 
@@ -167,7 +205,17 @@
 							$scope.$apply(function() {
 								$scope.active = true;
 							});
-							expect(iface.loadAd).toHaveBeenCalled();
+							expect(iface.play).toHaveBeenCalled();
+						});
+					});
+
+					describe('when false', function() {
+						it('should pause the ad', function() {
+							$scope.$apply(function() {
+								$scope.active = false;
+							});
+							expect(iface.pause).toHaveBeenCalled();
+							expect($scope.config._data.modules.displayAd.active).toBe(true);
 						});
 					});
 				});

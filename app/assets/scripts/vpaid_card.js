@@ -2,24 +2,44 @@
 	'use strict';
 
 	angular.module('c6.rumble')
-		.controller('VpaidCardController', ['$scope', '$log', 'ModuleService',
-		function							($scope ,  $log ,  ModuleService ) {
+		.controller('VpaidCardController', ['$scope', '$log', 'ModuleService', 'EventService',
+		function							($scope ,  $log ,  ModuleService ,  EventService ) {
 			$log = $log.context('VpaidCardController');
 			var self = this,
 				config = $scope.config,
 				_data = config._data = config._data || {
+					playerEvents: {},
 					modules: {
 						displayAd: {
 							active: false
 						}
 					}
-				};
+				},
+				player;
 
-			this.showVideo = true;
+			Object.defineProperties(this, {
+				showVideo: {
+					get: function() {
+						return $scope.active && !_data.modules.displayAd.active;
+					}
+				}
+			});
+
+			this.reset = function() {
+				// this is basically just a resumeAd() call
+				// in order to play another ad we need to re-initialize the whole player
+				_data.modules.displayAd.active = false;
+
+				player.play();
+			};
 
 			this.hasModule = ModuleService.hasModule.bind(ModuleService, config.modules);
 
 			$scope.$on('playerAdd', function(event, iface) {
+				player = iface;
+
+				_data.playerEvents = EventService.trackEvents(iface, ['play', 'pause']);
+				
 				self.resumeAd = function() {
 					iface.resume();
 				};
@@ -41,17 +61,26 @@
 					_data.modules.displayAd.active = false;
 				});
 
-				// $scope.$watch('onDeck', function(onDeck) {
-				// 	// if(onDeck) {
-				// 	// 	iface.insertHTML();
-				// 	// }
-				// });
+				iface.on('pause', function() {
+					if (self.hasModule('displayAd')) {
+						_data.modules.displayAd.active = true;
+					}
+				});
+				
+
+				iface.on('getCompanions', function(_player) {
+					// this doesn't work yet
+					self.companions = _player.getDisplayBanners();
+				});
 
 				$scope.$watch('active', function(active, wasActive) {
 					if(active === wasActive) { return; }
 
-					if(active) {
-						iface.loadAd();
+					if(active && _data.playerEvents.play.emitCount < 1) {
+						iface.play();
+					} else {
+						iface.pause();
+						_data.modules.displayAd.active = true;
 					}
 				});
 			});
@@ -84,9 +113,7 @@
 						},
 						duration: {
 							get: function() {
-								// maybe this returns a private prop that's set when player is loaded?
 								return _iface.duration;
-								// return playerIsReady ? player.getDuration() : NaN;
 							}
 						},
 						paused: {
@@ -101,14 +128,8 @@
 						}
 					});
 
-					iface.loadAd = function() {
-						if(adIsReady) {
-							player.loadAd();
-						}
-					};
-
 					iface.getType = function() {
-						// return 'vpaid';
+						// returning 'ad' instead of 'vpaid' allows the rumble controller to find the card
 						return 'ad';
 					};
 
@@ -121,14 +142,12 @@
 					};
 
 					iface.play = function() {
-						if(playerIsReady) {
-							player.loadAd();
-						}
-					};
-
-					iface.resume = function() {
-						if(playerIsReady) {
-							player.resumeAd();
+						if(playerIsReady && adIsReady) {
+							if(_iface.paused) {
+								player.resumeAd();
+							} else {
+								player.loadAd();
+							}
 						}
 					};
 
@@ -183,11 +202,9 @@
 								iface.emit('pause', iface);
 							});
 
-							// scope.$watch('onDeck', function(onDeck) {
-							// 	if(onDeck) {
-							// 		// do stuff
-							// 	}
-							// });
+							player.on('companionsReady', function() {
+								iface.emit('getCompanions', player);
+							});
 						});
 
 						player.insertHTML().then(function(result) {

@@ -1,11 +1,14 @@
 <div class="mr-card__group mr-vast__group">
-    <div ng-style="{visibility: Ctrl.showVideo ? 'visible' : 'hidden'}" class="mr-player mr-vast__player">
-        <div style="text-align:center;">
-            <button ng-click="Ctrl.pauseAd()">PAUSE</button>
-            <button ng-click="Ctrl.resumeAd()">RESUME</button>
+    <div ng-style="{visibility: Ctrl.showVideo ? 'visible' : 'hidden'}" class="mr-vast__player">
+        <div ng-style="{visibility: Ctrl.showVideo ? 'visible' : 'hidden'}" class="mr-player mr-vast__player">
+            <div style="text-align:center;">
+                <button ng-click="Ctrl.pauseAd()">PAUSE</button>
+                <button ng-click="Ctrl.resumeAd()">RESUME</button>
+            </div>
+
         </div>
-    </div>
     <h1 class="mr-vast__title-h1 tk--hdr">Advertisement</h1>
+    </div>
     <section>
         <display-ad-module ng-if="Ctrl.hasModule('displayAd')"
             active="config._data.modules.displayAd.active"
