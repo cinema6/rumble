@@ -285,10 +285,21 @@
             }
 
             function setBehaviors(obj, mode) {
+                function isMode() {
+                    var result = false;
+                    
+                    angular.forEach(Array.prototype.slice.call(arguments, 0), function(val) {
+                        if(mode === val) { result = true; }
+                    });
+
+                    return result;
+                }
+
                 obj.behaviors = {
-                    autoplay: (mode === 'light'),
-                    inlineVoteResults: (mode !== 'light'),
-                    separateTextView: (mode === 'full')
+                    autoplay: isMode('light'),
+                    inlineVoteResults: isMode('full', 'mobile'),
+                    separateTextView: isMode('full'),
+                    fullscreen: isMode('mobile', 'lightbox', 'lightbox-ads')
                 };
             }
 

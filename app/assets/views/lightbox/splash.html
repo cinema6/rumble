@@ -1,0 +1,18 @@
+<section class="mr-splash__group">
+    <!--<h1>{{title}}</h1>
+    <p>{{app.data.experience.summary}}</p>-->
+    <button type="button"
+        c6-bg-img="{{app.data.experience.img.splash}}"
+        class="mr-splash__start"
+        ng-click="RumbleCtrl.start()"
+        ng-show="ready">
+        <span class="mr-splash__bar">&nbsp;</span>
+        <span class="mr-splash__copy">
+            <span class="ir">Click Here to Start</span>
+        </span>
+    </button>
+
+    <div class="mr-splash__loading" ng-hide="ready">
+        <span class="ir">Loading...</span>
+    </div>
+</section>

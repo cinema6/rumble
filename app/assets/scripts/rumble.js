@@ -14,23 +14,23 @@
         return {
             beforeAddClass: function(element,className,done) {
                 $log.log('addClass setup:',className);
-                element.css({ opacity : 1, 'visibility' : 'visible'});
+                element.css({ 'opacity' : 1, 'visibility' : 'visible' });
                 $log.info('addClass start',className);
                 element.animate({
                     opacity: 0
-                }, 500, function() {
+                }, 1, function() {
                     $log.info('addClass end',className);
-                    element.css('visibility', 'hidden');
+                    element.css({'visibility' : 'hidden'});
                     done();
                 });
             },
             removeClass: function(element,className,done) {
                 $log.log('removeClass setup:',className);
-                element.css({ opacity : 0, visibility : 'visible' });
+                element.css({ 'opacity' : 0, 'visibility' : 'visible' });
                 $log.info('removeClass start',className);
-                element.delay(1000).animate({
+                element.delay(50).animate({
                     opacity: 1
-                }, 500, function() {
+                }, 400, function() {
                     $log.info('removeClass end',className);
                     done();
                 });
@@ -416,7 +416,7 @@
         this.start = function() {
             this.goForward();
 
-            if ($scope.deviceProfile.device === 'phone') {
+            if (appData.behaviors.fullscreen) {
                 cinema6.fullscreen(true);
             }
         };
