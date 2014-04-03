@@ -410,7 +410,7 @@
         this.start = function() {
             this.goForward();
 
-            if ($scope.deviceProfile.device === 'phone') {
+            if (appData.behaviors.fullscreen) {
                 cinema6.fullscreen(true);
             }
         };

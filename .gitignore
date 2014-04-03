@@ -19,3 +19,4 @@ reports/
 .vagrant/
 Berksfile.lock
 personal.json
+.DS_Store
