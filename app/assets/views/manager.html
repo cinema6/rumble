@@ -1,4 +1,17 @@
 <main c6-alias="ManagerCtrl.model as minireels">
+<section>
+    <header class="pageHeader container">
+        <h1 class="pageTitle">Dashboard</h1>
+        <ul class="filters__list">
+            <li class="filters__item">
+                <button class="filters__btn" type="button" title="Show All">Show All</button>
+                <button class="filters__btn" type="button" title="Draft">Draft</button>
+                <button class="filters__btn" type="button" title="Published">Published</button>
+                <button class="filters__btn" type="button" title="Private">Private</button>
+                <button class="filters__btn filters__deleted" type="button" title="Deleted">Deleted</button>
+            </li>
+        </ul>
+    </header>
     <nav>
         <ul>
             <li><button>Create New</button></li>
@@ -21,4 +34,5 @@
         </li>
     </ul>
     <p ng-show="!minireels.length">You have no Mini Reels. Would you like to <a>create one?</a></p>
+</section>
 </main>

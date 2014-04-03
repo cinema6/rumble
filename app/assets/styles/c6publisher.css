@@ -1,0 +1,100 @@
+/*  ==========================================================================
+    global styles
+    ========================================================================== */
+    body {
+        font-family: 'museo-sans', Arial, Helvetica, sans-serif; 
+        font-size: 100%; font-weight:300; line-height: 1.5;
+        background:#fff; margin:0;
+    }
+    ::-moz-selection {
+        background: #e900a4; text-shadow: none; color:#fff;
+    }
+    ::selection {
+        background: #e900a4; text-shadow: none; color:#fff;
+    }
+    p {
+        margin: 1em 0;
+    }
+    textarea {
+        resize: vertical;
+    }
+        
+/*  ==========================================================================
+    c6-copy classes : general type & color styles
+    ========================================================================== */
+    a {
+        text-decoration: none; color:#4a9cd1;
+    }
+        a:hover {
+            border-bottom:1px dotted #4a9cd1;
+        }
+    a:focus, button:focus, input:focus, textarea:focus {
+        outline:none; border:0;
+    }
+
+/*  ==========================================================================
+    Helper classes
+    ========================================================================== */
+    .ir {
+        background-color: transparent;
+        border: 0; width:0; height:0;
+        overflow: hidden; display: block; position:absolute;
+    }
+    .clearfix:before,
+    .clearfix:after {
+        content: ' ';
+        display: table;
+    }
+    .clearfix:after {
+        clear: both;
+    }
+    .hidden {
+        visibility: hidden;
+    }
+    .sprite {
+        background:url('../../img/sprite--light.svg') 0 0 / 18.75rem 18.75rem no-repeat;
+    }
+    @media screen and (min-width:0\0) {  
+        /* IE9 and IE10 rule sets go here */
+        .sprite {
+            background-image:url('../../img/sprite--light.png');
+        }
+    }
+    .overlay {
+        width:100%; height:100%;
+        background:rgb(0,0,0); background:rgba(0,0,0,0.8);
+        position:absolute; z-index: 0; left:0; top:0;
+    }
+    .css-promote {
+        transform: translateZ(0);
+        -webkit-transform: translateZ(0); /* Safari and Chrome */
+    }
+    .container {
+        max-width:70.5em; margin:0 auto; padding:0 1.5em;
+    }
+
+/*  ==========================================================================
+    masthead navigation
+    ========================================================================== */
+    .mast__group {
+        background:#282b2c; min-height:4.5em;
+    }
+        .mainNav__list {
+            margin:0; padding:0; list-style: none;
+        }
+            .mainNav__item {
+                padding:1.5em 0; margin:0 2em 0 0; float:left;
+            }
+            .mainNav__link {
+                color:#fff;
+            }
+
+/*  ==========================================================================
+    pageHeader
+    ========================================================================== */
+    .pageHeader {
+        border-bottom:1px solid #eeeeee;
+    }
+        .pageTitle {
+            color:#565656; font-weight:100; font-size:1.875em; margin:1rem 0 0 0;
+        }
