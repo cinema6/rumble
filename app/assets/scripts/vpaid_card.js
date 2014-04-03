@@ -40,17 +40,6 @@
 
 				_data.playerEvents = EventService.trackEvents(iface, ['play', 'pause']);
 				
-				self.resumeAd = function() {
-					iface.resume();
-				};
-				self.pauseAd = function() {
-					iface.pause();
-				};
-
-				self.destroy = function() {
-					iface.destroy();
-				};
-
 				iface.on('ended', function() {
 					if(!_data.modules.displayAd.src) {
 						$scope.$emit('<vpaid-card>:contentEnd', config);
