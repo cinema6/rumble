@@ -28,7 +28,7 @@
         font-family: 'Georgia', 'Times New Roman', serif; font-weight:300;
     }
     a {
-        text-decoration: none; color:#d94040;
+        text-decoration: none;
     }
     a:focus, button:focus, input:focus, textarea:focus {
         outline:none; border:0;
@@ -52,9 +52,6 @@
     }
     .hidden {
         visibility: hidden;
-    }
-    .sprite--alpha-png {
-        background:url('../../img/mr-sprite__alpha@2x.png') 0 0 / 6.25rem 3.125rem no-repeat;
     }
     .sprite {
         background:url('../../img/sprite--light.svg') 0 0 / 18.75rem 18.75rem no-repeat;
@@ -142,12 +139,6 @@
             -webkit-box-shadow: 0 3px 3px 0 rgba(0,0,0,0.5);
             box-shadow: 0 3px 3px 0 rgba(0,0,0,0.5);
         }
-            .mr-ui__close:active {
-                -webkit-box-shadow: 0 1px 1px 0 rgba(0,0,0,0.5);
-                box-shadow: 0 1px 1px 0 rgba(0,0,0,0.5);
-                top:-19px; right:-23px;
-                border:3px solid white; 
-            }
         .mr-nav__btn {
             width:3rem; height:5.5rem; margin:-2.75rem 0 0 0;
             position:absolute; top:50%; left:0; z-index: 10;
@@ -158,6 +149,9 @@
             .mr-nav__next {
                 right:12.75rem; left:auto;
             }
+                .mr-nav__next--display-ad {
+                    right:18.75rem;
+                }
             .mr-nav__icon {
                 display:block; width:0.875rem;/*14px*/ height:1.1875rem;/*19px*/
                 position:absolute; top:2.125rem;/*34px*/ left:1.0625rem;/*17px*/ margin:0;
@@ -385,8 +379,8 @@
             background-position: 0 -9.35rem; cursor: pointer;
         }
 
-    @media screen and (max-width:33.75rem) {
-        /*max 540px*/
+    @media screen and (max-width:50rem) {
+        /*max 800px*/
         .mr-ballot__group {
             top:4rem;
         }
@@ -398,22 +392,6 @@
         }
         .mr-ballot__btn {
             width:9em;
-        }
-    }
-
-    @media screen and (max-width: 26.625rem) {
-        /*426px*/
-        .mr-ballot__group {
-            top:20%;
-        }
-        .mr-ballot__btn-label {
-            font-size: 0.875rem;
-        }
-        .mr-ballot__btn {
-            width:7.25em; height:4em;
-        }
-        .mr-ballot__textlink {
-            font-size: 0.75rem;
         }
     }
 
@@ -484,8 +462,11 @@
             background-position: 0 -9.35rem; cursor: pointer;
         }
 
-    @media screen and (max-width: 33.75rem) {
-        /*540px*/
+    @media screen and (max-width: 50rem) {
+        /*800px*/
+        .mr-results__group {
+            padding:0 15% 66.67%;
+        }
         .mr-results__title {
             font-size: 1em; margin-top: 20%;
         }
