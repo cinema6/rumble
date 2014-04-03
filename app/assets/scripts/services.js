@@ -277,6 +277,229 @@
             if (window.c6.kHasKarma) { this._private = _provider; }
         }])
 
+        .provider('VPAIDService', [function() {
+            var _provider = {};
+
+            this.adServerUrl = function(url) {
+                _provider.serverUrl = url;
+            };
+
+            this.$get = ['$log', '$http', '$q', '$window', '$interval', '$templateCache', 'c6EventEmitter', 'c6UrlMaker',
+            function    ( $log ,  $http ,  $q ,  $window ,  $interval ,  $templateCache ,  c6EventEmitter ,  c6UrlMaker ) {
+                var service = {},
+                    _service = {};
+
+                $log = $log.context('VPAIDService');
+
+                service.createPlayer = function(playerId, config, $parentElement) {
+                    var $playerElement = angular.element('<div style="text-align:center;"></div>');
+
+                    if(!$parentElement) {
+                        throw new Error('Parent element is required for vpaid.createPlayer');
+                    }
+
+                    $log.info(config);
+
+                    $parentElement.prepend($playerElement);
+
+                    _service.VPAIDPlayer = function(element$, playerId, $win) {
+                        var self = this;
+
+                        c6EventEmitter(self);
+
+                        function getPlayerTemplate() {
+                            return $http({
+                                method: 'GET',
+                                url: c6UrlMaker('views/vpaid_object_embed.html'),
+                                cache: $templateCache
+                            });
+                        }
+
+                        function emitReady() {
+                            var deferred = $q.defer();
+
+                            var current = 0,
+                                limit = 5000,
+                                check = $interval(function() {
+                                    if(self.player && self.player.isCinema6player()) {
+                                        $interval.cancel(check);
+                                        self.emit('ready', self);
+                                        return deferred.resolve('successfully inserted and loaded player');
+                                    } else {
+                                        current += 100;
+                                        if(current > limit) {
+                                            $interval.cancel(check);
+                                            $log.error('VPAID player never responded');
+                                            return deferred.reject('error, do something');
+                                        }
+                                    }
+                                }, 100);
+
+                            return deferred.promise;
+                        }
+
+                        function setup(template) {
+                            var html,
+                                flashvars;
+
+                            html = template.data.replace(/__SWF__/g, c6UrlMaker('swf/player.swf'));
+
+                            flashvars = '';
+                            flashvars += 'adXmlUrl=' + encodeURIComponent(_provider.serverUrl);
+                            flashvars += '&playerId=' + encodeURIComponent(playerId);
+
+                            html = html.replace(/__FLASHVARS__/g, flashvars);
+
+                            element$.prepend(html);
+
+                            return emitReady();
+                        }
+
+                        Object.defineProperties(this, {
+                            player : {
+                                get: function() {
+                                    var obj = element$.find('#c6VPAIDplayer')[0],
+                                        val;
+
+                                    try {
+                                        val = obj.isCinema6player();
+
+                                        if (val){ return obj; }
+
+                                    } catch(e) {}
+
+                                    obj = element$.find('#c6VPAIDplayer_ie')[0];
+
+                                    try {
+                                        val = obj.isCinema6player();
+
+                                        if (val) { return obj; }
+
+                                    } catch(e) {}
+
+                                    return null;
+                                }
+                            },
+                            currentTime : {
+                                get: function() {
+                                    return self.player.getAdProperties().adCurrentTime;
+                                }
+                            }
+                        });
+
+                        self.insertHTML = function() {
+                            return getPlayerTemplate().then(setup);
+                        };
+
+                        self.loadAd = function() {
+                            self.player.loadAd();
+                        };
+
+                        self.pause = function() {
+                            self.player.pauseAd();
+                        };
+
+                        self.getAdProperties = function() {
+                            return self.player.getAdProperties();
+                        };
+
+                        self.getDisplayBanners = function() {
+                            return self.player.getDisplayBanners();
+                        };
+
+                        self.setVolume = function(volume) {
+                            self.player.setVolume(volume);
+                        };
+
+                        self.resumeAd = function() {
+                            self.player.resumeAd();
+                        };
+
+                        self.stopAd = function() {
+                            self.player.stopAd();
+                        };
+
+                        self.isC6VpaidPlayer = function() {
+                            return self.player.isCinema6player();
+                        };
+
+                        self.getCurrentTime = function() {
+                            return self.player.getAdProperties().adCurrentTime;
+                        };
+
+                        self.getDuration = function() {
+                            return self.player.getAdProperties().adDuration;
+                        };
+
+                        self.destroy = function() {
+                            // TO DO: graceful way to destroy and rebuild
+                            // this will depend on whether we actually want to re-initialize a new vpaid ad
+                            
+                            // self.player.stopAd();
+                            // element$[0].removeChild(element$[0].childNodes[0]);
+                            // self.insertHTML();
+                        };
+
+                        function handlePostMessage(e) {
+                            // this player interface doesn't fire timeupdates
+                            // we're relying on the events coming from the Player instead
+                            // we have no controls on this player so the only thing time-related
+                            // will be firing our own tracking pixels for reporting/analytics
+                            try {
+                                var data = JSON.parse(e.data);
+
+                                if(!data.__vpaid__ || (data.__vpaid__.id !== playerId)) { return; }
+
+                                $log.info('EVENT: ', data.__vpaid__.type);
+
+                                switch(data.__vpaid__.type) {
+                                    case 'AdStarted':
+                                        {
+                                            self.emit('play', self);
+                                            break;
+                                        }
+                                    case 'AdPaused':
+                                        {
+                                            self.emit('pause', self);
+                                            break;
+                                        }
+                                    case 'AdVideoComplete':
+                                        {
+                                            self.emit('ended', self);
+                                            break;
+                                        }
+                                    case 'onAdResponse':
+                                        {
+                                            self.emit('adReady', self);
+                                            break;
+                                        }
+                                    case 'displayBanners':
+                                        {
+                                            self.emit('companionsReady', self);
+                                            break;
+                                        }
+                                }
+
+                                self.emit(data.__vpaid__.type, self);
+                            } catch (err) {}
+                        }
+
+                        $win.addEventListener('message', handlePostMessage, false);
+
+                    }; // end _service.VPAIDPlayer()
+
+                    return new _service.VPAIDPlayer($playerElement, playerId, $window);
+                };
+
+                if (window.c6.kHasKarma) { service._private = _service; }
+
+                return service;
+            }]; // end $get
+
+            if (window.c6.kHasKarma) { this._private = _provider; }
+
+        }])
+
         .service('ControlsService', ['$timeout',
         function                    ( $timeout ) {
             var _private = {};

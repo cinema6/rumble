@@ -346,6 +346,12 @@
             }
         });
 
+        $scope.$on('<vpaid-card>:contentEnd', function(event, card) {
+            if($scope.currentCard === card) {
+                self.goForward();
+            }
+        });
+
         this.findCardByVideo = function(videoType,videoId){
             var result;
             $scope.deck.some(function(item){

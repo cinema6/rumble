@@ -44,6 +44,8 @@
                     'scripts/mini_reel_card',
                     'scripts/video_card',
                     'scripts/vast_card',
+                    'scripts/ad_card',
+                    'scripts/vpaid_card',
                     'scripts/ballot_module',
                     'scripts/comments_module',
                     'scripts/display_ad_module',

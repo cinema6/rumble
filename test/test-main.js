@@ -107,7 +107,13 @@
                 video_card: {
                     deps: ['app']
                 },
+                ad_card: {
+                    deps: ['app']
+                },
                 vast_card: {
+                    deps: ['app']
+                },
+                vpaid_card: {
                     deps: ['app']
                 },
                 ballot_module: {
