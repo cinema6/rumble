@@ -155,12 +155,18 @@
 
                 describe('ended', function() {
                     describe('if there is a displayAd', function() {
-                        it('should not $emit the contentEnd event', function() {
+                        beforeEach(function() {
                             $scope.config._data.modules.displayAd.src = 'foo.jpg';
 
                             iface.emit('ended', iface);
-
+                        });
+                        
+                        it('should not $emit the contentEnd event', function() {
                             expect($scope.$emit).not.toHaveBeenCalledWith('<vpaid-card>:contentEnd', $scope.config);
+                        });
+
+                        it('should activate the display ad', function() {
+                            expect($scope.config._data.modules.displayAd.active).toBe(true);
                         });
                     });
 
@@ -216,6 +222,32 @@
                             });
                             expect(iface.pause).toHaveBeenCalled();
                             expect($scope.config._data.modules.displayAd.active).toBe(true);
+                        });
+                    });
+                });
+
+                describe('onDeck', function() {
+                    describe('when true should set the displayAd src', function() {
+                        beforeEach(function() {
+                            $scope.$apply(function() {
+                                $scope.onDeck = true;
+                            });
+                        });
+
+                        it('to undefined if there is no display ad', function() {
+                            expect($scope.config._data.modules.displayAd.src).toBe(undefined);
+                        });
+
+                        it('to the url from config', function() {
+                            $scope.onDeck = false;
+                            $scope.$digest();
+                            
+                            $scope.$apply(function() {
+                                $scope.config.displayAd = 'htpp://test.com/image.jpg';
+                                $scope.onDeck = true;
+                            });     
+                            
+                            expect($scope.config._data.modules.displayAd.src).toBe('htpp://test.com/image.jpg');
                         });
                     });
                 });

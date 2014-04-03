@@ -35,13 +35,21 @@
 
             this.hasModule = ModuleService.hasModule.bind(ModuleService, config.modules);
 
+            $scope.$watch('onDeck', function(onDeck) {
+                if(onDeck) {
+                    _data.modules.displayAd.src = config.displayAd;
+                }
+            });
+
             $scope.$on('playerAdd', function(event, iface) {
                 player = iface;
 
                 _data.playerEvents = EventService.trackEvents(iface, ['play', 'pause']);
                 
                 iface.on('ended', function() {
-                    if(!_data.modules.displayAd.src) {
+                    if(_data.modules.displayAd.src) {
+                        _data.modules.displayAd.active = true;
+                    } else {
                         $scope.$emit('<vpaid-card>:contentEnd', config);
                     }
                 });
