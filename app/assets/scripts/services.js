@@ -284,8 +284,8 @@
                 _provider.serverUrl = url;
             };
 
-            this.$get = ['$log', '$http', '$q', '$window', '$interval', 'c6EventEmitter', 'c6UrlMaker',
-            function    ( $log ,  $http ,  $q ,  $window ,  $interval ,  c6EventEmitter ,  c6UrlMaker ) {
+            this.$get = ['$log', '$http', '$q', '$window', '$interval', '$templateCache', 'c6EventEmitter', 'c6UrlMaker',
+            function    ( $log ,  $http ,  $q ,  $window ,  $interval ,  $templateCache ,  c6EventEmitter ,  c6UrlMaker ) {
                 var service = {},
                     _service = {};
 
@@ -310,7 +310,8 @@
                         function getPlayerTemplate() {
                             return $http({
                                 method: 'GET',
-                                url: c6UrlMaker('views/vpaid_object_embed.html')
+                                url: c6UrlMaker('views/vpaid_object_embed.html'),
+                                cache: $templateCache
                             });
                         }
 
