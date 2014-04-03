@@ -597,7 +597,6 @@
     .mr-splash__loading {
         background:#fff url('../../img/spinner-dots.gif') 50% 50% / 2rem auto no-repeat;
     }
-
     @media screen and (max-width: 20rem) { /*320px*/
         .mr-splash__group {
             padding: 0 0.625em; height: 20.625rem;/*330px*/
