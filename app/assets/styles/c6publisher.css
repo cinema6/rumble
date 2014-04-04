@@ -51,6 +51,9 @@
     .hidden {
         visibility: hidden;
     }
+    .sprite--alpha {
+        background:url('../img/sprite--alpha@2x.png') 0 0 / 25rem 25rem no-repeat;
+    }
     .sprite {
         background:url('../../img/sprite--light.svg') 0 0 / 18.75rem 18.75rem no-repeat;
     }
@@ -77,8 +80,11 @@
     masthead navigation
     ========================================================================== */
     .mast__group {
-        background:#282b2c; min-height:4.5em;
+        background:#282b2c; min-height:4.5em; color:#fff;
     }
+        .mainNav {
+            float:left;
+        }
         .mainNav__list {
             margin:0; padding:0; list-style: none;
         }
@@ -88,6 +94,25 @@
             .mainNav__link {
                 color:#fff;
             }
+            
+            .mainNav__c6BrandItem {
+                padding:0.75em 0; margin-right:3em;
+            }
+                .mainNav__c6Brand {
+                    width:11em; height:2.75em; display: block;
+                    font-size:1em;
+                    background-position:0 0;
+                    border:0; padding:0;
+                    cursor:pointer;
+                }
+
+
+/*  ==========================================================================
+    pageHeader
+    ========================================================================== */
+    .userPane {
+        float:right;
+    }
 
 /*  ==========================================================================
     pageHeader
