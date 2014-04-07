@@ -72,6 +72,80 @@
                     expect($dragSpace.data('cDragCtrl')).toBe(Controller);
                 });
 
+                it('should do its computations on initialization', function() {
+                    var $mommy = $('<div id="mommy" c6-drag-zone style="width: 100px; height: 100px; display: inline-block; position: relative;"><div id="baby" c6-draggable style="position: absolute; top: 10px; right: 10px; bottom: 10px; left: 10px;"></div></div>'),
+                        $baby = $mommy.find('#baby');
+
+                    $dragSpace.append($mommy);
+                    $scope.$apply(function() {
+                        $compile($mommy)($scope);
+                    });
+
+                    expect($mommy.hasClass('c6-drag-zone-active')).toBe(true);
+                    expect($mommy.hasClass('c6-drag-zone-under-baby')).toBe(true);
+                    expect($baby.hasClass('c6-over-zone')).toBe(true);
+                    expect($baby.hasClass('c6-over-mommy')).toBe(true);
+                });
+
+                it('should refresh everthing when an element is added (because everything could reflow)', function() {
+                    var $drag = $('<span id="drag1" c6-draggable style="display: inline-block; width: 50px; height: 50px; margin-left: 5px;"></span>'),
+                        $zone = $('<span id="zone1" c6-drag-zone style="display: inline-block; width: 50px; height: 50px;"></span>');
+
+                    $dragSpace.empty();
+
+                    $dragSpace.append($drag);
+                    $scope.$apply(function() {
+                        $compile($drag)($scope);
+                    });
+
+                    $dragSpace.prepend($zone);
+                    $scope.$apply(function() {
+                        $compile($zone)($scope);
+                    });
+
+                    expect($drag.hasClass('c6-over-zone1')).toBe(false);
+                    expect($zone.hasClass('c6-drag-zone-under-drag1')).toBe(false);
+                });
+
+                it('should compute collisions whenever something is refreshed', function() {
+                    var $zone1 = $('<div id="zone1" c6-drag-zone style="height: 50px; width: 50px;">Zone 1</div>'),
+                        $drag1 = $dragSpace.find('#drag1'),
+                        zone1, drag1;
+
+                    $zone1.css({
+                        position: 'fixed',
+                        top: '100px',
+                        left: '0px'
+                    });
+                    $drag1.css({
+                        position: 'fixed',
+                        top: '100px',
+                        left: '55px'
+                    });
+
+                    $dragSpace.prepend($zone1);
+                    $scope.$apply(function() {
+                        $compile($zone1)($scope);
+                    });
+                    zone1 = $zone1.data('cDragZone');
+                    drag1 = $drag1.data('cDrag');
+
+                    $drag1.css('left', '25px');
+                    drag1.refresh();
+                    expect($drag1.hasClass('c6-over-zone')).toBe(true);
+                    expect($zone1.hasClass('c6-drag-zone-active')).toBe(true);
+
+                    $zone1.css('top', '200px');
+                    zone1.refresh();
+                    expect($drag1.hasClass('c6-over-zone')).toBe(false);
+                    expect($zone1.hasClass('c6-drag-zone-active')).toBe(false);
+
+                    $drag1.css('top', '200px');
+                    Controller.refresh();
+                    expect($drag1.hasClass('c6-over-zone')).toBe(true);
+                    expect($zone1.hasClass('c6-drag-zone-active')).toBe(true);
+                });
+
                 describe('methods', function() {
                     describe('refresh()', function() {
                         it('should call the refresh() method on all zones and draggables', function() {
@@ -114,7 +188,12 @@
                             var draggable = {
                                     on: function() {
                                         return this;
-                                    }
+                                    },
+                                    emit: function() {},
+                                    display: {},
+                                    refresh: function() {},
+                                    collidesWith: function() {},
+                                    currentlyOver: []
                                 },
                                 spy = jasmine.createSpy('draggableAdded spy');
 
@@ -132,7 +211,12 @@
                                     id: 'foo',
                                     on: function() {
                                         return this;
-                                    }
+                                    },
+                                    emit: function() {},
+                                    display: {},
+                                    refresh: function() {},
+                                    collidesWith: function() {},
+                                    currentlyOver: []
                                 },
                                 spy = jasmine.createSpy('draggableRemoved spy');
 
@@ -149,7 +233,12 @@
                             var zone = {
                                     on: function() {
                                         return this;
-                                    }
+                                    },
+                                    emit: function() {},
+                                    display: {},
+                                    refresh: function() {},
+                                    collidesWith: function() {},
+                                    currentlyUnder: []
                                 },
                                 spy = jasmine.createSpy('zoneAdded spy');
 
@@ -167,7 +256,12 @@
                                     id: 'foo',
                                     on: function() {
                                         return this;
-                                    }
+                                    },
+                                    emit: function() {},
+                                    display: {},
+                                    refresh: function() {},
+                                    collidesWith: function() {},
+                                    currentlyUnder: []
                                 },
                                 spy = jasmine.createSpy('zoneRemoved spy');
 
@@ -234,6 +328,10 @@
                                 $zone1 = $('<span id="zone1" c6-drag-zone style="display: inline-block; width: 50px; height: 50px;"></span>'),
                                 zone1, drag1, drag2, $watchSpy = jasmine.createSpy('$watch()');
 
+                            $zone1.css({
+                                margin: '50px 5px 0 100px'
+                            });
+
                             scope.$watchCollection('Ctrl.zones.zone1.currentlyUnder', $watchSpy);
 
                             $dragSpace.prepend($zone1);
@@ -248,10 +346,6 @@
 
                             expect($watchSpy.calls.count()).toBe(1);
                             expect(zone1.currentlyUnder).toEqual([]);
-
-                            $zone1.css({
-                                margin: '50px 5px 0 100px'
-                            });
 
                             indexFinger.placeOn($drag1);
                             // Drag 10px to the left and 50px down
@@ -335,10 +429,30 @@
 
                             expect(Controller.zones.zone1).toBeDefined();
 
-                            $zone1.scope().$destroy();
                             $zone1.remove();
 
                             expect(Controller.zones.zone1).not.toBeDefined();
+                        });
+
+                        it('should clean up draggables if a zone is destroyed', function() {
+                            var finger = new Finger(),
+                                $drag1 = $dragSpace.find('#drag1'),
+                                $zone1 = $('<div id="zone1" c6-drag-zone style="height: 100px;"></div>'),
+                                drag1;
+
+                            $dragSpace.prepend($zone1);
+                            $scope.$apply(function() {
+                                $compile($zone1)($scope);
+                            });
+                            drag1 = $drag1.data('cDrag');
+
+                            finger.placeOn($drag1);
+                            finger.drag(-10, 0);
+
+                            $zone1.remove();
+
+                            expect(drag1.currentlyOver).toEqual([]);
+                            expect($drag1.hasClass('c6-over-zone')).toBe(false);
                         });
                     });
 
@@ -470,6 +584,37 @@
                             $drag1.remove();
 
                             expect(Controller.draggables.drag1).not.toBeDefined();
+                        });
+
+                        it('should clean up after a draggable that is destroyed mid-drag', function() {
+                            var finger = new Finger(),
+                                $drag1 = $dragSpace.find('#drag1'),
+                                $zone1 = new ZoneElement('zone1'),
+                                $zone2 = new ZoneElement('zone2'),
+                                zone1, zone2, drag1;
+
+                            $dragSpace.prepend($zone2);
+                            $dragSpace.prepend($zone1);
+                            $scope.$apply(function() {
+                                $compile($zone1)($scope);
+                                $compile($zone2)($scope);
+                            });
+                            zone1 = $zone1.data('cDragZone');
+                            zone2 = $zone2.data('cDragZone');
+                            drag1 = $drag1.data('cDrag');
+
+                            finger.placeOn($drag1);
+
+                            // Drag 25px to the left
+                            finger.drag(-25, 0);
+
+                            $drag1.remove();
+
+                            expect(Controller.currentDrags).toEqual([]);
+                            expect(zone1.currentlyUnder).toEqual([]);
+                            expect(zone2.currentlyUnder).toEqual([]);
+                            expect($zone1.hasClass('c6-drag-zone-active')).toBe(false);
+                            expect($zone2.hasClass('c6-drag-zone-active')).toBe(false);
                         });
                     });
 

@@ -80,12 +80,19 @@
                     },
                     // This method updates the "display" rect with the most up-to-date position of
                     // the element in the viewport.
-                    refresh: function() {
-                        var $element = this.$element;
+                    refresh: function(skipNotify) {
+                        var $element = this.$element,
+                            rect;
 
                         if (!$element) { return null; }
 
-                        return this.display.update($element[0].getBoundingClientRect());
+                        rect = this.display.update($element[0].getBoundingClientRect());
+
+                        if (!skipNotify) {
+                            this.emit('refresh', this);
+                        }
+
+                        return rect;
                     },
                     // This method animates the addition of a class to the element and gets the
                     // most recent position information after the animation completes.
@@ -241,7 +248,7 @@
 
                 function draggableBeginDrag(draggable) {
                     forEach(C6DragSpaceCtrl.zones, function(zone) {
-                        zone.refresh();
+                        zone.refresh(true);
                     });
 
                     $scope.$apply(function() {
@@ -249,35 +256,64 @@
                     });
                 }
 
-                function draggableMove(draggable, rect) {
-                    var id, zone, currentlyUnder, isCollision, isTracked,
-                        zones = C6DragSpaceCtrl.zones;
+                function emitCollision(zone, draggable, skipApply) {
+                    var hit;
 
-                    function add() {
-                        zone.emit('draggableEnter', draggable);
-                        draggable.emit('enterZone', zone);
-                    }
+                    if (zone.currentlyUnder.indexOf(draggable) < 0) {
+                        hit = function hit() {
+                            zone.emit('draggableEnter', draggable);
+                            draggable.emit('enterZone', zone);
+                        };
 
-                    function remove() {
-                        zone.emit('draggableLeave', draggable);
-                        draggable.emit('leaveZone', zone);
-                    }
-
-                    for (id in zones) {
-                        zone = zones[id];
-                        currentlyUnder = zone.currentlyUnder;
-                        isCollision = zone.collidesWith(rect);
-                        isTracked = currentlyUnder.indexOf(draggable) > -1;
-
-
-                        if (isCollision && !isTracked) {
-                            $scope.$apply(add);
-                        } else if (!isCollision && isTracked) {
-                            $scope.$apply(remove);
+                        if (skipApply) {
+                            hit();
+                        } else {
+                            $scope.$apply(hit);
                         }
                     }
+                }
 
-                    draggable.emit('collisionsComputed', draggable);
+                function emitMiss(zone, draggable, skipApply) {
+                    var miss;
+
+                    if (zone.currentlyUnder.indexOf(draggable) > -1) {
+                        miss = function miss() {
+                            zone.emit('draggableLeave', draggable);
+                            draggable.emit('leaveZone', zone);
+                        };
+
+                        if (skipApply) {
+                            miss();
+                        } else {
+                            $scope.$apply(miss);
+                        }
+                    }
+                }
+
+                function draggableRefresh(draggable) {
+                    C6DragSpaceCtrl.computeCollisionsFor(
+                        draggable,
+                        C6DragSpaceCtrl.zones,
+                        function hit(zone) {
+                            emitCollision(zone, draggable);
+                        },
+                        function miss(zone) {
+                            emitMiss(zone, draggable);
+                        }
+                    );
+                }
+
+                function zoneRefresh(zone) {
+                    C6DragSpaceCtrl.computeCollisionsFor(
+                        zone,
+                        C6DragSpaceCtrl.draggables,
+                        function hit(draggable) {
+                            emitCollision(zone, draggable);
+                        },
+                        function miss(draggable) {
+                            emitMiss(zone, draggable);
+                        }
+                    );
                 }
 
                 function draggableEndDrag(draggable) {
@@ -288,13 +324,54 @@
                     });
                 }
 
+                // This method is accepts: item (a PositionState object), collection (an object
+                // whose values are PositionState objects), everyCollision (a function that will be
+                // invoked for every item in the collection that collides with the *item*), and
+                // everyMiss (a function that will be invoked for every item in the collection that
+                // does *not* collide with the *item*.
+                // The method is used internally when a draggable is dragged, or when its refresh
+                // method is called.
+                this.computeCollisionsFor = function(item, collection, everyCollision, everyMiss) {
+                    var key, otherItem,
+                    rect = item.display;
+
+                    for (key in collection) {
+                        otherItem = collection[key];
+
+                        if (otherItem.collidesWith(rect)) {
+                            everyCollision(otherItem);
+                        } else {
+                            everyMiss(otherItem);
+                        }
+                    }
+                };
+
+                // This method updates all draggables and zones in the drag space with their most
+                // up-to-date coordinates.
                 this.refresh = function() {
                     function refresh(item) {
-                        item.refresh();
+                        // We provide "true" to the refresh method here so the zone/draggable does
+                        // not emit its "refresh" event. If this event were emitted, the collisions
+                        // would be computed for each item many times unnecessarily. So, we skip
+                        // the notification and do the computation once at the end.
+                        item.refresh(true);
                     }
 
                     forEach(this.draggables, refresh);
                     forEach(this.zones, refresh);
+
+                    forEach(this.draggables, function(draggable) {
+                        this.computeCollisionsFor(
+                            draggable,
+                            this.zones,
+                            function hit(zone) {
+                                emitCollision(zone, draggable, true);
+                            },
+                            function miss(zone) {
+                                emitMiss(zone, draggable, true);
+                            }
+                        );
+                    }, this);
                 };
 
                 this.addDraggable = function(draggable) {
@@ -302,27 +379,49 @@
                     // the c6-draggable directive.
                     draggable
                         .on('begin', draggableBeginDrag)
-                        .on('move', draggableMove)
+                        .on('refresh', draggableRefresh)
                         .on('end', draggableEndDrag);
 
                     this.draggables[draggable.id] = draggable;
+                    this.refresh();
 
                     this.emit('draggableAdded', draggable);
                 };
 
                 this.removeDraggable = function(draggable) {
+                    var currentDragIndex = this.currentDrags.indexOf(draggable);
+
+                    if (currentDragIndex > -1) {
+                        this.currentDrags.splice(currentDragIndex, 1);
+                    }
+
+                    forEach(this.zones, function(zone) {
+                        if (zone.currentlyUnder.indexOf(draggable) > -1) {
+                            zone.emit('draggableLeave', draggable);
+                        }
+                    });
+
                     delete this.draggables[draggable.id];
 
                     this.emit('draggableRemoved', draggable);
                 };
 
                 this.addZone = function(zone) {
+                    zone.on('refresh', zoneRefresh);
+
                     this.zones[zone.id] = zone;
+                    this.refresh();
 
                     this.emit('zoneAdded', zone);
                 };
 
                 this.removeZone = function(zone) {
+                    forEach(this.draggables, function(draggable) {
+                        if (draggable.currentlyOver.indexOf(zone) > -1) {
+                            draggable.emit('leaveZone', zone);
+                        }
+                    });
+
                     delete this.zones[zone.id];
 
                     this.emit('zoneRemoved', zone);
@@ -335,7 +434,6 @@
                 return {
                     restrict: 'EAC',
                     controller: 'C6DragSpaceController',
-                    scope: true,
                     link: function(scope, $element, $attrs, Controller) {
                         $element.data('cDragCtrl', Controller);
 
@@ -365,7 +463,7 @@
                         C6DragSpaceCtrl.addZone(zone);
                         $element.data('cDragZone', zone);
 
-                        scope.$on('$destroy', function() {
+                        $element.on('$destroy', function() {
                             zone.removeAllListeners();
                             C6DragSpaceCtrl.removeZone(zone);
                         });
@@ -479,8 +577,11 @@
                                 }
                             }
 
-                            // Attach touch event listeners to the element.
+                            // Attach/remove touch event listeners to the element.
                             touchable.on('dragstart drag dragend', delegate);
+                            $element.on('$destroy', function() {
+                                touchable.off('dragstart drag dragend', delegate);
+                            });
                         }
 
                         if (C6DragSpaceCtrl) {
@@ -491,7 +592,7 @@
 
                         listenForEvents();
 
-                        scope.$on('$destroy', function() {
+                        $element.on('$destroy', function() {
                             draggable.removeAllListeners();
 
                             if (C6DragSpaceCtrl) {
