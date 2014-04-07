@@ -429,10 +429,30 @@
 
                             expect(Controller.zones.zone1).toBeDefined();
 
-                            $zone1.scope().$destroy();
                             $zone1.remove();
 
                             expect(Controller.zones.zone1).not.toBeDefined();
+                        });
+
+                        it('should clean up draggables if a zone is destroyed', function() {
+                            var finger = new Finger(),
+                                $drag1 = $dragSpace.find('#drag1'),
+                                $zone1 = $('<div id="zone1" c6-drag-zone style="height: 100px;"></div>'),
+                                drag1;
+
+                            $dragSpace.prepend($zone1);
+                            $scope.$apply(function() {
+                                $compile($zone1)($scope);
+                            });
+                            drag1 = $drag1.data('cDrag');
+
+                            finger.placeOn($drag1);
+                            finger.drag(-10, 0);
+
+                            $zone1.remove();
+
+                            expect(drag1.currentlyOver).toEqual([]);
+                            expect($drag1.hasClass('c6-over-zone')).toBe(false);
                         });
                     });
 
@@ -564,6 +584,37 @@
                             $drag1.remove();
 
                             expect(Controller.draggables.drag1).not.toBeDefined();
+                        });
+
+                        it('should clean up after a draggable that is destroyed mid-drag', function() {
+                            var finger = new Finger(),
+                                $drag1 = $dragSpace.find('#drag1'),
+                                $zone1 = new ZoneElement('zone1'),
+                                $zone2 = new ZoneElement('zone2'),
+                                zone1, zone2, drag1;
+
+                            $dragSpace.prepend($zone2);
+                            $dragSpace.prepend($zone1);
+                            $scope.$apply(function() {
+                                $compile($zone1)($scope);
+                                $compile($zone2)($scope);
+                            });
+                            zone1 = $zone1.data('cDragZone');
+                            zone2 = $zone2.data('cDragZone');
+                            drag1 = $drag1.data('cDrag');
+
+                            finger.placeOn($drag1);
+
+                            // Drag 25px to the left
+                            finger.drag(-25, 0);
+
+                            $drag1.remove();
+
+                            expect(Controller.currentDrags).toEqual([]);
+                            expect(zone1.currentlyUnder).toEqual([]);
+                            expect(zone2.currentlyUnder).toEqual([]);
+                            expect($zone1.hasClass('c6-drag-zone-active')).toBe(false);
+                            expect($zone2.hasClass('c6-drag-zone-active')).toBe(false);
                         });
                     });
 

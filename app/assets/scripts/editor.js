@@ -190,21 +190,6 @@
                             dropZone = dropZones[dropZones.length - 1],
                             zone = $element.inheritedData('cDragZone');
 
-                        function backToStart() {
-                            zone
-                                .once('animationComplete', function() {
-                                    $element.animate({
-                                        top: zone.display.top,
-                                        left: zone.display.left
-                                    }, {
-                                        complete: done,
-                                        progress: function() {
-                                            refresh($element);
-                                        }
-                                    });
-                                });
-                        }
-
                         function toNewPosition() {
                             var $ul = $element.closest('ul'),
                                 $dropZones = $ul.find('.card__drop-zone');
@@ -250,7 +235,7 @@
                         if (dropZone) {
                             return toNewPosition();
                         } else {
-                            return backToStart();
+                            return done();
                         }
                     }
 

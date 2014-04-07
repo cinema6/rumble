@@ -376,6 +376,18 @@
                 };
 
                 this.removeDraggable = function(draggable) {
+                    var currentDragIndex = this.currentDrags.indexOf(draggable);
+
+                    if (currentDragIndex > -1) {
+                        this.currentDrags.splice(currentDragIndex, 1);
+                    }
+
+                    forEach(this.zones, function(zone) {
+                        if (zone.currentlyUnder.indexOf(draggable) > -1) {
+                            zone.emit('draggableLeave', draggable);
+                        }
+                    });
+
                     delete this.draggables[draggable.id];
 
                     this.emit('draggableRemoved', draggable);
@@ -391,6 +403,12 @@
                 };
 
                 this.removeZone = function(zone) {
+                    forEach(this.draggables, function(draggable) {
+                        if (draggable.currentlyOver.indexOf(zone) > -1) {
+                            draggable.emit('leaveZone', zone);
+                        }
+                    });
+
                     delete this.zones[zone.id];
 
                     this.emit('zoneRemoved', zone);
@@ -432,7 +450,7 @@
                         C6DragSpaceCtrl.addZone(zone);
                         $element.data('cDragZone', zone);
 
-                        scope.$on('$destroy', function() {
+                        $element.on('$destroy', function() {
                             zone.removeAllListeners();
                             C6DragSpaceCtrl.removeZone(zone);
                         });
@@ -558,7 +576,7 @@
 
                         listenForEvents();
 
-                        scope.$on('$destroy', function() {
+                        $element.on('$destroy', function() {
                             draggable.removeAllListeners();
 
                             if (C6DragSpaceCtrl) {

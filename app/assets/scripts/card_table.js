@@ -170,7 +170,33 @@
                         });
                     }
 
-                    card.on('reorder', reorder);
+                    function dropStart(cardDraggable) {
+                        var deck, cardIndex;
+
+                        if (cardDraggable.currentlyOver.length) {
+                            return;
+                        }
+
+                        deck = $scope.deck;
+                        cardIndex = (function() {
+                            var result = -1;
+
+                            deck.some(function(card, index) {
+                                if (card.id === cardDraggable.id) {
+                                    result = index;
+                                }
+                            });
+
+                            return result;
+                        }());
+
+                        $scope.$apply(function() {
+                            deck.splice(cardIndex, 1);
+                        });
+                    }
+
+                    card.on('reorder', reorder)
+                        .on('dropStart', dropStart);
                 }
 
                 [
