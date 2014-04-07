@@ -324,6 +324,13 @@
                     });
                 }
 
+                // This method is accepts: item (a PositionState object), collection (an object
+                // whose values are PositionState objects), everyCollision (a function that will be
+                // invoked for every item in the collection that collides with the *item*), and
+                // everyMiss (a function that will be invoked for every item in the collection that
+                // does *not* collide with the *item*.
+                // The method is used internally when a draggable is dragged, or when its refresh
+                // method is called.
                 this.computeCollisionsFor = function(item, collection, everyCollision, everyMiss) {
                     var key, otherItem,
                     rect = item.display;
@@ -339,8 +346,14 @@
                     }
                 };
 
+                // This method updates all draggables and zones in the drag space with their most
+                // up-to-date coordinates.
                 this.refresh = function() {
                     function refresh(item) {
+                        // We provide "true" to the refresh method here so the zone/draggable does
+                        // not emit its "refresh" event. If this event were emitted, the collisions
+                        // would be computed for each item many times unnecessarily. So, we skip
+                        // the notification and do the computation once at the end.
                         item.refresh(true);
                     }
 
@@ -564,7 +577,7 @@
                                 }
                             }
 
-                            // Attach touch event listeners to the element.
+                            // Attach/remove touch event listeners to the element.
                             touchable.on('dragstart drag dragend', delegate);
                             $element.on('$destroy', function() {
                                 touchable.off('dragstart drag dragend', delegate);
