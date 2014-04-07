@@ -94,6 +94,9 @@
                 },
                 editor: {
                     deps: ['app']
+                },
+                players: {
+                    deps: ['app']
                 }
             },
 
