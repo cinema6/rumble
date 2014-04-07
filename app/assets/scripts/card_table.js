@@ -184,6 +184,7 @@
                             deck.some(function(card, index) {
                                 if (card.id === cardDraggable.id) {
                                     result = index;
+                                    return true;
                                 }
                             });
 
