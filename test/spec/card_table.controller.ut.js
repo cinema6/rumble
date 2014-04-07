@@ -45,6 +45,7 @@
                     $scope = $rootScope.$new();
                     $scope.$apply(function() {
                         CardTableCtrl = $controller('CardTableController', { $scope: $scope });
+                        $scope.Ctrl = CardTableCtrl;
                     });
                     $scope.$apply(function() {
                         DragCtrl = $controller('C6DragSpaceController', { $scope: $scope });
@@ -58,9 +59,74 @@
 
             describe('properties', function() {
                 describe('position', function() {
-                    it('should be 0', function() {
-                        expect(CardTableCtrl.position).toBe(0);
+                    it('should be an object with an x property of 0', function() {
+                        expect(CardTableCtrl.position).toEqual({ x: 0 });
                     });
+                });
+            });
+
+            describe('when a card should be reordered', function() {
+                var card1, card2, card3, card4, card5,
+                    zone1, zone2, zone3, zone4, zone5,
+                    model1, model2, model3, model4, model5,
+                    watchDeck;
+
+                beforeEach(function() {
+                    watchDeck = jasmine.createSpy('$watch deck');
+
+                    model1 = { id: 'rc-7bc713f331ae68' };
+                    model2 = { id: 'rc-b56ea317bbd92b' };
+                    model3 = { id: 'rc-8b25c1792c6ba1' };
+                    model4 = { id: 'rc-8c658546dc5c5f' };
+                    model5 = { id: 'rc-bc717117888f80' };
+
+                    $scope.deck = [model1, model2, model3, model4, model5];
+
+                    card1 = new Draggable('rc-7bc713f331ae68');
+                    card2 = new Draggable('rc-b56ea317bbd92b');
+                    card3 = new Draggable('rc-8b25c1792c6ba1');
+                    card4 = new Draggable('rc-8c658546dc5c5f');
+                    card5 = new Draggable('rc-bc717117888f80');
+
+                    zone1 = new Zone('drop-zone-rc-7bc713f331ae68');
+                    zone2 = new Zone('drop-zone-rc-b56ea317bbd92b');
+                    zone3 = new Zone('drop-zone-rc-8b25c1792c6ba1');
+                    zone4 = new Zone('drop-zone-rc-8c658546dc5c5f');
+                    zone5 = new Zone('drop-zone-rc-bc717117888f80');
+
+                    DragCtrl.addZone(new Zone('scroll-left'));
+                    DragCtrl.addZone(new Zone('scroll-right'));
+                    DragCtrl.addDraggable(card1);
+                    DragCtrl.addZone(zone1);
+                    DragCtrl.addDraggable(card2);
+                    DragCtrl.addZone(zone2);
+                    DragCtrl.addDraggable(card3);
+                    DragCtrl.addZone(zone3);
+                    DragCtrl.addDraggable(card4);
+                    DragCtrl.addZone(zone4);
+                    DragCtrl.addDraggable(card5);
+                    DragCtrl.addZone(zone5);
+
+                    $scope.$apply(function() {
+                        $scope.DragCtrl = DragCtrl;
+                    });
+                    $scope.$watchCollection('deck', watchDeck);
+                });
+
+                it('should reorder the deck so the dropped card is placed after the card of the zone it was dropped on', function() {
+                    card3.emit('reorder', zone1);
+                    expect($scope.deck).toEqual([model1, model3, model2, model4, model5]);
+
+                    card2.emit('reorder', zone5);
+                    expect($scope.deck).toEqual([model1, model3, model4, model5, model2]);
+
+                    card1.emit('reorder', zone2);
+                    expect($scope.deck).toEqual([model3, model4, model5, model2, model1]);
+
+                    card2.emit('reorder', zone5);
+                    expect($scope.deck).toEqual([model3, model4, model5, model2, model1]);
+
+                    expect(watchDeck.calls.count()).toBe(3);
                 });
             });
 
@@ -102,7 +168,7 @@
                         scrollZoneRight.emit('draggableEnter', card3);
 
                         $interval.flush(5000);
-                        expect(CardTableCtrl.position).toBe(0);
+                        expect(CardTableCtrl.position.x).toBe(0);
                     });
 
                     it('should scroll to the right 5px every 17ms while the card is in the zone', function() {
@@ -115,11 +181,11 @@
                         scrollZoneRight.emit('draggableEnter', card2);
 
                         $interval.flush(17);
-                        expect(CardTableCtrl.position).toBe(5);
+                        expect(CardTableCtrl.position.x).toBe(5);
                         $interval.flush(17);
-                        expect(CardTableCtrl.position).toBe(10);
+                        expect(CardTableCtrl.position.x).toBe(10);
                         $interval.flush(17);
-                        expect(CardTableCtrl.position).toBe(15);
+                        expect(CardTableCtrl.position.x).toBe(15);
 
                         scrollZoneRight.currentlyUnder.splice(
                             scrollZoneRight.currentlyUnder.indexOf(
@@ -130,7 +196,7 @@
                         scrollZoneRight.emit('draggableLeave', card3);
 
                         $interval.flush(17);
-                        expect(CardTableCtrl.position).toBe(20);
+                        expect(CardTableCtrl.position.x).toBe(20);
 
                         scrollZoneRight.currentlyUnder.splice(
                             scrollZoneRight.currentlyUnder.indexOf(
@@ -141,8 +207,8 @@
                         scrollZoneRight.emit('draggableLeave', card2);
 
                         $interval.flush(500);
-                        expect(CardTableCtrl.position).toBe(20);
-                        expect(DragCtrl.refresh.calls.count()).toBe(4);
+                        expect(CardTableCtrl.position.x).toBe(20);
+                        expect(DragCtrl.refresh.calls.count()).toBe(5);
                     });
 
                     it('should stop scrolling if the card is released during scrolling', function() {
@@ -166,7 +232,7 @@
                         scrollZoneRight.emit('draggableLeave', card2);
 
                         $interval.flush(1000);
-                        expect(CardTableCtrl.position).toBe(0);
+                        expect(CardTableCtrl.position.x).toBe(0);
                     });
                 });
 
@@ -178,11 +244,11 @@
                         scrollZoneLeft.emit('draggableEnter', card1);
 
                         $interval.flush(5000);
-                        expect(CardTableCtrl.position).toBe(0);
+                        expect(CardTableCtrl.position.x).toBe(0);
                     });
 
                     it('should scroll to the left 1px every 5ms while the card is in the zone', function() {
-                        CardTableCtrl.position = 50;
+                        CardTableCtrl.position.x = 50;
 
                         DragCtrl.currentDrags.push(card2);
 
@@ -193,11 +259,11 @@
                         scrollZoneLeft.emit('draggableEnter', card2);
 
                         $interval.flush(17);
-                        expect(CardTableCtrl.position).toBe(45);
+                        expect(CardTableCtrl.position.x).toBe(45);
                         $interval.flush(17);
-                        expect(CardTableCtrl.position).toBe(40);
+                        expect(CardTableCtrl.position.x).toBe(40);
                         $interval.flush(17);
-                        expect(CardTableCtrl.position).toBe(35);
+                        expect(CardTableCtrl.position.x).toBe(35);
 
                         scrollZoneLeft.currentlyUnder.splice(
                             scrollZoneLeft.currentlyUnder.indexOf(
@@ -208,7 +274,7 @@
                         scrollZoneLeft.emit('draggableLeave', card3);
 
                         $interval.flush(17);
-                        expect(CardTableCtrl.position).toBe(30);
+                        expect(CardTableCtrl.position.x).toBe(30);
 
                         scrollZoneLeft.currentlyUnder.splice(
                             scrollZoneLeft.currentlyUnder.indexOf(
@@ -219,12 +285,12 @@
                         scrollZoneLeft.emit('draggableLeave', card2);
 
                         $interval.flush(500);
-                        expect(CardTableCtrl.position).toBe(30);
-                        expect(DragCtrl.refresh.calls.count()).toBe(4);
+                        expect(CardTableCtrl.position.x).toBe(30);
+                        expect(DragCtrl.refresh.calls.count()).toBe(5);
                     });
 
                     it('should stop scrolling if the card is released during scrolling', function() {
-                        CardTableCtrl.position = 300;
+                        CardTableCtrl.position.x = 300;
 
                         DragCtrl.currentDrags.push(card2);
 
@@ -246,7 +312,7 @@
                         scrollZoneLeft.emit('draggableLeave', card2);
 
                         $interval.flush(1000);
-                        expect(CardTableCtrl.position).toBe(300);
+                        expect(CardTableCtrl.position.x).toBe(300);
                     });
                 });
             });

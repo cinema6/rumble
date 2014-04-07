@@ -47,27 +47,28 @@ c6-drag-space {
     margin: 0 5px;
 }
     .card__drop-zone.c6-drag-zone-active {
-        width: 10rem;
+        width: calc(10rem + 34px);
     }
     .card__drop-zone--reordering {
-        width: 10rem !important;
+        width: 2px !important;
     }
-.card__item {
-    white-space: normal;
+.card__list-item {
     display: inline-block;
-    border: solid grey 1px;
-    width: 10rem; height: 13rem;
-    vertical-align: top;
-    background: grey;
-    opacity: 0.4;
 }
-    .card__item.c6-over-zone {
-        opacity: 1;
+    .card__item {
+        white-space: normal;
+        width: 10rem; height: 13rem;
+        vertical-align: top;
+        background: grey;
+        opacity: 0.4;
     }
+        .card__item.c6-over-zone {
+            opacity: 1;
+        }
 
 .new__container {
     display: inline-block;
-    margin: 0 10px;
+    margin: 0 22px 0 10px;
     width: 5rem; height: 13rem;
     position: relative;
 }
@@ -80,14 +81,7 @@ c6-drag-space {
     top: 0; right: 0; bottom: 0; left: 0;
     margin: auto;
     position: absolute; z-index: -10;
-    -webkit-transition: -webkit-transform 0.3s;
 }
-    .new__button.c6-drag-zone-active {
-        -webkit-transform: scale(1.2, 1.2);
-    }
-    .new__button--drop-zone {
-        background: green;
-    }
 
 .c6-dragging {
     cursor: move;

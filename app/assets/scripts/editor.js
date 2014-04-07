@@ -12,7 +12,7 @@
                     function shrink($element, done) {
                         $element
                             .animate({
-                                width: '0px'
+                                width: '2px'
                             },{
                                 complete: done,
                                 progress: function() {
@@ -34,9 +34,15 @@
                 },
                 beforeAddClass: function($element, className, done) {
                     function grow($element, done) {
+                        var remPx = parseInt(
+                            angular.element('html')
+                                .css('font-size'),
+                            10
+                        );
+
                         $element
                             .animate({
-                                width: '10rem'
+                                width: ((10 * remPx) + 34) + 'px'
                             },{
                                 complete: done,
                                 progress: function() {
@@ -60,13 +66,9 @@
         })
 
         .animation('.new__container', function() {
-            var width = null;
-
             return {
                 beforeAddClass: function($element, className, done) {
                     function hide($element, done) {
-                        width = $element.width();
-
                         $element.animate({
                             width: 0,
                             margin: 0
@@ -92,9 +94,9 @@
                 removeClass: function($element, className, done) {
                     function show($element, done) {
                         $element.animate({
-                            width: width + 'px',
-                            margin: '0 10px'
-                        },{
+                            width: '5rem',
+                            margin: '0 22px 0 10px'
+                        }, {
                             complete: done,
                             progress: function() {
                                 refresh($element);
@@ -128,6 +130,11 @@
                                 refresh($element);
                             }
                         });
+
+                        return function() {
+                            $element.stop();
+                            $element.removeAttr('style');
+                        };
                     }
 
                     switch (className) {
@@ -152,6 +159,11 @@
                                 refresh($element);
                             }
                         });
+
+                        return function() {
+                            $element.stop();
+                            $element.removeAttr('style');
+                        };
                     }
 
                     switch (className) {
@@ -164,14 +176,18 @@
             };
         })
 
-        .animation('.card__item', function() {
+        .animation('.card__item', function($animate) {
+            var forEach = angular.forEach,
+                $ = angular.element;
+
             return {
                 beforeRemoveClass: function($element, className, done) {
                     function zipBack($element, done) {
                         var draggable = $element.data('cDrag'),
-                            dropZone = draggable.currentlyOver.filter(function(zone) {
+                            dropZones = draggable.currentlyOver.filter(function(zone) {
                                 return zone.id.search(/drop-zone-\w+/) > -1;
-                            })[0],
+                            }),
+                            dropZone = dropZones[dropZones.length - 1],
                             zone = $element.inheritedData('cDragZone');
 
                         function backToStart() {
@@ -190,41 +206,51 @@
                         }
 
                         function toNewPosition() {
-                            var $container = $element.parent(),
-                                $newButton = $container.nextAll('.new__container').first();
+                            var $ul = $element.closest('ul'),
+                                $dropZones = $ul.find('.card__drop-zone');
 
-                            $container.addClass('card__container--reordering');
                             dropZone.$element.addClass('card__drop-zone--reordering');
-                            $newButton.insertBefore(dropZone.$element);
+                            draggable.emit('reorder', dropZone);
 
                             zone.once('animationComplete', function() {
                                 $element.animate({
-                                    top: dropZone.display.center.y - (draggable.display.height / 2),
-                                    left: dropZone.display.center.x - (draggable.display.width / 2)
+                                    top: zone.display.top,
+                                    left: zone.display.left
                                 }, {
-                                    complete: function() {
-                                        refresh($element);
-                                        draggable.emit('reorderAnimated', dropZone);
-                                        $container.removeClass(
-                                            'card__container--reordering'
-                                        );
-                                        dropZone.$element.removeClass(
-                                            'card__drop-zone--reordering'
-                                        );
-                                        refresh($element);
-                                    },
                                     progress: function() {
+                                        draggable.refresh();
+                                    },
+                                    complete: function() {
+                                        dropZone.$element.removeClass(
+                                            [
+                                                'card__drop-zone--reordering',
+                                                'c6-drag-zone-active'
+                                            ].join(' ')
+                                        );
+                                        forEach($dropZones, function(dropZone) {
+                                            $animate.removeClass(
+                                                $(dropZone),
+                                                'c6-drag-zone-active'
+                                            );
+                                        });
+                                        done();
                                         refresh($element);
                                     }
                                 });
                             });
+
+                            return function() {
+                                dropZone.$element.removeClass(
+                                    'card__drop-zone--reordering'
+                                );
+                            };
                         }
 
 
                         if (dropZone) {
-                            toNewPosition();
+                            return toNewPosition();
                         } else {
-                            backToStart();
+                            return backToStart();
                         }
                     }
 

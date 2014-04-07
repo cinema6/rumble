@@ -5,7 +5,8 @@
         describe('c6-bind-scroll=""', function() {
             var $rootScope,
                 $scope,
-                $compile;
+                $compile,
+                $timeout;
 
             var $scroller;
 
@@ -15,6 +16,7 @@
                 inject(function($injector) {
                     $rootScope = $injector.get('$rootScope');
                     $compile = $injector.get('$compile');
+                    $timeout = $injector.get('$timeout');
 
                     $scope = $rootScope.$new();
                 });
@@ -58,18 +60,22 @@
             it('should bind from the element to the data', function() {
                 $scroller.scrollLeft(25);
                 $scroller.trigger('scroll');
+                $timeout.flush();
                 expect($scope.scroll.x).toBe(25);
 
                 $scroller.scrollTop(50);
                 $scroller.trigger('scroll');
+                $timeout.flush();
                 expect($scope.scroll.y).toBe(50);
 
                 $scroller.scrollLeft(44);
                 $scroller.trigger('scroll');
+                $timeout.flush();
                 expect($scope.scroll.x).toBe(44);
 
                 $scroller.scrollTop(63);
                 $scroller.trigger('scroll');
+                $timeout.flush();
                 expect($scope.scroll.y).toBe(63);
             });
 

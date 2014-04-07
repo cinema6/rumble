@@ -1,12 +1,23 @@
 (function() {
     'use strict';
 
+    var forEach = angular.forEach;
+
     angular.module('c6.mrmaker')
-        .directive('c6BindScroll', [function() {
+        .directive('c6BindScroll', ['c6Debounce',
+        function                   ( c6Debounce ) {
             return {
                 restrict: 'A',
                 link: function(scope, $element, $attrs) {
-                    var element_ = $element[0];
+                    var element_ = $element[0],
+                        update = c6Debounce(function() {
+                            var scroll = scope.$eval($attrs.c6BindScroll);
+
+                            scope.$apply(function() {
+                                scroll.x = element_.scrollLeft;
+                                scroll.y = element_.scrollTop;
+                            });
+                        }, 100);
 
                     scope.$watch($attrs.c6BindScroll, function(scroll) {
                         element_.scrollTop = scroll.y;
@@ -16,12 +27,48 @@
                         scroll.x = element_.scrollLeft;
                     }, true);
 
-                    $element.on('scroll', function() {
-                        var scroll = scope.$eval($attrs.c6BindScroll);
+                    $element.on('scroll', update);
+                }
+            };
+        }])
 
-                        scope.$apply(function() {
-                            scroll.x = element_.scrollLeft;
-                            scroll.y = element_.scrollTop;
+        .directive('renderDeck', [function() {
+            return {
+                transclude: 'element',
+                link: function(scope, $element, attrs, controller, transclude) {
+                    var deck = attrs.renderDeck,
+                        $parent = $element.parent(),
+                        cache = {};
+
+                    function CardView(data) {
+                        var cardScope = scope.$new();
+
+                        cardScope.this = data;
+
+                        this.$element = transclude(cardScope, function($clone) {
+                            $parent.append($clone);
+                        });
+                        this.data = data;
+                        this.scope = cardScope;
+                    }
+
+                    scope.$watchCollection(deck, function(deck) {
+                        forEach(deck, function(card) {
+                            var view = cache[card.id];
+
+                            if (view) {
+                                $parent.append(view.$element);
+                            } else {
+                                cache[card.id] = new CardView(card);
+                            }
+                        });
+
+                        forEach(cache, function(view, id) {
+                            if (deck.indexOf(view.data) < 0) {
+                                delete cache[id];
+                                view.scope.$destroy();
+                                view.$element.remove();
+                            }
                         });
                     });
                 }
@@ -44,7 +91,8 @@
 
         .controller('CardTableController', ['$scope','$q','$interval',
         function                           ( $scope , $q , $interval ) {
-            var self = this;
+            var self = this,
+                forEach = angular.forEach;
 
             function getDragCtrl() {
                 var deferred = $q.defer(),
@@ -79,8 +127,7 @@
                         }
 
                         scrollInterval = $interval(function() {
-                            self.position += (5 * multiplyer);
-                            DragCtrl.refresh();
+                            self.position.x += (5 * multiplyer);
                         }, 17);
                     }
 
@@ -98,13 +145,47 @@
                         .on('draggableLeave', leaveScrollZone);
                 }
 
+                function addCard(card) {
+                    function reorder(zone) {
+                        var deck = $scope.deck,
+                            afterId = zone.id.match(/rc-\w+/)[0],
+                            afterCard = null,
+                            myCard = null,
+                            myIndex = -1;
+
+                        forEach(deck, function(crd, index) {
+                            if (crd.id === afterId) {
+                                afterCard = crd;
+                            }
+
+                            if (crd.id === card.id) {
+                                myCard = crd;
+                                myIndex = index;
+                            }
+                        });
+
+                        $scope.$apply(function() {
+                            deck.splice(myIndex, 1);
+                            deck.splice(deck.indexOf(afterCard) + 1, 0, myCard);
+                        });
+                    }
+
+                    card.on('reorder', reorder);
+                }
+
                 [
                     DragCtrl.zones['scroll-left'],
                     DragCtrl.zones['scroll-right']
                 ].forEach(addScrollZone);
+
+                forEach(DragCtrl.draggables, addCard);
+
+                $scope.$watch('Ctrl.position.x', function() {
+                    DragCtrl.refresh();
+                });
             }
 
-            this.position = 0;
+            this.position = { x: 0 };
 
             getDragCtrl()
                 .then(handleDragEvents);

@@ -1,21 +1,22 @@
 <c6-drag-space class="table__group" controller-as="DragCtrl" id="drag-space" c6-drag-zone>
     <div class="table__left-zone" id="scroll-left" c6-drag-zone>&nbsp;</div>
-    <ul class="card__list" c6-bind-scroll="{x: Ctrl.position }">
-        <li class="card__container"
-            ng-repeat-start="this in deck"
-            ng-class="{
-                'card__container--dragging': DragCtrl.currentDrags[0] === DragCtrl.draggables[this.id]
-            }"
-            id="container-{{this.id}}"
-            c6-drag-zone>
-            <div id="{{this.id}}" c6-draggable class="card__item">
-                <h3>{{this.title}}</h3>
-                <button ng-click="editCard({ card: this })">Edit</button>
+    <ul class="card__list" c6-bind-scroll="Ctrl.position">
+        <li class="card__list-item" render-deck="deck">
+            <div class="card__container"
+                ng-class="{
+                    'card__container--dragging': DragCtrl.currentDrags[0] === DragCtrl.draggables[this.id]
+                }"
+                id="container-{{this.id}}"
+                c6-drag-zone>
+                <div id="{{this.id}}" c6-draggable class="card__item">
+                    <h3>{{this.title}}</h3>
+                    <button ng-click="editCard({ card: this })">Edit</button>
+                </div>
             </div>
-        </li>
-        <li id="drop-zone-{{this.id}}" ng-show="DragCtrl.currentDrags[0] !== DragCtrl.draggables[this.id]" c6-drag-zone class="card__drop-zone">&nbsp;</li>
-        <li ng-repeat-end class="new__container" ng-hide="DragCtrl.currentDrags.length">
-            <button class="new__button" id="zone-{{this.id}}" data-index={{$index}}>+</button>
+            <div id="drop-zone-{{this.id}}" ng-show="DragCtrl.currentDrags[0] !== DragCtrl.draggables[this.id]" c6-drag-zone class="card__drop-zone">&nbsp;</div>
+            <div class="new__container" ng-hide="DragCtrl.currentDrags.length">
+                <button class="new__button" id="zone-{{this.id}}" data-index={{$index}}>+</button>
+            </div>
         </li>
     </ul>
     <div class="table__right-zone" id="scroll-right" c6-drag-zone>&nbsp;</div>
