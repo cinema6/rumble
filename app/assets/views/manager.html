@@ -30,7 +30,7 @@
 
 <div class="container miniReels__group">
     <ul class="miniReels__list grid">
-        <li class=".miniReels__item grid__item grid__item--oneFourth lap--oneHalf lapWide--oneThird"
+        <li class="miniReels__item grid__item grid__item--oneFourth lap--oneHalf lapWide--oneThird"
             ng-repeat="this in minireels">
             <article class="miniReel__group">
                 <div ng-click="ManagerCtrl.edit(this)" class="miniReel__imgBox">
@@ -44,6 +44,7 @@
                     <div class="ui__divider--pause">&hellip;</div>
                     <div class="miniReel__status miniReel__status--public">
                         <strong class="statusText">Published</strong> 3/11/2014
+                        <span class="ui__statusIcon sprite--alpha">&nbsp;</span>
                     </div>
                 </div>
                 <form class="miniReel__quickActions">
@@ -55,6 +56,6 @@
             </article>
         </li>
     </ul>
-    <p ng-show="!minireels.length">You have no Mini Reels. Would you like to <a>create one?</a></p>
+    <p ng-show="!minireels.length">You have no Mini Reels. Would you like to <a href="#" title="Create A MiniReel">create one?</a></p>
 </div>
 </main>
