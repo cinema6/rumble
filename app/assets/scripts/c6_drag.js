@@ -566,6 +566,9 @@
 
                             // Attach touch event listeners to the element.
                             touchable.on('dragstart drag dragend', delegate);
+                            $element.on('$destroy', function() {
+                                touchable.off('dragstart drag dragend', delegate);
+                            });
                         }
 
                         if (C6DragSpaceCtrl) {
