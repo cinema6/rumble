@@ -9,7 +9,11 @@
                 $preview;
 
             beforeEach(function() {
-                module('c6.mrmaker');
+                module('c6.mrmaker', function($provide) {
+                    $provide.value('youtube', {
+                        Player: function() {}
+                    });
+                });
 
                 inject(function($injector) {
                     $rootScope = $injector.get('$rootScope');
@@ -39,17 +43,17 @@
                     expect($preview.find('iframe').length).toBe(0);
                 });
 
-                it('should create a youtube embed iframe when a videoid is provided', function() {
-                    var $iframe;
+                it('should create a youtube player when a videoid is provided', function() {
+                    var $youtube;
 
                     $scope.$apply(function() {
                         $scope.videoid = 'gy1B3agGNxw';
                     });
-                    $iframe = $preview.find('iframe');
+                    $youtube = $preview.find('youtube-player');
 
-                    expect($iframe.length).toBe(1);
+                    expect($youtube.length).toBe(1);
 
-                    expect($iframe.attr('src')).toBe('//www.youtube.com/embed/gy1B3agGNxw?rel=0');
+                    expect($youtube.attr('videoid')).toBe('gy1B3agGNxw');
                 });
             });
 

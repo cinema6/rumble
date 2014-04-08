@@ -37,7 +37,8 @@
                     'Strong'
                 ],
                 googleAnalytics: 'ga',
-                crypto: 'CryptoJS'
+                crypto: 'CryptoJS',
+                youtube: 'YT'
             };
 
             angular.forEach(config, function(value, key) {
