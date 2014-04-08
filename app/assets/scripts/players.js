@@ -2,6 +2,20 @@
     'use strict';
 
     angular.module('c6.mrmaker')
+        .service('VimeoPlayerService', [function() {
+            var service = this;
+
+            this.players = {};
+
+            this.Player = function(id) {
+                this.call = function(method) {
+
+                };
+
+                service.players[id] = this;
+            };
+        }])
+
         .directive('youtubePlayer', ['youtube','c6EventEmitter','$interval',
         function                    ( youtube , c6EventEmitter , $interval ) {
             return {
