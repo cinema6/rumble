@@ -35,7 +35,8 @@
                     'scripts/manager',
                     'scripts/editor',
                     'scripts/c6_state',
-                    'scripts/c6_drag'
+                    'scripts/c6_drag',
+                    'scripts/card_table'
                 ];
             }
         }()),
@@ -48,6 +49,7 @@
                     libUrl('gsap/1.11.2-0-g79f8c87/TimelineMax.min.js'),
                     libUrl('cryptojs/v3.1.2/sha1.js'),
                     libUrl('angular/v1.2.14-0-g729fb13/angular.min.js'),
+                    libUrl('angular/v1.2.14-0-g729fb13/angular-animate.min.js'),
                     libUrl('c6ui/v2.5.0-0-gc58e712/c6uilib.min.js'),
                     libUrl('c6ui/v2.5.0-0-gc58e712/c6log.min.js')
                 ];
@@ -59,6 +61,7 @@
                     libUrl('gsap/1.11.2-0-g79f8c87/TimelineMax.min.js'),
                     libUrl('cryptojs/v3.1.2/sha1.js'),
                     libUrl('angular/v1.2.14-0-g729fb13/angular.js'),
+                    libUrl('angular/v1.2.14-0-g729fb13/angular-animate.min.js'),
                     libUrl('c6ui/v2.5.0-0-gc58e712/c6uilib.js'),
                     libUrl('c6ui/v2.5.0-0-gc58e712/c6log.js')
                 ];
@@ -101,7 +104,7 @@
         dev: 'http://s3.amazonaws.com/c6.dev/media/src/stub',
         cdn: 'http://cdn1.cinema6.com/src/stub'
     };
-    c6.kModDeps = ['c6.ui', 'c6.state', 'c6.log', 'c6.drag'];
+    c6.kModDeps = ['c6.ui', 'c6.state', 'c6.log', 'c6.drag', 'ngAnimate'];
 
     if (window.location.host.match(/\/\/(www\.)*cinema6.com/) !== null){
         ga('create', 'UA-44457821-2', 'cinema6.com');
