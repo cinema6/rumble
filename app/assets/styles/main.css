@@ -91,3 +91,8 @@ c6-drag-space {
 .field {
     display: block;
 }
+
+youtube-player {
+    display: block;
+    width: 420px; height: 315px;
+}

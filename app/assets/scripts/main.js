@@ -33,6 +33,7 @@
                     'scripts/app',
                     'scripts/services',
                     'scripts/manager',
+                    'scripts/players',
                     'scripts/editor',
                     'scripts/c6_state',
                     'scripts/c6_drag',
@@ -43,6 +44,7 @@
         libScripts = (function() {
             if (__C6_BUILD_VERSION__) {
                 return [
+                    '//www.youtube.com/iframe_api',
                     libUrl('modernizr/modernizr.custom.71747.js'),
                     libUrl('jquery/2.0.3-0-gf576d00/jquery.min.js'),
                     libUrl('gsap/1.11.2-0-g79f8c87/TweenMax.min.js'),
@@ -55,6 +57,7 @@
                 ];
             } else {
                 return [
+                    '//www.youtube.com/iframe_api',
                     libUrl('modernizr/modernizr.custom.71747.js'),
                     libUrl('jquery/2.0.3-0-gf576d00/jquery.js'),
                     libUrl('gsap/1.11.2-0-g79f8c87/TweenMax.min.js'),

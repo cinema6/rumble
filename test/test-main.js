@@ -95,6 +95,9 @@
                 editor: {
                     deps: ['app']
                 },
+                players: {
+                    deps: ['app']
+                },
                 card_table: {
                     deps: ['app', 'c6_drag']
                 }
