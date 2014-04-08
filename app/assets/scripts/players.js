@@ -21,11 +21,28 @@
                     function VideoPlayer(id, $iframe) {
                         var self = this,
                             hasPaused = false,
+                            currentTimeInterval = null,
                             player = new youtube.Player($iframe[0], {
                                 events: {
                                     onReady: function onReady() {
                                         state.readyState = 0;
                                         self.emit('ready');
+
+                                        currentTimeInterval = $interval(function pollCurrentTime() {
+                                            state.currentTime = player.getCurrentTime();
+
+                                            if (state.currentTime !== publicTime) {
+                                                publicTime = state.currentTime;
+                                                self.emit('timeupdate');
+                                            }
+
+                                            if (state.seeking) {
+                                                if (state.currentTime !== seekStartTime) {
+                                                    state.seeking = false;
+                                                    self.emit('seeked');
+                                                }
+                                            }
+                                        }, 250);
                                     },
                                     onStateChange: function onStateChange(event) {
                                         var PlayerState = youtube.PlayerState;
@@ -71,22 +88,7 @@
                                 paused: true,
                                 seeking: false,
                                 readyState: -1
-                            },
-                            currentTimeInterval = $interval(function pollCurrentTime() {
-                                state.currentTime = player.getCurrentTime();
-
-                                if (state.currentTime !== publicTime) {
-                                    publicTime = state.currentTime;
-                                    self.emit('timeupdate');
-                                }
-
-                                if (state.seeking) {
-                                    if (state.currentTime !== seekStartTime) {
-                                        state.seeking = false;
-                                        self.emit('seeked');
-                                    }
-                                }
-                            }, 250);
+                            };
 
                         Object.defineProperties(this, {
                             currentTime: {

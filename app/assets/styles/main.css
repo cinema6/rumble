@@ -10,3 +10,8 @@ html { height: 100%; width: 100%;}
 .field {
     display: block;
 }
+
+youtube-player {
+    display: block;
+    width: 420px; height: 315px;
+}

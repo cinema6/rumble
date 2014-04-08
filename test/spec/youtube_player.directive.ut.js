@@ -110,6 +110,14 @@
 
                     expect(youtube.Player).toHaveBeenCalledWith(iframe, jasmine.any(Object));
                 });
+
+                it('should create an interval after the player is ready', function() {
+                    expect($interval).not.toHaveBeenCalled();
+
+                    player._trigger('onReady', {});
+
+                    expect($interval).toHaveBeenCalled();
+                });
             });
 
             describe('when the player is destroyed', function() {
@@ -122,6 +130,7 @@
                         $player = $compile('<youtube-player videoid="gy1B3agGNxw"></youtube-player>')($scope);
                     });
                     $player.data('video').on('destroy', destroySpy);
+                    player._trigger('onReady', {});
 
                     $player.remove();
                 });
@@ -167,6 +176,10 @@
 
                 describe('properties', function() {
                     describe('currentTime', function() {
+                        beforeEach(function() {
+                            player._trigger('onReady', {});
+                        });
+
                         describe('getting', function() {
                             it('should be 0 initially', function() {
                                 expect(video.currentTime).toBe(0);
@@ -330,6 +343,7 @@
 
                     describe('seeking', function() {
                         beforeEach(function() {
+                            player._trigger('onReady', {});
                             player._trigger('onStateChange', { data: youtube.PlayerState.PLAYING });
                         });
 
