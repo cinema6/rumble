@@ -2,18 +2,72 @@
     'use strict';
 
     angular.module('c6.mrmaker')
-        .service('VimeoPlayerService', [function() {
+        .service('VimeoPlayerService', ['$q','$window','$rootScope',
+        function                       ( $q , $window , $rootScope ) {
             var service = this;
+
+            function delegateMessage(event) {
+                var data = event.data,
+                    /* jshint camelcase:false */
+                    player = service.players[data.player_id];
+                    /* jshint camelcase:true */
+
+                if (!player) { return; }
+
+                $rootScope.$apply(function() {
+                    player.handleMessage(data);
+                });
+            }
 
             this.players = {};
 
-            this.Player = function(id) {
-                this.call = function(method) {
+            this.Player = function(id, $iframe) {
+                var pending = {};
 
+                this.handleMessage = function(data) {
+                    var method = data.method,
+                        value = data.value;
+
+                    pending[method].resolve(value);
+                };
+
+                this.call = function(method, data) {
+                    var deferred = $q.defer(),
+                        message = {
+                            method: method
+                        };
+
+                    if (arguments.length > 1) {
+                        message.value = data;
+                    }
+
+                    $iframe[0].contentWindow.postMessage(
+                        angular.toJson(message),
+                        '*'
+                    );
+
+                    switch (method) {
+                    case 'play':
+                    case 'pause':
+                    case 'seekTo':
+                    case 'unload':
+                    case 'setColor':
+                    case 'setLoop':
+                    case 'setVolume':
+                        deferred.resolve();
+                        break;
+
+                    default:
+                        pending[method] = deferred;
+                    }
+
+                    return deferred.promise;
                 };
 
                 service.players[id] = this;
             };
+
+            $window.addEventListener('message', delegateMessage, false);
         }])
 
         .directive('youtubePlayer', ['youtube','c6EventEmitter','$interval',
