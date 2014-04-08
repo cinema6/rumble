@@ -126,6 +126,9 @@
     .ui__divider--pause {
         line-height: 1;
     }
+    .ui-divider--bar {
+        color:#ccc;
+    }
 
 
 /*  ==========================================================================
@@ -200,73 +203,92 @@
     .pageHeader {
         margin-bottom:1.5em;
     }
+        .pageHeader--editor {
+            margin-bottom:0; padding-bottom:1px;
+        }
         .pageTitle {
             color:#565656; font-weight:100; font-size:1.875em; margin:1rem 0 0 0;
         }
-        .pageHeader__actions .filters__list {
+        .pageHeader__actions .filters__list,
+        .pageHeader__actions .metaData__group {
             float:left;
         }
         .pageHeader__actions .toolbar__group {
             float:right; margin-bottom:0.6875em;
         }
 
-
-/*  ==========================================================================
-    filters__list
+    /*  filters__list
     ========================================================================== */
-    .filters__list {
-        margin:0.375em 0 1em 0; padding:0; list-style:none;
-    }
-        .filters__item {
-            display:inline;
+        .filters__list {
+            margin:0.375em 0 1em 0; padding:0; list-style:none;
         }
-        .filters__btn {
-            border:0; border-radius:3px; padding:0.25em 0.5em 0.1875em 0.5em; margin:0;
-            font-size:1em; color:#565656; font-weight:700; 
-            text-align: center; line-height: 1;
-            background:transparent;
-            cursor:pointer;
-            -webkit-transition: background 0.5s, color 0.5s; transition: background 0.5s, color 0.5s;
-        }
-            .filters__btn:hover {
-                background:#eee;
+            .filters__item {
+                display:inline;
             }
-            .filters__btn--active, .filters__btn--active:hover {
-                background:#565656;
-                color:#fff;
+            .filters__btn {
+                border:0; border-radius:3px; padding:0.25em 0.5em 0.1875em 0.5em; margin:0;
+                font-size:1em; color:#565656; font-weight:700; 
+                text-align: center; line-height: 1;
+                background:transparent;
+                cursor:pointer;
+                -webkit-transition: background 0.5s, color 0.5s; transition: background 0.5s, color 0.5s;
             }
-            .filters__btn--special {
-                color:#d61212;
-            }
+                .filters__btn:hover {
+                    background:#eee;
+                }
+                .filters__btn--active, .filters__btn--active:hover {
+                    background:#565656;
+                    color:#fff;
+                }
+                .filters__btn--special {
+                    color:#d61212;
+                }
 
-
-/*  ==========================================================================
-    toolbar__group
+    /*  metaData__group
     ========================================================================== */
-    .toolbar__group {
-        margin:0; padding:0; list-style: none;
-    }
-        .toolbar__item {
-            display:inline;
+        .metaData__group {
+            margin:0.375em 0 1em 0;
         }
-        .toolbar__btn {
-            margin:0; padding:0.6875rem 1.5rem 0.625rem 1.5rem; 
-            border:0; border-radius:3px;
-            font-size:0.875em; color:#fff; font-weight:700; line-height: 1;
-            background:#4a9cd1;
-            cursor:pointer;
-            -webkit-transition: background 0.5s; transition: background 0.5s;
+
+
+    /*  toolbar__group
+    ========================================================================== */
+        .toolbar__group {
+            margin:0; padding:0; list-style: none;
         }
-            .toolbar__btn:hover {
-                background:#13a2ff;
+            .toolbar__item {
+                display:inline;
             }
-        .toolbar__newMiniReel {
-            padding-left:2.375rem;
-            position: relative;
-        }
-            .toolbar__newMiniReel .ui__plus {
-                position:absolute; left:1.5em; top:0.875em;
+            .toolbar__btn {
+                margin:0; padding:0.6875rem 1.5rem 0.625rem 1.5rem; 
+                border:0; border-radius:3px;
+                font-size:0.875em; color:#fff; font-weight:700; line-height: 1;
+                background:#4a9cd1;
+                cursor:pointer;
+                -webkit-transition: background 0.5s; transition: background 0.5s;
             }
+                .toolbar__btn:hover {
+                    background:#13a2ff;
+                }
+            .toolbar__newMiniReel {
+                padding-left:2.375rem;
+                position: relative;
+            }
+                .toolbar__newMiniReel .ui__plus {
+                    position:absolute; left:1.5em; top:0.875em;
+                }
+            .toolbar__makePrivate {
+                background:#646464;
+            }
+                .toolbar__makePrivate:hover {
+                    background:#8e8e8e;
+                }
+            .toolbar__publish {
+                background:#72ad25;
+            }
+                .toolbar__publish:hover {
+                    background:#7cc61b;
+                }
 
 
 /*  ==========================================================================
@@ -392,6 +414,126 @@
                     color:#ee1b1b; border-bottom:1px dotted #ee1b1b;
                 }
 
+
+/*  ==========================================================================
+    miniReel editor styles
+    ========================================================================== */
+    c6-drag-space {
+        display: block;
+    }
+
+    .table__group {
+        position: relative; background:#eee;
+    }
+        .table__left-zone {
+            position: absolute;
+            width: 10px; height: 100%;
+            top: 0; left: 0;
+        }
+        .table__right-zone {
+            position: absolute;
+            width: 10px; height: 100%;
+            top: 0; right: 0;
+        }
+
+    .card__container {
+        display: inline-block;
+        width: 13.5em;
+        vertical-align: top;
+    }
+        .card__container--dragging {
+            width: 0px;
+        }
+        .card__container--reordering {
+            width: 0px !important;
+        }
+    .card__drop-zone {
+        display: inline-block;
+        width: 2px; height: 13rem;
+        vertical-align: top;
+        margin: 0 5px;
+    }
+        .card__drop-zone.c6-drag-zone-active {
+            width: calc(10rem + 34px);
+        }
+        .card__drop-zone--reordering {
+            width: 2px !important;
+        }
+    .card__list {
+        overflow-x: scroll; white-space: nowrap;
+        overflow-y: hidden;
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        margin:0; padding:0;
+    }
+        .card__list-item {
+            display: inline-block;
+        }
+            .card__type {
+                color:#646464; font-size:0.75em; font-weight:100; text-align: center;
+                margin:1.9166em 0 0.5833em 0;
+            }
+            .card__item {
+                white-space: normal;
+                vertical-align: top;
+                background: #fff;
+                opacity: 0.4;
+                position:relative;
+            }
+                .card__item.c6-over-zone {
+                    opacity: 1;
+                }
+                .card__item .miniReel__imgBox {
+                    background:#ccc;
+                }
+            .card__statusIndicator {
+                position:absolute; z-index:1; top:0; left:0;
+                width:100%; height:100%;
+                -webkit-box-sizing: border-box;
+                -moz-box-sizing: border-box;
+                box-sizing: border-box;
+                -webkit-transition: border 0.2s; transition: border 0.2s;
+                cursor:pointer;
+                border:0;
+            }
+                .card__statusIndicator:hover {
+                    border:3px solid #13a2ff;
+                }
+                .card__statusIndicator--error, 
+                .card__statusIndicator--error:hover {
+                    border:3px solid #d61212;
+                }
+
+    .new__container {
+        display: inline-block;
+        margin: 0 22px 0 10px;
+        width: 5rem; height: 13rem;
+        position: relative;
+    }
+        .new__container--reordering {
+            display: none !important;
+        }
+
+    .new__button {
+        width: 5rem; height: 5rem;
+        top: 0; right: 0; bottom: 0; left: 0;
+        margin: auto;
+        position: absolute; z-index: -10;
+    }
+
+    .c6-dragging {
+        cursor: move;
+        box-shadow: 0px 0px 11px 0px rgba(50, 50, 50, 1);
+    }
+
+    .field {
+        display: block;
+    }
+    
 
 /*  ==========================================================================
     footer
