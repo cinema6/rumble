@@ -18,22 +18,25 @@
                     '</iframe>'
                 ].join('\n'),
                 link: function(scope, $element) {
-                    function VideoPlayer(id) {
+                    function VideoPlayer(id, $iframe) {
                         var self = this,
                             hasPaused = false,
-                            player = new youtube.Player($element.find('iframe')[0], {
+                            player = new youtube.Player($iframe[0], {
                                 events: {
                                     onReady: function onReady() {
+                                        state.readyState = 0;
                                         self.emit('ready');
                                     },
                                     onStateChange: function onStateChange(event) {
-                                        var state = event.data,
-                                            PlayerState = youtube.PlayerState;
+                                        var PlayerState = youtube.PlayerState;
 
-                                        switch (state) {
+                                        switch (event.data) {
                                         case PlayerState.PLAYING:
-                                            if (self.readyState < 1) {
-                                                self.readyState = 1;
+                                            state.ended = false;
+                                            state.paused = false;
+
+                                            if (state.readyState < 1) {
+                                                state.readyState = 3;
                                                 self.emit('loadedmetadata');
                                                 self.emit('canplay');
                                             }
@@ -46,10 +49,13 @@
                                             break;
 
                                         case PlayerState.ENDED:
+                                            state.paused = true;
+                                            state.ended = true;
                                             self.emit('ended');
                                             break;
 
                                         case PlayerState.PAUSED:
+                                            state.paused = true;
                                             self.emit('pause');
                                             hasPaused = true;
                                             break;
@@ -58,47 +64,98 @@
                                 }
                             }),
                             seekStartTime = null,
+                            publicTime = null,
                             state = {
                                 currentTime: 0,
-                                seeking: false
-                            };
+                                ended: false,
+                                paused: true,
+                                seeking: false,
+                                readyState: -1
+                            },
+                            currentTimeInterval = $interval(function pollCurrentTime() {
+                                state.currentTime = player.getCurrentTime();
+
+                                if (state.currentTime !== publicTime) {
+                                    publicTime = state.currentTime;
+                                    self.emit('timeupdate');
+                                }
+
+                                if (state.seeking) {
+                                    if (state.currentTime !== seekStartTime) {
+                                        state.seeking = false;
+                                        self.emit('seeked');
+                                    }
+                                }
+                            }, 250);
 
                         Object.defineProperties(this, {
                             currentTime: {
                                 get: function() {
                                     return state.currentTime;
                                 },
-                                set: function() {
+                                set: function(time) {
+                                    if (self.readyState < 1) {
+                                        throw new Error(
+                                            'Can\'t seek video. Haven\'t loaded metadata.'
+                                        );
+                                    }
+
                                     seekStartTime = state.currentTime;
                                     state.seeking = true;
+                                    self.emit('seeking');
+                                    player.seekTo(time);
                                 }
+                            },
+                            duration: {
+                                get: function() {
+                                    return player.getDuration();
+                                }
+                            },
+                            ended: {
+                                get: function() {
+                                    return state.ended;
+                                }
+                            },
+                            paused: {
+                                get: function() {
+                                    return state.paused;
+                                }
+                            },
+                            readyState: {
+                                get: function() {
+                                    return state.readyState;
+                                }
+                            },
+                            seeking: {
+                                get: function() {
+                                    return state.seeking;
+                                }
+                            },
+                            videoid: {
+                                value: id
                             }
                         });
 
-                        this.duration = 0;
-                        this.ended = false;
-                        this.paused = true;
-                        this.readyState = -1;
-                        this.seeking = false;
-                        this.videoid = id;
+                        this.pause = function() {
+                            player.pauseVideo();
+                        };
 
-                        $interval(function pollCurrentTime() {
-                            state.currentTime = player.getCurrentTime();
-
-                            if (state.seeking) {
-                                if (state.currentTime !== seekStartTime) {
-                                    state.seeking = false;
-                                    self.emit('seeked');
-                                }
-                            }
-                        }, 250);
+                        this.play = function() {
+                            player.playVideo();
+                        };
 
                         c6EventEmitter(this);
+
+                        $iframe.on('$destroy', function() {
+                            $interval.cancel(currentTimeInterval);
+                            player.destroy();
+                            self.emit('destroy');
+                        });
                     }
 
                     scope.url = '//www.youtube.com/embed/' + scope.videoid + '?rel=0&enablejsapi=1';
 
-                    $element.data('video', new VideoPlayer(scope.videoid));
+                    $element.data('video', new VideoPlayer(scope.videoid, $element.find('iframe')));
                 }
             };
         }]);

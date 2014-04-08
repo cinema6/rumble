@@ -10,12 +10,15 @@
 
             var youtube,
                 players,
-                player;
+                player,
+                intervals,
+                interval;
 
             var $player;
 
             beforeEach(function() {
                 players = [];
+                intervals = [];
 
                 module('c6.mrmaker', function($provide) {
                     $provide.value('youtube', {
@@ -23,6 +26,14 @@
                             .and.callFake(function(iframe, config) {
                                 this.getCurrentTime = jasmine.createSpy('youtube.getCurrentTime()')
                                     .and.returnValue(0);
+
+                                this.getDuration = jasmine.createSpy('youtube.getDuration()')
+                                    .and.returnValue(0);
+
+                                this.seekTo = jasmine.createSpy('youtube.seekTo()');
+                                this.pauseVideo = jasmine.createSpy('youtube.pauseVideo()');
+                                this.playVideo = jasmine.createSpy('youtube.pauseVideo()');
+                                this.destroy = jasmine.createSpy('youtube.destroy()');
 
                                 this._trigger = function(name, event) {
                                     config.events[name](event);
@@ -38,6 +49,34 @@
                             BUFFERING: 3,
                             CUED: 4
                         }
+                    });
+                });
+
+                module(function($provide) {
+                    $provide.decorator('$interval', function($delegate) {
+                        var mockInterval = jasmine.createSpy('$interval')
+                            .and.callFake(function() {
+                                var promise = $delegate.apply($delegate, arguments);
+
+                                intervals.push(promise);
+                                interval = promise;
+
+                                return promise;
+                            });
+
+                        mockInterval.cancel = jasmine.createSpy('$interval.cancel()')
+                            .and.callFake(function(promise) {
+                                intervals.splice(intervals.indexOf(promise), 1);
+
+                                return $delegate.cancel.apply($delegate, arguments);
+                            });
+
+                        mockInterval.flush = jasmine.createSpy('$interval.flush()')
+                            .and.callFake(function() {
+                                return $delegate.flush.apply($delegate, arguments);
+                            });
+
+                        return mockInterval;
                     });
                 });
 
@@ -73,6 +112,33 @@
                 });
             });
 
+            describe('when the player is destroyed', function() {
+                var destroySpy;
+
+                beforeEach(function() {
+                    destroySpy = jasmine.createSpy('destroy');
+
+                    $scope.$apply(function() {
+                        $player = $compile('<youtube-player videoid="gy1B3agGNxw"></youtube-player>')($scope);
+                    });
+                    $player.data('video').on('destroy', destroySpy);
+
+                    $player.remove();
+                });
+
+                it('should cancel the $interval', function() {
+                    expect($interval.cancel).toHaveBeenCalledWith(interval);
+                });
+
+                it('should destroy the youtube player', function() {
+                    expect(player.destroy).toHaveBeenCalled();
+                });
+
+                it('should emit a destroy event', function() {
+                    expect(destroySpy).toHaveBeenCalled();
+                });
+            });
+
             describe('player interface', function() {
                 var video;
 
@@ -97,6 +163,246 @@
                         seeking: false,
                         videoid: 'gy1B3agGNxw'
                     }));
+                });
+
+                describe('properties', function() {
+                    describe('currentTime', function() {
+                        describe('getting', function() {
+                            it('should be 0 initially', function() {
+                                expect(video.currentTime).toBe(0);
+                            });
+
+                            it('should be the value of the youtube player\'s currentTime', function() {
+                                player.getCurrentTime.and.returnValue(1);
+                                $interval.flush(250);
+
+                                expect(video.currentTime).toBe(1);
+
+                                player.getCurrentTime.and.returnValue(20);
+                                expect(video.currentTime).toBe(1);
+                                $interval.flush(250);
+                                expect(video.currentTime).toBe(20);
+                            });
+                        });
+
+                        describe('setting', function() {
+                            describe('if the player does not have metadata', function() {
+                                it('should throw an error', function() {
+                                    expect(function() {
+                                        video.currentTime = 10;
+                                    }).toThrow(new Error('Can\'t seek video. Haven\'t loaded metadata.'));
+                                });
+                            });
+
+                            describe('when the player has metadata', function() {
+                                beforeEach(function() {
+                                    player._trigger('onStateChange', { data: youtube.PlayerState.PLAYING });
+                                });
+
+                                it('should seek the youtube player to the provided time', function() {
+                                    video.currentTime = 5;
+                                    expect(player.seekTo).toHaveBeenCalledWith(5);
+
+                                    video.currentTime = 7;
+                                    expect(player.seekTo).toHaveBeenCalledWith(7);
+
+                                    video.currentTime = 2;
+                                    expect(player.seekTo).toHaveBeenCalledWith(2);
+                                });
+                            });
+                        });
+                    });
+
+                    describe('duration', function() {
+                        describe('getting', function() {
+                            it('should proxy to the player', function() {
+                                expect(video.duration).toBe(0);
+
+                                player.getDuration.and.returnValue(2);
+                                expect(video.duration).toBe(2);
+
+                                player.getDuration.and.returnValue(6);
+                                expect(video.duration).toBe(6);
+                            });
+                        });
+
+                        describe('setting', function() {
+                            it('should throw an error', function() {
+                                expect(function() {
+                                    video.duration = 30;
+                                }).toThrow();
+                            });
+                        });
+                    });
+
+                    describe('ended', function() {
+                        describe('getting', function() {
+                            it('should be false if the video has not ended', function() {
+                                expect(video.ended).toBe(false);
+                            });
+
+                            it('should be true if the video has ended', function() {
+                                player._trigger('onStateChange', { data: youtube.PlayerState.ENDED });
+
+                                expect(video.ended).toBe(true);
+                            });
+
+                            it('should be false after the video plays again', function() {
+                                player._trigger('onStateChange', { data: youtube.PlayerState.ENDED });
+                                player._trigger('onStateChange', { data: youtube.PlayerState.PLAYING });
+
+                                expect(video.ended).toBe(false);
+                            });
+                        });
+
+                        describe('setting', function() {
+                            it('should throw an error', function() {
+                                expect(function() {
+                                    video.ended = true;
+                                }).toThrow();
+                            });
+                        });
+                    });
+
+                    describe('paused', function() {
+                        describe('getting', function() {
+                            it('should initially be true', function() {
+                                expect(video.paused).toBe(true);
+                            });
+
+                            it('should become false when the video plays', function() {
+                                player._trigger('onStateChange', { data: youtube.PlayerState.PLAYING });
+
+                                expect(video.paused).toBe(false);
+                            });
+
+                            it('should become true when the video pauses', function() {
+                                player._trigger('onStateChange', { data: youtube.PlayerState.PLAYING });
+                                player._trigger('onStateChange', { data: youtube.PlayerState.PAUSED });
+
+                                expect(video.paused).toBe(true);
+                            });
+
+                            it('should be true when the video ends', function() {
+                                player._trigger('onStateChange', { data: youtube.PlayerState.PLAYING });
+                                player._trigger('onStateChange', { data: youtube.PlayerState.ENDED });
+
+                                expect(video.paused).toBe(true);
+                            });
+                        });
+
+                        describe('setting', function() {
+                            it('should throw an error', function() {
+                                expect(function() {
+                                    video.paused = true;
+                                }).toThrow();
+                            });
+                        });
+                    });
+
+                    describe('readyState', function() {
+                        describe('getting', function() {
+                            it('should initally be -1', function() {
+                                expect(video.readyState).toBe(-1);
+                            });
+
+                            it('should be 0 when the player is ready', function() {
+                                player._trigger('onReady', {});
+
+                                expect(video.readyState).toBe(0);
+                            });
+
+                            it('should be 3 when the video starts playing', function() {
+                                player._trigger('onStateChange', { data: youtube.PlayerState.PLAYING });
+
+                                expect(video.readyState).toBe(3);
+                            });
+                        });
+
+                        describe('setting', function() {
+                            it('should throw an error', function() {
+                                expect(function() {
+                                    video.readyState = 4;
+                                }).toThrow();
+                            });
+                        });
+                    });
+
+                    describe('seeking', function() {
+                        beforeEach(function() {
+                            player._trigger('onStateChange', { data: youtube.PlayerState.PLAYING });
+                        });
+
+                        describe('getting', function() {
+                            it('should be initialized as false', function() {
+                                expect(video.seeking).toBe(false);
+                            });
+
+                            it('should be true when the currentTime is changed', function() {
+                                video.currentTime = 25;
+
+                                expect(video.seeking).toBe(true);
+                            });
+
+                            it('should go back to be false when seeking ends', function() {
+                                player.getCurrentTime.and.returnValue(10);
+                                $interval.flush(250);
+                                video.currentTime = 25;
+
+                                $interval.flush(250);
+                                expect(video.seeking).toBe(true);
+
+                                $interval.flush(250);
+                                expect(video.seeking).toBe(true);
+
+                                player.getCurrentTime.and.returnValue(26);
+                                $interval.flush(250);
+                                expect(video.seeking).toBe(false);
+                            });
+                        });
+
+                        describe('setting', function() {
+                            it('should throw an error', function() {
+                                expect(function() {
+                                    video.seeking = true;
+                                }).toThrow();
+                            });
+                        });
+                    });
+
+                    describe('videoid', function() {
+                        describe('getting', function() {
+                            it('should be the id of the youtube video', function() {
+                                expect(video.videoid).toBe('gy1B3agGNxw');
+                            });
+                        });
+
+                        describe('setting', function() {
+                            it('should throw an error', function() {
+                                expect(function() {
+                                    video.videoid = null;
+                                }).toThrow();
+                            });
+                        });
+                    });
+                });
+
+                describe('methods', function() {
+                    describe('pause', function() {
+                        it('should pause the player', function() {
+                            video.pause();
+
+                            expect(player.pauseVideo).toHaveBeenCalled();
+                        });
+                    });
+
+                    describe('play', function() {
+                        it('should play the player', function() {
+                            video.play();
+
+                            expect(player.playVideo).toHaveBeenCalled();
+                        });
+                    });
                 });
 
                 describe('events', function() {
@@ -206,6 +512,7 @@
                     describe('seeked', function() {
                         beforeEach(function() {
                             player._trigger('onReady', {});
+                            player._trigger('onStateChange', { data: youtube.PlayerState.PLAYING });
                         });
 
                         it('should be emitted after the video finishes seeking', function() {
@@ -244,6 +551,7 @@
                     describe('seeking', function() {
                         beforeEach(function() {
                             player._trigger('onReady', {});
+                            player._trigger('onStateChange', { data: youtube.PlayerState.PLAYING });
                         });
 
                         it('should be emitted when the video is seeked', function() {
@@ -253,6 +561,35 @@
 
                             video.currentTime = 25;
                             expect(seekingSpy).toHaveBeenCalled();
+                        });
+                    });
+
+                    describe('timeupdate', function() {
+                        beforeEach(function() {
+                            player._trigger('onReady', {});
+                        });
+
+                        it('should be emitted every 250ms if the current time has changed', function() {
+                            var timeupdate = jasmine.createSpy('timeupdate');
+
+                            video.on('timeupdate', timeupdate);
+
+                            $interval.flush(250);
+                            expect(timeupdate).toHaveBeenCalled();
+
+                            $interval.flush(250);
+                            expect(timeupdate.calls.count()).toBe(1);
+
+                            player.getCurrentTime.and.returnValue(2);
+                            $interval.flush(250);
+                            expect(timeupdate.calls.count()).toBe(2);
+
+                            player.getCurrentTime.and.returnValue(3);
+                            $interval.flush(250);
+                            expect(timeupdate.calls.count()).toBe(3);
+
+                            $interval.flush(250);
+                            expect(timeupdate.calls.count()).toBe(3);
                         });
                     });
                 });
