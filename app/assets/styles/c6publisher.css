@@ -468,7 +468,7 @@
         -moz-user-select: none;
         -ms-user-select: none;
         user-select: none;
-        margin:0; padding:0;
+        margin:0; padding:0 1.5em 1.5em 1.5em;
     }
         .card__list-item {
             display: inline-block;
@@ -507,6 +507,13 @@
                 .card__statusIndicator--error:hover {
                     border:3px solid #d61212;
                 }
+            .card__item .miniReel__body {
+                padding-bottom:0.625em;
+            }
+            .card__contextBar {
+                text-align: center; font-size:0.75em;
+                margin:0.4166em 0 0 0;
+            }
 
     .new__container {
         display: inline-block;

@@ -22,7 +22,9 @@
                         <div class="ui__divider--pause">&hellip;</div>
                     </div>
                 </div>
-                <a href="#" class="card__preview" title="Preview This Card">Preview This Card</a>
+                <div class="card__contextBar">
+                    <a href="#" title="Preview This Card">Preview This Card</a>
+                </div>
             </div>
             <div id="drop-zone-{{this.id}}" ng-show="DragCtrl.currentDrags[0] !== DragCtrl.draggables[this.id]" c6-drag-zone class="card__drop-zone">&nbsp;</div>
             <div class="new__container" ng-hide="DragCtrl.currentDrags.length">
