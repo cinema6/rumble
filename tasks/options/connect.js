@@ -21,7 +21,17 @@
                 middleware: function() {
                     return [
                         require('grunt-connect-proxy/lib/utils').proxyRequest,
-                        require('connect-livereload')(),
+                        require('connect-livereload')({
+                            rules   : [{
+                                match: /<!--C6ENV-->/,
+                                fn  : function(w, s){
+                                        return w + s +
+                                        '<script>window.c6={kEnv:\'' +
+                                            grunt.config.get('settings.environment') +
+                                        '\'};</script>'; 
+                                }
+                            }]
+                        }),
                         c6Sandbox({
                             landingContentDir: grunt.template.process('<%= settings.collateralDir %>'),
                             experiences: grunt.config.process(

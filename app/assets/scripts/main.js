@@ -15,7 +15,7 @@
                 case 'dev':
                 case 'staging':
                     return c6.kLibUrls.dev;
-                case 'release':
+                case 'production':
                     return c6.kLibUrls.release;
                 }
             }());

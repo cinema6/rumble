@@ -24,22 +24,15 @@
         <div ng-if="!!app.data.mode" class="c6-minireel">
             <ng-include src="'experience.html' | asset:'views'" ng-controller="RumbleController as RumbleCtrl"></ng-include>
         </div>
+        <!--C6ENV-->
         <script>
             (function() {
                 'use strict';
-                var c6 = window.c6 = {},
+                var c6 = window.c6 = (window.c6 || {}),
                     body = document.getElementsByTagName('body')[0],
                     head = document.getElementsByTagName('head')[0],
                     libUrl, useMin, requireJS;
-                c6.kEnv = (function() {
-                    if (window.location.host.match(/(localhost|\d+\.\d+\.\d+\.\d+)/)) {
-                        return 'dev';
-                    } else if ((!window.location.host.match(/cinema6.com/i)) || (window.location.search.indexOf('debug=true') !== -1)) {
-                        return 'staging';
-                    } else {
-                        return 'release';
-                    }
-                }());
+                c6.kEnv = (c6.kEnv || 'production');
                 c6.kLibUrls = {
                     dev: 'http://s3.amazonaws.com/c6.dev/ext/',
                     release: 'http://lib.cinema6.com/'
@@ -50,7 +43,7 @@
                         case 'dev':
                         case 'staging':
                             return c6.kLibUrls.dev;
-                        case 'release':
+                        default: 
                             return c6.kLibUrls.release;
                         }
                     }());
@@ -76,7 +69,6 @@
                     return stylesheet;
                 }
                 body.appendChild(requireScript(requireJS, 'assets/scripts/main'));
-                //head.appendChild(stylesheet(libUrl('c6ui/v2.5.0-0-gc58e712/css/c6uilib.min.css')));
             }());
         </script>
     </body>
