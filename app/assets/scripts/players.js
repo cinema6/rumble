@@ -111,6 +111,90 @@
             $window.addEventListener('message', delegateMessage, false);
         }])
 
+        .directive('vimeoPlayer', ['VimeoPlayerService','c6EventEmitter',
+        function                  ( VimeoPlayerService , c6EventEmitter ) {
+            return {
+                restrict: 'E',
+                template: [
+                    '<iframe id="{{id}}"',
+                    '    src="{{url}}"',
+                    '    width="100%"',
+                    '    height="100%"',
+                    '    frameborder="0"',
+                    '    webkitAllowFullScreen',
+                    '    mozallowfullscreen',
+                    '    allowFullScreen>',
+                    '</iframe>'
+                ].join('\n'),
+                scope: {
+                    videoid: '@',
+                    id: '@'
+                },
+                link: function(scope, $element) {
+                    function VideoPlayer($iframe) {
+                        var self = this,
+                            player = new VimeoPlayerService.Player($iframe),
+                            hasPaused = false;
+
+                        player
+                            .on('ready', function() {
+                                self.emit('ready');
+                                self.emit('loadedmetadata');
+                            })
+                            .once('loadProgress', function() {
+                                self.emit('canplay');
+                                self.emit('loadstart');
+                            })
+                            .on('loadProgress', function(data) {
+                                var percent = parseFloat(data.percent);
+
+                                if (percent >= 0.25) {
+                                    self.emit('canplaythrough');
+                                    player.removeListener('loadProgress', this);
+                                }
+                            })
+                            .on('loadProgress', function() {
+                                self.emit('progress');
+                            })
+                            .on('finish', function() {
+                                self.emit('ended');
+                            })
+                            .on('pause', function() {
+                                hasPaused = true;
+                                self.emit('pause');
+                            })
+                            .on('play', function() {
+                                if (hasPaused) {
+                                    self.emit('play');
+                                }
+
+                                self.emit('playing');
+                            })
+                            .on('seek', function() {
+                                self.emit('seeked');
+                            });
+
+                        Object.defineProperties(this, {
+                            currentTime: {
+                                set: function() {
+                                    self.emit('seeking');
+                                }
+                            }
+                        });
+
+                        c6EventEmitter(this);
+                    }
+
+                    scope.url = 'http://player.vimeo.com/video/' +
+                        scope.videoid +
+                        '?api=1&player_id=' +
+                        scope.id;
+
+                    $element.data('video', new VideoPlayer($element.find('iframe')));
+                }
+            };
+        }])
+
         .directive('youtubePlayer', ['youtube','c6EventEmitter','$interval',
         function                    ( youtube , c6EventEmitter , $interval ) {
             return {
