@@ -107,7 +107,7 @@
     c6.kLogFormats = c6.kDebug;
     c6.kLogLevels = (c6.kDebug) ? ['error','warn','log','info'] : [];
     c6.kCollateralUrls = {
-        dev: 'http://s3.amazonaws.com/c6.dev/media/src/site/collateral',
+        dev: 'http://staging.cinema6.com/collateral',
         cdn: 'http://cinema6.com/collateral'
     };
     c6.kApiUrls = {
