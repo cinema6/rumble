@@ -11,22 +11,26 @@
 
             var $window;
 
-            var iframe;
+            var $iframes,
+                $iframe,
+                iframe;
 
-            function Window() {
-                this._handlers = {};
-            }
-            Window.prototype = {
-                postMessage: jasmine.createSpy('window.postMessage()')
-            };
+            function IFrame(src) {
+                $iframe = angular.element('<iframe>');
+                $iframe.attr('src', src);
+                $('body').append($iframe);
 
-            function IFrame() {
-                this.contentWindow = new Window();
+                spyOn($iframe[0].contentWindow, 'postMessage');
 
-                iframe = this;
+                iframe = $iframe[0];
+                $iframes.push($iframe);
+
+                return $iframe;
             }
 
             beforeEach(function() {
+                $iframes = [];
+
                 module('ng', function($provide) {
                     $provide.value('$window', {
                         _handlers: {},
@@ -41,7 +45,9 @@
                             handlers.forEach(function(handler) {
                                 handler(data);
                             });
-                        }
+                        },
+                        navigator: window.navigator,
+                        document: window.document
                     });
                 });
 
@@ -57,23 +63,124 @@
                 });
             });
 
+            afterEach(function() {
+                $iframes.forEach(function($frame) {
+                    $frame.remove();
+                });
+            });
+
             it('should exist', function() {
                 expect(VimeoPlayerService).toEqual(jasmine.any(Object));
             });
 
+            it('should ignore messages not intended for it', function() {
+                expect(function() {
+                    $window.trigger('message', { origin: 'foo.com', data: null });
+                }).not.toThrow();
+
+                expect(function() {
+                    $window.trigger('message', { origin: 'cinema6.com', data: 'test' });
+                }).not.toThrow();
+            });
+
             describe('properties', function() {
-                describe('Player(id, $iframe)', function() {
+                describe('Player($iframe)', function() {
                     it('should add itself to the players hash', function() {
-                        var vimeo = new VimeoPlayerService.Player('rc-1', {});
+                        var vimeo = new VimeoPlayerService.Player(new IFrame('http://player.vimeo.com/video/27855315?api=1&player_id=rc-1&foo=bar'));
 
                         expect(VimeoPlayerService.players['rc-1']).toBe(vimeo);
+                    });
+
+                    it('should remove itself from the players hash when the iframe is removed', function() {
+                        new VimeoPlayerService.Player(new IFrame('http://player.vimeo.com/video/27855315?api=1&player_id=rc-1'));
+                        $iframe.remove();
+
+                        expect(VimeoPlayerService.players['rc-1']).not.toBeDefined();
+                    });
+
+                    it('should throw an error if the iframe provided has no player_id', function() {
+                        expect(function() {
+                            new VimeoPlayerService.Player(new IFrame('http://player.vimeo.com/video/27855315?api=1'));
+                        }).toThrow(new Error('Provided iFrame has no player_id specified in the search params.'));
+                    });
+
+                    describe('event handling', function() {
+                        var vimeo;
+
+                        beforeEach(function() {
+                            vimeo = new VimeoPlayerService.Player(new IFrame('http://player.vimeo.com/video/27855315?api=1&player_id=rc-2'));
+
+                            spyOn(vimeo, 'call').and.callThrough();
+                        });
+
+                        function emit(event, data, id) {
+                            $window.trigger('message', {
+                                origin: 'http://player.vimeo.com',
+                                data: JSON.stringify({
+                                    player_id: id || 'rc-2',
+                                    event: event,
+                                    data: data
+                                })
+                            });
+                        }
+
+                        it('should call the "addEventListener" method when a non-c6EventEmitter or ready event listener is added', function() {
+                            vimeo.on('ready', function() {});
+                            expect(vimeo.call).not.toHaveBeenCalled();
+
+                            vimeo.on('removeListener');
+                            expect(vimeo.call).not.toHaveBeenCalled();
+
+                            vimeo.on('loadProgress', function() {});
+                            expect(vimeo.call).toHaveBeenCalledWith('addEventListener', 'loadProgress');
+
+                            vimeo.on('play', function() {});
+                            expect(vimeo.call).toHaveBeenCalledWith('addEventListener', 'play');
+                        });
+
+                        it('should emit events that come via postMessage', function() {
+                            var ready = jasmine.createSpy('ready'),
+                                play = jasmine.createSpy('play'),
+                                playProgress = jasmine.createSpy('playProgress');
+
+                            vimeo.on('ready', ready)
+                                .on('play', play)
+                                .on('playProgress', playProgress);
+
+                            expect(ready).not.toHaveBeenCalled();
+                            expect(play).not.toHaveBeenCalled();
+                            expect(playProgress).not.toHaveBeenCalled();
+
+                            emit('ready', undefined, 'rc-5');
+                            expect(ready).not.toHaveBeenCalled();
+
+                            emit('ready');
+                            expect(ready).toHaveBeenCalled();
+
+                            emit('play', undefined, 'rc-8rh49f');
+                            expect(play).not.toHaveBeenCalled();
+
+                            emit('play');
+                            expect(play).toHaveBeenCalled();
+
+                            emit('playProgress', {
+                                seconds: '4.308',
+                                percent: '0.012',
+                                duration: '359.000'
+                            });
+                            expect(playProgress).toHaveBeenCalledWith({
+                                seconds: '4.308',
+                                percent: '0.012',
+                                duration: '359.000'
+                            });
+                        });
                     });
 
                     describe('methods', function() {
                         var vimeo;
 
                         beforeEach(function() {
-                            vimeo = new VimeoPlayerService.Player('rc-1', angular.element(new IFrame()));
+                            vimeo = new VimeoPlayerService.Player(new IFrame('http://player.vimeo.com/video/27855315?api=1&player_id=rc-1'));
                         });
 
                         describe('call(method, data)', function() {
@@ -132,6 +239,17 @@
                             });
 
                             describe('methods that return a value', function() {
+                                function postMessage(method, value, id) {
+                                    $window.trigger('message', {
+                                        origin: 'http://player.vimeo.com',
+                                        data: JSON.stringify({
+                                            player_id: id || 'rc-1',
+                                            method: method,
+                                            value: value
+                                        })
+                                    });
+                                }
+
                                 it('should return a promise that resolves to the value of the response', function() {
                                     var paused = jasmine.createSpy('paused'),
                                         getCurrentTime = jasmine.createSpy('getCurrentTime'),
@@ -142,16 +260,6 @@
                                         getVideoUrl = jasmine.createSpy('getVideoUrl'),
                                         getColor = jasmine.createSpy('getColor'),
                                         getVolume = jasmine.createSpy('getVolume');
-
-                                    function postMessage(method, value, id) {
-                                        $window.trigger('message', {
-                                            data: {
-                                                player_id: id || 'rc-1',
-                                                method: method,
-                                                value: value
-                                            }
-                                        });
-                                    }
 
                                     $rootScope.$apply(function() {
                                         vimeo.call('paused').then(paused);
@@ -203,6 +311,31 @@
 
                                     postMessage('getVolume', 0);
                                     expect(getVolume).toHaveBeenCalledWith(0);
+                                });
+
+                                it('should reuse deferreds when possible', function() {
+                                    var paused = jasmine.createSpy('paused'),
+                                        paused2 = jasmine.createSpy('paused2'),
+                                        promise = vimeo.call('paused'),
+                                        promise2 = vimeo.call('paused');
+
+                                    expect(promise).toBe(promise2);
+
+                                    promise.then(paused);
+                                    promise2.then(paused2);
+
+                                    postMessage('paused', false);
+
+                                    expect(paused).toHaveBeenCalledWith(false);
+                                    expect(paused2).toHaveBeenCalledWith(false);
+
+                                    paused.calls.reset();
+
+                                    vimeo.call('paused').then(paused);
+
+                                    postMessage('paused', true);
+
+                                    expect(paused).toHaveBeenCalledWith(true);
                                 });
                             });
                         });

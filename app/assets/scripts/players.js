@@ -1,38 +1,65 @@
 (function() {
     'use strict';
 
+    var fromJson = angular.fromJson;
+
     angular.module('c6.mrmaker')
-        .service('VimeoPlayerService', ['$q','$window','$rootScope',
-        function                       ( $q , $window , $rootScope ) {
+        .service('VimeoPlayerService', ['$q','$window','$rootScope','c6EventEmitter',
+                                        'c6UrlParser',
+        function                       ( $q , $window , $rootScope , c6EventEmitter ,
+                                         c6UrlParser ) {
             var service = this;
 
             function delegateMessage(event) {
                 var data = event.data,
-                    /* jshint camelcase:false */
-                    player = service.players[data.player_id];
-                    /* jshint camelcase:true */
+                    player;
+
+                if (event.origin !== 'http://player.vimeo.com') { return; }
+
+                data = fromJson(data);
+
+                /* jshint camelcase:false */
+                player = service.players[data.player_id];
+                /* jshint camelcase:true */
 
                 if (!player) { return; }
 
                 $rootScope.$apply(function() {
-                    player.handleMessage(data);
+                    player._handleMessage(data);
                 });
             }
 
             this.players = {};
 
-            this.Player = function(id, $iframe) {
-                var pending = {};
+            this.Player = function($iframe) {
+                var self = this,
+                    pending = {},
+                    src = c6UrlParser($iframe.attr('src')),
+                    id = (src.search.match(/player_id=((\w|-)+)/) || [])[1];
 
-                this.handleMessage = function(data) {
+                if (!id) {
+                    throw new Error(
+                        'Provided iFrame has no player_id specified in the search params.'
+                    );
+                }
+
+                this._handleMessage = function(data) {
                     var method = data.method,
+                        event = data.event,
                         value = data.value;
 
-                    pending[method].resolve(value);
+                    if (method) {
+                        pending[method].resolve(value);
+                        delete pending[method];
+                    }
+
+                    if (event) {
+                        this.emit(event, data.data);
+                    }
                 };
 
                 this.call = function(method, data) {
-                    var deferred = $q.defer(),
+                    var deferred = pending[method] || $q.defer(),
                         message = {
                             method: method
                         };
@@ -63,6 +90,20 @@
 
                     return deferred.promise;
                 };
+
+                c6EventEmitter(this);
+
+                this.on('newListener', function(event) {
+                    if (event.search(
+                        /^(ready|newListener|removeListener)$/
+                    ) > -1) { return; }
+
+                    self.call('addEventListener', event);
+                });
+
+                $iframe.on('$destroy', function() {
+                    delete service.players[id];
+                });
 
                 service.players[id] = this;
             };
