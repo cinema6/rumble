@@ -535,10 +535,13 @@
         position: absolute; top:0; bottom:0; left:0; right:0;
         cursor:pointer;
     }
+        .new__button:hover {
+            background-position:-7.625em -2.8125em;
+        }
 
     .c6-dragging {
         cursor: move;
-        box-shadow: 0px 0px 11px 0px rgba(50, 50, 50, 1);
+        box-shadow: 0 0 6px 0 rgba(50, 50, 50, 0.5);
     }
 
     .field {
