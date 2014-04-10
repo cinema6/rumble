@@ -19,15 +19,9 @@
     c6.kHasKarma = true;
     c6.kLogFormats = true;
     c6.kLogLevels = ['error','warn','log','info'];
-    c6.kCollateralUrls = {
-        local: 'assets/media',
-        cdn: 'http://foo.cinema6.com/media/app'
-    };
-    c6.kApiUrls = {
-        local: '/api',
-        beta: 'http://beta.cinema6.com/api',
-        prod: 'http://cinema6.com/api'
-    };
+    c6.envUrlRoot = (c6.envUrlRoot || 'http://foo.cinema6.com');
+    c6.kCollateralUrl = (c6.kCollateralUrl || (c6.envUrlRoot + '/collateral'));
+    c6.kApiUrl = '/api';
     c6.kModDeps = ['c6.rumble.services', 'c6.ui', 'c6.log'];
 
     packageRequest.onload = function(event) {

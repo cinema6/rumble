@@ -24,60 +24,7 @@
         <div ng-if="!!app.data.mode" class="c6-minireel">
             <ng-include src="'experience.html' | asset:'views'" ng-controller="RumbleController as RumbleCtrl"></ng-include>
         </div>
-        <script>
-            (function() {
-                'use strict';
-                var c6 = window.c6 = {},
-                    body = document.getElementsByTagName('body')[0],
-                    head = document.getElementsByTagName('head')[0],
-                    libUrl, useMin, requireJS;
-                c6.kEnv = (function() {
-                    if (window.location.host.match(/(localhost|\d+\.\d+\.\d+\.\d+)/)) {
-                        return 'dev';
-                    } else if ((!window.location.host.match(/cinema6.com/i)) || (window.location.search.indexOf('debug=true') !== -1)) {
-                        return 'staging';
-                    } else {
-                        return 'release';
-                    }
-                }());
-                c6.kLibUrls = {
-                    dev: 'http://s3.amazonaws.com/c6.dev/ext/',
-                    release: 'http://lib.cinema6.com/'
-                };
-                libUrl = function(url) {
-                    var libBase = (function() {
-                        switch (c6.kEnv) {
-                        case 'dev':
-                        case 'staging':
-                            return c6.kLibUrls.dev;
-                        case 'release':
-                            return c6.kLibUrls.release;
-                        }
-                    }());
-
-                    libUrl = function(url) {
-                        return libBase + url;
-                    };
-
-                    return libUrl(url);
-                };
-                useMin = (c6.kEnv !== 'dev');
-                requireJS = libUrl('require/2.1.5/require' + (useMin ? '.min' : '') + '.js');
-                function requireScript(src, main) {
-                    var script = document.createElement('script');
-                    script.setAttribute('data-main', main);
-                    script.setAttribute('src', src);
-                    return script;
-                }
-                function stylesheet(href) {
-                    var stylesheet = document.createElement('link');
-                    stylesheet.setAttribute('rel', 'stylesheet');
-                    stylesheet.setAttribute('href', href);
-                    return stylesheet;
-                }
-                body.appendChild(requireScript(requireJS, 'assets/scripts/main'));
-                //head.appendChild(stylesheet(libUrl('c6ui/v2.5.0-0-gc58e712/css/c6uilib.min.css')));
-            }());
-        </script>
+        <!--C6ENV-->
+        <script data-main="assets/scripts/main" src="http://lib.cinema6.com/require/2.1.5/require.min.js"></script>
     </body>
 </html>

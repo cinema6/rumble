@@ -11,14 +11,19 @@
     "experiencesJSON": "<%= settings.appDir %>/assets/mock/experiences.json",
     "libUrl": "http://s3.amazonaws.com/c6.dev/ext/",
     "defaultE2EEnv": "browserstack",
+    "debug": true,
+    "locations" : {
+        "collateral" : "http://staging.cinema6.com/collateral",
+        "api"        : "/api"
+    },
     "s3": {
         "test": {
-            "bucket": "c6.dev",
-            "collateral": "media/src/site/collateral/",
-            "app": "content/<%= package.name %>/"
+            "bucket": "staging.cinema6.com-api",
+            "collateral": "collateral/",
+            "app": "experiences/<%= package.name %>/"
         },
         "production": {
-            "bucket": "cinema6.com-etc",
+            "bucket": "cinema6.com-api",
             "collateral": "collateral/",
             "app": "experiences/<%= package.name %>/"
         }
