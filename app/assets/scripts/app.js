@@ -62,15 +62,8 @@
         .config(['c6UrlMakerProvider', 'c6Defines',
         function( c6UrlMakerProvider ,  c6Defines ) {
             c6UrlMakerProvider.location(c6Defines.kBaseUrl,'default');
-            c6UrlMakerProvider.location(
-                c6Defines.kCollateralUrls[c6Defines.kDebug ? 'dev' : 'cdn'],
-                'collateral'
-            );
-            c6UrlMakerProvider.location(
-                c6Defines.kApiUrls[c6Defines.kLocal ? 'local' :
-                    (c6Defines.kDebug ? 'beta' : 'prod')],
-                'api'
-            );
+            c6UrlMakerProvider.location(c6Defines.kCollateralUrl,'collateral');
+            c6UrlMakerProvider.location(c6Defines.kApiUrl,'api');
         }])
         .config(['VASTServiceProvider', 'VPAIDServiceProvider',
         function( VASTServiceProvider, VPAIDServiceProvider ) {

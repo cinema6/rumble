@@ -25,10 +25,12 @@
                             rules   : [{
                                 match: /<!--C6ENV-->/,
                                 fn  : function(w, s){
-                                        return w + s +
-                                        '<script>window.c6={kEnv:\'' +
-                                            grunt.config.get('settings.environment') +
-                                        '\'};</script>'; 
+                                      return w + s +
+                                      '<script>window.c6={' +
+                                      'kDebug:' + grunt.config.get('settings.debug') + ',' +
+                                      'kCollateralUrl:\'' + grunt.config.get('settings.locations.collateral') + '\',' +
+                                      'kApiUrl:\'' + grunt.config.get('settings.locations.api') + '\'' +
+                                      '};</script>'; 
                                 }
                             }]
                         }),
