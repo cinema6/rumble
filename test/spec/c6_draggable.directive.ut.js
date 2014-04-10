@@ -83,6 +83,52 @@
                 });
             });
 
+            it('should support preventing the moving of the draggable item', function() {
+                var finger = new Finger(),
+                    $draggable = $('<span c6-draggable style="display: inline-block; width: 50px; height: 50px;"></span>'),
+                    draggable;
+
+                testFrame.$body.append($draggable);
+                $scope.$apply(function() {
+                    $compile($draggable)($scope);
+                });
+                draggable = $draggable.data('cDrag');
+
+                draggable.on('beforeMove', function(draggable, event) {
+                    var desired = event.desired;
+
+                    if (desired.bottom > 100 || desired.right > 100) {
+                        event.preventDefault();
+                    }
+                });
+
+                finger.placeOn($draggable);
+
+                // Drag 10px to the right
+                finger.drag(10, 0);
+                expect($draggable.css('left')).toBe('10px');
+
+                // Drag 39px to the right
+                finger.drag(39, 0);
+                expect($draggable.css('left')).toBe('49px');
+
+                // Drag 2px to the right
+                finger.drag(2, 0);
+                expect($draggable.css('left')).toBe('49px');
+
+                // Drag 2px to the left and 10px down
+                finger.drag(-2, 10);
+                expect($draggable.css('top')).toBe('10px');
+
+                // Drag 39px down
+                finger.drag(0, 39);
+                expect($draggable.css('top')).toBe('49px');
+
+                // Drag 2px down
+                finger.drag(0, 2);
+                expect($draggable.css('top')).toBe('49px');
+            });
+
             it('should support multiple drags/drops', function() {
                 var finger = new Finger(),
                     $div = $('<div c6-draggable style="width: 50px; height: 50px;"></div>');
