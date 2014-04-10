@@ -112,6 +112,7 @@
                 });
 
                 it('should ping cinema6 with responsive styles based on mode', inject(function(c6AppData) {
+                    /* jshint unused:false */
                     $httpBackend.flush();
                     $rootScope.$apply(function() {
                         deferreds.getAppData.resolve(appData);
@@ -124,6 +125,8 @@
                 }));
 
                 it('should send an empty object if there are no styles', inject(function(c6AppData) {
+                    /* jshint unused:false */
+
                     appData.experience.mode = 'foo';
 
                     $httpBackend.flush();
@@ -163,8 +166,8 @@
                         expect(c6AppData('full').behaviors.autoplay).toBe(false);
                         expect(c6AppData('mobile').behaviors.autoplay).toBe(false);
                         expect(c6AppData('light').behaviors.autoplay).toBe(true);
-                        expect(c6AppData('lightbox').behaviors.autoplay).toBe(false);
-                        expect(c6AppData('lightbox-ads').behaviors.autoplay).toBe(false);
+                        expect(c6AppData('lightbox').behaviors.autoplay).toBe(true);
+                        expect(c6AppData('lightbox-ads').behaviors.autoplay).toBe(true);
                     });
                 });
 
@@ -173,8 +176,8 @@
                         expect(c6AppData('full').behaviors.inlineVoteResults).toBe(true);
                         expect(c6AppData('mobile').behaviors.inlineVoteResults).toBe(true);
                         expect(c6AppData('light').behaviors.inlineVoteResults).toBe(false);
-                        expect(c6AppData('lightbox').behaviors.autoplay).toBe(false);
-                        expect(c6AppData('lightbox-ads').behaviors.autoplay).toBe(false);
+                        expect(c6AppData('lightbox').behaviors.inlineVoteResults).toBe(false);
+                        expect(c6AppData('lightbox-ads').behaviors.inlineVoteResults).toBe(false);
                     });
                 });
 
@@ -183,8 +186,8 @@
                         expect(c6AppData('full').behaviors.separateTextView).toBe(true);
                         expect(c6AppData('mobile').behaviors.separateTextView).toBe(false);
                         expect(c6AppData('light').behaviors.separateTextView).toBe(false);
-                        expect(c6AppData('lightbox').behaviors.autoplay).toBe(false);
-                        expect(c6AppData('lightbox-ads').behaviors.autoplay).toBe(false);
+                        expect(c6AppData('lightbox').behaviors.separateTextView).toBe(false);
+                        expect(c6AppData('lightbox-ads').behaviors.separateTextView).toBe(false);
                     });
                 });
 

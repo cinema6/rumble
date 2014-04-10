@@ -508,6 +508,367 @@
         }
     },
     {
+        "id": "e-b40c7bd11e512e",
+        "uri": "gopro-lightbox",
+        "appUriPrefix": "<%= settings.appUrl %>",
+        "appUri": "rumble",
+        "title": "The 15 Most Amazing GoPro Videos Ever Recorded",
+        "subtitle": "",
+        "summary": "GoPro cameras are the only tech inventions we were introduced to in 2013 that we think deserve to continue trending in 2014. These handy-dandy cameras are perfect for just about any activity, including skydiving, surfing, or rescuing a baby kitten from a tree.",
+        "img": {
+            "splash": "experiences/gopro/splash-6thumb.jpg"
+        },
+        "mode": "lightbox-ads",
+        "theme": "ed-videos",
+        "data": {
+            "id": "r-ea8caee7de7582",
+            "electionId": "el-2f173cf1a9a8ef",
+            "deck": [
+                {
+                    "id": "rc-22119a8cf9f755",
+                    "type": "youtube",
+                    "title": "F18 Fighter",
+                    "note": "This guy recorded himself in an F18 fighter jet.",
+                    "source": "YouTube",
+                    "modules": [
+                        "ballot",
+                        "displayAd"
+                    ],
+                    "ballot": [
+                        "Cool",
+                        "Lame"
+                    ],
+                    "data": {
+                        "videoid": "IqVPwcvgOWQ",
+                        "rel": 0,
+                        "modestbranding": 1
+                    },
+                    "displayAd": "http://2.bp.blogspot.com/-TlM_3FT89Y0/UMzLr7kVykI/AAAAAAAACjs/lKrdhgp6OQg/s1600/brad-turner.jpg"
+                },
+                {
+                    "id": "rc-337f092e881524",
+                    "type": "youtube",
+                    "title": "Lions",
+                    "note": "If you ever get the chance to hang out with lions, record it.",
+                    "source": "YouTube",
+                    "modules": [
+                        "ballot",
+                        "displayAd"
+                    ],
+                    "ballot": [
+                        "Funny",
+                        "Gross"
+                    ],
+                    "data": {
+                        "videoid": "MNCzSfv4hX8",
+                        "rel": 0,
+                        "modestbranding": 1
+                    },
+                    "displayAd": "http://2.bp.blogspot.com/-TlM_3FT89Y0/UMzLr7kVykI/AAAAAAAACjs/lKrdhgp6OQg/s1600/brad-turner.jpg"
+                },
+                {
+                    "id": "rc-facb167546a4ff",
+                    "type": "youtube",
+                    "title": "Vetical Skydive",
+                    "note": "Vertical skydiving looks like a breeze, doesn't it?",
+                    "source": "YouTube",
+                    "modules": [
+                        "ballot",
+                        "displayAd"
+                    ],
+                    "ballot": [
+                        "Cool",
+                        "Lame"
+                    ],
+                    "data": {
+                        "videoid": "HrqXTHCGVEo",
+                        "rel": 0,
+                        "modestbranding": 1
+                    },
+                    "displayAd": "http://2.bp.blogspot.com/-TlM_3FT89Y0/UMzLr7kVykI/AAAAAAAACjs/lKrdhgp6OQg/s1600/brad-turner.jpg"
+                },
+                {
+                    "id": "rc-4b9dc6b9651428",
+                    "type": "youtube",
+                    "title": "Canyon Backflip",
+                    "note": "Kelly McGarry flips over a 72-foot-long canyon gap.",
+                    "source": "YouTube",
+                    "modules": [
+                        "ballot",
+                        "displayAd"
+                    ],
+                    "ballot": [
+                        "Cool",
+                        "Lame"
+                    ],
+                    "data": {
+                        "videoid": "x76VEPXYaI0",
+                        "rel": 0,
+                        "modestbranding": 1
+                    },
+                    "displayAd": "http://2.bp.blogspot.com/-TlM_3FT89Y0/UMzLr7kVykI/AAAAAAAACjs/lKrdhgp6OQg/s1600/brad-turner.jpg"
+                },
+                {
+                    "id": "rc-9b524d0c0535db",
+                    "type": "youtube",
+                    "title": "Afghanistan",
+                    "note": "Six months in Afghanistan in a two-minute video.",
+                    "source": "YouTube",
+                    "modules": [
+                        "ballot",
+                        "displayAd"
+                    ],
+                    "ballot": [
+                        "Cool",
+                        "Lame"
+                    ],
+                    "data": {
+                        "videoid": "af2m0gf6TtA",
+                        "rel": 0,
+                        "modestbranding": 1
+                    },
+                    "displayAd": "http://2.bp.blogspot.com/-TlM_3FT89Y0/UMzLr7kVykI/AAAAAAAACjs/lKrdhgp6OQg/s1600/brad-turner.jpg"
+                },
+                {
+                    "id": "rc-828007b55441ca",
+                    "type": "youtube",
+                    "title": "Waterski Breakdancing",
+                    "note": "Yes, there is such a thing as waterski-breakdancing.",
+                    "source": "YouTube",
+                    "modules": [
+                        "ballot",
+                        "displayAd"
+                    ],
+                    "ballot": [
+                        "Cool",
+                        "Lame"
+                    ],
+                    "data": {
+                        "videoid": "GdEKSyad_rk",
+                        "rel": 0,
+                        "modestbranding": 1
+                    },
+                    "displayAd": "http://2.bp.blogspot.com/-TlM_3FT89Y0/UMzLr7kVykI/AAAAAAAACjs/lKrdhgp6OQg/s1600/brad-turner.jpg"
+                },
+                {
+                    "id": "rc-4ea854fd34d960",
+                    "type": "youtube",
+                    "title": "Cat Bike Guy",
+                    "note": "This guy rides all around Philly with his cat on his shoulder.",
+                    "source": "YouTube",
+                    "modules": [
+                        "ballot",
+                        "displayAd"
+                    ],
+                    "ballot": [
+                        "Cute",
+                        "Lame"
+                    ],
+                    "data": {
+                        "videoid": "T8F8WR2rzPA",
+                        "rel": 0,
+                        "modestbranding": 1
+                    },
+                    "displayAd": "http://2.bp.blogspot.com/-TlM_3FT89Y0/UMzLr7kVykI/AAAAAAAACjs/lKrdhgp6OQg/s1600/brad-turner.jpg"
+                },
+                {
+                    "id": "rc-392f3546f0cfc3",
+                    "type": "ad",
+                    "ad": true,
+                    "modules": [
+                        "displayAd"
+                    ],
+                    "data": {
+                        "autoplay": true
+                    },
+                    "displayAd": "http://2.bp.blogspot.com/-TlM_3FT89Y0/UMzLr7kVykI/AAAAAAAACjs/lKrdhgp6OQg/s1600/brad-turner.jpg"
+                },
+                {
+                    "id": "rc-77d0ea2794cc6b",
+                    "type": "youtube",
+                    "title": "Avalanche Cliff Jump",
+                    "note": "You're going to want to add avalanche cliff jumping to your bucket list.",
+                    "source": "YouTube",
+                    "modules": [
+                        "ballot",
+                        "displayAd"
+                    ],
+                    "ballot": [
+                        "Cool",
+                        "Lame"
+                    ],
+                    "data": {
+                        "videoid": "SwbP9WLX3fY",
+                        "rel": 0,
+                        "modestbranding": 1
+                    },
+                    "displayAd": "http://2.bp.blogspot.com/-TlM_3FT89Y0/UMzLr7kVykI/AAAAAAAACjs/lKrdhgp6OQg/s1600/brad-turner.jpg"
+                },
+                {
+                    "id": "rc-389f9dea3498d2",
+                    "type": "youtube",
+                    "title": "Toy Robot in Space",
+                    "note": "Who said sending a toy robot to space was impossible?!",
+                    "source": "YouTube",
+                    "modules": [
+                        "ballot",
+                        "displayAd"
+                    ],
+                    "ballot": [
+                        "Cool",
+                        "Lame"
+                    ],
+                    "data": {
+                        "videoid": "ZCAnLxRvNNc",
+                        "rel": 0,
+                        "modestbranding": 1
+                    },
+                    "displayAd": "http://2.bp.blogspot.com/-TlM_3FT89Y0/UMzLr7kVykI/AAAAAAAACjs/lKrdhgp6OQg/s1600/brad-turner.jpg"
+                },
+                {
+                    "id": "rc-065050baf27d98",
+                    "type": "youtube",
+                    "title": "Flash Flood Biker",
+                    "note": "Genius biker thinks he can make it through a flood on his motorcycle.",
+                    "source": "YouTube",
+                    "modules": [
+                        "ballot",
+                        "displayAd"
+                    ],
+                    "ballot": [
+                        "Awesome",
+                        "Stupid"
+                    ],
+                    "data": {
+                        "videoid": "pOoy7_l2EbI",
+                        "rel": 0,
+                        "modestbranding": 1
+                    },
+                    "displayAd": "http://2.bp.blogspot.com/-TlM_3FT89Y0/UMzLr7kVykI/AAAAAAAACjs/lKrdhgp6OQg/s1600/brad-turner.jpg"
+                },
+                {
+                    "id": "rc-3194c992829ad5",
+                    "type": "youtube",
+                    "title": "Seagull GoPro Thief!",
+                    "note": "Oh, what about the time a seagull stole a GoPro? Insane.",
+                    "source": "YouTube",
+                    "modules": [
+                        "ballot",
+                        "displayAd"
+                    ],
+                    "ballot": [
+                        "Cool",
+                        "Lame"
+                    ],
+                    "data": {
+                        "videoid": "rIu5B3Fsstg",
+                        "rel": 0,
+                        "modestbranding": 1
+                    },
+                    "displayAd": "http://2.bp.blogspot.com/-TlM_3FT89Y0/UMzLr7kVykI/AAAAAAAACjs/lKrdhgp6OQg/s1600/brad-turner.jpg"
+                },
+                {
+                    "id": "rc-974e99904a58fd",
+                    "type": "youtube",
+                    "title": "Rattlesnake Attack!",
+                    "note": "Want to see what an angry rattlesnake looks like?",
+                    "source": "YouTube",
+                    "modules": [
+                        "ballot",
+                        "displayAd"
+                    ],
+                    "ballot": [
+                        "Cool",
+                        "Lame"
+                    ],
+                    "data": {
+                        "videoid": "oEG1V7rkIK8",
+                        "rel": 0,
+                        "modestbranding": 1
+                    },
+                    "displayAd": "http://2.bp.blogspot.com/-TlM_3FT89Y0/UMzLr7kVykI/AAAAAAAACjs/lKrdhgp6OQg/s1600/brad-turner.jpg"
+                },
+                {
+                    "id": "rc-0518f251954d3d",
+                    "type": "youtube",
+                    "title": "Rope-Swing!",
+                    "note": "Rope-swinging from a moving boat sounds like fun.",
+                    "source": "YouTube",
+                    "modules": [
+                        "ballot",
+                        "displayAd"
+                    ],
+                    "ballot": [
+                        "Cool",
+                        "Lame"
+                    ],
+                    "data": {
+                        "videoid": "zqIjZFV4YAU",
+                        "rel": 0,
+                        "modestbranding": 1
+                    },
+                    "displayAd": "http://2.bp.blogspot.com/-TlM_3FT89Y0/UMzLr7kVykI/AAAAAAAACjs/lKrdhgp6OQg/s1600/brad-turner.jpg"
+                },
+                {
+                    "id": "rc-3502759494071f",
+                    "type": "youtube",
+                    "title": "Kitten Rescue!",
+                    "note": "The world's greatest fireman rescues a kitten.",
+                    "source": "YouTube",
+                    "modules": [
+                        "ballot",
+                        "displayAd"
+                    ],
+                    "ballot": [
+                        "Cute",
+                        "Lame"
+                    ],
+                    "data": {
+                        "videoid": "CjB_oVeq8Lo",
+                        "rel": 0,
+                        "modestbranding": 1
+                    },
+                    "displayAd": "http://2.bp.blogspot.com/-TlM_3FT89Y0/UMzLr7kVykI/AAAAAAAACjs/lKrdhgp6OQg/s1600/brad-turner.jpg"
+                },
+                {
+                    "id": "rc-6c107d42d383ec",
+                    "type": "youtube",
+                    "title": "Red Sox Victory!",
+                    "note": "Shane Victorino captures the moment the Red Sox won the World Series.",
+                    "source": "YouTube",
+                    "modules": [
+                        "ballot",
+                        "displayAd"
+                    ],
+                    "ballot": [
+                        "YAY!",
+                        "ARGH!"
+                    ],
+                    "data": {
+                        "videoid": "eesJwsJoczY",
+                        "rel": 0,
+                        "modestbranding": 1
+                    },
+                    "displayAd": "http://2.bp.blogspot.com/-TlM_3FT89Y0/UMzLr7kVykI/AAAAAAAACjs/lKrdhgp6OQg/s1600/brad-turner.jpg"
+                },
+                {
+                    "id": "rc-ee5f1c11d8d42f",
+                    "type": "miniReel",
+                    "data": {
+                        "message": "Now check out...",
+                        "query": {
+                            "id": [
+                                "1",
+                                "2",
+                                "3"
+                            ]
+                        }
+                    }
+                }
+            ]
+        }
+    },
+    {
         "id": "e-6ab02642b45eb8",
         "uri": "superbowl",
         "appUriPrefix": "<%= settings.appUrl %>",
@@ -562,10 +923,10 @@
                     }
                 },
                 {
-                    "id": "rc-df375fb28cc776",
+                    "id": "rc-4f9cb78c41dcd9",
                     "type": "youtube",
-                    "title": "Marcus Allen's 74-yard Cutback Touchdown Run",
-                    "note": "<p><strong>Super Bowl:</strong> XVIII (18) | January 22, 1984</p> <p><strong>Venue:</strong> Tampa Stadium, Tampa, FL</p> <p>Marcus Allen put on one of the most impressive Super Bowl performances of all time in 1984 when he ran for 191 yards and two touchdowns. His best run of the day came in the third quarter when he scampered off for a 74-yarder that started with a smooth cutback to fool the defense.</p>",
+                    "title": "John Riggins Scores On 4th And 1",
+                    "note": "<p><strong>Super Bowl:</strong> XVII (17) | January 30, 1983</p> <p><strong>Venue:</strong> Rose Bowl Stadium, Pasadena, CA</p> <p>Back when power running was actually a thing in the NFL, Redskins back John Riggins showed us what real football looks like when he bulldozed his way to a 43-yard score on a pivotal 4th and 1 situation. Showing what a perfectly executed play looks like, the run was a thing of beauty. Seeing all 11 players execute perfectly like that only happens every once in a while.</p>",
                     "source": "YouTube",
                     "modules": [
                         "ballot"
@@ -575,7 +936,202 @@
                         "All Luck"
                     ],
                     "data": {
-                        "videoid": "oPrm4PpOStA",
+                        "videoid": "u_Hrv5TNb2Y",
+                        "rel": 0,
+                        "modestbranding": 1
+                    }
+                },
+                {
+                    "id": "rc-b0f8f58e21f202",
+                    "type": "youtube",
+                    "title": "Devin Hester's Kickoff Return To Start The Game",
+                    "note": "<p><strong>Super Bowl:</strong> XLI (41) | February 4, 2007</p> <p><strong>Venue:</strong> Dolphin Stadium, Miami Gardens, FL</p> <p>Devin Hester tore the lid off Super Bowl XLI by returning the opening kickoff for a touchdown, putting the Bears up 7-0 over the Colts in just the opening seconds of the game. Making one good move after another, no one was catching Hester out in the open field.</p>",
+                    "source": "YouTube",
+                    "modules": [
+                        "ballot"
+                    ],
+                    "ballot": [
+                        "All Skill",
+                        "All Luck"
+                    ],
+                    "data": {
+                        "videoid": "MVT91mNMS8A",
+                        "rel": 0,
+                        "modestbranding": 1
+                    }
+                },
+                {
+                    "id": "rc-ca8adce82b632f",
+                    "type": "youtube",
+                    "title": "Joe Montana's Game-Winning Drive And TD Pass To John Taylor",
+                    "note": "<p><strong>Super Bowl:</strong> XXIII (23) | January 22, 1989</p> <p><strong>Venue:</strong> Joe Robbie Stadium, Miami, FL</p> <p>During the final drive of Super Bowl XXIII, we saw the best of Joe Montana and the 49ers. With old reliable Jerry Rice converting on a couple of key receptions, Montana found John Taylor in the back of the endzone to seal the game just after a Bengals scoring drive.</p>",
+                    "source": "YouTube",
+                    "modules": [
+                        "ballot"
+                    ],
+                    "ballot": [
+                        "All Skill",
+                        "All Luck"
+                    ],
+                    "data": {
+                        "videoid": "O-5mLe8n9QI",
+                        "rel": 0,
+                        "modestbranding": 1
+                    }
+                },
+                {
+                    "id": "rc-cd2a90ac077d87",
+                    "type": "youtube",
+                    "title": "Mike Jones Tackles Kevin Dyson At The 1-Yard Line To Save The Game",
+                    "note": "<p><strong>Super Bowl:</strong> XXXIV (34) | January 30, 2000</p> <p><strong>Venue:</strong> Georgia Dome, Atlanta, GA</p> <p>They say defense wins championships and at Super Bowl XXXIV. With Steve McNair closing in on scoring late to steal the game, the Titans literally came within one yard of tying the game to force overtime. McNair set his team up to win when receiver Kevin Dyson got denied by linebacker Mike Jones at the goal line.</p>",
+                    "source": "YouTube",
+                    "modules": [
+                        "ballot"
+                    ],
+                    "ballot": [
+                        "All Skill",
+                        "All Luck"
+                    ],
+                    "data": {
+                        "videoid": "xKaGdvnQUz4",
+                        "rel": 0,
+                        "modestbranding": 1
+                    }
+                },
+                {
+                    "id": "rc-392f3546f0cfc3",
+                    "type": "ad",
+                    "ad": true,
+                    "modules": [],
+                    "data": {
+                        "autoplay": true
+                    }
+                },
+                {
+                    "id": "rc-cd6b62c0bf1025",
+                    "type": "youtube",
+                    "title": "Santonio Holmes' Game-Winning, Toe-Drag Touchdown",
+                    "note": "<p><strong>Super Bowl:</strong> XLIII (43) | February 1, 2009</p> <p><strong>Venue:</strong> Raymond James Stadium, Tampa, FL</p> <p>When healthy, Santonio Holmes is an elite receiver. His Super Bowl XLIII matchup against Larry Fitzgerald was one for the ages, as the two went blow-for-blow. Holmes who had the last laugh, reeling in a clutch 6-yard pass from Ben Roethlisberger to ice the game. The toe drag proved that Santonio was good for the count.</p>",
+                    "source": "YouTube",
+                    "modules": [
+                        "ballot"
+                    ],
+                    "ballot": [
+                        "All Skill",
+                        "All Luck"
+                    ],
+                    "data": {
+                        "videoid": "lmvQVz1-bOU",
+                        "rel": 0,
+                        "modestbranding": 1
+                    }
+                },
+                {
+                    "id": "rc-ef6ffe2bab25f5",
+                    "type": "youtube",
+                    "title": "Eli Manning's Evasion And David Tyree's Impossible Helmet Catch",
+                    "note": "<p><strong>Super Bowl:</strong> XLII (42) | February 3, 2008</p> <p><strong>Venue:</strong> University of Phoenix Stadium, Glendale, AZ</p> <p>Eli Manning&rsquo;s tenacity was just as big a part of this play as David Tyree&rsquo;s unbelievable catch itself. When all hope was lost, goofy ass Eli emerged out of the would-be sack and launched a prayer. That play kept the drive alive and led to a Plaxico Burress touchdown-reception to win the game.</p>",
+                    "source": "YouTube",
+                    "modules": [
+                        "ballot"
+                    ],
+                    "ballot": [
+                        "All Skill",
+                        "All Luck"
+                    ],
+                    "data": {
+                        "videoid": "27XeNefwABw",
+                        "rel": 0,
+                        "modestbranding": 1
+                    }
+                },
+                {
+                    "id": "rc-7c2c6b5040f21b",
+                    "type": "youtube",
+                    "title": "James Harrison's 100-yard Interception Return For Touchdown",
+                    "note": "<p><strong>Super Bowl:</strong> XLIII (43) | February 1, 2009</p> <p><strong>Venue:</strong> Raymond James Stadium, Tampa, FL</p> <p>James Harrison&rsquo;s 100-yard interception return for a touchdown right before the half of Super Bowl XLIII could be the greatest football play of all time. With Kurt Warner about to strike from the redzone, Harrison etched his legacy by bullying his way the distance to give the Steelers the advantage that decided the game.</p>",
+                    "source": "YouTube",
+                    "modules": [
+                        "ballot"
+                    ],
+                    "ballot": [
+                        "All Skill",
+                        "All Luck"
+                    ],
+                    "data": {
+                        "videoid": "RqnQwKAI4OE",
+                        "rel": 0,
+                        "modestbranding": 1
+                    }
+                },
+                {
+                    "id": "rc-1a327c199e4387",
+                    "type": "miniReel",
+                    "data": {
+                        "message": "Now check out...",
+                        "query": {
+                            "id": [
+                                "1",
+                                "2",
+                                "3"
+                            ]
+                        }
+                    }
+                }
+            ]
+        }
+    },
+    {
+        "id": "e-d9f6d87d8beb76",
+        "uri": "superbowl-lightbox",
+        "appUriPrefix": "<%= settings.appUrl %>",
+        "appUri": "rumble",
+        "title": "The 10 Greatest Super Bowl Plays Of All Time",
+        "subtitle": "",
+        "summary": "From touchdowns, to big hits, spectacular catches and defensive stops, the highest level of competition never disappoints. To really appreciate what this Super Bowl will bring us on Sunday, it's important to remember some of the greatness of the past.",
+        "img": {
+            "splash": "experiences/superbowl/splash-6thumb.jpg"
+        },
+        "theme": "ed-sports",
+        "mode": "lightbox",
+        "data": {
+            "id": "r-a798237d2e522f",
+            "electionId": "el-8b1b6847d575ac",
+            "deck": [
+                {
+                    "id": "rc-080fb573e704cf",
+                    "type": "youtube",
+                    "title": "John Elway's \"Helicopter\" Scramble Spin",
+                    "note": "<p><strong>Super Bowl:</strong> XXXII (32) | January 25, 1998</p> <p><strong>Venue:</strong> Qualcomm Stadium, San Diego, CA</p> <p>Before Peyton Manning was breaking passing records out in Denver, it was John Elway who called the shots as the Broncos legendary signal caller from 1983 to 1998.</p> <p>In his last year playing in the league, Elway made it to the Super Bowl where he he scrambled down in the red zone for a gain that ended with a big hit.</p>",
+                    "source": "YouTube",
+                    "modules": [
+                        "ballot"
+                    ],
+                    "ballot": [
+                        "All Skill",
+                        "All Luck"
+                    ],
+                    "data": {
+                        "videoid": "WpJaJM4Cy8o",
+                        "rel": 0,
+                        "modestbranding": 1
+                    }
+                },
+                {
+                    "id": "rc-7311404ad44b52",
+                    "type": "youtube",
+                    "title": "Desmond Howard's 100-yard Touchdown Return",
+                    "note": "<p><strong>Super Bowl:</strong> XXXI (31) | January 26, 1997</p> <p><strong>Venue:</strong> Louisiana Superdome, New Orleans, LA</p> <p>It doesn’t feel like too long ago when Desmond Howard was in the NFL returning kicks and scoring touchdowns, as we most remember his signature moment in Super Bowl XXXI. Des ended up walking away with MVP honors, finishing with 154 yards returning and one game-changing touchdown.</p>",
+                    "source": "YouTube",
+                    "modules": [
+                        "ballot"
+                    ],
+                    "ballot": [
+                        "All Skill",
+                        "All Luck"
+                    ],
+                    "data": {
+                        "videoid": "-T1D_H-vOSA",
                         "rel": 0,
                         "modestbranding": 1
                     }
