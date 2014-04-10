@@ -1,23 +1,5 @@
+<div class="ui__modal">
 <c6-alias model="EditCardCtrl.model" as="card">
-    <header class="pageHeader container">
-        <h1 class="pageTitle">{{card.title}}</h1>
-        <div class="pageHeader__actions clearfix">
-            
-            <ul class="toolbar__group">
-                <li class="toolbar__item">
-                    <button class="toolbar__btn toolbar__preview" type="button">Preview</button>
-                </li>
-                <li class="toolbar__item">
-                    <button class="toolbar__btn toolbar__makePrivate" type="button">Make Private</button>
-                </li>
-                <li class="toolbar__item">
-                    <button class="toolbar__btn toolbar__publish" type="button">Publish</button>
-                </li>
-            </ul>
-        </div>
-        <span class="ui__divider--border"><br></span>
-    </header>
-
     <form>
         <label class="field">
             Title:
@@ -35,3 +17,5 @@
     <video-preview service="{{card.data.service}}" videoid="{{card.data.videoid}}"></video-preview>
     <button ng-click="EditCardCtrl.close()">Close</button>
 </c6-alias>
+</div>
+<div class="ui__overlay">&nbsp;</div>
