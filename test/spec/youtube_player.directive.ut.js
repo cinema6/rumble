@@ -588,6 +588,11 @@
 
                             video.on('timeupdate', timeupdate);
 
+                            player.getCurrentTime.and.returnValue(0);
+                            $interval.flush(250);
+                            expect(timeupdate).not.toHaveBeenCalled();
+
+                            player.getCurrentTime.and.returnValue(1);
                             $interval.flush(250);
                             expect(timeupdate).toHaveBeenCalled();
 
