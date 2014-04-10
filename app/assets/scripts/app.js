@@ -280,8 +280,8 @@
             function setBehaviors(obj, mode) {
                 function isMode() {
                     var result = false;
-                    
-                    angular.forEach(Array.prototype.slice.call(arguments, 0), function(val) {
+
+                    angular.forEach(Array.prototype.slice.call(arguments), function(val) {
                         if(mode === val) { result = true; }
                     });
 
@@ -289,7 +289,7 @@
                 }
 
                 obj.behaviors = {
-                    autoplay: isMode('light'),
+                    autoplay: isMode('light', 'lightbox', 'lightbox-ads'),
                     inlineVoteResults: isMode('full', 'mobile'),
                     separateTextView: isMode('full'),
                     fullscreen: isMode('mobile', 'lightbox', 'lightbox-ads')
