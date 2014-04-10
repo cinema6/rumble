@@ -26,7 +26,7 @@
     <div class="mr-card__copy">
         <h1 class="mr-card__title tk--hdr">{{config.title}}</h1>
         <p ng-show="!!config.source" class="mr-card__attributes">via <a ng-href="{{Ctrl.videoUrl}}" target="_blank" title="YouTube">{{config.source}}</a></p>
-        <div class="mr-card__desc">{{config.note}}</div>
+        <div class="mr-card__desc" ng-bind-html="config.note"></div>
     </div>
     <div class="mr-ad__med-rect">
         <display-ad-module ng-if="Ctrl.hasModule('displayAd')"
