@@ -412,7 +412,9 @@
                                 }
                             },
                             videoid: {
-                                value: id
+                                get: function() {
+                                    return id;
+                                }
                             }
                         });
 

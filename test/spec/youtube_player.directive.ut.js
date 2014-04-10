@@ -394,7 +394,7 @@
                         describe('setting', function() {
                             it('should throw an error', function() {
                                 expect(function() {
-                                    video.videoid = null;
+                                    video.videoid = 'foo';
                                 }).toThrow();
                             });
                         });
