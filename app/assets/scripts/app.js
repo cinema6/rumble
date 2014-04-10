@@ -353,5 +353,11 @@
             $scope.app = app;
 
             cinema6.init();
+
+            cinema6.getSession().then(function(session) {
+                session.on('mrPreview:updateMode', function() {
+                    $window.location.reload();
+                });
+            });
         }]);
 }(window));

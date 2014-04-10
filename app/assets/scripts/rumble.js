@@ -352,6 +352,18 @@
             }
         });
 
+        cinema6.getSession().then(function(session) {
+            session.on('mrPreview:updateExperience', function(experience) {
+                $scope.deck = MiniReelService.createDeck(experience.data);
+            });
+
+            session.on('mrPreview:jumpToCard', function(card) {
+                console.log(card);
+                $scope.$emit('reelStart');
+                self.jumpTo(self.findCardByVideo(card.type,card.data.videoid));
+            });
+        });
+
         this.findCardByVideo = function(videoType,videoId){
             var result;
             $scope.deck.some(function(item){
