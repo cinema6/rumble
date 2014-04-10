@@ -94,8 +94,8 @@
                 removeClass: function($element, className, done) {
                     function show($element, done) {
                         $element.animate({
-                            width: '5rem',
-                            margin: '0 22px 0 10px'
+                            width: '2.25em',
+                            margin: '0 0.75em 0 0'
                         }, {
                             complete: done,
                             progress: function() {
@@ -212,6 +212,7 @@
                                                 'c6-drag-zone-active'
                                             ].join(' ')
                                         );
+                                        $element.css({'top' : 0, 'left' : 0});
                                         forEach($dropZones, function(dropZone) {
                                             $animate.removeClass(
                                                 $(dropZone),

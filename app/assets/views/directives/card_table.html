@@ -8,14 +8,27 @@
                 }"
                 id="container-{{this.id}}"
                 c6-drag-zone>
+                <h4 class="card__type">Card #. Card Type</h4>
                 <div id="{{this.id}}" c6-draggable class="card__item">
-                    <h3>{{this.title}}</h3>
-                    <button ng-click="editCard({ card: this })">Edit</button>
+                    <div class="card__statusIndicator" ng-click="editCard({ card: this })">&nbsp;</div>
+                    <div class="miniReel__imgBox">
+                        <img src="http://lorempixel.com/300/200/" class="miniReel__img" alt="{{this.title}}">
+                    </div>
+                    <div class="miniReel__body">
+                        <div class="miniReel__copy">
+                            <h1 class="miniReel__title"><span class="miniReel__titleText">{{this.title}}</span></h1>
+                            <p class="miniReel__summary">{{this.summary}}</p>
+                        </div>
+                        <div class="ui__divider--pause">&hellip;</div>
+                    </div>
                 </div>
-            </div>
-            <div id="drop-zone-{{this.id}}" ng-show="DragCtrl.currentDrags[0] !== DragCtrl.draggables[this.id]" c6-drag-zone class="card__drop-zone">&nbsp;</div>
-            <div class="new__container" ng-hide="DragCtrl.currentDrags.length">
-                <button class="new__button" id="zone-{{this.id}}" data-index={{$index}}>+</button>
+                <div class="card__contextBar">
+                    <a href="#" title="Preview This Card">Preview This Card</a>
+                </div>
+            </div><!--
+            --><div id="drop-zone-{{this.id}}" ng-show="DragCtrl.currentDrags[0] !== DragCtrl.draggables[this.id]" c6-drag-zone class="card__drop-zone">&nbsp;</div><!--
+            --><div class="new__container" ng-hide="DragCtrl.currentDrags.length">
+                <button class="new__button ui__add sprite--alpha" id="zone-{{this.id}}" data-index={{$index}}><span class="ir">Add Here</span></button>
             </div>
         </li>
     </ul>
