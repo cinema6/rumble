@@ -6,7 +6,8 @@
             var $rootScope,
                 $scope,
                 c6EventEmitter,
-                $compile;
+                $compile,
+                $q;
 
             var VimeoPlayerService,
                 players,
@@ -21,9 +22,27 @@
                     $provide.value('VimeoPlayerService', {
                         Player: jasmine.createSpy('VimeoPlayerService.Player')
                             .and.callFake(function($iframe) {
+                                var ready = false;
+
                                 expect($iframe[0].tagName).toBe('IFRAME');
+                                expect($iframe.attr('src')).not.toBe('{{url}}');
+
+                                this.call = jasmine.createSpy('player.call()')
+                                    .and.returnValue($q.defer().promise);
 
                                 c6EventEmitter(this);
+
+                                this.on('ready', function() {
+                                    ready = true;
+                                });
+
+                                this.on('newListener', function(event) {
+                                    if (event.search(
+                                        /^(newListener|ready)$/
+                                    ) < 0 && !ready) {
+                                        throw new Error('Can\'t add and event listener: ' + event + ' before the player is ready.');
+                                    }
+                                });
 
                                 player = this;
                             })
@@ -34,6 +53,7 @@
                     $rootScope = $injector.get('$rootScope');
                     $compile = $injector.get('$compile');
                     c6EventEmitter = $injector.get('c6EventEmitter');
+                    $q = $injector.get('$q');
 
                     VimeoPlayerService = $injector.get('VimeoPlayerService');
 
@@ -84,6 +104,10 @@
                     });
 
                     describe('canplay', function() {
+                        beforeEach(function() {
+                            player.emit('ready');
+                        });
+
                         it('should be emitted the first time the "loadProgress" event is emitted', function() {
                             var canplay = jasmine.createSpy('canplay');
 
@@ -98,6 +122,10 @@
                     });
 
                     describe('canplaythrough', function() {
+                        beforeEach(function() {
+                            player.emit('ready');
+                        });
+
                         it('should be emitted after the video buffers 25%', function() {
                             var canplaythrough = jasmine.createSpy('canplaythrough');
 
@@ -124,6 +152,10 @@
                     });
 
                     describe('ended', function() {
+                        beforeEach(function() {
+                            player.emit('ready');
+                        });
+
                         it('should be emitted when the player is finished', function() {
                             var ended = jasmine.createSpy('ended');
 
@@ -135,17 +167,32 @@
                     });
 
                     describe('loadedmetadata', function() {
-                        it('should be emitted when the player is ready', function() {
-                            var loadedmetadata = jasmine.createSpy('loadedmetadata');
+                        beforeEach(function() {
+                            player.emit('ready');
+                        });
+
+                        it('should be emitted when the player gets the duration', function() {
+                            var loadedmetadata = jasmine.createSpy('loadedmetadata'),
+                                deferred = $q.defer();
 
                             video.on('loadedmetadata', loadedmetadata);
+                            player.call.and.returnValue(deferred.promise);
 
                             player.emit('ready');
+                            expect(loadedmetadata).not.toHaveBeenCalled();
+
+                            $scope.$apply(function() {
+                                deferred.resolve(3);
+                            });
                             expect(loadedmetadata).toHaveBeenCalled();
                         });
                     });
 
                     describe('loadstart', function() {
+                        beforeEach(function() {
+                            player.emit('ready');
+                        });
+
                         it('should be emitted once on the first "loadProgress" event', function() {
                             var loadstart = jasmine.createSpy('loadstart');
 
@@ -160,6 +207,10 @@
                     });
 
                     describe('pause', function() {
+                        beforeEach(function() {
+                            player.emit('ready');
+                        });
+
                         it('should be emitted on every "pause" event', function() {
                             var pause = jasmine.createSpy('pause');
 
@@ -174,6 +225,10 @@
                     });
 
                     describe('play', function() {
+                        beforeEach(function() {
+                            player.emit('ready');
+                        });
+
                         it('should be emitted after the video resumes', function() {
                             var play = jasmine.createSpy('play');
 
@@ -192,6 +247,10 @@
                     });
 
                     describe('playing', function() {
+                        beforeEach(function() {
+                            player.emit('ready');
+                        });
+
                         it('should be emitted on every play', function() {
                             var playing = jasmine.createSpy('playing');
 
@@ -206,6 +265,10 @@
                     });
 
                     describe('progress', function() {
+                        beforeEach(function() {
+                            player.emit('ready');
+                        });
+
                         it('should be emitted for every "loadProgress" event', function() {
                             var progress = jasmine.createSpy('progress');
 
@@ -220,6 +283,10 @@
                     });
 
                     describe('seeked', function() {
+                        beforeEach(function() {
+                            player.emit('ready');
+                        });
+
                         it('should be emitted when the video finishes seeking', function() {
                             var seeked = jasmine.createSpy('seeked');
 
@@ -234,6 +301,10 @@
                     });
 
                     describe('seeking', function() {
+                        beforeEach(function() {
+                            player.emit('ready');
+                        });
+
                         it('should be emitted when the video starts seeking', function() {
                             var seeking = jasmine.createSpy('seeking');
 
@@ -248,6 +319,10 @@
                     });
 
                     describe('timeupdate', function() {
+                        beforeEach(function() {
+                            player.emit('ready');
+                        });
+
                         it('should be emitted on every "playProgress" event', function() {
                             var timeupdate = jasmine.createSpy('timeupdate');
 
@@ -258,6 +333,280 @@
 
                             player.emit('playProgress', {});
                             expect(timeupdate.calls.count()).toBe(2);
+                        });
+                    });
+                });
+
+                describe('properties', function() {
+                    describe('buffered', function() {
+                        beforeEach(function() {
+                            player.emit('ready');
+                        });
+
+                        function loadProgress(percent) {
+                            player.emit('loadProgress', {
+                                percent: percent.toString()
+                            });
+                        }
+
+                        describe('getting', function() {
+                            it('should be the percent of the video that is buffered', function() {
+                                expect(video.buffered).toBe(0);
+
+                                loadProgress(0.2);
+                                expect(video.buffered).toBe(0.2);
+
+                                loadProgress(0.35);
+                                expect(video.buffered).toBe(0.35);
+
+                                loadProgress(0.6);
+                                expect(video.buffered).toBe(0.6);
+                            });
+                        });
+
+                        describe('setting', function() {
+                            it('should throw an error', function() {
+                                expect(function() {
+                                    video.buffered = 0.5;
+                                }).toThrow();
+                            });
+                        });
+                    });
+
+                    describe('currentTime', function() {
+                        beforeEach(function() {
+                            player.emit('ready');
+                        });
+
+                        function playProgress(time) {
+                            player.emit('playProgress', {
+                                seconds: time.toString()
+                            });
+                        }
+
+                        describe('getting', function() {
+                            it('should be the most recent time for the video', function() {
+                                expect(video.currentTime).toBe(0);
+
+                                playProgress(4);
+                                expect(video.currentTime).toBe(4);
+
+                                playProgress(6.4);
+                                expect(video.currentTime).toBe(6.4);
+
+                                playProgress(100.2);
+                                expect(video.currentTime).toBe(100.2);
+                            });
+                        });
+
+                        describe('setting', function() {
+                            it('should seek the player to the provided time', function() {
+                                video.currentTime = 15;
+                                expect(player.call).toHaveBeenCalledWith('seekTo', 15);
+
+                                video.currentTime = 20.2;
+                                expect(player.call).toHaveBeenCalledWith('seekTo', 20.2);
+
+                                video.currentTime = 35;
+                                expect(player.call).toHaveBeenCalledWith('seekTo', 35);
+                            });
+                        });
+                    });
+
+                    describe('duration', function() {
+                        describe('getting', function() {
+                            var deferred;
+
+                            beforeEach(function() {
+                                deferred = $q.defer();
+
+                                player.call.and.returnValue(deferred.promise);
+
+                                player.emit('ready');
+                            });
+
+                            it('should be the result of a getDuration call', function() {
+                                expect(player.call).toHaveBeenCalledWith('getDuration');
+
+                                expect(video.duration).toBe(0);
+
+                                $scope.$apply(function() {
+                                    deferred.resolve(60);
+                                });
+
+                                expect(video.duration).toBe(60);
+                            });
+                        });
+
+                        describe('setting', function() {
+                            it('should throw an error', function() {
+                                expect(function() {
+                                    video.duration = 10;
+                                }).toThrow();
+                            });
+                        });
+                    });
+
+                    describe('ended', function() {
+                        beforeEach(function() {
+                            player.emit('ready');
+                        });
+
+                        describe('getting', function() {
+                            it('should be true when the video has ended, and be false when it plays again', function() {
+                                expect(video.ended).toBe(false);
+
+                                player.emit('finish');
+                                expect(video.ended).toBe(true);
+
+                                player.emit('play');
+                                expect(video.ended).toBe(false);
+
+                                player.emit('finish');
+                                expect(video.ended).toBe(true);
+                            });
+                        });
+
+                        describe('setting', function() {
+                            it('should throw an error', function() {
+                                expect(function() {
+                                    video.ended = true;
+                                }).toThrow();
+                            });
+                        });
+                    });
+
+                    describe('paused', function() {
+                        beforeEach(function() {
+                            player.emit('ready');
+                        });
+
+                        describe('getting', function() {
+                            it('should be true when the video is paused', function() {
+                                expect(video.paused).toBe(true);
+
+                                player.emit('play');
+                                expect(video.paused).toBe(false);
+
+                                player.emit('pause');
+                                expect(video.paused).toBe(true);
+                            });
+                        });
+
+                        describe('setting', function() {
+                            it('should throw an error', function() {
+                                expect(function() {
+                                    video.paused = true;
+                                }).toThrow();
+                            });
+                        });
+                    });
+
+                    describe('readyState', function() {
+                        describe('getting', function() {
+                            it('should start as -1', function() {
+                                expect(video.readyState).toBe(-1);
+                            });
+
+                            it('should be 0 when the player is ready', function() {
+                                player.emit('ready');
+
+                                expect(video.readyState).toBe(0);
+                            });
+
+                            it('should be 1 when the duration is fetched', function() {
+                                var deferred = $q.defer();
+
+                                player.call.and.returnValue(deferred.promise);
+                                player.emit('ready');
+                                $scope.$apply(function() {
+                                    deferred.resolve(45);
+                                });
+
+                                expect(video.readyState).toBe(1);
+                            });
+
+                            it('should be 3 on the first loadProgress event', function() {
+                                player.emit('ready');
+                                player.emit('loadProgress', {});
+
+                                expect(video.readyState).toBe(3);
+                            });
+
+                            it('should be 4 when the video is 25% buffered', function() {
+                                function loadProgress(percent) {
+                                    player.emit('loadProgress', {
+                                        percent: percent.toString()
+                                    });
+                                }
+
+                                player.emit('ready');
+
+                                loadProgress(0.1);
+                                loadProgress(0.2);
+                                loadProgress(0.24);
+                                expect(video.readyState).not.toBe(4);
+                                loadProgress(0.25);
+                                expect(video.readyState).toBe(4);
+                            });
+                        });
+
+                        describe('setting', function() {
+                            it('should throw an error', function() {
+                                expect(function() {
+                                    video.readyState = 5;
+                                }).toThrow();
+                            });
+                        });
+                    });
+
+                    describe('seeking', function() {
+                        beforeEach(function() {
+                            player.emit('ready');
+                        });
+
+                        describe('getting', function() {
+                            it('should be true when a seek is in progress', function() {
+                                expect(video.seeking).toBe(false);
+
+                                video.currentTime = 10;
+                                expect(video.seeking).toBe(true);
+
+                                player.emit('seek', {});
+                                expect(video.seeking).toBe(false);
+
+                                video.currentTime = 20;
+                                expect(video.seeking).toBe(true);
+
+                                player.emit('seek');
+                                expect(video.seeking).toBe(false);
+                            });
+                        });
+
+                        describe('setting', function() {
+                            it('should throw an error', function() {
+                                expect(function() {
+                                    video.seeking = true;
+                                }).toThrow();
+                            });
+                        });
+                    });
+                });
+
+                describe('methods', function() {
+                    describe('pause', function() {
+                        it('should pause the player', function() {
+                            video.pause();
+
+                            expect(player.call).toHaveBeenCalledWith('pause');
+                        });
+                    });
+
+                    describe('play', function() {
+                        it('should play the player', function() {
+                            video.play();
+
+                            expect(player.call).toHaveBeenCalledWith('play');
                         });
                     });
                 });

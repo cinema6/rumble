@@ -117,7 +117,7 @@
                 restrict: 'E',
                 template: [
                     '<iframe id="{{id}}"',
-                    '    src="{{url}}"',
+                    '    src="about:blank"',
                     '    width="100%"',
                     '    height="100%"',
                     '    frameborder="0"',
@@ -131,66 +131,151 @@
                     id: '@'
                 },
                 link: function(scope, $element) {
+                    var $iframe = $element.find('iframe');
+
                     function VideoPlayer($iframe) {
                         var self = this,
                             player = new VimeoPlayerService.Player($iframe),
-                            hasPaused = false;
+                            hasPaused = false,
+                            state = {
+                                buffered: 0,
+                                currentTime: 0,
+                                duration: 0,
+                                ended: false,
+                                paused: true,
+                                readyState: -1,
+                                seeking: false
+                            };
 
-                        player
-                            .on('ready', function() {
-                                self.emit('ready');
-                                self.emit('loadedmetadata');
-                            })
-                            .once('loadProgress', function() {
-                                self.emit('canplay');
-                                self.emit('loadstart');
-                            })
-                            .on('loadProgress', function(data) {
-                                var percent = parseFloat(data.percent);
+                        function addEventListeners(player) {
+                            player
+                                .once('loadProgress', function() {
+                                    state.readyState = 3;
+                                    self.emit('canplay');
+                                    self.emit('loadstart');
+                                })
+                                .on('loadProgress', function(data) {
+                                    var percent = parseFloat(data.percent);
 
-                                if (percent >= 0.25) {
-                                    self.emit('canplaythrough');
-                                    player.removeListener('loadProgress', this);
-                                }
-                            })
-                            .on('loadProgress', function() {
-                                self.emit('progress');
-                            })
-                            .on('finish', function() {
-                                self.emit('ended');
-                            })
-                            .on('pause', function() {
-                                hasPaused = true;
-                                self.emit('pause');
-                            })
-                            .on('play', function() {
-                                if (hasPaused) {
-                                    self.emit('play');
-                                }
+                                    if (percent >= 0.25) {
+                                        state.readyState = 4;
+                                        self.emit('canplaythrough');
+                                        player.removeListener('loadProgress', this);
+                                    }
+                                })
+                                .on('loadProgress', function(data) {
+                                    var percent = parseFloat(data.percent);
 
-                                self.emit('playing');
-                            })
-                            .on('seek', function() {
-                                self.emit('seeked');
-                            });
+                                    state.buffered = percent;
+                                    self.emit('progress');
+                                })
+                                .on('finish', function() {
+                                    state.ended = true;
+                                    self.emit('ended');
+                                })
+                                .on('pause', function() {
+                                    hasPaused = true;
+                                    state.paused = true;
+
+                                    self.emit('pause');
+                                })
+                                .on('play', function() {
+                                    state.ended = false;
+                                    state.paused = false;
+
+                                    if (hasPaused) {
+                                        self.emit('play');
+                                    }
+
+                                    self.emit('playing');
+                                })
+                                .on('seek', function() {
+                                    state.seeking = false;
+                                    self.emit('seeked');
+                                })
+                                .on('playProgress', function(data) {
+                                    var time = parseFloat(data.seconds);
+
+                                    state.currentTime = time;
+                                    self.emit('timeupdate');
+                                });
+                        }
+
+                        this.play = function() {
+                            player.call('play');
+                        };
+
+                        this.pause = function() {
+                            player.call('pause');
+                        };
 
                         Object.defineProperties(this, {
+                            buffered: {
+                                get: function() {
+                                    return state.buffered;
+                                }
+                            },
                             currentTime: {
-                                set: function() {
+                                get: function() {
+                                    return state.currentTime;
+                                },
+                                set: function(time) {
+                                    state.seeking = true;
                                     self.emit('seeking');
+                                    player.call('seekTo', time);
+                                }
+                            },
+                            duration: {
+                                get: function() {
+                                    return state.duration;
+                                }
+                            },
+                            ended: {
+                                get: function() {
+                                    return state.ended;
+                                }
+                            },
+                            paused: {
+                                get: function() {
+                                    return state.paused;
+                                }
+                            },
+                            readyState: {
+                                get: function() {
+                                    return state.readyState;
+                                }
+                            },
+                            seeking: {
+                                get: function() {
+                                    return state.seeking;
                                 }
                             }
+                        });
+
+                        player.on('ready', function() {
+                            state.readyState = 0;
+                            self.emit('ready');
+                            addEventListeners(player);
+
+                            player.call('getDuration')
+                                .then(function getDuration(duration) {
+                                    state.readyState = 1;
+                                    state.duration = duration;
+                                    self.emit('loadedmetadata');
+                                });
                         });
 
                         c6EventEmitter(this);
                     }
 
-                    scope.url = 'http://player.vimeo.com/video/' +
+                    // We can't rely on angular bindings to set the iframe src because it needs to
+                    // be set before it is passed to the constructor below.
+                    $iframe.attr('src', 'http://player.vimeo.com/video/' +
                         scope.videoid +
                         '?api=1&player_id=' +
-                        scope.id;
+                        scope.id);
 
-                    $element.data('video', new VideoPlayer($element.find('iframe')));
+                    $element.data('video', new VideoPlayer($iframe));
                 }
             };
         }])
