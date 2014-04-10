@@ -64,21 +64,22 @@
                     });
                 });
 
-                it('should not create any iframes when there is no videoid', function() {
-                    expect($preview.find('iframe').length).toBe(0);
+                it('should not create any player when there is no videoid', function() {
+                    expect($preview.find('vimeo-player').length).toBe(0);
                 });
 
-                it('should create a vimeo embed iframe when a videoid is provided', function() {
-                    var $iframe;
+                it('should create a vimeo player when a videoid is provided', function() {
+                    var $vimeo;
 
                     $scope.$apply(function() {
                         $scope.videoid = '2424355';
                     });
-                    $iframe = $preview.find('iframe');
+                    $vimeo = $preview.find('vimeo-player');
 
-                    expect($iframe.length).toBe(1);
+                    expect($vimeo.length).toBe(1);
 
-                    expect($iframe.attr('src')).toBe('//player.vimeo.com/video/2424355');
+                    expect($vimeo.attr('id')).toBe('preview');
+                    expect($vimeo.attr('videoid')).toBe('2424355');
                 });
             });
 
