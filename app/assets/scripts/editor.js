@@ -313,14 +313,64 @@
             };
         }])
 
-        .directive('videoPreview', ['c6UrlMaker',
-        function                   ( c6UrlMaker ) {
+        .directive('videoPreview', ['c6UrlMaker','$timeout',
+        function                   ( c6UrlMaker , $timeout ) {
             return {
                 restrict: 'E',
                 templateUrl: c6UrlMaker('views/directives/video_preview.html'),
                 scope: {
                     service: '@',
-                    videoid: '@'
+                    videoid: '@',
+                    start: '@',
+                    end: '@'
+                },
+                link: function(scope, $element) {
+                    function controlVideo($video) {
+                        var video = $video.data('video'),
+                            ended = false;
+
+                        function start() {
+                            return parseFloat(scope.start) || 0;
+                        }
+                        function end() {
+                            return parseFloat(scope.end) || Infinity;
+                        }
+
+                        function handleEvents() {
+                            video
+                                .on('timeupdate', function timeupdate() {
+                                    var startTime = start(),
+                                        endTime = end();
+
+                                    if (video.currentTime < startTime) {
+                                        video.currentTime = startTime;
+                                    }
+
+                                    if (video.currentTime >= endTime) {
+                                        video.pause();
+                                        ended = true;
+                                    }
+                                })
+                                .on('playing', function playing() {
+                                    if (ended) {
+                                        video.currentTime = start();
+                                        ended = false;
+                                    }
+                                });
+                        }
+
+                        if (!video) { return; }
+
+                        video.once('ready', handleEvents);
+                    }
+
+                    scope.$watch('videoid', function(id) {
+                        if (!id) { return; }
+
+                        $timeout(function() {
+                            controlVideo($element.find('div *'));
+                        });
+                    });
                 }
             };
         }]);
