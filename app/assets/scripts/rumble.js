@@ -358,7 +358,6 @@
             });
 
             session.on('mrPreview:jumpToCard', function(card) {
-                console.log(card);
                 $scope.$emit('reelStart');
                 self.jumpTo(self.findCardByVideo(card.type,card.data.videoid));
             });
