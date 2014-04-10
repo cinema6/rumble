@@ -359,7 +359,7 @@
                                 }
                             }),
                             seekStartTime = null,
-                            publicTime = null,
+                            publicTime = 0,
                             state = {
                                 currentTime: 0,
                                 ended: false,
@@ -412,7 +412,9 @@
                                 }
                             },
                             videoid: {
-                                value: id
+                                get: function() {
+                                    return id;
+                                }
                             }
                         });
 
