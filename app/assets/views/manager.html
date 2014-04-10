@@ -1,24 +1,106 @@
 <main c6-alias="ManagerCtrl.model as minireels">
-    <nav>
-        <ul>
-            <li><button>Create New</button></li>
+<header class="pageHeader container">
+    <h1 class="pageTitle">Dashboard</h1>
+    <div class="pageHeader__actions clearfix">
+        <ul class="filters__list">
+            <li class="filters__item">
+                <button class="filters__btn filters__btn--active" type="button" title="Show All">Show All</button>
+            </li>
+            <li class="filters__item">
+                <button class="filters__btn" type="button" title="Draft">Draft</button>
+            </li>
+            <li class="filters__item">
+                <button class="filters__btn" type="button" title="Published">Published</button>
+            </li>
+            <li class="filters__item">
+                <button class="filters__btn" type="button" title="Private">Private</button>
+            </li>
+            <li class="filters__item">
+                <button class="filters__btn filters__btn--special" type="button" title="Deleted">Deleted</button>
+            </li>
         </ul>
-    </nav>
-    <ul>
-        <li ng-repeat="this in minireels">
-            <article>
-                <header>
-                    <h4>{{this.title}}</h4>
-                    <small>Unpublished</small>
-                </header>
-                <p>{{this.summary}}</p>
-                <form>
-                    <button ng-click="ManagerCtrl.edit(this)">Edit</button>
-                    <button>Copy</button>
-                    <button>Delete</button>
+        <ul class="toolbar__group">
+            <li class="toolbar__item">
+                <button class="toolbar__btn toolbar__newMiniReel" type="button"><span class="ui__plus sprite--alpha">&nbsp;</span>New MiniReel</button>
+            </li>
+        </ul>
+    </div>
+    <span class="ui__divider--border"><br></span>
+</header>
+
+<div class="container miniReels__group">
+    <ul class="miniReels__list grid">
+        <li class="miniReels__item grid__item" ng-repeat="this in minireels">
+            <article class="miniReel__group">
+                <div ng-click="ManagerCtrl.edit(this)" class="miniReel__imgBox">
+                    <img src="http://lorempixel.com/600/400/" class="miniReel__img" alt="{{this.title}}">
+                </div>
+                <div class="miniReel__body" ng-click="ManagerCtrl.edit(this)">
+                    <div class="miniReel__copy">
+                        <h1 class="miniReel__title"><span class="miniReel__titleText">{{this.title}}</span></h1>
+                        <p class="miniReel__summary">{{this.summary}}</p>
+                    </div>
+                    <div class="ui__divider--pause">&hellip;</div>
+                    <div class="miniReel__status miniReel__status--public">
+                        <strong class="statusText">Published</strong> 3/11/2014
+                        <span class="ui__statusIcon sprite--alpha">&nbsp;</span>
+                    </div>
+                </div>
+                <form class="miniReel__quickActions">
+                    <button class="quickActions__btn" type="button">Make Private</button> &nbsp;|&nbsp; 
+                    <button class="quickActions__btn" type="button">Embed</button> &nbsp;|&nbsp; 
+                    <button class="quickActions__btn" type="button">Copy</button> &nbsp;|&nbsp; 
+                    <button class="quickActions__btn quickActions__delete" type="button">Delete</button>
+                </form>
+            </article>
+        </li>
+
+
+        <li class="miniReels__item grid__item">
+            <article class="miniReel__group">
+                <div ng-click="ManagerCtrl.edit(this)" class="miniReel__imgBox">
+                    <img src="http://lorempixel.com/600/400/" class="miniReel__img" alt="{{this.title}}">
+                </div>
+                <div class="miniReel__body" ng-click="ManagerCtrl.edit(this)">
+                    <div class="miniReel__copy">
+                        <h1 class="miniReel__title"><span class="miniReel__titleText">Private MiniReel</span></h1>
+                        <p class="miniReel__summary">Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec odio. Quisque volutpat mattis eros. Nullam malesuada erat ut turpis. Suspendisse urna nibh, viverra non, semper suscipit, posuere a, pede.</p>
+                    </div>
+                    <div class="ui__divider--pause">&hellip;</div>
+                    <div class="miniReel__status miniReel__status--private">
+                        <strong class="statusText">Private</strong> 3/11/2014
+                        <span class="ui__statusIcon sprite--alpha">&nbsp;</span>
+                    </div>
+                </div>
+                <form class="miniReel__quickActions">
+                    <button class="quickActions__btn" type="button">Make Public</button> &nbsp;|&nbsp; 
+                    <button class="quickActions__btn" type="button">Copy</button> &nbsp;|&nbsp; 
+                    <button class="quickActions__btn quickActions__delete" type="button">Delete</button>
+                </form>
+            </article>
+        </li>
+        <li class="miniReels__item grid__item">
+            <article class="miniReel__group miniReel__group--deleted">
+                <div ng-click="ManagerCtrl.edit(this)" class="miniReel__imgBox">
+                    <img src="http://lorempixel.com/600/400/" class="miniReel__img" alt="{{this.title}}">
+                </div>
+                <div class="miniReel__body" ng-click="ManagerCtrl.edit(this)">
+                    <div class="miniReel__copy">
+                        <h1 class="miniReel__title"><span class="miniReel__titleText">Deleted MiniReel</span></h1>
+                        <p class="miniReel__summary">Donec nec justo eget felis facilisis fermentum. Aliquam porttitor mauris sit amet orci. Aenean dignissim pellentesque felis.</p>
+                    </div>
+                    <div class="ui__divider--pause">&hellip;</div>
+                    <div class="miniReel__status miniReel__status--deleted">
+                        <strong class="statusText">Deleted</strong> 3/11/2014
+                        <span class="ui__statusIcon sprite--alpha">&nbsp;</span>
+                    </div>
+                </div>
+                <form class="miniReel__quickActions">
+                    <button class="quickActions__btn quickActions__delete" type="button">Undo Delete</button>
                 </form>
             </article>
         </li>
     </ul>
-    <p ng-show="!minireels.length">You have no Mini Reels. Would you like to <a>create one?</a></p>
+    <p ng-show="!minireels.length">You have no Mini Reels. Would you like to <a href="#" title="Create A MiniReel">create one?</a></p>
+</div>
 </main>
