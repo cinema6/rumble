@@ -13,6 +13,21 @@
     document.getElementsByTagName('head')[0].appendChild(styles);
 
     define(['hammer'], function(hammer) {
+        function DragEvent(config) {
+            var key;
+
+            this.defaultPrevented = false;
+
+            for (key in config) {
+                this[key] = config[key];
+            }
+        }
+        DragEvent.prototype = {
+            preventDefault: function() {
+                this.defaultPrevented = true;
+            }
+        };
+
         angular.module('c6.drag', ['c6.ui'])
             .value('hammer', hammer)
 
@@ -471,8 +486,8 @@
                 };
             }])
 
-            .directive('c6Draggable', ['hammer','_Draggable',
-            function                  ( hammer ,  Draggable ) {
+            .directive('c6Draggable', ['hammer','_Draggable','_Rect',
+            function                  ( hammer ,  Draggable ,  Rect ) {
                 var noop = angular.noop;
 
                 return {
@@ -480,7 +495,8 @@
                     require: '?^c6DragSpace',
                     link: function(scope, $element, $attrs, C6DragSpaceCtrl) {
                         var touchable = hammer($element[0]),
-                            draggable = new Draggable($attrs.id, $element);
+                            draggable = new Draggable($attrs.id, $element),
+                            emitBeforeMove = false;
 
                         function px(num) {
                             return num + 'px';
@@ -525,9 +541,34 @@
                                             event.gesture.preventDefault();
                                         },
                                         modify: function(event) {
+                                            var top = this.start.top + event.gesture.deltaY,
+                                                left = this.start.left + event.gesture.deltaX,
+                                                dragEvent;
+
+                                            // Emitting the "beforeMove" event requires creating a
+                                            // lot of new objects and some math. Because of this,
+                                            // we only create those objects if somebody is
+                                            // listening for the event.
+                                            if (emitBeforeMove) {
+                                                dragEvent = new DragEvent({
+                                                    desired: new Rect({
+                                                        top: top,
+                                                        left: left,
+                                                        bottom: top + draggable.display.height,
+                                                        right: left + draggable.display.width
+                                                    })
+                                                });
+
+                                                draggable.emit('beforeMove', draggable, dragEvent);
+
+                                                if (dragEvent.defaultPrevented) {
+                                                    return;
+                                                }
+                                            }
+
                                             $element.css({
-                                                top: px(this.start.top + event.gesture.deltaY),
-                                                left: px(this.start.left + event.gesture.deltaX)
+                                                top: px(top),
+                                                left: px(left)
                                             });
                                         },
                                         notify: function() {
@@ -583,6 +624,13 @@
                                 touchable.off('dragstart drag dragend', delegate);
                             });
                         }
+
+                        draggable.on('newListener', function(event) {
+                            switch (event) {
+                            case 'beforeMove':
+                                emitBeforeMove = true;
+                            }
+                        });
 
                         if (C6DragSpaceCtrl) {
                             C6DragSpaceCtrl.addDraggable(draggable);
