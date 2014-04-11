@@ -463,14 +463,20 @@
         vertical-align: top;
         margin: 3em 5px 0;
         border:0;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
     }
         .card__drop-zone.c6-drag-zone-active {
             /*width: calc(10rem + 34px);*/
             width:13.5em;
-            border:3px solid rgba(0,0,0,0.3);
+            background:#fff;
+            border:3px solid rgba(19,162,255,0.5);
         }
         .card__drop-zone--reordering {
             width: 2px !important;
+            border:0 !important;
+            background:none !important;
         }
     .card__list {
         overflow-x: scroll; white-space: nowrap;
@@ -488,8 +494,7 @@
         }
             .card__type {
                 color:#646464; font-size:0.75em; font-weight:100; text-align: center;
-                margin:-1.5625rem 0 0 0; position:absolute;
-                width:13.5rem;
+                margin:-1.5625rem 0 0.4375rem 0; position:relative;
             }
             .card__item {
                 width: 13.5em;
