@@ -13,6 +13,21 @@
     document.getElementsByTagName('head')[0].appendChild(styles);
 
     define(['hammer'], function(hammer) {
+        function DragEvent(config) {
+            var key;
+
+            this.defaultPrevented = false;
+
+            for (key in config) {
+                this[key] = config[key];
+            }
+        }
+        DragEvent.prototype = {
+            preventDefault: function() {
+                this.defaultPrevented = true;
+            }
+        };
+
         angular.module('c6.drag', ['c6.ui'])
             .value('hammer', hammer)
 
@@ -37,25 +52,6 @@
                 };
 
                 return Rect;
-            }])
-
-            .factory('_DragEvent', [function() {
-                function DragEvent(config) {
-                    var key;
-
-                    this.defaultPrevented = false;
-
-                    for (key in config) {
-                        this[key] = config[key];
-                    }
-                }
-                DragEvent.prototype = {
-                    preventDefault: function() {
-                        this.defaultPrevented = true;
-                    }
-                };
-
-                return DragEvent;
             }])
 
             .factory('_PositionState', ['$animate','c6EventEmitter','_Rect',
@@ -490,8 +486,8 @@
                 };
             }])
 
-            .directive('c6Draggable', ['hammer','_Draggable','_Rect','_DragEvent',
-            function                  ( hammer ,  Draggable ,  Rect ,  DragEvent ) {
+            .directive('c6Draggable', ['hammer','_Draggable','_Rect',
+            function                  ( hammer ,  Draggable ,  Rect ) {
                 var noop = angular.noop;
 
                 return {
