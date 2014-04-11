@@ -353,13 +353,62 @@
         });
 
         cinema6.getSession().then(function(session) {
+            // When the RumbleController is loaded we need to set up
+            // some listeners for messages from above (ie. the parent window).
+            // All of the incoming instructions will update the current experience
+            // and will NOT reload the page!
+            //
+            // we can be instructed to do a few things:
+            // 1. update the experience
+            // 2. go to a specific card
+            // 3. start the experience from the beginning
+            //
+            // we are also going to check with our parent
+            // to see if there's a card that we're supposed to go to
+            // a specific card, since it's possible that the user was 
+            // looking at something but wanted to change the mode,
+            // which does require a reload
+
+            function getCard(card) {
+                return $scope.deck.filter(function(c) {
+                    return c.id === card.id;
+                })[0];
+            }
+
             session.on('mrPreview:updateExperience', function(experience) {
+                // we're being sent a new experience
+                // so we update the deck
                 $scope.deck = MiniReelService.createDeck(experience.data);
             });
 
             session.on('mrPreview:jumpToCard', function(card) {
+                // we're being told to go to a specific card,
+                // so start the reel, leave the splash page
+                // and jumpTo the right card
                 $scope.$emit('reelStart');
-                self.jumpTo(self.findCardByVideo(card.type,card.data.videoid));
+                self.jumpTo(getCard(card));
+            });
+
+            session.on('mrPreview:reset', function() {
+                // we're being told to reset the MR player
+                // so we set the position to -1
+                // which will load the splash page
+                self.setPosition(-1);
+            });
+
+            session.request('mrPreview:getCard').then(function(card) {
+                // when the player loads we ask
+                // if there's a card to jumpTo
+                if(card) {
+                    // we'll have a card when a user
+                    // was previewing a specific card
+                    // and chose to change the mode,
+                    // once a user closes the preview
+                    // the card is forgotten and this
+                    // request will return undefined
+                    $scope.$emit('reelStart');
+                    self.jumpTo(getCard(card));
+                }
             });
         });
 
