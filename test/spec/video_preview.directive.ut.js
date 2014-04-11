@@ -30,7 +30,7 @@
                 $scope.videoid = null;
 
                 $scope.$apply(function() {
-                    $preview = $compile('<video-preview service="{{service}}" videoid="{{videoid}}" start="{{start}}" end="{{end}}"></video-preview>')($scope);
+                    $preview = $compile('<video-preview service="{{service}}" videoid="{{videoid}}" start="start" end="end"></video-preview>')($scope);
                 });
 
                 expect($preview.find('iframe').length).toBe(0);

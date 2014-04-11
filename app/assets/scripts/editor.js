@@ -1,6 +1,8 @@
 (function() {
     'use strict';
 
+    var isNumber = angular.isNumber;
+
     function refresh($element) {
         $element.inheritedData('cDragCtrl').refresh();
     }
@@ -314,6 +316,82 @@
             };
         }])
 
+        .directive('videoTrimmer', ['c6UrlMaker',
+        function                   ( c6UrlMaker ) {
+            return {
+                restrict: 'E',
+                templateUrl: c6UrlMaker('views/directives/video_trimmer.html'),
+                scope: {
+                    duration: '@',
+                    start: '=',
+                    end: '='
+                },
+                link: function(scope, $element) {
+                    var startMarker = $element.find('#start-marker').data('cDrag'),
+                        endMarker = $element.find('#end-marker').data('cDrag'),
+                        seekBar = $element.find('#seek-bar').data('cDragZone');
+
+                    scope.position = {};
+                    Object.defineProperties(scope.position, {
+                        startMarker: {
+                            get: function() {
+                                var start = scope.start || 0;
+
+                                return ((seekBar.display.width * start) /
+                                    parseFloat(scope.duration)) + 'px';
+                            }
+                        },
+                        endMarker: {
+                            get: function() {
+                                var duration = parseFloat(scope.duration),
+                                    end = isNumber(scope.end) ? scope.end : duration;
+
+                                return ((seekBar.display.width * end) /
+                                    parseFloat(scope.duration)) + 'px';
+                            }
+                        }
+                    });
+
+                    function beforeMove(item, event) {
+                        var desired = event.desired,
+                            $marker = item.$element,
+                            seekDisplay = seekBar.display,
+                            halfWidth = (item.display.width / 2);
+
+                        event.preventDefault();
+
+                        $marker.css({
+                            // Make sure the slider can't move beyond the confines of the timeline.
+                            left: Math.max(
+                                Math.min(
+                                    desired.left,
+                                    (seekDisplay.right - halfWidth)
+                                ),
+                                (seekDisplay.left - halfWidth)
+                            ) + 'px'
+                        });
+                    }
+
+                    function dropStart(item) {
+                        scope.$apply(function() {
+                            var pxTraveled = item.display.center.x - seekBar.display.left,
+                                scopeProp = item.id.replace(/-marker$/, '');
+
+                            scope[scopeProp] = (pxTraveled * parseFloat(scope.duration)) /
+                                seekBar.display.width;
+                        });
+                        item.$element.css('top', 'auto');
+                    }
+
+                    startMarker.on('beforeMove', beforeMove)
+                        .on('dropStart', dropStart);
+
+                    endMarker.on('beforeMove', beforeMove)
+                        .on('dropStart', dropStart);
+                }
+            };
+        }])
+
         .directive('videoPreview', ['c6UrlMaker','$timeout',
         function                   ( c6UrlMaker , $timeout ) {
             return {
@@ -322,8 +400,8 @@
                 scope: {
                     service: '@',
                     videoid: '@',
-                    start: '@',
-                    end: '@'
+                    start: '=',
+                    end: '='
                 },
                 link: function(scope, $element) {
                     function controlVideo($video) {
@@ -331,10 +409,10 @@
                             ended = false;
 
                         function start() {
-                            return parseFloat(scope.start) || 0;
+                            return scope.start || 0;
                         }
                         function end() {
-                            return parseFloat(scope.end) || Infinity;
+                            return scope.end || Infinity;
                         }
 
                         function handleEvents() {
