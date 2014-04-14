@@ -79,6 +79,12 @@
         position:absolute; bottom:-3.375rem; right:-19rem;
         background:#ccc;
     }
+        @media screen and (min-width:76rem) {
+            /*1216px + */
+            .mr-ad__med-rect {
+                bottom:-4.375rem;
+            }
+        }
     .mr-icons__close {
         width: 1.25rem;/*20px*/ height: 1.25rem;/*20px*/
         margin:0; padding: 0; border: 0; display: block;
@@ -119,7 +125,7 @@
             /*1216px - 1419px*/
             .mr-experience {
                 width:74em; /*1184*/
-                margin:-21.875em 0 0 -37em; /* 350 0 0 592*/
+                margin:-21.75em 0 0 -37em; /* 348 0 0 592*/
             }
         }
         @media screen and (min-width:88.75rem) {
@@ -192,8 +198,8 @@
             right:0;
         }
     .mr-pager__icon {
-        display:block; width:0.875rem;/*14px*/ height:1.1875rem;/*19px*/
-        position:absolute; top:0.9375rem;/*15px*/ left:12.5%; margin:0;
+        display:block; width:0.75rem;/*12px*/ height:auto;
+        position:absolute; top:0; left:12.5%; margin:0;
         z-index:1;
     }
         .mr-pager__icon-next {
@@ -205,14 +211,28 @@
     .mr-pager__label {
         font-weight:bold; color:#fff; line-height:1;
         display: block;
-        position:absolute; z-index: 1; top:1.375em; left:36%;
+        position:absolute; z-index: 1; top:1.375em; left:40%;
     }
         .mr-pager__next .mr-pager__label {
-            right:36%; left:auto;
+            right:40%; left:auto;
         }
     .mr-pager__activator {
         opacity:0; background:#000; display: block; width:100%; height:100%;
         position:absolute; top:0; left:0;
+    }
+    @media screen and (min-width:76rem) {
+        /*1216px + */
+        .mr-pager__group, .mr-pager__btn {
+            height:4rem;/*64px*/
+        }
+        
+        .mr-pager__icon {
+            width:18px;/*18px*/
+            top:0; /*22px*/
+        }
+        .mr-pager__label {
+            font-size:1.25em;
+        }
     }
     /* pages styles */
     .mr-pages__group {
@@ -275,16 +295,29 @@
                             .mr-pages__page--active .mr-pages__current-indicator {
                                 opacity:1;
                             }
+    @media screen and (min-width:76rem) {
+        /*1216px + */
+        .mr-pages__page {
+            width:6rem;/*96px*/ height:4rem;/*64px*/
+        }
+    }
 
 
 /*  ==========================================================================
     Mini Reel Cards classes
     ========================================================================== */
     .mr-card__container {
-        background:#fff; padding:0.9375rem 20.125rem 4.5rem 1.125rem; /*15px 322px 72px 18px*/
+        background:#fff; 
+        padding:0.9375rem 20.125rem 4.5rem 1.125rem; /*15px 322px 72px 18px*/
         -webkit-border-radius: 3px; border-radius: 3px; 
         position:relative; overflow:hidden;
     }
+        @media screen and (min-width:76rem) {
+            /*1216px +*/
+            .mr-card__container {
+                padding-bottom: 5.5rem; /*88px*/
+            }
+        }
     .mr-cards__list, .mr-cards__item {
         margin:0; padding:0; list-style:none;
     }
