@@ -238,7 +238,8 @@
                     expect($window.c6MrGa.calls[0].args[1]).toEqual('abc');
                     expect($window.c6MrGa.calls[0].args[2]).toEqual({
                         'name'      : 'c6mr',
-                        'clientId'  : '123'
+                        'clientId'  : '123',
+                        'storage'   : 'none'
                     });
 
                     expect($window.c6MrGa.calls[1].args[0]).toEqual('c6mr.send');

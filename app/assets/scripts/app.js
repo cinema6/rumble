@@ -337,7 +337,8 @@
                     cfg.accountId, cfg.clientId);
                 $window.c6MrGa('create', cfg.accountId, {
                     'name'      : 'c6mr',
-                    'clientId'  : cfg.clientId
+                    'clientId'  : cfg.clientId,
+                    'storage'   : 'none'
                 });
                 $window.console.log('SENDING PAGE-VIEW FOR LOAD');
                 $window.c6MrGa('c6mr.send', 'pageview', {
