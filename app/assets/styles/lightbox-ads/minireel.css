@@ -79,6 +79,12 @@
         position:absolute; bottom:-3.375rem; right:-19rem;
         background:#ccc;
     }
+        @media screen and (min-width:76rem) {
+            /*1216px + */
+            .mr-ad__med-rect {
+                bottom:-4.375rem;
+            }
+        }
     .mr-icons__close {
         width: 1.25rem;/*20px*/ height: 1.25rem;/*20px*/
         margin:0; padding: 0; border: 0; display: block;
@@ -119,7 +125,7 @@
             /*1216px - 1419px*/
             .mr-experience {
                 width:74em; /*1184*/
-                margin:-21.875em 0 0 -37em; /* 350 0 0 592*/
+                margin:-21.75em 0 0 -37em; /* 348 0 0 592*/
             }
         }
         @media screen and (min-width:88.75rem) {
@@ -178,7 +184,7 @@
         position: absolute; left: 1.125rem; right: 20.125rem; bottom:1.125rem;
     }
     .mr-pager__btn {
-        min-width:3.25rem;/*52px*/ height:3rem;/*48px*/ position:absolute;
+        min-width:4rem;/*64px*/ height:3rem;/*48px*/ position:absolute;
         background:#b69823 no-repeat 50% 50%; border:0; padding:0; margin:0;
         cursor:pointer;
     }
@@ -192,8 +198,8 @@
             right:0;
         }
     .mr-pager__icon {
-        display:block; width:0.875rem;/*14px*/ height:1.1875rem;/*19px*/
-        position:absolute; top:0.9375rem;/*15px*/ left:12.5%; margin:0;
+        display:block; width:0.75rem;/*12px*/ height:auto;
+        position:absolute; top:0; left:12.5%; margin:0;
         z-index:1;
     }
         .mr-pager__icon-next {
@@ -205,14 +211,27 @@
     .mr-pager__label {
         font-weight:bold; color:#fff; line-height:1;
         display: block;
-        position:absolute; z-index: 1; top:1.375em; left:36%;
+        position:absolute; z-index: 1; top:1.375em; left:40%;
     }
         .mr-pager__next .mr-pager__label {
-            right:36%; left:auto;
+            right:40%; left:auto;
         }
     .mr-pager__activator {
         opacity:0; background:#000; display: block; width:100%; height:100%;
         position:absolute; top:0; left:0;
+    }
+    @media screen and (min-width:76rem) {
+        /*1216px + */
+        .mr-pager__group, .mr-pager__btn {
+            height:4rem;/*64px*/
+        }
+        
+        .mr-pager__icon {
+            width:0.875rem;/*14px*/
+        }
+        .mr-pager__label {
+            font-size:1.25em;
+        }
     }
     /* pages styles */
     .mr-pages__group {
@@ -275,16 +294,29 @@
                             .mr-pages__page--active .mr-pages__current-indicator {
                                 opacity:1;
                             }
+    @media screen and (min-width:76rem) {
+        /*1216px + */
+        .mr-pages__page {
+            width:6rem;/*96px*/ height:4rem;/*64px*/
+        }
+    }
 
 
 /*  ==========================================================================
     Mini Reel Cards classes
     ========================================================================== */
     .mr-card__container {
-        background:#fff; padding:0.9375rem 20.125rem 4.5rem 1.125rem; /*15px 322px 72px 18px*/
+        background:#fff; 
+        padding:0.9375rem 20.125rem 4.5rem 1.125rem; /*15px 322px 72px 18px*/
         -webkit-border-radius: 3px; border-radius: 3px; 
         position:relative; overflow:hidden;
     }
+        @media screen and (min-width:76rem) {
+            /*1216px +*/
+            .mr-card__container {
+                padding-bottom: 5.5rem; /*88px*/
+            }
+        }
     .mr-cards__list, .mr-cards__item {
         margin:0; padding:0; list-style:none;
     }
@@ -347,9 +379,10 @@
     }
     .mr-ballot__list {
         margin:0 0 2em 0; padding:0; list-style: none;
+        vertical-align: top;
     }
         .mr-ballot__item {
-            display:inline-block; margin:0 1em;
+            display:block; float:left; margin:0 1em;
         }
             .mr-ballot__btn {
                 border:0; width:10em; /*240px*/ height:5em; /*120px*/
@@ -384,6 +417,27 @@
     @media screen and (max-width:50rem) {
         /*max 800px*/
         .mr-ballot__group {
+            top:2rem;
+        }
+        .mr-ballot__item {
+            margin:0 0.5em;
+        }
+        .mr-ballot__textlink {
+            font-size:0.75em;
+        }
+        .mr-ballot__title {
+            font-size:0.875em;
+        }
+        .mr-ballot__btn {
+            font-size:0.75em;
+        }
+        .mr-ballot__btn-label {
+            font-size:1em;
+        }
+    }
+    @media screen and (min-width:50rem) and (max-width:59.9375rem) {
+        /*800px - 959px*/
+        .mr-ballot__group {
             top:4rem;
         }
         .mr-ballot__item {
@@ -392,8 +446,50 @@
         .mr-ballot__btn, .mr-ballot__title {
             font-size:1em;
         }
+        .mr-ballot__list {
+            margin-left:2.375em;/*38px*/
+        }
+    }
+    @media screen and (min-width:60rem) and (max-width:64.9375rem) {
+        /*960px - 1039px*/
+        .mr-ballot__list {
+            margin-left:3.875em;/*62px*/
+        }
+    }
+    @media screen and (min-width:65rem) and (max-width:75.9375rem) {
+        /*1040px - 1215px*/
+        .mr-ballot__list {
+            margin-left:5.875em;/*94px*/
+        }
+    }
+    @media screen and (min-width:76rem) and (max-width:88.6875rem) {
+        /*1216px - 1419px*/
+        .mr-ballot__group {
+            top:32%;
+        }
+        .mr-ballot__list {
+            margin-left:9.375em;/*150px*/
+        }
         .mr-ballot__btn {
-            width:9em;
+            font-size:1.5rem;/*24px*/
+        }
+        .mr-ballot__btn-label {
+             font-size:1em;
+        }
+    }
+    @media screen and (min-width:88.75rem) {
+        /*1420px +*/
+        .mr-ballot__group {
+            top:35%;
+        }
+        .mr-ballot__list {
+            margin-left:15.375em;/*246px*/
+        }
+        .mr-ballot__btn {
+            font-size:1.5rem;/*24px*/
+        }
+        .mr-ballot__btn-label {
+             font-size:1em;
         }
     }
 

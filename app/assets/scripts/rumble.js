@@ -479,7 +479,7 @@
         };
 
         this.start = function() {
-            $window.c6MrGa('c6-mr.send', 'pageview', {
+            $window.c6MrGa('c6mr.send', 'pageview', {
                 'page'  : '/mr/launch?experienceId=' + appData.experience.id,
                 'title' : 'Minireel App Launch'
             });
@@ -654,7 +654,10 @@
                 if (active) {
                     ControlsService.bindTo(player);
 
-                    if (c6AppData.behaviors.autoplay && c6AppData.profile.autoplay) {
+                    if (c6AppData.behaviors.canAutoplay &&
+                        c6AppData.profile.autoplay &&
+                        c6AppData.experience.data.autoplay) {
+
                         iface.play();
                     }
                 } else {
