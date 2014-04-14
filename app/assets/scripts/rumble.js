@@ -383,9 +383,13 @@
 
             session.on('mrPreview:jumpToCard', function(card) {
                 // we're being told to go to a specific card,
-                // so start the reel, leave the splash page
-                // and jumpTo the right card
-                $scope.$emit('reelStart');
+                // so if we're at the splash page then emit reelStart
+                // otherwise, just jump to the card
+
+                if($scope.currentIndex === -1) {
+                    $scope.$emit('reelStart');
+                }
+
                 self.jumpTo(getCard(card));
             });
 
@@ -403,10 +407,11 @@
                     // we'll have a card when a user
                     // was previewing a specific card
                     // and chose to change the mode,
-                    // once a user closes the preview
-                    // the card is forgotten and this
-                    // request will return undefined
-                    $scope.$emit('reelStart');
+
+                    if($scope.currentIndex === -1) {
+                        $scope.$emit('reelStart');
+                    }
+
                     self.jumpTo(getCard(card));
                 }
             });

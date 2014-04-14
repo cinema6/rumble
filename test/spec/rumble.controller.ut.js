@@ -10,6 +10,7 @@
                 $log,
                 $controller,
                 c6UserAgent,
+                c6EventEmitter,
                 RumbleCtrl,
                 BallotService,
                 CommentsService,
@@ -17,6 +18,7 @@
                 appData,
                 mockPlayer,
                 cinema6,
+                sessionDeferred,
                 MiniReelService,
                 ControlsService;
 
@@ -42,7 +44,8 @@
                 };
 
                 cinema6 = {
-                    fullscreen: jasmine.createSpy('cinema6.fullscreen')
+                    fullscreen: jasmine.createSpy('cinema6.fullscreen'),
+                    getSession: function(){}
                 };
 
                 mockPlayer = {
@@ -162,6 +165,7 @@
                     $log.context = function() { return $log; };
                     $window     = $injector.get('$window');
                     c6UserAgent = $injector.get('c6UserAgent');
+                    c6EventEmitter = $injector.get('c6EventEmitter');
                     BallotService = $injector.get('BallotService');
                     CommentsService = $injector.get('CommentsService');
                     ControlsService = $injector.get('ControlsService');
@@ -173,6 +177,10 @@
                     };
                     $scope.AppCtrl = {};
 
+                    spyOn(cinema6, 'getSession').andCallFake(function() {
+                        sessionDeferred = $q.defer();
+                        return sessionDeferred.promise;
+                    });
                     spyOn(CommentsService, 'init');
                     spyOn(BallotService, 'init');
                     spyOn(BallotService, 'getElection');
@@ -690,6 +698,152 @@
                         expect($scope.deck[1].player.isReady).toHaveBeenCalled();
                         expect($scope.deck[2].player.isReady).toHaveBeenCalled();
                         expect($scope.ready).toEqual(true);
+                    });
+                });
+            });
+
+            describe('cinema6 session handlers', function() {
+                var session, request, card;
+
+                beforeEach(function() {
+                    $scope.deck = [
+                        {
+                            id: 'foo',
+                            data: 'test'
+                        },
+                        {
+                            id: 'bar',
+                            data: 'more info'
+                        },
+                        {
+                            id: 'baz',
+                        }
+                    ];
+
+                    card = {
+                        id: 'bar'
+                    };
+
+                    request = $q.defer();
+
+                    session = c6EventEmitter({
+                        request: jasmine.createSpy('session.request()')
+                            .andReturn(request.promise)
+                    });
+
+                    spyOn(session, 'on').andCallThrough();
+                    spyOn($scope, '$emit');
+                    spyOn(RumbleCtrl, 'jumpTo');
+
+                    $scope.$apply(function() {
+                        sessionDeferred.resolve(session);
+                    });
+                });
+
+                it('should have called getSession()', function() {
+                    expect(cinema6.getSession).toHaveBeenCalled();
+                });
+
+                it('should register three handlers', function() {
+                    expect(session.on.callCount).toEqual(3);
+                    expect(session.on.calls[0].args[0]).toEqual('mrPreview:updateExperience');
+                    expect(session.on.calls[1].args[0]).toEqual('mrPreview:jumpToCard');
+                    expect(session.on.calls[2].args[0]).toEqual('mrPreview:reset');
+                });
+
+                it('should request a card', function() {
+                    expect(session.request).toHaveBeenCalledWith('mrPreview:getCard');
+                });
+
+                describe('mrPreview:updateExperience', function() {
+                    it('should update the deck when called', function() {
+                        var deck = MiniReelService.createDeck(appData.experience.data);
+                        session.emit('mrPreview:updateExperience', appData.experience);
+                        expect(MiniReelService.createDeck).toHaveBeenCalled();
+                        expect($scope.deck).toEqual(deck);
+                    });
+                });
+
+                describe('mrPreview:jumpToCard', function() {
+                    describe('when player is not at the beginning', function() {
+                        beforeEach(function() {
+                            $scope.currentIndex = 1;
+                            session.emit('mrPreview:jumpToCard', card);
+                        });
+
+                        it('should not emit reelStart', function() {
+                            expect($scope.$emit).not.toHaveBeenCalledWith('reelStart');
+                        });
+
+                        it('should find and jumpTo the right card', function() {
+                            expect(RumbleCtrl.jumpTo).toHaveBeenCalledWith($scope.deck[1]);
+                        });
+                    });
+
+                    describe('when player is at the beginning', function() {
+                        beforeEach(function() {
+                            $scope.currentIndex = -1;
+                            session.emit('mrPreview:jumpToCard', card);
+                        });
+
+                        it('should not emit reelStart', function() {
+                            expect($scope.$emit).toHaveBeenCalledWith('reelStart');
+                        });
+
+                        it('should find and jumpTo the right card', function() {
+                            expect(RumbleCtrl.jumpTo).toHaveBeenCalledWith($scope.deck[1]);
+                        });
+                    });
+
+                });
+
+                describe('mrPreview:reset', function() {
+                    it('should set the position to -1, which enables the splash page', function() {
+                        spyOn(RumbleCtrl, 'setPosition');
+                        session.emit('mrPreview:reset');
+                        expect(RumbleCtrl.setPosition).toHaveBeenCalledWith(-1);
+                    });
+                });
+
+                describe('mrPreview:getCard', function() {
+                    describe('if there is no card returned', function() {
+                        it('should not jumpTo anything', function() {
+                            card = undefined;
+
+                            $scope.$apply(function() {
+                                request.resolve(card);
+                            });
+
+                            expect(RumbleCtrl.jumpTo).not.toHaveBeenCalled();
+                        });
+                    });
+
+                    describe('if there a card is returned', function() {
+                        it('should find and jumpTo the right card', function() {
+                            $scope.$apply(function() {
+                                request.resolve(card);
+                            });
+
+                            expect(RumbleCtrl.jumpTo).toHaveBeenCalledWith($scope.deck[1]);
+                        });
+
+                        it('should not emit reelStart if the player is not at the beginning', function() {
+                            $scope.$apply(function() {
+                                $scope.currentIndex = 1;
+                                request.resolve(card);
+                            });
+
+                            expect($scope.$emit).not.toHaveBeenCalledWith('reelStart');
+                        });
+
+                        it('should emit reelStart if the player is at the beginning', function() {
+                            $scope.$apply(function() {
+                                $scope.currentIndex = -1;
+                                request.resolve(card);
+                            });
+
+                            expect($scope.$emit).toHaveBeenCalledWith('reelStart');
+                        });
                     });
                 });
             });
