@@ -508,7 +508,7 @@
         }
     },
     {
-        "id": "e-b40c7bd11e512e",
+        "id": "e-ad5c74dcb1f638",
         "uri": "gopro-lightbox",
         "appUriPrefix": "<%= settings.appUrl %>",
         "appUri": "rumble",
@@ -1082,7 +1082,7 @@
         }
     },
     {
-        "id": "e-d9f6d87d8beb76",
+        "id": "e-bad9dc9276ec49",
         "uri": "superbowl-lightbox",
         "appUriPrefix": "<%= settings.appUrl %>",
         "appUri": "rumble",
