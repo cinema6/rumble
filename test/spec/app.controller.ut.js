@@ -237,17 +237,18 @@
                     expect($window.c6MrGa.calls[0].args[0]).toEqual('create');
                     expect($window.c6MrGa.calls[0].args[1]).toEqual('abc');
                     expect($window.c6MrGa.calls[0].args[2]).toEqual({
-                        'name'      : 'c6mr',
-                        'clientId'  : '123',
-                        'storage'   : 'none'
+                        'name'          : 'c6-mr',
+                        'clientId'      : '123',
+                        'cookieDomain'  : 'none',
+                        'storage'       : 'none'
                     });
 
-                    expect($window.c6MrGa.calls[1].args[0]).toEqual('c6mr.send');
+                    expect($window.c6MrGa.calls[1].args[0]).toEqual('c6-mr.send');
                     expect($window.c6MrGa.calls[1].args[1]).toEqual('pageview');
-//                    expect($window.c6MrGa.calls[1].args[2]).toEqual({
-//                        'page'      : '/mr/load?experienceId=exp1',
-//                        'title'     : 'Minireel App Load'
-//                    });
+                    expect($window.c6MrGa.calls[1].args[2]).toEqual({
+                        'page'      : '/mr/load?experienceId=exp1',
+                        'title'     : 'Minireel App Load'
+                    });
                 });
             });
         });

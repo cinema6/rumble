@@ -414,7 +414,7 @@
         };
 
         this.start = function() {
-            $window.c6MrGa('c6mr.send', 'pageview', {
+            $window.c6MrGa('c6-mr.send', 'pageview', {
                 'page'  : '/mr/launch?experienceId=' + appData.experience.id,
                 'title' : 'Minireel App Launch'
             });
