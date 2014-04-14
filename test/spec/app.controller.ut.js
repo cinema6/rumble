@@ -239,7 +239,8 @@
                     expect($window.c6MrGa.calls[0].args[2]).toEqual({
                         'name'          : 'c6mr',
                         'clientId'      : '123',
-                        'storage'       : 'none'
+                        'storage'       : 'none',
+                        'cookieDomain'  : 'none'
                     });
 
                     expect($window.c6MrGa.calls[1].args[0]).toEqual('c6mr.send');

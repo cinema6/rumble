@@ -338,7 +338,8 @@
                 $window.c6MrGa('create', cfg.accountId, {
                     'name'          : 'c6mr',
                     'clientId'      : cfg.clientId,
-                    'storage'       : 'none'
+                    'storage'       : 'none',
+                    'cookieDomain'  : 'none'
                 });
                 $window.c6MrGa('c6mr.send', 'pageview', {
                     'page'  : '/mr/load?experienceId=' + c6AppData.experience.id,
