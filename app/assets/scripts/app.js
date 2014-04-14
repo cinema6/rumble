@@ -343,6 +343,7 @@
                     'page'  : '/mr/load?experienceId=' + c6AppData.experience.id,
                     'title' : 'Minireel App Load'
                 });
+                $window.console.log($window.c6MrGa);
             });
         }]);
 }(window));
