@@ -339,9 +339,13 @@
                     'name'      : 'c6mr',
                     'clientId'  : cfg.clientId
                 });
+                $window.console.log('SENDING PAGE-VIEW FOR LOAD');
                 $window.c6MrGa('c6mr.send', 'pageview', {
                     'page'  : '/mr/load?experienceId=' + c6AppData.experience.id,
-                    'title' : 'Minireel App Load'
+                    'title' : 'Minireel App Load',
+                    'hitCallback' : function(){
+                        $window.console.log('DONE SENDING PAGE-VIEW FOR LOAD');
+                    }
                 });
                 $window.console.log($window.c6MrGa);
             });
