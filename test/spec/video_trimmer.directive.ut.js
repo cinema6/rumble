@@ -34,6 +34,7 @@
                     '            background: blue;',
                     '        }',
                     '            .video-trimmer__playhead {',
+                    '                position: relative; margin-left: -5px;',
                     '                height: 100%; width: 10px;',
                     '                background: yellow;',
                     '            }',
@@ -57,10 +58,11 @@
                     $scope = $rootScope.$new();
                 });
 
+                $scope.currentTime = 0;
                 $scope.start = 10;
                 $scope.end = 40;
 
-                $trimmer = $('<video-trimmer start="start" end="end" duration="60"></video-trimmer>');
+                $trimmer = $('<video-trimmer start="start" end="end" duration="60" current-time="currentTime"></video-trimmer>');
                 frame.$body.append($trimmer);
                 $scope.$apply(function() {
                     $compile($trimmer)($scope);
@@ -99,6 +101,10 @@
                 it('should be draggable along the x axis', function() {
                     var finger = new Finger();
 
+                    $scope.$apply(function() {
+                        $scope.end = 60;
+                    });
+
                     finger.placeOn($start);
                     finger.drag(0, 0);
                     assertPosition($start, initial.start.left, initial.start.top);
@@ -109,6 +115,11 @@
                     finger.drag(10, 5);
                     assertPosition($start, initial.start.left + 20, initial.start.top);
                     finger.lift();
+
+                    $scope.$apply(function() {
+                        $scope.end = 40;
+                        $scope.start = 0;
+                    });
 
                     finger.placeOn($end);
                     finger.drag(0, 0);
@@ -127,15 +138,13 @@
                         $seek = $trimmer.find('.video-trimmer__seek-bar'),
                         seekZone = $seek.data('cDragZone');
 
-                    // set the start/end time to 0 to make this easier
+                    // set the start/end time to min/max to make this easier
                     $scope.$apply(function() {
                         $scope.start = 0;
-                        $scope.end = 0;
+                        $scope.end = 60;
                     });
                     initial.start.top = $start.offset().top;
                     initial.start.left = $start.offset().left;
-                    initial.end.top = $end.offset().top;
-                    initial.end.left = $end.offset().left;
 
                     finger.placeOn($start);
                     finger.drag(10, 0);
@@ -146,13 +155,13 @@
 
                     finger.drag(-5, 0);
                     assertPosition($start, initial.start.left, initial.start.top);
-
-                    finger.drag(seekZone.display.width + 5, 0);
-                    assertPosition($start, initial.start.left + seekZone.display.width, initial.start.top);
-
-                    finger.drag(10, 0);
-                    assertPosition($start, initial.start.left + seekZone.display.width, initial.start.top);
                     finger.lift();
+
+                    $scope.$apply(function() {
+                        $scope.end = 0;
+                    });
+                    initial.end.top = $end.offset().top;
+                    initial.end.left = $end.offset().left;
 
                     finger.placeOn($end);
                     finger.drag(10, 0);
@@ -262,7 +271,7 @@
 
                     finger.placeOn($start);
                     finger.drag(seekWidth, 0);
-                    expect($start.css('left')).toBe((endPosition.center.x - ($start.width() / 2)) + 'px');
+                    expect($start.css('left')).toBe((endPosition.center.x - ($start.outerWidth() / 2)) + 'px');
                 });
             });
 
@@ -304,7 +313,7 @@
                     expect($end.css('left')).toBe(positionFor(57));
                 });
 
-                it('should modify the start time based on the position to which its moved', function() {
+                it('should modify the end time based on the position to which its moved', function() {
                     var finger = new Finger(),
                         seekWidth = $seek.width();
 
@@ -338,6 +347,62 @@
                     expect($scope.end).toBe(pxMovedToDuration(47));
                     expect($end.css('left')).toBe((seekWidth - 47) + 'px');
                     expect($end.css('top')).toBe('auto');
+                });
+
+                it('should not be able to move past the start marker', function() {
+                    var finger = new Finger(),
+                        seekWidth = $seek.width(),
+                        start = $trimmer.find('#start-marker').data('cDrag'),
+                        startPosition = start.display;
+
+                    start.refresh();
+
+                    // Start at the end
+                    $scope.$apply(function() {
+                        $scope.end = 60;
+                    });
+
+                    finger.placeOn($end);
+                    finger.drag(seekWidth * -1, 0);
+                    expect($end.css('left')).toBe((startPosition.center.x - ($end.outerWidth() / 2)) + 'px');
+                });
+            });
+
+            describe('the playhead', function() {
+                var $seek,
+                    $playhead;
+
+                beforeEach(function() {
+                    $seek = $trimmer.find('#seek-bar');
+                    $playhead = $seek.find('.video-trimmer__playhead');
+                });
+
+                it('should be positioned as a percentage (currentTime / duration.)', function() {
+                    function toPixels(percent) {
+                        return ($seek.width() * percent) + 16 + 'px';
+                    }
+
+                    expect($playhead.css('left')).toBe(toPixels(0));
+
+                    $scope.$apply(function() {
+                        $scope.currentTime = 15;
+                    });
+                    expect($playhead.css('left')).toBe(toPixels(0.25));
+
+                    $scope.$apply(function() {
+                        $scope.currentTime = 30;
+                    });
+                    expect($playhead.css('left')).toBe(toPixels(0.5));
+
+                    $scope.$apply(function() {
+                        $scope.currentTime = 45;
+                    });
+                    expect($playhead.css('left')).toBe(toPixels(0.75));
+
+                    $scope.$apply(function() {
+                        $scope.currentTime = 60;
+                    });
+                    expect($playhead.css('left')).toBe(toPixels(1));
                 });
             });
         });

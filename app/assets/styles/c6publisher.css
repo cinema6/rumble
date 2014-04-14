@@ -576,7 +576,8 @@
             background: blue;
         }
             .video-trimmer__playhead {
-                height: 100%; width: 10px;
+                position: relative;
+                height: 100%; width: 10px; margin-left: -5px;
                 background: yellow;
             }
         .video-trimmer__end-marker {

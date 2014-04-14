@@ -76,7 +76,12 @@
                     $preview.find('div').append($player);
                     $timeout.flush();
 
+                    expect($preview.isolateScope().video).not.toBeDefined();
                     video.emit('ready');
+                });
+
+                it('should put the video on the scope', function() {
+                    expect($preview.isolateScope().video).toBe(video);
                 });
 
                 describe('if there is no start/end specified', function() {

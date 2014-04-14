@@ -323,6 +323,7 @@
                 templateUrl: c6UrlMaker('views/directives/video_trimmer.html'),
                 scope: {
                     duration: '@',
+                    currentTime: '=',
                     start: '=',
                     end: '='
                 },
@@ -349,26 +350,56 @@
                                 return ((seekBar.display.width * end) /
                                     parseFloat(scope.duration)) + 'px';
                             }
+                        },
+                        playhead: {
+                            get: function() {
+                                var duration = parseFloat(scope.duration),
+                                    currentTime = scope.currentTime;
+
+                                return ((currentTime / duration) * 100) + '%';
+                            }
                         }
                     });
 
+                    function adjustPosition(item, desired) {
+                        var halfWidth = (item.display.width / 2),
+                            seekDisplay = seekBar.display;
+
+                        switch (item.id) {
+                        case 'start-marker':
+                            // The start marker can't move past the left side of the timeline or
+                            // past the end marker.
+                            endMarker.refresh();
+                            return Math.max(
+                                seekDisplay.left - halfWidth,
+                                Math.min(
+                                    desired.left,
+                                    endMarker.display.center.x - halfWidth
+                                )
+                            );
+
+                        case 'end-marker':
+                            // The end marker can't move past the right side of the timeline or
+                            // past the start marker.
+                            startMarker.refresh();
+                            return Math.max(
+                                startMarker.display.center.x - halfWidth,
+                                Math.min(
+                                    desired.left,
+                                    seekDisplay.right - halfWidth
+                                )
+                            );
+                        }
+                    }
+
                     function beforeMove(item, event) {
                         var desired = event.desired,
-                            $marker = item.$element,
-                            seekDisplay = seekBar.display,
-                            halfWidth = (item.display.width / 2);
+                            $marker = item.$element;
 
                         event.preventDefault();
 
                         $marker.css({
-                            // Make sure the slider can't move beyond the confines of the timeline.
-                            left: Math.max(
-                                Math.min(
-                                    desired.left,
-                                    (seekDisplay.right - halfWidth)
-                                ),
-                                (seekDisplay.left - halfWidth)
-                            ) + 'px'
+                            left: adjustPosition(item, desired) + 'px'
                         });
                     }
 
@@ -383,11 +414,10 @@
                         item.$element.css('top', 'auto');
                     }
 
-                    startMarker.on('beforeMove', beforeMove)
-                        .on('dropStart', dropStart);
-
-                    endMarker.on('beforeMove', beforeMove)
-                        .on('dropStart', dropStart);
+                    [startMarker, endMarker].forEach(function(marker) {
+                        marker.on('beforeMove', beforeMove)
+                            .on('dropStart', dropStart);
+                    });
                 }
             };
         }])
@@ -436,6 +466,8 @@
                                         ended = false;
                                     }
                                 });
+
+                            scope.video = video;
                         }
 
                         if (!video) { return; }
