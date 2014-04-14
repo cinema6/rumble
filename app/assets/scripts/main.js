@@ -93,12 +93,6 @@
         'c6.rumble.services', 'ngAnimate', 'ngSanitize', 'c6.ui', 'c6.log', 'c6.http'
     ];
     
-    if (window.location.host.match(/\/\/(www\.)*cinema6.com/) !== null){
-        ga('create', 'UA-44457821-2', 'cinema6.com');
-    } else {
-        ga('create', 'UA-44457821-1', { 'cookieDomain' : 'none' });
-    }
-
     loadScriptsInOrder(libScripts, function() {
         var Modernizr = window.Modernizr;
 

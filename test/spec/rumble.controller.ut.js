@@ -550,6 +550,23 @@
             });
 
             describe('starting the mini reel', function() {
+                beforeEach(function(){
+                    $window.c6MrGa = jasmine.createSpy('$window.c6MrGa');
+                });
+                describe('google analytics',function(){
+                    beforeEach(function(){
+                        spyOn($scope, '$emit');
+                        RumbleCtrl.start();
+                    });
+                    it('sends a page view event for the launch',function(){
+                        expect($window.c6MrGa).toHaveBeenCalledWith(
+                            'c6-mr.send', 'pageview',{
+                                'page' : '/mr/launch?experienceId=e-722bd3c4942331',
+                                'title' : 'Minireel App Launch'
+                            });
+                    });
+                });
+
                 describe('if the behavior allows fullscreen', function() {
                     beforeEach(function() {
                         spyOn($scope, '$emit');
