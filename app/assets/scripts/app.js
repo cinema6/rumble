@@ -336,10 +336,12 @@
                 $log.info('Init analytics with accountId: %1, clientId: %2',
                     cfg.accountId, cfg.clientId);
                 $window.c6MrGa('create', cfg.accountId, {
-                    'name'      : 'c6-mr',
-                    'clientId'  : cfg.clientId
+                    'name'          : 'c6mr',
+                    'clientId'      : cfg.clientId,
+                    'storage'       : 'none',
+                    'cookieDomain'  : 'none'
                 });
-                $window.c6MrGa('c6-mr.send', 'pageview', {
+                $window.c6MrGa('c6mr.send', 'pageview', {
                     'page'  : '/mr/load?experienceId=' + c6AppData.experience.id,
                     'title' : 'Minireel App Load'
                 });
