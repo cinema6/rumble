@@ -14,7 +14,8 @@
                 c6EventEmitter,
                 $window,
                 c6AppData,
-                AppCtrl;
+                AppCtrl,
+                $httpBackend;
 
             var cinema6,
                 c6ImagePreloader,
@@ -26,7 +27,8 @@
                 $document,
                 myFrame$,
                 appData,
-                siteSession;
+                siteSession,
+                session;
 
             beforeEach(function() {
                 c6ImagePreloader = {
@@ -70,6 +72,10 @@
                         device: 'desktop'
                     }
                 };
+                
+                session = {
+                    on : jasmine.createSpy('session.on')
+                };
 
                 module('ng', function($provide) {
                     $provide.value('$document', {
@@ -81,7 +87,7 @@
                 module('c6.ui', function($provide) {
                     $provide.factory('cinema6', function($q) {
                         cinema6 = {
-                            init: jasmine.createSpy('cinema6.init()'),
+                            init: jasmine.createSpy('cinema6.init()').andReturn(session),
                             getSession: jasmine.createSpy('cinema6.getSiteSession()').andCallFake(function() {
                                 return cinema6._.getSessionResult.promise;
                             }),
@@ -120,6 +126,9 @@
                     c6EventEmitter = $injector.get('c6EventEmitter');
                     $window = $injector.get('$window');
                     c6AppData = $injector.get('c6AppData');
+                    $httpBackend = $injector.get('$httpBackend');
+                    $httpBackend.whenGET('assets/config/responsive.json').respond({});
+
 
                     $document = $injector.get('$document');
                     myFrame$ = $injector.get('myFrame$');
@@ -200,6 +209,43 @@
 
                     it('should exit fullscreen mode', function() {
                         expect(cinema6.fullscreen).toHaveBeenCalledWith(false);
+                    });
+                });
+            });
+
+            describe('google analytics initialization',function(){
+                beforeEach(function(){
+                    $window.c6MrGa = jasmine.createSpy('$window.c6MrGa');
+                });
+
+                it('app will look for initAnalytics',function(){
+                    expect(cinema6.init).toHaveBeenCalled();
+                    expect(session.on.calls[0].args[0]).toEqual('initAnalytics');
+                });
+
+                it('will use initAnalytics cb to init ga',function(){
+                    c6AppData.experience = {
+                        id : 'exp1'
+                    };
+                    var cb = session.on.calls[0].args[1];
+                    cb({
+                        accountId : 'abc',
+                        clientId  : '123'
+                    });
+                    expect($window.c6MrGa.callCount).toEqual(2);
+                    
+                    expect($window.c6MrGa.calls[0].args[0]).toEqual('create');
+                    expect($window.c6MrGa.calls[0].args[1]).toEqual('abc');
+                    expect($window.c6MrGa.calls[0].args[2]).toEqual({
+                        'name'      : 'c6-mr',
+                        'clientId'  : '123'
+                    });
+
+                    expect($window.c6MrGa.calls[1].args[0]).toEqual('c6-mr.send');
+                    expect($window.c6MrGa.calls[1].args[1]).toEqual('pageview');
+                    expect($window.c6MrGa.calls[1].args[2]).toEqual({
+                        'page'      : '/mr/load?experienceId=exp1',
+                        'title'     : 'Minireel App Load'
                     });
                 });
             });

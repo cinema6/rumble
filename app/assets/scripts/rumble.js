@@ -234,8 +234,8 @@
             }).then(process);
         };
     }])
-    .controller('RumbleController',['$log','$scope','$timeout','BallotService','c6Computed','cinema6','MiniReelService','CommentsService','ControlsService',
-    function                       ( $log , $scope , $timeout , BallotService , c6Computed , cinema6 , MiniReelService , CommentsService , ControlsService ){
+    .controller('RumbleController',['$log','$scope','$timeout','$window','BallotService','c6Computed','cinema6','MiniReelService','CommentsService','ControlsService',
+    function                       ( $log , $scope , $timeout, $window, BallotService , c6Computed , cinema6 , MiniReelService , CommentsService , ControlsService ){
         $log = $log.context('RumbleCtrl');
         var self    = this, readyTimeout,
             appData = $scope.app.data,
@@ -474,6 +474,10 @@
         };
 
         this.start = function() {
+            $window.c6MrGa('c6-mr.send', 'pageview', {
+                'page'  : '/mr/launch?experienceId=' + appData.experience.id,
+                'title' : 'Minireel App Launch'
+            });
             this.goForward();
 
             if (appData.behaviors.fullscreen) {

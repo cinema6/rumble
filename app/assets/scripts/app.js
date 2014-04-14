@@ -5,28 +5,6 @@
         .constant('c6Defines', window$.c6)
         .config(['$provide',
         function( $provide ) {
-            var config = {
-                googleAnalytics: 'ga'
-            };
-
-            angular.forEach(config, function(value, key) {
-                if (angular.isString(value)) {
-                    $provide.value(key, window[value]);
-                } else if (angular.isArray(value)) {
-                    $provide.factory(key, function() {
-                        var service = {};
-
-                        angular.forEach(value, function(global) {
-                            service[global] = window[global];
-                        });
-
-                        return service;
-                    });
-                }
-            });
-        }])
-        .config(['$provide',
-        function( $provide ) {
             $provide.decorator('cinema6', ['$delegate', '$q',
             function                      ( $delegate ,  $q ) {
                 var mocks = {};
@@ -317,12 +295,12 @@
         function                     ( $scope , $log , cinema6 , c6UrlMaker , $timeout , $document , $window , c6Debounce , $animate , c6AppData ) {
             $log = $log.context('AppCtrl');
             var _app = {
-                state: 'splash'
-            };
-
-            var app = {
-                data: c6AppData
-            };
+                    state: 'splash'
+                },
+                app = {
+                    data: c6AppData
+                },
+                session;
 
             $animate.enabled(false);
 
@@ -352,12 +330,23 @@
 
             $scope.app = app;
 
-            cinema6.init();
+            session = cinema6.init();
 
-            cinema6.getSession().then(function(session) {
-                session.on('mrPreview:updateMode', function() {
-                    $window.location.reload();
+            session.on('initAnalytics',function(cfg){
+                $log.info('Init analytics with accountId: %1, clientId: %2',
+                    cfg.accountId, cfg.clientId);
+                $window.c6MrGa('create', cfg.accountId, {
+                    'name'      : 'c6-mr',
+                    'clientId'  : cfg.clientId
                 });
+                $window.c6MrGa('c6-mr.send', 'pageview', {
+                    'page'  : '/mr/load?experienceId=' + c6AppData.experience.id,
+                    'title' : 'Minireel App Load'
+                });
+            });
+
+            session.on('mrPreview:updateMode', function() {
+                $window.location.reload();
             });
         }]);
 }(window));
