@@ -317,8 +317,8 @@
             };
         }])
 
-        .directive('videoTrimmer', ['c6UrlMaker','$window',
-        function                   ( c6UrlMaker , $window ) {
+        .directive('videoTrimmer', ['c6UrlMaker','$window','c6Debounce','$q',
+        function                   ( c6UrlMaker , $window , c6Debounce , $q ) {
             return {
                 restrict: 'E',
                 templateUrl: c6UrlMaker('views/directives/video_trimmer.html'),
@@ -326,40 +326,61 @@
                     duration: '@',
                     currentTime: '=',
                     start: '=',
-                    end: '='
+                    end: '=',
+                    onStartScan: '&',
+                    onEndScan: '&'
                 },
                 link: function(scope, $element) {
                     var DragCtrl = $element.children('div').data('cDragCtrl'),
                         startMarker = $element.find('#start-marker').data('cDrag'),
                         endMarker = $element.find('#end-marker').data('cDrag'),
                         seekBar = $element.find('#seek-bar').data('cDragZone'),
-                        $$window = jqLite($window);
+                        $$window = jqLite($window),
+                        scanDeferred = null,
+                        notifyScan = c6Debounce(function(args) {
+                            var item = args[0];
+
+                            scanDeferred.notify(markerValue(item));
+                        }, 250);
+
+                    function markerValue(marker) {
+                        var pxTraveled = marker.display.center.x - seekBar.display.left,
+                            totalPx = seekBar.display.width;
+
+                        return (pxTraveled * duration()) / totalPx;
+                    }
+
+                    function duration() {
+                        return parseFloat(scope.duration);
+                    }
+
+                    function start() {
+                        return scope.start || 0;
+                    }
+
+                    function end() {
+                        return isNumber(scope.end) ? scope.end : duration();
+                    }
 
                     scope.position = {};
                     Object.defineProperties(scope.position, {
                         startMarker: {
                             get: function() {
-                                var start = scope.start || 0;
-
-                                return ((seekBar.display.width * start) /
-                                    parseFloat(scope.duration)) + 'px';
+                                return ((seekBar.display.width * start()) /
+                                    duration()) + 'px';
                             }
                         },
                         endMarker: {
                             get: function() {
-                                var duration = parseFloat(scope.duration),
-                                    end = isNumber(scope.end) ? scope.end : duration;
-
-                                return ((seekBar.display.width * end) /
-                                    parseFloat(scope.duration)) + 'px';
+                                return ((seekBar.display.width * end()) /
+                                    duration()) + 'px';
                             }
                         },
                         playhead: {
                             get: function() {
-                                var duration = parseFloat(scope.duration),
-                                    currentTime = scope.currentTime;
+                                var currentTime = scope.currentTime;
 
-                                return ((currentTime / duration) * 100) + '%';
+                                return ((currentTime / duration()) * 100) + '%';
                             }
                         }
                     });
@@ -395,6 +416,20 @@
                         }
                     }
 
+                    function begin(item) {
+                        var marker = item.id.replace(/-marker$/, ''),
+                            fnName;
+
+                        marker = marker.slice(0, 1).toUpperCase() + marker.slice(1);
+                        fnName = 'on' + marker + 'Scan';
+
+                        scanDeferred = $q.defer();
+
+                        scope[fnName]({
+                            promise: scanDeferred.promise
+                        });
+                    }
+
                     function beforeMove(item, event) {
                         var desired = event.desired,
                             $marker = item.$element;
@@ -404,15 +439,17 @@
                         $marker.css({
                             left: adjustPosition(item, desired) + 'px'
                         });
+
+                        notifyScan(item);
                     }
 
                     function dropStart(item) {
                         scope.$apply(function() {
-                            var pxTraveled = item.display.center.x - seekBar.display.left,
-                                scopeProp = item.id.replace(/-marker$/, '');
+                            var scopeProp = item.id.replace(/-marker$/, ''),
+                                seconds = markerValue(item);
 
-                            scope[scopeProp] = (pxTraveled * parseFloat(scope.duration)) /
-                                seekBar.display.width;
+                            scope[scopeProp] = seconds;
+                            scanDeferred.resolve(seconds);
                         });
                         item.$element.css('top', 'auto');
                     }
@@ -425,7 +462,8 @@
                     $$window.on('resize', resize);
 
                     [startMarker, endMarker].forEach(function(marker) {
-                        marker.on('beforeMove', beforeMove)
+                        marker.on('begin', begin)
+                            .on('beforeMove', beforeMove)
                             .on('dropStart', dropStart);
                     });
 
@@ -450,7 +488,7 @@
                 link: function(scope, $element) {
                     function controlVideo($video) {
                         var video = $video.data('video'),
-                            ended = false;
+                            startScanTime = null;
 
                         function start() {
                             return scope.start || 0;
@@ -460,34 +498,64 @@
                         }
 
                         function handleEvents() {
-                            video
-                                .on('timeupdate', function timeupdate() {
+                            video.on('timeupdate', function timeupdate() {
                                     var startTime = start(),
                                         endTime = end();
 
-                                    if (video.currentTime < startTime) {
+                                    if (isNumber(startScanTime)) {
+                                        return;
+                                    }
+
+                                    if (video.currentTime < (startTime - 1)) {
                                         video.currentTime = startTime;
                                     }
 
                                     if (video.currentTime >= endTime) {
                                         video.pause();
-                                        ended = true;
                                     }
                                 })
                                 .on('playing', function playing() {
-                                    if (ended) {
+                                    if (video.currentTime >= end()) {
                                         video.currentTime = start();
-                                        ended = false;
                                     }
                                 });
 
                             scope.video = video;
                         }
 
+                        function scan(time) {
+                            video.currentTime = time;
+                        }
+
+                        function finishScan() {
+                            video.currentTime = startScanTime;
+
+                            startScanTime = null;
+                        }
+
                         if (!video) { return; }
+
+                        scope.onMarkerSeek = function(promise) {
+                            startScanTime = video.currentTime;
+
+                            promise.then(finishScan, null, scan);
+                        };
+
+                        Object.defineProperties(scope, {
+                            currentTime: {
+                                get: function() {
+                                    if (isNumber(startScanTime)) {
+                                        return startScanTime;
+                                    }
+
+                                    return video.currentTime;
+                                }
+                            }
+                        });
 
                         video.once('ready', handleEvents);
                     }
+
 
                     scope.$watch('videoid', function(id) {
                         if (!id) { return; }

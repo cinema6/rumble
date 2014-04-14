@@ -9,7 +9,8 @@
             var $rootScope,
                 $scope,
                 $compile,
-                $window;
+                $window,
+                $timeout;
 
             var frame,
                 $trimmer;
@@ -56,6 +57,7 @@
                     $rootScope = $injector.get('$rootScope');
                     $compile = $injector.get('$compile');
                     $window = $injector.get('$window');
+                    $timeout = $injector.get('$timeout');
 
                     $scope = $rootScope.$new();
                 });
@@ -64,7 +66,7 @@
                 $scope.start = 10;
                 $scope.end = 40;
 
-                $trimmer = $('<video-trimmer start="start" end="end" duration="60" current-time="currentTime"></video-trimmer>');
+                $trimmer = $('<video-trimmer start="start" end="end" duration="60" current-time="currentTime" on-start-scan="startScan(promise)" on-end-scan="endScan(promise)"></video-trimmer>');
                 frame.$body.append($trimmer);
                 $scope.$apply(function() {
                     $compile($trimmer)($scope);
@@ -258,6 +260,61 @@
                     expect($start.css('top')).toBe('auto');
                 });
 
+                it('should notify the outside world about its scan', function() {
+                    var finger = new Finger(),
+                        seekWidth = $seek.width(),
+                        update, done;
+
+                    function createSpies() {
+                        update = jasmine.createSpy('scan update');
+                        done = jasmine.createSpy('scan done');
+
+                        $scope.startScan = jasmine.createSpy('$scope.startScan()')
+                            .and.callFake(function(promise) {
+                                promise.then(done, null, update);
+                            });
+                    }
+
+                    createSpies();
+
+                    $scope.$apply(function() {
+                        $scope.start = 0;
+                        $scope.end = 60;
+                    });
+
+                    finger.placeOn($start);
+                    finger.drag(0, 0);
+                    expect($scope.startScan).toHaveBeenCalled();
+
+                    finger.drag(seekWidth * 0.25, 0);
+                    $timeout.flush();
+                    expect(update).toHaveBeenCalledWith(15);
+
+                    finger.drag(seekWidth * 0.25, 0);
+                    $timeout.flush();
+                    expect(update).toHaveBeenCalledWith(30);
+
+                    finger.drag(seekWidth * 0.25, 0);
+                    $timeout.flush();
+                    expect(update).toHaveBeenCalledWith(45);
+
+                    finger.lift();
+                    expect(done).toHaveBeenCalledWith(45);
+
+                    createSpies();
+
+                    finger.placeOn($start);
+                    finger.drag(0, 0);
+                    expect($scope.startScan).toHaveBeenCalled();
+
+                    finger.drag(seekWidth * -0.25, 0);
+                    $timeout.flush();
+                    expect(update).toHaveBeenCalledWith(30);
+
+                    finger.lift();
+                    expect(done).toHaveBeenCalledWith(30);
+                });
+
                 it('should not be able to move past the end marker', function() {
                     var finger = new Finger(),
                         seekWidth = $seek.width(),
@@ -349,6 +406,61 @@
                     expect($scope.end).toBe(pxMovedToDuration(47));
                     expect($end.css('left')).toBe((seekWidth - 47) + 'px');
                     expect($end.css('top')).toBe('auto');
+                });
+
+                it('should notify the outside world about its scan', function() {
+                    var finger = new Finger(),
+                        seekWidth = $seek.width(),
+                        update, done;
+
+                    function createSpies() {
+                        update = jasmine.createSpy('scan update');
+                        done = jasmine.createSpy('scan done');
+
+                        $scope.endScan = jasmine.createSpy('$scope.endScan()')
+                            .and.callFake(function(promise) {
+                                promise.then(done, null, update);
+                            });
+                    }
+
+                    createSpies();
+
+                    $scope.$apply(function() {
+                        $scope.start = 0;
+                        $scope.end = 60;
+                    });
+
+                    finger.placeOn($end);
+                    finger.drag(0, 0);
+                    expect($scope.endScan).toHaveBeenCalled();
+
+                    finger.drag(seekWidth * -0.25, 0);
+                    $timeout.flush();
+                    expect(update).toHaveBeenCalledWith(45);
+
+                    finger.drag(seekWidth * -0.25, 0);
+                    $timeout.flush();
+                    expect(update).toHaveBeenCalledWith(30);
+
+                    finger.drag(seekWidth * -0.25, 0);
+                    $timeout.flush();
+                    expect(update).toHaveBeenCalledWith(15);
+
+                    finger.lift();
+                    expect(done).toHaveBeenCalledWith(15);
+
+                    createSpies();
+
+                    finger.placeOn($end);
+                    finger.drag(0, 0);
+                    expect($scope.endScan).toHaveBeenCalled();
+
+                    finger.drag(seekWidth * 0.25, 0);
+                    $timeout.flush();
+                    expect(update).toHaveBeenCalledWith(30);
+
+                    finger.lift();
+                    expect(done).toHaveBeenCalledWith(30);
                 });
 
                 it('should not be able to move past the start marker', function() {
