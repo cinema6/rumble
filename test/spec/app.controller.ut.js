@@ -27,7 +27,8 @@
                 $document,
                 myFrame$,
                 appData,
-                siteSession;
+                siteSession,
+                session;
 
             beforeEach(function() {
                 c6ImagePreloader = {
@@ -71,6 +72,10 @@
                         device: 'desktop'
                     }
                 };
+                
+                session = {
+                    on : jasmine.createSpy('session.on')
+                };
 
                 module('ng', function($provide) {
                     $provide.value('$document', {
@@ -82,7 +87,7 @@
                 module('c6.ui', function($provide) {
                     $provide.factory('cinema6', function($q) {
                         cinema6 = {
-                            init: jasmine.createSpy('cinema6.init()'),
+                            init: jasmine.createSpy('cinema6.init()').andReturn(session),
                             getSession: jasmine.createSpy('cinema6.getSiteSession()').andCallFake(function() {
                                 return cinema6._.getSessionResult.promise;
                             }),
@@ -209,18 +214,12 @@
             });
 
             describe('google analytics initialization',function(){
-                var session;
                 beforeEach(function(){
-                    session = {
-                        on : jasmine.createSpy('session.on')
-                    };
                     $window.c6MrGa = jasmine.createSpy('$window.c6MrGa');
                 });
 
                 it('app will look for initAnalytics',function(){
-                    expect(cinema6.getSession).toHaveBeenCalled();
-                    cinema6._.getSessionResult.resolve(session);
-                    $rootScope.$apply();
+                    expect(cinema6.init).toHaveBeenCalled();
                     expect(session.on.calls[0].args[0]).toEqual('initAnalytics');
                 });
 
@@ -228,8 +227,6 @@
                     c6AppData.experience = {
                         id : 'exp1'
                     };
-                    cinema6._.getSessionResult.resolve(session);
-                    $rootScope.$apply();
                     var cb = session.on.calls[0].args[1];
                     cb({
                         accountId : 'abc',

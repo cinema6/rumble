@@ -295,12 +295,12 @@
         function                     ( $scope , $log , cinema6 , c6UrlMaker , $timeout , $document , $window , c6Debounce , $animate , c6AppData ) {
             $log = $log.context('AppCtrl');
             var _app = {
-                state: 'splash'
-            };
-
-            var app = {
-                data: c6AppData
-            };
+                    state: 'splash'
+                },
+                app = {
+                    data: c6AppData
+                },
+                session;
 
             $animate.enabled(false);
 
@@ -330,21 +330,18 @@
 
             $scope.app = app;
 
-            cinema6.init();
+            session = cinema6.init();
 
-            cinema6.getSession()
-            .then(function(session){
-                session.on('initAnalytics',function(cfg){
-                    $log.info('Init analytics with accountId: %1, clientId: %2',
-                        cfg.accountId, cfg.clientId);
-                    $window.c6MrGa('create', cfg.accountId, {
-                        'name'      : 'c6-mr',
-                        'clientId'  : cfg.clientId
-                    });
-                    $window.c6MrGa('c6-mr.send', 'pageview', {
-                        'page'  : '/mr/load?experienceId=' + c6AppData.experience.id,
-                        'title' : 'Minireel App Load'
-                    });
+            session.on('initAnalytics',function(cfg){
+                $log.info('Init analytics with accountId: %1, clientId: %2',
+                    cfg.accountId, cfg.clientId);
+                $window.c6MrGa('create', cfg.accountId, {
+                    'name'      : 'c6-mr',
+                    'clientId'  : cfg.clientId
+                });
+                $window.c6MrGa('c6-mr.send', 'pageview', {
+                    'page'  : '/mr/load?experienceId=' + c6AppData.experience.id,
+                    'title' : 'Minireel App Load'
                 });
             });
         }]);
