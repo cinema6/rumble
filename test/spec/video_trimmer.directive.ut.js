@@ -8,7 +8,8 @@
         describe('<video-trimmer>', function() {
             var $rootScope,
                 $scope,
-                $compile;
+                $compile,
+                $window;
 
             var frame,
                 $trimmer;
@@ -54,6 +55,7 @@
                 inject(function($injector) {
                     $rootScope = $injector.get('$rootScope');
                     $compile = $injector.get('$compile');
+                    $window = $injector.get('$window');
 
                     $scope = $rootScope.$new();
                 });
@@ -403,6 +405,31 @@
                         $scope.currentTime = 60;
                     });
                     expect($playhead.css('left')).toBe(toPixels(1));
+                });
+            });
+
+            describe('when the window is resized', function() {
+                var scope,
+                    DragCtrl;
+
+                beforeEach(function() {
+                    scope = $trimmer.isolateScope();
+                    DragCtrl = $trimmer.find('.video-trimmer__group').data('cDragCtrl');
+
+                    spyOn(scope, '$digest').and.callThrough();
+                    spyOn(DragCtrl, 'refresh').and.callThrough();
+                });
+
+                it('should refresh the DragCtrl and $digest the scope', function() {
+                    var $$window = $($window);
+
+                    $$window.trigger('resize');
+                    expect(DragCtrl.refresh).toHaveBeenCalled();
+                    expect(scope.$digest).toHaveBeenCalled();
+
+                    $$window.trigger('resize');
+                    expect(DragCtrl.refresh.calls.count()).toBe(2);
+                    expect(scope.$digest.calls.count()).toBe(2);
                 });
             });
         });

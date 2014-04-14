@@ -1,7 +1,8 @@
 (function() {
     'use strict';
 
-    var isNumber = angular.isNumber;
+    var isNumber = angular.isNumber,
+        jqLite = angular.element;
 
     function refresh($element) {
         $element.inheritedData('cDragCtrl').refresh();
@@ -316,8 +317,8 @@
             };
         }])
 
-        .directive('videoTrimmer', ['c6UrlMaker',
-        function                   ( c6UrlMaker ) {
+        .directive('videoTrimmer', ['c6UrlMaker','$window',
+        function                   ( c6UrlMaker , $window ) {
             return {
                 restrict: 'E',
                 templateUrl: c6UrlMaker('views/directives/video_trimmer.html'),
@@ -328,9 +329,11 @@
                     end: '='
                 },
                 link: function(scope, $element) {
-                    var startMarker = $element.find('#start-marker').data('cDrag'),
+                    var DragCtrl = $element.children('div').data('cDragCtrl'),
+                        startMarker = $element.find('#start-marker').data('cDrag'),
                         endMarker = $element.find('#end-marker').data('cDrag'),
-                        seekBar = $element.find('#seek-bar').data('cDragZone');
+                        seekBar = $element.find('#seek-bar').data('cDragZone'),
+                        $$window = jqLite($window);
 
                     scope.position = {};
                     Object.defineProperties(scope.position, {
@@ -414,9 +417,20 @@
                         item.$element.css('top', 'auto');
                     }
 
+                    function resize() {
+                        DragCtrl.refresh();
+                        scope.$digest();
+                    }
+
+                    $$window.on('resize', resize);
+
                     [startMarker, endMarker].forEach(function(marker) {
                         marker.on('beforeMove', beforeMove)
                             .on('dropStart', dropStart);
+                    });
+
+                    scope.$on('$destroy', function() {
+                        $$window.off('resize', resize);
                     });
                 }
             };
