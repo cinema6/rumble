@@ -37,8 +37,13 @@
                         profile: {
                             autoplay: true
                         },
+                        experience: {
+                            data: {
+                                autoplay: true
+                            }
+                        },
                         behaviors: {
-                            autoplay: true,
+                            canAutoplay: true,
                             separateTextView: false
                         }
                     });
@@ -303,9 +308,30 @@
                             expect(ControlsService.bindTo).toHaveBeenCalledWith(iface);
                         });
 
-                        describe('if the behavior is autoplay', function() {
+                        describe('if the behavior can autoplay and the experience is set to autoplay', function() {
                             it('should play the video', function() {
                                 expect(iface.play).toHaveBeenCalled();
+                            });
+                        });
+
+                        describe('if the experience is set not to autoplay', function() {
+                            var currentPlayCalls;
+
+                            beforeEach(function() {
+                                currentPlayCalls = iface.play.callCount;
+
+                                c6AppData.experience.data.autoplay = false;
+
+                                $scope.$apply(function() {
+                                    $scope.active = false;
+                                });
+                                $scope.$apply(function() {
+                                    $scope.active = true;
+                                });
+                            });
+
+                            it('should not play the video', function() {
+                                expect(iface.play.callCount).toBe(currentPlayCalls);
                             });
                         });
 
@@ -336,7 +362,7 @@
                             beforeEach(function() {
                                 currentPlayCalls = iface.play.callCount;
 
-                                c6AppData.behaviors.autoplay = false;
+                                c6AppData.behaviors.canAutoplay = false;
 
                                 $scope.$apply(function() {
                                     $scope.active = false;

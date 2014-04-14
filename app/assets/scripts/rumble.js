@@ -589,7 +589,10 @@
                 if (active) {
                     ControlsService.bindTo(player);
 
-                    if (c6AppData.behaviors.autoplay && c6AppData.profile.autoplay) {
+                    if (c6AppData.behaviors.canAutoplay &&
+                        c6AppData.profile.autoplay &&
+                        c6AppData.experience.data.autoplay) {
+
                         iface.play();
                     }
                 } else {

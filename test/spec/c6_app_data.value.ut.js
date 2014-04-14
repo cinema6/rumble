@@ -161,13 +161,13 @@
                     return svc;
                 }
 
-                describe('autoplay', function() {
+                describe('canAutoplay', function() {
                     it('should be set based on the mode', function() {
-                        expect(c6AppData('full').behaviors.autoplay).toBe(false);
-                        expect(c6AppData('mobile').behaviors.autoplay).toBe(false);
-                        expect(c6AppData('light').behaviors.autoplay).toBe(true);
-                        expect(c6AppData('lightbox').behaviors.autoplay).toBe(true);
-                        expect(c6AppData('lightbox-ads').behaviors.autoplay).toBe(true);
+                        expect(c6AppData('full').behaviors.canAutoplay).toBe(false);
+                        expect(c6AppData('mobile').behaviors.canAutoplay).toBe(false);
+                        expect(c6AppData('light').behaviors.canAutoplay).toBe(true);
+                        expect(c6AppData('lightbox').behaviors.canAutoplay).toBe(true);
+                        expect(c6AppData('lightbox-ads').behaviors.canAutoplay).toBe(true);
                     });
                 });
 

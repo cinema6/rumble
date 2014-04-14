@@ -48,6 +48,7 @@
                     ]
                 }
             ],
+            "autoplay": true,
             "deck": [
                 {
                     "id": "rc-22119a8cf9f755",
@@ -192,6 +193,7 @@
         "data": {
             "id": "r-ea8caee7de7582",
             "electionId": "el-2f173cf1a9a8ef",
+            "autoplay": true,
             "deck": [
                 {
                     "id": "rc-22119a8cf9f755",
@@ -523,6 +525,7 @@
         "data": {
             "id": "r-ea8caee7de7582",
             "electionId": "el-2f173cf1a9a8ef",
+            "autoplay": true,
             "deck": [
                 {
                     "id": "rc-22119a8cf9f755",
@@ -883,6 +886,7 @@
         "data": {
             "id": "r-a798237d2e522f",
             "electionId": "el-8b1b6847d575ac",
+            "autoplay": true,
             "deck": [
                 {
                     "id": "rc-080fb573e704cf",
@@ -1097,6 +1101,7 @@
         "data": {
             "id": "r-a798237d2e522f",
             "electionId": "el-8b1b6847d575ac",
+            "autoplay": true,
             "deck": [
                 {
                     "id": "rc-080fb573e704cf",
@@ -1310,6 +1315,7 @@
         "data": {
             "id": "r-ea8caee7de7582",
             "electionId": "el-8b1b6847d575ac",
+            "autoplay": true,
             "deck": [
                 {
                     "id": "rc-0c4d7938b6fe3c",

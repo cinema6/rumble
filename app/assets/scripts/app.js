@@ -267,7 +267,7 @@
                 }
 
                 obj.behaviors = {
-                    autoplay: isMode('light', 'lightbox', 'lightbox-ads'),
+                    canAutoplay: isMode('light', 'lightbox', 'lightbox-ads'),
                     inlineVoteResults: isMode('full', 'mobile'),
                     separateTextView: isMode('full'),
                     fullscreen: isMode('mobile', 'lightbox', 'lightbox-ads')
