@@ -560,7 +560,7 @@
                     });
                     it('sends a page view event for the launch',function(){
                         expect($window.c6MrGa).toHaveBeenCalledWith(
-                            'c6-mr.send', 'pageview',{
+                            'c6mr.send', 'pageview',{
                                 'page' : '/mr/launch?experienceId=e-722bd3c4942331',
                                 'title' : 'Minireel App Launch'
                             });
