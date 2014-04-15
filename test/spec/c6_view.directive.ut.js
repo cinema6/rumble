@@ -62,12 +62,12 @@
                     };
 
                 $scope.$apply(function() {
-                    c6State.emit('viewChangeStart', parentState, null);
+                    c6State.emit('viewChangeStart', parentState, null, false);
                 });
                 expect(view.find('c6-view>div').length).toBe(1);
 
                 $scope.$apply(function() {
-                    c6State.emit('viewChangeStart', childState, parentState);
+                    c6State.emit('viewChangeStart', childState, parentState, true);
                 });
                 expect(view.text()).toBe('I\'m a child!');
             });
@@ -83,22 +83,32 @@
                         cTemplate: '<p>{{ChildCtrl.model.data}}</p>',
                         cModel: { data: 'Hello!' },
                         controllerAs: 'ChildCtrl'
-                    };
+                    },
+                    successSpy = jasmine.createSpy('handleViewChangeSuccess'),
+                    $p;
 
                 $scope.$apply(function() {
-                    c6State.emit('viewChangeStart', parentState, null);
+                    c6State.emit('viewChangeStart', parentState, null, false);
                 });
                 $scope.$apply(function() {
-                    c6State.emit('viewChangeStart', childState, parentState);
+                    c6State.emit('viewChangeStart', childState, parentState, true);
                 });
+                $p = view.find('p');
 
                 expect(view.text()).toBe('Hello!');
 
+                c6State.on('viewChangeSuccess', successSpy);
                 childState.cModel.data = 'World!';
                 $scope.$apply(function() {
-                    c6State.emit('viewChangeStart', childState, childState);
+                    c6State.emit('viewChangeStart', parentState, childState, false);
                 });
+                expect(successSpy).toHaveBeenCalledWith(parentState);
+                $scope.$apply(function() {
+                    c6State.emit('viewChangeStart', childState, parentState, true);
+                });
+                expect(successSpy).toHaveBeenCalledWith(childState);
                 expect(view.text()).toBe('World!');
+                expect($p[0]).toBe(view.find('p')[0]);
             });
 
             it('should support "backing out" of a nested view without re-rendering the parent', function() {
@@ -116,10 +126,10 @@
                     $c6View;
 
                 $scope.$apply(function() {
-                    c6State.emit('viewChangeStart', parentState, null);
+                    c6State.emit('viewChangeStart', parentState, null, false);
                 });
                 $scope.$apply(function() {
-                    c6State.emit('viewChangeStart', childState, parentState);
+                    c6State.emit('viewChangeStart', childState, parentState, true);
                 });
                 $c6View = view.children('c6-view');
 
@@ -128,13 +138,21 @@
                 spyOn($scope, '$new').and.callThrough();
                 parentState.controller.calls.reset();
                 $scope.$apply(function() {
-                    c6State.emit('viewChangeStart', parentState, childState);
+                    c6State.emit('viewChangeStart', parentState, childState, true);
                 });
                 expect(view.children('c6-view')[0]).toBe($c6View[0]);
                 expect(view.text()).toBe('Parent');
                 expect($scope.$new).not.toHaveBeenCalled();
                 expect(parentState.controller).not.toHaveBeenCalled();
                 expect(c6State.emit).toHaveBeenCalledWith('viewChangeSuccess', parentState);
+
+                $scope.$apply(function() {
+                    c6State.emit('viewChangeStart', parentState, parentState, false);
+                });
+                $scope.$apply(function() {
+                    c6State.emit('viewChangeStart', childState, parentState, true);
+                });
+                expect(view.text()).toBe('ParentChild');
             });
 
             it('should support entering a child without re-rendering the parents', function() {
@@ -158,23 +176,23 @@
                     $c6Views = {};
 
                 $scope.$apply(function() {
-                    c6State.emit('viewChangeStart', parentState, null);
+                    c6State.emit('viewChangeStart', parentState, null, true);
                 });
                 $c6Views.parent = view.children('c6-view');
                 expect($c6Views.parent.text()).toBe('Parent');
 
                 $scope.$apply(function() {
-                    c6State.emit('viewChangeStart', parentState, grandchildState);
+                    c6State.emit('viewChangeStart', parentState, parentState, false);
                 });
                 $scope.$apply(function() {
-                    c6State.emit('viewChangeStart', childState, parentState);
+                    c6State.emit('viewChangeStart', childState, parentState, false);
                 });
                 $c6Views.child = view.children('c6-view').children('c6-view');
                 expect($c6Views.child.text()).toBe('Child');
                 expect(view.children('c6-view')[0]).toBe($c6Views.parent[0]);
 
                 $scope.$apply(function() {
-                    c6State.emit('viewChangeStart', grandchildState, childState);
+                    c6State.emit('viewChangeStart', grandchildState, childState, true);
                 });
                 $c6Views.grandchild = view.children('c6-view').children('c6-view').children('c6-view');
                 expect($c6Views.grandchild.text()).toBe('Grandchild');
@@ -200,7 +218,7 @@
                     };
 
                     $scope.$apply(function() {
-                        c6State.emit('viewChangeStart', homeState);
+                        c6State.emit('viewChangeStart', homeState, null, true);
                     });
 
                     scope = view.find('c6-view div').scope();
@@ -226,7 +244,7 @@
                     spyOn(oldScope, '$destroy').and.callThrough();
 
                     $scope.$apply(function() {
-                        c6State.emit('viewChangeStart', contactsState);
+                        c6State.emit('viewChangeStart', contactsState, homeState, true);
                     });
 
                     expect(oldScope.$destroy).toHaveBeenCalled();

@@ -346,14 +346,14 @@
                                 $rootScope.$apply(function() {
                                     resolveState.resolve(parentState);
                                 });
-                                expect(c6State.emit).toHaveBeenCalledWith('viewChangeStart', parentState, null);
+                                expect(c6State.emit).toHaveBeenCalledWith('viewChangeStart', parentState, null, false);
 
                                 finish(parentState);
                                 expect(c6State.emit).toHaveBeenCalledWith('transitionStart', childState1, parentState);
                                 $rootScope.$apply(function() {
                                     resolveState.resolve(childState1);
                                 });
-                                expect(c6State.emit).toHaveBeenCalledWith('viewChangeStart', childState1, parentState);
+                                expect(c6State.emit).toHaveBeenCalledWith('viewChangeStart', childState1, parentState, true);
                                 finish(childState1);
 
                                 expect(success).toHaveBeenCalledWith(childState1);
@@ -374,11 +374,11 @@
                                     c6State.transitionTo('parent.child2');
                                 });
                                 expect(_service.resolveState.calls.count()).toBe(1);
-                                $rootScope.$apply(function() {
-                                    resolveState.resolve(childState2);
-                                });
-                                expect(c6State.emit).toHaveBeenCalledWith('viewChangeStart', childState2, grandchildState);
+                                finish(parentState);
+                                expect(c6State.emit).toHaveBeenCalledWith('viewChangeStart', parentState, grandchildState, false);
+                                expect(_service.resolveState.calls.count()).toBe(2);
                                 finish(childState2);
+                                expect(c6State.emit).toHaveBeenCalledWith('viewChangeStart', childState2, parentState, true);
 
                                 expect(c6State.current).toBe(childState2);
                             });
@@ -451,12 +451,12 @@
                                     c6State.transitionTo('home');
                                 });
 
-                                expect(c6State.emit).not.toHaveBeenCalledWith('viewChangeStart', homeState, null);
+                                expect(c6State.emit).not.toHaveBeenCalledWith('viewChangeStart', homeState, null, true);
 
                                 $rootScope.$apply(function() {
                                     resolveState.resolve(homeState);
                                 });
-                                expect(c6State.emit).toHaveBeenCalledWith('viewChangeStart', homeState, null);
+                                expect(c6State.emit).toHaveBeenCalledWith('viewChangeStart', homeState, null, true);
                                 $rootScope.$apply(function() {
                                     c6State.emit('viewChangeSuccess', homeState);
                                 });
@@ -467,7 +467,7 @@
                                 $rootScope.$apply(function() {
                                     resolveState.resolve(contactState);
                                 });
-                                expect(c6State.emit).toHaveBeenCalledWith('viewChangeStart', contactState, homeState);
+                                expect(c6State.emit).toHaveBeenCalledWith('viewChangeStart', contactState, homeState, true);
                             });
 
                             it('should resolve the promise when viewChangeSuccess is emitted with a state of the same name', function() {

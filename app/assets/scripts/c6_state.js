@@ -18,17 +18,8 @@
                         parentData = element.inheritedData('cView') || {},
                         viewLevel = (parentData.level || 0) + 1;
 
-                    function leave() {
-                        if (currentScope) {
-                            currentScope.$destroy();
-                        }
 
-                        if (currentElement$) {
-                            $animate.leave(currentElement$);
-                        }
-                    }
-
-                    function update(state) {
+                    function update(state, prevState, terminal) {
                         var newScope, ctrl, controllerAs, controller, clone$,
                             stateLevel = state.name.split('.').length,
                             data = (currentElement$ && currentElement$.data('cView')) || {};
@@ -84,27 +75,41 @@
                             });
                         }
 
+                        function leave() {
+                            if (currentScope) {
+                                currentScope.$destroy();
+                            }
+
+                            if (currentElement$) {
+                                $animate.leave(currentElement$);
+                            }
+
+                            currentScope = newScope;
+                            currentElement$ = clone$;
+                        }
+
                         // We have nothing to do if the transition was not intended for this view or
                         // the state being requested is already loaded into the view (and this is
                         // not a deliberate transition to the current state again (but maybe with
                         // different data.)
                         if (stateLevel > viewLevel) { return; }
 
-                        if (state === data.state) {
-                            return setupController(data.controller);
+                        if (stateLevel === viewLevel) {
+                            if (state === data.state) {
+                                setupController(data.controller);
+                                c6State.emit('viewChangeSuccess', state);
+                                return;
+                            }
+
+                            enter();
+                            leave();
+                            return;
                         }
 
-
-                        if (stateLevel === viewLevel) {
-                            enter();
-                        } else {
+                        if (terminal) {
+                            leave();
                             c6State.emit('viewChangeSuccess', state);
                         }
-
-                        leave();
-
-                        currentScope = newScope;
-                        currentElement$ = clone$;
                     }
 
                     c6State.emit('viewReady');
@@ -223,7 +228,7 @@
                         return tree;
                     }
 
-                    function doTransition(state) {
+                    function doTransition(state, terminal) {
                         var from = c6State.current;
 
                         function resolveState(state) {
@@ -246,7 +251,7 @@
                             }
 
                             c6State.on('viewChangeSuccess', handleViewChangeSuccess);
-                            c6State.emit('viewChangeStart', state, from);
+                            c6State.emit('viewChangeStart', state, from, terminal);
 
                             return deferred.promise;
                         }
@@ -265,12 +270,15 @@
                     }
 
                     function execute() {
-                        var promise;
+                        var promise,
+                            lastIndex = tree.length - 1;
 
-                        angular.forEach(tree, function(state) {
-                            promise = promise ? promise.then(function() {
-                                return doTransition(state);
-                            }) : doTransition(state);
+                        angular.forEach(tree, function(state, index) {
+                            function doPromise() {
+                                return doTransition(state, index === lastIndex);
+                            }
+
+                            promise = promise ? promise.then(doPromise) : doPromise();
                         });
 
                         c6State.transitions[name] = promise;
