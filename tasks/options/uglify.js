@@ -2,6 +2,9 @@
     'use strict';
 
     module.exports = {
+        options: {
+            sourceMap : '<%= withMaps %>'
+                 },
         dist: {
             files: [
                 {

@@ -106,17 +106,22 @@ module.exports = function(grunt) {
      *
      *********************************************************************************************/
 
-    grunt.registerTask('build', 'build app into distDir', [
-        'test:unit',
-        'git_last_commit',
-        'clean:build',
-        'copy:dist',
-        'ngtemplates:dist',
-        'htmlmin:dist',
-        'sed',
-        'cssmin:dist',
-        'uglify:dist'
-    ]);
+    grunt.registerTask('build', 'build app into distDir', function(){
+        grunt.config('withMaps',grunt.option('with-maps'));
+        grunt.task.run('test:unit');
+        grunt.task.run('git_last_commit');
+        grunt.task.run('clean:build');
+        grunt.task.run('copy:dist');
+        grunt.task.run('ngtemplates:dist');
+        grunt.task.run('htmlmin:dist');
+        grunt.task.run('sed:main');
+        grunt.task.run('sed:html');
+        grunt.task.run('cssmin:dist');
+        grunt.task.run('uglify:dist');
+        if (grunt.option('with-maps')){
+            grunt.task.run('sed:maps');
+        }
+    });
 
     /*********************************************************************************************
      *

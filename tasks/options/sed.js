@@ -14,6 +14,14 @@
                 '.tmp/templates.js',
                 '<%= settings.distDir %>/index.html'
             ]
+        },
+        maps: {
+            pattern: 'assets',
+            replacement: '<%= _version %>',
+            path: [
+                '<%= settings.distDir %>/<%= _version %>/scripts/c6app.min.map',
+                '<%= settings.distDir %>/<%= _version %>/scripts/main.map'
+            ]
         }
     };
 }());
