@@ -1,6 +1,9 @@
 (function() {
     'use strict';
 
+    var isNumber = angular.isNumber,
+        jqLite = angular.element;
+
     function refresh($element) {
         $element.inheritedData('cDragCtrl').refresh();
     }
@@ -314,6 +317,163 @@
             };
         }])
 
+        .directive('videoTrimmer', ['c6UrlMaker','$window','c6Debounce','$q',
+        function                   ( c6UrlMaker , $window , c6Debounce , $q ) {
+            return {
+                restrict: 'E',
+                templateUrl: c6UrlMaker('views/directives/video_trimmer.html'),
+                scope: {
+                    duration: '@',
+                    currentTime: '=',
+                    start: '=',
+                    end: '=',
+                    onStartScan: '&',
+                    onEndScan: '&'
+                },
+                link: function(scope, $element) {
+                    var DragCtrl = $element.children('div').data('cDragCtrl'),
+                        startMarker = $element.find('#start-marker').data('cDrag'),
+                        endMarker = $element.find('#end-marker').data('cDrag'),
+                        seekBar = $element.find('#seek-bar').data('cDragZone'),
+                        $$window = jqLite($window),
+                        scanDeferred = null,
+                        notifyScan = c6Debounce(function(args) {
+                            var item = args[0];
+
+                            scanDeferred.notify(markerValue(item));
+                        }, 250);
+
+                    function markerValue(marker) {
+                        var pxTraveled = marker.display.center.x - seekBar.display.left,
+                            totalPx = seekBar.display.width;
+
+                        return (pxTraveled * duration()) / totalPx;
+                    }
+
+                    function duration() {
+                        return parseFloat(scope.duration);
+                    }
+
+                    function start() {
+                        return scope.start || 0;
+                    }
+
+                    function end() {
+                        return isNumber(scope.end) ? scope.end : duration();
+                    }
+
+                    scope.position = {};
+                    Object.defineProperties(scope.position, {
+                        startMarker: {
+                            get: function() {
+                                return ((seekBar.display.width * start()) /
+                                    duration()) + 'px';
+                            }
+                        },
+                        endMarker: {
+                            get: function() {
+                                return ((seekBar.display.width * end()) /
+                                    duration()) + 'px';
+                            }
+                        },
+                        playhead: {
+                            get: function() {
+                                var currentTime = scope.currentTime;
+
+                                return ((currentTime / duration()) * 100) + '%';
+                            }
+                        }
+                    });
+
+                    function adjustPosition(item, desired) {
+                        var halfWidth = (item.display.width / 2),
+                            seekDisplay = seekBar.display;
+
+                        switch (item.id) {
+                        case 'start-marker':
+                            // The start marker can't move past the left side of the timeline or
+                            // past the end marker.
+                            endMarker.refresh();
+                            return Math.max(
+                                seekDisplay.left - halfWidth,
+                                Math.min(
+                                    desired.left,
+                                    endMarker.display.center.x - halfWidth
+                                )
+                            );
+
+                        case 'end-marker':
+                            // The end marker can't move past the right side of the timeline or
+                            // past the start marker.
+                            startMarker.refresh();
+                            return Math.max(
+                                startMarker.display.center.x - halfWidth,
+                                Math.min(
+                                    desired.left,
+                                    seekDisplay.right - halfWidth
+                                )
+                            );
+                        }
+                    }
+
+                    function begin(item) {
+                        var marker = item.id.replace(/-marker$/, ''),
+                            fnName;
+
+                        marker = marker.slice(0, 1).toUpperCase() + marker.slice(1);
+                        fnName = 'on' + marker + 'Scan';
+
+                        scanDeferred = $q.defer();
+
+                        scope[fnName]({
+                            promise: scanDeferred.promise
+                        });
+                    }
+
+                    function beforeMove(item, event) {
+                        var desired = event.desired,
+                            $marker = item.$element;
+
+                        event.preventDefault();
+
+                        $marker.css({
+                            left: adjustPosition(item, desired) + 'px'
+                        });
+
+                        notifyScan(item);
+                    }
+
+                    function dropStart(item) {
+                        scope.$apply(function() {
+                            var scopeProp = item.id.replace(/-marker$/, ''),
+                                seconds = markerValue(item);
+
+                            scope[scopeProp] = seconds;
+                            scanDeferred.resolve(seconds);
+                        });
+                        item.$element.css('top', 'auto');
+                    }
+
+                    function resize() {
+                        DragCtrl.refresh();
+                        scope.$digest();
+                    }
+
+                    $$window.on('resize', resize);
+
+                    [startMarker, endMarker].forEach(function(marker) {
+                        marker.on('begin', begin)
+                            .on('beforeMove', beforeMove)
+                            .on('dropStart', dropStart);
+                    });
+
+                    scope.$on('$destroy', function() {
+                        $$window.off('resize', resize);
+                    });
+                }
+            };
+        }])
+
         .directive('videoPreview', ['c6UrlMaker','$timeout',
         function                   ( c6UrlMaker , $timeout ) {
             return {
@@ -322,48 +482,80 @@
                 scope: {
                     service: '@',
                     videoid: '@',
-                    start: '@',
-                    end: '@'
+                    start: '=',
+                    end: '='
                 },
                 link: function(scope, $element) {
                     function controlVideo($video) {
                         var video = $video.data('video'),
-                            ended = false;
+                            startScanTime = null;
 
                         function start() {
-                            return parseFloat(scope.start) || 0;
+                            return scope.start || 0;
                         }
                         function end() {
-                            return parseFloat(scope.end) || Infinity;
+                            return scope.end || Infinity;
                         }
 
                         function handleEvents() {
-                            video
-                                .on('timeupdate', function timeupdate() {
+                            video.on('timeupdate', function timeupdate() {
                                     var startTime = start(),
                                         endTime = end();
 
-                                    if (video.currentTime < startTime) {
+                                    if (isNumber(startScanTime)) {
+                                        return;
+                                    }
+
+                                    if (video.currentTime < (startTime - 1)) {
                                         video.currentTime = startTime;
                                     }
 
                                     if (video.currentTime >= endTime) {
                                         video.pause();
-                                        ended = true;
                                     }
                                 })
                                 .on('playing', function playing() {
-                                    if (ended) {
+                                    if (video.currentTime >= end()) {
                                         video.currentTime = start();
-                                        ended = false;
                                     }
                                 });
+
+                            scope.video = video;
+                        }
+
+                        function scan(time) {
+                            video.currentTime = time;
+                        }
+
+                        function finishScan() {
+                            video.currentTime = startScanTime;
+
+                            startScanTime = null;
                         }
 
                         if (!video) { return; }
 
+                        scope.onMarkerSeek = function(promise) {
+                            startScanTime = video.currentTime;
+
+                            promise.then(finishScan, null, scan);
+                        };
+
+                        Object.defineProperties(scope, {
+                            currentTime: {
+                                get: function() {
+                                    if (isNumber(startScanTime)) {
+                                        return startScanTime;
+                                    }
+
+                                    return video.currentTime;
+                                }
+                            }
+                        });
+
                         video.once('ready', handleEvents);
                     }
+
 
                     scope.$watch('videoid', function(id) {
                         if (!id) { return; }
