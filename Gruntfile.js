@@ -119,7 +119,7 @@ module.exports = function(grunt) {
         grunt.task.run('cssmin:dist');
         grunt.task.run('uglify:dist');
         if (grunt.option('with-maps')){
-            grunt.task.run('sed:maps');
+            grunt.task.run('sed:app_map');
         }
     });
 
