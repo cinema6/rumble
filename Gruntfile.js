@@ -141,6 +141,13 @@ module.exports = function(grunt) {
     });
 
     grunt.registerTask('publish', 'upload the collateral assets and app to s3', function(target) {
+        if (grunt.option('with-maps')){
+            if (task === 'test'){
+                grunt.log.writeln('WARNING - source maps will be uploaded to s3!');
+            } else {
+                grunt.fail.warn('Type maps are only allowed on test!');
+            }
+        }
         grunt.task.run('publish:collateral:' + target);
         grunt.task.run('publish:app:' + target);
     });
