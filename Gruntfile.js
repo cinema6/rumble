@@ -142,7 +142,7 @@ module.exports = function(grunt) {
 
     grunt.registerTask('publish', 'upload the collateral assets and app to s3', function(target) {
         if (grunt.option('with-maps')){
-            if (task === 'test'){
+            if (target === 'test'){
                 grunt.log.writeln('WARNING - source maps will be uploaded to s3!');
             } else {
                 grunt.fail.warn('Type maps are only allowed on test!');
