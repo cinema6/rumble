@@ -141,14 +141,22 @@ module.exports = function(grunt) {
     });
 
     grunt.registerTask('publish', 'upload the collateral assets and app to s3', function(target) {
+        var done = this.async(), delay = 0;
         if (grunt.option('with-maps')){
             if (target === 'test'){
                 grunt.log.writeln('WARNING - source maps will be uploaded to s3!');
+                delay = 3000;
             } else {
                 grunt.fail.warn('Type maps are only allowed on test!');
+                done(false);
             }
         }
-        grunt.task.run('publish:collateral:' + target);
-        grunt.task.run('publish:app:' + target);
+
+        setTimeout(function(){
+            grunt.task.run('publish:collateral:' + target);
+            grunt.task.run('publish:app:' + target);
+            done(true);
+        },delay);
+
     });
 };
