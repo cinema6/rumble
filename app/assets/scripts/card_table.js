@@ -84,7 +84,8 @@
                 controllerAs: 'Ctrl',
                 scope: {
                     deck: '=',
-                    editCard: '&'
+                    editCard: '&',
+                    previewMode: '&'
                 }
             };
         }])

@@ -256,6 +256,7 @@
         .controller('EditorController', ['cModel','c6State','$scope',
         function                        ( cModel , c6State , $scope ) {
             this.model = cModel;
+            this.preview = false;
 
             this.editCard = function(card) {
                 c6State.transitionTo('editor.editCard', { id: card.id });
@@ -263,6 +264,18 @@
 
             this.newCard = function() {
                 c6State.transitionTo('editor.newCard.type');
+            };
+
+            this.previewMode = function(card) {
+                this.preview = true;
+                $scope.$broadcast('mrPreview:updateExperience', cModel, card);
+            };
+
+            this.closePreview = function() {
+                this.preview = false;
+                // commenting out cuz we don't want to reset the player
+                // when the user closes the preview
+                // $scope.$broadcast('mrPreview:closePreview');
             };
 
             $scope.$on('addCard', function(event, card) {
