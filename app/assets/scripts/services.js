@@ -104,7 +104,8 @@
 
         .service('MiniReelService', ['crypto','$window','cinema6','$cacheFactory','$q',
         function                    ( crypto , $window , cinema6 , $cacheFactory , $q ) {
-            var cache = $cacheFactory('MiniReelService:minireels');
+            var cache = $cacheFactory('MiniReelService:minireels'),
+                self = this;
 
             function generateId(prefix) {
                 return prefix + '-' +
@@ -115,48 +116,48 @@
                     ).toString(crypto.enc.Hex).substr(0, 14);
             }
 
+            /******************************************************\
+             * * * * * * * * * * HELPER FUNCTIONS * * * * * * * * *
+            \******************************************************/
+            // Copy the value from the raw source with an optional
+            // default.
+            function copy(def) {
+                return function(data, key) {
+                    var value = data[key];
+
+                    return angular.isUndefined(value) ?
+                        def : angular.copy(value);
+                };
+            }
+
+            // Used for copying the start/end times off of the
+            // cards. This is needed because the start/end for
+            // Dailymotion must be "undefined" rather than
+            // "null".
+            function trimmer() {
+                return function(data, key, card) {
+                    var value = data[key],
+                        def = (card.type === 'dailymotion') ?
+                            undefined : null;
+
+                    return angular.isNumber(value) ?
+                        value : def;
+                };
+            }
+
+            // Simply use the provided value.
+            function value(val) {
+                return function() {
+                    return val;
+                };
+            }
+
             function makeCard(rawData, base) {
                 var template, dataTemplates, videoDataTemplate,
                     dataTemplate,
                     card = base || {
                         data: {}
                     };
-
-                /******************************************************\
-                 * * * * * * * * * * HELPER FUNCTIONS * * * * * * * * *
-                \******************************************************/
-                // Copy the value from the raw source with an optional
-                // default.
-                function copy(def) {
-                    return function(data, key) {
-                        var value = data[key];
-
-                        return angular.isUndefined(value) ?
-                            def : angular.copy(value);
-                    };
-                }
-
-                // Used for copying the start/end times off of the
-                // cards. This is needed because the start/end for
-                // Dailymotion must be "undefined" rather than
-                // "null".
-                function trimmer() {
-                    return function(data, key, card) {
-                        var value = data[key],
-                            def = (card.type === 'dailymotion') ?
-                                undefined : null;
-
-                        return angular.isNumber(value) ?
-                            value : def;
-                    };
-                }
-
-                // Simply use the provided value.
-                function value(val) {
-                    return function() {
-                        return val;
-                    };
-                }
 
                 /******************************************************\
                  * * * * * * * * CONFIGURATION DEFINITION * * * * * * *
@@ -313,6 +314,116 @@
 
                 return fetchFromCache()
                     .catch(fetchFromServer);
+            };
+
+            this.convertCard = function(card) {
+                var dataTemplates, cardBases, cardType,
+                    newCard = {
+                        data: {}
+                    };
+
+                var forEach = angular.forEach;
+
+                function camelSource(source) {
+                    switch(source) {
+
+                    case 'youtube':
+                        return 'YouTube';
+                    case 'vimeo':
+                        return 'Vimeo';
+                    case 'dailymotion':
+                        return 'DailyMotion';
+                    }
+                }
+
+                function getType(card) {
+                    if(card.ad) {
+                        return 'ad';
+                    }
+                    if(card.type.indexOf('video') > -1) {
+                        return 'video';
+                    } else {
+                        // currently this will only be 'miniReel' or 'intro'
+                        // but the intro slide is already being skipped
+                        // and is never passed to convertCard()
+                        return card.type;
+                    }
+                }
+
+                dataTemplates = {
+                    video: {
+                        modestbranding: copy(1),
+                        rel: copy(0),
+                        start: trimmer(),
+                        end: trimmer(),
+                        videoid: copy(null)
+                    },
+                    ad: {
+                        autoplay: copy(false)
+                    },
+                    miniReel: {
+                        message: copy('Not being copied into the MRinator yet'),
+                        query: copy({id:[]})
+                    }
+                };
+
+                cardBases = {
+                    video: {
+                        id: copy(),
+                        note: copy(null),
+                        title: copy(null),
+                        type: function(card) {
+                            return card.data.service;
+                        },
+                        source: function(card) {
+                            return camelSource(card.data.service);
+                        },
+                        modules: function(card) {
+                            return card.type === 'videoBallot' ? ['ballot'] : [];
+                        }
+                    },
+                    ad: {
+                        id: copy(),
+                        ad: value(true),
+                        type: value('ad'),
+                        displayAd: copy('Not being copied into MRinator yet'),
+                        modules: value(['displayAd'])
+                    },
+                    miniReel: {
+                        id: copy(),
+                        type: value('miniReel')
+                    }
+                };
+
+                cardType = getType(card);
+
+                forEach(cardBases[cardType], function(fn, key) {
+                    newCard[key] = fn(card, key, card);
+                });
+
+                forEach(dataTemplates[cardType], function(fn, key) {
+                    newCard.data[key] = fn((card.data || {}), key, card);
+                });
+
+                return newCard;
+            };
+
+            this.preview = function(minireel) {
+                var mrExperience = angular.copy(minireel),
+                    convertedDeck = [];
+
+                angular.forEach(mrExperience.data.deck, function(card) {
+                    if(card.data) {
+                        // this conditional is used to weed out the intro card
+                        // we need to process the intro card and put the pieces
+                        // where they belong in the experience model (ie. the img object)
+                        convertedDeck.push(self.convertCard(card));
+                    }
+                });
+
+                mrExperience.data.deck = convertedDeck;
+
+                return mrExperience;
             };
         }]);
 }());
