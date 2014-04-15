@@ -534,6 +534,7 @@
 
                         Object.defineProperties(scope, {
                             currentTime: {
+                                configurable: true,
                                 get: function() {
                                     if (isNumber(startScanTime)) {
                                         return startScanTime;
