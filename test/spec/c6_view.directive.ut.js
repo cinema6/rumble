@@ -9,12 +9,16 @@
                 $animate;
 
             var c6State,
-                HomeController;
+                HomeController,
+                homeCtrl;
 
             var view;
 
             beforeEach(function() {
-                HomeController = jasmine.createSpy('HomeController');
+                HomeController = jasmine.createSpy('HomeController')
+                    .and.callFake(function() {
+                        homeCtrl = this;
+                    });
 
                 module('ngAnimateMock');
 
@@ -76,11 +80,9 @@
                     },
                     childState = {
                         name: 'parent.child',
-                        cTemplate: '<p>{{foo}}</p>',
+                        cTemplate: '<p>{{ChildCtrl.model.data}}</p>',
                         cModel: { data: 'Hello!' },
-                        controller: function(cModel, $scope) {
-                            $scope.foo = cModel.data;
-                        }
+                        controllerAs: 'ChildCtrl'
                     };
 
                 $scope.$apply(function() {
@@ -133,6 +135,51 @@
                 expect($scope.$new).not.toHaveBeenCalled();
                 expect(parentState.controller).not.toHaveBeenCalled();
                 expect(c6State.emit).toHaveBeenCalledWith('viewChangeSuccess', parentState);
+            });
+
+            it('should support entering a child without re-rendering the parents', function() {
+                var parentState = {
+                        name: 'parent',
+                        cTemplate: '<p>Parent</p><c6-view></c6-view>',
+                        controller: jasmine.createSpy('ParentController'),
+                        cModel: null
+                    },
+                    childState = {
+                        name: 'parent.child',
+                        cTemplate: '<p>Child</p><c6-view></c6-view>',
+                        controller: jasmine.createSpy('ChildController'),
+                        cModel: null
+                    },
+                    grandchildState = {
+                        name: 'parent.child.grandchild',
+                        cTemplate: '<p>Grandchild</p>',
+                        cModel: null
+                    },
+                    $c6Views = {};
+
+                $scope.$apply(function() {
+                    c6State.emit('viewChangeStart', parentState, null);
+                });
+                $c6Views.parent = view.children('c6-view');
+                expect($c6Views.parent.text()).toBe('Parent');
+
+                $scope.$apply(function() {
+                    c6State.emit('viewChangeStart', parentState, grandchildState);
+                });
+                $scope.$apply(function() {
+                    c6State.emit('viewChangeStart', childState, parentState);
+                });
+                $c6Views.child = view.children('c6-view').children('c6-view');
+                expect($c6Views.child.text()).toBe('Child');
+                expect(view.children('c6-view')[0]).toBe($c6Views.parent[0]);
+
+                $scope.$apply(function() {
+                    c6State.emit('viewChangeStart', grandchildState, childState);
+                });
+                $c6Views.grandchild = view.children('c6-view').children('c6-view').children('c6-view');
+                expect($c6Views.grandchild.text()).toBe('Grandchild');
+                expect(view.children('c6-view')[0]).toBe($c6Views.parent[0]);
+                expect(view.children('c6-view').children('c6-view')[0]).toBe($c6Views.child[0]);
             });
 
             describe('initialization', function() {
@@ -236,7 +283,78 @@
                 });
 
                 it('should stick the controller on the scope', function() {
-                    expect(scope.HomeCtrl).toEqual(new HomeController());
+                    expect(scope.HomeCtrl).toBe(homeCtrl);
+                });
+            });
+
+            describe('if a controller is not specified', function() {
+                var homeState,
+                    scope;
+
+                beforeEach(function() {
+                    homeState = {
+                        name: 'home',
+                        controllerAs: 'HomeCtrl',
+                        cTemplate: '<p>Hello</p>',
+                        cModel: null
+                    };
+
+                    $scope.$apply(function() {
+                        c6State.emit('viewChangeStart', homeState);
+                    });
+
+                    scope = view.find('c6-view *').scope();
+                });
+
+                it('should create a controller', function() {
+                    expect(scope.HomeCtrl).toEqual(jasmine.any(Object));
+                    expect(scope.HomeCtrl).not.toBeNull();
+                });
+            });
+
+            describe('setupController', function() {
+                var homeState,
+                    scope;
+
+                beforeEach(function() {
+                    homeState = {
+                        name: 'home',
+                        controllerAs: 'HomeCtrl',
+                        cTemplate: '<p>Hello</p>',
+                        cModel: {
+                            data: 'foo'
+                        }
+                    };
+                });
+
+                describe('if specified', function() {
+                    beforeEach(function() {
+                        homeState.setupController = ['model','controller', jasmine.createSpy('setupController')];
+
+                        $scope.$apply(function() {
+                            c6State.emit('viewChangeStart', homeState);
+                        });
+
+                        scope = view.find('c6-view *').scope();
+                    });
+
+                    it('should $invoke the setup function', function() {
+                        expect(homeState.setupController[2]).toHaveBeenCalledWith(homeState.cModel, scope.HomeCtrl);
+                    });
+                });
+
+                describe('if not specified', function() {
+                    beforeEach(function() {
+                        $scope.$apply(function() {
+                            c6State.emit('viewChangeStart', homeState);
+                        });
+
+                        scope = view.find('c6-view *').scope();
+                    });
+
+                    it('should make the model the "model" property of the controller', function() {
+                        expect(scope.HomeCtrl.model).toBe(homeState.cModel);
+                    });
                 });
             });
 

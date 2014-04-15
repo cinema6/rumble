@@ -2,6 +2,9 @@
     'use strict';
 
     define(['c6_state'], function() {
+        /* global angular */
+        var extend = angular.extend;
+
         describe('c6State', function() {
             var $rootScope,
                 $q,
@@ -282,6 +285,27 @@
                                 expect(c6State.get('home')).toBe(homeState);
                                 expect(c6State.get('about')).toBe(aboutState);
                                 expect(c6State.get('contact')).toBe(contactState);
+                            });
+                        });
+
+                        describe('goTo(state, params)', function() {
+                            beforeEach(function() {
+                                spyOn(c6State, 'transitionTo');
+                            });
+
+                            it('should call transitionTo, but extend the current c6StateParams', function() {
+                                c6State.goTo('home', {});
+                                expect(c6State.transitionTo).toHaveBeenCalledWith('home', {});
+                                expect(c6State.transitionTo.calls.mostRecent().args[1]).not.toBe(c6StateParams);
+
+                                extend(c6StateParams, {
+                                    id: 'foo'
+                                });
+                                c6State.goTo('home.dining', { test: 'bar' });
+                                expect(c6State.transitionTo).toHaveBeenCalledWith('home.dining', extend(c6StateParams, {
+                                    test: 'bar'
+                                }));
+                                expect(c6State.transitionTo.calls.mostRecent().args[1]).not.toBe(c6StateParams);
                             });
                         });
 

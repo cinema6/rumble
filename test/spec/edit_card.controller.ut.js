@@ -28,36 +28,25 @@
 
                     $scope = $rootScope.$new();
                     EditCardCtrl = $controller('EditCardController', { $scope: $scope, cModel: model });
+                    EditCardCtrl.model = model;
                     $scope.EditCardCtrl = EditCardCtrl;
                 });
 
-                spyOn(c6State, 'transitionTo');
+                spyOn(c6State, 'goTo');
             });
 
             it('should exist', function() {
                 expect(EditCardCtrl).toEqual(jasmine.any(Object));
             });
 
-            describe('initialization', function() {
-                it('should put a reference to the model on itself', function() {
-                    expect(EditCardCtrl.model).toBe(model);
-                });
-            });
-
             describe('methods', function() {
                 describe('close()', function() {
                     beforeEach(function() {
-                        $scope.EditorCtrl = {
-                            model: {
-                                id: 'e-0aee6dfbdc2786'
-                            }
-                        };
-
                         EditCardCtrl.close();
                     });
 
                     it('should transition back to the editor state', function() {
-                        expect(c6State.transitionTo).toHaveBeenCalledWith('editor', { id: 'e-0aee6dfbdc2786' });
+                        expect(c6State.goTo).toHaveBeenCalledWith('editor');
                     });
                 });
             });

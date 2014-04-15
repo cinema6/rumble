@@ -47,7 +47,7 @@
                             ]
                         }
                     };
-                    c6StateParams.id = 'rc-036a2e0b648f3d';
+                    c6StateParams.cardId = 'rc-036a2e0b648f3d';
                 });
 
                 it('should use the c6StateParams id to find the card in the deck of the editor\'s model', function() {

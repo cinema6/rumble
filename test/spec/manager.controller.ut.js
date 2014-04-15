@@ -18,7 +18,7 @@
                     $provide.provider('c6State', function() {
                         this.$get = function() {
                             return {
-                                transitionTo: jasmine.createSpy('c6State.transitionTo()')
+                                goTo: jasmine.createSpy('c6State.transitionTo()')
                             };
                         };
 
@@ -44,12 +44,6 @@
                 expect(ManagerCtrl).toEqual(jasmine.any(Object));
             });
 
-            describe('construction', function() {
-                it('should put its model on itself', function() {
-                    expect(ManagerCtrl.model).toBe(model);
-                });
-            });
-
             describe('methods', function() {
                 describe('edit(minireel)', function() {
                     beforeEach(function() {
@@ -57,7 +51,7 @@
                     });
 
                     it('should transition to the "editor" state and provide the id of the minireel', function() {
-                        expect(c6State.transitionTo).toHaveBeenCalledWith('editor', { id: 'e-59c8519cc4c54f' });
+                        expect(c6State.goTo).toHaveBeenCalledWith('editor', { minireelId: 'e-59c8519cc4c54f' });
                     });
                 });
             });

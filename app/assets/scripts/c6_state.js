@@ -1,11 +1,14 @@
 (function() {
     'use strict';
 
+    var extend = angular.extend,
+        copy = angular.copy;
+
     angular.module('c6.state', ['c6.ui'])
         .value('c6StateParams', {})
 
-        .directive('c6View', ['c6State','$compile','$animate','$controller',
-        function             ( c6State , $compile , $animate , $controller ) {
+        .directive('c6View', ['c6State','$compile','$animate','$controller','$injector',
+        function             ( c6State , $compile , $animate , $controller , $injector ) {
             return {
                 restrict: 'EAC',
                 transclude: 'element',
@@ -25,10 +28,24 @@
                         }
                     }
 
-                    function update(state, prevState) {
+                    function update(state) {
                         var newScope, ctrl, controllerAs, controller, clone$,
                             stateLevel = state.name.split('.').length,
                             data = (currentElement$ && currentElement$.data('cView')) || {};
+
+                        function setupController(controller) {
+                            return $injector.invoke(
+                                state.setupController ||
+                                    function() {
+                                        controller.model = this.cModel;
+                                    },
+                                state,
+                                {
+                                    model: state.cModel,
+                                    controller: controller
+                                }
+                            );
+                        }
 
                         function enter() {
                             newScope = scope.$new();
@@ -37,7 +54,9 @@
                             controller = ctrl ? $controller(ctrl, {
                                 $scope: newScope,
                                 cModel: state.cModel
-                            }) : null;
+                            }) : {};
+
+                            setupController(controller);
 
                             if (controllerAs) {
                                 newScope[controllerAs] = controller;
@@ -45,7 +64,13 @@
 
                             clone$ = transclude(function(clone$) {
                                 clone$.html(state.cTemplate);
-                                clone$.data('cView', { level: viewLevel, state: state });
+
+                                clone$.data('cView', {
+                                    level: viewLevel,
+                                    state: state,
+                                    controller: controller
+                                });
+
                                 $compile(clone$.contents())(newScope);
 
                                 $animate.enter(
@@ -63,8 +88,11 @@
                         // the state being requested is already loaded into the view (and this is
                         // not a deliberate transition to the current state again (but maybe with
                         // different data.)
-                        if (stateLevel > viewLevel ||
-                            (state === data.state && state !== prevState)) { return; }
+                        if (stateLevel > viewLevel) { return; }
+
+                        if (state === data.state) {
+                            return setupController(data.controller);
+                        }
 
 
                         if (stateLevel === viewLevel) {
@@ -237,17 +265,9 @@
                     }
 
                     function execute() {
-                        var promise,
-                            length = tree.length;
+                        var promise;
 
-                        angular.forEach(tree, function(state, index) {
-                            if (state === currentTree[index] && (index < (length - 1))) {
-                                promise = promise ? promise.then(function() {
-                                    return $q.when(state);
-                                }) : $q.when(state);
-                                return;
-                            }
-
+                        angular.forEach(tree, function(state) {
                             promise = promise ? promise.then(function() {
                                 return doTransition(state);
                             }) : doTransition(state);
@@ -268,6 +288,10 @@
                     return $q.all(this.transitions)
                         .then(execute)
                         .finally(removeTransition);
+                };
+
+                c6State.goTo = function(state, params) {
+                    return this.transitionTo(state, extend(copy(c6StateParams), params));
                 };
 
                 c6State.on('viewReady', function() {
