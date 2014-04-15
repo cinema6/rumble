@@ -17,7 +17,7 @@
         },
         app_map: {
             pattern: 'app\/assets\/scripts',
-            replacement: '<%= _version %>/scripts/raw',
+            replacement: 'rumble/<%= _version %>/scripts/raw',
             path: [
                 '<%= settings.distDir %>/<%= _version %>/scripts/c6app.min.map'
             ]
