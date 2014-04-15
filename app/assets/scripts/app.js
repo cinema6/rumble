@@ -346,5 +346,9 @@
                     'title' : 'Minireel App Load'
                 });
             });
+
+            session.on('mrPreview:updateMode', function() {
+                $window.location.reload();
+            });
         }]);
 }(window));

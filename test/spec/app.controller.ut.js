@@ -251,6 +251,19 @@
                     });
                 });
             });
+
+            describe('mrPreview session handler', function() {
+                it('should register handler', function() {
+                    expect(session.on).toHaveBeenCalledWith('mrPreview:updateMode', jasmine.any(Function));
+                });
+
+                it('should refresh the page when the callback is called', function() {
+                    var cb = session.on.calls[1].args[1];
+                    spyOn($window.location, 'reload').andReturn(undefined);
+                    cb();
+                    expect($window.location.reload).toHaveBeenCalled();
+                });
+            });
         });
     });
 }());
