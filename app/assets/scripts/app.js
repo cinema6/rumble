@@ -341,6 +341,7 @@
                     'storage'       : 'none',
                     'cookieDomain'  : 'none'
                 });
+                $window.c6MrGa('c6mr.set', 'checkProtocolTask', function(){});
                 $window.c6MrGa('c6mr.send', 'pageview', {
                     'page'  : '/mr/load?experienceId=' + c6AppData.experience.id,
                     'title' : 'Minireel App Load'
