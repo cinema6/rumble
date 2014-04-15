@@ -106,17 +106,23 @@ module.exports = function(grunt) {
      *
      *********************************************************************************************/
 
-    grunt.registerTask('build', 'build app into distDir', [
-        'test:unit',
-        'git_last_commit',
-        'clean:build',
-        'copy:dist',
-        'ngtemplates:dist',
-        'htmlmin:dist',
-        'sed',
-        'cssmin:dist',
-        'uglify:dist'
-    ]);
+    grunt.registerTask('build', 'build app into distDir', function(){
+        grunt.config('withMaps',grunt.option('with-maps'));
+        grunt.task.run('test:unit');
+        grunt.task.run('git_last_commit');
+        grunt.task.run('clean:build');
+        grunt.task.run('copy:dist');
+        grunt.task.run('ngtemplates:dist');
+        grunt.task.run('htmlmin:dist');
+        grunt.task.run('sed:main');
+        grunt.task.run('sed:html');
+        grunt.task.run('cssmin:dist');
+        grunt.task.run('uglify:dist');
+        if (grunt.option('with-maps')){
+            grunt.task.run('copy:raw');
+            grunt.task.run('sed:app_map');
+        }
+    });
 
     /*********************************************************************************************
      *
@@ -135,7 +141,22 @@ module.exports = function(grunt) {
     });
 
     grunt.registerTask('publish', 'upload the collateral assets and app to s3', function(target) {
-        grunt.task.run('publish:collateral:' + target);
-        grunt.task.run('publish:app:' + target);
+        var done = this.async(), delay = 0;
+        if (grunt.option('with-maps')){
+            if (target === 'test'){
+                grunt.log.writeln('WARNING - source maps will be uploaded to s3!');
+                delay = 3000;
+            } else {
+                grunt.fail.warn('Type maps are only allowed on test!');
+                done(false);
+            }
+        }
+
+        setTimeout(function(){
+            grunt.task.run('publish:collateral:' + target);
+            grunt.task.run('publish:app:' + target);
+            done(true);
+        },delay);
+
     });
 };
