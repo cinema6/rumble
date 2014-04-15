@@ -16,8 +16,8 @@
             ]
         },
         app_map: {
-            pattern: 'assets',
-            replacement: '<%= _version %>',
+            pattern: 'app\/assets\/scripts',
+            replacement: '<%= _version %>/scripts/raw',
             path: [
                 '<%= settings.distDir %>/<%= _version %>/scripts/c6app.min.map'
             ]
