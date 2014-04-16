@@ -1,6 +1,8 @@
 (function() {
     'use strict';
 
+    var jqLite = angular.element;
+
     angular.module('c6.rumble')
         .directive('thumbPaginator', ['assetFilter','c6Debounce','$window',
         function                     ( assetFilter , c6Debounce , $window ) {
@@ -15,11 +17,15 @@
                     disablePrevWhen: '&'
                 },
                 link: function(scope, element, attr, controller) {
-                    var resetWidth = c6Debounce(function() {
-                        controller.setWidth(element.width());
-                    }, 250);
+                    var $$window = jqLite($window),
+                        resetWidth = c6Debounce(function() {
+                            controller.setWidth(element.width());
+                        }, 250);
 
-                    angular.element($window).bind('resize', resetWidth);
+                    $$window.on('resize', resetWidth);
+                    element.on('$destroy', function() {
+                        $$window.off('resize', resetWidth);
+                    });
 
                     resetWidth();
                 },
@@ -101,24 +107,52 @@
             };
         }])
 
-        .directive('thumbPaginatorItem', [function() {
+        .directive('thumbPaginatorItem', ['$window','c6Debounce',
+        function                         ( $window , c6Debounce ) {
             return {
                 restrict: 'A',
                 require: '^thumbPaginator',
                 link: function(scope, element, attr, controller) {
-                    controller.addItem({
-                        width: element.outerWidth(true)
+                    var $$window = jqLite($window),
+                        model = {
+                            width: element.outerWidth(true)
+                        },
+                        updateWidth = c6Debounce(function() {
+                            model.width = element.outerWidth(true);
+                        }, 250);
+
+                    $$window.on('resize', updateWidth);
+                    element.on('$destroy', function() {
+                        $$window.off('resize', updateWidth);
                     });
+
+                    controller.addItem(model);
                 }
             };
         }])
 
-        .directive('thumbPaginatorButton', [function() {
+        .directive('thumbPaginatorButton', ['$window','c6Debounce',
+        function                           ( $window , c6Debounce ) {
             return {
                 restrict: 'A',
                 require: '^thumbPaginator',
                 link: function(scope, element, attr, controller) {
-                    controller.setMinButtonWidth(parseInt(element.css('min-width'), 10));
+                    var $$window = jqLite($window),
+                        setWidth = c6Debounce(function() {
+                            controller.setMinButtonWidth(
+                                parseInt(
+                                    element.css('min-width'),
+                                    10
+                                )
+                            );
+                        }, 250);
+
+                    $$window.on('resize', setWidth);
+                    element.on('$destroy', function() {
+                        $$window.off('resize', setWidth);
+                    });
+
+                    setWidth();
                 }
             };
         }]);
