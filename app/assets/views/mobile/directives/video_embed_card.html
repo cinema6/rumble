@@ -19,15 +19,16 @@
                 ng-style="{'background-image':config.thumbs.large ? 'url(' + config.thumbs.large + ')' : ''}">
                 <span class="ir"><img ng-src="{{config.thumbs.large}}"></span>
             </div>
+            <ballot-results-module ng-if="Ctrl.hasModule('ballot')"
+                active="config._data.modules.ballot.resultsActive && active"
+                vote="config._data.modules.ballot.vote"
+                card-id="{{config.id}}"
+                fetch-when="onDeck || active"
+                on-dismiss="Ctrl.dismissBallotResults()">
+            </ballot-results-module>
             <div class="mr-card__copy" ng-bind-html="config.note"></div>
         </div>
-        <ballot-results-module ng-if="Ctrl.hasModule('ballot')"
-            active="config._data.modules.ballot.resultsActive && active"
-            vote="config._data.modules.ballot.vote"
-            card-id="{{config.id}}"
-            fetch-when="onDeck || active"
-            on-dismiss="Ctrl.dismissBallotResults()">
-        </ballot-results-module>
+        
     </div><!--.mr-card-->
     <comments-module ng-if="Ctrl.hasModule('comments')"
         card-id="{{config.id}}"
