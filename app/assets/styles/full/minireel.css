@@ -121,9 +121,9 @@
             fill: #fff;
         }
     .mr-pager__label {
-        font-weight:bold; color:#fff; line-height:1; font-size:1.135em;
+        font-weight:bold; color:#fff; line-height:1; font-size:0.875rem;
         display: block;
-        position:absolute; z-index: 1; top:1.5em; left:40%;
+        position:absolute; z-index: 1; top:1.4375rem; left:40%;
     }
         .mr-pager__next .mr-pager__label {
             right:40%; left:auto;

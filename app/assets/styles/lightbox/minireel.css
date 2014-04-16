@@ -115,15 +115,15 @@
         @media screen and (min-width:76rem) and (max-width:88.6875rem) {
             /*1216px - 1419px*/
             .mr-experience {
-                width:74em; /*1184*/
-                margin:-21.875em 0 0 -37em; /* 350 0 0 592*/
+                width:68em; /*1088 x 654*/
+                margin:-19.5em 0 0 -34em; /* 312 0 0 544*/
             }
         }
         @media screen and (min-width:88.75rem) {
             /*1420px +*/
             .mr-experience {
-                width:86em; /*1376*/
-                margin:-25.875em 0 0 -43em; /* 414 0 0 688*/
+                width:78em; /*1248 x 760*/
+                margin:-23.125em 0 0 -39em; /* 370 0 0 624*/
             }
         }
         .mr-title {
@@ -200,7 +200,7 @@
     .mr-pager__label {
         font-weight:bold; color:#fff; line-height:1;
         display: block;
-        position:absolute; z-index: 1; top:1.375em; left:40%;
+        position:absolute; z-index: 1; top:1.125rem; left:40%;
     }
         .mr-pager__next .mr-pager__label {
             right:40%; left:auto;
@@ -214,12 +214,16 @@
         .mr-pager__group, .mr-pager__btn {
             height:4rem;/*64px*/
         }
+        .mr-pager__btn {
+            min-width:5.625em;
+        }
         
         .mr-pager__icon {
             width:0.875rem;/*14px*/
         }
         .mr-pager__label {
-            font-size:1.25em;
+            font-size:1.0625rem;
+            top:1.4375rem;
         }
     }
     /* pages styles */
