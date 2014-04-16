@@ -85,7 +85,7 @@
                 scope: {
                     deck: '=',
                     editCard: '&',
-                    previewMode: '&'
+                    previewCard: '&'
                 }
             };
         }])
