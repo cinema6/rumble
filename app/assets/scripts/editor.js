@@ -318,8 +318,8 @@
             };
         }])
 
-        .controller('PreviewController', ['$scope','MiniReelService','postMessage', 'c6BrowserInfo',
-        function                         ( $scope , MiniReelService , postMessage ,  c6BrowserInfo ) {
+        .controller('PreviewController',['$scope','MiniReelService','postMessage','c6BrowserInfo',
+        function                        ( $scope , MiniReelService , postMessage , c6BrowserInfo ) {
             var self = this,
                 experience,
                 session,
