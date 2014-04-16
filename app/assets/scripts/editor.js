@@ -322,10 +322,14 @@
         function                        ( $scope , MiniReelService , postMessage , c6BrowserInfo ) {
             var self = this,
                 experience,
+                profile,
                 session,
                 card;
 
-            this.mode = 'full';
+            this.device = 'desktop';
+
+            profile = c6BrowserInfo.profile;
+            profile.device = this.device;
 
             $scope.$on('mrPreview:initExperience', function(event, exp, iframe) {
                 var player;
@@ -339,7 +343,7 @@
                 experience = MiniReelService.preview(exp);
 
                 // add the mode
-                experience.mode = self.mode;
+                // experience.mode = self.mode;
 
                 // create a postMessage session (as defined in c6ui.postMessage)
                 session = postMessage.createSession(player);
@@ -357,7 +361,7 @@
                             // this will send the most updated experience
                             // whenever the MR player is (re)loaded
                             experience: experience,
-                            profile: c6BrowserInfo.profile
+                            profile: profile
                         }
                     });
                 });
@@ -379,7 +383,7 @@
 
                 // we convert the experience
                 experience = MiniReelService.preview(exp);
-                experience.mode = self.mode;
+                // experience.mode = self.mode;
 
                 // if it's been changed or we're previewing a specific card
                 // then we ping the player
@@ -416,13 +420,15 @@
             // });
 
             $scope.$watch(function() {
-                return self.mode;
-            }, function(newMode, oldMode) {
-                if(newMode === oldMode) { return; }
+                return self.device;
+            }, function(newDevice, oldDevice) {
+                if(newDevice === oldDevice) { return; }
 
                 // the mode has changed
                 // update the mode on the experience
-                experience.mode = newMode;
+                // experience.mode = newMode;
+
+                profile.device = newDevice;
 
                 // ping the MR player
                 // sending 'updateMode' will trigger a refresh
@@ -430,6 +436,7 @@
                 // and will call for a specific card
                 // in case we're previewing that card
                 session.ping('mrPreview:updateMode');
+                // TODO: change updateMode to updateDevice
             });
 
         }])
