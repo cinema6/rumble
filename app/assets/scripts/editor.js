@@ -327,9 +327,9 @@
 
             this.mode = 'full';
 
-            this.setMode = function() {
-                $scope.mode = this.mode;
-            };
+            // this.setMode = function() {
+            //     $scope.mode = this.mode;
+            // };
 
             $scope.$on('mrPreview:initExperience', function(event, exp, iframe) {
                 // the mr-preview directive sends the experience and the iframe element
@@ -418,7 +418,9 @@
             //     session.ping('mrPreview:reset');
             // });
 
-            $scope.$watch('mode', function(newMode, oldMode) {
+            $scope.$watch(function() { 
+                return self.mode;
+            }, function(newMode, oldMode) {
                 if(newMode === oldMode) { return; }
 
                 // the mode has changed
