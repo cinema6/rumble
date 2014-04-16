@@ -200,7 +200,7 @@
     .mr-pager__label {
         font-weight:bold; color:#fff; line-height:1;
         display: block;
-        position:absolute; z-index: 1; top:1.375em; left:40%;
+        position:absolute; z-index: 1; top:1.125rem; left:40%;
     }
         .mr-pager__next .mr-pager__label {
             right:40%; left:auto;
@@ -214,12 +214,16 @@
         .mr-pager__group, .mr-pager__btn {
             height:4rem;/*64px*/
         }
+        .mr-pager__btn {
+            min-width:5.625em;
+        }
         
         .mr-pager__icon {
             width:0.875rem;/*14px*/
         }
         .mr-pager__label {
-            font-size:1.25em;
+            font-size:1.0625rem;
+            top:1.4375rem;
         }
     }
     /* pages styles */
