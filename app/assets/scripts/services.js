@@ -408,7 +408,7 @@
                 return newCard;
             };
 
-            this.preview = function(minireel) {
+            this.convertForPreview = function(minireel) {
                 var mrExperience = angular.copy(minireel),
                     convertedDeck = [];
 
