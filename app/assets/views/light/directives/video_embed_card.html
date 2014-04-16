@@ -17,7 +17,7 @@
     </ballot-results-module>
 
     <div class="mr-player__group">
-        <button class="mr-player__play-btn">
+        <button ng-if="!profile.touch" ng-show="Ctrl.showPlay" ng-click="Ctrl.playVideo()" class="mr-player__play-btn">
             <div class="mr-player__play-icon">
                 <span class="ir">Play Video</span>
             </div>

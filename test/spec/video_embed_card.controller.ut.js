@@ -591,6 +591,34 @@
                         });
                     });
 
+                    describe('showPlay', function() {
+                        describe('if the player has not been received yet', function() {
+                            it('should be false', function() {
+                                expect(VideoEmbedCardCtrl.showPlay).toBe(false);
+                            });
+                        });
+
+                        describe('if the player has been received', function() {
+                            var player;
+
+                            beforeEach(function() {
+                                player = c6EventEmitter({
+                                    paused: true
+                                });
+
+                                $scope.$emit('playerAdd', player);
+                            });
+
+                            it('should be the same as the "paused" property of the player', function() {
+                                expect(VideoEmbedCardCtrl.showPlay).toBe(true);
+
+                                player.paused = false;
+
+                                expect(VideoEmbedCardCtrl.showPlay).toBe(false);
+                            });
+                        });
+                    });
+
                     describe('flyAway', function() {
                         describe('if the ballot module is not enabled', function() {
                             beforeEach(function() {
@@ -688,6 +716,26 @@
 
                             VideoEmbedCardCtrl.hasModule('comments');
                             expect(ModuleService.hasModule).toHaveBeenCalledWith($rootScope.config.modules, 'comments');
+                        });
+                    });
+
+                    describe('playVideo()', function() {
+                        var iface;
+
+                        beforeEach(function() {
+                            iface = c6EventEmitter({
+                                play: jasmine.createSpy('iface.play()')
+                            });
+
+                            $scope.$emit('playerAdd', iface);
+                        });
+
+                        it('should play the video', function() {
+                            expect(iface.play).not.toHaveBeenCalled();
+
+                            VideoEmbedCardCtrl.playVideo();
+
+                            expect(iface.play).toHaveBeenCalled();
                         });
                     });
 

@@ -62,7 +62,7 @@
 
     <div class="mr-player__group">
         <h1 ng-hide="config._data.textMode" class="mr-player__title tk--hdr">{{config.title}}</h1>
-        <button class="mr-player__play-btn">
+        <button ng-if="!profile.touch" ng-show="Ctrl.showPlay && !Ctrl.flyAway" ng-click="Ctrl.playVideo()" class="mr-player__play-btn">
             <div class="mr-player__play-icon">
                 <span class="ir">Play Video</span>
             </div>
