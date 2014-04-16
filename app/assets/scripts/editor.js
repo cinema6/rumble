@@ -2,7 +2,8 @@
     'use strict';
 
     var isNumber = angular.isNumber,
-        jqLite = angular.element;
+        jqLite = angular.element,
+        equals = angular.equals;
 
     function refresh($element) {
         $element.inheritedData('cDragCtrl').refresh();
@@ -317,21 +318,17 @@
             };
         }])
 
-        .controller('MRPreviewController', ['$scope','MiniReelService','postMessage', 'c6BrowserInfo',
-        function                           ( $scope , MiniReelService , postMessage ,  c6BrowserInfo ) {
+        .controller('PreviewController', ['$scope','MiniReelService','postMessage', 'c6BrowserInfo',
+        function                         ( $scope , MiniReelService , postMessage ,  c6BrowserInfo ) {
             var self = this,
                 experience,
                 session,
-                player,
                 card;
 
             this.mode = 'full';
 
-            // this.setMode = function() {
-            //     $scope.mode = this.mode;
-            // };
-
             $scope.$on('mrPreview:initExperience', function(event, exp, iframe) {
+                var player;
                 // the mr-preview directive sends the experience and the iframe element
                 // 'card' is undefined at this point
 
@@ -389,7 +386,7 @@
                 // and send the updated experience
                 // the MRplayer is listening in the RumbleCtrl
                 // and will update the deck
-                if(!angular.equals(experience, session.experience)) {
+                if(!equals(experience, session.experience)) {
                     session.ping('mrPreview:updateExperience', experience);
                 }
 
@@ -418,7 +415,7 @@
             //     session.ping('mrPreview:reset');
             // });
 
-            $scope.$watch(function() { 
+            $scope.$watch(function() {
                 return self.mode;
             }, function(newMode, oldMode) {
                 if(newMode === oldMode) { return; }
