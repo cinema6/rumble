@@ -136,9 +136,12 @@
 
                     function VideoPlayer($iframe) {
                         var self = this,
-                            player = new VimeoPlayerService.Player($iframe),
+                            player = null,
                             hasPaused = false,
-                            state = {
+                            state;
+
+                        function setupState() {
+                            return {
                                 buffered: 0,
                                 currentTime: 0,
                                 duration: 0,
@@ -147,6 +150,7 @@
                                 readyState: -1,
                                 seeking: false
                             };
+                        }
 
                         function addEventListeners(player) {
                             player
@@ -202,6 +206,19 @@
                                 });
                         }
 
+                        function removeEventListeners(player) {
+                            [
+                                'loadProgress',
+                                'finish',
+                                'pause',
+                                'play',
+                                'seek',
+                                'playProgress'
+                            ].forEach(function(event) {
+                                player.removeAllListeners(event);
+                            });
+                        }
+
                         this.play = function() {
                             player.call('play');
                         };
@@ -253,28 +270,50 @@
                             }
                         });
 
-                        player.on('ready', function() {
-                            state.readyState = 0;
-                            self.emit('ready');
-                            addEventListeners(player);
 
-                            player.call('getDuration')
-                                .then(function getDuration(duration) {
-                                    state.readyState = 1;
-                                    state.duration = duration;
-                                    self.emit('loadedmetadata');
+                        // When the video loaded into the player changes (or is initialized,) there
+                        // are a few steps that need to be taken:
+                        //
+                        // 1. Reset the state of the player.
+                        // 2. Change the src of the iframe to the new embed URL
+                        // 3. Create a new Vimeo Player object (only on initialization.)
+                        // 4. Remove all non-ready event listeners (if there is already a player.)
+                        scope.$watch('videoid', function(videoid, lastVideoid) {
+                            state = setupState();
+
+                            $iframe.attr('src', 'http://player.vimeo.com/video/' +
+                                videoid +
+                                '?api=1&player_id=' +
+                                scope.id);
+
+                            // This will only happen on initialization. We'll continue to use this
+                            // player object, even as the src of the iframe is changed.
+                            if (videoid === lastVideoid) {
+                                player = new VimeoPlayerService.Player($iframe);
+
+                                player.on('ready', function() {
+                                    state.readyState = 0;
+                                    self.emit('ready');
+                                    addEventListeners(player);
+
+                                    player.call('getDuration')
+                                        .then(function getDuration(duration) {
+                                            state.readyState = 1;
+                                            state.duration = duration;
+                                            self.emit('loadedmetadata');
+                                        });
                                 });
+                            } else {
+                                // This only happens when the video is changed from one to another.
+                                // We remove all the non-ready event listeners (they'll be readded
+                                // when the iframe's new page loads and "ready" event is emitted
+                                // again.)
+                                removeEventListeners(player);
+                            }
                         });
 
                         c6EventEmitter(this);
                     }
-
-                    // We can't rely on angular bindings to set the iframe src because it needs to
-                    // be set before it is passed to the constructor below.
-                    $iframe.attr('src', 'http://player.vimeo.com/video/' +
-                        scope.videoid +
-                        '?api=1&player_id=' +
-                        scope.id);
 
                     $element.data('video', new VideoPlayer($iframe));
                 }
@@ -297,8 +336,11 @@
                     '</iframe>'
                 ].join('\n'),
                 compile: function($element) {
+                    // Grab the string template for this directive before angular compiles it.
                     var iframeTemplate = $element.html();
 
+                    // Remove the iframe template from the DOM. It will be created when a
+                    // VideoPlayer is created.
                     $element.empty();
 
                     return function postLink(scope, $element) {
@@ -385,7 +427,15 @@
 
                             c6EventEmitter(this);
 
-
+                            // Whenever the video loaded into the player changes (or is
+                            // initialized,) a few things need to happen:
+                            //
+                            // 1. Set the scope's "url" property to the correct URL to load into
+                            //    the iframe.
+                            // 2. Create a new iframe (using the string template saved during the
+                            //    compile phase.)
+                            // 3. Destroy the previous iframe (if there is one.)
+                            // 4. Create a new YouTube Player object for the new video.
                             scope.$watch('videoid', function(id) {
                                 var $iframe;
 
