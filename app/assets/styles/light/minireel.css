@@ -223,7 +223,7 @@
                     padding: 0; margin: -2.71875rem 0 0 -3.1875rem; border: 0; 
                     cursor: pointer;
                     background: rgba(0,0,0,0.8);
-                    position: absolute; left: 50%; top: 50%; z-index:5;
+                    position: absolute; left: 50%; top: 50%; z-index:1;
                 }
                     .mr-player__play-icon {
                         height: 45%; width: 100%;
