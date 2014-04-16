@@ -340,7 +340,7 @@
                 player = iframe.prop('contentWindow');
 
                 // convert the MRinator experience to a MRplayer experience
-                experience = MiniReelService.preview(exp);
+                experience = MiniReelService.convertForPreview(exp);
 
                 // add the mode
                 // experience.mode = self.mode;
@@ -382,7 +382,7 @@
                 // it may have a newCard to go to
 
                 // we convert the experience
-                experience = MiniReelService.preview(exp);
+                experience = MiniReelService.convertForPreview(exp);
                 // experience.mode = self.mode;
 
                 // if it's been changed or we're previewing a specific card
