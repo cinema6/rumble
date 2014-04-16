@@ -1,6 +1,12 @@
 (function() {
     'use strict';
 
+    var forEach = angular.forEach,
+        ngCopy = angular.copy,
+        isNumber = angular.isNumber,
+        isUndefined = angular.isUndefined,
+        extend = angular.extend;
+
     angular.module('c6.mrmaker')
         .service('VideoService', ['c6UrlParser',
         function                 ( c6UrlParser ) {
@@ -80,7 +86,7 @@
                     var pairs = search.split('&'),
                         object = {};
 
-                    angular.forEach(pairs, function(pair) {
+                    forEach(pairs, function(pair) {
                         pair = pair.split('=');
 
                         object[pair[0]] = pair[1];
@@ -125,8 +131,8 @@
                 return function(data, key) {
                     var value = data[key];
 
-                    return angular.isUndefined(value) ?
-                        def : angular.copy(value);
+                    return isUndefined(value) ?
+                        def : ngCopy(value);
                 };
             }
 
@@ -140,7 +146,7 @@
                         def = (card.type === 'dailymotion') ?
                             undefined : null;
 
-                    return angular.isNumber(value) ?
+                    return isNumber(value) ?
                         value : def;
                 };
             }
@@ -212,7 +218,7 @@
                 // the card.
                 dataTemplates = {
                     video: videoDataTemplate,
-                    videoBallot: angular.extend(angular.copy(videoDataTemplate), {
+                    videoBallot: extend(ngCopy(videoDataTemplate), {
                         ballot: value([])
                     }),
                     ad: {
@@ -229,17 +235,17 @@
                 \******************************************************/
                 // Use the template defined above to populate the
                 // properties of the card.
-                angular.forEach(template, function(fn, key) {
+                forEach(template, function(fn, key) {
                     card[key] = fn(rawData, key, rawData);
                 });
 
                 // Use the dataTemplates defined above to populate
                 // the data object of the card.
                 dataTemplate = dataTemplates[card.type];
-                angular.forEach(dataTemplate, function(fn, key) {
+                forEach(dataTemplate, function(fn, key) {
                     card.data[key] = fn((rawData.data || {}), key, rawData);
                 });
-                angular.forEach(card.data, function(value, key) {
+                forEach(card.data, function(value, key) {
                     if (!dataTemplate.hasOwnProperty(key)) {
                         delete card.data[key];
                     }
@@ -293,7 +299,7 @@
 
                         // Loop through the experience and copy everything but
                         // the "data" object.
-                        angular.forEach(minireel, function(value, key) {
+                        forEach(minireel, function(value, key) {
                             if (key !== 'data') {
                                 model[key] = value;
                             }
@@ -321,8 +327,6 @@
                     newCard = {
                         data: {}
                     };
-
-                var forEach = angular.forEach;
 
                 function camelSource(source) {
                     switch(source) {
@@ -409,10 +413,10 @@
             };
 
             this.convertForPreview = function(minireel) {
-                var mrExperience = angular.copy(minireel),
+                var mrExperience = ngCopy(minireel),
                     convertedDeck = [];
 
-                angular.forEach(mrExperience.data.deck, function(card) {
+                forEach(mrExperience.data.deck, function(card) {
                     if(card.data) {
                         // this conditional is used to weed out the intro card
                         // we need to process the intro card and put the pieces
