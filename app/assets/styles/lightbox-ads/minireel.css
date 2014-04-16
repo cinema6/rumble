@@ -124,15 +124,15 @@
         @media screen and (min-width:76rem) and (max-width:88.6875rem) {
             /*1216px - 1419px*/
             .mr-experience {
-                width:74em; /*1184*/
-                margin:-21.75em 0 0 -37em; /* 348 0 0 592*/
+                width:68.75em; /*1100 x 640*/
+                margin:-20em 0 0 -34.375em; /* 320 0 0 550*/
             }
         }
         @media screen and (min-width:88.75rem) {
             /*1420px +*/
             .mr-experience {
-                width:86em; /*1376*/
-                margin:-25.875em 0 0 -43em; /* 414 0 0 688*/
+                width:80em; /*1280 x 760*/
+                margin:-23.75em 0 0 -40em; /* 380 0 0 640*/
             }
         }
         .mr-title {
