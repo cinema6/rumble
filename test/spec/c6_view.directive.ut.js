@@ -82,7 +82,8 @@
                         name: 'parent.child',
                         cTemplate: '<p>{{ChildCtrl.model.data}}</p>',
                         cModel: { data: 'Hello!' },
-                        controllerAs: 'ChildCtrl'
+                        controllerAs: 'ChildCtrl',
+                        controller: function() {}
                     },
                     successSpy = jasmine.createSpy('handleViewChangeSuccess'),
                     $p;
@@ -305,7 +306,7 @@
                 });
             });
 
-            describe('if a controller is not specified', function() {
+            describe('decorateController', function() {
                 var homeState,
                     scope;
 
@@ -313,31 +314,7 @@
                     homeState = {
                         name: 'home',
                         controllerAs: 'HomeCtrl',
-                        cTemplate: '<p>Hello</p>',
-                        cModel: null
-                    };
-
-                    $scope.$apply(function() {
-                        c6State.emit('viewChangeStart', homeState);
-                    });
-
-                    scope = view.find('c6-view *').scope();
-                });
-
-                it('should create a controller', function() {
-                    expect(scope.HomeCtrl).toEqual(jasmine.any(Object));
-                    expect(scope.HomeCtrl).not.toBeNull();
-                });
-            });
-
-            describe('setupController', function() {
-                var homeState,
-                    scope;
-
-                beforeEach(function() {
-                    homeState = {
-                        name: 'home',
-                        controllerAs: 'HomeCtrl',
+                        controller: function() {},
                         cTemplate: '<p>Hello</p>',
                         cModel: {
                             data: 'foo'
@@ -347,7 +324,7 @@
 
                 describe('if specified', function() {
                     beforeEach(function() {
-                        homeState.setupController = ['model','controller', jasmine.createSpy('setupController')];
+                        homeState.decorateController = ['model','controller', jasmine.createSpy('decorateController')];
 
                         $scope.$apply(function() {
                             c6State.emit('viewChangeStart', homeState);
@@ -357,7 +334,7 @@
                     });
 
                     it('should $invoke the setup function', function() {
-                        expect(homeState.setupController[2]).toHaveBeenCalledWith(homeState.cModel, scope.HomeCtrl);
+                        expect(homeState.decorateController[2]).toHaveBeenCalledWith(homeState.cModel, scope.HomeCtrl);
                     });
                 });
 
