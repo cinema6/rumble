@@ -62,6 +62,11 @@
 
     <div class="mr-player__group">
         <h1 ng-hide="config._data.textMode" class="mr-player__title tk--hdr">{{config.title}}</h1>
+        <button class="mr-player__play-btn">
+            <div class="mr-player__play-icon">
+                <span class="ir">Play Video</span>
+            </div>
+        </button>
         <div ng-class="{'mr-player--fly-away': Ctrl.flyAway}" class="mr-player c6-height-limiter"><!-- actual player will be inserted into this container --></div>
         <div ng-show="Ctrl.flyAway" class="mr-player__thumbnail c6-height-limiter"
             ng-style="{'background-image':config.thumbs.large ? 'url(' + config.thumbs.large + ')' : ''}">
