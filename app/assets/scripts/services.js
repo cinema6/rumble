@@ -323,7 +323,7 @@
             };
 
             this.convertCard = function(card) {
-                var dataTemplates, cardBases, cardType,
+                var dataTemplates, cardBases, cardType, dataType,
                     newCard = {
                         data: {}
                     };
@@ -340,7 +340,7 @@
                     }
                 }
 
-                function getType(card) {
+                function getCardType(card) {
                     if(card.ad) {
                         return 'ad';
                     }
@@ -354,31 +354,53 @@
                     }
                 }
 
+                function getDataType(card) {
+                    if(card.type === 'links' || card.type === 'ad') {
+                        return card.type;
+                    }
+                    if(card.type.indexOf('video') > -1) {
+                        return card.data.service;
+                    }
+                }
+
                 dataTemplates = {
-                    video: {
-                        modestbranding: copy(1),
-                        rel: copy(0),
+                    youtube: {
+                        modestbranding: value(0),
+                        rel: value(0),
                         start: trimmer(),
                         end: trimmer(),
                         videoid: copy(null)
                     },
-                    ad: {
-                        autoplay: copy(false)
+                    vimeo: {
+                        start: trimmer(),
+                        end: trimmer(),
+                        videoid: copy(null)
                     },
-                    miniReel: {
-                        message: copy('Not being copied into the MRinator yet'),
-                        query: copy({id:[]})
+                    dailymotion: {
+                        start: trimmer(),
+                        end: trimmer(),
+                        related: value(0),
+                        videoid: copy(null)
+                    },
+                    ad: {
+                        autoplay: copy(false),
+                        publisher: copy(false)
+                    },
+                    links: {
+                        // message: copy('Not being copied into the MRinator yet'),
+                        // query: copy({id:[]}),
+                        links: copy([])
                     }
                 };
 
                 cardBases = {
                     video: {
                         id: copy(),
-                        note: copy(null),
-                        title: copy(null),
                         type: function(card) {
                             return card.data.service;
                         },
+                        title: copy(null),
+                        note: copy(null),
                         source: function(card) {
                             return camelSource(card.data.service);
                         },
@@ -388,31 +410,37 @@
                     },
                     ad: {
                         id: copy(),
-                        ad: value(true),
                         type: value('ad'),
-                        displayAd: copy('Not being copied into MRinator yet'),
+                        ad: value(true),
+                        // displayAd: copy('Not being copied into MRinator yet'),
                         modules: value(['displayAd'])
                     },
-                    miniReel: {
+                    links: {
                         id: copy(),
-                        type: value('miniReel')
+                        type: value('links'),
+                        title: copy(null),
+                        note: copy(null),
                     }
                 };
 
-                cardType = getType(card);
+                cardType = getCardType(card);
+                dataType = getDataType(card);
 
                 forEach(cardBases[cardType], function(fn, key) {
                     newCard[key] = fn(card, key, card);
                 });
 
-                forEach(dataTemplates[cardType], function(fn, key) {
-                    newCard.data[key] = fn((card.data || {}), key, card);
+                forEach(dataTemplates[dataType], function(fn, key) {
+                    var value = fn((card.data || {}), key, card);
+                    if(value !== undefined && value !== null) {
+                        newCard.data[key] = value;
+                    }
                 });
 
                 return newCard;
             };
 
-            this.convertForPreview = function(minireel) {
+            this.convertForPlayer = function(minireel) {
                 var mrExperience = ngCopy(minireel),
                     convertedDeck = [];
 

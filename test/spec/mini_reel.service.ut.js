@@ -26,6 +26,7 @@
                                 type: 'youtube',
                                 title: 'The Slowest Turtle',
                                 note: 'Blah blah blah',
+                                source: 'YouTube',
                                 modules: [],
                                 data: {
                                     videoid: '47tfg8734',
@@ -40,6 +41,7 @@
                                 type: 'vimeo',
                                 title: 'The Ugliest Turtle',
                                 note: 'Blah blah blah',
+                                source: 'Vimeo',
                                 modules: ['ballot'],
                                 data: {
                                     videoid: '48hfrei49'
@@ -49,6 +51,7 @@
                                 id: 'rc-1c7a46097a5d4a',
                                 type: 'ad',
                                 ad: true,
+                                modules: ['displayAd'],
                                 data: {
                                     autoplay: true,
                                     publisher: true
@@ -59,6 +62,7 @@
                                 type: 'dailymotion',
                                 title: 'The Smartest Turtle',
                                 note: 'Blah blah blah',
+                                source: 'DailyMotion',
                                 modules: ['ballot'],
                                 data: {
                                     videoid: 'vfu85f5',
@@ -70,6 +74,7 @@
                                 type: 'youtube',
                                 title: 'The Dumbest Turtle',
                                 note: 'Blah blah blah',
+                                source: 'YouTube',
                                 modules: [],
                                 data: {
                                     videoid: 'fn4378r4d',
@@ -83,6 +88,7 @@
                                 id: 'rc-f31cabb9193ef9',
                                 type: 'ad',
                                 ad: true,
+                                modules: ['displayAd'],
                                 data: {
                                     autoplay: false,
                                     publisher: false
@@ -472,6 +478,26 @@
                             });
 
                             expect(deck[7].data.links).not.toBe(minireel.data.deck[6].data.links);
+                        });
+                    });
+
+                    describe('convertForPlayer(minireel)', function() {
+                        it('should convert back to the player format', function() {
+                            var success = jasmine.createSpy('success'),
+                                converted,
+                                result;
+
+                            spyOn(cinema6.db, 'find').and.returnValue($q.when(minireel));
+
+                            $rootScope.$apply(function() {
+                                MiniReelService.open('e-15aa87f5da34c3')
+                                    .then(success);
+                            });
+                            converted = success.calls.mostRecent().args[0];
+                            result = MiniReelService.convertForPlayer(converted);
+
+                            expect(result).toEqual(minireel);
+                            expect(result).not.toBe(minireel);
                         });
                     });
                 });
