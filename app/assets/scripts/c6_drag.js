@@ -28,6 +28,15 @@
             }
         };
 
+        function DragContext() {
+            this._killed = false;
+        }
+        DragContext.prototype = {
+            kill: function() {
+                this._killed = true;
+            }
+        };
+
         angular.module('c6.drag', ['c6.ui'])
             .value('hammer', hammer)
 
@@ -518,6 +527,13 @@
                                 events = {
                                     dragstart: {
                                         setup: function() {
+                                            var enabled =
+                                                scope.$eval($attrs.c6Draggable) !== false;
+
+                                            if (!enabled) {
+                                                return this.kill();
+                                            }
+
                                             draggable.refresh();
 
                                             this.start = {
@@ -604,7 +620,7 @@
 
                                 if (type === 'dragstart') {
                                     // Create a new context at the start of the drag lifecycle.
-                                    context = {};
+                                    context = new DragContext();
                                 }
 
                                 // Call the hook for every phase
@@ -614,6 +630,8 @@
                                     // number.
                                     index < 3;
                                     index++) {
+                                    if (context._killed) { return; }
+
                                     (eventPhases[hooks[index]] || noop).call(context, event);
                                 }
                             }
