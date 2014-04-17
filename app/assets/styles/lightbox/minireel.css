@@ -349,7 +349,8 @@
                     background:50% 50% / cover no-repeat;
                 }
         .mr-card__copy {
-            position: absolute; width:12rem; top:1rem; right:-12.5rem;
+            width:12rem; height:110%; overflow: auto;
+            position: absolute;top:0.25rem; right:-12.5rem;
         }
             .mr-card__counter {
                 text-align: right; margin-right:1rem; font-size:0.875em; color:#999;
@@ -366,6 +367,42 @@
                 margin: 1em 0 0 0; font-size:0.8125rem;/*13px*/ 
                 color:#ccc; line-height:1.69;
             }
+        @media screen and (max-width:49.9375rem) {
+            /*799px*/
+            .mr-card__copy {
+                height:114%;
+            }
+        }
+        @media screen and (min-width:50rem) and (max-width:59.9375rem) {
+            /*800px - 959px*/
+            .mr-card__copy {
+                height:110%;
+            }
+        }
+        @media screen and (min-width:60rem) and (max-width:64.9375rem) {
+            /*960px - 1039px*/
+            .mr-card__copy {
+                height:108%;
+            }
+        }
+        @media screen and (min-width:65rem) and (max-width:75.9375rem) {
+            /*1040px - 1215px*/
+            .mr-card__copy {
+                height:107%;
+            }
+        }
+        @media screen and (min-width:76rem) and (max-width:88.6875rem) {
+            /*1216px - 1419px*/
+            .mr-card__copy {
+                height:109%;
+            }
+        }
+        @media screen and (min-width:88.75rem) {
+            /*1420px +*/
+            .mr-card__copy {
+                height:110%;
+            }
+        }
 
 
 /*  ==========================================================================
