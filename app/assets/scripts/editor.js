@@ -3,7 +3,8 @@
 
     var isNumber = angular.isNumber,
         jqLite = angular.element,
-        equals = angular.equals;
+        equals = angular.equals,
+        copy = angular.copy;
 
     function refresh($element) {
         $element.inheritedData('cDragCtrl').refresh();
@@ -326,30 +327,33 @@
                 session,
                 card;
 
+            // set a default device mode
             this.device = 'desktop';
 
+            // set a profile based on the current browser
+            // this is needed to instantiate a player
             profile = c6BrowserInfo.profile;
+
+            // override the device setting for previewing
             profile.device = this.device;
 
             $scope.$on('mrPreview:initExperience', function(event, exp, iframe) {
                 var player;
+
                 // the mr-preview directive sends the experience and the iframe element
                 // 'card' is undefined at this point
 
                 // store the MR player window
                 player = iframe.prop('contentWindow');
 
-                // convert the MRinator experience to a MRplayer experience
-                experience = MiniReelService.convertForPlayer(exp);
-
-                // add the mode
-                // experience.mode = self.mode;
-
                 // create a postMessage session (as defined in c6ui.postMessage)
                 session = postMessage.createSession(player);
 
+                // convert the MRinator experience to a MRplayer experience
+                experience = MiniReelService.convertForPlayer(exp);
+
                 // add the converted experience to the session for comparing later
-                session.experience = experience;
+                session.experience = copy(experience);
 
                 // add the listener for 'handshake' request
                 // we aren't using once() cuz the MR player
@@ -383,7 +387,6 @@
 
                 // we convert the experience
                 experience = MiniReelService.convertForPlayer(exp);
-                // experience.mode = self.mode;
 
                 // if it's been changed or we're previewing a specific card
                 // then we ping the player
@@ -405,6 +408,7 @@
             // i'm commenting out the below listener
             // cuz we aren't going to reset the player
             // when the user closes the preview
+            // i'm leaving it in in case we want to use it later
 
             // $scope.$on('mrPreview:closePreview', function() {
             //     // reset the card so that on the next mode change
@@ -436,7 +440,6 @@
                 // and will call for a specific card
                 // in case we're previewing that card
                 session.ping('mrPreview:updateMode');
-                // TODO: change updateMode to updateDevice
             });
 
         }])
