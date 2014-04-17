@@ -582,12 +582,23 @@
                         /* If there is a separate view for text, and if that mode is active: */
                         (behaviors.separateTextView && _data.textMode);
                 }
+            },
+            showPlay: {
+                get: function() {
+                    return !!player && player.paused;
+                }
             }
         });
+
+        this.enablePlayButton = config.type !== 'dailymotion' && !profile.touch;
 
         this.videoUrl = null;
 
         this.hasModule = ModuleService.hasModule.bind(ModuleService, config.modules);
+
+        this.playVideo = function() {
+            player.play();
+        };
 
         this.dismissBallot = function() {
             ballotTargetPlays = _data.playerEvents.play.emitCount;

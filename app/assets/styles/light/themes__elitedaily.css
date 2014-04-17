@@ -69,7 +69,8 @@
         background: rgba(35,145,215,0.7);
     }
     .ed-news .ui-control__next, 
-    .ed-news .ui-control__prev, 
+    .ed-news .ui-control__prev,
+    .ed-news .mr-player__play-btn,
     .ed-news .ui-nav__next, 
     .ed-news .ui-nav__prev {
         background-color: #2391d7;
@@ -94,6 +95,7 @@
     }
     .ed-life .ui-control__next, 
     .ed-life .ui-control__prev, 
+    .ed-life .mr-player__play-btn,
     .ed-life .ui-nav__next, 
     .ed-life .ui-nav__prev {
         background-color: #c0392b;
@@ -118,6 +120,7 @@
     }
     .ed-money .ui-control__next, 
     .ed-money .ui-control__prev, 
+    .ed-money .mr-player__play-btn,
     .ed-money .ui-nav__next, 
     .ed-money .ui-nav__prev {
         background-color: #27ae60;
@@ -142,6 +145,7 @@
     }
     .ed-sports .ui-control__next, 
     .ed-sports .ui-control__prev, 
+    .ed-sports .mr-player__play-btn,
     .ed-sports .ui-nav__next, 
     .ed-sports .ui-nav__prev {
         background-color: #e67e22;
@@ -166,6 +170,7 @@
     }
     .ed-dating .ui-control__next, 
     .ed-dating .ui-control__prev, 
+    .ed-dating .mr-player__play-btn,
     .ed-dating .ui-nav__next, 
     .ed-dating .ui-nav__prev {
         background-color: #8e44ad;
@@ -190,6 +195,7 @@
     }
     .ed-entertainment .ui-control__next, 
     .ed-entertainment .ui-control__prev, 
+    .ed-entertainment .mr-player__play-btn,
     .ed-entertainment .ui-nav__next, 
     .ed-entertainment .ui-nav__prev {
         background-color: #f1c40f;
@@ -214,6 +220,7 @@
     }
     .ed-music .ui-control__next, 
     .ed-music .ui-control__prev, 
+    .ed-music .mr-player__play-btn,
     .ed-music .ui-nav__next, 
     .ed-music .ui-nav__prev {
         background-color: #2c3e50;
@@ -237,7 +244,8 @@
         background: rgba(195,93,158,0.7);
     }
     .ed-women .ui-control__next, 
-    .ed-women .ui-control__prev, 
+    .ed-women .ui-control__prev,
+    .ed-women .mr-player__play-btn, 
     .ed-women .ui-nav__next, 
     .ed-women .ui-nav__prev {
         background-color: #c35d9e;
@@ -261,7 +269,8 @@
         background: rgba(182,152,35,0.7);
     }
     .ed-envision .ui-control__next, 
-    .ed-envision .ui-control__prev, 
+    .ed-envision .ui-control__prev,
+    .ed-envision .mr-player__play-btn, 
     .ed-envision .ui-nav__next, 
     .ed-envision .ui-nav__prev {
         background-color: #b69823;
@@ -286,6 +295,7 @@
     }
     .ed-humor .ui-control__next, 
     .ed-humor .ui-control__prev, 
+    .ed-humor .mr-player__play-btn,
     .ed-humor .ui-nav__next, 
     .ed-humor .ui-nav__prev {
         background-color: #16a085;
@@ -310,6 +320,7 @@
     }
     .ed-videos .ui-control__next, 
     .ed-videos .ui-control__prev, 
+    .ed-videos .mr-player__play-btn,
     .ed-videos .ui-nav__next, 
     .ed-videos .ui-nav__prev {
         background-color: #d5161d;

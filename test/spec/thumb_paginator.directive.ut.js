@@ -115,6 +115,40 @@
                     expect($pager.find('.mr-pager__prev').width()).toBe(62);
                     expect($pager.find('.mr-pager__next').width()).toBe(62);
                 });
+
+                it('should re-fetch the minimum width of the buttons when the window resizes', function() {
+                    $pager = create([
+                        '<ul>',
+                        '    <li ng-repeat="index in [0,1,2,3,4,5,6,7,8,9,10,11]">',
+                        '        <span thumb-paginator-item style="display: inline-block; width: 100px;">Foo</span>',
+                        '    </li>',
+                        '</ul>'
+                    ].join('\n'));
+
+                    $pager.find('.mr-pager__btn').css('min-width', '100px');
+                    $($window).trigger('resize');
+                    $timeout.flush();
+
+                    expect($pager.find('.mr-pager__prev').width()).toBe(112);
+                    expect($pager.find('.mr-pager__next').width()).toBe(112);
+                });
+
+                it('should update the width of the thumbnails when the window resizes', function() {
+                    $pager = create([
+                        '<ul>',
+                        '    <li ng-repeat="index in [0,1,2,3,4,5,6,7,8,9,10,11]">',
+                        '        <span thumb-paginator-item style="display: inline-block; width: 100px;">Foo</span>',
+                        '    </li>',
+                        '</ul>'
+                    ].join('\n'));
+
+                    $pager.find('span').width(125);
+                    $($window).trigger('resize');
+                    $timeout.flush();
+
+                    expect($pager.find('.mr-pager__prev').width()).toBe(74);
+                    expect($pager.find('.mr-pager__next').width()).toBe(74);
+                });
             });
 
             describe('the paginator', function() {
