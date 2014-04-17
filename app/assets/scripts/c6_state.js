@@ -1,11 +1,14 @@
 (function() {
     'use strict';
 
+    var extend = angular.extend,
+        copy = angular.copy;
+
     angular.module('c6.state', ['c6.ui'])
         .value('c6StateParams', {})
 
-        .directive('c6View', ['c6State','$compile','$animate','$controller',
-        function             ( c6State , $compile , $animate , $controller ) {
+        .directive('c6View', ['c6State','$compile','$animate','$controller','$injector',
+        function             ( c6State , $compile , $animate , $controller , $injector ) {
             return {
                 restrict: 'EAC',
                 transclude: 'element',
@@ -15,20 +18,27 @@
                         parentData = element.inheritedData('cView') || {},
                         viewLevel = (parentData.level || 0) + 1;
 
-                    function leave() {
-                        if (currentScope) {
-                            currentScope.$destroy();
-                        }
 
-                        if (currentElement$) {
-                            $animate.leave(currentElement$);
-                        }
-                    }
-
-                    function update(state, prevState) {
+                    function update(state, prevState, terminal) {
                         var newScope, ctrl, controllerAs, controller, clone$,
                             stateLevel = state.name.split('.').length,
                             data = (currentElement$ && currentElement$.data('cView')) || {};
+
+                        function updateControllerModel(controller) {
+                            return $injector.invoke(
+                                state.updateControllerModel ||
+                                    function() {
+                                        if (!controller) { return; }
+
+                                        controller.model = this.cModel;
+                                    },
+                                state,
+                                {
+                                    model: state.cModel,
+                                    controller: controller
+                                }
+                            );
+                        }
 
                         function enter() {
                             newScope = scope.$new();
@@ -39,13 +49,21 @@
                                 cModel: state.cModel
                             }) : null;
 
+                            updateControllerModel(controller);
+
                             if (controllerAs) {
                                 newScope[controllerAs] = controller;
                             }
 
                             clone$ = transclude(function(clone$) {
                                 clone$.html(state.cTemplate);
-                                clone$.data('cView', { level: viewLevel, state: state });
+
+                                clone$.data('cView', {
+                                    level: viewLevel,
+                                    state: state,
+                                    controller: controller
+                                });
+
                                 $compile(clone$.contents())(newScope);
 
                                 $animate.enter(
@@ -59,24 +77,41 @@
                             });
                         }
 
+                        function leave() {
+                            if (currentScope) {
+                                currentScope.$destroy();
+                            }
+
+                            if (currentElement$) {
+                                $animate.leave(currentElement$);
+                            }
+
+                            currentScope = newScope;
+                            currentElement$ = clone$;
+                        }
+
                         // We have nothing to do if the transition was not intended for this view or
                         // the state being requested is already loaded into the view (and this is
                         // not a deliberate transition to the current state again (but maybe with
                         // different data.)
-                        if (stateLevel > viewLevel ||
-                            (state === data.state && state !== prevState)) { return; }
-
+                        if (stateLevel > viewLevel) { return; }
 
                         if (stateLevel === viewLevel) {
+                            if (state === data.state) {
+                                updateControllerModel(data.controller);
+                                c6State.emit('viewChangeSuccess', state);
+                                return;
+                            }
+
                             enter();
-                        } else {
-                            c6State.emit('viewChangeSuccess', state);
+                            leave();
+                            return;
                         }
 
-                        leave();
-
-                        currentScope = newScope;
-                        currentElement$ = clone$;
+                        if (terminal) {
+                            leave();
+                            c6State.emit('viewChangeSuccess', state);
+                        }
                     }
 
                     c6State.emit('viewReady');
@@ -181,7 +216,7 @@
                 };
 
                 c6State.transitionTo = function(name, params) {
-                    var tree, currentTree;
+                    var tree;
 
                     function climbTree(tree) {
                         var item = tree[0],
@@ -195,7 +230,7 @@
                         return tree;
                     }
 
-                    function doTransition(state) {
+                    function doTransition(state, terminal) {
                         var from = c6State.current;
 
                         function resolveState(state) {
@@ -218,7 +253,7 @@
                             }
 
                             c6State.on('viewChangeSuccess', handleViewChangeSuccess);
-                            c6State.emit('viewChangeStart', state, from);
+                            c6State.emit('viewChangeStart', state, from, terminal);
 
                             return deferred.promise;
                         }
@@ -238,19 +273,14 @@
 
                     function execute() {
                         var promise,
-                            length = tree.length;
+                            lastIndex = tree.length - 1;
 
                         angular.forEach(tree, function(state, index) {
-                            if (state === currentTree[index] && (index < (length - 1))) {
-                                promise = promise ? promise.then(function() {
-                                    return $q.when(state);
-                                }) : $q.when(state);
-                                return;
+                            function doPromise() {
+                                return doTransition(state, index === lastIndex);
                             }
 
-                            promise = promise ? promise.then(function() {
-                                return doTransition(state);
-                            }) : doTransition(state);
+                            promise = promise ? promise.then(doPromise) : doPromise();
                         });
 
                         c6State.transitions[name] = promise;
@@ -263,11 +293,14 @@
                     }
 
                     tree = climbTree([states[name]]);
-                    currentTree = climbTree([c6State.current]);
 
                     return $q.all(this.transitions)
                         .then(execute)
                         .finally(removeTransition);
+                };
+
+                c6State.goTo = function(state, params) {
+                    return this.transitionTo(state, extend(copy(c6StateParams), params));
                 };
 
                 c6State.on('viewReady', function() {

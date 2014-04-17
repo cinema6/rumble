@@ -253,40 +253,36 @@
             };
         })
 
-        .controller('EditorController', ['cModel','c6State','$scope',
-        function                        ( cModel , c6State , $scope ) {
-            this.model = cModel;
+        .controller('EditorController', ['c6State','$scope',
+        function                        ( c6State , $scope ) {
+            var self = this;
 
             this.editCard = function(card) {
-                c6State.transitionTo('editor.editCard', { id: card.id });
+                c6State.goTo('editor.editCard.video', { cardId: card.id });
             };
 
             this.newCard = function() {
-                c6State.transitionTo('editor.newCard.type');
+                c6State.goTo('editor.newCard.type');
             };
 
             $scope.$on('addCard', function(event, card) {
-                cModel.data.deck.push(card);
+                self.model.data.deck.push(card);
             });
         }])
 
-        .controller('EditCardController', ['$scope','cModel','c6Computed','c6State',
-                                           'VideoService',
-        function                          ( $scope , cModel , c6Computed , c6State ,
-                                            VideoService ) {
+        .controller('EditCardController', ['$scope','c6Computed','c6State','VideoService',
+        function                          ( $scope , c6Computed , c6State , VideoService ) {
             var c = c6Computed($scope);
 
-            this.model = cModel;
             VideoService.createVideoUrl(c, this, 'EditCardCtrl');
 
             this.close = function() {
-                c6State.transitionTo('editor', { id: $scope.EditorCtrl.model.id });
+                c6State.goTo('editor');
             };
         }])
 
-        .controller('NewCardTypeController', ['cModel','c6State',
-        function                             ( cModel , c6State ) {
-            this.model = cModel;
+        .controller('NewCardTypeController', ['c6State',
+        function                             ( c6State ) {
             this.type = null;
 
             this.edit = function() {
@@ -296,24 +292,19 @@
                     throw new Error('Can\'t edit before a type is chosen.');
                 }
 
-                c6State.transitionTo('editor.newCard.edit', { type: type });
+                c6State.goTo('editor.newCard.edit', { cardType: type });
             };
         }])
 
-        .controller('NewCardEditController', ['cModel','c6Computed','$scope','VideoService',
-                                              'c6State',
-        function                             ( cModel , c6Computed , $scope , VideoService ,
-                                               c6State ) {
+        .controller('NewCardEditController', ['c6Computed','$scope','VideoService','c6State',
+        function                             ( c6Computed , $scope , VideoService , c6State ) {
             var c = c6Computed($scope);
 
-            this.model = cModel;
             VideoService.createVideoUrl(c, this, 'NewCardEditCtrl');
 
             this.save = function() {
-                var minireel = c6State.get('editor').cModel;
-
-                $scope.$emit('addCard', cModel);
-                c6State.transitionTo('editor', { id: minireel.id });
+                $scope.$emit('addCard', this.model);
+                c6State.goTo('editor');
             };
         }])
 
@@ -543,6 +534,7 @@
 
                         Object.defineProperties(scope, {
                             currentTime: {
+                                configurable: true,
                                 get: function() {
                                     if (isNumber(startScanTime)) {
                                         return startScanTime;

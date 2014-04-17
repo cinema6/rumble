@@ -115,7 +115,7 @@
                     templateUrl: assets('views/editor.html'),
                     model:  ['cinema6','c6StateParams','MiniReelService',
                     function( cinema6 , c6StateParams , MiniReelService ) {
-                        return MiniReelService.open(c6StateParams.id);
+                        return MiniReelService.open(c6StateParams.minireelId);
                     }],
                     children: {
                         editCard: {
@@ -128,9 +128,18 @@
 
                                 return MiniReelService.findCard(
                                     minireel.data.deck,
-                                    c6StateParams.id
+                                    c6StateParams.cardId
                                 );
-                            }]
+                            }],
+                            children: {
+                                video: {
+                                    controllerAs: 'EditCardVideoCtrl',
+                                    templateUrl: assets('views/editor/edit_card/video.html'),
+                                    model:  [function() {
+                                        return this.cParent.cModel;
+                                    }]
+                                }
+                            }
                         },
                         newCard: {
                             templateUrl: assets('views/editor/new_card.html'),
@@ -156,7 +165,7 @@
                                         var card = this.cParent.cModel;
 
                                         return MiniReelService.setCardType(
-                                            card, c6StateParams.type
+                                            card, c6StateParams.cardType
                                         );
                                     }]
                                 }

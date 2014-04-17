@@ -166,6 +166,25 @@
                         "ballotId": "rb-01eb03bc062c15"
                     },
                     {
+                        "id": "rc-89094f9b7f8c93",
+                        "type": "vimeo",
+                        "title": "ShapeShifter",
+                        "note": "Pretty cool.",
+                        "source": "Vimeo",
+                        "modules": [
+                            "ballot"
+                        ],
+                        "voting": [
+                            0.83,
+                            0.14,
+                            0.03
+                        ],
+                        "data": {
+                            "videoid": "18439821"
+                        },
+                        "ballotId": "rb-01eb03bc062c15"
+                    },
+                    {
                         "id": "rc-e2947c9bec017e",
                         "type": "youtube",
                         "title": "Geek cool",
