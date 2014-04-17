@@ -2,12 +2,10 @@
     'use strict';
 
     angular.module('c6.mrmaker')
-        .controller('ManagerController', ['cModel','c6State',
-        function                         ( cModel , c6State ) {
-            this.model = cModel;
-
+        .controller('ManagerController', ['c6State',
+        function                         ( c6State ) {
             this.edit = function(minireel) {
-                c6State.transitionTo('editor', { id: minireel.id });
+                c6State.goTo('editor', { minireelId: minireel.id });
             };
         }]);
 }());
