@@ -141,6 +141,10 @@
                             deck : deck 
                         }
                     },
+                    virtualPage : {
+                        page : '/mr/exp1',
+                        title : 'Test Minireel'
+                    },
                     behaviors: {}
                 };
 
@@ -169,6 +173,8 @@
                     BallotService = $injector.get('BallotService');
                     CommentsService = $injector.get('CommentsService');
                     ControlsService = $injector.get('ControlsService');
+                    
+                    $window.c6MrGa = jasmine.createSpy('$window.c6MrGa');
 
                     $scope      = $rootScope.$new();
 
@@ -213,6 +219,10 @@
 
                 it('should initialize the CommentsService with the id', function() {
                     expect(CommentsService.init).toHaveBeenCalledWith(appData.experience.id);
+                });
+
+                it('should initialize the google analytics', function(){
+                    expect($window.c6MrGa.calls[0].args).toEqual(['c6mr.send','pageview',appData.virtualPage]);
                 });
             });
 
@@ -540,6 +550,18 @@
                     expect($scope.atTail).toEqual(false);
                     expect($scope.$emit).toHaveBeenCalledWith('reelMove');
                     expect($scope.$emit.callCount).toBe(1);
+                    expect($window.c6MrGa.callCount).toEqual(1);
+                });
+
+                it('sends ga event if moving forward from control', function(){
+                    appData.mode = 'testMode';
+                    $scope.currentIndex = 0;
+                    $scope.currentCard  = $scope.deck[0];
+                    RumbleCtrl.goForward('test');
+                    expect($scope.currentIndex).toEqual(1);
+                    expect($scope.currentCard).toBe($scope.deck[1]);
+                    expect($window.c6MrGa.callCount).toEqual(2);
+                    expect($window.c6MrGa.mostRecentCall.args).toEqual(['c6mr.send','event','button','click','next','testMode::test',appData.virtualPage]); 
                 });
 
 
@@ -554,24 +576,33 @@
                     expect($scope.atTail).toEqual(false);
                     expect($scope.$emit).toHaveBeenCalledWith('reelMove');
                     expect($scope.$emit.callCount).toBe(1);
+                    expect($window.c6MrGa.callCount).toEqual(1);
                 });
+                
+                it('sends ga event if moving backward from control', function(){
+                    appData.mode = 'testMode';
+                    $scope.currentIndex = 2;
+                    $scope.currentCard  = $scope.deck[2];
+                    RumbleCtrl.goBack('test');
+                    $scope.$digest();
+                    expect($scope.currentIndex).toEqual(1);
+                    expect($scope.currentCard).toBe($scope.deck[1]);
+                    expect($window.c6MrGa.callCount).toEqual(2);
+                    expect($window.c6MrGa.mostRecentCall.args).toEqual(['c6mr.send','event','button','click','prev','testMode::test',appData.virtualPage]); 
+                });
+
             });
 
             describe('starting the mini reel', function() {
-                beforeEach(function(){
-                    $window.c6MrGa = jasmine.createSpy('$window.c6MrGa');
-                });
                 describe('google analytics',function(){
                     beforeEach(function(){
                         spyOn($scope, '$emit');
                         RumbleCtrl.start();
                     });
                     it('sends a page view event for the launch',function(){
-                        expect($window.c6MrGa).toHaveBeenCalledWith(
-                            'c6mr.send', 'pageview',{
-                                'page' : '/mr/launch?experienceId=e-722bd3c4942331',
-                                'title' : 'Minireel App Launch'
-                            });
+                        expect($window.c6MrGa.mostRecentCall.args).toEqual([
+                            'c6mr.send', 'event', 'button', 'click', 'start', 
+                            appData.virtualPage]);
                     });
                 });
 

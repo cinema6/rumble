@@ -274,12 +274,22 @@
                 };
             }
 
+            function setVirtualPage(obj, experience ){
+                obj.virtualPage = {
+                    page  : '/mr/' + experience.id,
+                    title : (experience.title ||
+                                ('Mini Reel: ' + experience.id))
+                };
+                return obj;
+            }
+
             cinema6.getAppData()
                 .then(function(appData) {
                     angular.copy(appData, c6AppData);
 
                     setMode(c6AppData, appData);
                     setBehaviors(c6AppData, c6AppData.mode);
+                    setVirtualPage(c6AppData, appData.experience);
 
                     return $q.all([getResponsiveStyles, cinema6.getSession()]);
                 }).then(function(promises) {
@@ -342,10 +352,6 @@
                     'cookieDomain'  : 'none'
                 });
                 $window.c6MrGa('c6mr.set', 'checkProtocolTask', function(){});
-                $window.c6MrGa('c6mr.send', 'pageview', {
-                    'page'  : '/mr/load?experienceId=' + c6AppData.experience.id,
-                    'title' : 'Minireel App Load'
-                });
             });
 
             session.on('mrPreview:updateMode', function() {

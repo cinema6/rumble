@@ -3,7 +3,7 @@
         <button class="publisher__branding-logo" type="button" title="Elite Daily">
             <span class="ir">Elite Daily</span>
         </button>
-        <button class="ui-nav__prev" title="Previous Video" type="button" c6-touch="RumbleCtrl.goBack()">
+        <button class="ui-nav__prev" title="Previous Video" type="button" c6-touch="RumbleCtrl.goBack('landscape')">
             <span class="ui-nav__label ui-nav__label-prev">
                 Prev
             </span>
@@ -27,7 +27,7 @@
             <span class="sprite ui-icon__list">&nbsp;</span>
             <span class="ui-control__activator">&nbsp;</span>
         </button>
-        <button ng-hide="showTOC" ng-class="{'ui-nav__next--disabled': atTail}" class="ui-nav__next" title="Previous Video" type="button" c6-touch="RumbleCtrl.goForward()" ng-disabled="atTail">
+        <button ng-hide="showTOC" ng-class="{'ui-nav__next--disabled': atTail}" class="ui-nav__next" title="Previous Video" type="button" c6-touch="RumbleCtrl.goForward('landscape')" ng-disabled="atTail">
             <span class="ui-nav__label ui-nav__label-next">
                 Next
             </span>
@@ -58,7 +58,7 @@
     </div><!--.ui-context-->
 
     <div class="ui-control--portrait c6-slide-bar--bottom  css-promote">
-        <button ng-hide="showTOC" class="ui-control__prev" title="Previous Video" type="button" c6-touch="RumbleCtrl.goBack()">
+        <button ng-hide="showTOC" class="ui-control__prev" title="Previous Video" type="button" c6-touch="RumbleCtrl.goBack('portrait')">
             <span class="ui-control__label ui-control__label-prev">
                 Prev
             </span>
@@ -74,7 +74,7 @@
             <span class="sprite ui-icon__list">&nbsp;</span>
             <span class="ui-control__activator">&nbsp;</span>
         </button>
-        <button ng-hide="showTOC" ng-class="{'ui-control__next--disabled': atTail}" class="ui-control__next" title="Next Video" type="button" c6-touch="RumbleCtrl.goForward()" ng-disabled="atTail">
+        <button ng-hide="showTOC" ng-class="{'ui-control__next--disabled': atTail}" class="ui-control__next" title="Next Video" type="button" c6-touch="RumbleCtrl.goForward('portrait')" ng-disabled="atTail">
             <span class="ui-control__label ui-control__label-next">
                 Next
             </span>

@@ -6,7 +6,7 @@
     <div class="mr-card__container">
         <ng-include src="'deck.html' | asset:'views'"></ng-include>
         
-        <button ng-click="RumbleCtrl.goBack()"
+        <button ng-click="RumbleCtrl.goBack('nav')"
             class="mr-nav__btn mr-nav__prev"
             type="button"
             title="Previous Page">
@@ -17,7 +17,7 @@
             </svg>
             <span class="ir">Previous Page</span>
         </button>
-        <button ng-click="RumbleCtrl.goForward()"
+        <button ng-click="RumbleCtrl.goForward('nav')"
             ng-class="{'mr-nav__btn--disabled': atTail, 'mr-nav__next--display-ad': currentCard.type === 'ad'}"
             ng-disabled="atTail"
             class="mr-nav__btn mr-nav__next"
@@ -36,8 +36,8 @@
             class="mr-pager__group"
             disable-prev-when="false"
             disable-next-when="atTail"
-            on-prev="RumbleCtrl.goBack()"
-            on-next="RumbleCtrl.goForward()">
+            on-prev="RumbleCtrl.goBack('thumb')"
+            on-next="RumbleCtrl.goForward('thumb')">
             <ul class="mr-pages__list">
                 <li thumb-paginator-item ng-repeat="this in tocCards" class="mr-pages__item">
                     <navbar-button index="$index"
