@@ -216,7 +216,7 @@
                 };
 
                 c6State.transitionTo = function(name, params) {
-                    var tree, currentTree;
+                    var tree;
 
                     function climbTree(tree) {
                         var item = tree[0],
@@ -293,7 +293,6 @@
                     }
 
                     tree = climbTree([states[name]]);
-                    currentTree = climbTree([c6State.current]);
 
                     return $q.all(this.transitions)
                         .then(execute)
