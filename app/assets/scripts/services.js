@@ -5,6 +5,7 @@
         ngCopy = angular.copy,
         isNumber = angular.isNumber,
         isUndefined = angular.isUndefined,
+        isDefined = angular.isDefined,
         extend = angular.extend;
 
     angular.module('c6.mrmaker')
@@ -387,8 +388,6 @@
                         publisher: copy(false)
                     },
                     links: {
-                        // message: copy('Not being copied into the MRinator yet'),
-                        // query: copy({id:[]}),
                         links: copy([])
                     }
                 };
@@ -412,7 +411,6 @@
                         id: copy(),
                         type: value('ad'),
                         ad: value(true),
-                        // displayAd: copy('Not being copied into MRinator yet'),
                         modules: value(['displayAd'])
                     },
                     links: {
@@ -432,7 +430,7 @@
 
                 forEach(dataTemplates[dataType], function(fn, key) {
                     var value = fn((card.data || {}), key, card);
-                    if(value !== undefined && value !== null) {
+                    if(isDefined(value) && value !== null) {
                         newCard.data[key] = value;
                     }
                 });
