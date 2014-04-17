@@ -306,7 +306,7 @@
                 });
             });
 
-            describe('decorateController', function() {
+            describe('updateControllerModel', function() {
                 var homeState,
                     scope;
 
@@ -324,7 +324,7 @@
 
                 describe('if specified', function() {
                     beforeEach(function() {
-                        homeState.decorateController = ['model','controller', jasmine.createSpy('decorateController')];
+                        homeState.updateControllerModel = ['model','controller', jasmine.createSpy('updateControllerModel')];
 
                         $scope.$apply(function() {
                             c6State.emit('viewChangeStart', homeState);
@@ -334,7 +334,7 @@
                     });
 
                     it('should $invoke the setup function', function() {
-                        expect(homeState.decorateController[2]).toHaveBeenCalledWith(homeState.cModel, scope.HomeCtrl);
+                        expect(homeState.updateControllerModel[2]).toHaveBeenCalledWith(homeState.cModel, scope.HomeCtrl);
                     });
                 });
 

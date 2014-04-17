@@ -24,9 +24,9 @@
                             stateLevel = state.name.split('.').length,
                             data = (currentElement$ && currentElement$.data('cView')) || {};
 
-                        function decorateController(controller) {
+                        function updateControllerModel(controller) {
                             return $injector.invoke(
-                                state.decorateController ||
+                                state.updateControllerModel ||
                                     function() {
                                         if (!controller) { return; }
 
@@ -49,7 +49,7 @@
                                 cModel: state.cModel
                             }) : null;
 
-                            decorateController(controller);
+                            updateControllerModel(controller);
 
                             if (controllerAs) {
                                 newScope[controllerAs] = controller;
@@ -98,7 +98,7 @@
 
                         if (stateLevel === viewLevel) {
                             if (state === data.state) {
-                                decorateController(data.controller);
+                                updateControllerModel(data.controller);
                                 c6State.emit('viewChangeSuccess', state);
                                 return;
                             }
