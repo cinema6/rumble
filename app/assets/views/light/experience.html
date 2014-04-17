@@ -8,8 +8,8 @@
         class="mr-pager__group"
         disable-prev-when="false"
         disable-next-when="atTail"
-        on-prev="RumbleCtrl.goBack()"
-        on-next="RumbleCtrl.goForward()">
+        on-prev="RumbleCtrl.goBack('thumb')"
+        on-next="RumbleCtrl.goForward('thumb')">
         <ul class="mr-pages__list">
             <li thumb-paginator-item ng-repeat="this in tocCards" class="mr-pages__item">
                 <navbar-button index="$index"

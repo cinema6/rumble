@@ -479,10 +479,8 @@
         };
 
         this.start = function() {
-            $window.c6MrGa('c6mr.send', 'pageview', {
-                'page'  : '/mr/launch?experienceId=' + appData.experience.id,
-                'title' : 'Minireel App Launch'
-            });
+            $window.c6MrGa('c6mr.send', 'event', 'button', 'click', 'start',
+                appData.virtualPage);
             this.goForward();
 
             if (appData.behaviors.fullscreen) {
@@ -490,12 +488,22 @@
             }
         };
 
-        this.goBack = function(){
+        this.goBack = function(src){
             self.setPosition($scope.currentIndex - 1);
+            if (src){
+                $window.c6MrGa('c6mr.send', 'event', 'button', 'click', 'prev',
+                    appData.mode + '::' + src,
+                    appData.virtualPage);
+            }
         };
 
-        this.goForward = function(){
+        this.goForward = function(src){
             self.setPosition($scope.currentIndex + 1);
+            if (src){
+                $window.c6MrGa('c6mr.send', 'event', 'button', 'click', 'next',
+                    appData.mode + '::' + src,
+                    appData.virtualPage);
+            }
         };
 
         readyTimeout = $timeout(function(){
@@ -504,6 +512,8 @@
         }, 3000);
 
         $log.log('Rumble Controller is initialized!');
+        
+        $window.c6MrGa('c6mr.send', 'pageview', appData.virtualPage);
     }])
     .directive('navbarButton', ['assetFilter','c6Computed',
     function                   ( assetFilter , c6Computed ) {

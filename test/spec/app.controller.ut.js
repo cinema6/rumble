@@ -26,7 +26,6 @@
                 $animate,
                 $document,
                 myFrame$,
-                appData,
                 siteSession,
                 session;
 
@@ -61,16 +60,6 @@
 
                 $state = {
                     go: jasmine.createSpy('$state.go()')
-                };
-
-                appData = {
-                    experience: {
-                        img: {}
-                    },
-                    profile: {
-                        raf: {},
-                        device: 'desktop'
-                    }
                 };
                 
                 session = {
@@ -129,6 +118,15 @@
                     $httpBackend = $injector.get('$httpBackend');
                     $httpBackend.whenGET('assets/config/responsive.json').respond({});
 
+                    c6AppData.experience = {
+                        id : 'exp1',
+                        title: 'Test Minireel'
+                    };
+
+                    c6AppData.virtualPage = {
+                        page : '/mr/exp1',
+                        title : 'Test Minireel'
+                    };
 
                     $document = $injector.get('$document');
                     myFrame$ = $injector.get('myFrame$');
@@ -224,15 +222,12 @@
                 });
 
                 it('will use initAnalytics cb to init ga',function(){
-                    c6AppData.experience = {
-                        id : 'exp1'
-                    };
                     var cb = session.on.calls[0].args[1];
                     cb({
                         accountId : 'abc',
                         clientId  : '123'
                     });
-                    expect($window.c6MrGa.callCount).toEqual(3);
+                    expect($window.c6MrGa.callCount).toEqual(2);
                     
                     expect($window.c6MrGa.calls[0].args[0]).toEqual('create');
                     expect($window.c6MrGa.calls[0].args[1]).toEqual('abc');
@@ -243,12 +238,8 @@
                         'cookieDomain'  : 'none'
                     });
 
-                    expect($window.c6MrGa.calls[2].args[0]).toEqual('c6mr.send');
-                    expect($window.c6MrGa.calls[2].args[1]).toEqual('pageview');
-                    expect($window.c6MrGa.calls[2].args[2]).toEqual({
-                        'page'      : '/mr/load?experienceId=exp1',
-                        'title'     : 'Minireel App Load'
-                    });
+                    expect($window.c6MrGa.calls[1].args[0]).toEqual('c6mr.set');
+                    expect($window.c6MrGa.calls[1].args[1]).toEqual('checkProtocolTask');
                 });
             });
 
