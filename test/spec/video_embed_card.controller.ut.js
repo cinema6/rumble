@@ -35,7 +35,8 @@
                     $provide.value('c6AppData', {
                         mode: null,
                         profile: {
-                            autoplay: true
+                            autoplay: true,
+                            touch: false
                         },
                         experience: {
                             data: {
@@ -70,7 +71,8 @@
                         }
                     };
                     $rootScope.profile = {
-                        autoplay: true
+                        autoplay: true,
+                        touch: false
                     };
                     $scope = $rootScope.$new();
                     VideoEmbedCardCtrl = $controller('VideoEmbedCardController', { $scope: $scope });
@@ -591,6 +593,70 @@
                         });
                     });
 
+                    describe('showPlay', function() {
+                        describe('if the player has not been received yet', function() {
+                            it('should be false', function() {
+                                expect(VideoEmbedCardCtrl.showPlay).toBe(false);
+                            });
+                        });
+
+                        describe('if the player has been received', function() {
+                            var player;
+
+                            beforeEach(function() {
+                                player = c6EventEmitter({
+                                    paused: true
+                                });
+
+                                $scope.$emit('playerAdd', player);
+                            });
+
+                            it('should be the same as the "paused" property of the player', function() {
+                                expect(VideoEmbedCardCtrl.showPlay).toBe(true);
+
+                                player.paused = false;
+
+                                expect(VideoEmbedCardCtrl.showPlay).toBe(false);
+                            });
+                        });
+                    });
+
+                    describe('enablePlayButton', function() {
+                        describe('if this is a dailymotion video', function() {
+                            beforeEach(function() {
+                                $rootScope.config.type = 'dailymotion';
+
+                                $scope.$apply(function() {
+                                    VideoEmbedCardCtrl = $controller('VideoEmbedCardController', { $scope: $scope });
+                                });
+                            });
+
+                            it('should be false', function() {
+                                expect(VideoEmbedCardCtrl.enablePlayButton).toBe(false);
+                            });
+                        });
+
+                        describe('if this is a touch device', function() {
+                            beforeEach(function() {
+                                $rootScope.profile.touch = true;
+
+                                $scope.$apply(function() {
+                                    VideoEmbedCardCtrl = $controller('VideoEmbedCardController', { $scope: $scope });
+                                });
+                            });
+
+                            it('should be false', function() {
+                                expect(VideoEmbedCardCtrl.enablePlayButton).toBe(false);
+                            });
+                        });
+
+                        describe('otherwise', function() {
+                            it('should be true', function() {
+                                expect(VideoEmbedCardCtrl.enablePlayButton).toBe(true);
+                            });
+                        });
+                    });
+
                     describe('flyAway', function() {
                         describe('if the ballot module is not enabled', function() {
                             beforeEach(function() {
@@ -688,6 +754,26 @@
 
                             VideoEmbedCardCtrl.hasModule('comments');
                             expect(ModuleService.hasModule).toHaveBeenCalledWith($rootScope.config.modules, 'comments');
+                        });
+                    });
+
+                    describe('playVideo()', function() {
+                        var iface;
+
+                        beforeEach(function() {
+                            iface = c6EventEmitter({
+                                play: jasmine.createSpy('iface.play()')
+                            });
+
+                            $scope.$emit('playerAdd', iface);
+                        });
+
+                        it('should play the video', function() {
+                            expect(iface.play).not.toHaveBeenCalled();
+
+                            VideoEmbedCardCtrl.playVideo();
+
+                            expect(iface.play).toHaveBeenCalled();
                         });
                     });
 

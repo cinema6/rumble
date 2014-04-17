@@ -141,7 +141,7 @@
         }
         .mr-nav__btn {
             width:3rem; height:5.5rem; margin:-2.75rem 0 0 0;
-            position:absolute; top:50%; left:0; z-index: 10;
+            position:absolute; top:45%; left:0; z-index: 10;
             background:rgba(0,0,0,0.8);
             border:0;
             cursor:pointer;
@@ -325,6 +325,17 @@
                 width:100%; height:0; position:relative;
                 background:#000;
             }
+                .mr-player__play-btn {
+                    width: 6.375rem;/*68px*/ height: 5.4375rem;/*58px*/
+                    padding: 0; margin: -2.71875rem 0 0 -3.1875rem; border: 0; 
+                    cursor: pointer;
+                    background: rgba(0,0,0,0.8);
+                    position: absolute; left: 50%; top: 50%; z-index:1;
+                }
+                    .mr-player__play-icon {
+                        height: 45%; width: 100%;
+                        background: url('../../img/play-icon.svg') 50% 50% / contain no-repeat;
+                    }
                 .mr-player, .mr-player__thumbnail {
                     position:absolute; width:100%; height:100%;
                 }
