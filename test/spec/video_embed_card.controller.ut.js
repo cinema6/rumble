@@ -35,7 +35,8 @@
                     $provide.value('c6AppData', {
                         mode: null,
                         profile: {
-                            autoplay: true
+                            autoplay: true,
+                            touch: false
                         },
                         experience: {
                             data: {
@@ -70,7 +71,8 @@
                         }
                     };
                     $rootScope.profile = {
-                        autoplay: true
+                        autoplay: true,
+                        touch: false
                     };
                     $scope = $rootScope.$new();
                     VideoEmbedCardCtrl = $controller('VideoEmbedCardController', { $scope: $scope });
@@ -615,6 +617,42 @@
                                 player.paused = false;
 
                                 expect(VideoEmbedCardCtrl.showPlay).toBe(false);
+                            });
+                        });
+                    });
+
+                    describe('enablePlayButton', function() {
+                        describe('if this is a dailymotion video', function() {
+                            beforeEach(function() {
+                                $rootScope.config.type = 'dailymotion';
+
+                                $scope.$apply(function() {
+                                    VideoEmbedCardCtrl = $controller('VideoEmbedCardController', { $scope: $scope });
+                                });
+                            });
+
+                            it('should be false', function() {
+                                expect(VideoEmbedCardCtrl.enablePlayButton).toBe(false);
+                            });
+                        });
+
+                        describe('if this is a touch device', function() {
+                            beforeEach(function() {
+                                $rootScope.profile.touch = true;
+
+                                $scope.$apply(function() {
+                                    VideoEmbedCardCtrl = $controller('VideoEmbedCardController', { $scope: $scope });
+                                });
+                            });
+
+                            it('should be false', function() {
+                                expect(VideoEmbedCardCtrl.enablePlayButton).toBe(false);
+                            });
+                        });
+
+                        describe('otherwise', function() {
+                            it('should be true', function() {
+                                expect(VideoEmbedCardCtrl.enablePlayButton).toBe(true);
                             });
                         });
                     });

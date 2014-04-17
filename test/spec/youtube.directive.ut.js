@@ -114,6 +114,7 @@
                             videoid: 'foo'
                         }
                     };
+                    $scope.profile = {};
                 });
             });
 

@@ -106,6 +106,7 @@
                             videoid: 'foo'
                         }
                     };
+                    $scope.profile = {};
                 });
             });
 
