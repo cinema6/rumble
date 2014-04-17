@@ -220,7 +220,9 @@
                 dataTemplates = {
                     video: videoDataTemplate,
                     videoBallot: extend(ngCopy(videoDataTemplate), {
-                        ballot: value([])
+                        ballot: function(data, key, card) {
+                            return card.ballot || [];
+                        }
                     }),
                     ad: {
                         autoplay: copy(false),
@@ -405,6 +407,9 @@
                         },
                         modules: function(card) {
                             return card.type === 'videoBallot' ? ['ballot'] : [];
+                        },
+                        ballot: function(card) {
+                            return card.data.ballot;
                         }
                     },
                     ad: {
@@ -425,7 +430,11 @@
                 dataType = getDataType(card);
 
                 forEach(cardBases[cardType], function(fn, key) {
-                    newCard[key] = fn(card, key, card);
+                    var value = fn(card, key, card);
+
+                    if (isDefined(value)) {
+                        newCard[key] = fn(card, key, card);
+                    }
                 });
 
                 forEach(dataTemplates[dataType], function(fn, key) {

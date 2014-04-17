@@ -43,6 +43,10 @@
                                 note: 'Blah blah blah',
                                 source: 'Vimeo',
                                 modules: ['ballot'],
+                                ballot: [
+                                    'Awesome',
+                                    'Lame'
+                                ],
                                 data: {
                                     videoid: '48hfrei49'
                                 }
@@ -64,6 +68,10 @@
                                 note: 'Blah blah blah',
                                 source: 'DailyMotion',
                                 modules: ['ballot'],
+                                ballot: [
+                                    'Funny',
+                                    'Stupid'
+                                ],
                                 data: {
                                     videoid: 'vfu85f5',
                                     related: 0
@@ -408,7 +416,10 @@
                                     videoid: '48hfrei49',
                                     start: null,
                                     end: null,
-                                    ballot: []
+                                    ballot: [
+                                        'Awesome',
+                                        'Lame'
+                                    ]
                                 }
                             });
 
@@ -423,7 +434,10 @@
                                     videoid: 'vfu85f5',
                                     start: undefined,
                                     end: undefined,
-                                    ballot: []
+                                    ballot: [
+                                        'Funny',
+                                        'Stupid'
+                                    ]
                                 }
                             });
 
