@@ -590,6 +590,8 @@
             }
         });
 
+        this.enablePlayButton = config.type !== 'dailymotion' && !profile.touch;
+
         this.videoUrl = null;
 
         this.hasModule = ModuleService.hasModule.bind(ModuleService, config.modules);
