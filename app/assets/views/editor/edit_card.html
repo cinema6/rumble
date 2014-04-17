@@ -1,24 +1,31 @@
-<c6-alias model="EditCardCtrl.model" as="card">
-    <header class="pageHeader container">
-        <h1 class="pageTitle">{{card.title}}</h1>
-        <div class="pageHeader__actions clearfix">
-            
-            <ul class="toolbar__group">
-                <li class="toolbar__item">
-                    <button class="toolbar__btn toolbar__preview" type="button">Preview</button>
-                </li>
-                <li class="toolbar__item">
-                    <button class="toolbar__btn toolbar__makePrivate" type="button">Make Private</button>
-                </li>
-                <li class="toolbar__item">
-                    <button class="toolbar__btn toolbar__publish" type="button">Publish</button>
-                </li>
-            </ul>
-        </div>
-        <span class="ui__divider--border"><br></span>
-    </header>
+<header c6-alias="EditCardCtrl.model as card" class="pageHeader container">
+    <h1 class="pageTitle">{{card.title}}</h1>
+    <div class="pageHeader__actions clearfix">
+        
+        <ul class="toolbar__group">
+            <li class="toolbar__item">
+                <button class="toolbar__btn toolbar__preview" type="button">Preview</button>
+            </li>
+            <li class="toolbar__item">
+                <button class="toolbar__btn toolbar__makePrivate" type="button">Make Private</button>
+            </li>
+            <li class="toolbar__item">
+                <button class="toolbar__btn toolbar__publish" type="button">Publish</button>
+            </li>
+        </ul>
 
-    <c6-view></c6-view>
+        <ul>
+            <li>
+                <a c6-sref="editor.editCard.ballot">Edit Ballot</a>
+            </li>
+            <li>
+                <a c6-sref="editor.editCard.video">Edit Video</a>
+            </li>
+        </ul>
+    </div>
+    <span class="ui__divider--border"><br></span>
+</header>
 
-    <button ng-click="EditCardCtrl.close()">Close</button>
-</c6-alias>
+<c6-view></c6-view>
+
+<button ng-click="EditCardCtrl.close()">Close</button>
