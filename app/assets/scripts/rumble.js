@@ -140,7 +140,8 @@
     }])
     .service('BallotService', ['$http','$cacheFactory','$q','c6UrlMaker',
     function                  ( $http , $cacheFactory , $q , c6UrlMaker ) {
-        var electionId = null,
+        var service = this,
+            electionId = null,
             electionCache = $cacheFactory('BallotService:elections');
 
         function processBallot(ballot) {
@@ -199,27 +200,21 @@
                 var election = electionCache.get(electionId);
 
                 return election ?
-                    $q.when(election[id]) :
+                    $q.when(election) :
                     $q.reject('Election ' + electionId + ' is not in the cache.');
             }
 
             function fetchFromService() {
-                function process(response) {
-                    var data = response.data,
-                        ballotItems = data.ballot[id];
+                return service.getElection();
+            }
 
-                    return processBallot(ballotItems);
-                }
-
-                return $http.get(c6UrlMaker(
-                        ('election/' + electionId + '/ballot/' + id),
-                        'api'
-                    ), { cache: true })
-                    .then(process);
+            function getBallot(election) {
+                return election[id];
             }
 
             return fetchFromCache()
-                .catch(fetchFromService);
+                .catch(fetchFromService)
+                .then(getBallot);
         };
 
         this.vote = function(id, name) {
@@ -234,8 +229,12 @@
             }).then(process);
         };
     }])
-    .controller('RumbleController',['$log','$scope','$timeout','$window','BallotService','c6Computed','cinema6','MiniReelService','CommentsService','ControlsService',
-    function                       ( $log , $scope , $timeout, $window, BallotService , c6Computed , cinema6 , MiniReelService , CommentsService , ControlsService ){
+    .controller('RumbleController',['$log','$scope','$timeout','$window','BallotService',
+                                    'c6Computed','cinema6','MiniReelService','CommentsService',
+                                    'ControlsService',
+    function                       ( $log , $scope , $timeout , $window , BallotService ,
+                                     c6Computed , cinema6 , MiniReelService , CommentsService ,
+                                     ControlsService ){
         $log = $log.context('RumbleCtrl');
         var self    = this, readyTimeout,
             appData = $scope.app.data,
@@ -247,9 +246,6 @@
         }
 
         BallotService.init(id);
-        // This will load the election into the BallotService\'s cache so
-        // requests for individual ballots will not hit the vote service.
-        BallotService.getElection();
 
         CommentsService.init(id);
 
