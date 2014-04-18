@@ -514,8 +514,8 @@
 
         this.goBack = function(src){
             if (src){
-                $window.c6MrGa('c6mr.send', 'event', 'button', 'click', 'prev',
-                    appData.mode + '::' + src,
+                $window.c6MrGa('c6mr.send', 'event', 'button', 'click',
+                    appData.mode + '::prev::' + src,
                     this.getVirtualPage());
             }
             self.setPosition($scope.currentIndex - 1);
@@ -523,8 +523,8 @@
 
         this.goForward = function(src){
             if (src){
-                $window.c6MrGa('c6mr.send', 'event', 'button', 'click', 'next',
-                    appData.mode + '::' + src,
+                $window.c6MrGa('c6mr.send', 'event', 'button', 'click',
+                    appData.mode + '::next::' + src,
                     this.getVirtualPage());
             }
             self.setPosition($scope.currentIndex + 1);
