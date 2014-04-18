@@ -87,6 +87,7 @@
                 scope: {
                     deck: '=',
                     editCard: '&',
+                    addCard: '&',
                     previewCard: '&'
                 }
             };
@@ -209,6 +210,7 @@
                 ].forEach(addScrollZone);
 
                 forEach(DragCtrl.draggables, addCard);
+                DragCtrl.on('draggableAdded', addCard);
 
                 $scope.$watch('Ctrl.position.x', function() {
                     DragCtrl.refresh();

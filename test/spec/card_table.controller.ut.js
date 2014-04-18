@@ -206,6 +206,20 @@
 
                     expect(watchDeck.calls.count()).toBe(3);
                 });
+
+                it('should work on "new" cards', function() {
+                    var modelA = { id: 'rc-5162b1e7e7e3b9' },
+                        cardA = new Draggable('rc-5162b1e7e7e3b9'),
+                        zoneA = new Zone('drop-zone-rc-5162b1e7e7e3b9');
+
+                    $scope.deck.splice(1, 0, modelA);
+
+                    DragCtrl.addDraggable(cardA);
+                    DragCtrl.addZone(zoneA);
+
+                    cardA.emit('reorder', zone4);
+                    expect($scope.deck).toEqual([model1, model2, model3, model4, modelA, model5]);
+                });
             });
 
             describe('when the card currently being dragged enters a "scroll zone".', function() {

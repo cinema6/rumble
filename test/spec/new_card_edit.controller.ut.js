@@ -9,6 +9,7 @@
                 VideoService,
                 computer,
                 c6State,
+                c6StateParams,
                 NewCardEditCtrl;
 
             var model;
@@ -33,6 +34,7 @@
                     $controller = $injector.get('$controller');
                     VideoService = $injector.get('VideoService');
                     c6State = $injector.get('c6State');
+                    c6StateParams = $injector.get('c6StateParams');
 
                     spyOn(VideoService, 'createVideoUrl').and.callThrough();
                     c6State.get('editor').cModel = { id: 'e-fcfb709c23e0fd' };
@@ -56,6 +58,7 @@
             describe('methods', function() {
                 describe('save()', function() {
                     beforeEach(function() {
+                        c6StateParams.insertionIndex = 4;
                         spyOn($scope, '$emit').and.callThrough();
                         spyOn(c6State, 'goTo');
 
@@ -63,7 +66,7 @@
                     });
 
                     it('should $emit a "addCard" event', function() {
-                        expect($scope.$emit).toHaveBeenCalledWith('addCard', model);
+                        expect($scope.$emit).toHaveBeenCalledWith('addCard', model, 4);
                     });
 
                     it('should transition back to the editor state', function() {

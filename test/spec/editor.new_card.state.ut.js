@@ -26,19 +26,34 @@
             });
 
             describe('model()', function() {
-                var card;
+                var newCard;
 
                 beforeEach(function() {
-                    card = {};
+                    newCard = {};
 
-                    spyOn(MiniReelService, 'createCard').and.returnValue(card);
+                    spyOn(MiniReelService, 'createCard').and.returnValue(newCard);
                 });
 
-                it('should create a new card as the model', function() {
-                    var model = $injector.invoke(NewCardState.model, NewCardState);
+                describe('if the state doesn\'t have a model', function() {
+                    var result;
 
-                    expect(MiniReelService.createCard).toHaveBeenCalledWith();
-                    expect(model).toBe(card);
+                    beforeEach(function() {
+                        result = $injector.invoke(NewCardState.model, NewCardState);
+                    });
+
+                    it('should make the card the state\'s model', function() {
+                        expect(result).toBe(newCard);
+                    });
+                });
+
+                describe('if the state already has a model', function() {
+                    it('should use the existing model', function() {
+                        var model = {};
+
+                        NewCardState.cModel = model;
+
+                        expect($injector.invoke(NewCardState.model, NewCardState)).toBe(model);
+                    });
                 });
             });
         });
