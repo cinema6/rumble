@@ -241,6 +241,20 @@
                 return mode && c6UrlMaker(base + '/' + mode + '/' + url);
             };
         }])
+        .filter('branding', ['c6AppData','c6UrlMaker',
+        function            ( c6AppData , c6UrlMaker ) {
+            return function(url, base) {
+                var mode = c6AppData.mode,
+                    experience = c6AppData.experience,
+                    branding = (experience && experience.data.branding) || null;
+
+                return mode && branding &&
+                    c6UrlMaker(
+                        'orgs/' + branding + '/' + base + '/' + mode + '/' + url,
+                        'collateral'
+                    );
+            };
+        }])
         .factory('c6AppData', ['cinema6','$http','c6UrlMaker','$q',
         function              ( cinema6 , $http , c6UrlMaker , $q ) {
             var c6AppData = {
