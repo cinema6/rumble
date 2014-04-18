@@ -13,7 +13,7 @@
     "defaultE2EEnv": "browserstack",
     "debug": true,
     "locations" : {
-        "collateral" : "http://staging.cinema6.com/collateral",
+        "collateral" : "/__dirname/c6Content",
         "api"        : "/api"
     },
     "s3": {
