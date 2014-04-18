@@ -136,14 +136,11 @@
                     },
                     experience: {
                         id: 'e-722bd3c4942331',
+                        title: 'my title',
                         data : {
                             id: 'r-43yt3fh85',
                             deck : deck 
                         }
-                    },
-                    virtualPage : {
-                        page : '/mr/exp1',
-                        title : 'Test Minireel'
                     },
                     behaviors: {}
                 };
@@ -222,7 +219,10 @@
                 });
 
                 it('should initialize the google analytics', function(){
-                    expect($window.c6MrGa.calls[0].args).toEqual(['c6mr.send','pageview',appData.virtualPage]);
+                    expect($window.c6MrGa.calls[0].args).toEqual(['c6mr.send','pageview',{
+                        page : '/mr/e-722bd3c4942331',
+                        title : 'my title'
+                    }]);
                 });
             });
 
@@ -509,6 +509,28 @@
                 });
             });
 
+            describe('getVirtualPage', function(){
+                beforeEach(function(){
+                    
+                });
+
+                it('returns base experience page if $scope.currentCard not set',function(){
+                    $scope.currentCard = null;
+                    expect(RumbleCtrl.getVirtualPage()).toEqual({
+                        page :  '/mr/e-722bd3c4942331',
+                        title : 'my title'
+                    });
+                });
+                
+                it('returns current card url if $scope.currentCard is set',function(){
+                    $scope.currentCard = deck[0];
+                    expect(RumbleCtrl.getVirtualPage()).toEqual({
+                        page :  '/mr/e-722bd3c4942331/vid1',
+                        title : 'my title - vid1'
+                    });
+                });
+            });
+
             describe('navigation',function(){
                 beforeEach(function(){
                     $scope.deviceProfile = { multiPlayer : true };
@@ -550,7 +572,10 @@
                     expect($scope.atTail).toEqual(false);
                     expect($scope.$emit).toHaveBeenCalledWith('reelMove');
                     expect($scope.$emit.callCount).toBe(1);
-                    expect($window.c6MrGa.callCount).toEqual(1);
+                    expect($window.c6MrGa.callCount).toEqual(2);
+                    expect($window.c6MrGa.calls[0].args).toEqual(['c6mr.send','pageview',{
+                        page : '/mr/e-722bd3c4942331', title : 'my title'
+                    }]); 
                 });
 
                 it('sends ga event if moving forward from control', function(){
@@ -560,8 +585,10 @@
                     RumbleCtrl.goForward('test');
                     expect($scope.currentIndex).toEqual(1);
                     expect($scope.currentCard).toBe($scope.deck[1]);
-                    expect($window.c6MrGa.callCount).toEqual(2);
-                    expect($window.c6MrGa.mostRecentCall.args).toEqual(['c6mr.send','event','button','click','next','testMode::test',appData.virtualPage]); 
+                    expect($window.c6MrGa.callCount).toEqual(3);
+                    expect($window.c6MrGa.calls[1].args).toEqual(['c6mr.send','event','button','click','next','testMode::test',{
+                        page : '/mr/e-722bd3c4942331/vid1', title : 'my title - vid1'
+                    }]); 
                 });
 
 
@@ -576,7 +603,10 @@
                     expect($scope.atTail).toEqual(false);
                     expect($scope.$emit).toHaveBeenCalledWith('reelMove');
                     expect($scope.$emit.callCount).toBe(1);
-                    expect($window.c6MrGa.callCount).toEqual(1);
+                    expect($window.c6MrGa.callCount).toEqual(2);
+                    expect($window.c6MrGa.calls[0].args).toEqual(['c6mr.send','pageview',{
+                        page : '/mr/e-722bd3c4942331', title : 'my title'
+                    }]); 
                 });
                 
                 it('sends ga event if moving backward from control', function(){
@@ -587,8 +617,10 @@
                     $scope.$digest();
                     expect($scope.currentIndex).toEqual(1);
                     expect($scope.currentCard).toBe($scope.deck[1]);
-                    expect($window.c6MrGa.callCount).toEqual(2);
-                    expect($window.c6MrGa.mostRecentCall.args).toEqual(['c6mr.send','event','button','click','prev','testMode::test',appData.virtualPage]); 
+                    expect($window.c6MrGa.callCount).toEqual(3);
+                    expect($window.c6MrGa.calls[1].args).toEqual(['c6mr.send','event','button','click','prev','testMode::test',{
+                        page : '/mr/e-722bd3c4942331/vid2', title : 'my title - vid2'     
+                    }]); 
                 });
 
             });
@@ -600,9 +632,10 @@
                         RumbleCtrl.start();
                     });
                     it('sends a page view event for the launch',function(){
-                        expect($window.c6MrGa.mostRecentCall.args).toEqual([
-                            'c6mr.send', 'event', 'button', 'click', 'start', 
-                            appData.virtualPage]);
+                        expect($window.c6MrGa.calls[1].args).toEqual([
+                            'c6mr.send', 'event', 'button', 'click', 'start',{
+                             page : '/mr/e-722bd3c4942331', title : 'my title'     
+                        }]);
                     });
                 });
 
