@@ -43,7 +43,7 @@
                             success = jasmine.createSpy('getElection() success');
                             failure = jasmine.createSpy('getElection() failure');
 
-                            $httpBackend.expectGET('/api/election/' + id)
+                            $httpBackend.expectGET('/api/public/election/' + id)
                                 .respond(200, {
                                     id: 'e-80fcd03196b3d2',
                                     ballot: {
@@ -167,7 +167,7 @@
                             success = jasmine.createSpy('getBallot() success');
                             failure = jasmine.createSpy('getBallot() failure');
                             
-                            $httpBackend.expectGET('/api/election/' + id)
+                            $httpBackend.expectGET('/api/public/election/' + id)
                                 .respond(200, {
                                     id: id,
                                     ballot: {
@@ -246,7 +246,7 @@
 
                             BallotService.init(id);
 
-                            $httpBackend.expectPOST('/api/vote', {
+                            $httpBackend.expectPOST('/api/public/vote', {
                                 election: id,
                                 ballotItem: 'b1',
                                 vote: 'Cool'

@@ -187,7 +187,7 @@
             }
 
             return $http.get(c6UrlMaker(
-                    ('election/' + electionId),
+                    ('public/election/' + electionId),
                     'api'
                 ), { cache: true })
                 .then(process)
@@ -211,7 +211,7 @@
                 return true;
             }
 
-            return $http.post(c6UrlMaker('vote', 'api'), {
+            return $http.post(c6UrlMaker('public/vote', 'api'), {
                 election: electionId,
                 ballotItem: id,
                 vote: name
