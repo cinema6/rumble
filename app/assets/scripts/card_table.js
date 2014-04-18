@@ -86,7 +86,8 @@
                 controllerAs: 'Ctrl',
                 scope: {
                     deck: '=',
-                    editCard: '&'
+                    editCard: '&',
+                    previewCard: '&'
                 }
             };
         }])

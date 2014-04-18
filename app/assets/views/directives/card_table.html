@@ -23,7 +23,7 @@
                     </div>
                 </div>
                 <div class="card__contextBar">
-                    <a href="#" title="Preview This Card">Preview This Card</a>
+                    <a href="#" title="Preview This Card" ng-click="previewCard({ card: this })">Preview This Card</a>
                 </div>
             </div><!--
             --><div id="drop-zone-{{this.id}}" ng-show="DragCtrl.currentDrags[0] !== DragCtrl.draggables[this.id] && $index !== (deck.length - 1)" c6-drag-zone class="card__drop-zone">&nbsp;</div><!--

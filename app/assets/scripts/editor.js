@@ -259,12 +259,23 @@
         function                        ( c6State , $scope ) {
             var self = this;
 
+            this.preview = false;
+
             this.editCard = function(card) {
                 c6State.goTo('editor.editCard.video', { cardId: card.id });
             };
 
             this.newCard = function() {
                 c6State.goTo('editor.newCard.type');
+            };
+
+            this.previewMode = function(card) {
+                self.preview = true;
+                $scope.$broadcast('mrPreview:updateExperience', self.model, card);
+            };
+
+            this.closePreview = function() {
+                this.preview = false;
             };
 
             $scope.$on('addCard', function(event, card) {
