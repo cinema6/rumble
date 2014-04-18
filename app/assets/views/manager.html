@@ -4,13 +4,16 @@
     <div class="pageHeader__actions clearfix">
         <ul class="filters__list">
             <li class="filters__item">
-                <button ng-click="ManagerCtrl.filter = 'all'" ng-class="{'filters__btn--active': ManagerCtrl.filter === 'all'}" class="filters__btn" type="button" title="Show All">Show All</button>
+                <button ng-click="ManagerCtrl.filter = 'all'" ng-class="{'filtersBtn__showAll--active': ManagerCtrl.filter === 'all'}" class="filters__btn filtersBtn__showAll" type="button" title="Show All">Show All</button>
             </li>
             <li class="filters__item">
-                <button ng-click="ManagerCtrl.filter = 'active'" ng-class="{'filters__btn--active': ManagerCtrl.filter === 'active'}" class="filters__btn" type="button" title="Published">Published</button>
+                <button ng-click="ManagerCtrl.filter = 'active'" ng-class="{'filtersBtn__published--active': ManagerCtrl.filter === 'active'}" class="filters__btn filtersBtn__published" type="button" title="Published">Published</button>
             </li>
             <li class="filters__item">
-                <button ng-click="ManagerCtrl.filter = 'pending'" ng-class="{'filters__btn--active': ManagerCtrl.filter === 'pending'}" class="filters__btn" type="button" title="Private">Private</button>
+                <button ng-click="ManagerCtrl.filter = 'pending'" ng-class="{'filtersBtn__private--active': ManagerCtrl.filter === 'pending'}" class="filters__btn filtersBtn__private" type="button" title="Private">Private</button>
+            </li>
+            <li class="filters__item">
+                <button ng-click="ManagerCtrl.filter = 'pending'" class="filters__btn filtersBtn__deleted" type="button" title="Deleted">Deleted</button>
             </li>
         </ul>
         <ul class="toolbar__group">

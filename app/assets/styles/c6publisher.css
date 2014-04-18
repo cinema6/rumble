@@ -245,22 +245,44 @@
             }
             .filters__btn {
                 border:0; border-radius:3px; padding:0.25em 0.5em 0.1875em 0.5em; margin:0;
-                font-size:1em; color:#565656; font-weight:700; 
+                font-size:1em; font-weight:700; 
                 text-align: center; line-height: 1;
                 background:transparent;
                 cursor:pointer;
                 -webkit-transition: background 0.5s, color 0.5s; transition: background 0.5s, color 0.5s;
             }
-                .filters__btn:hover {
-                    background:#eee;
+                .filtersBtn__showAll {
+                    color:#b0b0b0;
                 }
-                .filters__btn--active, .filters__btn--active:hover {
-                    background:#565656;
-                    color:#fff;
+                    .filtersBtn__showAll--active, 
+                    .filtersBtn__showAll:hover {
+                        background:#b0b0b0;
+                        color:#fff;
+                    }
+                .filtersBtn__published {
+                    color:#72ad25;
                 }
-                .filters__btn--special {
+                    .filtersBtn__published--active, 
+                    .filtersBtn__published:hover {
+                        background:#72ad25;
+                        color:#fff;
+                    }
+                .filtersBtn__private {
+                    color:#646464;
+                }
+                    .filtersBtn__private--active, 
+                    .filtersBtn__private:hover {
+                        background:#646464;
+                        color:#fff;
+                    }
+                .filtersBtn__deleted {
                     color:#d61212;
                 }
+                    .filtersBtn__deleted--active, 
+                    .filtersBtn__deleted:hover {
+                        background:#d61212;
+                        color:#fff;
+                    }
 
     /*  metaData__group
     ========================================================================== */
@@ -268,10 +290,10 @@
             margin:0.375em 0 1em 0;
         }
 
-
-    /*  toolbar__group
+    
+    /*  toolbar__group / actionbar__group
     ========================================================================== */
-        .toolbar__group {
+        .toolbar__group, .actionbar__group {
             margin:0; padding:0; list-style: none;
         }
             .toolbar__item {
@@ -307,6 +329,24 @@
                 .toolbar__publish:hover {
                     background:#7cc61b;
                 }
+            .toolbar__delete {
+                background:#d61212;
+            }
+                .toolbar__delete:hover {
+                    background:#ee1b1b;
+                }
+
+    /*  publish__actions
+    ========================================================================== */
+        .publish__actions {
+            margin:0.125em 0 0.6875em 0;
+        }
+        .publish__actions .actionbar__group {
+            float:left;
+        }
+        .publish__actions .toolbar__group {
+            float: right;
+        }
 
 
 /*  ==========================================================================
