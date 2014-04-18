@@ -25,7 +25,7 @@
                 expect(NewCardState).toEqual(jasmine.any(Object));
             });
 
-            describe('updateControllerModel()', function() {
+            describe('model()', function() {
                 var newCard;
 
                 beforeEach(function() {
@@ -35,12 +35,14 @@
                 });
 
                 describe('if the state doesn\'t have a model', function() {
+                    var result;
+
                     beforeEach(function() {
-                        $injector.invoke(NewCardState.updateControllerModel, NewCardState);
+                        result = $injector.invoke(NewCardState.model, NewCardState);
                     });
 
                     it('should make the card the state\'s model', function() {
-                        expect(NewCardState.cModel).toBe(newCard);
+                        expect(result).toBe(newCard);
                     });
                 });
 
@@ -50,9 +52,7 @@
 
                         NewCardState.cModel = model;
 
-                        $injector.invoke(NewCardState.updateControllerModel, NewCardState);
-
-                        expect(NewCardState.cModel).toBe(model);
+                        expect($injector.invoke(NewCardState.model, NewCardState)).toBe(model);
                     });
                 });
             });
