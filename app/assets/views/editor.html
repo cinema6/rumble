@@ -28,14 +28,14 @@
 
     <card-table deck="minireel.data.deck" edit-card="EditorCtrl.editCard(card)" preview-card="EditorCtrl.previewMode(card)"></card-table>
 
-    <div ng-show="EditorCtrl.preview" ng-controller="PreviewController as PreviewCtrl" style="position: absolute;top: 50%;right: 50%;z-index: 1;width: 700px;height: 660px;margin-top: -330px;margin-right: -350px;background-color:white;padding:20px;">
+    <div ng-show="EditorCtrl.preview" ng-controller="PreviewController as PreviewCtrl" ng-class="{ 'preview__container--desktop' : (PreviewCtrl.device === 'desktop'), 'preview__container--mobile' : (PreviewCtrl.device === 'phone') }" class="preview__container">
         <h3>Preview Mode</h3>
         <form>
             <input type="radio" ng-model="PreviewCtrl.device" value="desktop">Desktop</input>
             <input type="radio" ng-model="PreviewCtrl.device" value="phone">Mobile</input>
             <button ng-click="EditorCtrl.closePreview()">CLOSE</button>
         </form>
-        <iframe width="700" height="570" mr-preview="minireel" src="assets/rumble/app/index.html" style="border:0"></iframe>
+        <iframe mr-preview="minireel" src="assets/rumble/app/index.html" ng-class="{ 'preview__iframe--desktop' : (PreviewCtrl.device === 'desktop'), 'preview__iframe--mobile' : (PreviewCtrl.device === 'phone') }" class="preview__iframe"></iframe>
     </div>
 </c6-alias>
 <c6-view></c6-view>
