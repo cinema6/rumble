@@ -503,7 +503,7 @@
         };
 
         this.start = function() {
-            $window.c6MrGa('c6mr.send', 'event', 'button', 'click', 'start');
+            $window.c6MrGa('c6mr.send', 'event', 'button', 'click', 'start', this.getVirtualPage());
             this.goForward();
 
             if (appData.behaviors.fullscreen) {
@@ -514,7 +514,7 @@
         this.goBack = function(src){
             if (src){
                 $window.c6MrGa('c6mr.send', 'event', 'button', 'click',
-                    'prev::' + appData.mode + '::' + src);
+                    'prev::' + appData.mode + '::' + src, this.getVirtualPage());
             }
             self.setPosition($scope.currentIndex - 1);
         };
@@ -522,7 +522,7 @@
         this.goForward = function(src){
             if (src){
                 $window.c6MrGa('c6mr.send', 'event', 'button', 'click',
-                    'next::' + appData.mode + '::' + src);
+                    'next::' + appData.mode + '::' + src, this.getVirtualPage());
             }
             self.setPosition($scope.currentIndex + 1);
         };
@@ -534,8 +534,9 @@
 
         $log.log('Rumble Controller is initialized!');
    
-        $log.info(this.getVirtualPage());
-        $window.c6MrGa('c6mr.send', 'pageview', this.getVirtualPage());
+        $scope.$on('analyticsReady',function(){
+            $window.c6MrGa('c6mr.send', 'pageview', self.getVirtualPage());
+        });
     }])
     .directive('navbarButton', ['assetFilter','c6Computed',
     function                   ( assetFilter , c6Computed ) {
