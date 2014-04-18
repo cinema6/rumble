@@ -44,6 +44,14 @@
                 expect(ManagerCtrl).toEqual(jasmine.any(Object));
             });
 
+            describe('properties', function() {
+                describe('filter', function() {
+                    it('should be initialized as "all"', function() {
+                        expect(ManagerCtrl.filter).toBe('all');
+                    });
+                });
+            });
+
             describe('methods', function() {
                 describe('edit(minireel)', function() {
                     beforeEach(function() {
@@ -52,6 +60,83 @@
 
                     it('should transition to the "editor" state and provide the id of the minireel', function() {
                         expect(c6State.goTo).toHaveBeenCalledWith('editor', { minireelId: 'e-59c8519cc4c54f' });
+                    });
+                });
+
+                describe('makeActive(minireel)', function() {
+                    var minireel;
+
+                    beforeEach(function() {
+                        minireel = {
+                            status: 'pending'
+                        };
+                    });
+
+                    it('should make the minireel\'s status "active"', function() {
+                        ManagerCtrl.makeActive(minireel);
+
+                        expect(minireel.status).toBe('active');
+                    });
+                });
+
+                describe('makePending(minireel)', function() {
+                    var minireel;
+
+                    beforeEach(function() {
+                        minireel = {
+                            status: 'active'
+                        };
+                    });
+
+                    it('should make the minireel\'s status "pending"', function() {
+                        ManagerCtrl.makePending(minireel);
+
+                        expect(minireel.status).toBe('pending');
+                    });
+                });
+
+                describe('determineInclusionWithFilter(minireel)', function() {
+                    var active, pending,
+                        fn;
+
+                    beforeEach(function() {
+                        active = { status: 'active' };
+                        pending = { status: 'pending' };
+
+                        fn = ManagerCtrl.determineInclusionWithFilter;
+                    });
+
+                    describe('if the filter is "all"', function() {
+                        beforeEach(function() {
+                            ManagerCtrl.filter = 'all';
+                        });
+
+                        it('should always be true', function() {
+                            expect(fn(active)).toBe(true);
+                            expect(fn(pending)).toBe(true);
+                        });
+                    });
+
+                    describe('if the filter is "active"', function() {
+                        beforeEach(function() {
+                            ManagerCtrl.filter = 'active';
+                        });
+
+                        it('should return true only for active minireels', function() {
+                            expect(fn(active)).toBe(true);
+                            expect(fn(pending)).toBe(false);
+                        });
+                    });
+
+                    describe('if the filter is "pending"', function() {
+                        beforeEach(function() {
+                            ManagerCtrl.filter = 'pending';
+                        });
+
+                        it('should return true only for pending minireels', function() {
+                            expect(fn(active)).toBe(false);
+                            expect(fn(pending)).toBe(true);
+                        });
                     });
                 });
             });
