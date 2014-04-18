@@ -121,6 +121,27 @@
             };
         }])
 
+        .directive('c6Sref', ['c6State',
+        function             ( c6State ) {
+            return {
+                restrict: 'A',
+                link: function(scope, $element, attrs) {
+                    $element.on('click', function() {
+                        var state = attrs.c6Sref,
+                            params = scope.$eval(attrs.params);
+
+                        scope.$apply(function() {
+                            c6State.goTo(state, params);
+                        });
+                    });
+
+                    if ($element.prop('tagName') === 'A') {
+                        $element.attr('href', '');
+                    }
+                }
+            };
+        }])
+
         .provider('c6State', [function() {
             var states = {},
                 indexState = null;

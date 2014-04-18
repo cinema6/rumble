@@ -43,6 +43,10 @@
                                 note: 'Blah blah blah',
                                 source: 'Vimeo',
                                 modules: ['ballot'],
+                                ballot: [
+                                    'Awesome',
+                                    'Lame'
+                                ],
                                 data: {
                                     videoid: '48hfrei49'
                                 }
@@ -64,6 +68,10 @@
                                 note: 'Blah blah blah',
                                 source: 'DailyMotion',
                                 modules: ['ballot'],
+                                ballot: [
+                                    'Funny',
+                                    'Stupid'
+                                ],
                                 data: {
                                     videoid: 'vfu85f5',
                                     related: 0
@@ -373,11 +381,29 @@
                             });
                         });
 
-                        it('should insert an intro card', function() {
-                            expect(deck[0]).toEqual({
+                        it('should insert an intro card that is data-bound to the minireel itself', function() {
+                            var minireel = success.calls.mostRecent().args[0],
+                                intro = deck[0];
+
+                            expect(intro).toEqual({
                                 id: jasmine.any(String),
-                                type: 'intro'
+                                title: minireel.title,
+                                note: minireel.summary,
+                                type: 'intro',
+                                data: {}
                             });
+
+                            minireel.title = 'Your MiniReel';
+                            minireel.summary = 'Oh no...';
+
+                            expect(intro.title).toBe(minireel.title);
+                            expect(intro.note).toBe(minireel.summary);
+
+                            intro.title = 'Our MiniReel';
+                            intro.note = 'Okay!';
+
+                            expect(minireel.title).toBe(intro.title);
+                            expect(minireel.summary).toBe(intro.note);
 
                             expect(deck[0].id).toMatch(/rc-[a-zA-Z0-9]{14}/);
                         });
@@ -408,7 +434,10 @@
                                     videoid: '48hfrei49',
                                     start: null,
                                     end: null,
-                                    ballot: []
+                                    ballot: [
+                                        'Awesome',
+                                        'Lame'
+                                    ]
                                 }
                             });
 
@@ -423,7 +452,10 @@
                                     videoid: 'vfu85f5',
                                     start: undefined,
                                     end: undefined,
-                                    ballot: []
+                                    ballot: [
+                                        'Funny',
+                                        'Stupid'
+                                    ]
                                 }
                             });
 

@@ -83,6 +83,45 @@
                 });
             });
 
+            it('should support disabling the draggability of an item if "false" is passed into the c6-draggable attribute', function() {
+                var finger = new Finger(),
+                    $draggable = $('<span c6-draggable="enabled" style="display: inline-block; width: 50px; height: 50px;"></span>'),
+                    draggable;
+
+                function assertHasntMoved() {
+                    expect($draggable.css('top')).toBe('auto');
+                    expect($draggable.css('left')).toBe('auto');
+                }
+
+                testFrame.$body.append($draggable);
+                $scope.enabled = false;
+                $scope.$apply(function() {
+                    $compile($draggable)($scope);
+                });
+                draggable = $draggable.data('cDrag');
+                spyOn(draggable, 'emit');
+                spyOn(draggable, 'refresh');
+
+                finger.placeOn($draggable);
+                finger.drag(0, 0);
+                expect($draggable.hasClass('c6-dragging')).toBe(false);
+                assertHasntMoved();
+
+                finger.drag(10, 10);
+                assertHasntMoved();
+
+                finger.drag(100, 10);
+                assertHasntMoved();
+
+                finger.drag(-37, -2);
+                assertHasntMoved();
+
+                finger.lift();
+
+                expect(draggable.emit).not.toHaveBeenCalled();
+                expect(draggable.refresh).not.toHaveBeenCalled();
+            });
+
             it('should support preventing the moving of the draggable item', function() {
                 var finger = new Finger(),
                     $draggable = $('<span c6-draggable style="display: inline-block; width: 50px; height: 50px;"></span>'),

@@ -220,7 +220,9 @@
                 dataTemplates = {
                     video: videoDataTemplate,
                     videoBallot: extend(ngCopy(videoDataTemplate), {
-                        ballot: value([])
+                        ballot: function(data, key, card) {
+                            return card.ballot || [];
+                        }
                     }),
                     ad: {
                         autoplay: copy(false),
@@ -291,12 +293,38 @@
 
                     function transform(minireel) {
                         var model = {
-                            data: {
-                                deck: minireel.data.deck.map(function(card) {
-                                    return makeCard(card);
-                                })
+                                data: {
+                                    deck: minireel.data.deck.map(function(card) {
+                                        return makeCard(card);
+                                    })
+                                }
+                            },
+                            intro = {
+                                id: generateId('rc'),
+                                type: 'intro',
+                                data: {}
+                            };
+
+                        Object.defineProperties(intro, {
+                            title: {
+                                enumerable: true,
+                                get: function() {
+                                    return model.title;
+                                },
+                                set: function(value) {
+                                    model.title = value;
+                                }
+                            },
+                            note: {
+                                enumerable: true,
+                                get: function() {
+                                    return model.summary;
+                                },
+                                set: function(value) {
+                                    model.summary = value;
+                                }
                             }
-                        };
+                        });
 
                         // Loop through the experience and copy everything but
                         // the "data" object.
@@ -306,10 +334,7 @@
                             }
                         });
 
-                        model.data.deck.unshift({
-                            id: generateId('rc'),
-                            type: 'intro'
-                        });
+                        model.data.deck.unshift(intro);
 
                         return model;
                     }
@@ -405,6 +430,9 @@
                         },
                         modules: function(card) {
                             return card.type === 'videoBallot' ? ['ballot'] : [];
+                        },
+                        ballot: function(card) {
+                            return card.data.ballot;
                         }
                     },
                     ad: {
@@ -425,7 +453,11 @@
                 dataType = getDataType(card);
 
                 forEach(cardBases[cardType], function(fn, key) {
-                    newCard[key] = fn(card, key, card);
+                    var value = fn(card, key, card);
+
+                    if (isDefined(value)) {
+                        newCard[key] = fn(card, key, card);
+                    }
                 });
 
                 forEach(dataTemplates[dataType], function(fn, key) {
@@ -443,7 +475,7 @@
                     convertedDeck = [];
 
                 forEach(mrExperience.data.deck, function(card) {
-                    if(card.data) {
+                    if (card.type !== 'intro') {
                         // this conditional is used to weed out the intro card
                         // we need to process the intro card and put the pieces
                         // where they belong in the experience model (ie. the img object)
