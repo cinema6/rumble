@@ -63,6 +63,9 @@
                                     state: state,
                                     controller: controller
                                 });
+                                clone$.on('$destroy', function() {
+                                    state.cModel = null;
+                                });
 
                                 $compile(clone$.contents())(newScope);
 
