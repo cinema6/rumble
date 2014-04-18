@@ -62,20 +62,12 @@
                     }
                 };
 
-                player = {};
-
-                iframe = {
-                    prop: jasmine.createSpy('iframe.prop()')
-                        .and.returnValue(player)
-                };
-
                 session = {
                     ping: jasmine.createSpy('session.ping()')
                 };
 
                 c6EventEmitter(session);
 
-                spyOn(postMessage, 'createSession').and.returnValue(session);
                 spyOn(session, 'on').and.callThrough();
 
                 responseCallback = jasmine.createSpy('responseCallback()');
@@ -97,12 +89,7 @@
 
                     beforeEach(function() {
                         spyOn(MiniReelService, 'convertForPlayer').and.returnValue(experience);
-                        $scope.$emit('mrPreview:initExperience', experience, iframe);
-                    });
-
-                    it('should create a session with the iframe that\'s sent', function() {
-                        expect(iframe.prop).toHaveBeenCalled();
-                        expect(postMessage.createSession).toHaveBeenCalledWith(player);
+                        $scope.$emit('mrPreview:initExperience', experience, session);
                     });
 
                     it('should convert the experience and add it to the session', function() {
@@ -149,7 +136,7 @@
                         spyOn(MiniReelService, 'convertForPlayer').and.returnValue(experience);
                         spyOn(MiniReelService, 'convertCard').and.returnValue(newCard);
 
-                        $scope.$emit('mrPreview:initExperience', experience, iframe);
+                        $scope.$emit('mrPreview:initExperience', experience, session);
                     });
 
                     it('should convert the experience', function() {
@@ -194,7 +181,7 @@
 
                         beforeEach(function() {
                             spyOn(MiniReelService, 'convertForPlayer').and.returnValue(experience);
-                            $scope.$emit('mrPreview:initExperience', experience, iframe);
+                            $scope.$emit('mrPreview:initExperience', experience, session);
 
                             $scope.$apply(function() {
                                 PreviewController.device = 'desktop';
