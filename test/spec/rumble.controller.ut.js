@@ -582,9 +582,7 @@
                     expect($scope.currentIndex).toEqual(1);
                     expect($scope.currentCard).toBe($scope.deck[1]);
                     expect($window.c6MrGa.callCount).toEqual(3);
-                    expect($window.c6MrGa.calls[1].args).toEqual(['c6mr.send','event','button','click','testMode::next::test',{
-                        page : '/mr/e-722bd3c4942331/vid1', title : 'my title - vid1'
-                    }]); 
+                    expect($window.c6MrGa.calls[1].args).toEqual(['c6mr.send','event','button','click','next','testMode::test']); 
                 });
 
 
@@ -614,9 +612,7 @@
                     expect($scope.currentIndex).toEqual(1);
                     expect($scope.currentCard).toBe($scope.deck[1]);
                     expect($window.c6MrGa.callCount).toEqual(3);
-                    expect($window.c6MrGa.calls[1].args).toEqual(['c6mr.send','event','button','click','testMode::prev::test',{
-                        page : '/mr/e-722bd3c4942331/vid2', title : 'my title - vid2'     
-                    }]); 
+                    expect($window.c6MrGa.calls[1].args).toEqual(['c6mr.send','event','button','click','prev','testMode::test']); 
                 });
 
             });
@@ -629,9 +625,7 @@
                     });
                     it('sends a page view event for the launch',function(){
                         expect($window.c6MrGa.calls[1].args).toEqual([
-                            'c6mr.send', 'event', 'button', 'click', 'start',{
-                             page : '/mr/e-722bd3c4942331', title : 'my title'     
-                        }]);
+                            'c6mr.send', 'event', 'button', 'click', 'start']);
                     });
                 });
 
