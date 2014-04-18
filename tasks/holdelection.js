@@ -122,7 +122,8 @@ module.exports = function(grunt) {
                         var deck = minireel.data.deck,
                             election = {
                                 id: minireel.id,
-                                ballot: {}
+                                ballot: {},
+                                status: 'active'
                             },
                             ballot = election.ballot;
 

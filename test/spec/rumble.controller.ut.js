@@ -213,10 +213,6 @@
                     expect(BallotService.init).toHaveBeenCalledWith(appData.experience.id);
                 });
 
-                it('should get the election', function() {
-                    expect(BallotService.getElection).toHaveBeenCalled();
-                });
-
                 it('should initialize the CommentsService with the id', function() {
                     expect(CommentsService.init).toHaveBeenCalledWith(appData.experience.id);
                 });
