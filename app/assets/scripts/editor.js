@@ -2,7 +2,9 @@
     'use strict';
 
     var isNumber = angular.isNumber,
-        jqLite = angular.element;
+        jqLite = angular.element,
+        equals = angular.equals,
+        copy = angular.copy;
 
     function refresh($element) {
         $element.inheritedData('cDragCtrl').refresh();
@@ -305,6 +307,120 @@
             this.save = function() {
                 $scope.$emit('addCard', this.model);
                 c6State.goTo('editor');
+            };
+        }])
+
+        .controller('PreviewController',['$scope','MiniReelService','postMessage','c6BrowserInfo',
+        function                        ( $scope , MiniReelService , postMessage , c6BrowserInfo ) {
+            var self = this,
+                profile,
+                card;
+
+            // set a default device mode
+            this.device = 'desktop';
+
+            // set a profile based on the current browser
+            // this is needed to instantiate a player
+            profile = c6BrowserInfo.profile;
+
+            // override the device setting for previewing
+            profile.device = this.device;
+
+            $scope.$on('mrPreview:initExperience', function(event, experience, session) {
+                // convert the MRinator experience to a MRplayer experience
+                experience = MiniReelService.convertForPlayer(experience);
+
+                // add the converted experience to the session for comparing later
+                session.experience = copy(experience);
+
+                // add the listener for 'handshake' request
+                // we aren't using once() cuz the MR player
+                // will be calling for this every time we change modes
+                session.on('handshake', function(data, respond) {
+                    respond({
+                        success: true,
+                        appData: {
+                            // this will send the most updated experience
+                            // whenever the MR player is (re)loaded
+                            experience: experience,
+                            profile: profile
+                        }
+                    });
+                });
+
+                // add a listener for the 'getCard' request.
+                // when a user is previewing a specific card
+                // we remember it, and if they change the mode
+                // and the app reloads, it's going to call back
+                // and see if it still needs to go to that card
+                session.on('mrPreview:getCard', function(data, respond) {
+                    respond(card);
+                });
+
+                // register another listener within the init handler
+                // this will share the session
+                $scope.$on('mrPreview:updateExperience', function(event, experience, newCard) {
+                    // the EditorCtrl $broadcasts the most up-to-date experience model
+                    // when the user clicks 'preview'.
+                    // it may have a newCard to go to
+
+                    // we convert the experience
+                    experience = MiniReelService.convertForPlayer(experience);
+
+                    // if it's been changed or we're previewing a specific card
+                    // then we ping the player
+                    // and send the updated experience
+                    // the MRplayer is listening in the RumbleCtrl
+                    // and will update the deck
+                    if(!equals(experience, session.experience)) {
+                        session.ping('mrPreview:updateExperience', experience);
+                    }
+
+                    if(newCard) {
+                        card = MiniReelService.convertCard(newCard);
+                        session.ping('mrPreview:jumpToCard', card);
+                    } else {
+                        session.ping('mrPreview:reset');
+                    }
+                });
+
+                $scope.$watch(function() {
+                    return self.device;
+                }, function(newDevice, oldDevice) {
+                    if(newDevice === oldDevice) { return; }
+
+                    profile.device = newDevice;
+
+                    // ping the MR player
+                    // sending 'updateMode' will trigger a refresh
+                    // and the player will call for another handshake
+                    // and will call for a specific card
+                    // in case we're previewing that card
+                    session.ping('mrPreview:updateMode');
+                });
+            });
+        }])
+
+        .directive('mrPreview', ['postMessage',
+        function                ( postMessage ) {
+            return {
+                restrict: 'A',
+                link: function(scope, element, attrs) {
+                    var iframe,
+                        session;
+
+                    scope.$watch(attrs.mrPreview, function(experience) {
+                        if(experience) {
+                            // store the MR player window
+                            iframe = element.prop('contentWindow');
+
+                            // create a postMessage session (as defined in c6ui.postMessage)
+                            session = postMessage.createSession(iframe);
+
+                            scope.$emit('mrPreview:initExperience', experience, session);
+                        }
+                    });
+                }
             };
         }])
 
