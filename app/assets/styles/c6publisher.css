@@ -612,6 +612,39 @@
         display: block;
     }
 
+    .preview__container {
+        position: absolute;
+        top: 50%;
+        right: 50%;
+        z-index: 1;
+        background-color: white;
+        padding: 20px;
+    }
+        .preview__container--mobile {
+            width:320px;
+            height:658px;
+            margin-top: -329px;
+            margin-right: -160px;
+        }
+        .preview__container--desktop {
+            width: 700px;
+            height: 660px;
+            margin-top: -330px;
+            margin-right: -350px;
+        }
+
+        .preview__iframe {
+            border: 0;
+        }
+            .preview__iframe--mobile {
+                width:320px;
+                height:568px;
+            }
+            .preview__iframe--desktop {
+                width: 700px;
+                height: 570px;
+            }
+
 /*  ==========================================================================
     <video-trimmer> styles
     ========================================================================== */
