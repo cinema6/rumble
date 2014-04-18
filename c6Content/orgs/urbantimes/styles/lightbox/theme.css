@@ -1,0 +1,62 @@
+/*  ==========================================================================
+    copy styles
+    ========================================================================== */
+    @import url(http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,800italic,400,700,800);
+
+    body, .mr-card__btn-watch {
+        font-family: 'Open Sans', Arial, Helvetica, sans-serif;
+    }
+
+    .tk--hdr, .ui-context__label {
+        font-family: 'Open Sans', Arial, Helvetica, sans-serif; font-weight:700;
+    }
+
+    body, .ui-nav__counter, .mr-card__type, .mr-card__title-h1, .mr-ballot__title, .mr-results__title, 
+    .mr-comments__textarea, .mr-comm-meta__timestamp, .mr-toc-item__title, .more-reels__intro  {
+        font-weight: 400;
+    }
+
+    a {
+        color:#2870a2; border-bottom:1px dotted #2870a2;
+    }
+
+    .mr-switch__btn {
+        background-color: #4394cb; border-bottom: 2px solid #4394cb;
+    }
+
+
+/*  ==========================================================================
+    experience color styles
+    ========================================================================== */
+    .ui-control--portrait, .ui-context--portrait, .ui-nav-left--landscape, .ui-nav-right--landscape {
+        background:#2a2a2a;
+    }
+    .mr-toc {
+        border-top:0.25em solid #2a2a2a;
+    }
+
+
+/*  ==========================================================================
+    Interface Styles
+    ========================================================================== */
+    .mr-pager__btn, .mr-card__btn, .mr-card__btn-watch {
+        background: #4394cb;
+    }
+    .mr-switch__btn--active, .mr-switch__btn:focus {
+        border-bottom: 2px solid #4394cb;
+    }
+    .mr-preview__button {
+        background: rgba(213,22,29,0.7);
+    }
+    .ui-control__next, 
+    .ui-control__prev, 
+    .ui-nav__next, 
+    .ui-nav__prev,
+    .mr-player__play-btn,
+    .mr-pages__current-indicator {
+        background-color: #4394cb;
+    }
+
+
+
+    
