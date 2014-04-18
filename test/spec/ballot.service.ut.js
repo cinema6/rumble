@@ -71,7 +71,7 @@
                             success = jasmine.createSpy('getElection() success');
                             failure = jasmine.createSpy('getElection() failure');
 
-                            $httpBackend.expectGET('/api/election/' + id)
+                            $httpBackend.expectGET('/api/public/election/' + id)
                                 .respond(200, election);
 
                             BallotService.init(id);
@@ -177,7 +177,7 @@
 
                             BallotService.init(id);
 
-                            $httpBackend.expectGET('/api/election/' + id)
+                            $httpBackend.expectGET('/api/public/election/' + id)
                                 .respond(200, election);
 
                             BallotService.getBallot('rc-4770a2d7f85ce0').then(success, failure);
@@ -199,7 +199,7 @@
                         });
 
                         it('should split the votes evenly if the vote percentages are 0', function() {
-                            $httpBackend.expectGET('/api/election/' + id)
+                            $httpBackend.expectGET('/api/public/election/' + id)
                                 .respond(200, election);
 
                             $rootScope.$apply(function() {
@@ -236,6 +236,7 @@
                                 }
                             ]);
                         });
+
                     });
 
                     describe('vote(id, name)', function() {
@@ -247,7 +248,7 @@
 
                             BallotService.init(id);
 
-                            $httpBackend.expectPOST('/api/vote', {
+                            $httpBackend.expectPOST('/api/public/vote', {
                                 election: id,
                                 ballotItem: 'b1',
                                 vote: 'Cool'

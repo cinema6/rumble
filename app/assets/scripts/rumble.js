@@ -188,7 +188,7 @@
             }
 
             return $http.get(c6UrlMaker(
-                    ('election/' + electionId),
+                    ('public/election/' + electionId),
                     'api'
                 ), { cache: true })
                 .then(process)
@@ -222,7 +222,7 @@
                 return true;
             }
 
-            return $http.post(c6UrlMaker('vote', 'api'), {
+            return $http.post(c6UrlMaker('public/vote', 'api'), {
                 election: electionId,
                 ballotItem: id,
                 vote: name
@@ -451,6 +451,22 @@
             }
         };
 
+        this.getVirtualPage = function(){
+            var titleRoot = (appData.experience.title || 'Mini Reel: ' +
+                    appData.experience.id) ;
+            if (!$scope.currentCard){
+                return {
+                    page : '/mr/' + appData.experience.id,
+                    title : titleRoot
+                };
+            }
+            
+            return {
+                page : '/mr/' + appData.experience.id + '/' + $scope.currentCard.id,
+                title : titleRoot + ' - ' +  ($scope.currentCard.title || $scope.currentCard.id)
+            };
+        };
+
         this.setPosition = function(i){
             $log.info('setPosition: %1',i);
             $scope.currentReturns = null;
@@ -458,6 +474,17 @@
             $scope.currentCard    = $scope.deck[$scope.currentIndex] || null;
             $scope.atHead         = $scope.currentIndex === 0;
             $scope.atTail         = ($scope.currentIndex === ($scope.deck.length - 1));
+           
+            if (i >= 0) {
+                $window.c6MrGa('c6mr.send', 'pageview', this.getVirtualPage());
+            }
+
+            if ($scope.atTail){
+                $window.c6MrGa('c6mr.send', 'pageview', {
+                    page : '/mr/' + appData.experience.id + '/end',
+                    title: (appData.experience.title || appData.experience.id) + ' - End'
+                });
+            }
 
             if ($scope.atTail) {
                 $scope.$emit('reelEnd');
@@ -468,6 +495,7 @@
             } else {
                 $scope.$emit('reelMove');
             }
+        
         };
 
         this.jumpTo = function(card) {
@@ -476,7 +504,7 @@
 
         this.start = function() {
             $window.c6MrGa('c6mr.send', 'event', 'button', 'click', 'start',
-                appData.virtualPage);
+                this.getVirtualPage());
             this.goForward();
 
             if (appData.behaviors.fullscreen) {
@@ -485,21 +513,21 @@
         };
 
         this.goBack = function(src){
-            self.setPosition($scope.currentIndex - 1);
             if (src){
                 $window.c6MrGa('c6mr.send', 'event', 'button', 'click', 'prev',
                     appData.mode + '::' + src,
-                    appData.virtualPage);
+                    this.getVirtualPage());
             }
+            self.setPosition($scope.currentIndex - 1);
         };
 
         this.goForward = function(src){
-            self.setPosition($scope.currentIndex + 1);
             if (src){
                 $window.c6MrGa('c6mr.send', 'event', 'button', 'click', 'next',
                     appData.mode + '::' + src,
-                    appData.virtualPage);
+                    this.getVirtualPage());
             }
+            self.setPosition($scope.currentIndex + 1);
         };
 
         readyTimeout = $timeout(function(){
@@ -509,7 +537,7 @@
 
         $log.log('Rumble Controller is initialized!');
         
-        $window.c6MrGa('c6mr.send', 'pageview', appData.virtualPage);
+        $window.c6MrGa('c6mr.send', 'pageview', this.getVirtualPage());
     }])
     .directive('navbarButton', ['assetFilter','c6Computed',
     function                   ( assetFilter , c6Computed ) {
