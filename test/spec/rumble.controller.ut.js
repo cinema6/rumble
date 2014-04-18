@@ -193,6 +193,7 @@
                     });
                     
                     $scope.$emit('analyticsReady');
+                    $timeout.flush(1000);
                 });
             });
             describe('initialization',function(){
@@ -508,10 +509,6 @@
             });
 
             describe('getVirtualPage', function(){
-                beforeEach(function(){
-                    
-                });
-
                 it('returns base experience page if $scope.currentCard not set',function(){
                     $scope.currentCard = null;
                     expect(RumbleCtrl.getVirtualPage()).toEqual({
@@ -526,6 +523,41 @@
                         page :  '/mr/e-722bd3c4942331/vid1',
                         title : 'my title - vid1'
                     });
+                });
+            });
+
+            describe('reportPageView', function(){
+                beforeEach(function(){
+                    $window.c6MrGa = jasmine.createSpy('$window.c6MrGa-reportPageView');
+                });
+
+                it('reports a pageview when default time of 1000ms expires', function(){
+                    RumbleCtrl.reportPageView({ page : 'foo' });
+                    expect($window.c6MrGa.callCount).toEqual(0);
+                    $timeout.flush(500);
+                    expect($window.c6MrGa.callCount).toEqual(0);
+                    $timeout.flush(600);
+                    expect($window.c6MrGa.callCount).toEqual(1);
+                    expect($window.c6MrGa.mostRecentCall.args)
+                        .toEqual(['c6mr.send','pageview', { page : 'foo'}  ]); 
+                });
+
+                it('reports a pageview when override timeout expires', function(){
+                    RumbleCtrl.reportPageView({ page : 'foo' }, 100);
+                    expect($window.c6MrGa.callCount).toEqual(0);
+                    $timeout.flush(101);
+                    expect($window.c6MrGa.callCount).toEqual(1);
+                    expect($window.c6MrGa.mostRecentCall.args)
+                        .toEqual(['c6mr.send','pageview', { page : 'foo'}  ]); 
+                });
+
+                it('overwrites a pageview if new one comes in before delay', function(){
+                    RumbleCtrl.reportPageView({ page : 'foo' });
+                    RumbleCtrl.reportPageView({ page : 'bar' });
+                    $timeout.flush();
+                    expect($window.c6MrGa.callCount).toEqual(1);
+                    expect($window.c6MrGa.mostRecentCall.args)
+                        .toEqual(['c6mr.send','pageview', { page : 'bar'}  ]); 
                 });
             });
 
@@ -564,6 +596,7 @@
                     $scope.currentIndex = 0;
                     $scope.currentCard  = $scope.deck[0];
                     RumbleCtrl.goForward();
+                    $timeout.flush();
                     expect($scope.currentIndex).toEqual(1);
                     expect($scope.currentCard).toBe($scope.deck[1]);
                     expect($scope.atHead).toEqual(false);
@@ -581,10 +614,11 @@
                     $scope.currentIndex = 0;
                     $scope.currentCard  = $scope.deck[0];
                     RumbleCtrl.goForward('test');
+                    $timeout.flush();
                     expect($scope.currentIndex).toEqual(1);
                     expect($scope.currentCard).toBe($scope.deck[1]);
                     expect($window.c6MrGa.callCount).toEqual(3);
-                    expect($window.c6MrGa.calls[1].args).toEqual(['c6mr.send','event','button','click','next::testMode::test' ]); 
+                    expect($window.c6MrGa.calls[1].args).toEqual(['c6mr.send','event','button','click','next::testMode::test', { page : '/mr/e-722bd3c4942331/vid1', title : 'my title - vid1' }  ]); 
                 });
 
 
@@ -592,6 +626,7 @@
                     $scope.currentIndex = 2;
                     $scope.currentCard  = $scope.deck[2];
                     RumbleCtrl.goBack();
+                    $timeout.flush();
                     $scope.$digest();
                     expect($scope.currentIndex).toEqual(1);
                     expect($scope.currentCard).toBe($scope.deck[1]);
@@ -610,11 +645,12 @@
                     $scope.currentIndex = 2;
                     $scope.currentCard  = $scope.deck[2];
                     RumbleCtrl.goBack('test');
+                    $timeout.flush();
                     $scope.$digest();
                     expect($scope.currentIndex).toEqual(1);
                     expect($scope.currentCard).toBe($scope.deck[1]);
                     expect($window.c6MrGa.callCount).toEqual(3);
-                    expect($window.c6MrGa.calls[1].args).toEqual(['c6mr.send','event','button','click','prev::testMode::test' ]); 
+                    expect($window.c6MrGa.calls[1].args).toEqual(['c6mr.send','event','button','click','prev::testMode::test', { page : '/mr/e-722bd3c4942331/vid2', title : 'my title - vid2' } ]); 
                 });
 
             });
@@ -627,7 +663,7 @@
                     });
                     it('sends a page view event for the launch',function(){
                         expect($window.c6MrGa.calls[1].args).toEqual([
-                            'c6mr.send', 'event', 'button', 'click', 'start']);
+                            'c6mr.send', 'event', 'button', 'click', 'start', { page : '/mr/e-722bd3c4942331', title : 'my title' }]);
                     });
                 });
 
