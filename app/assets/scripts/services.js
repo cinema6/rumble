@@ -291,12 +291,38 @@
 
                     function transform(minireel) {
                         var model = {
-                            data: {
-                                deck: minireel.data.deck.map(function(card) {
-                                    return makeCard(card);
-                                })
+                                data: {
+                                    deck: minireel.data.deck.map(function(card) {
+                                        return makeCard(card);
+                                    })
+                                }
+                            },
+                            intro = {
+                                id: generateId('rc'),
+                                type: 'intro',
+                                data: {}
+                            };
+
+                        Object.defineProperties(intro, {
+                            title: {
+                                enumerable: true,
+                                get: function() {
+                                    return model.title;
+                                },
+                                set: function(value) {
+                                    model.title = value;
+                                }
+                            },
+                            note: {
+                                enumerable: true,
+                                get: function() {
+                                    return model.summary;
+                                },
+                                set: function(value) {
+                                    model.summary = value;
+                                }
                             }
-                        };
+                        });
 
                         // Loop through the experience and copy everything but
                         // the "data" object.
@@ -306,10 +332,7 @@
                             }
                         });
 
-                        model.data.deck.unshift({
-                            id: generateId('rc'),
-                            type: 'intro'
-                        });
+                        model.data.deck.unshift(intro);
 
                         return model;
                     }
@@ -443,7 +466,7 @@
                     convertedDeck = [];
 
                 forEach(mrExperience.data.deck, function(card) {
-                    if(card.data) {
+                    if (card.type !== 'intro') {
                         // this conditional is used to weed out the intro card
                         // we need to process the intro card and put the pieces
                         // where they belong in the experience model (ie. the img object)

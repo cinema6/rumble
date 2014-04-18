@@ -53,14 +53,16 @@
                     }
 
                     scope.$watchCollection(deck, function(deck) {
-                        forEach(deck, function(card) {
+                        forEach(deck, function(card, index) {
                             var view = cache[card.id];
 
                             if (view) {
                                 $parent.append(view.$element);
                             } else {
-                                cache[card.id] = new CardView(card);
+                                view = cache[card.id] = new CardView(card);
                             }
+
+                            view.scope.$index = index;
                         });
 
                         forEach(cache, function(view, id) {
