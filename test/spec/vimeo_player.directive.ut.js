@@ -80,14 +80,45 @@
                 var video;
 
                 beforeEach(function() {
+                    $scope.id = 'abc123';
+
                     $scope.$apply(function() {
-                        $vimeo = $compile('<vimeo-player id="foo" videoid="abc123"></vimeo-player>')($scope);
+                        $vimeo = $compile('<vimeo-player id="foo" videoid="{{id}}"></vimeo-player>')($scope);
                     });
                     video = $vimeo.data('video');
                 });
 
                 it('should be accessible via jqLite .data()', function() {
                     expect(video).toEqual(jasmine.any(Object));
+                });
+
+                it('should support changing the video', function() {
+                    player.emit('ready');
+                    player.emit('loadProgress', {
+                        percent: '0.75'
+                    });
+                    player.emit('play');
+                    player.emit('playProgress', {
+                        seconds: '30'
+                    });
+                    player.emit('finish');
+
+                    $scope.$apply(function() {
+                        $scope.id = '12345';
+                    });
+                    expect(video.buffered).toBe(0);
+                    expect(video.currentTime).toBe(0);
+                    expect(video.ended).toBe(false);
+                    expect(video.paused).toBe(true);
+                    expect(video.readyState).toBe(-1);
+
+                    player.emit('ready');
+                    expect(player.listeners('loadProgress').length).toBe(3);
+                    expect(player.listeners('finish').length).toBe(1);
+                    expect(player.listeners('pause').length).toBe(1);
+                    expect(player.listeners('play').length).toBe(1);
+                    expect(player.listeners('seek').length).toBe(1);
+                    expect(player.listeners('playProgress').length).toBe(1);
                 });
 
                 describe('events', function() {

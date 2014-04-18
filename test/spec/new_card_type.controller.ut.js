@@ -30,12 +30,6 @@
                 expect(NewCardTypeCtrl).toEqual(jasmine.any(Object));
             });
 
-            describe('initialization', function() {
-                it('should put a reference to its model on itself', function() {
-                    expect(NewCardTypeCtrl.model).toBe(model);
-                });
-            });
-
             describe('properties', function() {
                 describe('type', function() {
                     it('should be null', function() {
@@ -47,28 +41,28 @@
             describe('methods', function() {
                 describe('edit()', function() {
                     beforeEach(function() {
-                        spyOn(c6State, 'transitionTo');
+                        spyOn(c6State, 'goTo');
                     });
 
                     it('should transition to the edit state with the chosen type', function() {
                         NewCardTypeCtrl.type = 'video';
                         NewCardTypeCtrl.edit();
-                        expect(c6State.transitionTo).toHaveBeenCalledWith('editor.newCard.edit', { type: 'video' });
+                        expect(c6State.goTo).toHaveBeenCalledWith('editor.newCard.edit', { cardType: 'video' });
 
                         NewCardTypeCtrl.type = 'videoBallot';
                         NewCardTypeCtrl.edit();
-                        expect(c6State.transitionTo).toHaveBeenCalledWith('editor.newCard.edit', { type: 'videoBallot' });
+                        expect(c6State.goTo).toHaveBeenCalledWith('editor.newCard.edit', { cardType: 'videoBallot' });
 
                         NewCardTypeCtrl.type = 'ad';
                         NewCardTypeCtrl.edit();
-                        expect(c6State.transitionTo).toHaveBeenCalledWith('editor.newCard.edit', { type: 'ad' });
+                        expect(c6State.goTo).toHaveBeenCalledWith('editor.newCard.edit', { cardType: 'ad' });
                     });
 
                     it('should throw an error if there is no type set', function() {
                         expect(function() {
                             NewCardTypeCtrl.edit();
                         }).toThrow(new Error('Can\'t edit before a type is chosen.'));
-                        expect(c6State.transitionTo).not.toHaveBeenCalled();
+                        expect(c6State.goTo).not.toHaveBeenCalled();
                     });
                 });
             });

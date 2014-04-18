@@ -56,7 +56,7 @@
                 beforeEach(function() {
                     success = jasmine.createSpy('model() success');
 
-                    c6StateParams.id = 'e-9990920583a712';
+                    c6StateParams.minireelId = 'e-9990920583a712';
 
                     $rootScope.$apply(function() {
                         result = $injector.invoke(EditorState.model);

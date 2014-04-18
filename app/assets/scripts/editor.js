@@ -2,7 +2,9 @@
     'use strict';
 
     var isNumber = angular.isNumber,
-        jqLite = angular.element;
+        jqLite = angular.element,
+        equals = angular.equals,
+        copy = angular.copy;
 
     function refresh($element) {
         $element.inheritedData('cDragCtrl').refresh();
@@ -253,17 +255,18 @@
             };
         })
 
-        .controller('EditorController', ['cModel','c6State','$scope',
-        function                        ( cModel , c6State , $scope ) {
-            this.model = cModel;
+        .controller('EditorController', ['c6State','$scope',
+        function                        ( c6State , $scope ) {
+            var self = this;
+
             this.preview = false;
 
             this.editCard = function(card) {
-                c6State.transitionTo('editor.editCard', { id: card.id });
+                c6State.goTo('editor.editCard.video', { cardId: card.id });
             };
 
             this.newCard = function() {
-                c6State.transitionTo('editor.newCard.type');
+                c6State.goTo('editor.newCard.type');
             };
 
             this.previewMode = function(card) {
@@ -279,27 +282,23 @@
             };
 
             $scope.$on('addCard', function(event, card) {
-                cModel.data.deck.push(card);
+                self.model.data.deck.push(card);
             });
         }])
 
-        .controller('EditCardController', ['$scope','cModel','c6Computed','c6State',
-                                           'VideoService',
-        function                          ( $scope , cModel , c6Computed , c6State ,
-                                            VideoService ) {
+        .controller('EditCardController', ['$scope','c6Computed','c6State','VideoService',
+        function                          ( $scope , c6Computed , c6State , VideoService ) {
             var c = c6Computed($scope);
 
-            this.model = cModel;
             VideoService.createVideoUrl(c, this, 'EditCardCtrl');
 
             this.close = function() {
-                c6State.transitionTo('editor', { id: $scope.EditorCtrl.model.id });
+                c6State.goTo('editor');
             };
         }])
 
-        .controller('NewCardTypeController', ['cModel','c6State',
-        function                             ( cModel , c6State ) {
-            this.model = cModel;
+        .controller('NewCardTypeController', ['c6State',
+        function                             ( c6State ) {
             this.type = null;
 
             this.edit = function() {
@@ -309,24 +308,133 @@
                     throw new Error('Can\'t edit before a type is chosen.');
                 }
 
-                c6State.transitionTo('editor.newCard.edit', { type: type });
+                c6State.goTo('editor.newCard.edit', { cardType: type });
             };
         }])
 
-        .controller('NewCardEditController', ['cModel','c6Computed','$scope','VideoService',
-                                              'c6State',
-        function                             ( cModel , c6Computed , $scope , VideoService ,
-                                               c6State ) {
+        .controller('NewCardEditController', ['c6Computed','$scope','VideoService','c6State',
+        function                             ( c6Computed , $scope , VideoService , c6State ) {
             var c = c6Computed($scope);
 
-            this.model = cModel;
             VideoService.createVideoUrl(c, this, 'NewCardEditCtrl');
 
             this.save = function() {
-                var minireel = c6State.get('editor').cModel;
+                $scope.$emit('addCard', this.model);
+                c6State.goTo('editor');
+            };
+        }])
 
-                $scope.$emit('addCard', cModel);
-                c6State.transitionTo('editor', { id: minireel.id });
+        .controller('PreviewController',['$scope','MiniReelService','postMessage','c6BrowserInfo',
+        function                        ( $scope , MiniReelService , postMessage , c6BrowserInfo ) {
+            var self = this,
+                profile,
+                card;
+
+            // set a default device mode
+            this.device = 'desktop';
+
+            // set a profile based on the current browser
+            // this is needed to instantiate a player
+            profile = c6BrowserInfo.profile;
+
+            // override the device setting for previewing
+            profile.device = this.device;
+
+            $scope.$on('mrPreview:initExperience', function(event, experience, session) {
+                // convert the MRinator experience to a MRplayer experience
+                experience = MiniReelService.convertForPlayer(experience);
+
+                // add the converted experience to the session for comparing later
+                session.experience = copy(experience);
+
+                // add the listener for 'handshake' request
+                // we aren't using once() cuz the MR player
+                // will be calling for this every time we change modes
+                session.on('handshake', function(data, respond) {
+                    respond({
+                        success: true,
+                        appData: {
+                            // this will send the most updated experience
+                            // whenever the MR player is (re)loaded
+                            experience: experience,
+                            profile: profile
+                        }
+                    });
+                });
+
+                // add a listener for the 'getCard' request.
+                // when a user is previewing a specific card
+                // we remember it, and if they change the mode
+                // and the app reloads, it's going to call back
+                // and see if it still needs to go to that card
+                session.on('mrPreview:getCard', function(data, respond) {
+                    respond(card);
+                });
+
+                // register another listener within the init handler
+                // this will share the session
+                $scope.$on('mrPreview:updateExperience', function(event, experience, newCard) {
+                    // the EditorCtrl $broadcasts the most up-to-date experience model
+                    // when the user clicks 'preview'.
+                    // it may have a newCard to go to
+
+                    // we convert the experience
+                    experience = MiniReelService.convertForPlayer(experience);
+
+                    // if it's been changed or we're previewing a specific card
+                    // then we ping the player
+                    // and send the updated experience
+                    // the MRplayer is listening in the RumbleCtrl
+                    // and will update the deck
+                    if(!equals(experience, session.experience)) {
+                        session.ping('mrPreview:updateExperience', experience);
+                    }
+
+                    if(newCard) {
+                        card = MiniReelService.convertCard(newCard);
+                        session.ping('mrPreview:jumpToCard', card);
+                    } else {
+                        session.ping('mrPreview:reset');
+                    }
+                });
+
+                $scope.$watch(function() {
+                    return self.device;
+                }, function(newDevice, oldDevice) {
+                    if(newDevice === oldDevice) { return; }
+
+                    profile.device = newDevice;
+
+                    // ping the MR player
+                    // sending 'updateMode' will trigger a refresh
+                    // and the player will call for another handshake
+                    // and will call for a specific card
+                    // in case we're previewing that card
+                    session.ping('mrPreview:updateMode');
+                });
+            });
+        }])
+
+        .directive('mrPreview', ['postMessage',
+        function                ( postMessage ) {
+            return {
+                restrict: 'A',
+                link: function(scope, element, attrs) {
+                    var iframe,
+                        session;
+
+                    scope.$watch(attrs.mrPreview, function(experience) {
+                        if(experience) {
+                            // store the MR player window
+                            iframe = element.prop('contentWindow');
+
+                            // create a postMessage session (as defined in c6ui.postMessage)
+                            session = postMessage.createSession(iframe);
+
+                            scope.$emit('mrPreview:initExperience', experience, session);
+                        }
+                    });
+                }
             };
         }])
 
@@ -556,6 +664,7 @@
 
                         Object.defineProperties(scope, {
                             currentTime: {
+                                configurable: true,
                                 get: function() {
                                     if (isNumber(startScanTime)) {
                                         return startScanTime;

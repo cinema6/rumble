@@ -39,6 +39,7 @@
 
                     $scope = $rootScope.$new();
                     NewCardEditCtrl = $controller('NewCardEditController', { $scope: $scope, cModel: model });
+                    NewCardEditCtrl.model = model;
                 });
             });
 
@@ -47,10 +48,6 @@
             });
 
             describe('initialization', function() {
-                it('should put a reference to its model on itself', function() {
-                    expect(NewCardEditCtrl.model).toBe(model);
-                });
-
                 it('should create a videoUrl', function() {
                     expect(VideoService.createVideoUrl).toHaveBeenCalledWith(computer, NewCardEditCtrl, 'NewCardEditCtrl');
                 });
@@ -60,7 +57,7 @@
                 describe('save()', function() {
                     beforeEach(function() {
                         spyOn($scope, '$emit').and.callThrough();
-                        spyOn(c6State, 'transitionTo');
+                        spyOn(c6State, 'goTo');
 
                         NewCardEditCtrl.save();
                     });
@@ -70,7 +67,7 @@
                     });
 
                     it('should transition back to the editor state', function() {
-                        expect(c6State.transitionTo).toHaveBeenCalledWith('editor', { id: 'e-fcfb709c23e0fd' });
+                        expect(c6State.goTo).toHaveBeenCalledWith('editor');
                     });
                 });
             });

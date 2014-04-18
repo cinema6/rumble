@@ -26,6 +26,7 @@
                                 type: 'youtube',
                                 title: 'The Slowest Turtle',
                                 note: 'Blah blah blah',
+                                source: 'YouTube',
                                 modules: [],
                                 data: {
                                     videoid: '47tfg8734',
@@ -40,7 +41,12 @@
                                 type: 'vimeo',
                                 title: 'The Ugliest Turtle',
                                 note: 'Blah blah blah',
+                                source: 'Vimeo',
                                 modules: ['ballot'],
+                                ballot: [
+                                    'Awesome',
+                                    'Lame'
+                                ],
                                 data: {
                                     videoid: '48hfrei49'
                                 }
@@ -49,6 +55,7 @@
                                 id: 'rc-1c7a46097a5d4a',
                                 type: 'ad',
                                 ad: true,
+                                modules: ['displayAd'],
                                 data: {
                                     autoplay: true,
                                     publisher: true
@@ -59,7 +66,12 @@
                                 type: 'dailymotion',
                                 title: 'The Smartest Turtle',
                                 note: 'Blah blah blah',
+                                source: 'DailyMotion',
                                 modules: ['ballot'],
+                                ballot: [
+                                    'Funny',
+                                    'Stupid'
+                                ],
                                 data: {
                                     videoid: 'vfu85f5',
                                     related: 0
@@ -70,6 +82,7 @@
                                 type: 'youtube',
                                 title: 'The Dumbest Turtle',
                                 note: 'Blah blah blah',
+                                source: 'YouTube',
                                 modules: [],
                                 data: {
                                     videoid: 'fn4378r4d',
@@ -83,6 +96,7 @@
                                 id: 'rc-f31cabb9193ef9',
                                 type: 'ad',
                                 ad: true,
+                                modules: ['displayAd'],
                                 data: {
                                     autoplay: false,
                                     publisher: false
@@ -367,11 +381,29 @@
                             });
                         });
 
-                        it('should insert an intro card', function() {
-                            expect(deck[0]).toEqual({
+                        it('should insert an intro card that is data-bound to the minireel itself', function() {
+                            var minireel = success.calls.mostRecent().args[0],
+                                intro = deck[0];
+
+                            expect(intro).toEqual({
                                 id: jasmine.any(String),
-                                type: 'intro'
+                                title: minireel.title,
+                                note: minireel.summary,
+                                type: 'intro',
+                                data: {}
                             });
+
+                            minireel.title = 'Your MiniReel';
+                            minireel.summary = 'Oh no...';
+
+                            expect(intro.title).toBe(minireel.title);
+                            expect(intro.note).toBe(minireel.summary);
+
+                            intro.title = 'Our MiniReel';
+                            intro.note = 'Okay!';
+
+                            expect(minireel.title).toBe(intro.title);
+                            expect(minireel.summary).toBe(intro.note);
 
                             expect(deck[0].id).toMatch(/rc-[a-zA-Z0-9]{14}/);
                         });
@@ -402,7 +434,10 @@
                                     videoid: '48hfrei49',
                                     start: null,
                                     end: null,
-                                    ballot: []
+                                    ballot: [
+                                        'Awesome',
+                                        'Lame'
+                                    ]
                                 }
                             });
 
@@ -417,7 +452,10 @@
                                     videoid: 'vfu85f5',
                                     start: undefined,
                                     end: undefined,
-                                    ballot: []
+                                    ballot: [
+                                        'Funny',
+                                        'Stupid'
+                                    ]
                                 }
                             });
 
@@ -472,6 +510,26 @@
                             });
 
                             expect(deck[7].data.links).not.toBe(minireel.data.deck[6].data.links);
+                        });
+                    });
+
+                    describe('convertForPlayer(minireel)', function() {
+                        it('should convert back to the player format', function() {
+                            var success = jasmine.createSpy('success'),
+                                converted,
+                                result;
+
+                            spyOn(cinema6.db, 'find').and.returnValue($q.when(minireel));
+
+                            $rootScope.$apply(function() {
+                                MiniReelService.open('e-15aa87f5da34c3')
+                                    .then(success);
+                            });
+                            converted = success.calls.mostRecent().args[0];
+                            result = MiniReelService.convertForPlayer(converted);
+
+                            expect(result).toEqual(minireel);
+                            expect(result).not.toBe(minireel);
                         });
                     });
                 });
