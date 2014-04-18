@@ -166,70 +166,20 @@
                         beforeEach(function() {
                             success = jasmine.createSpy('getBallot() success');
                             failure = jasmine.createSpy('getBallot() failure');
-
-                            BallotService.init(id);
-
-                            $httpBackend.expectGET('/api/election/' + id + '/ballot/b1')
+                            
+                            $httpBackend.expectGET('/api/election/' + id)
                                 .respond(200, {
                                     id: id,
                                     ballot: {
-                                        b1: {
-                                            Cool: 0.25,
-                                            Lame: 0.75
-                                        }
-                                    }
-                                });
-
-                            BallotService.getBallot('b1').then(success, failure);
-
-                            $httpBackend.flush();
-                        });
-
-                        it('should return an object with the requested data', function() {
-                            expect(success).toHaveBeenCalledWith([
-                                {
-                                    name: 'Cool',
-                                    votes: 0.25
-                                },
-                                {
-                                    name: 'Lame',
-                                    votes: 0.75
-                                }
-                            ]);
-                        });
-
-                        it('should split the votes evenly if the vote percentages are 0', function() {
-                            $httpBackend.expectGET('/api/election/' + id + '/ballot/b2')
-                                .respond(200, {
-                                    id: id,
-                                    ballot: {
-                                        b2: {
-                                            'Too Funny': 0,
-                                            'Too Far': 0
-                                        }
-                                    }
-                                });
-
-                            BallotService.getBallot('b2').then(success, failure);
-
-                            $httpBackend.flush();
-
-                            expect(success).toHaveBeenCalledWith([
-                                {
-                                    name: 'Too Funny',
-                                    votes: 0.5
-                                },
-                                {
-                                    name: 'Too Far',
-                                    votes: 0.5
-                                }
-                            ]);
-
-                            $httpBackend.expectGET('/api/election/' + id + '/ballot/b3')
-                                .respond(200, {
-                                    id: id,
-                                    ballot: {
-                                        b3: {
+                                        'b1': {
+                                            'Cool': 0.25,
+                                            'Lame': 0.75
+                                        },
+                                        'b2': {
+                                            'Too Funny' : 0,
+                                            'Too Far'   : 0
+                                        },
+                                        'b3': {
                                             'Sweet': 0,
                                             'Sour': 0,
                                             'Savory': 0
@@ -237,25 +187,54 @@
                                     }
                                 });
 
-                            BallotService.getBallot('b3').then(success, failure);
 
-                            $httpBackend.flush();
-
-                            expect(success).toHaveBeenCalledWith([
-                                {
-                                    name: 'Sweet',
-                                    votes: 1/3
-                                },
-                                {
-                                    name: 'Sour',
-                                    votes: 1/3
-                                },
-                                {
-                                    name: 'Savory',
-                                    votes: 1/3
-                                }
-                            ]);
+                            BallotService.init(id);
                         });
+
+                        it('should return an object with the requested data', function() {
+                            BallotService.getElection().then(function(){
+                                $httpBackend.flush();
+                                BallotService.getBallot('b1').then(success, failure);
+                                expect(success).toHaveBeenCalledWith([
+                                    {
+                                        name: 'Cool',
+                                        votes: 0.25
+                                    },
+                                    {
+                                        name: 'Lame',
+                                        votes: 0.75
+                                    }
+                                ]);
+                            }, function(){
+                                expect(true).toEqual(false);
+                            });
+                        });
+
+                        it('should split the votes evenly if the vote percentages are 0', function() {
+                            BallotService.getElection().then(function(){
+                                $httpBackend.flush();
+                                BallotService.getBallot('b2').then(success, failure);
+                                expect(success).toHaveBeenCalledWith([
+                                    {
+                                        name: 'Too Funny',
+                                        votes: 0.5
+                                    },
+                                    {
+                                        name: 'Too Far',
+                                        votes: 0.5
+                                    }
+                                ]);
+                            }, function(){
+                                expect(true).toEqual(false);
+                            });
+                        });
+
+                        it('should fail if the election is not already cached',function(){
+                            BallotService.getBallot('x').then(success, failure);
+                            $rootScope.$apply();
+                            expect(failure).toHaveBeenCalledWith('Election e-a9af55ce25690c is not in the cache.');
+                        });
+
                     });
 
                     describe('vote(id, name)', function() {

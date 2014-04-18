@@ -203,23 +203,7 @@
                     $q.reject('Election ' + electionId + ' is not in the cache.');
             }
 
-            function fetchFromService() {
-                function process(response) {
-                    var data = response.data,
-                        ballotItems = data.ballot[id];
-
-                    return processBallot(ballotItems);
-                }
-
-                return $http.get(c6UrlMaker(
-                        ('election/' + electionId + '/ballot/' + id),
-                        'api'
-                    ), { cache: true })
-                    .then(process);
-            }
-
-            return fetchFromCache()
-                .catch(fetchFromService);
+            return fetchFromCache();
         };
 
         this.vote = function(id, name) {
