@@ -41,6 +41,10 @@
                 expect(EditorCtrl).toEqual(jasmine.any(Object));
             });
 
+            it('should set preview mode to false', function() {
+                expect(EditorCtrl.preview).toBe(false);
+            });
+
             describe('methods', function() {
                 describe('editCard(card)', function() {
                     beforeEach(function() {
@@ -63,6 +67,42 @@
 
                     it('should transition to the editor.newCard.type state', function() {
                         expect(c6State.goTo).toHaveBeenCalledWith('editor.newCard.type');
+                    });
+                });
+
+                describe('previewMode(card)', function() {
+                    beforeEach(function() {
+                        spyOn($scope, '$broadcast');
+                    });
+                    it('should set preview mode to true', function() {
+                        EditorCtrl.previewMode();
+                        expect(EditorCtrl.preview).toBe(true);
+                    });
+
+                    describe('without a card', function() {
+                        it('should $broadcast the experience without a card', function() {
+                            EditorCtrl.previewMode();
+                            expect($scope.$broadcast.calls.argsFor(0)[0]).toBe('mrPreview:updateExperience');
+                            expect($scope.$broadcast.calls.argsFor(0)[1]).toBe(cModel);
+                            expect($scope.$broadcast.calls.argsFor(0)[2]).toBe(undefined);
+                        });
+                    });
+
+                    describe('with a card', function() {
+                        it('should $broadcast the experience with a card', function() {
+                            var card = {};
+                            EditorCtrl.previewMode(card);
+                            expect($scope.$broadcast.calls.argsFor(0)[0]).toBe('mrPreview:updateExperience');
+                            expect($scope.$broadcast.calls.argsFor(0)[1]).toBe(cModel);
+                            expect($scope.$broadcast.calls.argsFor(0)[2]).toBe(card);
+                        });
+                    });
+                });
+
+                describe('closePreview()', function() {
+                    it('should set preview mode to false', function() {
+                        EditorCtrl.closePreview();
+                        expect(EditorCtrl.preview).toBe(false);
                     });
                 });
             });

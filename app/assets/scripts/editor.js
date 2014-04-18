@@ -270,15 +270,12 @@
             };
 
             this.previewMode = function(card) {
-                this.preview = true;
-                $scope.$broadcast('mrPreview:updateExperience', cModel, card);
+                self.preview = true;
+                $scope.$broadcast('mrPreview:updateExperience', self.model, card);
             };
 
             this.closePreview = function() {
                 this.preview = false;
-                // commenting out cuz we don't want to reset the player
-                // when the user closes the preview
-                // $scope.$broadcast('mrPreview:closePreview');
             };
 
             $scope.$on('addCard', function(event, card) {
