@@ -227,7 +227,7 @@
                         accountId : 'abc',
                         clientId  : '123'
                     });
-                    expect($window.c6MrGa.callCount).toEqual(2);
+                    expect($window.c6MrGa.callCount).toEqual(3);
                     
                     expect($window.c6MrGa.calls[0].args[0]).toEqual('create');
                     expect($window.c6MrGa.calls[0].args[1]).toEqual('abc');
@@ -238,8 +238,11 @@
                         'cookieDomain'  : 'none'
                     });
 
-                    expect($window.c6MrGa.calls[1].args[0]).toEqual('c6mr.set');
-                    expect($window.c6MrGa.calls[1].args[1]).toEqual('checkProtocolTask');
+                    expect($window.c6MrGa.calls[1].args[0]).toEqual('c6mr.require');
+                    expect($window.c6MrGa.calls[1].args[1]).toEqual('displayfeatures');
+                    
+                    expect($window.c6MrGa.calls[2].args[0]).toEqual('c6mr.set');
+                    expect($window.c6MrGa.calls[2].args[1]).toEqual('checkProtocolTask');
                 });
             });
 
