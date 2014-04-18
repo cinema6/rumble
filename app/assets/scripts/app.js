@@ -2,6 +2,8 @@
     /* jshint -W106 */
     'use strict';
 
+    var noop = angular.noop;
+
     angular.module('c6.mrmaker', window$.c6.kModDeps)
         .constant('c6Defines', window$.c6)
         .config(['$provide',
@@ -133,10 +135,27 @@
                             }],
                             children: {
                                 video: {
+                                    controller: noop,
                                     controllerAs: 'EditCardVideoCtrl',
                                     templateUrl: assets('views/editor/edit_card/video.html'),
                                     model:  [function() {
                                         return this.cParent.cModel;
+                                    }]
+                                },
+                                ballot: {
+                                    controller: noop,
+                                    controllerAs: 'EditCardBallotCtrl',
+                                    templateUrl: assets('views/editor/edit_card/ballot.html'),
+                                    model:  [function() {
+                                        return this.cParent.cModel.data.ballot;
+                                    }],
+                                    afterModel: ['model','$q','c6State',
+                                    function    ( model , $q , c6State ) {
+                                        if (!model) {
+                                            c6State.goTo('editor.editCard.video');
+
+                                            return $q.reject('Card doesn\'t support ballots.');
+                                        }
                                     }]
                                 }
                             }
