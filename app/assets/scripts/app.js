@@ -119,8 +119,8 @@
                 });
             };
         }])
-        .directive('c6Touch', ['$parse',
-        function              ( $parse ) {
+        .directive('c6Touch', ['$parse', 'c6AppData',
+        function              ( $parse ,  c6AppData ) {
             return {
                 restrict: 'AC',
                 link: function(scope, element, attrs) {
@@ -135,18 +135,25 @@
                         touching = true;
                     }
 
-                    element.on('touchstart touchenter', resume);
-                    element.on('touchleave touchcancel', cancel);
-
-                    element.on('touchend', function(event) {
-                        if (!touching) { return; }
-
+                    function handle(event) {
                         scope.$apply(function() {
                             fn(scope, {
                                 $event: event
                             });
                         });
+                    }
+
+                    element.on('touchstart touchenter', resume);
+                    element.on('touchleave touchcancel', cancel);
+
+                    element.on('touchend', function(event) {
+                        if (!touching) { return; }
+                        handle(event);
                     });
+
+                    if(!c6AppData.profile.touch) {
+                        element.on('click', handle);
+                    }
                 }
             };
         }])
