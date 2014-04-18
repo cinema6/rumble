@@ -143,6 +143,3 @@
         -o-transition: background 0.2s ease; 
         transition: background 0.2s ease;
     }
-        .mr-splash__start:hover .mr-splash__bar {
-            background: #b69823;
-        }
