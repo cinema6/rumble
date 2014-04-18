@@ -10,14 +10,15 @@
             var $link;
 
             beforeEach(function() {
-                module('c6.ui', function($provide) {
-                    $provide.value('c6BrowserInfo', {
-                        profile: {
-                            touch: false
+                module('c6.rumble', function($provide) {
+                    $provide.factory('c6AppData',function(){
+                        return {
+                            profile: {
+                                touch: false
+                            }
                         }
-                    });
+                    })
                 });
-                module('c6.rumble');
 
                 inject(function($injector) {
                     $rootScope = $injector.get('$rootScope');

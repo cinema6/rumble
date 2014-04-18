@@ -119,8 +119,8 @@
                 });
             };
         }])
-        .directive('c6Touch', ['$parse', 'c6BrowserInfo',
-        function              ( $parse ,  c6BrowserInfo ) {
+        .directive('c6Touch', ['$parse', 'c6AppData',
+        function              ( $parse ,  c6AppData ) {
             return {
                 restrict: 'AC',
                 link: function(scope, element, attrs) {
@@ -151,7 +151,7 @@
                         handle(event);
                     });
 
-                    if(!c6BrowserInfo.profile.touch) {
+                    if(!c6AppData.profile.touch) {
                         element.on('click', handle);
                     }
                 }
