@@ -1,10 +1,10 @@
 <header c6-alias="EditCardCtrl.model as card" class="pageHeader container">
     <h1 class="pageTitle">{{card.title}}</h1>
     <div class="pageHeader__actions clearfix">
-        
+
         <ul class="toolbar__group">
             <li class="toolbar__item">
-                <button class="toolbar__btn toolbar__preview" type="button">Preview</button>
+                <button class="toolbar__btn toolbar__preview" type="button" ng-click="EditorCtrl.previewMode(card)">Preview</button>
             </li>
             <li class="toolbar__item">
                 <button class="toolbar__btn toolbar__makePrivate" type="button">Make Private</button>

@@ -382,16 +382,16 @@
                     width:1em; height:0.8125em; display:block;
                     position:absolute; top:0.0625em; right:0;
                 }
-                .miniReel__status--private .statusText {
+                .miniReel__status--pending .statusText {
                     color:#646464;
                 }
-                .miniReel__status--private .ui__statusIcon {
+                .miniReel__status--pending .ui__statusIcon {
                     background-position:-3.1875em -2.8125em;
                 }
-                .miniReel__status--public .statusText {
+                .miniReel__status--active .statusText {
                     color:#72ad25;
                 }
-                .miniReel__status--public .ui__statusIcon {
+                .miniReel__status--active .ui__statusIcon {
                     background-position:-2.125em -2.8125em;
                 }
                 .miniReel__status--deleted .statusText {
