@@ -513,16 +513,16 @@
 
         this.goBack = function(src){
             if (src){
-                $window.c6MrGa('c6mr.send', 'event', 'button', 'click','prev',
-                    appData.mode + '::' + src);
+                $window.c6MrGa('c6mr.send', 'event', 'button', 'click',
+                    'prev::' + appData.mode + '::' + src);
             }
             self.setPosition($scope.currentIndex - 1);
         };
 
         this.goForward = function(src){
             if (src){
-                $window.c6MrGa('c6mr.send', 'event', 'button', 'click','next',
-                    appData.mode + '::' + src);
+                $window.c6MrGa('c6mr.send', 'event', 'button', 'click',
+                    'next::' + appData.mode + '::' + src);
             }
             self.setPosition($scope.currentIndex + 1);
         };
@@ -533,7 +533,8 @@
         }, 3000);
 
         $log.log('Rumble Controller is initialized!');
-        
+   
+        $log.info(this.getVirtualPage());
         $window.c6MrGa('c6mr.send', 'pageview', this.getVirtualPage());
     }])
     .directive('navbarButton', ['assetFilter','c6Computed',
