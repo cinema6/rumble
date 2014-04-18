@@ -10,7 +10,15 @@
             var $link;
 
             beforeEach(function() {
-                module('c6.rumble');
+                module('c6.rumble', function($provide) {
+                    $provide.factory('c6AppData',function(){
+                        return {
+                            profile: {
+                                touch: false
+                            }
+                        }
+                    })
+                });
 
                 inject(function($injector) {
                     $rootScope = $injector.get('$rootScope');
@@ -55,6 +63,11 @@
                 $link.trigger('touchend');
 
                 expect($scope.spy).toHaveBeenCalledWith(jasmine.any(Object));
+            });
+
+            it('should evaluate the expression on click if touch is not supported on the device', function() {
+                $link.trigger('click');
+                expect($scope.spy).toHaveBeenCalled();
             });
         });
     });
