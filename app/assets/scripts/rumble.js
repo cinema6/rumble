@@ -140,7 +140,8 @@
     }])
     .service('BallotService', ['$http','$cacheFactory','$q','c6UrlMaker',
     function                  ( $http , $cacheFactory , $q , c6UrlMaker ) {
-        var electionId = null,
+        var service = this,
+            electionId = null,
             electionCache = $cacheFactory('BallotService:elections');
 
         function processBallot(ballot) {
@@ -187,7 +188,7 @@
             }
 
             return $http.get(c6UrlMaker(
-                    ('election/' + electionId),
+                    ('public/election/' + electionId),
                     'api'
                 ), { cache: true })
                 .then(process)
@@ -199,27 +200,21 @@
                 var election = electionCache.get(electionId);
 
                 return election ?
-                    $q.when(election[id]) :
+                    $q.when(election) :
                     $q.reject('Election ' + electionId + ' is not in the cache.');
             }
 
             function fetchFromService() {
-                function process(response) {
-                    var data = response.data,
-                        ballotItems = data.ballot[id];
+                return service.getElection();
+            }
 
-                    return processBallot(ballotItems);
-                }
-
-                return $http.get(c6UrlMaker(
-                        ('election/' + electionId + '/ballot/' + id),
-                        'api'
-                    ), { cache: true })
-                    .then(process);
+            function getBallot(election) {
+                return election[id];
             }
 
             return fetchFromCache()
-                .catch(fetchFromService);
+                .catch(fetchFromService)
+                .then(getBallot);
         };
 
         this.vote = function(id, name) {
@@ -227,15 +222,19 @@
                 return true;
             }
 
-            return $http.post(c6UrlMaker('vote', 'api'), {
+            return $http.post(c6UrlMaker('public/vote', 'api'), {
                 election: electionId,
                 ballotItem: id,
                 vote: name
             }).then(process);
         };
     }])
-    .controller('RumbleController',['$log','$scope','$timeout','$window','BallotService','c6Computed','cinema6','MiniReelService','CommentsService','ControlsService',
-    function                       ( $log , $scope , $timeout, $window, BallotService , c6Computed , cinema6 , MiniReelService , CommentsService , ControlsService ){
+    .controller('RumbleController',['$log','$scope','$timeout','$window','BallotService',
+                                    'c6Computed','cinema6','MiniReelService','CommentsService',
+                                    'ControlsService',
+    function                       ( $log , $scope , $timeout , $window , BallotService ,
+                                     c6Computed , cinema6 , MiniReelService , CommentsService ,
+                                     ControlsService ){
         $log = $log.context('RumbleCtrl');
         var self    = this, readyTimeout,
             appData = $scope.app.data,
@@ -247,9 +246,6 @@
         }
 
         BallotService.init(id);
-        // This will load the election into the BallotService\'s cache so
-        // requests for individual ballots will not hit the vote service.
-        BallotService.getElection();
 
         CommentsService.init(id);
 
@@ -455,6 +451,22 @@
             }
         };
 
+        this.getVirtualPage = function(){
+            var titleRoot = (appData.experience.title || 'Mini Reel: ' +
+                    appData.experience.id) ;
+            if (!$scope.currentCard){
+                return {
+                    page : '/mr/' + appData.experience.id,
+                    title : titleRoot
+                };
+            }
+            
+            return {
+                page : '/mr/' + appData.experience.id + '/' + $scope.currentCard.id,
+                title : titleRoot + ' - ' +  ($scope.currentCard.title || $scope.currentCard.id)
+            };
+        };
+
         this.setPosition = function(i){
             $log.info('setPosition: %1',i);
             $scope.currentReturns = null;
@@ -462,6 +474,17 @@
             $scope.currentCard    = $scope.deck[$scope.currentIndex] || null;
             $scope.atHead         = $scope.currentIndex === 0;
             $scope.atTail         = ($scope.currentIndex === ($scope.deck.length - 1));
+           
+            if (i >= 0) {
+                $window.c6MrGa('c6mr.send', 'pageview', this.getVirtualPage());
+            }
+
+            if ($scope.atTail){
+                $window.c6MrGa('c6mr.send', 'pageview', {
+                    page : '/mr/' + appData.experience.id + '/end',
+                    title: (appData.experience.title || appData.experience.id) + ' - End'
+                });
+            }
 
             if ($scope.atTail) {
                 $scope.$emit('reelEnd');
@@ -472,6 +495,7 @@
             } else {
                 $scope.$emit('reelMove');
             }
+        
         };
 
         this.jumpTo = function(card) {
@@ -480,7 +504,7 @@
 
         this.start = function() {
             $window.c6MrGa('c6mr.send', 'event', 'button', 'click', 'start',
-                appData.virtualPage);
+                this.getVirtualPage());
             this.goForward();
 
             if (appData.behaviors.fullscreen) {
@@ -489,21 +513,21 @@
         };
 
         this.goBack = function(src){
-            self.setPosition($scope.currentIndex - 1);
             if (src){
                 $window.c6MrGa('c6mr.send', 'event', 'button', 'click', 'prev',
                     appData.mode + '::' + src,
-                    appData.virtualPage);
+                    this.getVirtualPage());
             }
+            self.setPosition($scope.currentIndex - 1);
         };
 
         this.goForward = function(src){
-            self.setPosition($scope.currentIndex + 1);
             if (src){
                 $window.c6MrGa('c6mr.send', 'event', 'button', 'click', 'next',
                     appData.mode + '::' + src,
-                    appData.virtualPage);
+                    this.getVirtualPage());
             }
+            self.setPosition($scope.currentIndex + 1);
         };
 
         readyTimeout = $timeout(function(){
@@ -513,7 +537,7 @@
 
         $log.log('Rumble Controller is initialized!');
         
-        $window.c6MrGa('c6mr.send', 'pageview', appData.virtualPage);
+        $window.c6MrGa('c6mr.send', 'pageview', this.getVirtualPage());
     }])
     .directive('navbarButton', ['assetFilter','c6Computed',
     function                   ( assetFilter , c6Computed ) {

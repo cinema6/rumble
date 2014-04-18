@@ -9,9 +9,37 @@
 
             var $httpBackend;
 
-            var id = 'e-a9af55ce25690c';
+            var id = 'e-a9af55ce25690c',
+                election;
 
             beforeEach(function() {
+                election = {
+                    id: 'e-80fcd03196b3d2',
+                    ballot: {
+                        'rc-22119a8cf9f755': {
+                            'Catchy': 0.5,
+                            'Painful': 0.5
+                        },
+                        'rc-4770a2d7f85ce0': {
+                            'Funny': 0,
+                            'Lame': 1
+                        },
+                        'rc-e489d1c6359fb3': {
+                            'Cute': 0,
+                            'Ugly': 0
+                        },
+                        'rc-e2947c9bec017e': {
+                            'Cool': 0,
+                            'Geeky': 0
+                        },
+                        'rc-99b87ea709d7ac': {
+                            'Funny': 0,
+                            'Gross': 0,
+                            'Strange': 0
+                        }
+                    }
+                };
+
                 module('c6.rumble');
 
                 inject(function($injector) {
@@ -43,32 +71,8 @@
                             success = jasmine.createSpy('getElection() success');
                             failure = jasmine.createSpy('getElection() failure');
 
-                            $httpBackend.expectGET('/api/election/' + id)
-                                .respond(200, {
-                                    id: 'e-80fcd03196b3d2',
-                                    ballot: {
-                                        'rc-22119a8cf9f755': {
-                                            'Catchy': 0.5,
-                                            'Painful': 0.5
-                                        },
-                                        'rc-4770a2d7f85ce0': {
-                                            'Funny': 0,
-                                            'Lame': 1
-                                        },
-                                        'rc-e489d1c6359fb3': {
-                                            'Cute': 0,
-                                            'Ugly': 0
-                                        },
-                                        'rc-e2947c9bec017e': {
-                                            'Cool': 0,
-                                            'Geeky': 0
-                                        },
-                                        'rc-99b87ea709d7ac': {
-                                            'Funny': 0,
-                                            'Gross': 0
-                                        }
-                                    }
-                                });
+                            $httpBackend.expectGET('/api/public/election/' + id)
+                                .respond(200, election);
 
                             BallotService.init(id);
 
@@ -126,11 +130,15 @@
                                 'rc-99b87ea709d7ac': [
                                     {
                                         name: 'Funny',
-                                        votes: 0.5
+                                        votes: 1 / 3
                                     },
                                     {
                                         name: 'Gross',
-                                        votes: 0.5
+                                        votes: 1 / 3
+                                    },
+                                    {
+                                        name: 'Strange',
+                                        votes: 1 / 3
                                     }
                                 ]
                             });
@@ -169,18 +177,10 @@
 
                             BallotService.init(id);
 
-                            $httpBackend.expectGET('/api/election/' + id + '/ballot/b1')
-                                .respond(200, {
-                                    id: id,
-                                    ballot: {
-                                        b1: {
-                                            Cool: 0.25,
-                                            Lame: 0.75
-                                        }
-                                    }
-                                });
+                            $httpBackend.expectGET('/api/public/election/' + id)
+                                .respond(200, election);
 
-                            BallotService.getBallot('b1').then(success, failure);
+                            BallotService.getBallot('rc-4770a2d7f85ce0').then(success, failure);
 
                             $httpBackend.flush();
                         });
@@ -188,74 +188,55 @@
                         it('should return an object with the requested data', function() {
                             expect(success).toHaveBeenCalledWith([
                                 {
-                                    name: 'Cool',
-                                    votes: 0.25
+                                    name: 'Funny',
+                                    votes: 0
                                 },
                                 {
                                     name: 'Lame',
-                                    votes: 0.75
+                                    votes: 1
                                 }
                             ]);
                         });
 
                         it('should split the votes evenly if the vote percentages are 0', function() {
-                            $httpBackend.expectGET('/api/election/' + id + '/ballot/b2')
-                                .respond(200, {
-                                    id: id,
-                                    ballot: {
-                                        b2: {
-                                            'Too Funny': 0,
-                                            'Too Far': 0
-                                        }
-                                    }
-                                });
+                            $httpBackend.expectGET('/api/public/election/' + id)
+                                .respond(200, election);
 
-                            BallotService.getBallot('b2').then(success, failure);
-
-                            $httpBackend.flush();
+                            $rootScope.$apply(function() {
+                                BallotService.getBallot('rc-e489d1c6359fb3').then(success, failure);
+                            });
 
                             expect(success).toHaveBeenCalledWith([
                                 {
-                                    name: 'Too Funny',
+                                    name: 'Cute',
                                     votes: 0.5
                                 },
                                 {
-                                    name: 'Too Far',
+                                    name: 'Ugly',
                                     votes: 0.5
                                 }
                             ]);
 
-                            $httpBackend.expectGET('/api/election/' + id + '/ballot/b3')
-                                .respond(200, {
-                                    id: id,
-                                    ballot: {
-                                        b3: {
-                                            'Sweet': 0,
-                                            'Sour': 0,
-                                            'Savory': 0
-                                        }
-                                    }
-                                });
-
-                            BallotService.getBallot('b3').then(success, failure);
-
-                            $httpBackend.flush();
+                            $rootScope.$apply(function() {
+                                BallotService.getBallot('rc-99b87ea709d7ac').then(success, failure);
+                            });
 
                             expect(success).toHaveBeenCalledWith([
                                 {
-                                    name: 'Sweet',
+                                    name: 'Funny',
                                     votes: 1/3
                                 },
                                 {
-                                    name: 'Sour',
+                                    name: 'Gross',
                                     votes: 1/3
                                 },
                                 {
-                                    name: 'Savory',
+                                    name: 'Strange',
                                     votes: 1/3
                                 }
                             ]);
                         });
+
                     });
 
                     describe('vote(id, name)', function() {
@@ -267,7 +248,7 @@
 
                             BallotService.init(id);
 
-                            $httpBackend.expectPOST('/api/vote', {
+                            $httpBackend.expectPOST('/api/public/vote', {
                                 election: id,
                                 ballotItem: 'b1',
                                 vote: 'Cool'
