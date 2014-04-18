@@ -275,14 +275,6 @@
                         background:#646464;
                         color:#fff;
                     }
-                .filtersBtn__deleted {
-                    color:#d61212;
-                }
-                    .filtersBtn__deleted--active, 
-                    .filtersBtn__deleted:hover {
-                        background:#d61212;
-                        color:#fff;
-                    }
 
     /*  metaData__group
     ========================================================================== */
