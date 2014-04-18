@@ -54,15 +54,15 @@
                     });
                 });
 
-                describe('newCard()', function() {
+                describe('newCard(insertionIndex)', function() {
                     beforeEach(function() {
                         spyOn(c6State, 'goTo');
 
-                        EditorCtrl.newCard();
+                        EditorCtrl.newCard(3);
                     });
 
                     it('should transition to the editor.newCard.type state', function() {
-                        expect(c6State.goTo).toHaveBeenCalledWith('editor.newCard.type');
+                        expect(c6State.goTo).toHaveBeenCalledWith('editor.newCard.type', { insertionIndex: 3 });
                     });
                 });
             });
@@ -74,13 +74,13 @@
                     beforeEach(function() {
                         card = {};
 
-                        $childScope.$emit('addCard', card);
+                        $childScope.$emit('addCard', card, 1);
                     });
 
-                    it('should push the card onto the deck', function() {
+                    it('should insert the card into the deck at the provided index', function() {
                         var deck = cModel.data.deck;
 
-                        expect(deck[deck.length - 1]).toBe(card);
+                        expect(deck[1]).toBe(card);
                     });
                 });
             });

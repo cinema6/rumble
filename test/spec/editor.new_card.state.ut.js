@@ -25,20 +25,35 @@
                 expect(NewCardState).toEqual(jasmine.any(Object));
             });
 
-            describe('model()', function() {
-                var card;
+            describe('updateControllerModel()', function() {
+                var newCard;
 
                 beforeEach(function() {
-                    card = {};
+                    newCard = {};
 
-                    spyOn(MiniReelService, 'createCard').and.returnValue(card);
+                    spyOn(MiniReelService, 'createCard').and.returnValue(newCard);
                 });
 
-                it('should create a new card as the model', function() {
-                    var model = $injector.invoke(NewCardState.model, NewCardState);
+                describe('if the state doesn\'t have a model', function() {
+                    beforeEach(function() {
+                        $injector.invoke(NewCardState.updateControllerModel, NewCardState);
+                    });
 
-                    expect(MiniReelService.createCard).toHaveBeenCalledWith();
-                    expect(model).toBe(card);
+                    it('should make the card the state\'s model', function() {
+                        expect(NewCardState.cModel).toBe(newCard);
+                    });
+                });
+
+                describe('if the state already has a model', function() {
+                    it('should use the existing model', function() {
+                        var model = {};
+
+                        NewCardState.cModel = model;
+
+                        $injector.invoke(NewCardState.updateControllerModel, NewCardState);
+
+                        expect(NewCardState.cModel).toBe(model);
+                    });
                 });
             });
         });

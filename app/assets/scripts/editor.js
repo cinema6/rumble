@@ -261,12 +261,12 @@
                 c6State.goTo('editor.editCard.video', { cardId: card.id });
             };
 
-            this.newCard = function() {
-                c6State.goTo('editor.newCard.type');
+            this.newCard = function(insertionIndex) {
+                c6State.goTo('editor.newCard.type', { insertionIndex: insertionIndex });
             };
 
-            $scope.$on('addCard', function(event, card) {
-                self.model.data.deck.push(card);
+            $scope.$on('addCard', function(event, card, index) {
+                self.model.data.deck.splice(index, 0, card);
             });
         }])
 
@@ -297,13 +297,15 @@
         }])
 
         .controller('NewCardEditController', ['c6Computed','$scope','VideoService','c6State',
-        function                             ( c6Computed , $scope , VideoService , c6State ) {
+                                              'c6StateParams',
+        function                             ( c6Computed , $scope , VideoService , c6State ,
+                                               c6StateParams ) {
             var c = c6Computed($scope);
 
             VideoService.createVideoUrl(c, this, 'NewCardEditCtrl');
 
             this.save = function() {
-                $scope.$emit('addCard', this.model);
+                $scope.$emit('addCard', this.model, c6StateParams.insertionIndex);
                 c6State.goTo('editor');
             };
         }])
