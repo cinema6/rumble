@@ -47,7 +47,7 @@
 
                         $element
                             .animate({
-                                width: ((10 * remPx) + 34) + 'px'
+                                width: ((13.5 * remPx)) + 'px'
                             },{
                                 complete: done,
                                 progress: function() {
@@ -128,7 +128,7 @@
                 beforeAddClass: function($element, className, done) {
                     function shrink($element, done) {
                         $element.animate({
-                            width: '0px'
+                            width: '0'
                         }, {
                             complete: done,
                             progress: function() {

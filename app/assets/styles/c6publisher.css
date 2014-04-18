@@ -51,7 +51,6 @@
     }
 
 
-        
 /*  ==========================================================================
     c6-copy classes : general type & color styles
     ========================================================================== */
@@ -100,11 +99,6 @@
             background-image:url('../../img/sprite--light.png');
         }
     }
-    .overlay {
-        width:100%; height:100%;
-        background:rgb(0,0,0); background:rgba(0,0,0,0.8);
-        position:absolute; z-index: 0; left:0; top:0;
-    }
     .css-promote {
         transform: translateZ(0);
         -webkit-transform: translateZ(0); /* Safari and Chrome */
@@ -139,8 +133,19 @@
     .ui__divider--pause {
         line-height: 1;
     }
-    .ui-divider--bar {
+    .ui__divider--bar {
         color:#ccc;
+    }
+    .ui__overlay {
+        width:100%; height:100%;
+        background:rgb(0,0,0); background:rgba(0,0,0,0.8);
+        position:absolute; z-index: 10; left:0; top:0;
+    }
+    .ui__modal {
+        width:44em; height:30em;
+        padding:1.5em 1.5em 2.25em; margin:-16.875em 0 0 -23.5em;
+        position:absolute; z-index:11; top:50%; left:50%;
+        background:#fff;
     }
 
 
@@ -240,22 +245,36 @@
             }
             .filters__btn {
                 border:0; border-radius:3px; padding:0.25em 0.5em 0.1875em 0.5em; margin:0;
-                font-size:1em; color:#565656; font-weight:700; 
+                font-size:1em; font-weight:700; 
                 text-align: center; line-height: 1;
                 background:transparent;
                 cursor:pointer;
                 -webkit-transition: background 0.5s, color 0.5s; transition: background 0.5s, color 0.5s;
             }
-                .filters__btn:hover {
-                    background:#eee;
+                .filtersBtn__showAll {
+                    color:#b0b0b0;
                 }
-                .filters__btn--active, .filters__btn--active:hover {
-                    background:#565656;
-                    color:#fff;
+                    .filtersBtn__showAll--active, 
+                    .filtersBtn__showAll:hover {
+                        background:#b0b0b0;
+                        color:#fff;
+                    }
+                .filtersBtn__published {
+                    color:#72ad25;
                 }
-                .filters__btn--special {
-                    color:#d61212;
+                    .filtersBtn__published--active, 
+                    .filtersBtn__published:hover {
+                        background:#72ad25;
+                        color:#fff;
+                    }
+                .filtersBtn__private {
+                    color:#646464;
                 }
+                    .filtersBtn__private--active, 
+                    .filtersBtn__private:hover {
+                        background:#646464;
+                        color:#fff;
+                    }
 
     /*  metaData__group
     ========================================================================== */
@@ -263,10 +282,10 @@
             margin:0.375em 0 1em 0;
         }
 
-
-    /*  toolbar__group
+    
+    /*  toolbar__group / actionbar__group
     ========================================================================== */
-        .toolbar__group {
+        .toolbar__group, .actionbar__group {
             margin:0; padding:0; list-style: none;
         }
             .toolbar__item {
@@ -302,6 +321,24 @@
                 .toolbar__publish:hover {
                     background:#7cc61b;
                 }
+            .toolbar__delete {
+                background:#d61212;
+            }
+                .toolbar__delete:hover {
+                    background:#ee1b1b;
+                }
+
+    /*  publish__actions
+    ========================================================================== */
+        .publish__actions {
+            margin:0.125em 0 0.6875em 0;
+        }
+        .publish__actions .actionbar__group {
+            float:left;
+        }
+        .publish__actions .toolbar__group {
+            float: right;
+        }
 
 
 /*  ==========================================================================
@@ -451,26 +488,36 @@
 
     .card__container {
         display: inline-block;
-        width: 13.5em;
+        width: 13.5em; margin:3em 0 0 0;
         vertical-align: top;
     }
         .card__container--dragging {
-            width: 0px;
+            width: 0; opacity:0.5;
+            z-index: 100; position:absolute;
         }
         .card__container--reordering {
-            width: 0px !important;
+            width: 0 !important;
         }
     .card__drop-zone {
         display: inline-block;
-        width: 2px; height: 13rem;
+        width: 2px; height: 20.625rem;
         vertical-align: top;
-        margin: 0 5px;
+        margin: 3em 5px 0;
+        border:0;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
     }
         .card__drop-zone.c6-drag-zone-active {
-            width: calc(10rem + 34px);
+            /*width: calc(10rem + 34px);*/
+            width:13.5em;
+            background:#fff;
+            border:3px solid rgba(19,162,255,0.5);
         }
         .card__drop-zone--reordering {
             width: 2px !important;
+            border:0 !important;
+            background:none !important;
         }
     .card__list {
         overflow-x: scroll; white-space: nowrap;
@@ -488,13 +535,12 @@
         }
             .card__type {
                 color:#646464; font-size:0.75em; font-weight:100; text-align: center;
-                margin:1.9166em 0 0.5833em 0;
+                margin:-1.5625rem 0 0.4375rem 0; position:relative;
             }
             .card__item {
-                white-space: normal;
-                vertical-align: top;
-                background: #fff;
-                opacity: 0.4;
+                width: 13.5em;
+                white-space: normal; vertical-align: top;
+                background: #fff; opacity: 0.4;
                 position:relative;
             }
                 .card__item.c6-over-zone {
@@ -551,6 +597,7 @@
     .c6-dragging {
         cursor: move;
         box-shadow: 0 0 6px 0 rgba(50, 50, 50, 0.5);
+        z-index:100;
     }
 
     .field {
