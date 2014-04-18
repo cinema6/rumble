@@ -503,7 +503,7 @@
         };
 
         this.start = function() {
-            $window.c6MrGa('c6mr.send', 'event', 'button', 'click', 'start', this.getVirtualPage());
+            $window.c6MrGa('c6mr.send', 'event', 'button', 'click', 'start');
             this.goForward();
 
             if (appData.behaviors.fullscreen) {
@@ -514,7 +514,7 @@
         this.goBack = function(src){
             if (src){
                 $window.c6MrGa('c6mr.send', 'event', 'button', 'click',
-                    'prev::' + appData.mode + '::' + src, this.getVirtualPage());
+                    'prev::' + appData.mode + '::' + src);
             }
             self.setPosition($scope.currentIndex - 1);
         };
@@ -522,7 +522,7 @@
         this.goForward = function(src){
             if (src){
                 $window.c6MrGa('c6mr.send', 'event', 'button', 'click',
-                    'next::' + appData.mode + '::' + src, this.getVirtualPage());
+                    'next::' + appData.mode + '::' + src);
             }
             self.setPosition($scope.currentIndex + 1);
         };
