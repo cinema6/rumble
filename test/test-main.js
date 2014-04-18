@@ -22,7 +22,7 @@
         local: 'assets/media',
         cdn: 'http://foo.cinema6.com/media/app'
     };
-    c6.kModDeps = ['c6.ui', 'c6.state', 'c6.log'];
+    c6.kModDeps = ['c6.ui', 'c6.state', 'c6.drag', 'c6.log'];
 
     packageRequest.onload = function(event) {
         var settings = JSON.parse(event.target.response),
@@ -47,8 +47,8 @@
                 modernizr: libUrl('modernizr/modernizr.custom.71747'),
                 tweenmax: libUrl('gsap/1.11.2-0-g79f8c87/TweenMax.min'),
                 timelinemax: libUrl('gsap/1.11.2-0-g79f8c87/TimelineMax.min'),
-                c6ui: libUrl('c6ui/v2.5.0-0-gc58e712/c6uilib'),
-                c6log: libUrl('c6ui/v2.5.0-0-gc58e712/c6log'),
+                c6ui: libUrl('c6ui/v2.5.1-0-ga585abd/c6uilib'),
+                c6log: libUrl('c6ui/v2.5.1-0-ga585abd/c6log'),
                 sha1: libUrl('cryptojs/v3.1.2/sha1'),
                 hammer: libUrl('hammer.js/1.0.9-0-g308cb9a/hammer'),
                 templates: '/base/.tmp/templates',

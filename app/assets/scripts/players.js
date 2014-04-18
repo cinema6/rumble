@@ -1,7 +1,8 @@
 (function() {
     'use strict';
 
-    var fromJson = angular.fromJson;
+    var fromJson = angular.fromJson,
+        jqLite = angular.element;
 
     angular.module('c6.mrmaker')
         .service('VimeoPlayerService', ['$q','$window','$rootScope','c6EventEmitter',
@@ -135,9 +136,12 @@
 
                     function VideoPlayer($iframe) {
                         var self = this,
-                            player = new VimeoPlayerService.Player($iframe),
+                            player = null,
                             hasPaused = false,
-                            state = {
+                            state;
+
+                        function setupState() {
+                            return {
                                 buffered: 0,
                                 currentTime: 0,
                                 duration: 0,
@@ -146,6 +150,7 @@
                                 readyState: -1,
                                 seeking: false
                             };
+                        }
 
                         function addEventListeners(player) {
                             player
@@ -201,6 +206,19 @@
                                 });
                         }
 
+                        function removeEventListeners(player) {
+                            [
+                                'loadProgress',
+                                'finish',
+                                'pause',
+                                'play',
+                                'seek',
+                                'playProgress'
+                            ].forEach(function(event) {
+                                player.removeAllListeners(event);
+                            });
+                        }
+
                         this.play = function() {
                             player.call('play');
                         };
@@ -252,36 +270,58 @@
                             }
                         });
 
-                        player.on('ready', function() {
-                            state.readyState = 0;
-                            self.emit('ready');
-                            addEventListeners(player);
 
-                            player.call('getDuration')
-                                .then(function getDuration(duration) {
-                                    state.readyState = 1;
-                                    state.duration = duration;
-                                    self.emit('loadedmetadata');
+                        // When the video loaded into the player changes (or is initialized,) there
+                        // are a few steps that need to be taken:
+                        //
+                        // 1. Reset the state of the player.
+                        // 2. Change the src of the iframe to the new embed URL
+                        // 3. Create a new Vimeo Player object (only on initialization.)
+                        // 4. Remove all non-ready event listeners (if there is already a player.)
+                        scope.$watch('videoid', function(videoid, lastVideoid) {
+                            state = setupState();
+
+                            $iframe.attr('src', 'http://player.vimeo.com/video/' +
+                                videoid +
+                                '?api=1&player_id=' +
+                                scope.id);
+
+                            // This will only happen on initialization. We'll continue to use this
+                            // player object, even as the src of the iframe is changed.
+                            if (videoid === lastVideoid) {
+                                player = new VimeoPlayerService.Player($iframe);
+
+                                player.on('ready', function() {
+                                    state.readyState = 0;
+                                    self.emit('ready');
+                                    addEventListeners(player);
+
+                                    player.call('getDuration')
+                                        .then(function getDuration(duration) {
+                                            state.readyState = 1;
+                                            state.duration = duration;
+                                            self.emit('loadedmetadata');
+                                        });
                                 });
+                            } else {
+                                // This only happens when the video is changed from one to another.
+                                // We remove all the non-ready event listeners (they'll be readded
+                                // when the iframe's new page loads and "ready" event is emitted
+                                // again.)
+                                removeEventListeners(player);
+                            }
                         });
 
                         c6EventEmitter(this);
                     }
-
-                    // We can't rely on angular bindings to set the iframe src because it needs to
-                    // be set before it is passed to the constructor below.
-                    $iframe.attr('src', 'http://player.vimeo.com/video/' +
-                        scope.videoid +
-                        '?api=1&player_id=' +
-                        scope.id);
 
                     $element.data('video', new VideoPlayer($iframe));
                 }
             };
         }])
 
-        .directive('youtubePlayer', ['youtube','c6EventEmitter','$interval',
-        function                    ( youtube , c6EventEmitter , $interval ) {
+        .directive('youtubePlayer', ['youtube','c6EventEmitter','$interval','$compile',
+        function                    ( youtube , c6EventEmitter , $interval , $compile ) {
             return {
                 restrict: 'E',
                 scope: {
@@ -295,147 +335,195 @@
                     '    allowfullscreen>',
                     '</iframe>'
                 ].join('\n'),
-                link: function(scope, $element) {
-                    function VideoPlayer(id, $iframe) {
-                        var self = this,
-                            hasPaused = false,
-                            currentTimeInterval = null,
-                            player = new youtube.Player($iframe[0], {
-                                events: {
-                                    onReady: function onReady() {
-                                        state.readyState = 0;
-                                        self.emit('ready');
+                compile: function($element) {
+                    // Grab the string template for this directive before angular compiles it.
+                    var iframeTemplate = $element.html();
 
-                                        currentTimeInterval = $interval(function pollCurrentTime() {
-                                            state.currentTime = player.getCurrentTime();
+                    // Remove the iframe template from the DOM. It will be created when a
+                    // VideoPlayer is created.
+                    $element.empty();
 
-                                            if (state.currentTime !== publicTime) {
-                                                publicTime = state.currentTime;
-                                                self.emit('timeupdate');
-                                            }
+                    return function postLink(scope, $element) {
+                        function VideoPlayer(id) {
+                            var self = this,
+                                hasPaused = false,
+                                currentTimeInterval = null,
+                                player = null,
+                                seekStartTime = null,
+                                publicTime = 0,
+                                state;
 
-                                            if (state.seeking) {
-                                                if (state.currentTime !== seekStartTime) {
-                                                    state.seeking = false;
-                                                    self.emit('seeked');
-                                                }
-                                            }
-                                        }, 250);
+                            function setupState() {
+                                return {
+                                    currentTime: 0,
+                                    ended: false,
+                                    paused: true,
+                                    seeking: false,
+                                    readyState: -1
+                                };
+                            }
+
+                            Object.defineProperties(this, {
+                                currentTime: {
+                                    get: function() {
+                                        return state.currentTime;
                                     },
-                                    onStateChange: function onStateChange(event) {
-                                        var PlayerState = youtube.PlayerState;
-
-                                        switch (event.data) {
-                                        case PlayerState.PLAYING:
-                                            state.ended = false;
-                                            state.paused = false;
-
-                                            if (state.readyState < 1) {
-                                                state.readyState = 3;
-                                                self.emit('loadedmetadata');
-                                                self.emit('canplay');
-                                            }
-
-                                            if (hasPaused) {
-                                                self.emit('play');
-                                            }
-
-                                            self.emit('playing');
-                                            break;
-
-                                        case PlayerState.ENDED:
-                                            state.paused = true;
-                                            state.ended = true;
-                                            self.emit('ended');
-                                            break;
-
-                                        case PlayerState.PAUSED:
-                                            state.paused = true;
-                                            self.emit('pause');
-                                            hasPaused = true;
-                                            break;
+                                    set: function(time) {
+                                        if (self.readyState < 1) {
+                                            throw new Error(
+                                                'Can\'t seek video. Haven\'t loaded metadata.'
+                                            );
                                         }
+
+                                        seekStartTime = state.currentTime;
+                                        state.seeking = true;
+                                        self.emit('seeking');
+                                        player.seekTo(time);
+                                    }
+                                },
+                                duration: {
+                                    get: function() {
+                                        if (state.readyState < 0) {
+                                            return 0;
+                                        }
+
+                                        return player.getDuration();
+                                    }
+                                },
+                                ended: {
+                                    get: function() {
+                                        return state.ended;
+                                    }
+                                },
+                                paused: {
+                                    get: function() {
+                                        return state.paused;
+                                    }
+                                },
+                                readyState: {
+                                    get: function() {
+                                        return state.readyState;
+                                    }
+                                },
+                                seeking: {
+                                    get: function() {
+                                        return state.seeking;
+                                    }
+                                },
+                                videoid: {
+                                    get: function() {
+                                        return id;
                                     }
                                 }
-                            }),
-                            seekStartTime = null,
-                            publicTime = null,
-                            state = {
-                                currentTime: 0,
-                                ended: false,
-                                paused: true,
-                                seeking: false,
-                                readyState: -1
+                            });
+
+                            this.pause = function() {
+                                player.pauseVideo();
                             };
 
-                        Object.defineProperties(this, {
-                            currentTime: {
-                                get: function() {
-                                    return state.currentTime;
-                                },
-                                set: function(time) {
-                                    if (self.readyState < 1) {
-                                        throw new Error(
-                                            'Can\'t seek video. Haven\'t loaded metadata.'
-                                        );
+                            this.play = function() {
+                                player.playVideo();
+                            };
+
+                            c6EventEmitter(this);
+
+                            // Whenever the video loaded into the player changes (or is
+                            // initialized,) a few things need to happen:
+                            //
+                            // 1. Set the scope's "url" property to the correct URL to load into
+                            //    the iframe.
+                            // 2. Create a new iframe (using the string template saved during the
+                            //    compile phase.)
+                            // 3. Destroy the previous iframe (if there is one.)
+                            // 4. Create a new YouTube Player object for the new video.
+                            scope.$watch('videoid', function(id) {
+                                var $iframe;
+
+                                scope.url = '//www.youtube.com/embed/' +
+                                    id +
+                                    '?rel=0&enablejsapi=1';
+
+                                state = setupState();
+
+                                $iframe = $compile(iframeTemplate)(scope, function($iframe) {
+                                    $element.append($iframe);
+                                });
+
+                                if (player) {
+                                    jqLite(player.getIframe()).remove();
+                                }
+
+                                player = new youtube.Player($iframe[0], {
+                                    events: {
+                                        onReady: function onReady() {
+                                            state.readyState = 0;
+                                            self.emit('ready');
+
+                                            currentTimeInterval = $interval(
+                                                function pollCurrentTime() {
+                                                    state.currentTime = player.getCurrentTime();
+
+                                                    if (state.currentTime !== publicTime) {
+                                                        publicTime = state.currentTime;
+                                                        self.emit('timeupdate');
+                                                    }
+
+                                                    if (state.seeking) {
+                                                        if (state.currentTime !== seekStartTime) {
+                                                            state.seeking = false;
+                                                            self.emit('seeked');
+                                                        }
+                                                    }
+                                                },
+                                                250
+                                            );
+                                        },
+                                        onStateChange: function onStateChange(event) {
+                                            var PlayerState = youtube.PlayerState;
+
+                                            switch (event.data) {
+                                            case PlayerState.PLAYING:
+                                                state.ended = false;
+                                                state.paused = false;
+
+                                                if (state.readyState < 1) {
+                                                    state.readyState = 3;
+                                                    self.emit('loadedmetadata');
+                                                    self.emit('canplay');
+                                                }
+
+                                                if (hasPaused) {
+                                                    self.emit('play');
+                                                }
+
+                                                self.emit('playing');
+                                                break;
+
+                                            case PlayerState.ENDED:
+                                                state.paused = true;
+                                                state.ended = true;
+                                                self.emit('ended');
+                                                break;
+
+                                            case PlayerState.PAUSED:
+                                                state.paused = true;
+                                                self.emit('pause');
+                                                hasPaused = true;
+                                                break;
+                                            }
+                                        }
                                     }
+                                });
 
-                                    seekStartTime = state.currentTime;
-                                    state.seeking = true;
-                                    self.emit('seeking');
-                                    player.seekTo(time);
-                                }
-                            },
-                            duration: {
-                                get: function() {
-                                    return player.getDuration();
-                                }
-                            },
-                            ended: {
-                                get: function() {
-                                    return state.ended;
-                                }
-                            },
-                            paused: {
-                                get: function() {
-                                    return state.paused;
-                                }
-                            },
-                            readyState: {
-                                get: function() {
-                                    return state.readyState;
-                                }
-                            },
-                            seeking: {
-                                get: function() {
-                                    return state.seeking;
-                                }
-                            },
-                            videoid: {
-                                value: id
-                            }
-                        });
+                                $iframe.on('$destroy', function() {
+                                    $interval.cancel(currentTimeInterval);
+                                    self.emit('destroy');
+                                });
+                            });
+                        }
 
-                        this.pause = function() {
-                            player.pauseVideo();
-                        };
-
-                        this.play = function() {
-                            player.playVideo();
-                        };
-
-                        c6EventEmitter(this);
-
-                        $iframe.on('$destroy', function() {
-                            $interval.cancel(currentTimeInterval);
-                            player.destroy();
-                            self.emit('destroy');
-                        });
-                    }
-
-                    scope.url = '//www.youtube.com/embed/' + scope.videoid + '?rel=0&enablejsapi=1';
-
-                    $element.data('video', new VideoPlayer(scope.videoid, $element.find('iframe')));
+                        $element.data('video', new VideoPlayer(scope.videoid));
+                    };
                 }
             };
         }]);

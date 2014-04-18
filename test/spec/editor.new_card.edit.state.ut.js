@@ -36,15 +36,15 @@
                 });
 
                 it('should return a card that has been set to the specified type', function() {
-                    c6StateParams.type = 'video';
+                    c6StateParams.cardType = 'video';
                     expect($injector.invoke(EditState.model, EditState)).toBe(NewCardState.cModel);
                     expect(MiniReelService.setCardType).toHaveBeenCalledWith(NewCardState.cModel, 'video');
 
-                    c6StateParams.type = 'ad';
+                    c6StateParams.cardType = 'ad';
                     expect($injector.invoke(EditState.model, EditState)).toBe(NewCardState.cModel);
                     expect(MiniReelService.setCardType).toHaveBeenCalledWith(NewCardState.cModel, 'ad');
 
-                    c6StateParams.type = 'videoBallot';
+                    c6StateParams.cardType = 'videoBallot';
                     expect($injector.invoke(EditState.model, EditState)).toBe(NewCardState.cModel);
                     expect(MiniReelService.setCardType).toHaveBeenCalledWith(NewCardState.cModel, 'videoBallot');
                 });

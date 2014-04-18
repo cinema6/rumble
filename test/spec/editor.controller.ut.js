@@ -33,6 +33,7 @@
                     $scope = $rootScope.$new();
                     $childScope = $scope.$new();
                     EditorCtrl = $controller('EditorController', { $scope: $scope, cModel: cModel });
+                    EditorCtrl.model = cModel;
                 });
             });
 
@@ -40,34 +41,68 @@
                 expect(EditorCtrl).toEqual(jasmine.any(Object));
             });
 
-            describe('initialization', function() {
-                it('should put a reference to the model on itself', function() {
-                    expect(EditorCtrl.model).toBe(cModel);
-                });
+            it('should set preview mode to false', function() {
+                expect(EditorCtrl.preview).toBe(false);
             });
 
             describe('methods', function() {
                 describe('editCard(card)', function() {
                     beforeEach(function() {
-                        spyOn(c6State, 'transitionTo');
+                        spyOn(c6State, 'goTo');
 
                         EditorCtrl.editCard({ id: 'rc-c98312239510db' });
                     });
 
-                    it('should transition to the editor.editCard state', function() {
-                        expect(c6State.transitionTo).toHaveBeenCalledWith('editor.editCard', { id: 'rc-c98312239510db' });
+                    it('should transition to the editor.editCard.video state', function() {
+                        expect(c6State.goTo).toHaveBeenCalledWith('editor.editCard.video', { cardId: 'rc-c98312239510db' });
                     });
                 });
 
                 describe('newCard()', function() {
                     beforeEach(function() {
-                        spyOn(c6State, 'transitionTo');
+                        spyOn(c6State, 'goTo');
 
                         EditorCtrl.newCard();
                     });
 
                     it('should transition to the editor.newCard.type state', function() {
-                        expect(c6State.transitionTo).toHaveBeenCalledWith('editor.newCard.type');
+                        expect(c6State.goTo).toHaveBeenCalledWith('editor.newCard.type');
+                    });
+                });
+
+                describe('previewMode(card)', function() {
+                    beforeEach(function() {
+                        spyOn($scope, '$broadcast');
+                    });
+                    it('should set preview mode to true', function() {
+                        EditorCtrl.previewMode();
+                        expect(EditorCtrl.preview).toBe(true);
+                    });
+
+                    describe('without a card', function() {
+                        it('should $broadcast the experience without a card', function() {
+                            EditorCtrl.previewMode();
+                            expect($scope.$broadcast.calls.argsFor(0)[0]).toBe('mrPreview:updateExperience');
+                            expect($scope.$broadcast.calls.argsFor(0)[1]).toBe(cModel);
+                            expect($scope.$broadcast.calls.argsFor(0)[2]).toBe(undefined);
+                        });
+                    });
+
+                    describe('with a card', function() {
+                        it('should $broadcast the experience with a card', function() {
+                            var card = {};
+                            EditorCtrl.previewMode(card);
+                            expect($scope.$broadcast.calls.argsFor(0)[0]).toBe('mrPreview:updateExperience');
+                            expect($scope.$broadcast.calls.argsFor(0)[1]).toBe(cModel);
+                            expect($scope.$broadcast.calls.argsFor(0)[2]).toBe(card);
+                        });
+                    });
+                });
+
+                describe('closePreview()', function() {
+                    it('should set preview mode to false', function() {
+                        EditorCtrl.closePreview();
+                        expect(EditorCtrl.preview).toBe(false);
                     });
                 });
             });

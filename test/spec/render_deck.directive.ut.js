@@ -59,7 +59,7 @@
                 $scope.$apply(function() {
                     $container = $compile([
                         '<ul>',
-                        '    <li render-deck="deck" parent-test>{{this.title}}</li>',
+                        '    <li render-deck="deck" parent-test>{{$index}}: {{this.title}}</li>',
                         '</ul>'
                     ].join('\n'))($scope);
                 });
@@ -80,7 +80,7 @@
 
                 expect($lis.length).toBe(5);
                 forEach($lis, function(li, index) {
-                    expect($(li).text()).toBe('Card ' + (index + 1));
+                    expect($(li).text()).toBe(index + ': Card ' + (index + 1));
                 });
             });
 
@@ -94,13 +94,13 @@
                 $lis = $container.find('li');
 
                 expect($lis.length).toBe(6);
-                expect($lis.eq(2).text()).toBe('Card A');
-                forEach($lis, function(li) {
+                expect($lis.eq(2).text()).toBe('2: Card A');
+                forEach($lis, function(li, listIndex) {
                     var id = $(li).scope().this.id,
                         index = id.match(/(rc-)(\w)/)[2].toUpperCase(),
                         element = domElements[id];
 
-                    expect($(li).text()).toBe('Card ' + index);
+                    expect($(li).text()).toBe(listIndex + ': Card ' + index);
 
                     if (element) {
                         expect(li).toBe(element);
@@ -128,7 +128,7 @@
                         expect(element).toBe($lis.eq(index)[0]);
                     }
 
-                    expect($lis.eq(index).text()).toBe(card.title);
+                    expect($lis.eq(index).text()).toBe(index + ': ' + card.title);
                 });
             });
 
@@ -148,7 +148,7 @@
                         expect(element).toBe($lis.eq(index)[0]);
                     }
 
-                    expect($lis.eq(index).text()).toBe(card.title);
+                    expect($lis.eq(index).text()).toBe(index + ': ' + card.title);
                 });
             });
         });

@@ -10,82 +10,9 @@
             "summary": "Pick the best",
             "img": {},
             "org": "o-d1f0be2ea473cb",
+            "status": "pending",
+            "lastModified": "2014-04-18T14:07:20+00:00",
             "data": {
-                "id": "r-738c2403d83ddc",
-                "ballots": [
-                    {
-                        "id": "rb-01eb03bc062c15",
-                        "choices": [
-                            {
-                                "button": "Good",
-                                "most": "The Goodest video"
-                            },
-                            {
-                                "button": "Bad",
-                                "most": "The Badest video"
-                            }
-                        ]
-                    },
-                    {
-                        "id": "rb-716ffbdfc356af",
-                        "choices": [
-                            {
-                                "button": "Catchy",
-                                "most": "The Goodest video"
-                            },
-                            {
-                                "button": "Painful",
-                                "most": "The Badest video"
-                            }
-                        ]
-                    },
-                    {
-                        "id": "rb-d1f60e2d64a0ba",
-                        "choices": [
-                            {
-                                "button": "Too Cool",
-                                "most": "The Goodest video"
-                            },
-                            {
-                                "button": "Too Geeky",
-                                "most": "The Badest video"
-                            }
-                        ]
-                    }
-                ],
-                "conversations": [
-                    {
-                        "id": "rcv-f9efca48d85143",
-                        "comments": [
-                            {
-                                "user": {
-                                    "pic": "josh.png",
-                                    "name": "Josh Minzner",
-                                    "isFriend": true
-                                },
-                                "date": "1390945596",
-                                "message": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc sed ultricies turpis. Praesent rutrum blandit nisl, ac adipiscing ante. Integer lectus lectus, ultricies nec orci a, condimentum cursus dolor."
-                            },
-                            {
-                                "user": {
-                                    "pic": "steph.png",
-                                    "name": "Steph Stober",
-                                    "isFriend": true
-                                },
-                                "date": "1389822391",
-                                "message": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc sed ultricies turpis. Praesent rutrum blandit nisl, ac adipiscing ante. Integer lectus lectus, ultricies nec orci a, condimentum cursus dolor."
-                            },
-                            {
-                                "user": {
-                                    "pic": "johnny.png",
-                                    "name": "Johnny Testmonkey"
-                                },
-                                "date": "1388353591",
-                                "message": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc sed ultricies turpis. Praesent rutrum blandit nisl, ac adipiscing ante. Integer lectus lectus, ultricies nec orci a, condimentum cursus dolor."
-                            }
-                        ]
-                    }
-                ],
                 "deck": [
                     {
                         "id": "rc-22119a8cf9f755",
@@ -94,13 +21,11 @@
                         "note": "He's back, and saxier than ever.",
                         "source": "YouTube",
                         "modules": [
-                            "ballot",
-                            "comments"
+                            "ballot"
                         ],
-                        "voting": [
-                            0.63,
-                            0.31,
-                            0.06
+                        "ballot": [
+                            "Catchy",
+                            "Annoying"
                         ],
                         "data": {
                             "videoid": "gy1B3agGNxw",
@@ -108,9 +33,7 @@
                             "end": 130,
                             "rel": 0,
                             "modestbranding": 1
-                        },
-                        "ballotId": "rb-716ffbdfc356af",
-                        "conversationId": "rcv-f9efca48d85143"
+                        }
                     },
                     {
                         "id": "rc-2d46a04b21b073",
@@ -133,16 +56,14 @@
                         "modules": [
                             "ballot"
                         ],
-                        "voting": [
-                            0.77,
-                            0.19,
-                            0.04
+                        "ballot": [
+                            "Funny",
+                            "Lame"
                         ],
                         "data": {
                             "videoid": "x18b09a",
                             "related": 0
-                        },
-                        "ballotId": "rb-01eb03bc062c15"
+                        }
                     },
                     {
                         "id": "rc-e489d1c6359fb3",
@@ -153,17 +74,32 @@
                         "modules": [
                             "ballot"
                         ],
-                        "voting": [
-                            0.83,
-                            0.14,
-                            0.03
+                        "ballot": [
+                            "Cute",
+                            "Sad"
                         ],
                         "data": {
                             "videoid": "81766071",
                             "start": 35,
                             "end": 45
-                        },
-                        "ballotId": "rb-01eb03bc062c15"
+                        }
+                    },
+                    {
+                        "id": "rc-89094f9b7f8c93",
+                        "type": "vimeo",
+                        "title": "ShapeShifter",
+                        "note": "Pretty cool.",
+                        "source": "Vimeo",
+                        "modules": [
+                            "ballot"
+                        ],
+                        "ballot": [
+                            "Cool",
+                            "Boring"
+                        ],
+                        "data": {
+                            "videoid": "18439821"
+                        }
                     },
                     {
                         "id": "rc-e2947c9bec017e",
@@ -174,18 +110,16 @@
                         "modules": [
                             "ballot"
                         ],
-                        "voting": [
-                            0.87,
-                            0.11,
-                            0.02
+                        "ballot": [
+                            "Too Cool",
+                            "Too Geeky"
                         ],
                         "data": {
                             "videoid": "Cn9yJrrm2tk",
                             "rel": 0,
                             "modestbranding": 1,
                             "end": 18
-                        },
-                        "ballotId": "rb-d1f60e2d64a0ba"
+                        }
                     },
                     {
                         "id": "rc-99b87ea709d7ac",
@@ -196,29 +130,13 @@
                         "modules": [
                             "ballot"
                         ],
-                        "voting": [
-                            0.89,
-                            0.09,
-                            0.02
+                        "ballot": [
+                            "Funny",
+                            "Gross"
                         ],
                         "data": {
                             "videoid": "xorbb7",
                             "related": 0
-                        },
-                        "ballotId": "rb-01eb03bc062c15"
-                    },
-                    {
-                        "id": "rc-235d41cde02032",
-                        "type": "miniReel",
-                        "data": {
-                            "message": "Check out these other MiniReels!",
-                            "query": {
-                                "id": [
-                                    "1",
-                                    "2",
-                                    "3"
-                                ]
-                            }
                         }
                     }
                 ]
@@ -233,23 +151,9 @@
             "subtitle": "",
             "summary": "GoPro cameras are the only tech inventions we were introduced to in 2013 that we think deserve to continue trending in 2014. These handy-dandy cameras are perfect for just about any activity, including skydiving, surfing, or rescuing a baby kitten from a tree.",
             "org": "o-d1f0be2ea473cb",
+            "status": "active",
+            "lastModified": "2014-03-27T14:06:36+00:00",
             "data": {
-                "id": "r-ea8caee7de7582",
-                "ballots": [
-                    {
-                        "id": "rb-8e76295e41625f",
-                        "choices": [
-                            {
-                                "button": "Way Rad",
-                                "most": "The Goodest video"
-                            },
-                            {
-                                "button": "Way Lame",
-                                "most": "The Badest video"
-                            }
-                        ]
-                    }
-                ],
                 "deck": [
                     {
                         "id": "rc-22119a8cf9f755",
@@ -260,16 +164,15 @@
                         "modules": [
                             "ballot"
                         ],
-                        "voting": [
-                            0.81,
-                            0.19
+                        "ballot": [
+                            "Cool",
+                            "Boring"
                         ],
                         "data": {
                             "videoid": "IqVPwcvgOWQ",
                             "rel": 0,
                             "modestbranding": 1
-                        },
-                        "ballotId": "rb-8e76295e41625f"
+                        }
                     },
                     {
                         "id": "rc-337f092e881524",
@@ -280,16 +183,15 @@
                         "modules": [
                             "ballot"
                         ],
-                        "voting": [
-                            0.74,
-                            0.26
+                        "ballot": [
+                            "Cool",
+                            "Boring"
                         ],
                         "data": {
                             "videoid": "MNCzSfv4hX8",
                             "rel": 0,
                             "modestbranding": 1
-                        },
-                        "ballotId": "rb-8e76295e41625f"
+                        }
                     },
                     {
                         "id": "rc-facb167546a4ff",
@@ -300,16 +202,15 @@
                         "modules": [
                             "ballot"
                         ],
-                        "voting": [
-                            0.95,
-                            0.05
+                        "ballot": [
+                            "Cool",
+                            "Boring"
                         ],
                         "data": {
                             "videoid": "HrqXTHCGVEo",
                             "rel": 0,
                             "modestbranding": 1
-                        },
-                        "ballotId": "rb-8e76295e41625f"
+                        }
                     },
                     {
                         "id": "rc-4b9dc6b9651428",
@@ -320,16 +221,15 @@
                         "modules": [
                             "ballot"
                         ],
-                        "voting": [
-                            0.65,
-                            0.35
+                        "ballot": [
+                            "Cool",
+                            "Boring"
                         ],
                         "data": {
                             "videoid": "x76VEPXYaI0",
                             "rel": 0,
                             "modestbranding": 1
-                        },
-                        "ballotId": "rb-8e76295e41625f"
+                        }
                     },
                     {
                         "id": "rc-9b524d0c0535db",
@@ -340,16 +240,15 @@
                         "modules": [
                             "ballot"
                         ],
-                        "voting": [
-                            0.7,
-                            0.3
+                        "ballot": [
+                            "Cool",
+                            "Boring"
                         ],
                         "data": {
                             "videoid": "af2m0gf6TtA",
                             "rel": 0,
                             "modestbranding": 1
-                        },
-                        "ballotId": "rb-8e76295e41625f"
+                        }
                     },
                     {
                         "id": "rc-828007b55441ca",
@@ -360,16 +259,15 @@
                         "modules": [
                             "ballot"
                         ],
-                        "voting": [
-                            0.9,
-                            0.1
+                        "ballot": [
+                            "Cool",
+                            "Boring"
                         ],
                         "data": {
                             "videoid": "GdEKSyad_rk",
                             "rel": 0,
                             "modestbranding": 1
-                        },
-                        "ballotId": "rb-8e76295e41625f"
+                        }
                     },
                     {
                         "id": "rc-4ea854fd34d960",
@@ -380,16 +278,15 @@
                         "modules": [
                             "ballot"
                         ],
-                        "voting": [
-                            0.82,
-                            0.18
+                        "ballot": [
+                            "Cool",
+                            "Boring"
                         ],
                         "data": {
                             "videoid": "T8F8WR2rzPA",
                             "rel": 0,
                             "modestbranding": 1
-                        },
-                        "ballotId": "rb-8e76295e41625f"
+                        }
                     },
                     {
                         "id": "rc-392f3546f0cfc3",
@@ -409,16 +306,15 @@
                         "modules": [
                             "ballot"
                         ],
-                        "voting": [
-                            0.97,
-                            0.03
+                        "ballot": [
+                            "Cool",
+                            "Boring"
                         ],
                         "data": {
                             "videoid": "SwbP9WLX3fY",
                             "rel": 0,
                             "modestbranding": 1
-                        },
-                        "ballotId": "rb-8e76295e41625f"
+                        }
                     },
                     {
                         "id": "rc-389f9dea3498d2",
@@ -429,16 +325,15 @@
                         "modules": [
                             "ballot"
                         ],
-                        "voting": [
-                            0.67,
-                            0.33
+                        "ballot": [
+                            "Cool",
+                            "Boring"
                         ],
                         "data": {
                             "videoid": "ZCAnLxRvNNc",
                             "rel": 0,
                             "modestbranding": 1
-                        },
-                        "ballotId": "rb-8e76295e41625f"
+                        }
                     },
                     {
                         "id": "rc-065050baf27d98",
@@ -449,16 +344,15 @@
                         "modules": [
                             "ballot"
                         ],
-                        "voting": [
-                            0.78,
-                            0.22
+                        "ballot": [
+                            "Cool",
+                            "Boring"
                         ],
                         "data": {
                             "videoid": "pOoy7_l2EbI",
                             "rel": 0,
                             "modestbranding": 1
-                        },
-                        "ballotId": "rb-8e76295e41625f"
+                        }
                     },
                     {
                         "id": "rc-3194c992829ad5",
@@ -469,16 +363,15 @@
                         "modules": [
                             "ballot"
                         ],
-                        "voting": [
-                            0.9,
-                            0.1
+                        "ballot": [
+                            "Cool",
+                            "Boring"
                         ],
                         "data": {
                             "videoid": "rIu5B3Fsstg",
                             "rel": 0,
                             "modestbranding": 1
-                        },
-                        "ballotId": "rb-8e76295e41625f"
+                        }
                     },
                     {
                         "id": "rc-974e99904a58fd",
@@ -489,16 +382,15 @@
                         "modules": [
                             "ballot"
                         ],
-                        "voting": [
-                            0.86,
-                            0.14
+                        "ballot": [
+                            "Cool",
+                            "Boring"
                         ],
                         "data": {
                             "videoid": "oEG1V7rkIK8",
                             "rel": 0,
                             "modestbranding": 1
-                        },
-                        "ballotId": "rb-8e76295e41625f"
+                        }
                     },
                     {
                         "id": "rc-0518f251954d3d",
@@ -509,16 +401,15 @@
                         "modules": [
                             "ballot"
                         ],
-                        "voting": [
-                            0.75,
-                            0.25
+                        "ballot": [
+                            "Cool",
+                            "Boring"
                         ],
                         "data": {
                             "videoid": "zqIjZFV4YAU",
                             "rel": 0,
                             "modestbranding": 1
-                        },
-                        "ballotId": "rb-8e76295e41625f"
+                        }
                     },
                     {
                         "id": "rc-3502759494071f",
@@ -529,16 +420,15 @@
                         "modules": [
                             "ballot"
                         ],
-                        "voting": [
-                            0.98,
-                            0.02
+                        "ballot": [
+                            "Cool",
+                            "Boring"
                         ],
                         "data": {
                             "videoid": "CjB_oVeq8Lo",
                             "rel": 0,
                             "modestbranding": 1
-                        },
-                        "ballotId": "rb-8e76295e41625f"
+                        }
                     },
                     {
                         "id": "rc-3502759494071f",
@@ -549,29 +439,14 @@
                         "modules": [
                             "ballot"
                         ],
-                        "voting": [
-                            0.64,
-                            0.36
+                        "ballot": [
+                            "Cool",
+                            "Boring"
                         ],
                         "data": {
                             "videoid": "eesJwsJoczY",
                             "rel": 0,
                             "modestbranding": 1
-                        },
-                        "ballotId": "rb-8e76295e41625f"
-                    },
-                    {
-                        "id": "rc-ee5f1c11d8d42f",
-                        "type": "miniReel",
-                        "data": {
-                            "message": "Now check out...",
-                            "query": {
-                                "id": [
-                                    "1",
-                                    "2",
-                                    "3"
-                                ]
-                            }
                         }
                     }
                 ]
@@ -586,23 +461,9 @@
             "subtitle": "",
             "summary": "From touchdowns, to big hits, spectacular catches and defensive stops, the highest level of competition never disappoints. To really appreciate what this Super Bowl will bring us on Sunday, it's important to remember some of the greatness of the past.",
             "org": "o-d1f0be2ea473cb",
+            "status": "active",
+            "lastModified": "2014-04-01T14:06:36+00:00",
             "data": {
-                "id": "r-a798237d2e522f",
-                "ballots": [
-                    {
-                        "id": "rb-f59f9c044594e7",
-                        "choices": [
-                            {
-                                "button": "All Skill",
-                                "most": "The Goodest video"
-                            },
-                            {
-                                "button": "All Luck",
-                                "most": "The Badest video"
-                            }
-                        ]
-                    }
-                ],
                 "deck": [
                     {
                         "id": "rc-080fb573e704cf",
@@ -613,16 +474,15 @@
                         "modules": [
                             "ballot"
                         ],
-                        "voting": [
-                            0.81,
-                            0.19
+                        "ballot": [
+                            "All Skill",
+                            "All Luck"
                         ],
                         "data": {
                             "videoid": "WpJaJM4Cy8o",
                             "rel": 0,
                             "modestbranding": 1
-                        },
-                        "ballotId": "rb-f59f9c044594e7"
+                        }
                     },
                     {
                         "id": "rc-7311404ad44b52",
@@ -633,16 +493,15 @@
                         "modules": [
                             "ballot"
                         ],
-                        "voting": [
-                            0.74,
-                            0.26
+                        "ballot": [
+                            "All Skill",
+                            "All Luck"
                         ],
                         "data": {
                             "videoid": "-T1D_H-vOSA",
                             "rel": 0,
                             "modestbranding": 1
-                        },
-                        "ballotId": "rb-f59f9c044594e7"
+                        }
                     },
                     {
                         "id": "rc-df375fb28cc776",
@@ -653,16 +512,15 @@
                         "modules": [
                             "ballot"
                         ],
-                        "voting": [
-                            0.95,
-                            0.05
+                        "ballot": [
+                            "All Skill",
+                            "All Luck"
                         ],
                         "data": {
                             "videoid": "oPrm4PpOStA",
                             "rel": 0,
                             "modestbranding": 1
-                        },
-                        "ballotId": "rb-f59f9c044594e7"
+                        }
                     },
                     {
                         "id": "rc-4f9cb78c41dcd9",
@@ -673,16 +531,15 @@
                         "modules": [
                             "ballot"
                         ],
-                        "voting": [
-                            0.65,
-                            0.35
+                        "ballot": [
+                            "All Skill",
+                            "All Luck"
                         ],
                         "data": {
                             "videoid": "u_Hrv5TNb2Y",
                             "rel": 0,
                             "modestbranding": 1
-                        },
-                        "ballotId": "rb-f59f9c044594e7"
+                        }
                     },
                     {
                         "id": "rc-b0f8f58e21f202",
@@ -693,16 +550,15 @@
                         "modules": [
                             "ballot"
                         ],
-                        "voting": [
-                            0.7,
-                            0.3
+                        "ballot": [
+                            "All Skill",
+                            "All Luck"
                         ],
                         "data": {
                             "videoid": "MVT91mNMS8A",
                             "rel": 0,
                             "modestbranding": 1
-                        },
-                        "ballotId": "rb-f59f9c044594e7"
+                        }
                     },
                     {
                         "id": "rc-ca8adce82b632f",
@@ -713,16 +569,15 @@
                         "modules": [
                             "ballot"
                         ],
-                        "voting": [
-                            0.9,
-                            0.1
+                        "ballot": [
+                            "All Skill",
+                            "All Luck"
                         ],
                         "data": {
                             "videoid": "O-5mLe8n9QI",
                             "rel": 0,
                             "modestbranding": 1
-                        },
-                        "ballotId": "rb-f59f9c044594e7"
+                        }
                     },
                     {
                         "id": "rc-cd2a90ac077d87",
@@ -733,16 +588,15 @@
                         "modules": [
                             "ballot"
                         ],
-                        "voting": [
-                            0.82,
-                            0.18
+                        "ballot": [
+                            "All Skill",
+                            "All Luck"
                         ],
                         "data": {
                             "videoid": "xKaGdvnQUz4",
                             "rel": 0,
                             "modestbranding": 1
-                        },
-                        "ballotId": "rb-f59f9c044594e7"
+                        }
                     },
                     {
                         "id": "rc-392f3546f0cfc3",
@@ -762,16 +616,15 @@
                         "modules": [
                             "ballot"
                         ],
-                        "voting": [
-                            0.97,
-                            0.03
+                        "ballot": [
+                            "All Skill",
+                            "All Luck"
                         ],
                         "data": {
                             "videoid": "lmvQVz1-bOU",
                             "rel": 0,
                             "modestbranding": 1
-                        },
-                        "ballotId": "rb-f59f9c044594e7"
+                        }
                     },
                     {
                         "id": "rc-ef6ffe2bab25f5",
@@ -782,16 +635,15 @@
                         "modules": [
                             "ballot"
                         ],
-                        "voting": [
-                            0.67,
-                            0.33
+                        "ballot": [
+                            "All Skill",
+                            "All Luck"
                         ],
                         "data": {
                             "videoid": "27XeNefwABw",
                             "rel": 0,
                             "modestbranding": 1
-                        },
-                        "ballotId": "rb-f59f9c044594e7"
+                        }
                     },
                     {
                         "id": "rc-7c2c6b5040f21b",
@@ -802,29 +654,14 @@
                         "modules": [
                             "ballot"
                         ],
-                        "voting": [
-                            0.78,
-                            0.22
+                        "ballot": [
+                            "All Skill",
+                            "All Luck"
                         ],
                         "data": {
                             "videoid": "RqnQwKAI4OE",
                             "rel": 0,
                             "modestbranding": 1
-                        },
-                        "ballotId": "rb-f59f9c044594e7"
-                    },
-                    {
-                        "id": "rc-1a327c199e4387",
-                        "type": "miniReel",
-                        "data": {
-                            "message": "Now check out...",
-                            "query": {
-                                "id": [
-                                    "1",
-                                    "2",
-                                    "3"
-                                ]
-                            }
                         }
                     }
                 ]
@@ -839,23 +676,9 @@
             "subtitle": "",
             "summary": "Nothing electrifies a crowd like a good wrestling entrance. Finishing moves are cool, but most of them don't even hurt!",
             "org": "o-d1f0be2ea473cb",
+            "status": "pending",
+            "lastModified": "2014-04-04T14:06:36+00:00",
             "data": {
-                "id": "r-ea8caee7de7582",
-                "ballots": [
-                    {
-                        "id": "rb-148edd87e67134",
-                        "choices": [
-                            {
-                                "button": "Hulk-Strong",
-                                "most": "The Goodest video"
-                            },
-                            {
-                                "button": "Too Weak",
-                                "most": "The Badest video"
-                            }
-                        ]
-                    }
-                ],
                 "deck": [
                     {
                         "id": "rc-0c4d7938b6fe3c",
@@ -866,16 +689,15 @@
                         "modules": [
                             "ballot"
                         ],
-                        "voting": [
-                            0.81,
-                            0.19
+                        "ballot": [
+                            "Strong",
+                            "Weak"
                         ],
                         "data": {
                             "videoid": "E0q7PPu_NIg",
                             "rel": 0,
                             "modestbranding": 1
-                        },
-                        "ballotId": "rb-148edd87e67134"
+                        }
                     },
                     {
                         "id": "rc-29bd38a14dc46b",
@@ -886,16 +708,15 @@
                         "modules": [
                             "ballot"
                         ],
-                        "voting": [
-                            0.74,
-                            0.26
+                        "ballot": [
+                            "Strong",
+                            "Weak"
                         ],
                         "data": {
                             "videoid": "SrliMvIPALU",
                             "rel": 0,
                             "modestbranding": 1
-                        },
-                        "ballotId": "rb-148edd87e67134"
+                        }
                     },
                     {
                         "id": "rc-9e477d23518112",
@@ -906,16 +727,15 @@
                         "modules": [
                             "ballot"
                         ],
-                        "voting": [
-                            0.95,
-                            0.05
+                        "ballot": [
+                            "Strong",
+                            "Weak"
                         ],
                         "data": {
                             "videoid": "Z5lMOIFAJVI",
                             "rel": 0,
                             "modestbranding": 1
-                        },
-                        "ballotId": "rb-148edd87e67134"
+                        }
                     },
                     {
                         "id": "rc-e1919a486fccfb",
@@ -926,16 +746,15 @@
                         "modules": [
                             "ballot"
                         ],
-                        "voting": [
-                            0.65,
-                            0.35
+                        "ballot": [
+                            "Strong",
+                            "Weak"
                         ],
                         "data": {
                             "videoid": "5oJtvopJoAU",
                             "rel": 0,
                             "modestbranding": 1
-                        },
-                        "ballotId": "rb-148edd87e67134"
+                        }
                     },
                     {
                         "id": "rc-11df958a25966d",
@@ -955,16 +774,15 @@
                         "modules": [
                             "ballot"
                         ],
-                        "voting": [
-                            0.7,
-                            0.3
+                        "ballot": [
+                            "Strong",
+                            "Weak"
                         ],
                         "data": {
                             "videoid": "HBq-FYvAFmk",
                             "rel": 0,
                             "modestbranding": 1
-                        },
-                        "ballotId": "rb-148edd87e67134"
+                        }
                     },
                     {
                         "id": "rc-26eb95e7e9d2ca",
@@ -975,16 +793,15 @@
                         "modules": [
                             "ballot"
                         ],
-                        "voting": [
-                            0.9,
-                            0.1
+                        "ballot": [
+                            "Strong",
+                            "Weak"
                         ],
                         "data": {
                             "videoid": "GQly9YfEhpA",
                             "rel": 0,
                             "modestbranding": 1
-                        },
-                        "ballotId": "rb-148edd87e67134"
+                        }
                     },
                     {
                         "id": "rc-cf6102c95f8d91",
@@ -995,29 +812,14 @@
                         "modules": [
                             "ballot"
                         ],
-                        "voting": [
-                            0.82,
-                            0.18
+                        "ballot": [
+                            "Strong",
+                            "Weak"
                         ],
                         "data": {
                             "videoid": "MNhe8ghamyE",
                             "rel": 0,
                             "modestbranding": 1
-                        },
-                        "ballotId": "rb-148edd87e67134"
-                    },
-                    {
-                        "id": "rc-b4b209132e2674",
-                        "type": "miniReel",
-                        "data": {
-                            "message": "Now check out...",
-                            "query": {
-                                "id": [
-                                    "1",
-                                    "2",
-                                    "3"
-                                ]
-                            }
                         }
                     }
                 ]

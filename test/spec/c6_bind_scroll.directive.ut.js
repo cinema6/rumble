@@ -83,22 +83,22 @@
                 $scope.$apply(function() {
                     $scope.scroll.x = -10;
                 });
-                expect($scope.scroll.x).toBe(0);
+                expect($scope.scroll.x).toBe($scroller.scrollLeft());
 
                 $scope.$apply(function() {
                     $scope.scroll.x = 100;
                 });
-                expect($scope.scroll.x).toBe(75);
+                expect($scope.scroll.x).toBe($scroller.scrollLeft());
 
                 $scope.$apply(function() {
                     $scope.scroll.y = -25;
                 });
-                expect($scope.scroll.y).toBe(0);
+                expect($scope.scroll.y).toBe($scroller.scrollTop());
 
                 $scope.$apply(function() {
                     $scope.scroll.y = 200;
                 });
-                expect($scope.scroll.y).toBe(75);
+                expect($scope.scroll.y).toBe($scroller.scrollTop());
             });
 
             afterEach(function() {

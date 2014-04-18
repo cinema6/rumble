@@ -33,7 +33,13 @@
                                 this.seekTo = jasmine.createSpy('youtube.seekTo()');
                                 this.pauseVideo = jasmine.createSpy('youtube.pauseVideo()');
                                 this.playVideo = jasmine.createSpy('youtube.pauseVideo()');
-                                this.destroy = jasmine.createSpy('youtube.destroy()');
+                                this.destroy = jasmine.createSpy('youtube.destroy()')
+                                    .and.callFake(function() {
+                                        iframe.parentNode.removeChild(iframe);
+                                    });
+                                this.getIframe = function() {
+                                    return iframe;
+                                };
 
                                 this._trigger = function(name, event) {
                                     config.events[name](event);
@@ -89,12 +95,14 @@
 
                     $scope = $rootScope.$new();
                 });
+
+                $scope.id = 'gy1B3agGNxw';
             });
 
             describe('initialization', function() {
                 beforeEach(function() {
                     $scope.$apply(function() {
-                        $player = $compile('<youtube-player videoid="gy1B3agGNxw"></youtube-player>')($scope);
+                        $player = $compile('<youtube-player videoid="{{id}}"></youtube-player>')($scope);
                     });
                 });
 
@@ -118,6 +126,35 @@
 
                     expect($interval).toHaveBeenCalled();
                 });
+
+                it('should support changing the video', function() {
+                    var $iframe = $player.find('iframe'),
+                        video = $player.data('video'),
+                        $newFrame,
+                        poll;
+
+                    player._trigger('onReady', {});
+                    poll = interval;
+                    player.getCurrentTime.and.returnValue(20);
+                    $interval.flush(250);
+                    player._trigger('onStateChange', { data: youtube.PlayerState.ENDED });
+
+                    $scope.$apply(function() {
+                        $scope.id = 'f9h85495jf';
+                    });
+                    expect(video.readyState).toBe(-1);
+                    expect(video.currentTime).toBe(0);
+                    expect(video.ended).toBe(false);
+                    $newFrame = $player.find('iframe');
+
+                    player._trigger('onReady', {});
+
+                    expect($interval.cancel).toHaveBeenCalledWith(poll);
+                    expect($interval.calls.count()).toBe(2);
+                    expect($iframe[0]).not.toBe($newFrame[0]);
+                    expect(player).not.toBe(players[0]);
+                    expect($newFrame.attr('src')).toBe('//www.youtube.com/embed/f9h85495jf?rel=0&enablejsapi=1');
+                });
             });
 
             describe('when the player is destroyed', function() {
@@ -137,10 +174,6 @@
 
                 it('should cancel the $interval', function() {
                     expect($interval.cancel).toHaveBeenCalledWith(interval);
-                });
-
-                it('should destroy the youtube player', function() {
-                    expect(player.destroy).toHaveBeenCalled();
                 });
 
                 it('should emit a destroy event', function() {
@@ -229,8 +262,10 @@
                     describe('duration', function() {
                         describe('getting', function() {
                             it('should proxy to the player', function() {
+                                player.getDuration.and.returnValue(30);
                                 expect(video.duration).toBe(0);
 
+                                player._trigger('onReady', {});
                                 player.getDuration.and.returnValue(2);
                                 expect(video.duration).toBe(2);
 
@@ -394,7 +429,7 @@
                         describe('setting', function() {
                             it('should throw an error', function() {
                                 expect(function() {
-                                    video.videoid = null;
+                                    video.videoid = 'foo';
                                 }).toThrow();
                             });
                         });
@@ -588,6 +623,11 @@
 
                             video.on('timeupdate', timeupdate);
 
+                            player.getCurrentTime.and.returnValue(0);
+                            $interval.flush(250);
+                            expect(timeupdate).not.toHaveBeenCalled();
+
+                            player.getCurrentTime.and.returnValue(1);
                             $interval.flush(250);
                             expect(timeupdate).toHaveBeenCalled();
 

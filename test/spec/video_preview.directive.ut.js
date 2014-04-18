@@ -6,6 +6,9 @@
             var $rootScope,
                 $scope,
                 $compile,
+                $timeout,
+                c6EventEmitter,
+                $q,
                 $preview;
 
             beforeEach(function() {
@@ -18,6 +21,9 @@
                 inject(function($injector) {
                     $rootScope = $injector.get('$rootScope');
                     $compile = $injector.get('$compile');
+                    c6EventEmitter = $injector.get('c6EventEmitter');
+                    $timeout = $injector.get('$timeout');
+                    $q = $injector.get('$q');
 
                     $scope = $rootScope.$new();
                 });
@@ -26,10 +32,275 @@
                 $scope.videoid = null;
 
                 $scope.$apply(function() {
-                    $preview = $compile('<video-preview service="{{service}}" videoid="{{videoid}}"></video-preview>')($scope);
+                    $preview = $compile('<video-preview service="{{service}}" videoid="{{videoid}}" start="start" end="end"></video-preview>')($scope);
                 });
 
                 expect($preview.find('iframe').length).toBe(0);
+            });
+
+            describe('when the chosen player has an interface', function() {
+                var video;
+
+                function VideoInterface() {
+                    var ready = false;
+
+                    this.currentTime = 0;
+
+                    this.pause = jasmine.createSpy('video.pause()');
+
+                    c6EventEmitter(this);
+
+                    this.once('ready', function() { ready = true; });
+
+                    this.on('newListener', function(event) {
+                        if (event.search(
+                            /^(newListener|ready)$/
+                        ) < 0 && !ready) {
+                            throw new Error('Can\'t add a listener before the player is ready!');
+                        }
+                    });
+                }
+
+                function timeupdate(time) {
+                    video.currentTime = time;
+                    video.emit('timeupdate');
+                }
+
+                beforeEach(function() {
+                    var $player = $('<mock-player></mock-player>');
+
+                    video = new VideoInterface();
+                    $player.data('video', video);
+
+                    $scope.$apply(function() {
+                        $scope.videoid = '85377978';
+                    });
+                    $preview.find('div').append($player);
+                    $timeout.flush();
+
+                    expect($preview.isolateScope().video).not.toBeDefined();
+                    video.emit('ready');
+                });
+
+                it('should put the video on the scope', function() {
+                    expect($preview.isolateScope().video).toBe(video);
+                });
+
+                describe('scanning', function() {
+                    var scanDeferred,
+                        scope;
+
+                    beforeEach(function() {
+                        scanDeferred = $q.defer();
+                        scope = $preview.isolateScope();
+
+                        scope.onMarkerSeek(scanDeferred.promise);
+                    });
+
+                    function notify(time) {
+                        $scope.$apply(function() {
+                            scanDeferred.notify(time);
+                        });
+                        video.emit('timeupdate');
+                    }
+
+                    function done(time) {
+                        $scope.$apply(function() {
+                            scanDeferred.resolve(time);
+                        });
+                        scanDeferred = $q.defer();
+                    }
+
+                    describe('the start time', function() {
+                        it('should update the currentTime on the video', function() {
+                            notify(10);
+                            expect(video.currentTime).toBe(10);
+
+                            notify(15);
+                            expect(video.currentTime).toBe(15);
+
+                            notify(12);
+                            expect(video.currentTime).toBe(12);
+                        });
+                    });
+
+                    describe('the end time', function() {
+                        it('should update the currentTime on the video', function() {
+                            notify(10);
+                            expect(video.currentTime).toBe(10);
+
+                            notify(15);
+                            expect(video.currentTime).toBe(15);
+
+                            notify(12);
+                            expect(video.currentTime).toBe(12);
+                        });
+                    });
+
+                    describe('scope.currentTime', function() {
+                        beforeEach(function() {
+                            done(0);
+                        });
+
+                        it('should "freeze" when the scan starts, and "unfreeze" when it ends', function() {
+                            expect(scope.currentTime).toBe(0);
+
+                            video.currentTime = 10;
+                            expect(scope.currentTime).toBe(10);
+
+                            video.currentTime = 20;
+                            expect(scope.currentTime).toBe(20);
+
+                            video.currentTime = 30;
+                            expect(scope.currentTime).toBe(30);
+
+                            scope.onMarkerSeek(scanDeferred.promise);
+
+                            notify(5);
+                            expect(scope.currentTime).toBe(30);
+
+                            notify(10);
+                            expect(scope.currentTime).toBe(30);
+
+                            notify(27);
+                            expect(scope.currentTime).toBe(30);
+
+                            done(27);
+                            expect(scope.currentTime).toBe(30);
+                            expect(video.currentTime).toBe(30);
+
+                            video.currentTime = 32;
+                            expect(scope.currentTime).toBe(32);
+                        });
+
+                        it('should not let a start/end time get in its way', function() {
+                            $scope.$apply(function() {
+                                $scope.start = 10;
+                                $scope.end = 30;
+                            });
+                            scope.onMarkerSeek(scanDeferred.promise);
+
+                            notify(20);
+                            expect(video.currentTime).toBe(20);
+
+                            notify(7);
+                            expect(video.currentTime).toBe(7);
+                        });
+                    });
+                });
+
+                describe('if there is no start/end specified', function() {
+                    it('should not interfere with the video playback', function() {
+                        timeupdate(0);
+                        expect(video.currentTime).toBe(0);
+
+                        timeupdate(1);
+                        expect(video.currentTime).toBe(1);
+
+                        timeupdate(2);
+                        expect(video.currentTime).toBe(2);
+                    });
+                });
+
+                describe('if there is a start/end time specified', function() {
+                    beforeEach(function() {
+                        $scope.$apply(function() {
+                            $scope.start = 10;
+                            $scope.end = 30;
+                        });
+                    });
+
+                    it('should seek the video to the start time if there is a timeupdate and the currentTime is lower than the start - 1 second', function() {
+                        expect(video.currentTime).toBe(0);
+                        timeupdate(1);
+
+                        expect(video.currentTime).toBe(10);
+
+                        timeupdate(10.1);
+                        expect(video.currentTime).toBe(10.1);
+
+                        timeupdate(8);
+                        expect(video.currentTime).toBe(10);
+
+                        timeupdate(9);
+                        expect(video.currentTime).toBe(9);
+                    });
+
+                    it('should pause the video if it goes past or reaches the end time', function() {
+                        timeupdate(25);
+                        timeupdate(26);
+                        timeupdate(27);
+                        timeupdate(28);
+                        timeupdate(29);
+                        timeupdate(29.999);
+
+                        expect(video.pause).not.toHaveBeenCalled();
+
+                        timeupdate(30);
+                        expect(video.pause).toHaveBeenCalled();
+
+                        video.pause.calls.reset();
+
+                        timeupdate(28);
+                        timeupdate(29.5);
+                        expect(video.pause).not.toHaveBeenCalled();
+
+                        timeupdate(31);
+                        expect(video.pause).toHaveBeenCalled();
+                    });
+
+                    it('should restart the video from the beginning if it is played after ending', function() {
+                        timeupdate(15);
+                        expect(video.currentTime).toBe(15);
+
+                        video.emit('playing');
+                        expect(video.currentTime).toBe(15);
+
+                        timeupdate(31);
+
+                        video.emit('playing');
+
+                        expect(video.currentTime).toBe(10);
+
+                        timeupdate(11);
+                        timeupdate(12);
+
+                        video.emit('playing');
+
+                        expect(video.currentTime).toBe(12);
+                    });
+
+                    it('should not restart the video from the beginning if the end time has changed since it ended', function() {
+                        timeupdate(15);
+                        expect(video.currentTime).toBe(15);
+
+                        video.emit('playing');
+                        expect(video.currentTime).toBe(15);
+
+                        timeupdate(31);
+                        $scope.$apply(function() {
+                            $scope.end = 45;
+                        });
+
+                        video.emit('playing');
+                        expect(video.currentTime).toBe(31);
+                    });
+                });
+            });
+
+            describe('when the player has no interface', function() {
+                beforeEach(function() {
+                    $scope.$apply(function() {
+                        $scope.videoid = 'abc123';
+                        $scope.service = 'dailymotion';
+                    });
+                });
+
+                it('should not throw errors', function() {
+                    expect(function() {
+                        $timeout.flush();
+                    }).not.toThrow();
+                });
             });
 
             describe('youtube', function() {

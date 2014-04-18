@@ -34,7 +34,9 @@
     "escape-regexp": "0.0.1",
     "underscore": "~1.5.2",
     "karma-junit-reporter": "~0.2.1",
-    "grunt-karma": "^0.8.2"
+    "grunt-karma": "^0.8.2",
+    "karma-requirejs": "^0.2.1",
+    "karma-phantomjs-launcher": "^0.1.4"
   },
   "engines": {
     "node": ">=0.8.0"
