@@ -725,7 +725,7 @@
                         expect($scope.deck[2].player).toBeNull();
                         $scope.$emit('playerAdd',mockPlayer);
                         expect($scope.deck[2].player).toBe(mockPlayer);
-                        expect(mockPlayer.on.callCount).toEqual(1);
+                        expect(mockPlayer.on.callCount).toEqual(4);
                         expect(mockPlayer.on.argsForCall[0][0]).toEqual('ready');
                     });
                 });

@@ -362,7 +362,6 @@
                     'storage'       : 'none',
                     'cookieDomain'  : 'none'
                 });
-                $window.c6MrGa('c6mr.require','displayfeatures');
                 $window.c6MrGa('c6mr.set', 'checkProtocolTask', function(){});
 
                 $scope.$broadcast('analyticsReady');

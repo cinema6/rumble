@@ -318,6 +318,11 @@
                     return true;
             }
         }, ['currentCard.type']);
+        
+        $scope.$on('<ballot-vote-module>:vote', function(/*event,vote*/){
+            $window.c6MrGa('c6mr.send', 'event', 'video', 'vote',
+                self.getVirtualPage());
+        });
 
         $scope.$on('playerAdd',function(event,player){
             $log.log('Player added: %1 - %2',player.getType(),player.getVideoId());
@@ -334,6 +339,21 @@
                 $log.log('Player ready: %1 - %2',player.getType(),player.getVideoId());
                 self.checkReady();
                 player.removeListener('ready',this);
+            });
+
+            player.on('play', function(){
+                $window.c6MrGa('c6mr.send', 'event', 'video', 'play',
+                    self.getVirtualPage());
+            });
+            
+            player.on('pause', function(){
+                $window.c6MrGa('c6mr.send', 'event', 'video', 'pause',
+                    self.getVirtualPage());
+            });
+            
+            player.on('ended', function(){
+                $window.c6MrGa('c6mr.send', 'event', 'video', 'ended',
+                    self.getVirtualPage());
             });
         });
 
