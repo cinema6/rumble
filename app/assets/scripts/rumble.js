@@ -342,18 +342,30 @@
             });
 
             player.on('play', function(){
-                $window.c6MrGa('c6mr.send', 'event', 'video', 'play',
-                    self.getVirtualPage());
+                if (($scope.currentCard) &&
+                        (player.getVideoId() === $scope.currentCard.data.videoid)){
+                    $window.c6MrGa('c6mr.send', 'event', 'video', 'play',
+                        player.webHref,
+                        self.getVirtualPage());
+                }
             });
             
             player.on('pause', function(){
-                $window.c6MrGa('c6mr.send', 'event', 'video', 'pause',
-                    self.getVirtualPage());
+                if (($scope.currentCard) &&
+                        (player.getVideoId() === $scope.currentCard.data.videoid)){
+                    $window.c6MrGa('c6mr.send', 'event', 'video', 'pause',
+                        player.webHref,
+                        self.getVirtualPage());
+                }
             });
             
             player.on('ended', function(){
-                $window.c6MrGa('c6mr.send', 'event', 'video', 'ended',
-                    self.getVirtualPage());
+                if (($scope.currentCard) &&
+                        (player.getVideoId() === $scope.currentCard.data.videoid)){
+                    $window.c6MrGa('c6mr.send', 'event', 'video', 'ended',
+                        player.webHref,
+                        self.getVirtualPage());
+                }
             });
         });
 
