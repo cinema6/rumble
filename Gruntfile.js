@@ -100,6 +100,11 @@ module.exports = function(grunt) {
         grunt.task.run('watch:e2e:' + (browser || ''));
     });
 
+    grunt.registerTask('setmode', 'the the build mode', function(mode) {
+        // console.log(mode);
+        grunt.config('buildMode',mode);
+    });
+
     /*********************************************************************************************
      *
      * BUILD TASKS
@@ -107,21 +112,33 @@ module.exports = function(grunt) {
      *********************************************************************************************/
 
     grunt.registerTask('build', 'build app into distDir', function(){
+        var modes = grunt.file.expand({
+            cwd: settings.appDir+'/assets/views',
+            filter: 'isDirectory'
+        }, ['*']);
+
         grunt.config('withMaps',grunt.option('with-maps'));
         grunt.task.run('test:unit');
-        grunt.task.run('git_last_commit');
         grunt.task.run('clean:build');
-        grunt.task.run('copy:dist');
-        grunt.task.run('ngtemplates:dist');
-        grunt.task.run('htmlmin:dist');
-        grunt.task.run('sed:main');
-        grunt.task.run('sed:html');
-        grunt.task.run('cssmin:dist');
-        grunt.task.run('uglify:dist');
-        if (grunt.option('with-maps')){
-            grunt.task.run('copy:raw');
-            grunt.task.run('sed:app_map');
-        }
+
+        // loop through modes and run these
+        modes.forEach(function(mode) {
+            grunt.task.run('setmode:'+mode);
+            grunt.task.run('git_last_commit');
+            grunt.task.run('copy:dist');
+            grunt.task.run('ngtemplates:dist');
+            grunt.task.run('htmlmin:dist');
+            grunt.task.run('sed:main');
+            grunt.task.run('sed:html');
+            grunt.task.run('cssmin:dist');
+            grunt.task.run('uglify:dist');
+        });
+
+        // temporarily disabling the with-maps stuff
+        // if (grunt.option('with-maps')){
+            // grunt.task.run('copy:raw');
+            // grunt.task.run('sed:app_map');
+        // }
     });
 
     /*********************************************************************************************

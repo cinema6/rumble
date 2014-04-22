@@ -7,7 +7,8 @@
         options: {
             config: function(data) {
                 var distDir = grunt.config.get('settings.distDir'),
-                    distVersionDir = distDir + '/' + data.commit;
+                    modeDir = grunt.config.get('buildMode'),
+                    distVersionDir = distDir + '/' + modeDir + '/' + data.commit;
 
                 grunt.config.set('_version', data.commit);
                 grunt.config.set('_versionDir', distVersionDir);

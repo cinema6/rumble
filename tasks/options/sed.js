@@ -4,15 +4,15 @@
     module.exports = {
         main: {
             pattern: 'undefined',
-            replacement: '\'<%= _version %>\'',
-            path: '.tmp/main.js'
+            replacement: '\'<%= buildMode %>/<%= _version %>\'',
+            path: '.tmp/main-<%= buildMode %>.js'
         },
         html: {
             pattern: 'assets',
-            replacement: '<%= _version %>',
+            replacement: '<%= buildMode %>/<%= _version %>',
             path: [
-                '.tmp/templates.js',
-                '<%= settings.distDir %>/index.html'
+                '.tmp/templates-<%= buildMode %>.js',
+                '<%= settings.distDir %>/<%= buildMode %>/index.html'
             ]
         },
         app_map: {

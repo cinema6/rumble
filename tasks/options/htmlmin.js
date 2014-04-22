@@ -18,7 +18,7 @@
                     expand: true,
                     cwd: '<%= settings.appDir %>',
                     src: '*.html',
-                    dest: '<%= settings.distDir %>'
+                    dest: '<%= settings.distDir %>/<%= buildMode %>'
                 },
                 {
                     expand: true,

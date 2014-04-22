@@ -11,8 +11,8 @@
         },
         dist: {
             cwd: '<%= settings.appDir %>/assets',
-            src: 'views/**/*.html',
-            dest: '.tmp/templates.js'
+            src: 'views/<%= buildMode %>/**/*.html',
+            dest: '.tmp/templates-<%= buildMode %>.js'
         },
         test: {
             options: {
