@@ -2,8 +2,8 @@
     'use strict';
 
     angular.module('c6.mrmaker')
-        .controller('ManagerController', ['c6State',
-        function                         ( c6State ) {
+        .controller('ManagerController', ['c6State','MiniReelService',
+        function                         ( c6State , MiniReelService ) {
             var self = this;
 
             this.filter = 'all';
@@ -12,12 +12,12 @@
                 c6State.goTo('editor', { minireelId: minireel.id });
             };
 
-            this.makeActive = function(minireel) {
-                minireel.status = 'active';
+            this.makePublic = function(minireel) {
+                MiniReelService.publish(minireel);
             };
 
-            this.makePending = function(minireel) {
-                minireel.status = 'pending';
+            this.makePrivate = function(minireel) {
+                MiniReelService.unpublish(minireel);
             };
 
             this.determineInclusionWithFilter = function(minireel) {
