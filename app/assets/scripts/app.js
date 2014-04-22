@@ -312,8 +312,8 @@
 
             return c6AppData;
         }])
-        .controller('AppController', ['$scope','$log','cinema6','c6UrlMaker','$timeout','$document','$window','c6Debounce','$animate','c6AppData', 'c6Defines',
-        function                     ( $scope , $log , cinema6 , c6UrlMaker , $timeout , $document , $window , c6Debounce , $animate , c6AppData, c6Defines ) {
+        .controller('AppController', ['$scope','$log','cinema6','c6UrlMaker','$timeout','$document','$window','c6Debounce','$animate','c6AppData', /*'c6Defines',*/
+        function                     ( $scope , $log , cinema6 , c6UrlMaker , $timeout , $document , $window , c6Debounce , $animate , c6AppData /*, c6Defines*/ ) {
             $log = $log.context('AppCtrl');
             var _app = {
                     state: 'splash'
