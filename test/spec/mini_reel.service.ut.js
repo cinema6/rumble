@@ -390,6 +390,7 @@
                                 title: minireel.title,
                                 note: minireel.summary,
                                 type: 'intro',
+                                ad: false,
                                 data: {}
                             });
 
@@ -510,6 +511,98 @@
                             });
 
                             expect(deck[7].data.links).not.toBe(minireel.data.deck[6].data.links);
+                        });
+                    });
+
+                    describe('create(template)', function() {
+                        var result;
+
+                        describe('with a template', function() {
+                            beforeEach(function() {
+                                result = MiniReelService.create(minireel);
+                            });
+
+                            it('should copy the minireel', function() {
+                                expect(result).toEqual({
+                                    id: jasmine.any(String),
+                                    title: 'My MiniReel (copy)',
+                                    subtitle: 'I <3 Turtles',
+                                    summary: 'I AM THE TURTLE MONSTER!',
+                                    type: 'minireel',
+                                    mode: 'lightbox',
+                                    theme: 'ed-videos',
+                                    status: 'pending',
+                                    data: minireel.data
+                                });
+                            });
+
+                            it('should return a copy', function() {
+                                expect(result).not.toBe(minireel);
+                            });
+
+                            it('should generate a new id', function() {
+                                expect(result.id).toMatch(/e-[a-zA-Z0-9]{14}/);
+                                expect(result.id).not.toBe(minireel.id);
+                            });
+
+                            it('should cache the new minireel', function() {
+                                var success = jasmine.createSpy('success');
+
+                                $rootScope.$apply(function() {
+                                    MiniReelService.open(result.id).then(success);
+                                });
+
+                                expect(success).toHaveBeenCalledWith(result);
+                            });
+                        });
+
+                        describe('without a template', function() {
+                            beforeEach(function() {
+                                result = MiniReelService.create();
+                            });
+
+                            it('should initialize a new minireel', function() {
+                                expect(result).toEqual({
+                                    id: jasmine.any(String),
+                                    title: 'Untitled',
+                                    subtitle: null,
+                                    summary: null,
+                                    type: 'minireel',
+                                    mode: 'light',
+                                    status: 'pending',
+                                    data: {
+                                        deck: [
+                                            {
+                                                id: jasmine.any(String),
+                                                title: 'Untitled',
+                                                note: null,
+                                                type: 'intro',
+                                                ad: false,
+                                                data: {}
+                                            },
+                                            {
+                                                id: jasmine.any(String),
+                                                title: null,
+                                                note: null,
+                                                type: 'recap',
+                                                ad: false,
+                                                data: {}
+                                            }
+                                        ]
+                                    }
+                                });
+                                expect(result.id).toMatch(/e-[a-zA-Z0-9]{14}/);
+                            });
+
+                            it('should cache the new minireel', function() {
+                                var success = jasmine.createSpy('success');
+
+                                $rootScope.$apply(function() {
+                                    MiniReelService.open(result.id).then(success);
+                                });
+
+                                expect(success).toHaveBeenCalledWith(result);
+                            });
                         });
                     });
 
