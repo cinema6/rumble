@@ -8,6 +8,16 @@
 
             this.filter = 'all';
 
+            this.copy = function(minireelId) {
+                MiniReelService.open(minireelId)
+                    .then(function copyExisting(minireel) {
+                        return MiniReelService.create(minireel);
+                    })
+                    .then(function editCopy(minireel) {
+                        c6State.goTo('editor', { minireelId: minireel.id });
+                    });
+            };
+
             this.edit = function(minireel) {
                 c6State.goTo('editor', { minireelId: minireel.id });
             };
