@@ -872,11 +872,13 @@
                         });
 
                         it('will set up the "play" listener again', function() {
+                            $timeout.flush();
                             player._on.playing[1](player);
                             expect(iface.emit).toHaveBeenCalledWith('play', iface);
                         });
 
                         it('will set up the "paused" listener again', function() {
+                            $timeout.flush();
                             player._on.paused[1](player);
                             expect(iface.emit).toHaveBeenCalledWith('pause', iface);
                         });
@@ -903,11 +905,13 @@
                         });
 
                         it('will set up the "play" listener again', function() {
+                            $timeout.flush();
                             player._on.playing[1](player);
                             expect(iface.emit).toHaveBeenCalledWith('play', iface);
                         });
 
                         it('will set up the "paused" listener again', function() {
+                            $timeout.flush();
                             player._on.paused[1](player);
                             expect(iface.emit).toHaveBeenCalledWith('pause', iface);
                         });
