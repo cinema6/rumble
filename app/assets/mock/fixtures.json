@@ -37,7 +37,7 @@
                     },
                     {
                         "id": "rc-2d46a04b21b073",
-                        "type": "vast",
+                        "type": "ad",
                         "ad": true,
                         "modules": [
                             "displayAd"
@@ -290,7 +290,7 @@
                     },
                     {
                         "id": "rc-392f3546f0cfc3",
-                        "type": "vast",
+                        "type": "ad",
                         "ad": true,
                         "modules": [],
                         "data": {
@@ -600,7 +600,7 @@
                     },
                     {
                         "id": "rc-392f3546f0cfc3",
-                        "type": "vast",
+                        "type": "ad",
                         "ad": true,
                         "modules": [],
                         "data": {
@@ -758,7 +758,7 @@
                     },
                     {
                         "id": "rc-11df958a25966d",
-                        "type": "vast",
+                        "type": "ad",
                         "ad": true,
                         "modules": [],
                         "data": {

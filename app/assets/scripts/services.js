@@ -192,6 +192,25 @@
                     },
                     title: copy(null),
                     note: copy(null),
+                    label: function() {
+                        switch (this.type) {
+                        case 'video':
+                            return 'Video';
+                        case 'videoBallot':
+                            return 'Video + Questionnaire';
+                        case 'ad':
+                            return 'Advertisement';
+                        case 'links':
+                            return 'Suggested Links';
+                        case 'intro':
+                            return 'Intro';
+                        case 'recap':
+                            return 'Recap';
+
+                        default:
+                            return null;
+                        }
+                    },
                     ad: function(card) {
                         return card.ad || card.type === 'ad';
                     }
@@ -239,14 +258,14 @@
                 // Use the template defined above to populate the
                 // properties of the card.
                 forEach(template, function(fn, key) {
-                    card[key] = fn(rawData, key, rawData);
+                    card[key] = fn.call(card, rawData, key, rawData);
                 });
 
                 // Use the dataTemplates defined above to populate
                 // the data object of the card.
                 dataTemplate = dataTemplates[card.type];
                 forEach(dataTemplate, function(fn, key) {
-                    card.data[key] = fn((rawData.data || {}), key, rawData);
+                    card.data[key] = fn.call(card.data, (rawData.data || {}), key, rawData);
                 });
                 forEach(card.data, function(value, key) {
                     if (!dataTemplate.hasOwnProperty(key)) {
@@ -459,6 +478,12 @@
                         type: value('links'),
                         title: copy(null),
                         note: copy(null),
+                    },
+                    recap: {
+                        id: copy(),
+                        type: copy(),
+                        title: copy(),
+                        note: copy()
                     }
                 };
 
