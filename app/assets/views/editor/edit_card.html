@@ -1,27 +1,24 @@
 <div class="ui__modal">
-    <navigation class="tabNav__group">
-        <ul class="tabNav__list clearfix">
-            <li class="tabNav__item">
-                <a c6-sref="editor.editCard.video"
-                    class="tabNav__link tabNav__link--active" 
-                    title="Editorial Content">Editorial Content</a>
-            </li>
-            <li class="tabNav__item">
-                <a c6-sref="editor.editCard.video"
-                    class="tabNav__link"
-                    title="Video Content">Video Content</a>
-            </li>
-            <li class="tabNav__item">
-                <a c6-sref="editor.editCard.ballot"
-                    class="tabNav__link"
-                    title="Questionnaire">Questionnaire</a>
-            </li>
-        </ul>
-    </navigation>
+    <header c6-alias="EditCardCtrl.model as card" class="pageHeader container">
+        <h1 class="pageTitle">{{card.title}}</h1>
+        <div class="pageHeader__actions clearfix">
 
-    <div class="modal__content">
-        <c6-view></c6-view>
-    </div>
+            <ul>
+                <li>
+                    <a c6-sref="editor.editCard.copy">Edit Copy</a>
+                </li>
+                <li>
+                    <a c6-sref="editor.editCard.ballot">Edit Ballot</a>
+                </li>
+                <li>
+                    <a c6-sref="editor.editCard.video">Edit Video</a>
+                </li>
+            </ul>
+        </div>
+        <span class="ui__divider--border"><br></span>
+    </header>
+
+    <c6-view></c6-view>
 
     <button ng-click="EditCardCtrl.close()">Close</button>
 </div>
