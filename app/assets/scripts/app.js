@@ -134,6 +134,14 @@
                                 );
                             }],
                             children: {
+                                copy: {
+                                    controller: noop,
+                                    controllerAs: 'EditCardCopyCtrl',
+                                    templateUrl: assets('views/editor/edit_card/copy.html'),
+                                    model:  [function() {
+                                        return this.cParent.cModel;
+                                    }]
+                                },
                                 video: {
                                     controller: noop,
                                     controllerAs: 'EditCardVideoCtrl',

@@ -304,6 +304,18 @@
                 });
             };
 
+            this.publish = function(minireel) {
+                minireel.status = 'active';
+
+                return minireel;
+            };
+
+            this.unpublish = function(minireel) {
+                minireel.status = 'pending';
+
+                return minireel;
+            };
+
             this.open = function(id) {
                 function fetchFromCache() {
                     var minireel = cache.get(id);

@@ -8,6 +8,7 @@
                 $childScope,
                 $controller,
                 c6State,
+                MiniReelService,
                 EditorCtrl;
 
             var cModel;
@@ -29,6 +30,7 @@
                     $rootScope = $injector.get('$rootScope');
                     $controller = $injector.get('$controller');
                     c6State = $injector.get('c6State');
+                    MiniReelService = $injector.get('MiniReelService');
 
                     $scope = $rootScope.$new();
                     $childScope = $scope.$new();
@@ -46,6 +48,30 @@
             });
 
             describe('methods', function() {
+                describe('publish()', function() {
+                    beforeEach(function() {
+                        spyOn(MiniReelService, 'publish');
+
+                        EditorCtrl.publish();
+                    });
+
+                    it('should publish the minireel', function() {
+                        expect(MiniReelService.publish).toHaveBeenCalledWith(cModel);
+                    });
+                });
+
+                describe('makePrivate()', function() {
+                    beforeEach(function() {
+                        spyOn(MiniReelService, 'unpublish');
+
+                        EditorCtrl.makePrivate();
+                    });
+
+                    it('should unpublish the minireel', function() {
+                        expect(MiniReelService.unpublish).toHaveBeenCalledWith(cModel);
+                    });
+                });
+
                 describe('editCard(card)', function() {
                     beforeEach(function() {
                         spyOn(c6State, 'goTo');
@@ -54,7 +80,7 @@
                     });
 
                     it('should transition to the editor.editCard.video state', function() {
-                        expect(c6State.goTo).toHaveBeenCalledWith('editor.editCard.video', { cardId: 'rc-c98312239510db' });
+                        expect(c6State.goTo).toHaveBeenCalledWith('editor.editCard.copy', { cardId: 'rc-c98312239510db' });
                     });
                 });
 

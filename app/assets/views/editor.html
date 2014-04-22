@@ -1,6 +1,9 @@
 <c6-alias model="EditorCtrl.model" as="minireel">
     <header class="pageHeader pageHeader--editor container">
-        <h1 class="pageTitle">{{minireel.title}}</h1>
+        <h1 class="pageTitle">{{minireel.title}} 
+            <span class="pageTitle__status">(<em class="pageTitle__status--private">private</em>)</span>
+            <span class="pageTitle__status">(<em class="pageTitle__status--public">public</em>)</span>
+        </h1>
         <div class="pageHeader__actions clearfix">
             <div class="metaData__group">
                 Type: <a href="#" class="miniReel__type" title="AutoPlay MiniReel"><strong>Lightbox, with Companion Ad</strong></a> 
@@ -13,10 +16,10 @@
         <div class="publish__actions clearfix">
             <ul class="actionbar__group">
                 <li class="toolbar__item">
-                    <button class="toolbar__btn toolbar__makePrivate" type="button">Make Private</button>
+                    <button ng-click="EditorCtrl.makePrivate()" ng-show="minireel.status === 'active'" class="toolbar__btn toolbar__makePrivate" type="button">Make Private</button>
                 </li>
                 <li class="toolbar__item">
-                    <button class="toolbar__btn toolbar__publish" type="button">Publish</button>
+                    <button ng-click="EditorCtrl.publish()" ng-show="minireel.status === 'pending'" class="toolbar__btn toolbar__publish" type="button">Publish</button>
                 </li>
                 <li class="toolbar__item">
                     <button class="toolbar__btn toolbar__delete" type="button">Delete</button>
@@ -46,3 +49,20 @@
     </div>
 </c6-alias>
 <c6-view></c6-view>
+
+<div class="embedCode__group container">
+    <div class="embedCode__header">
+        <label for="embedtype">Embed Code:</label>
+        <select class="embedCode__selector" name="embedtype">
+            <option value="responsive">Responsive Auto-fit <span class="typo--attention">*</span></option>
+            <option value="custom">Custom Size</option>
+        </select>
+        <div class="embedCode__customSizeDimensions">
+            <input class="textBox" type="text" value="Width"> x
+            <input class="textBox" type="text" value="Height">
+        </div>
+    </div>
+    <textarea name="" id="" class="embedCode__snippet" cols="30" rows="10">
+<iframe width="560" height="315" src="//www.youtube.com/embed/OnXijAxiy8g" frameborder="0" allowfullscreen></iframe></textarea>
+    <p class="embedCode__tip"><strong><span class="typo--attention">*</span> Responsive Auto-Fit</strong> embedding will automatically resize the MiniReel widget to fit nicely into your page. This is the recommended embedding method.</p>
+</div>

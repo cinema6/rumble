@@ -19,6 +19,7 @@
                     type: 'minireel',
                     mode: 'lightbox',
                     theme: 'ed-videos',
+                    status: 'pending',
                     data: {
                         deck: [
                             {
@@ -336,6 +337,40 @@
                         });
                     });
 
+                    describe('publish(minireel)', function() {
+                        var result;
+
+                        beforeEach(function() {
+                            result = MiniReelService.publish(minireel);
+                        });
+
+                        it('should set the minireel\'s status to "active"', function() {
+                            expect(minireel.status).toBe('active');
+                        });
+
+                        it('should return the minireel', function() {
+                            expect(result).toBe(minireel);
+                        });
+                    });
+
+                    describe('unpublish(minireel)', function() {
+                        var result;
+
+                        beforeEach(function() {
+                            minireel.status = 'active';
+
+                            result = MiniReelService.unpublish(minireel);
+                        });
+
+                        it('should set the minireel\'s status to "pending"', function() {
+                            expect(minireel.status).toBe('pending');
+                        });
+
+                        it('should return the minireel', function() {
+                            expect(result).toBe(minireel);
+                        });
+                    });
+
                     describe('open(id)', function() {
                         var success,
                             deck;
@@ -377,6 +412,7 @@
                                 type: 'minireel',
                                 mode: 'lightbox',
                                 theme: 'ed-videos',
+                                status: 'pending',
                                 data: jasmine.any(Object)
                             });
                         });
