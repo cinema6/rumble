@@ -262,7 +262,7 @@
             this.preview = false;
 
             this.editCard = function(card) {
-                c6State.goTo('editor.editCard.video', { cardId: card.id });
+                c6State.goTo('editor.editCard.copy', { cardId: card.id });
             };
 
             this.newCard = function(insertionIndex) {
