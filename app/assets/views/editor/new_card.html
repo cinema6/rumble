@@ -1,2 +1,8 @@
 <h2>New Card</h2>
-<c6-view></c6-view>
+<form>
+    <input type="radio" ng-model="NewCardCtrl.type" value="video">Video</input>
+    <input type="radio" ng-model="NewCardCtrl.type" value="videoBallot">Video With Polling</input>
+    <input type="radio" ng-model="NewCardCtrl.type" value="ad">Advertisement</input>
+    <input type="radio" ng-model="NewCardCtrl.type" value="links">Links</input>
+</form>
+<button ng-click="NewCardCtrl.edit()">Next</button>

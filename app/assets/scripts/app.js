@@ -217,34 +217,13 @@
                             }
                         },
                         newCard: {
+                            controller: 'NewCardController',
+                            controllerAs: 'NewCardCtrl',
                             templateUrl: assets('views/editor/new_card.html'),
                             model: ['MiniReelService',
                             function               ( MiniReelService ) {
                                 return this.cModel || MiniReelService.createCard();
-                            }],
-                            children: {
-                                type: {
-                                    controller: 'NewCardTypeController',
-                                    controllerAs: 'NewCardTypeCtrl',
-                                    templateUrl: assets('views/editor/new_card/type.html'),
-                                    model: [function() {
-                                        return this.cParent.cModel;
-                                    }]
-                                },
-                                edit: {
-                                    controller: 'NewCardEditController',
-                                    controllerAs: 'NewCardEditCtrl',
-                                    templateUrl: assets('views/editor/new_card/edit.html'),
-                                    model:  ['c6StateParams','MiniReelService',
-                                    function( c6StateParams , MiniReelService ) {
-                                        var card = this.cParent.cModel;
-
-                                        return MiniReelService.setCardType(
-                                            card, c6StateParams.cardType
-                                        );
-                                    }]
-                                }
-                            }
+                            }]
                         }
                     }
                 })
