@@ -36,7 +36,7 @@
         </div>
     </header>
 
-    <card-table deck="minireel.data.deck" edit-card="EditorCtrl.editCard(card)" preview-card="EditorCtrl.previewMode(card)"></card-table>
+    <card-table deck="minireel.data.deck" edit-card="EditorCtrl.editCard(card)" add-card="EditorCtrl.newCard(index)" preview-card="EditorCtrl.previewMode(card)"></card-table>
 
     <div ng-show="EditorCtrl.preview" ng-controller="PreviewController as PreviewCtrl" ng-class="{ 'preview__container--desktop' : (PreviewCtrl.device === 'desktop'), 'preview__container--mobile' : (PreviewCtrl.device === 'phone') }" class="preview__container">
         <h3>Preview Mode</h3>

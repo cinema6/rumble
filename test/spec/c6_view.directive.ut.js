@@ -112,6 +112,39 @@
                 expect($p[0]).toBe(view.find('p')[0]);
             });
 
+            it('should nullify the cModel of a state when it is removed from view', function() {
+                var parentState = {
+                        name: 'parent',
+                        cTemplate: '<c6-view></c6-view>',
+                        cModel: {}
+                    },
+                    childState = {
+                        name: 'parent.child',
+                        cTemplate: 'Child',
+                        cModel: {}
+                    },
+                    siblingState = {
+                        name: 'sibling',
+                        cTemplate: 'Sibling',
+                        cModel: {}
+                    };
+
+                $scope.$apply(function() {
+                    c6State.emit('viewChangeStart', parentState, null, false);
+                });
+                $scope.$apply(function() {
+                    c6State.emit('viewChangeStart', childState, parentState, true);
+                });
+                expect(parentState.cModel).not.toBeNull();
+                expect(childState.cModel).not.toBeNull();
+
+                $scope.$apply(function() {
+                    c6State.emit('viewChangeStart', siblingState, childState, true);
+                });
+                expect(parentState.cModel).toBeNull();
+                expect(childState.cModel).toBeNull();
+            });
+
             it('should support "backing out" of a nested view without re-rendering the parent', function() {
                 var parentState = {
                         name: 'parent',
@@ -122,7 +155,7 @@
                     childState = {
                         name: 'parent.child',
                         cTemplate: '<p>Child</p>',
-                        cModel: null
+                        cModel: {}
                     },
                     $c6View;
 
@@ -146,6 +179,7 @@
                 expect($scope.$new).not.toHaveBeenCalled();
                 expect(parentState.controller).not.toHaveBeenCalled();
                 expect(c6State.emit).toHaveBeenCalledWith('viewChangeSuccess', parentState);
+                expect(childState.cModel).toBeNull();
 
                 $scope.$apply(function() {
                     c6State.emit('viewChangeStart', parentState, parentState, false);
@@ -251,6 +285,7 @@
                     expect(oldScope.$destroy).toHaveBeenCalled();
 
                     expect(view.text()).toBe('2 is 2. Duh.');
+                    expect(homeState.cModel).toBeNull();
                     expect($animate.queue[0].event).toBe('enter');
                     expect($animate.queue[1].event).toBe('enter');
                     expect($animate.queue[2].event).toBe('leave');

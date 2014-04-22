@@ -162,9 +162,9 @@
                         },
                         newCard: {
                             templateUrl: assets('views/editor/new_card.html'),
-                            model:  ['MiniReelService',
-                            function( MiniReelService ) {
-                                return MiniReelService.createCard();
+                            model: ['MiniReelService',
+                            function               ( MiniReelService ) {
+                                return this.cModel || MiniReelService.createCard();
                             }],
                             children: {
                                 type: {
