@@ -255,11 +255,19 @@
             };
         })
 
-        .controller('EditorController', ['c6State','$scope',
-        function                        ( c6State , $scope ) {
+        .controller('EditorController', ['c6State','$scope','MiniReelService',
+        function                        ( c6State , $scope , MiniReelService ) {
             var self = this;
 
             this.preview = false;
+
+            this.publish = function() {
+                MiniReelService.publish(this.model);
+            };
+
+            this.makePrivate = function() {
+                MiniReelService.unpublish(this.model);
+            };
 
             this.editCard = function(card) {
                 c6State.goTo('editor.editCard.copy', { cardId: card.id });
