@@ -9,11 +9,15 @@
         },
         html: {
             pattern: 'assets',
-            replacement: '<%= buildMode %>/<%= _version %>',
+            replacement: '<%= _version %>/<%= buildMode %>',
             path: [
-                '.tmp/templates-<%= buildMode %>.js',
-                '<%= settings.distDir %>/<%= buildMode %>/index.html'
+                '.tmp/templates-<%= buildMode %>.js'
             ]
+        },
+        index: {
+            pattern: 'assets',
+            replacement: '<%= _version %>',
+            path: '<%= settings.distDir %>/index.html'
         },
         app_map: {
             pattern: 'app\/assets\/scripts',

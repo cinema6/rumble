@@ -6,7 +6,7 @@
             expand: true,
             cwd: '<%= settings.appDir %>/assets',
             src: 'styles/**/*.css',
-            dest: '<%= _versionDir %>'
+            dest: '<%= _modeDir %>'
         }
     };
 }());

@@ -14,11 +14,11 @@
                         '.tmp/templates-<%= buildMode %>.js',
                         '!<%= settings.appDir %>/assets/scripts/main.js'
                     ],
-                    dest: '<%= _versionDir %>/scripts/c6app.min.js'
+                    dest: '<%= _modeDir %>/scripts/c6app.min.js'
                 },
                 {
                     src: '.tmp/main-<%= buildMode %>.js',
-                    dest: '<%= _versionDir %>/scripts/main.js'
+                    dest: '<%= _modeDir %>/scripts/main.js'
                 }
             ]
         }

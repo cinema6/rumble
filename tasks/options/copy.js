@@ -21,7 +21,7 @@
                         '*.*',
                         '!*.html'
                     ],
-                    dest: '<%= settings.distDir %>/<%= buildMode %>'
+                    dest: '<%= settings.distDir %>'
                 },
                 {
                     expand: true,
@@ -32,7 +32,7 @@
                         'views/<%= buildMode %>/**',
                         '!**/*.{js,css,html}'
                     ],
-                    dest: '<%= _versionDir %>'
+                    dest: '<%= _modeDir %>'
                 },
                 {
                     src: '<%= settings.appDir %>/assets/scripts/main.js',

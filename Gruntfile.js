@@ -130,6 +130,7 @@ module.exports = function(grunt) {
             grunt.task.run('htmlmin:dist');
             grunt.task.run('sed:main');
             grunt.task.run('sed:html');
+            grunt.task.run('sed:index');
             grunt.task.run('cssmin:dist');
             grunt.task.run('uglify:dist');
         });
