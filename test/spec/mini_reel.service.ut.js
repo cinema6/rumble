@@ -127,6 +127,13 @@
                                         }
                                     ]
                                 }
+                            },
+                            {
+                                id: 'rc-b74a127991ee75',
+                                type: 'recap',
+                                title: null,
+                                note: null,
+                                data: {}
                             }
                         ]
                     }
@@ -160,6 +167,7 @@
                                 type: 'video',
                                 title: null,
                                 note: null,
+                                label: 'Video',
                                 ad: false,
                                 data: {
                                     service: null,
@@ -174,6 +182,7 @@
                                 type: 'videoBallot',
                                 title: null,
                                 note: null,
+                                label: 'Video + Questionnaire',
                                 ad: false,
                                 data: {
                                     service: null,
@@ -189,6 +198,7 @@
                                 type: 'ad',
                                 title: null,
                                 note: null,
+                                label: 'Advertisement',
                                 ad: true,
                                 data: {
                                     autoplay: false,
@@ -201,6 +211,7 @@
                                 type: 'links',
                                 title: null,
                                 note: null,
+                                label: 'Suggested Links',
                                 ad: false,
                                 data: {
                                     links: []
@@ -235,6 +246,7 @@
                                 type: null,
                                 title: null,
                                 note: null,
+                                label: null,
                                 ad: false,
                                 data: {}
                             });
@@ -254,6 +266,7 @@
                                 type: 'video',
                                 title: null,
                                 note: null,
+                                label: 'Video',
                                 ad: false,
                                 data: {
                                     service: null,
@@ -270,6 +283,7 @@
                                 type: 'videoBallot',
                                 title: null,
                                 note: null,
+                                label: 'Video + Questionnaire',
                                 ad: false,
                                 data: {
                                     service: null,
@@ -287,6 +301,7 @@
                                 type: 'ad',
                                 title: null,
                                 note: null,
+                                label: 'Advertisement',
                                 ad: true,
                                 data: {
                                     autoplay: false,
@@ -301,6 +316,7 @@
                                 type: 'links',
                                 title: null,
                                 note: null,
+                                label: 'Suggested Links',
                                 ad: false,
                                 data: {
                                     links: []
@@ -426,6 +442,7 @@
                                 title: minireel.title,
                                 note: minireel.summary,
                                 type: 'intro',
+                                label: 'Intro',
                                 ad: false,
                                 data: {}
                             });
@@ -451,6 +468,7 @@
                                 type: 'video',
                                 title: 'The Slowest Turtle',
                                 note: 'Blah blah blah',
+                                label: 'Video',
                                 ad: false,
                                 data: {
                                     service: 'youtube',
@@ -465,6 +483,7 @@
                                 type: 'videoBallot',
                                 title: 'The Ugliest Turtle',
                                 note: 'Blah blah blah',
+                                label: 'Video + Questionnaire',
                                 ad: false,
                                 data: {
                                     service: 'vimeo',
@@ -483,6 +502,7 @@
                                 type: 'videoBallot',
                                 title: 'The Smartest Turtle',
                                 note: 'Blah blah blah',
+                                label: 'Video + Questionnaire',
                                 ad: false,
                                 data: {
                                     service: 'dailymotion',
@@ -501,6 +521,7 @@
                                 type: 'video',
                                 title: 'The Dumbest Turtle',
                                 note: 'Blah blah blah',
+                                label: 'Video',
                                 ad: false,
                                 data: {
                                     service: 'youtube',
@@ -517,6 +538,7 @@
                                 type: 'ad',
                                 title: null,
                                 note: null,
+                                label: 'Advertisement',
                                 ad: true,
                                 data: {
                                     autoplay: true,
@@ -528,6 +550,7 @@
                                 type: 'ad',
                                 title: null,
                                 note: null,
+                                label: 'Advertisement',
                                 ad: true,
                                 data: {
                                     autoplay: false,
@@ -542,11 +565,24 @@
                                 type: 'links',
                                 title: 'If You Love Turtles',
                                 note: 'Blah blah blah',
+                                label: 'Suggested Links',
                                 ad: false,
                                 data: minireel.data.deck[6].data
                             });
 
                             expect(deck[7].data.links).not.toBe(minireel.data.deck[6].data.links);
+                        });
+
+                        it('should transpile the recap cards', function() {
+                            expect(deck[8]).toEqual({
+                                id: 'rc-b74a127991ee75',
+                                type: 'recap',
+                                title: null,
+                                note: null,
+                                label: 'Recap',
+                                ad: false,
+                                data: {}
+                            });
                         });
                     });
 
@@ -613,6 +649,7 @@
                                                 title: 'Untitled',
                                                 note: null,
                                                 type: 'intro',
+                                                label: 'Intro',
                                                 ad: false,
                                                 data: {}
                                             },
@@ -621,6 +658,7 @@
                                                 title: null,
                                                 note: null,
                                                 type: 'recap',
+                                                label: 'Recap',
                                                 ad: false,
                                                 data: {}
                                             }

@@ -1,8 +1,8 @@
 <c6-alias model="EditorCtrl.model" as="minireel">
     <header class="pageHeader pageHeader--editor container">
         <h1 class="pageTitle">{{minireel.title}} 
-            <span class="pageTitle__status">(<em class="pageTitle__status--private">private</em>)</span>
-            <span class="pageTitle__status">(<em class="pageTitle__status--public">public</em>)</span>
+            <span ng-show="minireel.status === 'pending'" class="pageTitle__status">(<em class="pageTitle__status--private">private</em>)</span>
+            <span ng-show="minireel.status === 'active'" class="pageTitle__status">(<em class="pageTitle__status--public">public</em>)</span>
         </h1>
         <div class="pageHeader__actions clearfix">
             <div class="metaData__group">
@@ -10,7 +10,7 @@
                 <span class="ui__divider--bar">&nbsp;|&nbsp;</span>
                 Created 3/13/2014
                 <span class="ui__divider--bar">&nbsp;|&nbsp;</span>
-                4 Cards
+                {{minireel.data.deck.length - 1}} Cards
             </div>
         </div>
         <div class="publish__actions clearfix">
