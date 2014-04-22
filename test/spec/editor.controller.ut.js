@@ -92,7 +92,7 @@
                     });
 
                     it('should transition to the editor.newCard.type state', function() {
-                        expect(c6State.goTo).toHaveBeenCalledWith('editor.newCard.type', { insertionIndex: 3 });
+                        expect(c6State.goTo).toHaveBeenCalledWith('editor.newCard', { insertionIndex: 3 });
                     });
                 });
 
