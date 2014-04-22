@@ -109,6 +109,7 @@
                     pause       : angular.noop,
                     getType     : angular.noop,
                     getVideoId  : angular.noop,
+                    getVideoUrl : angular.noop,
                     twerk       : angular.noop,
                     isReady     : angular.noop,
                     currentTime : 0,

@@ -149,6 +149,10 @@
                     return _iframe$;
                 };
 
+                self.getVideoUrl = function(){
+                    return _player.getVideoUrl();
+                };
+
                 self.setSize = function(w,h){
                     _player.setSize(w,h);
                     return self;
@@ -345,6 +349,10 @@
 
             playerIface.getType = function() {
                 return 'youtube';
+            };
+
+            playerIface.getVideoUrl = function() {
+                return player.getVideoUrl();
             };
 
             playerIface.getVideoId = function() {
