@@ -219,8 +219,10 @@
                 });
 
                 it('should initialize the google analytics', function(){
-                    expect($window.c6MrGa.calls[0].args).toEqual(['c6mr.send','pageview',{
-                        page : '/mr/e-722bd3c4942331?mode=testMode',
+                    expect($window.c6MrGa.calls[0].args).toEqual(['c6mr.set','dimension1',
+                        'testMode']);
+                    expect($window.c6MrGa.calls[1].args).toEqual(['c6mr.send','pageview',{
+                        page : '/mr/e-722bd3c4942331',
                         title : 'my title'
                     }]);
                 });
@@ -513,7 +515,7 @@
                 it('returns base experience page if $scope.currentCard not set',function(){
                     $scope.currentCard = null;
                     expect(RumbleCtrl.getVirtualPage()).toEqual({
-                        page :  '/mr/e-722bd3c4942331?mode=testMode',
+                        page :  '/mr/e-722bd3c4942331',
                         title : 'my title'
                     });
                 });
@@ -521,7 +523,7 @@
                 it('returns current card url if $scope.currentCard is set',function(){
                     $scope.currentCard = deck[0];
                     expect(RumbleCtrl.getVirtualPage()).toEqual({
-                        page :  '/mr/e-722bd3c4942331/vid1?mode=testMode',
+                        page :  '/mr/e-722bd3c4942331/vid1',
                         title : 'my title - vid1'
                     });
                 });
@@ -564,6 +566,7 @@
 
             describe('navigation',function(){
                 beforeEach(function(){
+                    $window.c6MrGa = jasmine.createSpy('$window.c6MrGa');
                     $scope.deviceProfile = { multiPlayer : true };
                     $scope.deck.forEach(function(item,index){
                         item.player = {
@@ -605,9 +608,9 @@
                     expect($scope.atTail).toEqual(false);
                     expect($scope.$emit).toHaveBeenCalledWith('reelMove');
                     expect($scope.$emit.callCount).toBe(1);
-                    expect($window.c6MrGa.callCount).toEqual(2);
+                    expect($window.c6MrGa.callCount).toEqual(1);
                     expect($window.c6MrGa.calls[0].args).toEqual(['c6mr.send','pageview',{
-                        page : '/mr/e-722bd3c4942331?mode=testMode', title : 'my title'
+                        page : '/mr/e-722bd3c4942331/ad1', title : 'my title - ad1'
                     }]); 
                 });
 
@@ -618,8 +621,8 @@
                     $timeout.flush();
                     expect($scope.currentIndex).toEqual(1);
                     expect($scope.currentCard).toBe($scope.deck[1]);
-                    expect($window.c6MrGa.callCount).toEqual(3);
-                    expect($window.c6MrGa.calls[1].args).toEqual(['c6mr.send','event','Navigation','Move','Next', { page : '/mr/e-722bd3c4942331/ad1?mode=testMode', title : 'my title - ad1' }  ]); 
+                    expect($window.c6MrGa.callCount).toEqual(2);
+                    expect($window.c6MrGa.calls[0].args).toEqual(['c6mr.send','event','Navigation','Move','Next', { page : '/mr/e-722bd3c4942331/ad1', title : 'my title - ad1' }  ]); 
                 });
 
 
@@ -635,9 +638,9 @@
                     expect($scope.atTail).toEqual(false);
                     expect($scope.$emit).toHaveBeenCalledWith('reelMove');
                     expect($scope.$emit.callCount).toBe(1);
-                    expect($window.c6MrGa.callCount).toEqual(2);
+                    expect($window.c6MrGa.callCount).toEqual(1);
                     expect($window.c6MrGa.calls[0].args).toEqual(['c6mr.send','pageview',{
-                        page : '/mr/e-722bd3c4942331?mode=testMode', title : 'my title'
+                        page : '/mr/e-722bd3c4942331/ad1', title : 'my title - ad1'
                     }]); 
                 });
                 
@@ -649,8 +652,8 @@
                     $scope.$digest();
                     expect($scope.currentIndex).toEqual(1);
                     expect($scope.currentCard).toBe($scope.deck[1]);
-                    expect($window.c6MrGa.callCount).toEqual(3);
-                    expect($window.c6MrGa.calls[1].args).toEqual(['c6mr.send','event','Navigation','Move','Previous', { page : '/mr/e-722bd3c4942331/ad1?mode=testMode', title : 'my title - ad1' } ]); 
+                    expect($window.c6MrGa.callCount).toEqual(2);
+                    expect($window.c6MrGa.calls[0].args).toEqual(['c6mr.send','event','Navigation','Move','Previous', { page : '/mr/e-722bd3c4942331/ad1', title : 'my title - ad1' } ]); 
                 });
 
                 it('handles goTo', function(){
@@ -665,9 +668,9 @@
                     expect($scope.atTail).toEqual(false);
                     expect($scope.$emit).toHaveBeenCalledWith('reelMove');
                     expect($scope.$emit.callCount).toBe(1);
-                    expect($window.c6MrGa.callCount).toEqual(2);
+                    expect($window.c6MrGa.callCount).toEqual(1);
                     expect($window.c6MrGa.calls[0].args).toEqual(['c6mr.send','pageview',{
-                        page : '/mr/e-722bd3c4942331?mode=testMode', title : 'my title'
+                        page : '/mr/e-722bd3c4942331/vid2', title : 'my title - vid2'
                     }]); 
                 });
                 
@@ -679,8 +682,8 @@
                     $scope.$digest();
                     expect($scope.currentIndex).toEqual(2);
                     expect($scope.currentCard).toBe($scope.deck[2]);
-                    expect($window.c6MrGa.callCount).toEqual(3);
-                    expect($window.c6MrGa.calls[1].args).toEqual(['c6mr.send','event','Navigation','Move','Skip', { page : '/mr/e-722bd3c4942331/vid2?mode=testMode', title : 'my title - vid2' } ]); 
+                    expect($window.c6MrGa.callCount).toEqual(2);
+                    expect($window.c6MrGa.calls[0].args).toEqual(['c6mr.send','event','Navigation','Move','Skip', { page : '/mr/e-722bd3c4942331/vid2', title : 'my title - vid2' } ]); 
                 });
 
                 it('sends ga event if navigates to tail',function(){
@@ -692,8 +695,8 @@
                     expect($scope.atTail).toEqual(true);
                     expect($scope.currentIndex).toEqual(4);
                     expect($scope.currentCard).toBe($scope.deck[4]);
-                    expect($window.c6MrGa.callCount).toEqual(3);
-                    expect($window.c6MrGa.calls[1].args).toEqual(['c6mr.send','event','Navigation','End','Skip', 1, { page : '/mr/e-722bd3c4942331/vid3?mode=testMode', title : 'my title - vid3' } ]); 
+                    expect($window.c6MrGa.callCount).toEqual(2);
+                    expect($window.c6MrGa.calls[0].args).toEqual(['c6mr.send','event','Navigation','End','Skip', 1, { page : '/mr/e-722bd3c4942331/vid3', title : 'my title - vid3' } ]); 
                 });
 
                 it('sends ga event with value===1 if ends with all cards visited',function(){
@@ -708,8 +711,8 @@
                     expect($scope.atTail).toEqual(true);
                     expect($scope.currentIndex).toEqual(4);
                     expect($scope.currentCard).toBe($scope.deck[4]);
-                    expect($window.c6MrGa.callCount).toEqual(3);
-                    expect($window.c6MrGa.calls[1].args).toEqual(['c6mr.send','event','Navigation','End','Next', 5, { page : '/mr/e-722bd3c4942331/vid3?mode=testMode', title : 'my title - vid3' } ]); 
+                    expect($window.c6MrGa.callCount).toEqual(2);
+                    expect($window.c6MrGa.calls[0].args).toEqual(['c6mr.send','event','Navigation','End','Next', 5, { page : '/mr/e-722bd3c4942331/vid3', title : 'my title - vid3' } ]); 
                 });
 
 
@@ -722,8 +725,8 @@
                         RumbleCtrl.start();
                     });
                     it('sends an event for the launch',function(){
-                        expect($window.c6MrGa.calls[1].args).toEqual([
-                            'c6mr.send', 'event', 'Navigation', 'Start', 'Start', { page : '/mr/e-722bd3c4942331/vid1?mode=testMode', title : 'my title - vid1' }]);
+                        expect($window.c6MrGa.calls[2].args).toEqual([
+                            'c6mr.send', 'event', 'Navigation', 'Start', 'Start', { page : '/mr/e-722bd3c4942331/vid1', title : 'my title - vid1' }]);
                     });
                 });
 

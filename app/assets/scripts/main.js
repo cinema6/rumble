@@ -82,6 +82,9 @@
         done();
     }
 
+    c6.kAppName     = 'MiniReel';
+    c6.kAppId       = 'com.cinema6.minireel';
+    c6.kAppVersion  = __C6_BUILD_VERSION__ || 'debug';
     c6.kBaseUrl = __C6_APP_BASE_URL__;
     c6.kHasKarma = false;
     c6.kLogFormats = c6.kDebug;

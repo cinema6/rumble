@@ -477,15 +477,14 @@
                     appData.experience.id) ;
             if (!$scope.currentCard){
                 return {
-                    page : '/mr/' + appData.experience.id + '?mode=' + appData.mode,
+                    page : '/mr/' + appData.experience.id,
                     title : titleRoot
                 };
             }
             
             return {
-                page : '/mr/' + appData.experience.id + '/' + $scope.currentCard.id
-                    + '?mode=' + appData.mode,
-                title : titleRoot + ' - ' +  ($scope.currentCard.title || $scope.currentCard.id)
+                page : '/mr/' + appData.experience.id + '/' + $scope.currentCard.id,
+                title : titleRoot + ' - ' + ($scope.currentCard.title || $scope.currentCard.id)
             };
         };
 
@@ -595,6 +594,7 @@
         $log.log('Rumble Controller is initialized!');
    
         $scope.$on('analyticsReady',function(){
+            $window.c6MrGa('c6mr.set','dimension1',appData.mode);
             self.reportPageView(self.getVirtualPage(),0);
         });
     }])

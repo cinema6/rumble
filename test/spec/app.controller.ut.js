@@ -14,6 +14,7 @@
                 c6EventEmitter,
                 $window,
                 c6AppData,
+                c6Defines,
                 AppCtrl,
                 $httpBackend;
 
@@ -115,6 +116,7 @@
                     c6EventEmitter = $injector.get('c6EventEmitter');
                     $window = $injector.get('$window');
                     c6AppData = $injector.get('c6AppData');
+                    c6Defines = $injector.get('c6Defines');
                     $httpBackend = $injector.get('$httpBackend');
                     $httpBackend.whenGET('assets/config/responsive.json').respond({});
 
@@ -123,10 +125,9 @@
                         title: 'Test Minireel'
                     };
 
-                    c6AppData.virtualPage = {
-                        page : '/mr/exp1',
-                        title : 'Test Minireel'
-                    };
+                    c6Defines.kAppName      = 'testAppName';
+                    c6Defines.kAppId        = 'testAppID';
+                    c6Defines.kAppVersion   = 'testAppVersion';
 
                     $document = $injector.get('$document');
                     myFrame$ = $injector.get('myFrame$');
@@ -139,7 +140,8 @@
 
                     AppCtrl = $controller('AppController', {
                         $scope: $scope,
-                        $log: $log
+                        $log: $log,
+                        c6Defines : c6Defines
                     });
 
                     siteSession = c6EventEmitter({});
@@ -240,6 +242,14 @@
 
                     expect($window.c6MrGa.calls[1].args[0]).toEqual('c6mr.set');
                     expect($window.c6MrGa.calls[1].args[1]).toEqual('checkProtocolTask');
+                    /*
+                    expect($window.c6MrGa.calls[2].args)
+                        .toEqual(['c6mr.set','appName','testAppName']);
+                    expect($window.c6MrGa.calls[3].args)
+                        .toEqual(['c6mr.set','appId','testAppID']);
+                    expect($window.c6MrGa.calls[4].args)
+                        .toEqual(['c6mr.set','appVersion','testAppVersion']);
+                    */
                 });
             });
 

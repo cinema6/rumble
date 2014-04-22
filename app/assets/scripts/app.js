@@ -312,8 +312,8 @@
 
             return c6AppData;
         }])
-        .controller('AppController', ['$scope','$log','cinema6','c6UrlMaker','$timeout','$document','$window','c6Debounce','$animate','c6AppData',
-        function                     ( $scope , $log , cinema6 , c6UrlMaker , $timeout , $document , $window , c6Debounce , $animate , c6AppData ) {
+        .controller('AppController', ['$scope','$log','cinema6','c6UrlMaker','$timeout','$document','$window','c6Debounce','$animate','c6AppData', 'c6Defines',
+        function                     ( $scope , $log , cinema6 , c6UrlMaker , $timeout , $document , $window , c6Debounce , $animate , c6AppData, c6Defines ) {
             $log = $log.context('AppCtrl');
             var _app = {
                     state: 'splash'
@@ -363,7 +363,12 @@
                     'cookieDomain'  : 'none'
                 });
                 $window.c6MrGa('c6mr.set', 'checkProtocolTask', function(){});
-
+                /*
+                 * For some reason adding these breaks some of the ga reporting???
+                $window.c6MrGa('c6mr.set', 'appName', c6Defines.kAppName);
+                $window.c6MrGa('c6mr.set', 'appId', c6Defines.kAppId);
+                $window.c6MrGa('c6mr.set', 'appVersion', c6Defines.kAppVersion);
+                */
                 $scope.$broadcast('analyticsReady');
             });
 
