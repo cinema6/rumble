@@ -109,7 +109,55 @@
                                     { appUri: 'rumble', org: user.org }
                                 );
                             });
-                    }]
+                    }],
+                    children: {
+                        new: {
+                            controller: noop,
+                            controllerAs: 'NewCtrl',
+                            templateUrl: assets('views/manager/new.html'),
+                            model:  ['cinema6','MiniReelService','$q',
+                            function( cinema6 , MiniReelService , $q ) {
+                                function getModes() {
+                                    return cinema6.getAppData()
+                                        .then(function returnModes(appData) {
+                                            return appData.experience.data.modes;
+                                        });
+                                }
+
+                                return this.cModel ||
+                                    $q.all({
+                                        modes: getModes(),
+                                        minireel: MiniReelService.create()
+                                    });
+                            }],
+                            children: {
+                                category: {
+                                    controller: noop,
+                                    controllerAs: 'NewCategoryCtrl',
+                                    templateUrl: assets('views/manager/new/category.html'),
+                                    model:  [function() {
+                                        return this.cParent.cModel.modes;
+                                    }]
+                                },
+                                mode: {
+                                    controller: 'NewModeController',
+                                    controllerAs: 'NewModeCtrl',
+                                    templateUrl: assets('views/manager/new/mode.html'),
+                                    model:  ['c6StateParams',
+                                    function( c6StateParams ) {
+                                        var parentModel = this.cParent.cModel;
+
+                                        return {
+                                            minireel: parentModel.minireel,
+                                            modes: parentModel.modes.filter(function(mode) {
+                                                return mode.name === c6StateParams.newModeCategory;
+                                            })[0].modes
+                                        };
+                                    }]
+                                }
+                            }
+                        }
+                    }
                 })
                 .state('editor', {
                     controller: 'EditorController',

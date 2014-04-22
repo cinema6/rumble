@@ -1,0 +1,5 @@
+<ul>
+    <li ng-repeat="$this in NewCategoryCtrl.model">
+        <a c6-sref="manager.new.mode" params="{ newModeCategory: $this.name }">{{$this.name}}</a>
+    </li>
+</ul>

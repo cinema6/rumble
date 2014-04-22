@@ -23,5 +23,15 @@
             this.determineInclusionWithFilter = function(minireel) {
                 return self.filter === 'all' || self.filter === minireel.status;
             };
+        }])
+
+        .controller('NewModeController', ['c6State',
+        function                         ( c6State ) {
+            this.launchEditor = function(mode) {
+                var minireel = this.model.minireel;
+
+                minireel.mode = mode;
+                c6State.goTo('editor', { minireelId: minireel.id });
+            };
         }]);
 }());
