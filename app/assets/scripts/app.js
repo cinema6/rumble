@@ -112,7 +112,7 @@
                     }],
                     children: {
                         new: {
-                            controller: noop,
+                            controller: 'GenericController',
                             controllerAs: 'NewCtrl',
                             templateUrl: assets('views/manager/new.html'),
                             model:  ['cinema6','MiniReelService','$q',
@@ -132,7 +132,7 @@
                             }],
                             children: {
                                 category: {
-                                    controller: noop,
+                                    controller: 'GenericController',
                                     controllerAs: 'NewCategoryCtrl',
                                     templateUrl: assets('views/manager/new/category.html'),
                                     model:  [function() {
@@ -183,7 +183,7 @@
                             }],
                             children: {
                                 copy: {
-                                    controller: noop,
+                                    controller: 'GenericController',
                                     controllerAs: 'EditCardCopyCtrl',
                                     templateUrl: assets('views/editor/edit_card/copy.html'),
                                     model:  [function() {
@@ -191,7 +191,7 @@
                                     }]
                                 },
                                 video: {
-                                    controller: noop,
+                                    controller: 'GenericController',
                                     controllerAs: 'EditCardVideoCtrl',
                                     templateUrl: assets('views/editor/edit_card/video.html'),
                                     model:  [function() {
@@ -199,7 +199,7 @@
                                     }]
                                 },
                                 ballot: {
-                                    controller: noop,
+                                    controller: 'GenericController',
                                     controllerAs: 'EditCardBallotCtrl',
                                     templateUrl: assets('views/editor/edit_card/ballot.html'),
                                     model:  [function() {
@@ -250,6 +250,8 @@
                 })
                 .index('manager');
         }])
+
+        .controller('GenericController', noop)
 
         .controller('AppController', ['$scope', '$log', 'cinema6', 'gsap',
         function                     ( $scope ,  $log ,  cinema6 ,  gsap ) {
