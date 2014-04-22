@@ -6,6 +6,7 @@
             var $rootScope,
                 $scope,
                 $controller,
+                MiniReelService,
                 ManagerCtrl;
 
             var model,
@@ -32,6 +33,7 @@
                 inject(function($injector) {
                     $rootScope = $injector.get('$rootScope');
                     $controller = $injector.get('$controller');
+                    MiniReelService = $injector.get('MiniReelService');
 
                     c6State = $injector.get('c6State');
 
@@ -63,35 +65,37 @@
                     });
                 });
 
-                describe('makeActive(minireel)', function() {
+                describe('makePublic(minireel)', function() {
                     var minireel;
 
                     beforeEach(function() {
                         minireel = {
                             status: 'pending'
                         };
+
+                        spyOn(MiniReelService, 'publish');
+                        ManagerCtrl.makePublic(minireel);
                     });
 
-                    it('should make the minireel\'s status "active"', function() {
-                        ManagerCtrl.makeActive(minireel);
-
-                        expect(minireel.status).toBe('active');
+                    it('should publish the minireel', function() {
+                        expect(MiniReelService.publish).toHaveBeenCalledWith(minireel);
                     });
                 });
 
-                describe('makePending(minireel)', function() {
+                describe('makePrivate(minireel)', function() {
                     var minireel;
 
                     beforeEach(function() {
                         minireel = {
                             status: 'active'
                         };
+
+                        spyOn(MiniReelService, 'unpublish');
+                        ManagerCtrl.makePrivate(minireel);
                     });
 
-                    it('should make the minireel\'s status "pending"', function() {
-                        ManagerCtrl.makePending(minireel);
-
-                        expect(minireel.status).toBe('pending');
+                    it('should unpublish the minireel', function() {
+                        expect(MiniReelService.unpublish).toHaveBeenCalledWith(minireel);
                     });
                 });
 
