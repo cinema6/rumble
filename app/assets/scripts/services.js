@@ -525,6 +525,8 @@
 
                 if (!toCopy) {
                     template.data.deck.unshift(generateIntroCard(template));
+                } else {
+                    template.data.deck[0] = generateIntroCard(template);
                 }
 
                 template.id = generateId('e');

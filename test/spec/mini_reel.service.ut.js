@@ -604,7 +604,13 @@
                                     mode: 'lightbox',
                                     theme: 'ed-videos',
                                     status: 'pending',
-                                    data: minireel.data
+                                    data: jasmine.any(Object)
+                                });
+
+                                result.data.deck.forEach(function(card, index) {
+                                    if (index === 0) { return; }
+
+                                    expect(minireel.data.deck[index]).toEqual(card);
                                 });
                             });
 
@@ -615,6 +621,16 @@
                             it('should generate a new id', function() {
                                 expect(result.id).toMatch(/e-[a-zA-Z0-9]{14}/);
                                 expect(result.id).not.toBe(minireel.id);
+                            });
+
+                            it('should generate a new intro card that is bound to the new minireel', function() {
+                                var intro = result.data.deck[0];
+
+                                intro.title = 'foo';
+                                expect(result.title).toBe('foo');
+
+                                intro.note = 'hey';
+                                expect(result.summary).toBe('hey');
                             });
 
                             it('should cache the new minireel', function() {
