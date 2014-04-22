@@ -11,6 +11,7 @@
                 controllerAs: 'Ctrl',
                 scope: {
                     vote: '=',
+                    ballot: '=',
                     cardId: '@',
                     active: '=',
                     fetchWhen: '=',
@@ -48,14 +49,12 @@
 
         .controller('BallotVoteModuleController', ['$scope','BallotService','$log',
         function                                  ( $scope , BallotService , $log ) {
-            var self = this;
-
             $log = $log.context('BallotVoteModuleController');
 
-            this.vote = function(vote) {
-                var voteName = (self.ballot[vote] || {}).name;
+            this.vote = function(index, ballot) {
+                var voteName = ballot[index];
 
-                $scope.vote = vote;
+                $scope.vote = index;
 
                 $log.info('Submitting vote for card %1: %2', $scope.cardId, voteName);
                 BallotService.vote($scope.cardId, voteName)
@@ -63,26 +62,12 @@
                         $log.error(error);
                     });
 
-                $scope.$emit('<ballot-vote-module>:vote', vote);
+                $scope.$emit('<ballot-vote-module>:vote', index);
             };
 
             this.pass = function() {
                 $scope.vote = -1;
             };
-
-            $scope.$watch('fetchWhen', function(shouldFetch) {
-                if (!shouldFetch) { return; }
-
-                $log.info('Fetching ballot for card: %1', $scope.cardId);
-                BallotService.getBallot($scope.cardId)
-                    .then(function(ballot) {
-                        $log.info('Got ballot for card: ' + $scope.cardId, ballot);
-                        self.ballot = ballot;
-                    })
-                    .catch(function(error) {
-                        $log.error(error);
-                    });
-            });
         }])
 
         .controller('BallotResultsModuleController', ['$scope','BallotService','$log',
