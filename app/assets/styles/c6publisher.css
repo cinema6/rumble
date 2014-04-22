@@ -163,20 +163,28 @@
             list-style: none;
         }
             .tabNav__item {
-                float:left;
+                float:left; margin:0 0.375em 0 0;
             }
             .tabNav__link {
-                width:12em; height:3em;
+                width:12rem; height:2.375rem;
+                padding:0.625rem 0 0 0;
                 display:block;
-                text-align: center;
+                text-align: center; font-size:1.25em;
                 -webkit-transition: background 0.5s; transition: background 0.5s;
-                background:#b0b0b0 url('../img/tabNav__bg.png') 0 -52px repeat-x;
+                background:#b0b0b0 url('../img/tabNav__bg.png') 0 -3.25rem repeat-x;
             }
                 .tabNav__link:hover {
-                    background-color:#000;
-                    background-position:0 -100px;
+                    background-color:#13a2ff;
                     border:0;
                 }
+                .tabNav__link--active {
+                    background-color:#4a9cd1;
+                    background-position:0 -6.0625rem;
+                    border:0;
+                }
+        .modal__content {
+            margin-top:60px;
+        }
 
 
 

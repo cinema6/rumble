@@ -3,7 +3,7 @@
         <ul class="tabNav__list clearfix">
             <li class="tabNav__item">
                 <a c6-sref="editor.editCard.video"
-                    class="tabNav__link" 
+                    class="tabNav__link tabNav__link--active" 
                     title="Editorial Content">Editorial Content</a>
             </li>
             <li class="tabNav__item">
@@ -19,7 +19,9 @@
         </ul>
     </navigation>
 
-    <c6-view></c6-view>
+    <div class="modal__content">
+        <c6-view></c6-view>
+    </div>
 
     <button ng-click="EditCardCtrl.close()">Close</button>
 </div>
