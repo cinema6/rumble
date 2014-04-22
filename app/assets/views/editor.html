@@ -38,14 +38,17 @@
 
     <card-table deck="minireel.data.deck" edit-card="EditorCtrl.editCard(card)" add-card="EditorCtrl.newCard(index)" preview-card="EditorCtrl.previewMode(card)"></card-table>
 
-    <div ng-show="EditorCtrl.preview" ng-controller="PreviewController as PreviewCtrl" ng-class="{ 'preview__container--desktop' : (PreviewCtrl.device === 'desktop'), 'preview__container--mobile' : (PreviewCtrl.device === 'phone') }" class="preview__container">
-        <h3>Preview Mode</h3>
-        <form>
-            <input type="radio" ng-model="PreviewCtrl.device" value="desktop">Desktop</input>
-            <input type="radio" ng-model="PreviewCtrl.device" value="phone">Mobile</input>
-            <button ng-click="EditorCtrl.closePreview()">CLOSE</button>
-        </form>
-        <iframe mr-preview="minireel" src="assets/rumble/app/index.html" ng-class="{ 'preview__iframe--desktop' : (PreviewCtrl.device === 'desktop'), 'preview__iframe--mobile' : (PreviewCtrl.device === 'phone') }" class="preview__iframe"></iframe>
+    <div ng-show="EditorCtrl.preview" ng-controller="PreviewController as PreviewCtrl" class="preview__group">
+        <div ng-class="{ 'preview__container--desktop' : (PreviewCtrl.device === 'desktop'), 'preview__container--mobile' : (PreviewCtrl.device === 'phone') }" class="preview__container ui__modal">
+            <h1 class="modal__title">Preview Mode</h1>
+            <form>
+                <input type="radio" ng-model="PreviewCtrl.device" value="desktop">Desktop</input>
+                <input type="radio" ng-model="PreviewCtrl.device" value="phone">Mobile</input>
+                <button class="modal__closeBtn sprite--alpha" ng-click="EditorCtrl.closePreview()"><span class="ir">Close</span></button>
+            </form>
+            <iframe mr-preview="minireel" src="assets/rumble/app/index.html" ng-class="{ 'preview__iframe--desktop' : (PreviewCtrl.device === 'desktop'), 'preview__iframe--mobile' : (PreviewCtrl.device === 'phone') }" class="preview__iframe"></iframe>
+        </div>
+        <div class="ui__overlay">&nbsp;</div>
     </div>
 </c6-alias>
 <c6-view></c6-view>
