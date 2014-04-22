@@ -5,6 +5,7 @@
         "appUriPrefix": "<%= settings.appUrl %>",
         "appUri": "mini-reel-maker",
         "data": {
+            "c6EmbedSrc": "//lib.cinema6.com/c6embed/v0.7.0-0-g495dfa0/c6embed.min.js",
             "modes": [
                 {
                     "name": "Inline",
