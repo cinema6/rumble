@@ -4,9 +4,35 @@
         "uri": "mini-reel-maker",
         "appUriPrefix": "<%= settings.appUrl %>",
         "appUri": "mini-reel-maker",
-        "title": "Blank",
-        "subtitle": "",
-        "summary": "",
-        "data": {}
+        "data": {
+            "modes": [
+                {
+                    "name": "Inline",
+                    "modes": [
+                        {
+                            "name": "Light Text",
+                            "value": "light"
+                        },
+                        {
+                            "name": "Heavy Text",
+                            "value": "full"
+                        }
+                    ]
+                },
+                {
+                    "name": "Lightbox",
+                    "modes": [
+                        {
+                            "name": "Lightbox, with Companion Ad",
+                            "value": "lightbox-ads"
+                        },
+                        {
+                            "name": "Lightbox",
+                            "value": "lightbox"
+                        }
+                    ]
+                }
+            ]
+        }
     }
 ]

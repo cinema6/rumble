@@ -257,6 +257,33 @@
                 return card;
             }
 
+            function generateIntroCard(minireel) {
+                var intro = self.createCard('intro');
+
+                Object.defineProperties(intro, {
+                    title: {
+                        enumerable: true,
+                        get: function() {
+                            return minireel.title;
+                        },
+                        set: function(value) {
+                            minireel.title = value;
+                        }
+                    },
+                    note: {
+                        enumerable: true,
+                        get: function() {
+                            return minireel.summary;
+                        },
+                        set: function(value) {
+                            minireel.summary = value;
+                        }
+                    }
+                });
+
+                return intro;
+            }
+
             this.findCard = function(deck, id) {
                 return deck.filter(function(card) {
                     return card.id === id;
@@ -305,38 +332,12 @@
 
                     function transform(minireel) {
                         var model = {
-                                data: {
-                                    deck: minireel.data.deck.map(function(card) {
-                                        return makeCard(card);
-                                    })
-                                }
-                            },
-                            intro = {
-                                id: generateId('rc'),
-                                type: 'intro',
-                                data: {}
-                            };
-
-                        Object.defineProperties(intro, {
-                            title: {
-                                enumerable: true,
-                                get: function() {
-                                    return model.title;
-                                },
-                                set: function(value) {
-                                    model.title = value;
-                                }
-                            },
-                            note: {
-                                enumerable: true,
-                                get: function() {
-                                    return model.summary;
-                                },
-                                set: function(value) {
-                                    model.summary = value;
-                                }
+                            data: {
+                                deck: minireel.data.deck.map(function(card) {
+                                    return makeCard(card);
+                                })
                             }
-                        });
+                        };
 
                         // Loop through the experience and copy everything but
                         // the "data" object.
@@ -346,7 +347,7 @@
                             }
                         });
 
-                        model.data.deck.unshift(intro);
+                        model.data.deck.unshift(generateIntroCard(model));
 
                         return model;
                     }
@@ -480,6 +481,34 @@
                 });
 
                 return newCard;
+            };
+
+            this.create = function(toCopy) {
+                var template = toCopy ? ngCopy(toCopy) :
+                    {
+                        title: 'Untitled',
+                        subtitle: null,
+                        summary: null,
+                        type: 'minireel',
+                        mode: 'light',
+                        data: {
+                            deck: [
+                                this.createCard('recap')
+                            ]
+                        }
+                    };
+
+                if (!toCopy) {
+                    template.data.deck.unshift(generateIntroCard(template));
+                }
+
+                template.id = generateId('e');
+                template.title += toCopy ? ' (copy)' : '';
+                template.status = 'pending';
+
+                cache.put(template.id, template);
+
+                return template;
             };
 
             this.convertForPlayer = function(minireel) {
