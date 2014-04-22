@@ -93,15 +93,6 @@
         border:0; margin:0; padding:0; overflow: hidden;
         font-size:1rem; line-height: 1;
     }
-    .sprite {
-        background:url('../../img/sprite--light.svg') 0 0 / 18.75rem 18.75rem no-repeat;
-    }
-    @media screen and (min-width:0\0) {  
-        /* IE9 and IE10 rule sets go here */
-        .sprite {
-            background-image:url('../../img/sprite--light.png');
-        }
-    }
     .css-promote {
         transform: translateZ(0);
         -webkit-transform: translateZ(0); /* Safari and Chrome */
@@ -186,6 +177,15 @@
         .modal__content {
             margin-top:60px;
         }
+        .modal__closeBtn {
+            width:1.125em; height:1.125em;
+            background-position:-25px -59px;
+            position:absolute; top:20px; right:20px;
+            cursor:pointer;
+        }
+            .modal__closeBtn:hover {
+                background-position: -43px -59px;
+            }
     /*  modal forms
     ========================================================================== */
         .field--noBreak {
@@ -196,27 +196,36 @@
             }
             .field--noBreak .modal__textBox {
                 float:right;
-                width:37.5rem;
             }
         .modal__label {
             font-weight:100;
             display:block;
+            width:7rem;
         }
         .modal__textBox, 
         .modal__textarea {
             border:1px solid #b0b0b0;
-            margin:0; padding:0 0.25em;
+            margin:0; padding:0.25em 0.5em;
             font-size:1rem;
-            height:1.5rem;
             -webkit-box-sizing: border-box;
             -moz-box-sizing: border-box;
             box-sizing: border-box;
             background:#f4f4f4;
+            color:#646464;
+            width:36.5rem;
         }
             .modal__textBox:focus,
             .modal__textarea:focus {
                 border:1px solid #4a9cd1;
                 background:#eff9ff;
+            }
+        .modal__textBox {
+            font-family: 'museo-sans', Arial, Helvetica, sans-serif;
+        }
+            .modal__textBox--short,
+            .field--noBreak .modal__textBox--short {
+                width:16rem; float:left;
+                margin-left:0.5rem;
             }
         .modal__textarea {
             width:100%; padding:0.5em 0.75em;
@@ -225,6 +234,7 @@
             .modal__cardCopy {
                 height:22rem;
                 line-height: 1.75em;
+                font-family: 'museo-sans', Arial, Helvetica, sans-serif;
             }
 
 
