@@ -85,10 +85,6 @@
                     return _url;
                 };
 
-                self.getVideoUrl = function(){
-                    return 'http://www.dailymotion.com/video/' + config.videoId;
-                };
-
                 self.getIframe = function(){
                     return _iframe$;
                 };
@@ -244,10 +240,6 @@
 
             playerIface.getVideoId = function() {
                 return $attr.videoid;
-            };
-
-            playerIface.getVideoUrl = function() {
-                return player.getVideoUrl();
             };
 
             playerIface.isReady = function() {

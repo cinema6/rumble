@@ -344,9 +344,8 @@
             player.on('play', function(){
                 if (($scope.currentCard) &&
                         (player.getVideoId() === $scope.currentCard.data.videoid)){
-                    $log.info('Sending play event to GOOGLE!');
                     $window.c6MrGa('c6mr.send', 'event', 'video', 'play',
-                        player.getVideoUrl(),
+                        player.webHref,
                         self.getVirtualPage());
                 }
             });
@@ -355,7 +354,7 @@
                 if (($scope.currentCard) &&
                         (player.getVideoId() === $scope.currentCard.data.videoid)){
                     $window.c6MrGa('c6mr.send', 'event', 'video', 'pause',
-                        player.getVideoUrl(),
+                        player.webHref,
                         self.getVirtualPage());
                 }
             });
@@ -364,7 +363,7 @@
                 if (($scope.currentCard) &&
                         (player.getVideoId() === $scope.currentCard.data.videoid)){
                     $window.c6MrGa('c6mr.send', 'event', 'video', 'ended',
-                        player.getVideoUrl(),
+                        player.webHref,
                         self.getVirtualPage());
                 }
             });
