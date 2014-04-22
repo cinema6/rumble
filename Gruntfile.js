@@ -100,16 +100,15 @@ module.exports = function(grunt) {
         grunt.task.run('watch:e2e:' + (browser || ''));
     });
 
-    grunt.registerTask('setmode', 'the the build mode', function(mode) {
-        // console.log(mode);
-        grunt.config('buildMode',mode);
-    });
-
     /*********************************************************************************************
      *
      * BUILD TASKS
      *
      *********************************************************************************************/
+
+    grunt.registerTask('setmode', 'set the build mode', function(mode) {
+        grunt.config('buildMode',mode);
+    });
 
     grunt.registerTask('build', 'build app into distDir', function(){
         var modes = grunt.file.expand({
