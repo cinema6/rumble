@@ -49,6 +49,7 @@
 
                     $scope = $rootScope.$new();
                     $scope.cardId = 'rc-76tfg5467ug';
+                    $scope.ballot = ['Catchy', 'Lame'];
 
                     BallotVoteModuleCtrl = $controller('BallotVoteModuleController', { $scope: $scope });
                 });
@@ -66,26 +67,26 @@
                         });
 
                         it('should set $scope.vote to the provided value', function() {
-                            BallotVoteModuleCtrl.vote(1, ['Catchy', 'Lame']);
+                            BallotVoteModuleCtrl.vote(1);
                             expect($scope.vote).toBe(1);
 
-                            BallotVoteModuleCtrl.vote(0, ['Catchy', 'Lame']);
+                            BallotVoteModuleCtrl.vote(0);
                             expect($scope.vote).toBe(0);
 
-                            BallotVoteModuleCtrl.vote(3, ['Catchy', 'Lame']);
+                            BallotVoteModuleCtrl.vote(3);
                             expect($scope.vote).toBe(3);
                         });
 
                         it('should emit "<ballot-vote-module>:vote"', function() {
-                            BallotVoteModuleCtrl.vote(1, ['Catchy', 'Lame']);
+                            BallotVoteModuleCtrl.vote(1);
                             expect($scope.$emit).toHaveBeenCalledWith('<ballot-vote-module>:vote', 1);
 
-                            BallotVoteModuleCtrl.vote(0, ['Catchy', 'Lame']);
+                            BallotVoteModuleCtrl.vote(0);
                             expect($scope.$emit).toHaveBeenCalledWith('<ballot-vote-module>:vote', 0);
                         });
 
                         it('should persist the vote', function() {
-                            BallotVoteModuleCtrl.vote(1, ['Catchy', 'Lame']);
+                            BallotVoteModuleCtrl.vote(1);
 
                             expect(BallotService.vote).toHaveBeenCalledWith($scope.cardId, 'Lame');
                         });

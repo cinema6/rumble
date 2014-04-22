@@ -51,8 +51,8 @@
         function                                  ( $scope , BallotService , $log ) {
             $log = $log.context('BallotVoteModuleController');
 
-            this.vote = function(index, ballot) {
-                var voteName = ballot[index];
+            this.vote = function(index) {
+                var voteName = $scope.ballot[index];
 
                 $scope.vote = index;
 

@@ -2,7 +2,7 @@
     <h2 class="mr-ballot__title tk--hdr" ng-click="onDismiss()">What did you think of this video?</h2>
     <ul class="mr-ballot__list" ng-click="onDismiss()">
         <li class="mr-ballot__item mr-ballot__item{{$index}}" ng-repeat="choice in ballot">
-            <button class="mr-ballot__btn mr-ballot__btn{{$index}}" ng-click="Ctrl.vote($index, ballot)"><span class="mr-ballot__btn-label">{{choice}}</span></button>
+            <button class="mr-ballot__btn mr-ballot__btn{{$index}}" ng-click="Ctrl.vote($index)"><span class="mr-ballot__btn-label">{{choice}}</span></button>
         </li>
     </ul>
     <p class="mr-ballot__textlink">
