@@ -134,11 +134,10 @@ module.exports = function(grunt) {
             grunt.task.run('uglify:dist');
         });
 
-        // temporarily disabling the with-maps stuff
-        // if (grunt.option('with-maps')){
-            // grunt.task.run('copy:raw');
-            // grunt.task.run('sed:app_map');
-        // }
+        if (grunt.option('with-maps')){
+            grunt.task.run('copy:raw');
+            grunt.task.run('sed:app_map');
+        }
     });
 
     /*********************************************************************************************
