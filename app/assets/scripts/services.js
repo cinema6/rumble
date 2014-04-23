@@ -9,6 +9,50 @@
         extend = angular.extend;
 
     angular.module('c6.mrmaker')
+        .service('VideoThumbnailService', ['$q','$cacheFactory',
+        function                          ( $q , $cacheFactory ) {
+            var _private = {},
+                cache = $cacheFactory('VideoThumbnailService:models');
+
+            function ThumbModel(promise) {
+                var self = this;
+
+                this.small = null;
+                this.large = null;
+
+                promise.then(function setThumbs(thumbs) {
+                    self.small = thumbs.small;
+                    self.large = thumbs.large;
+                });
+            }
+
+            _private.fetchYouTubeThumbs = function(videoid) {
+                return $q.when({
+                    small: 'http://img.youtube.com/vi/' + videoid + '/2.jpg',
+                    large: 'http://img.youtube.com/vi/' + videoid + '/0.jpg'
+                });
+            };
+
+            this.getThumbsFor = function(service, videoid) {
+                var key = service + ':' + videoid;
+
+                return cache.get(key) ||
+                    cache.put(key, (function() {
+                        switch (service) {
+                        case 'youtube':
+                            return new ThumbModel(_private.fetchYouTubeThumbs(videoid));
+                        default:
+                            return new ThumbModel($q.when({
+                                small: null,
+                                large: null
+                            }));
+                        }
+                    }()));
+            };
+
+            if (window.c6.kHasKarma) { this._private = _private; }
+        }])
+
         .service('VideoService', ['c6UrlParser',
         function                 ( c6UrlParser ) {
             var VideoService = this;
