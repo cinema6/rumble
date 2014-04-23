@@ -303,6 +303,7 @@
                 }
 
                 $interval.cancel(currentTimeInterval);
+                $log.info('[%1] - temporarily removing listeners during twerk.',player);
                 player.removeListener('playing', playListener);
                 player.removeListener('paused', pauseListener);
 
@@ -328,8 +329,13 @@
                     })
                     .finally(function() {
                         pollCurrentTime();
-                        player.on('playing', playListener);
-                        player.on('paused', pauseListener);
+                        $timeout(function(){
+                            $log.info('[%1] - restoring listeners after twerk.',player);
+                            player.on('playing', playListener);
+                            player.on('paused', pauseListener);
+                        },500); // Timeout allows time for pause to bubble up before
+                        // we go ahead and restore the pause handler.  Would be better to
+                        // replace with something a bit more deterministic.
                     });
 
                 return deferred.promise;
@@ -492,6 +498,7 @@
                         }
                     });
 
+                    $log.info('[%1] - setting player listeners',p);
                     player.on('playing', playListener);
                     player.on('paused', pauseListener);
                 });

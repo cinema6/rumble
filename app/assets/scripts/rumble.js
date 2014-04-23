@@ -318,6 +318,11 @@
                     return true;
             }
         }, ['currentCard.type']);
+        
+        $scope.$on('<ballot-vote-module>:vote', function(/*event,vote*/){
+            $window.c6MrGa('c6mr.send', 'event', 'video', 'vote',
+                self.getVirtualPage());
+        });
 
         $scope.$on('playerAdd',function(event,player){
             $log.log('Player added: %1 - %2',player.getType(),player.getVideoId());
@@ -334,6 +339,33 @@
                 $log.log('Player ready: %1 - %2',player.getType(),player.getVideoId());
                 self.checkReady();
                 player.removeListener('ready',this);
+            });
+
+            player.on('play', function(){
+                if (($scope.currentCard) &&
+                        (player.getVideoId() === $scope.currentCard.data.videoid)){
+                    $window.c6MrGa('c6mr.send', 'event', 'video', 'play',
+                        player.webHref,
+                        self.getVirtualPage());
+                }
+            });
+            
+            player.on('pause', function(){
+                if (($scope.currentCard) &&
+                        (player.getVideoId() === $scope.currentCard.data.videoid)){
+                    $window.c6MrGa('c6mr.send', 'event', 'video', 'pause',
+                        player.webHref,
+                        self.getVirtualPage());
+                }
+            });
+            
+            player.on('ended', function(){
+                if (($scope.currentCard) &&
+                        (player.getVideoId() === $scope.currentCard.data.videoid)){
+                    $window.c6MrGa('c6mr.send', 'event', 'video', 'ended',
+                        player.webHref,
+                        self.getVirtualPage());
+                }
             });
         });
 
@@ -464,7 +496,7 @@
             
             return {
                 page : '/mr/' + appData.experience.id + '/' + $scope.currentCard.id,
-                title : titleRoot + ' - ' +  ($scope.currentCard.title || $scope.currentCard.id)
+                title : titleRoot + ' - ' + ($scope.currentCard.title || $scope.currentCard.id)
             };
         };
 
@@ -486,6 +518,11 @@
             $scope.currentReturns = null;
             $scope.currentIndex   = i;
             $scope.currentCard    = $scope.deck[$scope.currentIndex] || null;
+
+            if ($scope.currentCard){
+                $scope.currentCard.visited = true;
+            }
+
             $scope.atHead         = $scope.currentIndex === 0;
             $scope.atTail         = ($scope.currentIndex === ($scope.deck.length - 1));
            
@@ -510,29 +547,55 @@
         };
 
         this.start = function() {
-            $window.c6MrGa('c6mr.send', 'event', 'button', 'click', 'start',
-                this.getVirtualPage());
             this.goForward();
+            $window.c6MrGa('c6mr.send', 'event', 'Navigation', 'Start', 'Start',
+                this.getVirtualPage());
 
             if (appData.behaviors.fullscreen) {
                 cinema6.fullscreen(true);
             }
         };
 
-        this.goBack = function(src){
+        this.goTo   = function(idx,src){
+            var visited;
+            self.setPosition(idx);
+            if ($scope.atTail){
+                visited = 0;
+                angular.forEach($scope.deck,function(card){
+                    visited += (card.visited) ? 1 : 0;
+                });
+                $window.c6MrGa('c6mr.send', 'event', 'Navigation', 'End', 'Skip',
+                    visited, this.getVirtualPage());
+            } else
             if (src){
-                $window.c6MrGa('c6mr.send', 'event', 'button', 'click',
-                    'prev::' + appData.mode + '::' + src, this.getVirtualPage());
+                $window.c6MrGa('c6mr.send', 'event', 'Navigation', 'Move',
+                    'Skip', this.getVirtualPage());
             }
+        };
+
+        this.goBack = function(src){
             self.setPosition($scope.currentIndex - 1);
+            if (src){
+                $window.c6MrGa('c6mr.send', 'event', 'Navigation', 'Move',
+                    'Previous', this.getVirtualPage());
+            }
         };
 
         this.goForward = function(src){
-            if (src){
-                $window.c6MrGa('c6mr.send', 'event', 'button', 'click',
-                    'next::' + appData.mode + '::' + src, this.getVirtualPage());
-            }
+            var visited;
             self.setPosition($scope.currentIndex + 1);
+            if ($scope.atTail){
+                visited = 0;
+                angular.forEach($scope.deck,function(card){
+                    visited += (card.visited) ? 1 : 0;
+                });
+                $window.c6MrGa('c6mr.send', 'event', 'Navigation', 'End', 'Next',
+                    visited, this.getVirtualPage());
+            } else
+            if (src){
+                $window.c6MrGa('c6mr.send', 'event', 'Navigation', 'Move',
+                    'Next', this.getVirtualPage());
+            }
         };
 
         readyTimeout = $timeout(function(){
@@ -543,6 +606,7 @@
         $log.log('Rumble Controller is initialized!');
    
         $scope.$on('analyticsReady',function(){
+            $window.c6MrGa('c6mr.set','dimension1',appData.mode);
             self.reportPageView(self.getVirtualPage(),0);
         });
     }])
