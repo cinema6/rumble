@@ -1,8 +1,9 @@
 <c6-alias model="EditorCtrl.model" as="minireel">
     <header class="pageHeader pageHeader--editor container">
-        <h1 class="pageTitle">{{minireel.title}} 
+        <h1 class="pageTitle minireel__theTitle">{{minireel.title}} 
             <span ng-show="minireel.status === 'pending'" class="pageTitle__status">(<em class="pageTitle__status--private">private</em>)</span>
             <span ng-show="minireel.status === 'active'" class="pageTitle__status">(<em class="pageTitle__status--public">public</em>)</span>
+            <span class="ui__edit sprite--alpha"><span class="ir">Edit</span></span>
         </h1>
         <div class="pageHeader__actions clearfix">
             <div class="metaData__group">

@@ -247,6 +247,7 @@
         }
         .modal__btnFooter {
             text-align: right;
+            position:absolute; bottom:1.5em; left:1.5em; right:1.5em;
         }
     /*  modal forms
     ========================================================================== */
@@ -298,7 +299,7 @@
             font-size:1rem;
         }
             .modal__cardCopy {
-                height:22rem;
+                height:19.375rem;
                 line-height: 1.75em;
                 font-family: 'museo-sans', Arial, Helvetica, sans-serif;
             }
