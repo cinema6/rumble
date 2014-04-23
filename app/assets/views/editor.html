@@ -1,8 +1,8 @@
 <c6-alias model="EditorCtrl.model" as="minireel">
     <header class="pageHeader pageHeader--editor container">
         <h1 class="pageTitle">{{minireel.title}} 
-            <span class="pageTitle__status">(<em class="pageTitle__status--private">private</em>)</span>
-            <span class="pageTitle__status">(<em class="pageTitle__status--public">public</em>)</span>
+            <span ng-show="minireel.status === 'pending'" class="pageTitle__status">(<em class="pageTitle__status--private">private</em>)</span>
+            <span ng-show="minireel.status === 'active'" class="pageTitle__status">(<em class="pageTitle__status--public">public</em>)</span>
         </h1>
         <div class="pageHeader__actions clearfix">
             <div class="metaData__group">
@@ -10,7 +10,7 @@
                 <span class="ui__divider--bar">&nbsp;|&nbsp;</span>
                 Created 3/13/2014
                 <span class="ui__divider--bar">&nbsp;|&nbsp;</span>
-                4 Cards
+                {{minireel.data.deck.length - 1}} Cards
             </div>
         </div>
         <div class="publish__actions clearfix">
@@ -57,19 +57,15 @@
 </c6-alias>
 <c6-view></c6-view>
 
-<div class="embedCode__group container">
+<div ng-controller="EmbedController as EmbedCtrl" class="embedCode__group container">
     <div class="embedCode__header">
         <label for="embedtype">Embed Code:</label>
-        <select class="embedCode__selector" name="embedtype">
-            <option value="responsive">Responsive Auto-fit <span class="typo--attention">*</span></option>
-            <option value="custom">Custom Size</option>
-        </select>
-        <div class="embedCode__customSizeDimensions">
-            <input class="textBox" type="text" value="Width"> x
-            <input class="textBox" type="text" value="Height">
+        <select ng-model="EmbedCtrl.mode" ng-options="mode.value as mode.name for mode in EmbedCtrl.modes" class="embedCode__selector" name="embedtype"></select>
+        <div c6-alias="EmbedCtrl.size as size" ng-show="EmbedCtrl.mode === 'custom'" class="embedCode__customSizeDimensions">
+            <input ng-model="size.width" class="textBox" type="text" value="Width"> x
+            <input ng-model="size.height" class="textBox" type="text" value="Height">
         </div>
     </div>
-    <textarea name="" id="" class="embedCode__snippet" cols="30" rows="10">
-<iframe width="560" height="315" src="//www.youtube.com/embed/OnXijAxiy8g" frameborder="0" allowfullscreen></iframe></textarea>
+    <textarea ng-model="EmbedCtrl.code" name="" id="" class="embedCode__snippet" cols="30" rows="10"></textarea>
     <p class="embedCode__tip"><strong><span class="typo--attention">*</span> Responsive Auto-Fit</strong> embedding will automatically resize the MiniReel widget to fit nicely into your page. This is the recommended embedding method.</p>
 </div>

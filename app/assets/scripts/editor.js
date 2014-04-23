@@ -274,7 +274,7 @@
             };
 
             this.newCard = function(insertionIndex) {
-                c6State.goTo('editor.newCard.type', { insertionIndex: insertionIndex });
+                c6State.goTo('editor.newCard', { insertionIndex: insertionIndex });
             };
 
             $scope.$on('addCard', function(event, card, index) {
@@ -302,33 +302,63 @@
             };
         }])
 
-        .controller('NewCardTypeController', ['c6State',
-        function                             ( c6State ) {
-            this.type = null;
+        .controller('NewCardController', ['$scope','c6State','c6StateParams','MiniReelService',
+        function                         ( $scope , c6State , c6StateParams , MiniReelService ) {
+            this.type = 'video';
 
             this.edit = function() {
-                var type = this.type;
+                MiniReelService.setCardType(this.model, this.type);
 
-                if (!type) {
-                    throw new Error('Can\'t edit before a type is chosen.');
-                }
-
-                c6State.goTo('editor.newCard.edit', { cardType: type });
+                $scope.$emit('addCard', this.model, c6StateParams.insertionIndex);
+                c6State.goTo('editor.editCard.copy', { cardId: this.model.id });
             };
         }])
 
-        .controller('NewCardEditController', ['c6Computed','$scope','VideoService','c6State',
-                                              'c6StateParams',
-        function                             ( c6Computed , $scope , VideoService , c6State ,
-                                               c6StateParams ) {
-            var c = c6Computed($scope);
+        .controller('EmbedController', ['$scope','cinema6',
+        function                       ( $scope , cinema6 ) {
+            var self = this,
+                EditorCtrl = $scope.EditorCtrl;
 
-            VideoService.createVideoUrl(c, this, 'NewCardEditCtrl');
+            this.modes = [
+                {
+                    name: 'Responsive Auto-fit *',
+                    value: 'responsive'
+                },
+                {
+                    name: 'Custom Size',
+                    value: 'custom'
+                }
+            ];
+            this.mode = this.modes[0].value;
 
-            this.save = function() {
-                $scope.$emit('addCard', this.model, c6StateParams.insertionIndex);
-                c6State.goTo('editor');
+            this.size = {
+                width: 650,
+                height: 522
             };
+
+            this.c6EmbedSrc = null;
+            cinema6.getAppData()
+                .then(function setC6EmbedSrc(data) {
+                    self.c6EmbedSrc = data.experience.data.c6EmbedSrc;
+                });
+
+            Object.defineProperties(this, {
+                code: {
+                    get: function() {
+                        return '<script src="' +
+                            this.c6EmbedSrc +
+                            '" data-exp="' +
+                            EditorCtrl.model.id +
+                            '"' + (this.mode === 'custom' ?
+                                (' data-width="' +
+                                    this.size.width +
+                                    '" data-height="' +
+                                    this.size.height + '"') :
+                                '') +
+                            '></script>';
+                    }
+                }
+            });
         }])
 
         .controller('PreviewController',['$scope','MiniReelService','postMessage','c6BrowserInfo',

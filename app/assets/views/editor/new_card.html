@@ -1,7 +1,8 @@
-<div class="ui__modal">
-    <h1 class="modal__title">New Card</h1>
-
-    <c6-view></c6-view>
-    
-</div>
-<div class="ui__overlay">&nbsp;</div>
+<h2>New Card</h2>
+<form>
+    <input type="radio" ng-model="NewCardCtrl.type" value="video">Video</input>
+    <input type="radio" ng-model="NewCardCtrl.type" value="videoBallot">Video With Polling</input>
+    <input type="radio" ng-model="NewCardCtrl.type" value="ad">Advertisement</input>
+    <input type="radio" ng-model="NewCardCtrl.type" value="links">Links</input>
+</form>
+<button ng-click="NewCardCtrl.edit()">Next</button>
