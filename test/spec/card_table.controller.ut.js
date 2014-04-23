@@ -11,6 +11,7 @@
                 $scope,
                 c6EventEmitter,
                 $interval,
+                VideoThumbnailService,
                 DragCtrl,
                 CardTableCtrl;
 
@@ -44,6 +45,7 @@
                     $controller = $injector.get('$controller');
                     c6EventEmitter = $injector.get('c6EventEmitter');
                     $interval = $injector.get('$interval');
+                    VideoThumbnailService = $injector.get('VideoThumbnailService');
 
                     $scope = $rootScope.$new();
                     $scope.$apply(function() {
@@ -64,6 +66,37 @@
                 describe('position', function() {
                     it('should be an object with an x property of 0', function() {
                         expect(CardTableCtrl.position).toEqual({ x: 0 });
+                    });
+                });
+            });
+
+            describe('methods', function() {
+                describe('getThumbs(card)', function() {
+                    var thumbs;
+
+                    beforeEach(function() {
+                        thumbs = {};
+
+                        spyOn(VideoThumbnailService, 'getThumbsFor')
+                            .and.returnValue(thumbs);
+                    });
+
+                    it('should proxy to the VideoThumbnailService.getThumbsFor() method', function() {
+                        expect(CardTableCtrl.getThumbs({
+                            data: {
+                                service: 'youtube',
+                                videoid: 'abc123'
+                            }
+                        })).toBe(thumbs);
+                        expect(VideoThumbnailService.getThumbsFor).toHaveBeenCalledWith('youtube', 'abc123');
+
+                        expect(CardTableCtrl.getThumbs({
+                            data: {
+                                service: 'vimeo',
+                                videoid: '12345'
+                            }
+                        })).toBe(thumbs);
+                        expect(VideoThumbnailService.getThumbsFor).toHaveBeenCalledWith('vimeo', '12345');
                     });
                 });
             });
