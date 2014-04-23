@@ -100,7 +100,7 @@
         font-size:1rem; line-height: 1;
     }
     .sprite--fff {
-        background:url('../img/sprite--white@2x.png') 0 0 / 25rem 33.25rem no-repeat;
+        background:url('../img/sprite--white@2x.png') 0 0 / 50rem 33.25rem no-repeat;
         border:0; margin:0; padding:0; overflow: hidden;
         font-size:1rem; line-height: 1;
     }
@@ -346,6 +346,18 @@
             }
                 .lightboxWizard__choice:hover .diagram__full {
                     background-position:-12.5em -24.9375em;
+                }
+            .diagram__lightbox {
+                background-position:-25em 0;
+            }
+                .lightboxWizard__choice:hover .diagram__lightbox {
+                    background-position:-25em -8.3125em;
+                }
+            .diagram__lightbox-ads {
+                background-position:-37.5em 0;
+            }
+                .lightboxWizard__choice:hover .diagram__lightbox-ads {
+                    background-position:-37.5em -8.3125em;
                 }
 
         .lightboxWizard__copy {
