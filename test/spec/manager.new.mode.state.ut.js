@@ -34,16 +34,16 @@
                         minireel: {},
                         modes: [
                             {
-                                name: 'inline',
+                                value: 'inline',
                                 modes: []
                             },
                             {
-                                name: 'lightbox',
+                                value: 'lightbox',
                                 modes: []
                             }
                         ]
                     };
-                    c6StateParams.newModeCategory = 'lightbox';
+                    c6StateParams.newModeValue = 'lightbox';
 
                     result = $injector.invoke(NewModeState.model, NewModeState);
                 });
@@ -53,6 +53,38 @@
                         minireel: ManagerNewState.cModel.minireel,
                         modes: ManagerNewState.cModel.modes[1].modes
                     });
+                });
+            });
+
+            describe('updateControllerModel()', function() {
+                var model, controller;
+
+                beforeEach(function() {
+                    controller = {};
+                    model = {
+                        minireel: {},
+                        modes: [
+                            {
+                                value: 'foo'
+                            },
+                            {
+                                value: 'bar'
+                            }
+                        ]
+                    };
+
+                    $injector.invoke(NewModeState.updateControllerModel, NewModeState, {
+                        controller: controller,
+                        model: model
+                    });
+                });
+
+                it('should set the "model" property on the controller', function() {
+                    expect(controller.model).toBe(model);
+                });
+
+                it('should set the mode to be the value of the first mode in the model\'s modes', function() {
+                    expect(controller.mode).toBe('foo');
                 });
             });
         });

@@ -132,7 +132,7 @@
                             }],
                             children: {
                                 category: {
-                                    controller: 'GenericController',
+                                    controller: 'NewCategoryController',
                                     controllerAs: 'NewCategoryCtrl',
                                     templateUrl: assets('views/manager/new/category.html'),
                                     model:  [function() {
@@ -150,9 +150,14 @@
                                         return {
                                             minireel: parentModel.minireel,
                                             modes: parentModel.modes.filter(function(mode) {
-                                                return mode.name === c6StateParams.newModeCategory;
+                                                return mode.value === c6StateParams.newModeValue;
                                             })[0].modes
                                         };
+                                    }],
+                                    updateControllerModel: ['controller','model',
+                                    function               ( controller , model ) {
+                                        controller.model = model;
+                                        controller.mode = model.modes[0].value;
                                     }]
                                 }
                             }

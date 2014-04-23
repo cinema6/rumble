@@ -35,10 +35,23 @@
             };
         }])
 
+        .controller('NewCategoryController', ['$scope',
+        function                             ( $scope ) {
+            var NewCtrl = $scope.NewCtrl,
+                self = this;
+
+            this.mode = 'lightbox';
+
+            $scope.$watch(function() { return self.mode; }, function(mode) {
+                NewCtrl.category = mode;
+            });
+        }])
+
         .controller('NewModeController', ['c6State',
         function                         ( c6State ) {
-            this.launchEditor = function(mode) {
-                var minireel = this.model.minireel;
+            this.launchEditor = function() {
+                var minireel = this.model.minireel,
+                    mode = this.mode;
 
                 minireel.mode = mode;
                 c6State.goTo('editor', { minireelId: minireel.id });

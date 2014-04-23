@@ -335,16 +335,16 @@
                 .lightboxWizard__choice:hover .diagram__inline {
                     background-position:-12.5em -8.3125em;
                 }
-            .diagram__lightText {
+            .diagram__light {
                 background-position:0 -16.625em;
             }
-                .lightboxWizard__choice:hover .diagram__lightText {
+                .lightboxWizard__choice:hover .diagram__light {
                     background-position:0 -24.9375em;
                 }
-            .diagram__heavyText {
+            .diagram__full {
                 background-position:-12.5em -16.625em;
             }
-                .lightboxWizard__choice:hover .diagram__heavyText {
+                .lightboxWizard__choice:hover .diagram__full {
                     background-position:-12.5em -24.9375em;
                 }
 

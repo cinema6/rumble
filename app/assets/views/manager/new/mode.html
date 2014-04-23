@@ -1,28 +1,17 @@
 <h1 class="modal__title modal__title--lightboxWizard">Choose the MiniReel Type</h1>
 <ul class="lightboxWizard__group">
-    <li class="lightboxWizard__choice">
-        <input id="modeLightText" type="radio" 
-            name="minireel-mode" value="lightbox"
-            class="modal__radioBtn" />
-        <label class="lightboxWizard__hitarea" for="modeLightText"><span class="ir">Light Text</span></label>
-        <div class="lightboxWizard__diagram sprite--fff diagram__lightText">&nbsp;</div>
+    <li ng-repeat="$this in NewModeCtrl.model.modes" class="lightboxWizard__choice">
+        <input id="mode-{{$this.value}}" type="radio" 
+            name="minireel-mode" value="{{$this.value}}"
+            class="modal__radioBtn" ng-model="NewModeCtrl.mode"/>
+        <label class="lightboxWizard__hitarea" for="mode-{{$this.value}}"><span class="ir">{{$this.name}}</span></label>
+        <div class="lightboxWizard__diagram sprite--fff diagram__{{$this.value}}">&nbsp;</div>
         <div class="lightboxWizard__copy">
-            <h2 class="lightboxWizard__title">Light Text</h2>
-            <p class="lightboxWizard__p">Recommended for content that is light on text. Copy is limited to approximately 200 characters.</p>
+            <h2 class="lightboxWizard__title">{{$this.name}}</h2>
+            <p class="lightboxWizard__p">{{$this.description}}</p>
         </div>
-    </li>
-    <li class="lightboxWizard__choice">
-        <input id="modeHeavyText" type="radio" 
-            name="minireel-mode" value="lightbox"
-            class="modal__radioBtn" />
-        <label class="lightboxWizard__hitarea" for="modeHeavyText"><span class="ir">Heavy Text</span></label>
-        <div class="lightboxWizard__diagram sprite--fff diagram__heavyText">&nbsp;</div>
-        <div class="lightboxWizard__copy">
-            <h2 class="lightboxWizard__title">Heavy Text</h2>
-            <p class="lightboxWizard__p">Provides more room for editorial content. Copy is limited to approximately 420 characters.</p>
-        </div>
-    </li>
-    <li ng-repeat="$this in NewModeCtrl.model.modes">
-        <a href="" ng-click="NewModeCtrl.launchEditor($this.value)">{{$this.name}}</a>
     </li>
 </ul>
+<footer class="modal__btnFooter">
+    <button ng-click="NewModeCtrl.launchEditor()" class="modal__btn" type="button" title="Create MiniReel">Create MiniReel</button>
+</footer>

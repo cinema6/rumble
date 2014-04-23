@@ -8,28 +8,36 @@
             "c6EmbedSrc": "//lib.cinema6.com/c6embed/v0.7.0-0-g495dfa0/c6embed.min.js",
             "modes": [
                 {
-                    "name": "Inline",
+                    "name": "Yes, view in a lightbox.",
+                    "value": "lightbox",
+                    "description": "When triggered, this MiniReel will open a lightbox on top of the web page.",
                     "modes": [
                         {
-                            "name": "Light Text",
-                            "value": "light"
+                            "name": "Lightbox, with Companion Ad",
+                            "value": "lightbox-ads",
+                            "description": "Provides more room for editorial content. Copy is limited to approximately 420 characters."
                         },
                         {
-                            "name": "Heavy Text",
-                            "value": "full"
+                            "name": "Lightbox",
+                            "value": "lightbox",
+                            "description": "Provides more room for editorial content. Copy is limited to approximately 420 characters."
                         }
                     ]
                 },
                 {
-                    "name": "Lightbox",
+                    "name": "No, view within the web page.",
+                    "value": "inline",
+                    "description": "When triggered, this MiniReel will display itself in the allotted content space of your website.",
                     "modes": [
                         {
-                            "name": "Lightbox, with Companion Ad",
-                            "value": "lightbox-ads"
+                            "name": "Light Text",
+                            "value": "light",
+                            "description": "Recommended for content that is light on text. Copy is limited to approximately 200 characters."
                         },
                         {
-                            "name": "Lightbox",
-                            "value": "lightbox"
+                            "name": "Heavy Text",
+                            "value": "full",
+                            "description": "Provides more room for editorial content. Copy is limited to approximately 420 characters."
                         }
                     ]
                 }
