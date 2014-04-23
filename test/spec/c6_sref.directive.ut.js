@@ -29,6 +29,7 @@
                     });
 
                 $scope.state = 'home';
+                c6State.current = { name: 'home' };
                 $scope.$apply(function() {
                     $sref = $compile('<a c6-sref="{{state}}" params="params">Click Me</a>')($scope);
                 });
@@ -63,6 +64,24 @@
                 expect(c6State.goTo).toHaveBeenCalledWith('home', undefined);
 
                 expect($sref.attr('href')).toBeUndefined();
+            });
+
+            it('should add the "c6-active" class when the state the sref points to is active', function() {
+                spyOn(c6State, 'isActive').and.returnValue(false);
+
+                expect($sref.hasClass('c6-active')).toBe(true);
+
+                c6State.emit('stateChangeSuccess');
+                expect(c6State.isActive).toHaveBeenCalledWith('home');
+                expect($sref.hasClass('c6-active')).toBe(false);
+
+                $scope.$apply(function() {
+                    $scope.state = 'about';
+                });
+                c6State.isActive.and.returnValue(true);
+                c6State.emit('stateChangeSuccess');
+                expect(c6State.isActive).toHaveBeenCalledWith('about');
+                expect($sref.hasClass('c6-active')).toBe(true);
             });
         });
     });

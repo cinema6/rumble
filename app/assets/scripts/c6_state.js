@@ -124,19 +124,40 @@
             };
         }])
 
-        .directive('c6Sref', ['c6State',
-        function             ( c6State ) {
+        .directive('c6Sref', ['c6State','$animate',
+        function             ( c6State , $animate ) {
             return {
                 restrict: 'A',
                 link: function(scope, $element, attrs) {
-                    $element.on('click', function() {
-                        var state = attrs.c6Sref,
-                            params = scope.$eval(attrs.params);
+                    function setActive() {
+                        $animate.addClass($element, 'c6-active');
+                    }
 
-                        scope.$apply(function() {
-                            c6State.goTo(state, params);
+                    function stateChangeSuccess() {
+                        if (c6State.isActive(attrs.c6Sref)) {
+                            setActive();
+                        } else {
+                            $animate.removeClass($element, 'c6-active');
+                        }
+                    }
+
+                    $element.on('click', function() {
+                            var state = attrs.c6Sref,
+                                params = scope.$eval(attrs.params);
+
+                            scope.$apply(function() {
+                                c6State.goTo(state, params);
+                            });
+                        })
+                        .on('$destroy', function() {
+                            c6State.removeListener('stateChangeSuccess', stateChangeSuccess);
                         });
-                    });
+
+                    c6State.on('stateChangeSuccess', stateChangeSuccess);
+
+                    if (c6State.isActive(attrs.c6Sref)) {
+                        setActive();
+                    }
 
                     if ($element.prop('tagName') === 'A') {
                         $element.attr('href', '');
@@ -179,6 +200,22 @@
                           $templateCache , $log ) {
                 var c6State = c6EventEmitter({}),
                     _service = {};
+
+                function getAllStates(state) {
+                    function climbTree(tree) {
+                        var item = tree[0],
+                            parent = (item || {}).cParent;
+
+                        if (parent) {
+                            tree.unshift(parent);
+                            return climbTree(tree);
+                        }
+
+                        return tree;
+                    }
+
+                    return climbTree([state]);
+                }
 
                 _service.resolveState = function(state) {
                     function setTemplate() {
@@ -235,24 +272,21 @@
                 c6State.current = null;
                 c6State.transitions = {};
 
+                c6State.isActive = function(stateName) {
+                    return getAllStates(c6State.current)
+                        .map(function(state) {
+                            return state.name;
+                        }).indexOf(stateName) > -1;
+                };
+
                 c6State.get = function(name) {
                     return states[name];
                 };
 
                 c6State.transitionTo = function(name, params) {
-                    var tree;
-
-                    function climbTree(tree) {
-                        var item = tree[0],
-                            parent = (item || {}).cParent;
-
-                        if (parent) {
-                            tree.unshift(parent);
-                            return climbTree(tree);
-                        }
-
-                        return tree;
-                    }
+                    var tree,
+                        state = states[name],
+                        current = c6State.current;
 
                     function doTransition(state, terminal) {
                         var from = c6State.current;
@@ -312,15 +346,17 @@
                         return promise;
                     }
 
-                    function removeTransition() {
+                    function finishTransition() {
                         delete c6State.transitions[name];
+
+                        c6State.emit('stateChangeSuccess', state, current);
                     }
 
-                    tree = climbTree([states[name]]);
+                    tree = getAllStates(state);
 
                     return $q.all(this.transitions)
                         .then(execute)
-                        .finally(removeTransition);
+                        .finally(finishTransition);
                 };
 
                 c6State.goTo = function(state, params) {
