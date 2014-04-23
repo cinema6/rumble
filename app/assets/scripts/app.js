@@ -186,6 +186,34 @@
                                     c6StateParams.cardId
                                 );
                             }],
+                            updateControllerModel: ['controller','model',
+                            function               ( controller , model ) {
+                                var copy = {
+                                        name: 'Editorial Content',
+                                        sref: 'editor.editCard.copy'
+                                    },
+                                    video = {
+                                        name: 'Video Content',
+                                        sref: 'editor.editCard.video'
+                                    },
+                                    ballot = {
+                                        name: 'Questionnaire',
+                                        sref: 'editor.editCard.ballot'
+                                    };
+
+                                controller.model = model;
+                                controller.tabs = (function() {
+                                    switch (model.type) {
+                                    case 'video':
+                                        return [copy, video];
+                                    case 'videoBallot':
+                                        return [copy, video, ballot];
+
+                                    default:
+                                        return [copy];
+                                    }
+                                }());
+                            }],
                             children: {
                                 copy: {
                                     controller: 'GenericController',

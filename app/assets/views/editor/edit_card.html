@@ -1,20 +1,10 @@
 <div class="ui__modal">
     <navigation class="tabNav__group">
         <ul class="tabNav__list clearfix">
-            <li class="tabNav__item">
-                <a c6-sref="editor.editCard.copy"
-                    class="tabNav__link tabNav__link--active" 
-                    title="Editorial Content">Editorial Content</a>
-            </li>
-            <li class="tabNav__item">
-                <a c6-sref="editor.editCard.video"
-                    class="tabNav__link"
-                    title="Video Content">Video Content</a>
-            </li>
-            <li class="tabNav__item">
-                <a c6-sref="editor.editCard.ballot"
-                    class="tabNav__link"
-                    title="Questionnaire">Questionnaire</a>
+            <li ng-repeat="tab in EditCardCtrl.tabs" class="tabNav__item">
+                <a c6-sref="{{tab.sref}}"
+                    class="tabNav__link" 
+                    title="{{tab.name}}">{{tab.name}}</a>
             </li>
         </ul>
         <button class="modal__closeBtn sprite--alpha" ng-click="EditCardCtrl.close()"><span class="ir">Close</span></button>
