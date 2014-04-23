@@ -49,7 +49,7 @@
 
                     $scope = $rootScope.$new();
                     $scope.cardId = 'rc-76tfg5467ug';
-                    $scope.fetchWhen = false;
+                    $scope.ballot = ['Catchy', 'Lame'];
 
                     BallotVoteModuleCtrl = $controller('BallotVoteModuleController', { $scope: $scope });
                 });
@@ -59,59 +59,10 @@
                 expect(BallotVoteModuleCtrl).toEqual(jasmine.any(Object));
             });
 
-            describe('$watchers', function() {
-                describe('fetchWhen', function() {
-                    beforeEach(function() {
-                        expect(BallotService.getBallot).not.toHaveBeenCalled();
-
-                        $scope.$apply(function() {
-                            $scope.fetchWhen = true;
-                        });
-                    });
-
-                    it('should get the ballot', function() {
-                        var ballot = [
-                            {
-                                name: 'Foo',
-                                votes: 0.25
-                            },
-                            {
-                                name: 'Bar',
-                                votes: 0.75
-                            }
-                        ];
-
-                        expect(BallotService.getBallot).toHaveBeenCalledWith($scope.cardId);
-
-                        $scope.$apply(function() {
-                            BallotService._.getBallotDeferred.resolve(ballot);
-                        });
-
-                        expect(BallotVoteModuleCtrl.ballot).toBe(ballot);
-                    });
-                });
-            });
-
             describe('@public', function() {
                 describe('methods', function() {
-                    describe('vote(index)', function() {
+                    describe('vote(index, ballot)', function() {
                         beforeEach(function() {
-                            $scope.$apply(function() {
-                                $scope.fetchWhen = true;
-                            });
-                            $scope.$apply(function() {
-                                BallotService._.getBallotDeferred.resolve([
-                                    {
-                                        name: 'Too Cool',
-                                        votes: 0.9
-                                    },
-                                    {
-                                        name: 'Too Far',
-                                        votes: 0.1
-                                    }
-                                ]);
-                            });
-
                             spyOn($scope, '$emit').andCallThrough();
                         });
 
@@ -137,7 +88,7 @@
                         it('should persist the vote', function() {
                             BallotVoteModuleCtrl.vote(1);
 
-                            expect(BallotService.vote).toHaveBeenCalledWith($scope.cardId, 'Too Far');
+                            expect(BallotService.vote).toHaveBeenCalledWith($scope.cardId, 'Lame');
                         });
                     });
 
