@@ -33,11 +33,12 @@
             });
 
             describe('methods', function() {
-                describe('launchEditor(mode)', function() {
+                describe('launchEditor()', function() {
                     beforeEach(function() {
                         spyOn(c6State, 'goTo');
 
-                        NewModeCtrl.launchEditor('foo');
+                        NewModeCtrl.mode = 'foo';
+                        NewModeCtrl.launchEditor();
                     });
 
                     it('should set the experience\'s mode to the provided mode', function() {
