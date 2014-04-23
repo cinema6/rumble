@@ -204,7 +204,7 @@
                     background-color:#13a2ff;
                     border:0;
                 }
-                .tabNav__link--active {
+                .tabNav__link.c6-active {
                     background-color:#4a9cd1; background-position:0 -6.0625rem;
                     color:#4a9cd1;
                     border:0;
