@@ -29,7 +29,10 @@
                     src: [
                         '**',
                         '!views/**',
-                        'views/<%= buildMode %>/**',
+                        '!styles/**',
+                        'styles/*.*',
+                        'styles/<%= buildMode %>/**',
+//                        'views/<%= buildMode %>/**',
                         '!**/*.{js,css,html}'
                     ],
                     dest: '<%= _modeDir %>'
