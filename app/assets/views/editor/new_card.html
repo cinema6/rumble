@@ -17,12 +17,12 @@
         class="modal__radioBtn" />
         <label for="cardType_ad">Advertisement</label>
 
-        <input id="cardType_links" type="radio" 
-        ng-model="NewCardCtrl.type" value="links"
-        class="modal__radioBtn" />
-        <label for="cardType_links">Links</label>
     </form>
+    <button class="modal__closeBtn sprite--alpha"><span class="ir">Close</span></button>
     <br><br>
-    <button class="modal__btn" ng-click="NewCardCtrl.edit()" title="Next">Next</button>
+    <footer class="modal__btnFooter">
+        <button class="modal__btn toolbar__delete" title="Cancel">Cancel</button>
+        <button class="modal__btn" ng-click="NewCardCtrl.edit()" title="Next">Next</button>
+    </footer>
 </div>
 <div class="ui__overlay">&nbsp;</div>

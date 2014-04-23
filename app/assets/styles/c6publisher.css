@@ -196,7 +196,7 @@
                 padding:0.625rem 0 0 0;
                 display:block;
                 text-align: center; font-size:1.25em; font-weight:100;
-                -webkit-transition: background 0.5s; transition: background 0.5s;
+                -webkit-transition: all 0.5s; transition: all 0.5s;
                 background:#b0b0b0 url('../img/tabNav__bg.png') 0 -3.25rem repeat-x;
                 color:#565656;
             }
@@ -206,7 +206,7 @@
                 }
                 .tabNav__link.c6-active {
                     background-color:#4a9cd1; background-position:0 -6.0625rem;
-                    color:#4a9cd1;
+                    color:#565656;
                     border:0;
                 }
         .modal__content {
@@ -278,6 +278,7 @@
             background:#f4f4f4;
             color:#646464;
             width:36.5rem;
+            resize: none;
         }
             .modal__textBox:focus,
             .modal__textarea:focus {
