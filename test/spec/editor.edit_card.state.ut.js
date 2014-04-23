@@ -7,7 +7,6 @@
                 EditorState,
                 $rootScope,
                 $injector,
-                $q,
                 c6StateParams,
                 c6State;
 
@@ -17,7 +16,6 @@
                 inject(function(_$injector_) {
                     $injector = _$injector_;
                     $rootScope = $injector.get('$rootScope');
-                    $q = $injector.get('$q');
 
                     c6State = $injector.get('c6State');
                     c6StateParams = $injector.get('c6StateParams');
