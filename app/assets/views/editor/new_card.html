@@ -18,10 +18,10 @@
         <label for="cardType_ad">Advertisement</label>
 
     </form>
-    <button class="modal__closeBtn sprite--alpha"><span class="ir">Close</span></button>
+    <button class="modal__closeBtn sprite--alpha" c6-sref="editor"><span class="ir">Close</span></button>
     <br><br>
     <footer class="modal__btnFooter">
-        <button class="modal__btn toolbar__delete" title="Cancel">Cancel</button>
+        <button class="modal__btn toolbar__delete" c6-sref="editor" title="Cancel">Cancel</button>
         <button class="modal__btn" ng-click="NewCardCtrl.edit()" title="Next">Next</button>
     </footer>
 </div>
