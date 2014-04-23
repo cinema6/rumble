@@ -197,7 +197,7 @@
                         case 'recap':
                             return 'Recap';
                         default:
-                            return card.title ? card.title : null;
+                            return card.title || null;
                         }
                     },
                     note: copy(null),
