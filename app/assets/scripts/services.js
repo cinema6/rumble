@@ -234,7 +234,16 @@
 
                         }
                     },
-                    title: copy(null),
+                    title: function(card) {
+                        switch (card.type) {
+                        case 'ad':
+                            return 'Advertisement';
+                        case 'recap':
+                            return 'Recap';
+                        default:
+                            return card.title || null;
+                        }
+                    },
                     note: copy(null),
                     label: function() {
                         switch (this.type) {

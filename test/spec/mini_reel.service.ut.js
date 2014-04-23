@@ -131,7 +131,7 @@
                             {
                                 id: 'rc-b74a127991ee75',
                                 type: 'recap',
-                                title: null,
+                                title: 'Recap',
                                 note: null,
                                 data: {}
                             }
@@ -196,7 +196,7 @@
                             expect(adCard).toEqual({
                                 id: jasmine.any(String),
                                 type: 'ad',
-                                title: null,
+                                title: 'Advertisement',
                                 note: null,
                                 label: 'Advertisement',
                                 ad: true,
@@ -299,7 +299,7 @@
                             expect(adCard).toEqual({
                                 id: id,
                                 type: 'ad',
-                                title: null,
+                                title: 'Advertisement',
                                 note: null,
                                 label: 'Advertisement',
                                 ad: true,
@@ -314,7 +314,7 @@
                             expect(linksCard).toEqual({
                                 id: id,
                                 type: 'links',
-                                title: null,
+                                title: 'Advertisement', // this is a result of the default ad title being set
                                 note: null,
                                 label: 'Suggested Links',
                                 ad: false,
@@ -536,7 +536,7 @@
                             expect(deck[3]).toEqual({
                                 id: 'rc-1c7a46097a5d4a',
                                 type: 'ad',
-                                title: null,
+                                title: 'Advertisement',
                                 note: null,
                                 label: 'Advertisement',
                                 ad: true,
@@ -548,7 +548,7 @@
                             expect(deck[6]).toEqual({
                                 id: 'rc-f31cabb9193ef9',
                                 type: 'ad',
-                                title: null,
+                                title: 'Advertisement',
                                 note: null,
                                 label: 'Advertisement',
                                 ad: true,
@@ -577,7 +577,7 @@
                             expect(deck[8]).toEqual({
                                 id: 'rc-b74a127991ee75',
                                 type: 'recap',
-                                title: null,
+                                title: 'Recap',
                                 note: null,
                                 label: 'Recap',
                                 ad: false,
@@ -671,7 +671,7 @@
                                             },
                                             {
                                                 id: jasmine.any(String),
-                                                title: null,
+                                                title: 'Recap',
                                                 note: null,
                                                 type: 'recap',
                                                 label: 'Recap',
