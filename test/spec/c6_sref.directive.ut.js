@@ -83,6 +83,16 @@
                 expect(c6State.isActive).toHaveBeenCalledWith('about');
                 expect($sref.hasClass('c6-active')).toBe(true);
             });
+
+            it('should not throw an error if the state its loaded on is null', function() {
+                c6State.current = null;
+
+                expect(function() {
+                    $scope.$apply(function() {
+                        $sref = $compile('<a c6-sref="{{state}}" params="params">Click Me</a>')($scope);
+                    });
+                }).not.toThrow();
+            });
         });
     });
 }());

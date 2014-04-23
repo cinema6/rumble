@@ -12,7 +12,7 @@
                 <div id="{{this.id}}" data-title="{{this.title}}" c6-draggable="$index !== 0 && $index !== (deck.length - 1)" class="card__item">
                     <div class="card__statusIndicator" ng-click="editCard({ card: this })">&nbsp;</div>
                     <div class="miniReel__imgBox">
-                        <img src="http://lorempixel.com/300/200/" class="miniReel__img" alt="{{this.title}}">
+                        <img ng-src="{{Ctrl.getThumbs(this).large || 'http://lorempixel.com/300/200/'}}" class="miniReel__img" alt="{{this.title}}">
                     </div>
                     <div class="miniReel__body">
                         <div class="miniReel__copy">

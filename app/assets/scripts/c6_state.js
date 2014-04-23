@@ -273,10 +273,11 @@
                 c6State.transitions = {};
 
                 c6State.isActive = function(stateName) {
-                    return getAllStates(c6State.current)
-                        .map(function(state) {
-                            return state.name;
-                        }).indexOf(stateName) > -1;
+                    return c6State.current &&
+                        getAllStates(c6State.current)
+                            .map(function(state) {
+                                return state.name;
+                            }).indexOf(stateName) > -1;
                 };
 
                 c6State.get = function(name) {

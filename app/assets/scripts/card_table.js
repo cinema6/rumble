@@ -363,8 +363,8 @@
             };
         }])
 
-        .controller('CardTableController', ['$scope','$q','$interval',
-        function                           ( $scope , $q , $interval ) {
+        .controller('CardTableController', ['$scope','$q','$interval','VideoThumbnailService',
+        function                           ( $scope , $q , $interval , VideoThumbnailService ) {
             var self = this,
                 forEach = angular.forEach;
 
@@ -488,6 +488,12 @@
             }
 
             this.position = { x: 0 };
+
+            this.getThumbs = function(card) {
+                var data = card.data;
+
+                return VideoThumbnailService.getThumbsFor(data.service, data.videoid);
+            };
 
             getDragCtrl()
                 .then(handleDragEvents);

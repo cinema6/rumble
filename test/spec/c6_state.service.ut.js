@@ -295,6 +295,11 @@
                                 expect(c6State.isActive('parent.child1')).toBe(false);
                                 expect(c6State.isActive('about')).toBe(false);
                             });
+
+                            it('should return null if the current state is null', function() {
+                                c6State.current = null;
+                                expect(c6State.isActive('foo')).toBeNull();
+                            });
                         });
 
                         describe('get(state)', function() {
