@@ -13,14 +13,14 @@
                     "description": "When triggered, this MiniReel will open a lightbox on top of the web page.",
                     "modes": [
                         {
-                            "name": "Lightbox, with Companion Ad",
-                            "value": "lightbox-ads",
-                            "description": "Provides more room for editorial content. Copy is limited to approximately 420 characters."
-                        },
-                        {
                             "name": "Lightbox",
                             "value": "lightbox",
-                            "description": "Provides more room for editorial content. Copy is limited to approximately 420 characters."
+                            "description": "Simple video and text MiniReel. No character limits, the content space will scroll as needed."
+                        },
+                        {
+                            "name": "Lightbox, with Companion Ad",
+                            "value": "lightbox-ads",
+                            "description": "A 300x250 ad will be displayed on every slide. No character limits, the content space will scroll as needed."
                         }
                     ]
                 },
