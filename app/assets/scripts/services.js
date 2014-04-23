@@ -405,6 +405,7 @@
                     function transform(minireel) {
                         var model = {
                             data: {
+                                branding: minireel.data.branding,
                                 deck: minireel.data.deck.map(function(card) {
                                     return makeCard(card);
                                 })
