@@ -4,7 +4,7 @@
     module.exports = {
         main: {
             pattern: 'undefined',
-            replacement: '\'<%= buildMode %>/<%= _version %>\'',
+            replacement: '\'<%= _version %>\'',
             path: '.tmp/main-<%= buildMode %>.js'
         },
         html: {

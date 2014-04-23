@@ -7,7 +7,7 @@
         options: {
             htmlmin: grunt.config.get('htmlmin.options'),
             module: '<%= settings.appModule %>',
-            prefix: '<%= _version %>/'
+            prefix: '<%= _version %>/<%= buildMode %>'
         },
         dist: {
             cwd: '<%= settings.appDir %>/assets',
