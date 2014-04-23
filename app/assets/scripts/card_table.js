@@ -3,7 +3,268 @@
 
     var forEach = angular.forEach;
 
+    function refresh($element) {
+        $element.inheritedData('cDragCtrl').refresh();
+    }
+
     angular.module('c6.mrmaker')
+        .animation('.card__drop-zone', function() {
+            return {
+                beforeRemoveClass: function($element, className, done) {
+                    function shrink($element, done) {
+                        $element
+                            .animate({
+                                width: '2px'
+                            },{
+                                complete: done,
+                                progress: function() {
+                                    refresh($element);
+                                }
+                            });
+
+                        return function() {
+                            $element.stop();
+                        };
+                    }
+
+                    switch (className) {
+                    case 'c6-drag-zone-active':
+                        return shrink($element, done);
+                    default:
+                        return done();
+                    }
+                },
+                beforeAddClass: function($element, className, done) {
+                    function grow($element, done) {
+                        var remPx = parseInt(
+                            angular.element('html')
+                                .css('font-size'),
+                            10
+                        );
+
+                        $element
+                            .animate({
+                                width: ((13.5 * remPx)) + 'px'
+                            },{
+                                complete: done,
+                                progress: function() {
+                                    refresh($element);
+                                }
+                            });
+
+                        return function() {
+                            $element.stop();
+                        };
+                    }
+
+                    switch (className) {
+                    case 'c6-drag-zone-active':
+                        return grow($element, done);
+                    default:
+                        return done();
+                    }
+                }
+            };
+        })
+
+        .animation('.new__container', function() {
+            return {
+                beforeAddClass: function($element, className, done) {
+                    function hide($element, done) {
+                        $element.animate({
+                            width: 0,
+                            margin: 0
+                        },{
+                            complete: done,
+                            progress: function() {
+                                refresh($element);
+                            }
+                        });
+
+                        return function() {
+                            $element.stop();
+                        };
+                    }
+
+                    switch (className) {
+                    case 'ng-hide':
+                        return hide($element, done);
+                    default:
+                        return done();
+                    }
+                },
+                removeClass: function($element, className, done) {
+                    function show($element, done) {
+                        $element.animate({
+                            width: '2.25em',
+                            margin: '0 0.75em 0 0'
+                        }, {
+                            complete: done,
+                            progress: function() {
+                                refresh($element);
+                            }
+                        });
+
+                        return function() {
+                            $element.stop();
+                        };
+                    }
+
+                    switch (className) {
+                    case 'ng-hide':
+                        return show($element, done);
+                    default:
+                        return done();
+                    }
+                }
+            };
+        })
+
+        .animation('.card__container', function() {
+            return {
+                beforeAddClass: function($element, className, done) {
+                    function shrink($element, done) {
+                        $element.animate({
+                            width: '0'
+                        }, {
+                            complete: done,
+                            progress: function() {
+                                refresh($element);
+                            }
+                        });
+
+                        return function() {
+                            $element.stop();
+                            $element.removeAttr('style');
+                        };
+                    }
+
+                    switch (className) {
+                    case 'card__container--dragging':
+                        return shrink($element, done);
+                    default:
+                        return done();
+                    }
+                },
+                removeClass: function($element, className, done) {
+                    function grow($element, done) {
+                        var zone = $element.data('cDragZone');
+
+                        $element.animate({
+                            width: '10rem'
+                        }, {
+                            complete: function() {
+                                zone.emit('animationComplete');
+                                done();
+                            },
+                            progress: function() {
+                                refresh($element);
+                            }
+                        });
+
+                        return function() {
+                            $element.stop();
+                            $element.removeAttr('style');
+                        };
+                    }
+
+                    switch (className) {
+                    case 'card__container--dragging':
+                        return grow($element, done);
+                    default:
+                        return done();
+                    }
+                }
+            };
+        })
+
+        .animation('.card__item', function($animate) {
+            var forEach = angular.forEach,
+                $ = angular.element;
+
+            return {
+                beforeRemoveClass: function($element, className, done) {
+                    function zipBack($element, done) {
+                        var draggable = $element.data('cDrag'),
+                            dropZones = draggable.currentlyOver.filter(function(zone) {
+                                return zone.id.search(/drop-zone-\w+/) > -1;
+                            }),
+                            dropZone = dropZones[dropZones.length - 1],
+                            zone = $element.inheritedData('cDragZone');
+
+                        function toNewPosition() {
+                            var $ul = $element.closest('ul'),
+                                $dropZones = $ul.find('.card__drop-zone');
+
+                            dropZone.$element.addClass('card__drop-zone--reordering');
+                            draggable.emit('reorder', dropZone);
+
+                            zone.once('animationComplete', function() {
+                                $element.animate({
+                                    top: zone.display.top,
+                                    left: zone.display.left
+                                }, {
+                                    progress: function() {
+                                        draggable.refresh();
+                                    },
+                                    complete: function() {
+                                        dropZone.$element.removeClass(
+                                            [
+                                                'card__drop-zone--reordering',
+                                                'c6-drag-zone-active'
+                                            ].join(' ')
+                                        );
+                                        $element.css({'top' : 0, 'left' : 0});
+                                        forEach($dropZones, function(dropZone) {
+                                            $animate.removeClass(
+                                                $(dropZone),
+                                                'c6-drag-zone-active'
+                                            );
+                                        });
+                                        done();
+                                        refresh($element);
+                                    }
+                                });
+                            });
+
+                            return function() {
+                                dropZone.$element.removeClass(
+                                    'card__drop-zone--reordering'
+                                );
+                            };
+                        }
+
+                        function toOldPosition() {
+                            zone.once('animationComplete', function() {
+                                $element.animate({
+                                    top: zone.display.top,
+                                    left: zone.display.left
+                                }, {
+                                    complete: function() {
+                                        $element.css({'top' : 0, 'left' : 0});
+                                        done();
+                                    }
+                                });
+                            });
+                        }
+
+                        if (dropZone) {
+                            return toNewPosition();
+                        } else {
+                            return toOldPosition();
+                        }
+                    }
+
+                    switch (className) {
+                    case 'c6-dragging':
+                        return zipBack($element, done);
+                    default:
+                        return done();
+                    }
+                }
+            };
+        })
+
         .directive('c6BindScroll', ['c6Debounce',
         function                   ( c6Debounce ) {
             return {
@@ -19,6 +280,15 @@
                             });
                         }, 100);
 
+                    function handleScroll() {
+                        scope.$emit(
+                            'c6-bind-scroll(' + $attrs.id + '):scroll',
+                            element_.scrollLeft,
+                            element_.scrollTop
+                        );
+                        update();
+                    }
+
                     scope.$watch($attrs.c6BindScroll, function(scroll) {
                         element_.scrollTop = scroll.y;
                         element_.scrollLeft = scroll.x;
@@ -27,7 +297,7 @@
                         scroll.x = element_.scrollLeft;
                     }, true);
 
-                    $element.on('scroll', update);
+                    $element.on('scroll', handleScroll);
                 }
             };
         }])
@@ -212,7 +482,7 @@
                 forEach(DragCtrl.draggables, addCard);
                 DragCtrl.on('draggableAdded', addCard);
 
-                $scope.$watch('Ctrl.position.x', function() {
+                $scope.$on('c6-bind-scroll(card-scroller):scroll', function() {
                     DragCtrl.refresh();
                 });
             }

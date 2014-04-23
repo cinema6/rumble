@@ -28,7 +28,7 @@
 
                 $scope.$apply(function() {
                     $scroller = $compile([
-                        '<div style="width: 25px; height: 25px; overflow: scroll;" c6-bind-scroll="scroll">',
+                        '<div id="scroller" style="width: 25px; height: 25px; overflow: scroll;" c6-bind-scroll="scroll">',
                         '    <div style="width: 100px; height: 100px;">&nbsp;</div>',
                         '</div>'
                     ].join('\n'))($scope);
@@ -99,6 +99,22 @@
                     $scope.scroll.y = 200;
                 });
                 expect($scope.scroll.y).toBe($scroller.scrollTop());
+            });
+
+            it('should emit a scroll event on the $scope', function() {
+                spyOn($scope, '$emit');
+
+                $scroller.scrollLeft(20);
+                $scroller.scrollTop(10);
+                $scroller.trigger('scroll');
+
+                expect($scope.$emit).toHaveBeenCalledWith('c6-bind-scroll(scroller):scroll', 20, 10);
+
+                $scroller.scrollLeft(34);
+                $scroller.scrollTop(22);
+                $scroller.trigger('scroll');
+
+                expect($scope.$emit).toHaveBeenCalledWith('c6-bind-scroll(scroller):scroll', 34, 22);
             });
 
             afterEach(function() {
