@@ -9,8 +9,8 @@
         extend = angular.extend;
 
     angular.module('c6.mrmaker')
-        .service('VideoThumbnailService', ['$q','$cacheFactory',
-        function                          ( $q , $cacheFactory ) {
+        .service('VideoThumbnailService', ['$q','$cacheFactory','$http',
+        function                          ( $q , $cacheFactory , $http ) {
             var _private = {},
                 cache = $cacheFactory('VideoThumbnailService:models');
 
@@ -33,6 +33,37 @@
                 });
             };
 
+            _private.fetchVimeoThumbs = function(videoid) {
+                return $http.get('http://vimeo.com/api/v2/video/' + videoid + '.json')
+                    .then(function handleResponse(response) {
+                        var data = response.data[0];
+
+                        return {
+                            /* jshint camelcase:false */
+                            small: data.thumbnail_small,
+                            large: data.thumbnail_large
+                            /* jshint camelcase:true */
+                        };
+                    });
+            };
+
+            _private.fetchDailyMotionThumbs = function(videoid) {
+                return $http.get(
+                    'https://api.dailymotion.com/video/' +
+                    videoid +
+                    '?fields=thumbnail_120_url,thumbnail_url'
+                ).then(function handleResponse(response) {
+                    var data = response.data;
+
+                    return {
+                        /* jshint camelcase:false */
+                        small: data.thumbnail_120_url,
+                        large: data.thumbnail_url
+                        /* jshint camelcase:true */
+                    };
+                });
+            };
+
             this.getThumbsFor = function(service, videoid) {
                 var key = service + ':' + videoid;
 
@@ -41,6 +72,10 @@
                         switch (service) {
                         case 'youtube':
                             return new ThumbModel(_private.fetchYouTubeThumbs(videoid));
+                        case 'vimeo':
+                            return new ThumbModel(_private.fetchVimeoThumbs(videoid));
+                        case 'dailymotion':
+                            return new ThumbModel(_private.fetchDailyMotionThumbs(videoid));
                         default:
                             return new ThumbModel($q.when({
                                 small: null,
