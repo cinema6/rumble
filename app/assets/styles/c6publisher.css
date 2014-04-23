@@ -21,6 +21,9 @@
     ul, ol {
         margin:0; padding:0; list-style:none;
     }
+    label {
+        cursor:pointer;
+    }
     youtube-player {
         display: block;
         width: 420px; height: 315px;

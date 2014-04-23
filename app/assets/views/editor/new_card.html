@@ -1,8 +1,28 @@
-<h2>New Card</h2>
-<form>
-    <input type="radio" ng-model="NewCardCtrl.type" value="video">Video</input>
-    <input type="radio" ng-model="NewCardCtrl.type" value="videoBallot">Video With Polling</input>
-    <input type="radio" ng-model="NewCardCtrl.type" value="ad">Advertisement</input>
-    <input type="radio" ng-model="NewCardCtrl.type" value="links">Links</input>
-</form>
-<button ng-click="NewCardCtrl.edit()">Next</button>
+<div class="ui__modal">
+    <h1 class="modal__title">New Card : Choose Your Card Type</h1>
+    <form>
+
+        <input id="cardType_video" type="radio" 
+        ng-model="NewCardCtrl.type" value="video"
+        class="modal__radioBtn" />
+        <label for="cardType_video">Video</label>
+
+        <input id="cardType_videoBallot" type="radio" 
+        ng-model="NewCardCtrl.type" value="videoBallot"
+        class="modal__radioBtn" />
+        <label for="cardType_videoBallot">Video with Questionnaire</label>
+
+        <input id="cardType_ad" type="radio" 
+        ng-model="NewCardCtrl.type" value="ad"
+        class="modal__radioBtn" />
+        <label for="cardType_ad">Advertisement</label>
+
+        <input id="cardType_links" type="radio" 
+        ng-model="NewCardCtrl.type" value="links"
+        class="modal__radioBtn" />
+        <label for="cardType_links">Links</label>
+    </form>
+    <br><br>
+    <button class="modal__btn" ng-click="NewCardCtrl.edit()" title="Next">Next</button>
+</div>
+<div class="ui__overlay">&nbsp;</div>
