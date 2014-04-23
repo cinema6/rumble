@@ -68,6 +68,30 @@
                 });
             });
 
+            describe('when "c6-bind-scroll(card-scroller):scroll" is $emitted', function() {
+                beforeEach(function() {
+                    DragCtrl.addZone(new Zone('scroll-left'));
+                    DragCtrl.addZone(new Zone('scroll-right'));
+
+                    $scope.$apply(function() {
+                        $scope.DragCtrl = DragCtrl;
+                    });
+
+                    spyOn(DragCtrl, 'refresh');
+                });
+
+                function $emit() {
+                    $scope.$emit('c6-bind-scroll(card-scroller):scroll');
+                }
+
+                it('should refresh the DragCtrl', function() {
+                    for (var count = 1; count < 10; count++) {
+                        $emit();
+                        expect(DragCtrl.refresh.calls.count()).toBe(count);
+                    }
+                });
+            });
+
             describe('when a card is dropped', function() {
                 var dragSpace,
                     card1, card2, card3, card4, card5,
@@ -300,7 +324,6 @@
 
                         $interval.flush(500);
                         expect(CardTableCtrl.position.x).toBe(20);
-                        expect(DragCtrl.refresh.calls.count()).toBe(5);
                     });
 
                     it('should stop scrolling if the card is released during scrolling', function() {
@@ -378,7 +401,6 @@
 
                         $interval.flush(500);
                         expect(CardTableCtrl.position.x).toBe(30);
-                        expect(DragCtrl.refresh.calls.count()).toBe(5);
                     });
 
                     it('should stop scrolling if the card is released during scrolling', function() {
