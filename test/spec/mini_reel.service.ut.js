@@ -21,6 +21,7 @@
                     theme: 'ed-videos',
                     status: 'pending',
                     data: {
+                        branding: 'elitedaily',
                         deck: [
                             {
                                 id: 'rc-c9cf24e87307ac',
@@ -431,6 +432,10 @@
                                 status: 'pending',
                                 data: jasmine.any(Object)
                             });
+                        });
+
+                        it('should copy the branding of the minireel', function() {
+                            expect(success.calls.mostRecent().args[0].data.branding).toBe('elitedaily');
                         });
 
                         it('should insert an intro card that is data-bound to the minireel itself', function() {

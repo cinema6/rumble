@@ -13,6 +13,7 @@
             "status": "pending",
             "lastModified": "2014-04-18T14:07:20+00:00",
             "data": {
+                "branding": "elitedaily",
                 "deck": [
                     {
                         "id": "rc-22119a8cf9f755",
@@ -154,6 +155,7 @@
             "status": "active",
             "lastModified": "2014-03-27T14:06:36+00:00",
             "data": {
+                "branding": "elitedaily",
                 "deck": [
                     {
                         "id": "rc-22119a8cf9f755",
@@ -464,6 +466,7 @@
             "status": "active",
             "lastModified": "2014-04-01T14:06:36+00:00",
             "data": {
+                "branding": "elitedaily",
                 "deck": [
                     {
                         "id": "rc-080fb573e704cf",
@@ -679,6 +682,7 @@
             "status": "pending",
             "lastModified": "2014-04-04T14:06:36+00:00",
             "data": {
+                "branding": "elitedaily",
                 "deck": [
                     {
                         "id": "rc-0c4d7938b6fe3c",
