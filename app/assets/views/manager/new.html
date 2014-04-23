@@ -1,2 +1,27 @@
-<h3>New MiniReel</h3>
-<c6-view></c6-view>
+<div class="ui__modal">
+    <navigation class="tabNav__group">
+        <ul class="tabNav__list clearfix">
+            <li class="tabNav__item">
+                <a c6-sref="manager.new.category"
+                    class="tabNav__link tabNav__link--active" 
+                    title="Editorial Content">Lightbox Settings</a>
+            </li>
+            <li class="tabNav__item">
+                <a c6-sref="manager.new.mode"
+                    class="tabNav__link"
+                    title="Video Content">MiniReel Type</a>
+            </li>
+        </ul>
+        <button class="modal__closeBtn sprite--alpha" c6-sref="manager"><span class="ir">Close</span></button>
+    </navigation>
+
+    <div class="modal__content">
+        <c6-view></c6-view>
+    </div>
+
+    <footer class="modal__btnFooter">
+	    <button class="modal__btn" type="button" title="Next Step">Next Step</button>
+	    <button class="modal__btn" type="button" title="Create MiniReel">Create MiniReel</button>
+	</footer>
+</div>
+<div class="ui__overlay">&nbsp;</div>

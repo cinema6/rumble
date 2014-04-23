@@ -18,6 +18,9 @@
     textarea {
         resize: vertical;
     }
+    ul, ol {
+        margin:0; padding:0; list-style:none;
+    }
     youtube-player {
         display: block;
         width: 420px; height: 315px;
@@ -93,6 +96,11 @@
         border:0; margin:0; padding:0; overflow: hidden;
         font-size:1rem; line-height: 1;
     }
+    .sprite--fff {
+        background:url('../img/sprite--white@2x.png') 0 0 / 25rem 33.25rem no-repeat;
+        border:0; margin:0; padding:0; overflow: hidden;
+        font-size:1rem; line-height: 1;
+    }
     .css-promote {
         transform: translateZ(0);
         -webkit-transform: translateZ(0); /* Safari and Chrome */
@@ -162,6 +170,9 @@
                     width: 43.75em;
                     height: 36.25em;
                 }
+            .preview__form {
+                margin:0 0 0.5em 0;
+            }
 
     /*  tabbed navigation
     ========================================================================== */
@@ -201,6 +212,9 @@
         .modal__title {
             font-weight:100; font-size:1.5em; margin:-0.25em 0 0.25em;
         }
+        .modal__status {
+            font-weight:300; font-size:0.875em; margin:-0.25em 0 0 0;
+        }
         .modal__closeBtn {
             width:1.125em; height:1.125em;
             background-position:-25px -59px;
@@ -210,6 +224,27 @@
             .modal__closeBtn:hover {
                 background-position: -43px -59px;
             }
+        .modal__radioBtn {
+            cursor:pointer;
+            vertical-align:middle;
+            margin:5px 6px 0 10px;
+        }
+        .modal__radioBtn:before {
+            content:"";
+            display:inline-block;
+            width:28px; height:28px;
+            margin:-10px 0 0 -10px;
+            vertical-align:middle;
+            background:url('../img/sprite--alpha@2x.png') 0 -77px / 25rem 25rem no-repeat;
+            cursor:pointer;
+        }
+        .modal__radioBtn:checked:before {
+            background:url('../img/sprite--alpha@2x.png') -29px -77px / 25rem 25rem no-repeat;
+            cursor:pointer;
+        }
+        .modal__btnFooter {
+            text-align: right;
+        }
     /*  modal forms
     ========================================================================== */
         .field {
@@ -262,6 +297,68 @@
                 height:22rem;
                 line-height: 1.75em;
                 font-family: 'museo-sans', Arial, Helvetica, sans-serif;
+            }
+
+    /*  minireel category wizard [lightbox or inline]
+    ========================================================================== */
+        .modal__title--lightboxWizard {
+            margin-bottom:12px;
+        }
+        .lightboxWizard__choice {
+            position:relative; height:8.25em; 
+            margin:0 0 1.5em 0; padding:2.625em 0 0 0;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+        }
+        .lightboxWizard__hitarea {
+            width:100%; height:8.25em; display: block;
+            cursor:pointer;
+            position:absolute; top:0; left:0; z-index: 2;
+        }
+        .lightboxWizard__diagram {
+            width:12em; height:8.25em;
+            position:absolute; top:0; left:3em;
+        }
+            .diagram__lightbox {
+                background-position:0 0;
+            }
+                .lightboxWizard__choice:hover .diagram__lightbox {
+                    background-position:0 -8.3125em;
+                }
+            .diagram__inline {
+                background-position:-12.5em 0;
+            }
+                .lightboxWizard__choice:hover .diagram__inline {
+                    background-position:-12.5em -8.3125em;
+                }
+            .diagram__lightText {
+                background-position:0 -16.625em;
+            }
+                .lightboxWizard__choice:hover .diagram__lightText {
+                    background-position:0 -24.9375em;
+                }
+            .diagram__heavyText {
+                background-position:-12.5em -16.625em;
+            }
+                .lightboxWizard__choice:hover .diagram__heavyText {
+                    background-position:-12.5em -24.9375em;
+                }
+
+        .lightboxWizard__copy {
+            position:absolute; top:0; left:16.5em;
+        }
+            .lightboxWizard__copy .lightboxWizard__title {
+                font-size:1.125em; color:#444; font-weight:700;
+                margin:5px 0;
+                -webkit-transition: color 0.5s; transition: color 0.5s;
+            }
+            .lightboxWizard__copy .lightboxWizard__p {
+                font-size:1em; color:#646464; font-weight:100;
+                margin:11px 0;
+            }
+            .lightboxWizard__choice:hover .lightboxWizard__title {
+                color:#13a2ff;
             }
 
 
@@ -421,7 +518,7 @@
             .toolbar__item {
                 display:inline;
             }
-            .toolbar__btn {
+            .toolbar__btn, .modal__btn {
                 margin:0; padding:0.6875rem 1.5rem 0.625rem 1.5rem; 
                 border:0; border-radius:3px;
                 font-size:0.875em; color:#fff; font-weight:700; line-height: 1;
@@ -429,9 +526,16 @@
                 cursor:pointer;
                 -webkit-transition: background 0.5s; transition: background 0.5s;
             }
-                .toolbar__btn:hover {
+                .toolbar__btn:hover, .modal__btn:hover {
                     background:#13a2ff;
                 }
+                .toolbar__btn--disabled, .modal__btn--disabled {
+                    opacity:0.4;
+                    cursor:default;
+                }
+                    .toolbar__btn--disabled:hover, .modal__btn--disabled:hover {
+                        background:#4a9cd1;
+                    }
             .toolbar__newMiniReel {
                 padding-left:2.375rem;
                 position: relative;
