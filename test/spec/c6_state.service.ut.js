@@ -280,6 +280,23 @@
                     });
 
                     describe('methods', function() {
+                        describe('isActive(stateName)', function() {
+                            beforeEach(function() {
+                                c6State.current = grandchildState;
+                            });
+
+                            it('should return true for any states that are active', function() {
+                                expect(c6State.isActive('parent.child2.grandchild')).toBe(true);
+                                expect(c6State.isActive('parent.child2')).toBe(true);
+                                expect(c6State.isActive('parent')).toBe(true);
+                            });
+
+                            it('should return false for any states that are not active', function() {
+                                expect(c6State.isActive('parent.child1')).toBe(false);
+                                expect(c6State.isActive('about')).toBe(false);
+                            });
+                        });
+
                         describe('get(state)', function() {
                             it('should get the state object for a given name', function() {
                                 expect(c6State.get('home')).toBe(homeState);
@@ -491,6 +508,28 @@
                                 });
                                 expect(c6State.transitions.home).toBeUndefined();
                                 expect(transitionSpy).toHaveBeenCalledWith(homeState);
+                            });
+
+                            it('should emit "stateChangeSuccess" when the transition is complete', function() {
+                                var spy = jasmine.createSpy('spy');
+
+                                c6State.on('stateChangeSuccess', spy);
+
+                                $rootScope.$apply(function() {
+                                    c6State.transitionTo('parent.child2.grandchild');
+                                });
+                                finish(parentState);
+                                finish(childState2);
+                                expect(spy).not.toHaveBeenCalled();
+
+                                finish(grandchildState);
+                                expect(spy).toHaveBeenCalledWith(grandchildState, null);
+
+                                $rootScope.$apply(function() {
+                                    c6State.transitionTo('about');
+                                });
+                                finish(aboutState);
+                                expect(spy).toHaveBeenCalledWith(aboutState, grandchildState);
                             });
                         });
                     });
