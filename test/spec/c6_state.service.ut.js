@@ -462,7 +462,7 @@
                                 expect(_service.resolveState).not.toHaveBeenCalled();
 
                                 $rootScope.$apply(function() {
-                                    transition2.resolve();
+                                    transition2.reject();
                                 });
                                 expect(_service.resolveState).toHaveBeenCalledWith(aboutState);
                                 expect(c6State.transitions.about.then).toEqual(jasmine.any(Function));

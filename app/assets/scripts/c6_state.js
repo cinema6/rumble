@@ -2,7 +2,8 @@
     'use strict';
 
     var extend = angular.extend,
-        copy = angular.copy;
+        copy = angular.copy,
+        forEach = angular.forEach;
 
     angular.module('c6.state', ['c6.ui'])
         .value('c6StateParams', {})
@@ -201,6 +202,41 @@
                 var c6State = c6EventEmitter({}),
                     _service = {};
 
+                function allSettled(hash) {
+                    var deferred = $q.defer(),
+                        keys = Object.keys(hash),
+                        waitingFor = [],
+                        result = {};
+
+                    if (!keys.length) {
+                        deferred.resolve({});
+                    }
+
+                    forEach(keys, function(key) {
+                        var promise = hash[key];
+
+                        waitingFor.push(promise);
+
+                        promise
+                            .finally(function handleSettle(value) {
+                                waitingFor.splice(
+                                    waitingFor.indexOf(
+                                        promise
+                                    ),
+                                    1
+                                );
+
+                                result[key] = value;
+
+                                if (waitingFor.length === 0) {
+                                    deferred.resolve(result);
+                                }
+                            });
+                    });
+
+                    return deferred.promise;
+                }
+
                 function getAllStates(state) {
                     function climbTree(tree) {
                         var item = tree[0],
@@ -355,7 +391,7 @@
 
                     tree = getAllStates(state);
 
-                    return $q.all(this.transitions)
+                    return allSettled(this.transitions)
                         .then(execute)
                         .finally(finishTransition);
                 };

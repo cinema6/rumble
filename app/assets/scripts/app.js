@@ -186,11 +186,13 @@
                                     c6StateParams.cardId
                                 );
                             }],
-                            afterModel: ['model', '$q',
-                            function    ( model ,  $q ) {
+                            afterModel: ['model','$q','c6State',
+                            function    ( model , $q , c6State ) {
                                 var types = ['intro', 'video', 'videoBallot'];
 
                                 if(types.indexOf(model.type) < 0) {
+                                    c6State.goTo('editor');
+
                                     return $q.reject('Cannot edit this card');
                                 }
                             }],

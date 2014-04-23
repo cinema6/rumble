@@ -70,19 +70,23 @@
                         id: 'rc-036a2e0b648f3d',
                         type: 'ad'
                     };
+
+                    spyOn(c6State, 'goTo');
                 });
 
                 it('should do nothing if the card type is acceptable', function() {
                     expect($injector.invoke(EditCardState.afterModel, EditCardState, { model: goodModel })).toBeUndefined();
+                    expect(c6State.goTo).not.toHaveBeenCalled();
                 });
 
-                it('should return a rejected promise if card type is not acceptable', function() {
+                it('should return a rejected promise and go to the editor state if card type is not acceptable', function() {
                     var fail = jasmine.createSpy('fail');
 
                     $rootScope.$apply(function() {
                         $injector.invoke(EditCardState.afterModel, EditCardState, { model: badModel }).catch(fail);
                     });
                     expect(fail).toHaveBeenCalled();
+                    expect(c6State.goTo).toHaveBeenCalledWith('editor');
                 });
             });
 
