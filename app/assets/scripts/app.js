@@ -186,6 +186,14 @@
                                     c6StateParams.cardId
                                 );
                             }],
+                            afterModel: ['model', '$q',
+                            function    ( model ,  $q ) {
+                                var types = ['intro', 'video', 'videoBallot'];
+
+                                if(types.indexOf(model.type) < 0) {
+                                    return $q.reject('Cannot edit this card');
+                                }
+                            }],
                             children: {
                                 copy: {
                                     controller: 'GenericController',

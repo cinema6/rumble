@@ -5,7 +5,9 @@
         describe('EditCardState', function() {
             var EditCardState,
                 EditorState,
+                $rootScope,
                 $injector,
+                $q,
                 c6StateParams,
                 c6State;
 
@@ -14,6 +16,8 @@
 
                 inject(function(_$injector_) {
                     $injector = _$injector_;
+                    $rootScope = $injector.get('$rootScope');
+                    $q = $injector.get('$q');
 
                     c6State = $injector.get('c6State');
                     c6StateParams = $injector.get('c6StateParams');
@@ -52,6 +56,35 @@
 
                 it('should use the c6StateParams id to find the card in the deck of the editor\'s model', function() {
                     expect($injector.invoke(EditCardState.model, EditCardState)).toBe(EditorState.cModel.data.deck[2]);
+                });
+            });
+
+            describe('afterModel()', function() {
+                var goodModel, badModel;
+
+                beforeEach(function() {
+                    goodModel = {
+                        id: 'rc-036a2e0b648f3d',
+                        type: 'videoBallot'
+                    };
+
+                    badModel = {
+                        id: 'rc-036a2e0b648f3d',
+                        type: 'ad'
+                    };
+                });
+
+                it('should do nothing if the card type is acceptable', function() {
+                    expect($injector.invoke(EditCardState.afterModel, EditCardState, { model: goodModel })).toBeUndefined();
+                });
+
+                it('should return a rejected promise if card type is not acceptable', function() {
+                    var fail = jasmine.createSpy('fail');
+
+                    $rootScope.$apply(function() {
+                        $injector.invoke(EditCardState.afterModel, EditCardState, { model: badModel }).catch(fail);
+                    });
+                    expect(fail).toHaveBeenCalled();
                 });
             });
         });
