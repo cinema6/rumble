@@ -1,10 +1,16 @@
 <c6-alias model="EditorCtrl.model" as="minireel">
     <header class="pageHeader pageHeader--editor container">
-        <h1 class="pageTitle minireel__theTitle">{{minireel.title}} 
+        <h1 class="pageTitle theTitle__text">{{minireel.title}} 
             <span ng-show="minireel.status === 'pending'" class="pageTitle__status">(<em class="pageTitle__status--private">private</em>)</span>
             <span ng-show="minireel.status === 'active'" class="pageTitle__status">(<em class="pageTitle__status--public">public</em>)</span>
-            <span class="ui__edit sprite--alpha"><span class="ir">Edit</span></span>
+            <span class="pageTitle__edit">
+                <span class="ui__edit sprite--alpha"><span class="ir">Edit</span></span>
+                Edit
+            </span>
         </h1>
+        <form>
+            <input type="text" value="{{minireel.title}}" class="theTitle__textBox">
+        </form>
         <div class="pageHeader__actions clearfix">
             <div class="metaData__group">
                 Type: <a href="#" class="miniReel__type" title="AutoPlay MiniReel"><strong>Lightbox, with Companion Ad</strong></a> 
