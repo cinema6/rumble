@@ -671,6 +671,7 @@
                 }
             },
             player = null,
+            shouldPlay = false,
             ballotTargetPlays = 0,
             resultsTargetPlays = 0;
 
@@ -690,7 +691,7 @@
             },
             showPlay: {
                 get: function() {
-                    return !!player && player.paused;
+                    return !c6AppData.experience.data.autoplay || !!player && player.paused;
                 }
             }
         });
@@ -759,13 +760,16 @@
 
             iface.once('ready', function() {
                 self.videoUrl = player.webHref;
+                if (shouldPlay){
+                    iface.play();
+                }
             });
             iface.once('play', function() {
                 _data.modules.displayAd.active = true;
             });
 
             $scope.$watch('active', function(active, wasActive) {
-                if (active === wasActive) { return; }
+                if ((active === wasActive) && (wasActive === false)){ return; }
 
                 if (active) {
                     ControlsService.bindTo(player);
@@ -774,6 +778,7 @@
                         c6AppData.profile.autoplay &&
                         c6AppData.experience.data.autoplay) {
 
+                        shouldPlay = true;
                         iface.play();
                     }
                 } else {
@@ -781,9 +786,11 @@
                         _data.modules.ballot.vote = -1;
                     }
 
+                    shouldPlay = false;
                     iface.pause();
                 }
             });
+
         });
 
         $scope.$watch('onDeck', function(onDeck) {
