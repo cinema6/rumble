@@ -1,4 +1,27 @@
-<ul>
+<h1 class="modal__title modal__title--lightboxWizard">Should This MiniReel Open in a Lightbox?</h1>
+<ul class="lightboxWizard__group">
+    <li class="lightboxWizard__choice">
+        <input id="categoryLightbox" type="radio" 
+            name="minireel-category" value="lightbox"
+            class="modal__radioBtn" />
+        <label class="lightboxWizard__hitarea" for="categoryLightbox"><span class="ir">Lightbox</span></label>
+        <div class="lightboxWizard__diagram sprite--fff diagram__lightbox">&nbsp;</div>
+        <div class="lightboxWizard__copy">
+            <h2 class="lightboxWizard__title">Yes, view in a lightbox.</h2>
+            <p class="lightboxWizard__p">When triggered, this MiniReel will open a lightbox on top of the web page.</p>
+        </div>
+    </li>
+    <li class="lightboxWizard__choice">
+        <input id="categoryInline" type="radio" 
+            name="minireel-category" value="lightbox"
+            class="modal__radioBtn" />
+        <label class="lightboxWizard__hitarea" for="categoryInline"><span class="ir">Inline</span></label>
+        <div class="lightboxWizard__diagram sprite--fff diagram__inline">&nbsp;</div>
+        <div class="lightboxWizard__copy">
+            <h2 class="lightboxWizard__title">No, view within the web page.</h2>
+            <p class="lightboxWizard__p">When triggered, this MiniReel will display itself in the allotted content space of your website.</p>
+        </div>
+    </li>
     <li ng-repeat="$this in NewCategoryCtrl.model">
         <a c6-sref="manager.new.mode" params="{ newModeCategory: $this.name }">{{$this.name}}</a>
     </li>
