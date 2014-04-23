@@ -6,6 +6,7 @@
             var $rootScope,
                 $scope,
                 $controller,
+                $q,
                 MiniReelService,
                 ManagerCtrl;
 
@@ -34,6 +35,7 @@
                     $rootScope = $injector.get('$rootScope');
                     $controller = $injector.get('$controller');
                     MiniReelService = $injector.get('MiniReelService');
+                    $q = $injector.get('$q');
 
                     c6State = $injector.get('c6State');
 
@@ -55,6 +57,31 @@
             });
 
             describe('methods', function() {
+                describe('copy(minireelId)', function() {
+                    var minireel,
+                        newMiniReel;
+
+                    beforeEach(function() {
+                        minireel = {};
+                        newMiniReel = {
+                            id: 'e-a48e32a8c1a87f'
+                        };
+
+                        spyOn(MiniReelService, 'open').and.returnValue($q.when(minireel));
+                        spyOn(MiniReelService, 'create').and.returnValue(newMiniReel);
+
+                        $scope.$apply(function() {
+                            ManagerCtrl.copy('e-abc');
+                        });
+                    });
+
+                    it('should open the minireel with the id provided, create a new one based on it, and go to the editor with that minireel', function() {
+                        expect(MiniReelService.open).toHaveBeenCalledWith('e-abc');
+                        expect(MiniReelService.create).toHaveBeenCalledWith(minireel);
+                        expect(c6State.goTo).toHaveBeenCalledWith('editor', { minireelId: 'e-a48e32a8c1a87f' });
+                    });
+                });
+
                 describe('edit(minireel)', function() {
                     beforeEach(function() {
                         ManagerCtrl.edit({ id: 'e-59c8519cc4c54f' });
