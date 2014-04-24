@@ -219,10 +219,11 @@
                             function( c6StateParams , MiniReelService ) {
                                 var minireel = this.cParent.cModel;
 
-                                return MiniReelService.findCard(
-                                    minireel.data.deck,
-                                    c6StateParams.cardId
-                                );
+                                return this.cModel ||
+                                    copy(MiniReelService.findCard(
+                                        minireel.data.deck,
+                                        c6StateParams.cardId
+                                    ));
                             }],
                             afterModel: ['model','$q','c6State',
                             function    ( model , $q , c6State ) {
