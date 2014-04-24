@@ -1,6 +1,6 @@
 <c6-alias model="EditorCtrl.model" as="minireel">
     <header class="pageHeader pageHeader--editor container">
-        <div class="pageHeader__coverImg">
+        <div c6-sref="editor.splash" class="pageHeader__coverImg">
             <div class="miniReel__imgBox"
                 style="background-image:url('');">
                 &nbsp;
@@ -84,15 +84,4 @@
 </c6-alias>
 <c6-view></c6-view>
 
-<div ng-controller="EmbedController as EmbedCtrl" class="embedCode__group container">
-    <div class="embedCode__header">
-        <label for="embedtype">Embed Code:</label>
-        <select ng-model="EmbedCtrl.mode" ng-options="mode.value as mode.name for mode in EmbedCtrl.modes" class="embedCode__selector" name="embedtype"></select>
-        <div c6-alias="EmbedCtrl.size as size" ng-show="EmbedCtrl.mode === 'custom'" class="embedCode__customSizeDimensions">
-            <input ng-model="size.width" class="textBox" type="text" value="Width"> x
-            <input ng-model="size.height" class="textBox" type="text" value="Height">
-        </div>
-    </div>
-    <textarea ng-model="EmbedCtrl.code" name="" id="" class="embedCode__snippet" cols="30" rows="10"></textarea>
-    <p class="embedCode__tip"><strong><span class="typo--attention">*</span> Responsive Auto-Fit</strong> embedding will automatically resize the MiniReel widget to fit nicely into your page. This is the recommended embedding method.</p>
-</div>
+<embed-code minireel-id="{{EditorCtrl.model.id}}" class="embedCode__group container"></embed-code>

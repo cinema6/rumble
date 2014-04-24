@@ -241,6 +241,29 @@
                         expect(deck[1]).toBe(card);
                     });
                 });
+
+                describe('updateCard', function() {
+                    var card;
+
+                    beforeEach(function() {
+                        card = {
+                            id: 'rc-2ba11eda2b2300',
+                            title: 'foo',
+                            note: 'bar',
+                            data: {
+                                videoid:'abc',
+                                service: 'vimeo'
+                            }
+                        };
+
+                        $scope.$emit('updateCard', card);
+                    });
+
+                    it('should copy the properties of the provided card to the actual card in the deck', function() {
+                        expect(cModel.data.deck[1]).toEqual(card);
+                        expect(cModel.data.deck[1]).not.toBe(card);
+                    });
+                });
             });
         });
     });
