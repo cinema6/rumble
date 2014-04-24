@@ -319,12 +319,15 @@
 
             $log.info('AppCtlr loaded.');
 
+            this.config = null;
+            cinema6.getAppData()
+                .then(function setControllerProps(appData) {
+                    self.config = appData.experience;
+                });
+
             cinema6.init({
                 setup: function(appData) {
-                    self.experience = appData.experience;
-                    self.profile = appData.profile;
-
-                    gsap.TweenLite.ticker.useRAF(self.profile.raf);
+                    gsap.TweenLite.ticker.useRAF(appData.profile.raf);
                 }
             });
 
