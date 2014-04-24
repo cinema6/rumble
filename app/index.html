@@ -26,7 +26,32 @@
         </div>
         <!--C6ENV-->
         <script>
-            (function(c6,base,d,s){
+            (function(c6,base,d,q,s){
+                if(q){
+                    var query = {};
+                    q.substring(1).split('&').map(function(qs) {
+                        var qa = qs.split('=');
+                        query[qa[0]] = qa[1];
+                    });
+
+                    // if we have '?env=dev' then we're going to set the
+                    // environment variables in case grunt hasn't set them
+
+                    if(query.env === 'dev') {
+                        // set __C6_DEV__ to true if necessary
+                        d = d || true;
+
+                        // HACK: set collateral url to local version if necessary,
+                        // this obviously needs to be replaced when we sort things out
+                        c6.kCollateralUrl = c6.kCollateralUrl || '../c6Content';
+
+                        // set debug if necessary
+                        c6.kDebug = c6.kDebug || true;
+
+                        // set api url if necessary
+                        c6.kApiUrl = c6.kApiUrl || '/api';
+                    }
+                }
                 c6.kMode = (c6.kMode === 'undefined' || (!c6.kMode)) ? 'full' : c6.kMode;
                 c6.kBaseUrl = (d) ? base
                     : ((c6.kDevice === 'phone') ? base + '/mobile' : (base + '/' + c6.kMode));
@@ -34,7 +59,7 @@
                 s.setAttribute('data-main', (c6.kBaseUrl + '/scripts/main'));
                 s.setAttribute('src', 'http://lib.cinema6.com/require/2.1.5/require.min.js');
                 document.getElementsByTagName('body')[0].appendChild(s);
-            }((window.c6 = (window.c6 || {})),'assets',__C6_DEV__));
+            }((window.c6 = (window.c6 || {})),'assets',window.__C6_DEV__,location.search));
         </script>
     </body>
 </html>
