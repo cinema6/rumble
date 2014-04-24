@@ -124,9 +124,9 @@
             // override the device setting for previewing
             profile.device = this.device;
 
-            $scope.$on('mrPreview:initExperience', function(event, experience, session) {
+            $scope.$on('mrPreview:initExperience', function(event, exp, session) {
                 // convert the MRinator experience to a MRplayer experience
-                experience = MiniReelService.convertForPlayer(experience);
+                var experience = MiniReelService.convertForPlayer(exp);
 
                 // add the converted experience to the session for comparing later
                 session.experience = copy(experience);
@@ -157,13 +157,13 @@
 
                 // register another listener within the init handler
                 // this will share the session
-                $scope.$on('mrPreview:updateExperience', function(event, experience, newCard) {
+                $scope.$on('mrPreview:updateExperience', function(event, exp, newCard) {
                     // the EditorCtrl $broadcasts the most up-to-date experience model
                     // when the user clicks 'preview'.
                     // it may have a newCard to go to
 
                     // we convert the experience
-                    experience = MiniReelService.convertForPlayer(experience);
+                    experience = MiniReelService.convertForPlayer(exp);
 
                     // if it's been changed or we're previewing a specific card
                     // then we ping the player
