@@ -98,53 +98,6 @@
             };
         }])
 
-        .controller('EmbedController', ['$scope','cinema6',
-        function                       ( $scope , cinema6 ) {
-            var self = this,
-                EditorCtrl = $scope.EditorCtrl;
-
-            this.modes = [
-                {
-                    name: 'Responsive Auto-fit *',
-                    value: 'responsive'
-                },
-                {
-                    name: 'Custom Size',
-                    value: 'custom'
-                }
-            ];
-            this.mode = this.modes[0].value;
-
-            this.size = {
-                width: 650,
-                height: 522
-            };
-
-            this.c6EmbedSrc = null;
-            cinema6.getAppData()
-                .then(function setC6EmbedSrc(data) {
-                    self.c6EmbedSrc = data.experience.data.c6EmbedSrc;
-                });
-
-            Object.defineProperties(this, {
-                code: {
-                    get: function() {
-                        return '<script src="' +
-                            this.c6EmbedSrc +
-                            '" data-exp="' +
-                            EditorCtrl.model.id +
-                            '"' + (this.mode === 'custom' ?
-                                (' data-width="' +
-                                    this.size.width +
-                                    '" data-height="' +
-                                    this.size.height + '"') :
-                                '') +
-                            '></script>';
-                    }
-                }
-            });
-        }])
-
         .controller('PreviewController',['$scope','MiniReelService','postMessage','c6BrowserInfo',
         function                        ( $scope , MiniReelService , postMessage , c6BrowserInfo ) {
             var self = this,

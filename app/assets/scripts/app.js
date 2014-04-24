@@ -144,6 +144,15 @@
                             });
                     }],
                     children: {
+                        embed: {
+                            controller: 'GenericController',
+                            controllerAs: 'ManagerEmbedCtrl',
+                            templateUrl: assets('views/manager/embed.html'),
+                            model:  ['c6StateParams',
+                            function( c6StateParams ) {
+                                return c6StateParams.minireelId;
+                            }]
+                        },
                         new: {
                             controller: 'GenericController',
                             controllerAs: 'NewCtrl',
@@ -332,5 +341,64 @@
             });
 
             $scope.AppCtrl = this;
+        }])
+
+        .directive('embedCode', ['c6UrlMaker',
+        function                ( c6UrlMaker ) {
+            return {
+                restrict: 'E',
+                templateUrl: c6UrlMaker('views/directives/embed_code.html'),
+                controller: 'EmbedCodeController',
+                controllerAs: 'Ctrl',
+                scope: {
+                    minireelId: '@'
+                }
+            };
+        }])
+
+        .controller('EmbedCodeController', ['$scope','cinema6',
+        function                           ( $scope , cinema6 ) {
+            var self = this;
+
+            this.modes = [
+                {
+                    name: 'Responsive Auto-fit *',
+                    value: 'responsive'
+                },
+                {
+                    name: 'Custom Size',
+                    value: 'custom'
+                }
+            ];
+            this.mode = this.modes[0].value;
+
+            this.size = {
+                width: 650,
+                height: 522
+            };
+
+            this.c6EmbedSrc = null;
+            cinema6.getAppData()
+                .then(function setC6EmbedSrc(data) {
+                    self.c6EmbedSrc = data.experience.data.c6EmbedSrc;
+                });
+
+            Object.defineProperties(this, {
+                code: {
+                    get: function() {
+                        return '<script src="' +
+                            this.c6EmbedSrc +
+                            '" data-exp="' +
+                            $scope.minireelId +
+                            '"' + (this.mode === 'custom' ?
+                                (' data-width="' +
+                                    this.size.width +
+                                    '" data-height="' +
+                                    this.size.height + '"') :
+                                '') +
+                            '></script>';
+                    }
+                }
+            });
         }]);
 }(window));
