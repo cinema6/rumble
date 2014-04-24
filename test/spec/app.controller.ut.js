@@ -5,6 +5,7 @@
         describe('AppController', function() {
             var $rootScope,
                 $scope,
+                $q,
                 AppCtrl;
 
             var cinema6,
@@ -47,8 +48,13 @@
                                 getSession: jasmine.createSpy('cinema6.getSiteSession()').and.callFake(function() {
                                     return cinema6._.getSessionResult.promise;
                                 }),
+                                getAppData: jasmine.createSpy('cinema6.getAppData()')
+                                    .and.callFake(function() {
+                                        return cinema6._.getAppDataDeferred.promise;
+                                    }),
                                 _: {
-                                    getSessionResult: $q.defer()
+                                    getSessionResult: $q.defer(),
+                                    getAppDataDeferred: $q.defer()
                                 }
                             };
 
@@ -64,6 +70,7 @@
 
                 inject(function($injector, $controller, c6EventEmitter) {
                     $rootScope = $injector.get('$rootScope');
+                    $q = $injector.get('$q');
 
                     $scope = $rootScope.$new();
                     AppCtrl = $controller('AppController', {
@@ -82,6 +89,28 @@
                 expect($scope.AppCtrl).toBe(AppCtrl);
             });
 
+            describe('properties', function() {
+                var appDataDeferred;
+
+                beforeEach(function() {
+                    appDataDeferred = $q.defer();
+                });
+
+                describe('config', function() {
+                    it('should initially be null', function() {
+                        expect(AppCtrl.config).toBeNull();
+                    });
+
+                    it('should be the experience when the appData is fetched', function() {
+                        $scope.$apply(function() {
+                            cinema6._.getAppDataDeferred.resolve(appData);
+                        });
+
+                        expect(AppCtrl.config).toBe(appData.experience);
+                    });
+                });
+            });
+
             describe('cinema6 integration', function() {
                 beforeEach(function() {
                     cinema6.init.calls.mostRecent().args[0].setup(appData);
@@ -89,11 +118,6 @@
 
                 it('should initialize a session with cinema6', function() {
                     expect(cinema6.init).toHaveBeenCalled();
-                });
-
-                it('should setup the session', function() {
-                    expect(AppCtrl.experience).toBe(appData.experience);
-                    expect(AppCtrl.profile).toBe(appData.profile);
                 });
 
                 it('should configure gsap', function() {
