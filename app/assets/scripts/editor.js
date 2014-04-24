@@ -61,10 +61,6 @@
                 deck.splice(deck.indexOf(card), 1);
             };
 
-            $scope.$on('addCard', function(event, card, index) {
-                self.model.data.deck.splice(index, 0, card);
-            });
-
             this.previewMode = function(card) {
                 self.preview = true;
                 $scope.$broadcast('mrPreview:updateExperience', self.model, card);
@@ -73,6 +69,18 @@
             this.closePreview = function() {
                 this.preview = false;
             };
+
+            $scope.$on('addCard', function(event, card, index) {
+                self.model.data.deck.splice(index, 0, card);
+            });
+
+            $scope.$on('updateCard', function(event, cardProxy) {
+                var card = self.model.data.deck.filter(function(card) {
+                    return card.id === cardProxy.id;
+                })[0];
+
+                copy(cardProxy, card);
+            });
         }])
 
         .controller('EditCardController', ['$scope','c6Computed','c6State','VideoService',
@@ -81,7 +89,9 @@
 
             VideoService.createVideoUrl(c, this, 'EditCardCtrl');
 
-            this.close = function() {
+            this.save = function() {
+                $scope.$emit('updateCard', this.model);
+
                 c6State.goTo('editor');
             };
         }])

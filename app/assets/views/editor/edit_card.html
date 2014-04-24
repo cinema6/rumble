@@ -7,7 +7,7 @@
                     title="{{tab.name}}">{{tab.name}}</a>
             </li>
         </ul>
-        <button class="modal__closeBtn sprite--alpha" ng-click="EditCardCtrl.close()"><span class="ir">Close</span></button>
+        <button class="modal__closeBtn sprite--alpha" c6-sref="editor"><span class="ir">Close</span></button>
     </navigation>
 
     <div class="modal__content">
@@ -15,8 +15,8 @@
     </div>
 
     <footer class="modal__btnFooter">
-        <button class="modal__btn toolbar__delete" ng-click="EditCardCtrl.close()" title="Cancel">Cancel</button>
-        <button class="modal__btn" title="Save">Save</button>
+        <button class="modal__btn toolbar__delete" c6-sref="editor" title="Cancel">Cancel</button>
+        <button class="modal__btn" title="Save" ng-click="EditCardCtrl.save()">Save</button>
     </footer>
 </div>
 <div class="ui__overlay">&nbsp;</div>

@@ -40,12 +40,18 @@
             });
 
             describe('methods', function() {
-                describe('close()', function() {
+                describe('save()', function() {
                     beforeEach(function() {
-                        EditCardCtrl.close();
+                        spyOn($scope, '$emit').and.callThrough();
+
+                        EditCardCtrl.save();
                     });
 
-                    it('should transition back to the editor state', function() {
+                    it('should $emit the "updateCard" event', function() {
+                        expect($scope.$emit).toHaveBeenCalledWith('updateCard', model);
+                    });
+
+                    it('should goTo the editor state', function() {
                         expect(c6State.goTo).toHaveBeenCalledWith('editor');
                     });
                 });
