@@ -9,6 +9,7 @@ define(['hammer'], function(hammer) {
 
     function Finger() {
         this.touching = null;
+        this.$touching = null;
 
         this.isDragging = false;
         this.dragStart = {
@@ -23,6 +24,7 @@ define(['hammer'], function(hammer) {
         placeOn: function($element) {
             var rect = $element[0].getBoundingClientRect();
 
+            this.$touching = $element;
             this.touching = hammer($element[0]);
             this.x = rect.left + (rect.width / 2);
             this.y = rect.top + (rect.height / 2);
@@ -32,6 +34,7 @@ define(['hammer'], function(hammer) {
                 deltaX: 0,
                 delatY: 0
             }));
+            this.$touching.trigger('mousedown');
         },
         lift: function() {
             if (this.isDragging) {
@@ -49,8 +52,11 @@ define(['hammer'], function(hammer) {
             this.touching.trigger('release', {
                 target: this.touching.element
             });
+            this.$touching.trigger('mouseup');
+            this.$touching.trigger('click');
 
             this.touching = null;
+            this.$touching = null;
         },
         drag: function(x, y) {
             if (!this.isDragging) {
