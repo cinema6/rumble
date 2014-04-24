@@ -1,21 +1,31 @@
 <div class="ui__modal">
     <h1 class="modal__title">Choose An Image For Your MiniReel</h1>
-	<button class="modal__closeBtn sprite--alpha" c6-sref="editor"><span class="ir">Close</span></button>
-    <div class="coverUploader__group">
+    <button class="modal__closeBtn sprite--alpha" c6-sref="editor"><span class="ir">Close</span></button>
+    <form class="coverUploader__group">
         <div class="coverUploader__imgBox">
+            <input class="coverUploader__fileDrop" type="file">
             <div class="coverUploader__imgCropMarks coverUploader__imgCropMarks--landscape">&nbsp;</div>
             <div class="coverUploader__imgCropMarks coverUploader__imgCropMarks--portrait">&nbsp;</div>
         </div>
         <div class="coverUploader__copy">
             <p>Upload your image or drag and drop it into the image space on the left.</p>
-            
+
+            <input class="coverUploader__filePath" type="file">
+            <div class="progressBar">
+                <div class="progressBar__status">&nbsp;</div>
+            </div>
+            <p class="progressBar__statusText">
+                Loading 1000 kb of 2000 kb
+            </p>
+            <button class="coverUploader__button toolbar__btn">Upload</button>
+
             <ul class="coverUploader__helpTips">
                 <li>Images should be 600 pixels by 600 pixels.</li>
                 <li><span class="crop__landscape">Green</span> crop marks indicate safe area for landscape display modes. </li>
                 <li><span class="crop__portrait">Blue</span> crop marks indicate safe area for portrait display modes.</li>
             </ul>
         </div>
-    </div>
+    </form>
 
     <footer class="modal__btnFooter">
         <button class="modal__btn toolbar__delete" title="Cancel" c6-sref="editor">Cancel</button>

@@ -325,7 +325,7 @@
             }
                 .coverUploader__helpTips {
                     font-size:0.875em; line-height: 1.25;
-                    padding:0 0 0 2em; list-style: disc;
+                    padding:1em 0 0 2em; list-style: disc;
                 }
                     .coverUploader__helpTips li {
                         margin:0.5em 0;
@@ -336,6 +336,35 @@
                 .crop__portrait {
                     font-weight:700; color:blue;
                 }
+                .progressBar__statusText {
+                    font-size:0.75em;
+                    margin:0.25em 0 1em;
+                }
+                .coverUploader__filePath {
+                    display: block;
+                    padding:0; margin:0;
+                    font-size:1rem;
+                }
+                    .coverUploader__filePath:focus {
+                        background:#eff9ff;
+                    }
+                .coverUploader__fileDrop {
+                    display: block;
+                    position:absolute; z-index: 5;
+                    width:100%; height:100%;
+                    opacity:0; cursor:pointer;
+                    border:0; margin:0; padding:0;
+                }
+                .progressBar {
+                    border-radius:3px;
+                    height:0.5em; overflow: hidden;
+                    background:#ccc;
+                    margin:0.875em 0 0.25em 0;
+                }
+                    .progressBar__status {
+                        width:50%;
+                        background:#72ad25;
+                    }
 
 
     /*  modal forms
