@@ -17,9 +17,15 @@
                 cModel = {
                     data: {
                         deck: [
-                            {},
-                            {},
-                            {}
+                            {
+                                id: 'rc-e91e76c0ce486a'
+                            },
+                            {
+                                id: 'rc-2ba11eda2b2300'
+                            },
+                            {
+                                id: 'rc-968f823aa61637'
+                            }
                         ]
                     }
                 };
@@ -103,6 +109,21 @@
 
                     it('should transition to the editor.newCard.type state', function() {
                         expect(c6State.goTo).toHaveBeenCalledWith('editor.newCard', { insertionIndex: 3 });
+                    });
+                });
+
+                describe('deleteCard(card)', function() {
+                    var card;
+
+                    beforeEach(function() {
+                        card = cModel.data.deck[1];
+
+                        EditorCtrl.deleteCard(card);
+                    });
+
+                    it('should remove the provided card from the deck', function() {
+                        expect(cModel.data.deck.length).toBe(2);
+                        expect(cModel.data.deck).not.toContain(card);
                     });
                 });
 
