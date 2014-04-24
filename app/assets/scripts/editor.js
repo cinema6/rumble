@@ -12,6 +12,7 @@
             var self = this;
 
             this.preview = false;
+            this.editTitle = false;
 
             this.publish = function() {
                 MiniReelService.publish(this.model);
