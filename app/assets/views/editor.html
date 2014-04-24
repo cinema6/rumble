@@ -96,3 +96,29 @@
     <textarea ng-model="EmbedCtrl.code" name="" id="" class="embedCode__snippet" cols="30" rows="10"></textarea>
     <p class="embedCode__tip"><strong><span class="typo--attention">*</span> Responsive Auto-Fit</strong> embedding will automatically resize the MiniReel widget to fit nicely into your page. This is the recommended embedding method.</p>
 </div>
+
+
+<!--splash image uploader START-->
+<div class="ui__modal">
+    <h1 class="modal__title">Choose An Image For Your MiniReel</h1>
+
+    <div class="coverUploader__group">
+        <div class="coverUploader__imgBox">
+            <div class="coverUploader__imgCropMarks coverUploader__imgCropMarks--landscape">&nbsp;</div>
+            <div class="coverUploader__imgCropMarks coverUploader__imgCropMarks--portrait">&nbsp;</div>
+        </div>
+        <form class="coverUploader__form">
+            <p>Upload your image or drag and drop it into the image space on the left.</p>
+            <p>Images should be 600 pixels by 600 pixels.</p>
+            <p><span class="crop__landscape">* Green</span> crop marks indicate safe area for landscape display modes. <br>
+                <span class="crop__portrait">* Blue</span> crop marks indicate safe area for portrait display modes.</p>
+        </form>
+    </div>
+
+    <footer class="modal__btnFooter">
+        <button class="modal__btn toolbar__delete" ng-click="EditCardCtrl.close()" title="Cancel">Cancel</button>
+        <button class="modal__btn" title="Save">Save</button>
+    </footer>
+</div>
+<div class="ui__overlay">&nbsp;</div>
+<!--splash image uploader END-->
