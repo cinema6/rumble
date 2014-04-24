@@ -33,7 +33,7 @@
                     return string.substring(1).split('&').map(function(qs) {
                         var qa = qs.split('=');
                         if(qa[1] === 'true' || qa[1] === 'false') {
-                            qa[1] = qa[1] === 'true' || false;
+                            qa[1] = qa[1] === 'true';
                         }
                         return qa;
                     });
