@@ -493,7 +493,8 @@
         }
         .pageHeader__coverImg {
             width:7.5em; height:7.5em;
-            background:#ccc; margin:0.5em 0 0 0;
+            background:#ccc url('../img/default_square.jpg') 50% 50% / cover no-repeat;
+            margin:0.5em 0 0 0;
             position:absolute;
             cursor:pointer;
             overflow: hidden;
@@ -741,9 +742,10 @@
             background:#ccc url('../img/default_square.jpg') 50% 50% / cover no-repeat;
             position:relative;
         }
-            .miniReel__img {
-                display: block; width:100%; height:100%;
-                position:absolute;
+            .miniReel__imgBox {
+                width:100%; height:100%;
+                position: absolute;
+                background:50% 50% /cover no-repeat;
             }
             .miniReel__title {
                 font-size:1em; line-height: 1.5; font-weight:700; color:#fff;
@@ -903,15 +905,11 @@
                     opacity: 1;
                 }
                 .card__imgBox {
-                    background:#ccc;
+                    background:#ccc url('../img/default_square.jpg') 50% 50% / cover no-repeat;
                     width:100%; height:0; padding-bottom:66.667%; display:block;
-                    position:relative; background:#eee;
+                    position:relative;
                     cursor:pointer;
                 }
-                    .card__img {
-                        display: block; width:100%; height:100%;
-                        position:absolute;
-                    }
                 .card__body {
                     border:1px solid #eee; border-top:0; border-bottom:0;
                     padding:0 0.75em 1.1875em 0.625em;

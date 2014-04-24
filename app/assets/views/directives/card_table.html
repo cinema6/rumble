@@ -25,7 +25,10 @@
                         </span>
                     </div>
                     <div class="card__imgBox">
-                        <img ng-src="{{Ctrl.getThumbs(this).large || 'http://lorempixel.com/300/200/'}}" class="card__img" alt="{{this.title}}">
+                        <div class="miniReel__imgBox"
+                            style="background-image:url('{{Ctrl.getThumbs(this).large || 'http://lorempixel.com/300/200/'}}');">
+                            &nbsp;
+                        </div>
                     </div>
                     <div class="card__body">
                         <div class="card__copy">
