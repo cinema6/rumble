@@ -14,9 +14,14 @@
                 '.tmp/templates-<%= buildMode %>.js'
             ]
         },
-        index: {
+        index1: {
             pattern: 'assets',
             replacement: '<%= _version %>',
+            path: '<%= settings.distDir %>/index.html'
+        },
+        index2: {
+            pattern: '__C6_DEV__',
+            replacement: 'false',
             path: '<%= settings.distDir %>/index.html'
         },
         app_map: {
