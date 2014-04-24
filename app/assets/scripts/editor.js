@@ -68,6 +68,7 @@
 
             this.closePreview = function() {
                 this.preview = false;
+                $scope.$broadcast('mrPreview:reset');
             };
 
             $scope.$on('addCard', function(event, card, index) {
@@ -180,6 +181,10 @@
                     } else {
                         session.ping('mrPreview:reset');
                     }
+                });
+
+                $scope.$on('mrPreview:reset', function() {
+                    session.ping('mrPreview:reset');
                 });
 
                 $scope.$watch(function() {
