@@ -738,7 +738,7 @@
 
         .miniReel__body {
             width:100%; height:0; padding-bottom:100%;
-            background:#eee;
+            background:#ccc url('../img/default_square.jpg') 50% 50% / cover no-repeat;
             position:relative;
         }
             .miniReel__img {
@@ -748,7 +748,7 @@
             .miniReel__title {
                 font-size:1em; line-height: 1.5; font-weight:700; color:#fff;
                 margin:0; padding:0.6875em 0.75em;
-                background:rgba(0,0,0,0.8);
+                background:rgba(0,0,0,0.5);
                 position:absolute; bottom:0; left:0; right:0;
                 -webkit-transition: all 0.5s; transition: all 0.5s;
             }
