@@ -22,7 +22,7 @@
                 </span>
             </h1>
             <form ng-if="EditorCtrl.editTitle">
-                <input type="text" autofocus ng-model="minireel.title" class="theTitle__textBox">
+                <input c6-click-outside="EditorCtrl.editTitle = false" type="text" autofocus ng-model="minireel.title" class="theTitle__textBox">
                 <button type="submit" class="theTitle__submit" ng-click="EditorCtrl.editTitle = false">Done</button>
             </form>
             <div class="pageHeader__actions clearfix">
