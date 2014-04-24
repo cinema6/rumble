@@ -14,7 +14,7 @@
                 id="container-{{this.id}}"
                 c6-drag-zone>
                 <h4 class="card__type">{{$index + 1}}. {{this.label}}</h4>
-                <button class="card__deleteBtn" type="button" title="Delete Card">
+                <button ng-show="$index !== (deck.length - 1)" ng-click="deleteCard({ card: this })" class="card__deleteBtn" type="button" title="Delete Card">
                     <span class="ui__xSmall ui__xSmall--white sprite--alpha"><span class="ir">Delete Card</span></span>
                 </button>
                 <div id="{{this.id}}" data-title="{{this.title}}" c6-draggable="$index !== (deck.length - 1)" class="card__item">

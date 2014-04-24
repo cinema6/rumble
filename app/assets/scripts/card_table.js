@@ -358,6 +358,7 @@
                     deck: '=',
                     editCard: '&',
                     addCard: '&',
+                    deleteCard: '&',
                     previewCard: '&'
                 }
             };
