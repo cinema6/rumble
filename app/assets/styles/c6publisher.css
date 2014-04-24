@@ -194,7 +194,7 @@
     /*  shared modal styles
     ========================================================================== */
         .modal__content {
-            margin-top:60px;
+            margin-top:3em;
         }
         .modal__title {
             font-weight:100; font-size:1.5em; margin:-0.25em 0 0.25em;
@@ -274,12 +274,12 @@
                 float:left; margin:0 0.375em 0 0;
             }
             .tabNav__link {
-                width:12rem; height:2.375rem;
+                width:8rem; height:1.625rem;
                 padding:0.625rem 0 0 0;
                 display:block;
-                text-align: center; font-size:1.25em; font-weight:100;
+                text-align: center; font-size:0.875rem; font-weight:300;
                 -webkit-transition: all 0.5s; transition: all 0.5s;
-                background:#b0b0b0 url('../img/tabNav__bg.png') 0 -3.25rem repeat-x;
+                background:#b0b0b0 url('../img/tabNav__bg.png') 0 -4rem repeat-x;
                 color:#565656;
             }
                 .tabNav__link:hover {
