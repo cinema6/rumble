@@ -231,7 +231,6 @@
 
                         it('should not play or paused the player', function() {
                             expect(iface.play).not.toHaveBeenCalled();
-                            expect(iface.pause).not.toHaveBeenCalled();
                         });
 
                         it('should not put in a dummy vote', function() {
@@ -248,10 +247,6 @@
                             $scope.$apply(function() {
                                 $scope.active = false;
                             });
-                        });
-
-                        it('should not bind to the controls', function() {
-                            expect(ControlsService.bindTo).not.toHaveBeenCalled();
                         });
 
                         it('should pause the player', function() {
