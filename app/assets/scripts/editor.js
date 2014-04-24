@@ -4,15 +4,40 @@
     var isNumber = angular.isNumber,
         jqLite = angular.element,
         equals = angular.equals,
-        copy = angular.copy;
+        copy = angular.copy,
+        forEach = angular.forEach;
 
     angular.module('c6.mrmaker')
         .controller('EditorController', ['c6State','$scope','MiniReelService',
         function                        ( c6State , $scope , MiniReelService ) {
-            var self = this;
+            var self = this,
+                AppCtrl = $scope.AppCtrl;
 
             this.preview = false;
             this.editTitle = false;
+
+            Object.defineProperties(this, {
+                prettyMode: {
+                    get: function() {
+                        var categories = AppCtrl.config && AppCtrl.config.data.modes,
+                            targetMode = this.model.mode;
+
+                        return categories && (function() {
+                            var result;
+
+                            forEach(categories, function(category) {
+                                forEach(category.modes, function(mode) {
+                                    if (mode.value === targetMode) {
+                                        result = mode.name;
+                                    }
+                                });
+                            });
+
+                            return result;
+                        }());
+                    }
+                }
+            });
 
             this.publish = function() {
                 MiniReelService.publish(this.model);
