@@ -127,13 +127,33 @@
         width:1.5em; height:1.5em;
     }
     .ui__edit {
-        background-position:-3.8125em -3.6875em; display: block;
+        background-position:-9.9375em -2.8125em; display: block;
         width:1em; height:1em;
     }
     .ui__plus {
         background-position:-1.5625em -2.8125em; display:block;
         width:0.5em; height:0.5em;
     }
+    .ui__x {
+        background-position:-1.5625em -3.6875em;
+        width:1.125em; height:1.125em; display: block;
+    }
+        .ui__x--red {
+            background-position:-2.6875em -3.6875em;
+        }
+        .ui__x--white {
+            background-position:-3.8125em -3.6875em;
+        }
+    .ui__xSmall {
+        background-position:-3.625em -5.125em;
+        width:0.75em; height:0.75em; display: block;
+    }
+        .ui__xSmall--red {
+            background-position:-4.4375em -5.125em;
+        }
+        .ui__xSmall--white {
+            background-position:-5.25em -5.125em;
+        }
     .ui__add {
         background-position:-5.3125em -2.8125em; display: block;
         width:2.25em; height:2.25em;
@@ -227,12 +247,12 @@
         }
         .modal__closeBtn {
             width:1.125em; height:1.125em;
-            background-position:-25px -59px;
+            background-position:-1.5625em -3.6875em;
             position:absolute; top:20px; right:20px;
             cursor:pointer;
         }
             .modal__closeBtn:hover {
-                background-position: -43px -59px;
+                background-position:-2.6875em -3.6875em;
             }
         .modal__radioBtn {
             cursor:pointer;
@@ -833,6 +853,23 @@
                 color:#646464; font-size:0.75em; font-weight:100; text-align: center;
                 margin:-1.5625rem 0 0.4375rem 0; position:relative;
             }
+            .card__deleteBtn {
+                position:absolute; z-index: 4;
+                background:black; background:rgba(0,0,0,0.75);
+                border:2px solid #fff; border-radius:50%; 
+                padding:0.5em; margin:-14px 0 0 196px;
+                font-size:1rem;
+                cursor:pointer;
+                -webkit-box-shadow: 0 3px 5px 0 rgba(0,0,0,0.5);
+                box-shadow: 0 3px 5px 0 rgba(0,0,0,0.5);
+                -webkit-transition: background 0.4s; transition: background 0.3s;
+            }
+                .card__deleteBtn:hover {
+                    background:#d61212; background:rgba(214,18,18,0.75);
+                }
+                .card__deleteBtn:focus {
+                    border:2px solid #fff;
+                }
             .card__item {
                 width: 13.5em;
                 white-space: normal; vertical-align: top;
