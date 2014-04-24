@@ -311,6 +311,32 @@
                 .index('manager');
         }])
 
+        .directive('c6ClickOutside', ['$document','$timeout',
+        function                     ( $document , $timeout ) {
+            return {
+                restrict: 'A',
+                link: function(scope, $element, attrs) {
+                    function handleClick(event) {
+                        if (event.target === $element[0]) {
+                            return;
+                        }
+
+                        scope.$apply(function() {
+                            scope.$eval(attrs.c6ClickOutside);
+                        });
+                    }
+
+                    $timeout(function() {
+                        $document.on('click', handleClick);
+                    }, 0, false);
+
+                    $element.on('$destroy', function() {
+                        $document.off('click', handleClick);
+                    });
+                }
+            };
+        }])
+
         .controller('GenericController', noop)
 
         .controller('AppController', ['$scope', '$log', 'cinema6', 'gsap',
