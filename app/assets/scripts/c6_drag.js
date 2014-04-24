@@ -502,10 +502,12 @@
                 return {
                     restrict: 'AC',
                     require: '?^c6DragSpace',
+                    priority: -100,
                     link: function(scope, $element, $attrs, C6DragSpaceCtrl) {
                         var touchable = hammer($element[0]),
                             draggable = new Draggable($attrs.id, $element),
-                            emitBeforeMove = false;
+                            emitBeforeMove = false,
+                            hasDragged = false;
 
                         function px(num) {
                             return num + 'px';
@@ -554,6 +556,8 @@
                                     },
                                     drag: {
                                         setup: function(event) {
+                                            hasDragged = true;
+
                                             event.gesture.preventDefault();
                                         },
                                         modify: function(event) {
@@ -640,6 +644,12 @@
                             touchable.on('dragstart drag dragend', delegate);
                             $element.on('$destroy', function() {
                                 touchable.off('dragstart drag dragend', delegate);
+                            });
+                            $element.on('click', function(event) {
+                                if (hasDragged) {
+                                    event.stopImmediatePropagation();
+                                    hasDragged = false;
+                                }
                             });
                         }
 
