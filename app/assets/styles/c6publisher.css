@@ -482,66 +482,75 @@
         .pageHeader--editor {
             margin-bottom:0; padding-bottom:1px;
         }
-        .pageTitle {
-            color:#565656; font-weight:100; font-size:1.875em; 
-            margin:1rem 0 0 0;
+        .pageHeader__coverImg {
+            width:7.5em; height:7.5em;
+            background:#ccc; margin:0.5em 0 0 0;
+            position:absolute;
+            cursor:pointer;
         }
-            .pageTitle__status {
-                font-weight:700; color:#ccc; font-size:0.667em;
+        .pageHeader__titlePane {
+            margin:0 0 0 140px;
+        }
+            .pageTitle {
+                color:#565656; font-weight:100; font-size:1.875em; 
+                margin:1rem 0 0 0;
             }
-                .pageTitle__status em {
-                    font-style:normal;
+                .pageTitle__status {
+                    font-weight:700; color:#ccc; font-size:0.667em;
                 }
-                .pageTitle__status--private {
-                    color:#646464;
-                }
-                .pageTitle__status--public {
-                    color:#72ad25;
-                }
-        .pageHeader__actions .filters__list,
-        .pageHeader__actions .metaData__group {
-            float:left;
-        }
-        .pageHeader__actions .toolbar__group {
-            float:right; margin-bottom:0.6875em;
-        }
+                    .pageTitle__status em {
+                        font-style:normal;
+                    }
+                    .pageTitle__status--private {
+                        color:#646464;
+                    }
+                    .pageTitle__status--public {
+                        color:#72ad25;
+                    }
+            .pageHeader__actions .filters__list,
+            .pageHeader__actions .metaData__group {
+                float:left;
+            }
+            .pageHeader__actions .toolbar__group {
+                float:right; margin-bottom:0.6875em;
+            }
 
-    .theTitle__text {
-        position:relative; cursor:pointer;
-    }
-        .theTitle__text:hover {
-            background:#eff9ff;
-        }
-        .theTitle__text .pageTitle__edit {
-            background-color:#4a9cd1;
-            display: block;
-            padding:0.25em 0.5em 0.25em 1.75em; border-radius:3px;
-            position:absolute; top:0.375em; right:0;
-            font-size:1rem; font-weight:700; color:#fff;
-            -webkit-transition: opacity 0.5s; transition: opacity 0.5s;
-            opacity:0;
-        }
-            .theTitle__text:hover .pageTitle__edit {
-                opacity:1;
+            .theTitle__text {
+                position:relative; cursor:pointer;
             }
-        .theTitle__text .ui__edit {
-            position:absolute; margin:0.25em 0.5em; left:0;
-        }
-    .theTitle__textBox {
-        border:1px solid #b0b0b0;
-        margin:0; padding:3px 0;
-        width:100%; height:1.5em;
-        color:#b0b0b0; font-weight:100; font-size:1.875em; line-height: 1;
-        margin:1rem 0 0 0;
-        -webkit-box-sizing: border-box;
-        -moz-box-sizing: border-box;
-        box-sizing: border-box;
-    }
-        .theTitle__textBox:focus {
-            border:1px solid #4a9cd1;
-            color:#565656;
-            background:#eff9ff;
-        }
+                .theTitle__text:hover {
+                    background:#eff9ff;
+                }
+                .theTitle__text .pageTitle__edit {
+                    background-color:#4a9cd1;
+                    display: block;
+                    padding:0.25em 0.5em 0.25em 1.75em; border-radius:3px;
+                    position:absolute; top:0.375em; right:0;
+                    font-size:1rem; font-weight:700; color:#fff;
+                    -webkit-transition: opacity 0.5s; transition: opacity 0.5s;
+                    opacity:0;
+                }
+                    .theTitle__text:hover .pageTitle__edit {
+                        opacity:1;
+                    }
+                .theTitle__text .ui__edit {
+                    position:absolute; margin:0.25em 0.5em; left:0;
+                }
+            .theTitle__textBox {
+                border:1px solid #b0b0b0;
+                margin:0; padding:3px 0;
+                width:100%; height:1.5em;
+                color:#b0b0b0; font-weight:100; font-size:1.875em; line-height: 1;
+                margin:1rem 0 0 0;
+                -webkit-box-sizing: border-box;
+                -moz-box-sizing: border-box;
+                box-sizing: border-box;
+            }
+                .theTitle__textBox:focus {
+                    border:1px solid #4a9cd1;
+                    color:#565656;
+                    background:#eff9ff;
+                }
         
 
     /*  filters__list
