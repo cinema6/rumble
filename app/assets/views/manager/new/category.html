@@ -13,6 +13,6 @@
     </li>
 </ul>
 <footer class="modal__btnFooter">
-    <button class="modal__btn toolbar__delete" c6-sref="manager" title="Cancel">Cancel</button>
-    <button c6-sref="manager.new.mode" params="{ newModeValue: NewCategoryCtrl.mode }" class="modal__btn" type="button" title="Next Step">Next Step</button>
+    <button class="modal__btn toolbar__delete" c6-sref="{{NewCtrl.returnState}}" title="Cancel">Cancel</button>
+    <button c6-sref="{{NewCtrl.baseState}}.mode" params="{ newModeValue: NewCategoryCtrl.mode }" class="modal__btn" type="button" title="Next Step">Next Step</button>
 </footer>

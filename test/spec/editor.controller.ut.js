@@ -9,12 +9,14 @@
                 $controller,
                 c6State,
                 MiniReelService,
+                AppCtrl,
                 EditorCtrl;
 
             var cModel;
 
             beforeEach(function() {
                 cModel = {
+                    mode: 'lightbox',
                     data: {
                         deck: [
                             {
@@ -39,6 +41,9 @@
                     MiniReelService = $injector.get('MiniReelService');
 
                     $scope = $rootScope.$new();
+                    AppCtrl = $scope.AppCtrl = {
+                        config: null
+                    };
                     $childScope = $scope.$new();
                     EditorCtrl = $controller('EditorController', { $scope: $scope, cModel: cModel });
                     EditorCtrl.model = cModel;
@@ -59,6 +64,62 @@
                 describe('editTitle', function() {
                     it('should be false', function() {
                         expect(EditorCtrl.editTitle).toBe(false);
+                    });
+                });
+
+                describe('prettyMode', function() {
+                    describe('if the AppCtrl has no config', function() {
+                        it('should be null', function() {
+                            expect(EditorCtrl.prettyMode).toBeNull();
+                        });
+                    });
+
+                    describe('if the AppCtrl has a config', function() {
+                        beforeEach(function() {
+                            AppCtrl.config = {
+                                data: {
+                                    modes: [
+                                        {
+                                            modes: [
+                                                {
+                                                    name: 'Lightbox',
+                                                    value: 'lightbox'
+                                                },
+                                                {
+                                                    name: 'Lightbox, with Companion Ad',
+                                                    value: 'lightbox-ads'
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            modes: [
+                                                {
+                                                    name: 'Light Text',
+                                                    value: 'light'
+                                                },
+                                                {
+                                                    name: 'Heavy Text',
+                                                    value: 'full'
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            };
+                        });
+
+                        it('should find the "name" for the mode\'s value', function() {
+                            expect(EditorCtrl.prettyMode).toBe('Lightbox');
+
+                            cModel.mode = 'lightbox-ads';
+                            expect(EditorCtrl.prettyMode).toBe('Lightbox, with Companion Ad');
+
+                            cModel.mode = 'light';
+                            expect(EditorCtrl.prettyMode).toBe('Light Text');
+
+                            cModel.mode = 'full';
+                            expect(EditorCtrl.prettyMode).toBe('Heavy Text');
+                        });
                     });
                 });
             });

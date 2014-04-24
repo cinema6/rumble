@@ -13,6 +13,7 @@
             "status": "pending",
             "created": "2014-02-08T10:42:51+00:00",
             "lastModified": "2014-04-18T14:07:20+00:00",
+            "mode": "light",
             "data": {
                 "branding": "elitedaily",
                 "deck": [
@@ -156,6 +157,7 @@
             "status": "active",
             "created": "2014-02-08T10:42:51+00:00",
             "lastModified": "2014-03-27T14:06:36+00:00",
+            "mode": "light",
             "data": {
                 "branding": "elitedaily",
                 "deck": [
@@ -468,6 +470,7 @@
             "status": "active",
             "created": "2014-02-08T10:42:51+00:00",
             "lastModified": "2014-04-01T14:06:36+00:00",
+            "mode": "lightbox",
             "data": {
                 "branding": "elitedaily",
                 "deck": [
@@ -685,6 +688,7 @@
             "status": "pending",
             "created": "2014-02-08T10:42:51+00:00",
             "lastModified": "2014-04-04T14:06:36+00:00",
+            "mode": "full",
             "data": {
                 "branding": "elitedaily",
                 "deck": [
