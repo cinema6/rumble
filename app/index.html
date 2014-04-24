@@ -39,13 +39,15 @@
                     });
                 })(q);
 
-                if(query) {
-                    query.forEach(function(param){
-                        if(queryCheck.indexOf(param[0]) > -1) {
-                            c6[param[0]] = param[1];
-                        }
-                    });
-                }
+                try {
+                    if(parent.location.href !== location.href && query) {
+                        query.forEach(function(param){
+                            if(queryCheck.indexOf(param[0]) > -1) {
+                                c6[param[0]] = param[1];
+                            }
+                        });
+                    }
+                } catch(e) {}
 
                 c6.kMode = (c6.kMode === 'undefined' || (!c6.kMode)) ? 'full' : c6.kMode;
                 c6.kBaseUrl = (c6.kDevMode) ? base
