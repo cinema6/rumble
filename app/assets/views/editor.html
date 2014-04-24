@@ -1,6 +1,6 @@
 <c6-alias model="EditorCtrl.model" as="minireel">
     <header class="pageHeader pageHeader--editor container">
-        <div class="pageHeader__coverImg">
+        <div c6-sref="editor.splash" class="pageHeader__coverImg">
             <div class="miniReel__imgBox"
                 style="background-image:url('');">
                 &nbsp;
@@ -22,7 +22,7 @@
                 </span>
             </h1>
             <form ng-if="EditorCtrl.editTitle">
-                <input type="text" autofocus ng-model="minireel.title" class="theTitle__textBox">
+                <input c6-click-outside="EditorCtrl.editTitle = false" type="text" autofocus ng-model="minireel.title" class="theTitle__textBox">
                 <button type="submit" class="theTitle__submit" ng-click="EditorCtrl.editTitle = false">Done</button>
             </form>
             <div class="pageHeader__actions clearfix">
@@ -84,44 +84,4 @@
 </c6-alias>
 <c6-view></c6-view>
 
-<div ng-controller="EmbedController as EmbedCtrl" class="embedCode__group container">
-    <div class="embedCode__header">
-        <label for="embedtype">Embed Code:</label>
-        <select ng-model="EmbedCtrl.mode" ng-options="mode.value as mode.name for mode in EmbedCtrl.modes" class="embedCode__selector" name="embedtype"></select>
-        <div c6-alias="EmbedCtrl.size as size" ng-show="EmbedCtrl.mode === 'custom'" class="embedCode__customSizeDimensions">
-            <input ng-model="size.width" class="textBox" type="text" value="Width"> x
-            <input ng-model="size.height" class="textBox" type="text" value="Height">
-        </div>
-    </div>
-    <textarea ng-model="EmbedCtrl.code" name="" id="" class="embedCode__snippet" cols="30" rows="10"></textarea>
-    <p class="embedCode__tip"><strong><span class="typo--attention">*</span> Responsive Auto-Fit</strong> embedding will automatically resize the MiniReel widget to fit nicely into your page. This is the recommended embedding method.</p>
-</div>
-
-
-<!--splash image uploader START-->
-<div class="ui__modal">
-    <h1 class="modal__title">Choose An Image For Your MiniReel</h1>
-
-    <div class="coverUploader__group">
-        <div class="coverUploader__imgBox">
-            <div class="coverUploader__imgCropMarks coverUploader__imgCropMarks--landscape">&nbsp;</div>
-            <div class="coverUploader__imgCropMarks coverUploader__imgCropMarks--portrait">&nbsp;</div>
-        </div>
-        <div class="coverUploader__copy">
-            <p>Upload your image or drag and drop it into the image space on the left.</p>
-            
-            <ul class="coverUploader__helpTips">
-                <li>Images should be 600 pixels by 600 pixels.</li>
-                <li><span class="crop__landscape">Green</span> crop marks indicate safe area for landscape display modes. </li>
-                <li><span class="crop__portrait">Blue</span> crop marks indicate safe area for portrait display modes.</li>
-            </ul>
-        </div>
-    </div>
-
-    <footer class="modal__btnFooter">
-        <button class="modal__btn toolbar__delete" ng-click="EditCardCtrl.close()" title="Cancel">Cancel</button>
-        <button class="modal__btn" title="Save">Save</button>
-    </footer>
-</div>
-<div class="ui__overlay">&nbsp;</div>
-<!--splash image uploader END-->
+<embed-code minireel-id="{{EditorCtrl.model.id}}" class="embedCode__group container"></embed-code>

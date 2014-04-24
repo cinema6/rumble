@@ -52,8 +52,18 @@
                     c6StateParams.cardId = 'rc-036a2e0b648f3d';
                 });
 
+                it('should return the current model if there is already one', function() {
+                    EditCardState.cModel = {};
+
+                    expect($injector.invoke(EditCardState.model, EditCardState)).toBe(EditCardState.cModel);
+                });
+
                 it('should use the c6StateParams id to find the card in the deck of the editor\'s model', function() {
-                    expect($injector.invoke(EditCardState.model, EditCardState)).toBe(EditorState.cModel.data.deck[2]);
+                    var model = $injector.invoke(EditCardState.model, EditCardState),
+                        card = EditorState.cModel.data.deck[2];
+
+                    expect(model).toEqual(card);
+                    expect(model).not.toBe(card);
                 });
             });
 
