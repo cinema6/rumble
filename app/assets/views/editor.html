@@ -10,7 +10,7 @@
             </div>
         </div>
         <div class="pageHeader__titlePane">
-            <h1 class="pageTitle theTitle__text">{{minireel.title}} 
+            <h1 ng-show="!EditorCtrl.editTitle" ng-click="EditorCtrl.editTitle = true" class="pageTitle theTitle__text">{{minireel.title}} 
                 <span ng-show="minireel.status === 'pending'" class="pageTitle__status">(<em class="pageTitle__status--private">private</em>)</span>
                 <span ng-show="minireel.status === 'active'" class="pageTitle__status">(<em class="pageTitle__status--public">public</em>)</span>
                 <span class="ui__editToolTip">
@@ -18,8 +18,9 @@
                     Edit
                 </span>
             </h1>
-            <form>
-                <input type="text" value="{{minireel.title}}" class="theTitle__textBox">
+            <form ng-if="EditorCtrl.editTitle">
+                <input type="text" autofocus ng-model="minireel.title" class="theTitle__textBox">
+                <button type="submit" class="theTitle__submit" ng-click="EditorCtrl.editTitle = false">Done</button>
             </form>
             <div class="pageHeader__actions clearfix">
                 <div class="metaData__group">

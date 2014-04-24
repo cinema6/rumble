@@ -575,6 +575,13 @@
                     color:#565656;
                     background:#eff9ff;
                 }
+            .theTitle__submit {
+                display: inline; position: absolute;
+                top: 0; left: 0;
+                height: 0; width: 0;
+                padding: 0; margin: 0;
+                border: none;
+            }
         
 
     /*  filters__list
