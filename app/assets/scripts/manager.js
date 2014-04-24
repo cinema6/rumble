@@ -14,7 +14,7 @@
                         return MiniReelService.create(minireel);
                     })
                     .then(function editCopy(minireel) {
-                        c6State.goTo('editor', { minireelId: minireel.id });
+                        c6State.goTo('editor.setMode.category', { minireelId: minireel.id });
                     });
             };
 
