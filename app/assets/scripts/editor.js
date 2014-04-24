@@ -30,6 +30,12 @@
                 c6State.goTo('editor.newCard', { insertionIndex: insertionIndex });
             };
 
+            this.deleteCard = function(card) {
+                var deck = this.model.data.deck;
+
+                deck.splice(deck.indexOf(card), 1);
+            };
+
             $scope.$on('addCard', function(event, card, index) {
                 self.model.data.deck.splice(index, 0, card);
             });
