@@ -364,33 +364,6 @@
                 return card;
             }
 
-            function generateIntroCard(minireel) {
-                var intro = self.createCard('intro');
-
-                Object.defineProperties(intro, {
-                    title: {
-                        enumerable: true,
-                        get: function() {
-                            return minireel.title;
-                        },
-                        set: function(value) {
-                            minireel.title = value;
-                        }
-                    },
-                    note: {
-                        enumerable: true,
-                        get: function() {
-                            return minireel.summary;
-                        },
-                        set: function(value) {
-                            minireel.summary = value;
-                        }
-                    }
-                });
-
-                return intro;
-            }
-
             this.findCard = function(deck, id) {
                 return deck.filter(function(card) {
                     return card.id === id;
@@ -454,8 +427,6 @@
                                 model[key] = value;
                             }
                         });
-
-                        model.data.deck.unshift(generateIntroCard(model));
 
                         return model;
                     }
@@ -612,12 +583,6 @@
                         }
                     };
 
-                if (!toCopy) {
-                    template.data.deck.unshift(generateIntroCard(template));
-                } else {
-                    template.data.deck[0] = generateIntroCard(template);
-                }
-
                 template.id = generateId('e');
                 template.title += toCopy ? ' (copy)' : '';
                 template.status = 'pending';
@@ -632,12 +597,7 @@
                     convertedDeck = [];
 
                 forEach(mrExperience.data.deck, function(card) {
-                    if (card.type !== 'intro') {
-                        // this conditional is used to weed out the intro card
-                        // we need to process the intro card and put the pieces
-                        // where they belong in the experience model (ie. the img object)
-                        convertedDeck.push(self.convertCard(card));
-                    }
+                    convertedDeck.push(self.convertCard(card));
                 });
 
                 mrExperience.data.deck = convertedDeck;
