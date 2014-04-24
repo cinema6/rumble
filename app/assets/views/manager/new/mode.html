@@ -1,14 +1,14 @@
 <h1 class="modal__title modal__title--lightboxWizard">Choose the MiniReel Type</h1>
-<ul class="lightboxWizard__group">
-    <li ng-repeat="$this in NewModeCtrl.model.modes" class="lightboxWizard__choice">
+<ul class="wizard__group">
+    <li ng-repeat="$this in NewModeCtrl.model.modes" class="wizard__choice">
         <input id="mode-{{$this.value}}" type="radio" 
             name="minireel-mode" value="{{$this.value}}"
             class="modal__radioBtn" ng-model="NewModeCtrl.mode"/>
-        <label class="lightboxWizard__hitarea" for="mode-{{$this.value}}"><span class="ir">{{$this.name}}</span></label>
-        <div class="lightboxWizard__diagram sprite--fff diagram__{{$this.value}}">&nbsp;</div>
-        <div class="lightboxWizard__copy">
-            <h2 class="lightboxWizard__title">{{$this.name}}</h2>
-            <p class="lightboxWizard__p">{{$this.description}}</p>
+        <label class="wizard__hitarea" for="mode-{{$this.value}}"><span class="ir">{{$this.name}}</span></label>
+        <div class="wizard__diagram sprite--fff diagram__{{$this.value}}">&nbsp;</div>
+        <div class="wizard__copy">
+            <h2 class="wizard__title">{{$this.name}}</h2>
+            <p class="wizard__p">{{$this.description}}</p>
         </div>
     </li>
 </ul>
