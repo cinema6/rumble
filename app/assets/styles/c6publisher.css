@@ -316,15 +316,22 @@
                         border-bottom:0; border-top:0;
                         border-color:rgba(0,0,255,0.5);
                     }
-            .coverUploader__form {
+            .coverUploader__copy {
                 margin-left:324px;
             }
-            .crop__landscape {
-                font-weight:700; color:green;
-            }
-            .crop__portrait {
-                font-weight:700; color:blue;
-            }
+                .coverUploader__helpTips {
+                    font-size:0.875em; line-height: 1.25;
+                    padding:0 0 0 2em; list-style: disc;
+                }
+                    .coverUploader__helpTips li {
+                        margin:0.5em 0;
+                    }
+                .crop__landscape {
+                    font-weight:700; color:green;
+                }
+                .crop__portrait {
+                    font-weight:700; color:blue;
+                }
 
 
     /*  modal forms
