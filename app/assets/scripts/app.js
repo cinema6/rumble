@@ -111,6 +111,15 @@
                             });
                     }],
                     children: {
+                        embed: {
+                            controller: 'GenericController',
+                            controllerAs: 'ManagerEmbedCtrl',
+                            templateUrl: assets('views/manager/embed.html'),
+                            model:  ['c6StateParams',
+                            function( c6StateParams ) {
+                                return c6StateParams.minireelId;
+                            }]
+                        },
                         new: {
                             controller: 'GenericController',
                             controllerAs: 'NewCtrl',
