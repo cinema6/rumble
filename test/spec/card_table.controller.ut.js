@@ -2,9 +2,6 @@
     'use strict';
 
     define(['card_table'], function() {
-        /* global angular:true */
-        var copy = angular.copy;
-
         describe('CardTableController', function() {
             var $rootScope,
                 $controller,
@@ -122,81 +119,6 @@
                         $emit();
                         expect(DragCtrl.refresh.calls.count()).toBe(count);
                     }
-                });
-            });
-
-            describe('when a card is dropped', function() {
-                var dragSpace,
-                    card1, card2, card3, card4, card5,
-                    model1, model2, model3, model4, model5,
-                    originalDeck,
-                    watchDeck;
-
-                beforeEach(function() {
-                    watchDeck = jasmine.createSpy('$watch deck');
-
-                    dragSpace = new Zone('drag-space');
-
-                    model1 = { id: 'rc-7bc713f331ae68' };
-                    model2 = { id: 'rc-b56ea317bbd92b' };
-                    model3 = { id: 'rc-8b25c1792c6ba1' };
-                    model4 = { id: 'rc-8c658546dc5c5f' };
-                    model5 = { id: 'rc-bc717117888f80' };
-
-                    $scope.deck = [model1, model2, model3, model4, model5];
-                    originalDeck = copy($scope.deck);
-
-                    card1 = new Draggable('rc-7bc713f331ae68');
-                    card2 = new Draggable('rc-b56ea317bbd92b');
-                    card3 = new Draggable('rc-8b25c1792c6ba1');
-                    card4 = new Draggable('rc-8c658546dc5c5f');
-                    card5 = new Draggable('rc-bc717117888f80');
-
-                    DragCtrl.addZone(dragSpace);
-                    DragCtrl.addZone(new Zone('scroll-left'));
-                    DragCtrl.addZone(new Zone('scroll-right'));
-                    DragCtrl.addDraggable(card1);
-                    DragCtrl.addDraggable(card2);
-                    DragCtrl.addDraggable(card3);
-                    DragCtrl.addDraggable(card4);
-                    DragCtrl.addDraggable(card5);
-
-                    for (var id in DragCtrl.draggables) {
-                        DragCtrl.draggables[id].currentlyOver.push(dragSpace);
-                    }
-
-                    $scope.$apply(function() {
-                        $scope.DragCtrl = DragCtrl;
-                    });
-                    $scope.$watchCollection('deck', watchDeck);
-                });
-
-                it('should do nothing if dropped over the drag space', function() {
-                    card1.emit('dropStart', card1);
-                    expect($scope.deck).toEqual(originalDeck);
-
-                    card3.emit('dropStart', card3);
-                    expect($scope.deck).toEqual(originalDeck);
-
-                    card5.emit('dropStart', card5);
-                    expect($scope.deck).toEqual(originalDeck);
-                });
-
-                it('should delete the card from the deck if it is not dropped over any zone', function() {
-                    for (var id in DragCtrl.draggables) {
-                        DragCtrl.draggables[id].currentlyOver.length = 0;
-                    }
-
-                    card1.emit('dropStart', card1);
-                    expect($scope.deck).toEqual([model2, model3, model4, model5]);
-
-                    card3.emit('dropStart', card3);
-                    expect($scope.deck).toEqual([model2, model4, model5]);
-
-                    card5.emit('dropStart', card5);
-                    expect($scope.deck).toEqual([model2, model4]);
-
-                    expect(watchDeck.calls.count()).toBe(3);
                 });
             });
 
