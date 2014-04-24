@@ -85,32 +85,3 @@
 <c6-view></c6-view>
 
 <embed-code minireel-id="{{EditorCtrl.model.id}}" class="embedCode__group container"></embed-code>
-
-
-<!--splash image uploader START-->
-<div class="ui__modal">
-    <h1 class="modal__title">Choose An Image For Your MiniReel</h1>
-
-    <div class="coverUploader__group">
-        <div class="coverUploader__imgBox">
-            <div class="coverUploader__imgCropMarks coverUploader__imgCropMarks--landscape">&nbsp;</div>
-            <div class="coverUploader__imgCropMarks coverUploader__imgCropMarks--portrait">&nbsp;</div>
-        </div>
-        <div class="coverUploader__copy">
-            <p>Upload your image or drag and drop it into the image space on the left.</p>
-            
-            <ul class="coverUploader__helpTips">
-                <li>Images should be 600 pixels by 600 pixels.</li>
-                <li><span class="crop__landscape">Green</span> crop marks indicate safe area for landscape display modes. </li>
-                <li><span class="crop__portrait">Blue</span> crop marks indicate safe area for portrait display modes.</li>
-            </ul>
-        </div>
-    </div>
-
-    <footer class="modal__btnFooter">
-        <button class="modal__btn toolbar__delete" ng-click="EditCardCtrl.close()" title="Cancel">Cancel</button>
-        <button class="modal__btn" title="Save">Save</button>
-    </footer>
-</div>
-<div class="ui__overlay">&nbsp;</div>
-<!--splash image uploader END-->
