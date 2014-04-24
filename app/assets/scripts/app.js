@@ -183,6 +183,11 @@
                         return MiniReelService.open(c6StateParams.minireelId);
                     }],
                     children: {
+                        splash: {
+                            controller: 'GenericController',
+                            controllerAs: 'EditorSplashCtrl',
+                            templateUrl: assets('views/editor/splash.html')
+                        },
                         setMode: {
                             controller: 'GenericController',
                             controllerAs: 'NewCtrl',
