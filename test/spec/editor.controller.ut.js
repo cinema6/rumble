@@ -9,17 +9,25 @@
                 $controller,
                 c6State,
                 MiniReelService,
+                AppCtrl,
                 EditorCtrl;
 
             var cModel;
 
             beforeEach(function() {
                 cModel = {
+                    mode: 'lightbox',
                     data: {
                         deck: [
-                            {},
-                            {},
-                            {}
+                            {
+                                id: 'rc-e91e76c0ce486a'
+                            },
+                            {
+                                id: 'rc-2ba11eda2b2300'
+                            },
+                            {
+                                id: 'rc-968f823aa61637'
+                            }
                         ]
                     }
                 };
@@ -33,6 +41,9 @@
                     MiniReelService = $injector.get('MiniReelService');
 
                     $scope = $rootScope.$new();
+                    AppCtrl = $scope.AppCtrl = {
+                        config: null
+                    };
                     $childScope = $scope.$new();
                     EditorCtrl = $controller('EditorController', { $scope: $scope, cModel: cModel });
                     EditorCtrl.model = cModel;
@@ -53,6 +64,62 @@
                 describe('editTitle', function() {
                     it('should be false', function() {
                         expect(EditorCtrl.editTitle).toBe(false);
+                    });
+                });
+
+                describe('prettyMode', function() {
+                    describe('if the AppCtrl has no config', function() {
+                        it('should be null', function() {
+                            expect(EditorCtrl.prettyMode).toBeNull();
+                        });
+                    });
+
+                    describe('if the AppCtrl has a config', function() {
+                        beforeEach(function() {
+                            AppCtrl.config = {
+                                data: {
+                                    modes: [
+                                        {
+                                            modes: [
+                                                {
+                                                    name: 'Lightbox',
+                                                    value: 'lightbox'
+                                                },
+                                                {
+                                                    name: 'Lightbox, with Companion Ad',
+                                                    value: 'lightbox-ads'
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            modes: [
+                                                {
+                                                    name: 'Light Text',
+                                                    value: 'light'
+                                                },
+                                                {
+                                                    name: 'Heavy Text',
+                                                    value: 'full'
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            };
+                        });
+
+                        it('should find the "name" for the mode\'s value', function() {
+                            expect(EditorCtrl.prettyMode).toBe('Lightbox');
+
+                            cModel.mode = 'lightbox-ads';
+                            expect(EditorCtrl.prettyMode).toBe('Lightbox, with Companion Ad');
+
+                            cModel.mode = 'light';
+                            expect(EditorCtrl.prettyMode).toBe('Light Text');
+
+                            cModel.mode = 'full';
+                            expect(EditorCtrl.prettyMode).toBe('Heavy Text');
+                        });
                     });
                 });
             });
@@ -103,6 +170,21 @@
 
                     it('should transition to the editor.newCard.type state', function() {
                         expect(c6State.goTo).toHaveBeenCalledWith('editor.newCard', { insertionIndex: 3 });
+                    });
+                });
+
+                describe('deleteCard(card)', function() {
+                    var card;
+
+                    beforeEach(function() {
+                        card = cModel.data.deck[1];
+
+                        EditorCtrl.deleteCard(card);
+                    });
+
+                    it('should remove the provided card from the deck', function() {
+                        expect(cModel.data.deck.length).toBe(2);
+                        expect(cModel.data.deck).not.toContain(card);
                     });
                 });
 
@@ -157,6 +239,29 @@
                         var deck = cModel.data.deck;
 
                         expect(deck[1]).toBe(card);
+                    });
+                });
+
+                describe('updateCard', function() {
+                    var card;
+
+                    beforeEach(function() {
+                        card = {
+                            id: 'rc-2ba11eda2b2300',
+                            title: 'foo',
+                            note: 'bar',
+                            data: {
+                                videoid:'abc',
+                                service: 'vimeo'
+                            }
+                        };
+
+                        $scope.$emit('updateCard', card);
+                    });
+
+                    it('should copy the properties of the provided card to the actual card in the deck', function() {
+                        expect(cModel.data.deck[1]).toEqual(card);
+                        expect(cModel.data.deck[1]).not.toBe(card);
                     });
                 });
             });

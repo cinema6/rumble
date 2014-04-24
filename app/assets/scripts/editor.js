@@ -4,15 +4,40 @@
     var isNumber = angular.isNumber,
         jqLite = angular.element,
         equals = angular.equals,
-        copy = angular.copy;
+        copy = angular.copy,
+        forEach = angular.forEach;
 
     angular.module('c6.mrmaker')
         .controller('EditorController', ['c6State','$scope','MiniReelService',
         function                        ( c6State , $scope , MiniReelService ) {
-            var self = this;
+            var self = this,
+                AppCtrl = $scope.AppCtrl;
 
             this.preview = false;
             this.editTitle = false;
+
+            Object.defineProperties(this, {
+                prettyMode: {
+                    get: function() {
+                        var categories = AppCtrl.config && AppCtrl.config.data.modes,
+                            targetMode = this.model.mode;
+
+                        return categories && (function() {
+                            var result;
+
+                            forEach(categories, function(category) {
+                                forEach(category.modes, function(mode) {
+                                    if (mode.value === targetMode) {
+                                        result = mode.name;
+                                    }
+                                });
+                            });
+
+                            return result;
+                        }());
+                    }
+                }
+            });
 
             this.publish = function() {
                 MiniReelService.publish(this.model);
@@ -30,9 +55,11 @@
                 c6State.goTo('editor.newCard', { insertionIndex: insertionIndex });
             };
 
-            $scope.$on('addCard', function(event, card, index) {
-                self.model.data.deck.splice(index, 0, card);
-            });
+            this.deleteCard = function(card) {
+                var deck = this.model.data.deck;
+
+                deck.splice(deck.indexOf(card), 1);
+            };
 
             this.previewMode = function(card) {
                 self.preview = true;
@@ -42,6 +69,18 @@
             this.closePreview = function() {
                 this.preview = false;
             };
+
+            $scope.$on('addCard', function(event, card, index) {
+                self.model.data.deck.splice(index, 0, card);
+            });
+
+            $scope.$on('updateCard', function(event, cardProxy) {
+                var card = self.model.data.deck.filter(function(card) {
+                    return card.id === cardProxy.id;
+                })[0];
+
+                copy(cardProxy, card);
+            });
         }])
 
         .controller('EditCardController', ['$scope','c6Computed','c6State','VideoService',
@@ -50,7 +89,9 @@
 
             VideoService.createVideoUrl(c, this, 'EditCardCtrl');
 
-            this.close = function() {
+            this.save = function() {
+                $scope.$emit('updateCard', this.model);
+
                 c6State.goTo('editor');
             };
         }])
@@ -65,53 +106,6 @@
                 $scope.$emit('addCard', this.model, c6StateParams.insertionIndex);
                 c6State.goTo('editor.editCard.copy', { cardId: this.model.id });
             };
-        }])
-
-        .controller('EmbedController', ['$scope','cinema6',
-        function                       ( $scope , cinema6 ) {
-            var self = this,
-                EditorCtrl = $scope.EditorCtrl;
-
-            this.modes = [
-                {
-                    name: 'Responsive Auto-fit *',
-                    value: 'responsive'
-                },
-                {
-                    name: 'Custom Size',
-                    value: 'custom'
-                }
-            ];
-            this.mode = this.modes[0].value;
-
-            this.size = {
-                width: 650,
-                height: 522
-            };
-
-            this.c6EmbedSrc = null;
-            cinema6.getAppData()
-                .then(function setC6EmbedSrc(data) {
-                    self.c6EmbedSrc = data.experience.data.c6EmbedSrc;
-                });
-
-            Object.defineProperties(this, {
-                code: {
-                    get: function() {
-                        return '<script src="' +
-                            this.c6EmbedSrc +
-                            '" data-exp="' +
-                            EditorCtrl.model.id +
-                            '"' + (this.mode === 'custom' ?
-                                (' data-width="' +
-                                    this.size.width +
-                                    '" data-height="' +
-                                    this.size.height + '"') :
-                                '') +
-                            '></script>';
-                    }
-                }
-            });
         }])
 
         .controller('PreviewController',['$scope','MiniReelService','postMessage','c6BrowserInfo',

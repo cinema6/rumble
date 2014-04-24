@@ -2,7 +2,8 @@
     /* jshint -W106 */
     'use strict';
 
-    var noop = angular.noop;
+    var noop = angular.noop,
+        copy = angular.copy;
 
     angular.module('c6.mrmaker', window$.c6.kModDeps)
         .constant('c6Defines', window$.c6)
@@ -93,6 +94,38 @@
         function( c6StateProvider , c6UrlMakerProvider ) {
             var assets = c6UrlMakerProvider.makeUrl.bind(c6UrlMakerProvider);
 
+            var newSubstates = {
+                category: {
+                    controller: 'NewCategoryController',
+                    controllerAs: 'NewCategoryCtrl',
+                    templateUrl: assets('views/manager/new/category.html'),
+                    model:  [function() {
+                        return this.cParent.cModel.modes;
+                    }]
+                },
+                mode: {
+                    controller: 'NewModeController',
+                    controllerAs: 'NewModeCtrl',
+                    templateUrl: assets('views/manager/new/mode.html'),
+                    model:  ['c6StateParams',
+                    function( c6StateParams ) {
+                        var parentModel = this.cParent.cModel;
+
+                        return {
+                            minireel: parentModel.minireel,
+                            modes: parentModel.modes.filter(function(mode) {
+                                return mode.value === c6StateParams.newModeValue;
+                            })[0].modes
+                        };
+                    }],
+                    updateControllerModel: ['controller','model',
+                    function               ( controller , model ) {
+                        controller.model = model;
+                        controller.mode = model.modes[0].value;
+                    }]
+                }
+            };
+
             c6StateProvider
                 .state('manager', {
                     controller: 'ManagerController',
@@ -111,6 +144,15 @@
                             });
                     }],
                     children: {
+                        embed: {
+                            controller: 'GenericController',
+                            controllerAs: 'ManagerEmbedCtrl',
+                            templateUrl: assets('views/manager/embed.html'),
+                            model:  ['c6StateParams',
+                            function( c6StateParams ) {
+                                return c6StateParams.minireelId;
+                            }]
+                        },
                         new: {
                             controller: 'GenericController',
                             controllerAs: 'NewCtrl',
@@ -130,37 +172,14 @@
                                         minireel: MiniReelService.create()
                                     });
                             }],
-                            children: {
-                                category: {
-                                    controller: 'NewCategoryController',
-                                    controllerAs: 'NewCategoryCtrl',
-                                    templateUrl: assets('views/manager/new/category.html'),
-                                    model:  [function() {
-                                        return this.cParent.cModel.modes;
-                                    }]
-                                },
-                                mode: {
-                                    controller: 'NewModeController',
-                                    controllerAs: 'NewModeCtrl',
-                                    templateUrl: assets('views/manager/new/mode.html'),
-                                    model:  ['c6StateParams',
-                                    function( c6StateParams ) {
-                                        var parentModel = this.cParent.cModel;
+                            updateControllerModel: ['controller','model',
+                            function               ( controller , model ) {
+                                controller.model = model;
 
-                                        return {
-                                            minireel: parentModel.minireel,
-                                            modes: parentModel.modes.filter(function(mode) {
-                                                return mode.value === c6StateParams.newModeValue;
-                                            })[0].modes
-                                        };
-                                    }],
-                                    updateControllerModel: ['controller','model',
-                                    function               ( controller , model ) {
-                                        controller.model = model;
-                                        controller.mode = model.modes[0].value;
-                                    }]
-                                }
-                            }
+                                controller.returnState = 'manager';
+                                controller.baseState = 'manager.new';
+                            }],
+                            children: copy(newSubstates)
                         }
                     }
                 })
@@ -173,6 +192,39 @@
                         return MiniReelService.open(c6StateParams.minireelId);
                     }],
                     children: {
+                        splash: {
+                            controller: 'GenericController',
+                            controllerAs: 'EditorSplashCtrl',
+                            templateUrl: assets('views/editor/splash.html')
+                        },
+                        setMode: {
+                            controller: 'GenericController',
+                            controllerAs: 'NewCtrl',
+                            templateUrl: assets('views/manager/new.html'),
+                            model:  ['cinema6','$q',
+                            function( cinema6 , $q ) {
+                                function getModes() {
+                                    return cinema6.getAppData()
+                                        .then(function returnModes(appData) {
+                                            return appData.experience.data.modes;
+                                        });
+                                }
+
+                                return this.cModel ||
+                                    $q.all({
+                                        modes: getModes(),
+                                        minireel: this.cParent.cModel
+                                    });
+                            }],
+                            updateControllerModel: ['controller','model',
+                            function               ( controller , model ) {
+                                controller.model = model;
+
+                                controller.returnState = 'editor';
+                                controller.baseState = 'editor.setMode';
+                            }],
+                            children: copy(newSubstates)
+                        },
                         editCard: {
                             controller: 'EditCardController',
                             controllerAs: 'EditCardCtrl',
@@ -181,10 +233,11 @@
                             function( c6StateParams , MiniReelService ) {
                                 var minireel = this.cParent.cModel;
 
-                                return MiniReelService.findCard(
-                                    minireel.data.deck,
-                                    c6StateParams.cardId
-                                );
+                                return this.cModel ||
+                                    copy(MiniReelService.findCard(
+                                        minireel.data.deck,
+                                        c6StateParams.cardId
+                                    ));
                             }],
                             afterModel: ['model','$q','c6State',
                             function    ( model , $q , c6State ) {
@@ -273,6 +326,32 @@
                 .index('manager');
         }])
 
+        .directive('c6ClickOutside', ['$document','$timeout',
+        function                     ( $document , $timeout ) {
+            return {
+                restrict: 'A',
+                link: function(scope, $element, attrs) {
+                    function handleClick(event) {
+                        if (event.target === $element[0]) {
+                            return;
+                        }
+
+                        scope.$apply(function() {
+                            scope.$eval(attrs.c6ClickOutside);
+                        });
+                    }
+
+                    $timeout(function() {
+                        $document.on('click', handleClick);
+                    }, 0, false);
+
+                    $element.on('$destroy', function() {
+                        $document.off('click', handleClick);
+                    });
+                }
+            };
+        }])
+
         .controller('GenericController', noop)
 
         .controller('AppController', ['$scope', '$log', 'cinema6', 'gsap',
@@ -281,15 +360,77 @@
 
             $log.info('AppCtlr loaded.');
 
+            this.config = null;
+            cinema6.getAppData()
+                .then(function setControllerProps(appData) {
+                    self.config = appData.experience;
+                });
+
             cinema6.init({
                 setup: function(appData) {
-                    self.experience = appData.experience;
-                    self.profile = appData.profile;
-
-                    gsap.TweenLite.ticker.useRAF(self.profile.raf);
+                    gsap.TweenLite.ticker.useRAF(appData.profile.raf);
                 }
             });
 
             $scope.AppCtrl = this;
+        }])
+
+        .directive('embedCode', ['c6UrlMaker',
+        function                ( c6UrlMaker ) {
+            return {
+                restrict: 'E',
+                templateUrl: c6UrlMaker('views/directives/embed_code.html'),
+                controller: 'EmbedCodeController',
+                controllerAs: 'Ctrl',
+                scope: {
+                    minireelId: '@'
+                }
+            };
+        }])
+
+        .controller('EmbedCodeController', ['$scope','cinema6',
+        function                           ( $scope , cinema6 ) {
+            var self = this;
+
+            this.modes = [
+                {
+                    name: 'Responsive Auto-fit *',
+                    value: 'responsive'
+                },
+                {
+                    name: 'Custom Size',
+                    value: 'custom'
+                }
+            ];
+            this.mode = this.modes[0].value;
+
+            this.size = {
+                width: 650,
+                height: 522
+            };
+
+            this.c6EmbedSrc = null;
+            cinema6.getAppData()
+                .then(function setC6EmbedSrc(data) {
+                    self.c6EmbedSrc = data.experience.data.c6EmbedSrc;
+                });
+
+            Object.defineProperties(this, {
+                code: {
+                    get: function() {
+                        return '<script src="' +
+                            this.c6EmbedSrc +
+                            '" data-exp="' +
+                            $scope.minireelId +
+                            '"' + (this.mode === 'custom' ?
+                                (' data-width="' +
+                                    this.size.width +
+                                    '" data-height="' +
+                                    this.size.height + '"') :
+                                '') +
+                            '></script>';
+                    }
+                }
+            });
         }]);
 }(window));

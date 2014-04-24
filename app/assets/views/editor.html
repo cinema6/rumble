@@ -1,7 +1,10 @@
 <c6-alias model="EditorCtrl.model" as="minireel">
     <header class="pageHeader pageHeader--editor container">
-        <div class="pageHeader__coverImg">
-            <img src="http://lorempixel.com/120/120/" alt="cover image">
+        <div c6-sref="editor.splash" class="pageHeader__coverImg">
+            <div class="miniReel__imgBox"
+                style="background-image:url('');">
+                &nbsp;
+            </div>
             <div class="coverImg__edit">
                 <span class="ui__editToolTip">
                     <span class="ui__edit sprite--alpha"><span class="ir">Edit</span></span>
@@ -19,12 +22,12 @@
                 </span>
             </h1>
             <form ng-if="EditorCtrl.editTitle">
-                <input type="text" autofocus ng-model="minireel.title" class="theTitle__textBox">
+                <input c6-click-outside="EditorCtrl.editTitle = false" type="text" autofocus ng-model="minireel.title" class="theTitle__textBox">
                 <button type="submit" class="theTitle__submit" ng-click="EditorCtrl.editTitle = false">Done</button>
             </form>
             <div class="pageHeader__actions clearfix">
                 <div class="metaData__group">
-                    Type: <a href="#" class="miniReel__type" title="AutoPlay MiniReel"><strong>Lightbox, with Companion Ad</strong></a> 
+                    Type: <a c6-sref="editor.setMode.category" class="miniReel__type" title="AutoPlay MiniReel"><strong>{{EditorCtrl.prettyMode}}</strong></a> 
                     <span class="ui__divider--bar">&nbsp;|&nbsp;</span>
                     Created {{minireel.created | date:'M/d/yyyy' }}
                     <span class="ui__divider--bar">&nbsp;|&nbsp;</span>
@@ -55,7 +58,12 @@
         </div>
     </header>
 
-    <card-table deck="minireel.data.deck" edit-card="EditorCtrl.editCard(card)" add-card="EditorCtrl.newCard(index)" preview-card="EditorCtrl.previewMode(card)"></card-table>
+    <card-table deck="minireel.data.deck"
+        edit-card="EditorCtrl.editCard(card)"
+        add-card="EditorCtrl.newCard(index)"
+        delete-card="EditorCtrl.deleteCard(card)"
+        preview-card="EditorCtrl.previewMode(card)">
+    </card-table>
 
     <div ng-show="EditorCtrl.preview" ng-controller="PreviewController as PreviewCtrl" class="preview__group">
         <div ng-class="{ 'preview__container--desktop' : (PreviewCtrl.device === 'desktop'), 'preview__container--mobile' : (PreviewCtrl.device === 'phone') }" class="preview__container ui__modal">
@@ -76,15 +84,4 @@
 </c6-alias>
 <c6-view></c6-view>
 
-<div ng-controller="EmbedController as EmbedCtrl" class="embedCode__group container">
-    <div class="embedCode__header">
-        <label for="embedtype">Embed Code:</label>
-        <select ng-model="EmbedCtrl.mode" ng-options="mode.value as mode.name for mode in EmbedCtrl.modes" class="embedCode__selector" name="embedtype"></select>
-        <div c6-alias="EmbedCtrl.size as size" ng-show="EmbedCtrl.mode === 'custom'" class="embedCode__customSizeDimensions">
-            <input ng-model="size.width" class="textBox" type="text" value="Width"> x
-            <input ng-model="size.height" class="textBox" type="text" value="Height">
-        </div>
-    </div>
-    <textarea ng-model="EmbedCtrl.code" name="" id="" class="embedCode__snippet" cols="30" rows="10"></textarea>
-    <p class="embedCode__tip"><strong><span class="typo--attention">*</span> Responsive Auto-Fit</strong> embedding will automatically resize the MiniReel widget to fit nicely into your page. This is the recommended embedding method.</p>
-</div>
+<embed-code minireel-id="{{EditorCtrl.model.id}}" class="embedCode__group container"></embed-code>

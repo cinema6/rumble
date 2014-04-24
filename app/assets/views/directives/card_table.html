@@ -1,4 +1,4 @@
-<c6-drag-space class="table__group" controller-as="DragCtrl" id="drag-space" c6-drag-zone>
+<c6-drag-space class="table__group" controller-as="DragCtrl" id="drag-space">
     <div class="table__left-zone" id="scroll-left" c6-drag-zone>&nbsp;</div>
     <ul id="card-scroller" class="card__list" c6-bind-scroll="Ctrl.position">
         <li class="card__list-item">
@@ -14,7 +14,7 @@
                 id="container-{{this.id}}"
                 c6-drag-zone>
                 <h4 class="card__type">{{$index + 1}}. {{this.label}}</h4>
-                <button class="card__deleteBtn" type="button" title="Delete Card">
+                <button ng-show="$index !== (deck.length - 1)" ng-click="deleteCard({ card: this })" class="card__deleteBtn" type="button" title="Delete Card">
                     <span class="ui__xSmall ui__xSmall--white sprite--alpha"><span class="ir">Delete Card</span></span>
                 </button>
                 <div id="{{this.id}}" data-title="{{this.title}}" c6-draggable="$index !== (deck.length - 1)" class="card__item">
@@ -25,7 +25,10 @@
                         </span>
                     </div>
                     <div class="card__imgBox">
-                        <img ng-src="{{Ctrl.getThumbs(this).large || 'http://lorempixel.com/300/200/'}}" class="card__img" alt="{{this.title}}">
+                        <div class="miniReel__imgBox"
+                            style="background-image:url('{{Ctrl.getThumbs(this).large}}');">
+                            &nbsp;
+                        </div>
                     </div>
                     <div class="card__body">
                         <div class="card__copy">
