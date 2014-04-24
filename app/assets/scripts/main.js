@@ -2,11 +2,10 @@
     'use strict';
 
     var __C6_BUILD_VERSION__ = window.__C6_BUILD_VERSION__ = undefined,
-        __C6_APP_BASE_URL__ = window.__C6_APP_BASE_URL__ = __C6_BUILD_VERSION__ || 'assets',
         c6 = window.c6 = (window.c6 || {});
 
     require.config({
-        baseUrl:  __C6_APP_BASE_URL__
+        baseUrl: c6.kBaseUrl
     });
 
     var libUrl = function(url) {
@@ -85,7 +84,6 @@
     c6.kAppName     = 'MiniReel';
     c6.kAppId       = 'com.cinema6.minireel';
     c6.kAppVersion  = __C6_BUILD_VERSION__ || 'debug';
-    c6.kBaseUrl = __C6_APP_BASE_URL__;
     c6.kHasKarma = false;
     c6.kLogFormats = c6.kDebug;
     c6.kLogLevels = (c6.kDebug) ? ['error','warn','log','info'] : [];

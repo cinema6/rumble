@@ -7,10 +7,13 @@
         options: {
             config: function(data) {
                 var distDir = grunt.config.get('settings.distDir'),
-                    distVersionDir = distDir + '/' + data.commit;
+                    mode = grunt.config.get('buildMode'),
+                    distVersionDir = distDir + '/' + data.commit,
+                    modeDir = distVersionDir + '/' + mode;
 
                 grunt.config.set('_version', data.commit);
                 grunt.config.set('_versionDir', distVersionDir);
+                grunt.config.set('_modeDir', modeDir);
             }
         }
     };

@@ -27,7 +27,7 @@
                         '**/*.html',
                         '!views/**/*.html'
                     ],
-                    dest: '<%= _versionDir %>'
+                    dest: '<%= _modeDir %>'
                 }
             ]
         }

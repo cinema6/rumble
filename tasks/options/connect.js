@@ -30,7 +30,7 @@
                                       'kDebug:' + grunt.config.get('settings.debug') + ',' +
                                       'kCollateralUrl:\'' + grunt.config.get('settings.locations.collateral') + '\',' +
                                       'kApiUrl:\'' + grunt.config.get('settings.locations.api') + '\'' +
-                                      '};</script>'; 
+                                      '}; __C6_DEV__ = true;</script>'; 
                                 }
                             }]
                         }),

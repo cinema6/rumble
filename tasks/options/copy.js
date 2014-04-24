@@ -28,13 +28,18 @@
                     cwd: '<%= settings.appDir %>/assets',
                     src: [
                         '**',
+                        '!views/**',
+                        '!styles/**',
+                        'styles/*.*',
+                        'styles/<%= buildMode %>/**',
+//                        'views/<%= buildMode %>/**',
                         '!**/*.{js,css,html}'
                     ],
-                    dest: '<%= _versionDir %>'
+                    dest: '<%= _modeDir %>'
                 },
                 {
                     src: '<%= settings.appDir %>/assets/scripts/main.js',
-                    dest: '.tmp/main.js'
+                    dest: '.tmp/main-<%= buildMode %>.js'
                 }
             ]
         }

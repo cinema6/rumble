@@ -5,8 +5,8 @@
         dist: {
             expand: true,
             cwd: '<%= settings.appDir %>/assets',
-            src: 'styles/**/*.css',
-            dest: '<%= _versionDir %>'
+            src: [ 'styles/*.css', 'styles/<%= buildMode %>/*.css'],
+            dest: '<%= _modeDir %>'
         }
     };
 }());
