@@ -19,13 +19,13 @@
                             Edit
                         </span>
                     </div>
-                    <div class="miniReel__imgBox">
-                        <img ng-src="{{Ctrl.getThumbs(this).large || 'http://lorempixel.com/300/200/'}}" class="miniReel__img" alt="{{this.title}}">
+                    <div class="card__imgBox">
+                        <img ng-src="{{Ctrl.getThumbs(this).large || 'http://lorempixel.com/300/200/'}}" class="card__img" alt="{{this.title}}">
                     </div>
-                    <div class="miniReel__body">
-                        <div class="miniReel__copy">
-                            <h1 class="miniReel__title"><span class="miniReel__titleText">{{this.title}}</span></h1>
-                            <p class="miniReel__summary">{{this.note}}</p>
+                    <div class="card__body">
+                        <div class="card__copy">
+                            <h1 class="card__title"><span class="card__titleText">{{this.title}}</span></h1>
+                            <p class="card__summary">{{this.note}}</p>
                         </div>
                         <div class="ui__divider--pause">&hellip;</div>
                     </div>
