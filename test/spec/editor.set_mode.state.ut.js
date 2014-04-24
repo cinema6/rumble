@@ -2,14 +2,14 @@
     'use strict';
 
     define(['app'], function() {
-        describe('ManagerNewState', function() {
+        describe('SetModeState', function() {
             var $injector,
                 $rootScope,
                 $q,
                 cinema6,
-                MiniReelService,
                 c6State,
-                ManagerNewState;
+                EditorState,
+                SetModeState;
 
             var minireel,
                 appData;
@@ -33,17 +33,38 @@
                     $rootScope = $injector.get('$rootScope');
                     $q = $injector.get('$q');
                     cinema6 = $injector.get('cinema6');
-                    MiniReelService = $injector.get('MiniReelService');
 
-                    ManagerNewState = c6State.get('manager.new');
+                    EditorState = c6State.get('editor');
+                    SetModeState = c6State.get('editor.setMode');
                 });
 
+                EditorState.cModel = minireel;
+
                 spyOn(cinema6, 'getAppData').and.returnValue($q.when(appData));
-                spyOn(MiniReelService, 'create').and.returnValue(minireel);
             });
 
             it('should exist', function() {
-                expect(ManagerNewState).toEqual(jasmine.any(Object));
+                expect(SetModeState).toEqual(jasmine.any(Object));
+            });
+
+            it('should have the same children as the "manager.new" state', function() {
+                var NewCategoryState = c6State.get('manager.new.category'),
+                    NewModeState = c6State.get('manager.new.mode'),
+                    MyNewCategoryState = c6State.get('editor.setMode.category'),
+                    MyNewModeState = c6State.get('editor.setMode.mode');
+
+                function equalStates(state1, state2) {
+                    ['controller', 'controllerAs', 'templateUrl', 'model', 'updateControllerModel']
+                        .forEach(function(prop) {
+                            expect(state1[prop]).toEqual(state2[prop]);
+                        });
+                }
+
+                equalStates(NewCategoryState, MyNewCategoryState);
+                expect(NewCategoryState).not.toBe(MyNewCategoryState);
+
+                equalStates(NewModeState, MyNewModeState);
+                expect(NewModeState).not.toBe(MyNewModeState);
             });
 
             describe('model()', function() {
@@ -51,13 +72,13 @@
 
                 describe('if there is already a model', function() {
                     beforeEach(function() {
-                        ManagerNewState.cModel = {};
+                        SetModeState.cModel = {};
 
-                        result = $injector.invoke(ManagerNewState.model, ManagerNewState);
+                        result = $injector.invoke(SetModeState.model, SetModeState);
                     });
 
                     it('should return the existing model', function() {
-                        expect(result).toBe(ManagerNewState.cModel);
+                        expect(result).toBe(SetModeState.cModel);
                     });
                 });
 
@@ -68,7 +89,7 @@
                         success = jasmine.createSpy('model() success');
 
                         $rootScope.$apply(function() {
-                            result = $injector.invoke(ManagerNewState.model, ManagerNewState).then(success);
+                            result = $injector.invoke(SetModeState.model, SetModeState).then(success);
                         });
                     });
 
@@ -88,7 +109,7 @@
                     controller = {};
                     model = {};
 
-                    $injector.invoke(ManagerNewState.updateControllerModel, ManagerNewState, {
+                    $injector.invoke(SetModeState.updateControllerModel, SetModeState, {
                         controller: controller,
                         model: model
                     });
@@ -98,12 +119,12 @@
                     expect(controller.model).toBe(model);
                 });
 
-                it('should set the controller\'s returnState to "manager"', function() {
-                    expect(controller.returnState).toBe('manager');
+                it('should set the controller\'s returnState to "editor"', function() {
+                    expect(controller.returnState).toBe('editor');
                 });
 
-                it('should set the controller\'s baseState to "manager.new"', function() {
-                    expect(controller.baseState).toBe('manager.new');
+                it('should set the controller\'s baseState to "editor.setMode"', function() {
+                    expect(controller.baseState).toBe('editor.setMode');
                 });
             });
         });

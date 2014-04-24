@@ -2,7 +2,8 @@
     /* jshint -W106 */
     'use strict';
 
-    var noop = angular.noop;
+    var noop = angular.noop,
+        copy = angular.copy;
 
     angular.module('c6.mrmaker', window$.c6.kModDeps)
         .constant('c6Defines', window$.c6)
@@ -93,6 +94,38 @@
         function( c6StateProvider , c6UrlMakerProvider ) {
             var assets = c6UrlMakerProvider.makeUrl.bind(c6UrlMakerProvider);
 
+            var newSubstates = {
+                category: {
+                    controller: 'NewCategoryController',
+                    controllerAs: 'NewCategoryCtrl',
+                    templateUrl: assets('views/manager/new/category.html'),
+                    model:  [function() {
+                        return this.cParent.cModel.modes;
+                    }]
+                },
+                mode: {
+                    controller: 'NewModeController',
+                    controllerAs: 'NewModeCtrl',
+                    templateUrl: assets('views/manager/new/mode.html'),
+                    model:  ['c6StateParams',
+                    function( c6StateParams ) {
+                        var parentModel = this.cParent.cModel;
+
+                        return {
+                            minireel: parentModel.minireel,
+                            modes: parentModel.modes.filter(function(mode) {
+                                return mode.value === c6StateParams.newModeValue;
+                            })[0].modes
+                        };
+                    }],
+                    updateControllerModel: ['controller','model',
+                    function               ( controller , model ) {
+                        controller.model = model;
+                        controller.mode = model.modes[0].value;
+                    }]
+                }
+            };
+
             c6StateProvider
                 .state('manager', {
                     controller: 'ManagerController',
@@ -130,37 +163,14 @@
                                         minireel: MiniReelService.create()
                                     });
                             }],
-                            children: {
-                                category: {
-                                    controller: 'NewCategoryController',
-                                    controllerAs: 'NewCategoryCtrl',
-                                    templateUrl: assets('views/manager/new/category.html'),
-                                    model:  [function() {
-                                        return this.cParent.cModel.modes;
-                                    }]
-                                },
-                                mode: {
-                                    controller: 'NewModeController',
-                                    controllerAs: 'NewModeCtrl',
-                                    templateUrl: assets('views/manager/new/mode.html'),
-                                    model:  ['c6StateParams',
-                                    function( c6StateParams ) {
-                                        var parentModel = this.cParent.cModel;
+                            updateControllerModel: ['controller','model',
+                            function               ( controller , model ) {
+                                controller.model = model;
 
-                                        return {
-                                            minireel: parentModel.minireel,
-                                            modes: parentModel.modes.filter(function(mode) {
-                                                return mode.value === c6StateParams.newModeValue;
-                                            })[0].modes
-                                        };
-                                    }],
-                                    updateControllerModel: ['controller','model',
-                                    function               ( controller , model ) {
-                                        controller.model = model;
-                                        controller.mode = model.modes[0].value;
-                                    }]
-                                }
-                            }
+                                controller.returnState = 'manager';
+                                controller.baseState = 'manager.new';
+                            }],
+                            children: copy(newSubstates)
                         }
                     }
                 })
@@ -173,6 +183,34 @@
                         return MiniReelService.open(c6StateParams.minireelId);
                     }],
                     children: {
+                        setMode: {
+                            controller: 'GenericController',
+                            controllerAs: 'NewCtrl',
+                            templateUrl: assets('views/manager/new.html'),
+                            model:  ['cinema6','$q',
+                            function( cinema6 , $q ) {
+                                function getModes() {
+                                    return cinema6.getAppData()
+                                        .then(function returnModes(appData) {
+                                            return appData.experience.data.modes;
+                                        });
+                                }
+
+                                return this.cModel ||
+                                    $q.all({
+                                        modes: getModes(),
+                                        minireel: this.cParent.cModel
+                                    });
+                            }],
+                            updateControllerModel: ['controller','model',
+                            function               ( controller , model ) {
+                                controller.model = model;
+
+                                controller.returnState = 'editor';
+                                controller.baseState = 'editor.setMode';
+                            }],
+                            children: copy(newSubstates)
+                        },
                         editCard: {
                             controller: 'EditCardController',
                             controllerAs: 'EditCardCtrl',
