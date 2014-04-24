@@ -43,8 +43,18 @@
                 expect(EditorCtrl).toEqual(jasmine.any(Object));
             });
 
-            it('should set preview mode to false', function() {
-                expect(EditorCtrl.preview).toBe(false);
+            describe('properties', function() {
+                describe('preview', function() {
+                    it('should be false', function() {
+                        expect(EditorCtrl.preview).toBe(false);
+                    });
+                });
+
+                describe('editTitle', function() {
+                    it('should be false', function() {
+                        expect(EditorCtrl.editTitle).toBe(false);
+                    });
+                });
             });
 
             describe('methods', function() {
