@@ -7,12 +7,12 @@
         options: {
             htmlmin: grunt.config.get('htmlmin.options'),
             module: '<%= settings.appModule %>',
-            prefix: '<%= _version %>/'
+            prefix: '<%= _version %>/<%= buildMode %>'
         },
         dist: {
             cwd: '<%= settings.appDir %>/assets',
-            src: 'views/**/*.html',
-            dest: '.tmp/templates.js'
+            src: 'views/<%= buildMode %>/**/*.html',
+            dest: '.tmp/templates-<%= buildMode %>.js'
         },
         test: {
             options: {

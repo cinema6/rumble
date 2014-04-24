@@ -5,15 +5,24 @@
         main: {
             pattern: 'undefined',
             replacement: '\'<%= _version %>\'',
-            path: '.tmp/main.js'
+            path: '.tmp/main-<%= buildMode %>.js'
         },
         html: {
             pattern: 'assets',
-            replacement: '<%= _version %>',
+            replacement: '<%= _version %>/<%= buildMode %>',
             path: [
-                '.tmp/templates.js',
-                '<%= settings.distDir %>/index.html'
+                '.tmp/templates-<%= buildMode %>.js'
             ]
+        },
+        index1: {
+            pattern: 'assets',
+            replacement: '<%= _version %>',
+            path: '<%= settings.distDir %>/index.html'
+        },
+        index2: {
+            pattern: '__C6_DEV__',
+            replacement: 'false',
+            path: '<%= settings.distDir %>/index.html'
         },
         app_map: {
             pattern: 'app\/assets\/scripts',
