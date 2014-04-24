@@ -1,13 +1,19 @@
 <c6-alias model="EditorCtrl.model" as="minireel">
     <header class="pageHeader pageHeader--editor container">
         <div class="pageHeader__coverImg">
-            <img src="http://lorempixel.com/120/120/" alt="cover image here">
+            <img src="http://lorempixel.com/120/120/" alt="cover image">
+            <div class="coverImg__edit">
+                <span class="ui__editToolTip">
+                    <span class="ui__edit sprite--alpha"><span class="ir">Edit</span></span>
+                    Edit
+                </span>
+            </div>
         </div>
         <div class="pageHeader__titlePane">
             <h1 class="pageTitle theTitle__text">{{minireel.title}} 
                 <span ng-show="minireel.status === 'pending'" class="pageTitle__status">(<em class="pageTitle__status--private">private</em>)</span>
                 <span ng-show="minireel.status === 'active'" class="pageTitle__status">(<em class="pageTitle__status--public">public</em>)</span>
-                <span class="pageTitle__edit">
+                <span class="ui__editToolTip">
                     <span class="ui__edit sprite--alpha"><span class="ir">Edit</span></span>
                     Edit
                 </span>
