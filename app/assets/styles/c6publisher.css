@@ -15,6 +15,9 @@
     p {
         margin: 1em 0;
     }
+    input, textarea {
+        font-family: 'museo-sans', Arial, Helvetica, sans-serif;
+    }
     textarea {
         resize: vertical;
     }
@@ -123,10 +126,43 @@
         background-position:0 -2.8125em; display:block;
         width:1.5em; height:1.5em;
     }
+    .ui__edit {
+        background-position:-9.9375em -2.8125em; display: block;
+        width:1em; height:1em;
+    }
+    .ui__editToolTip {
+        background-color:#4a9cd1;
+        display: block;
+        padding:0.25em 0.5em 0.25em 1.75em; margin:0;
+        border-radius:3px;
+        font-size:1rem; font-weight:700; color:#fff;
+        -webkit-transition: opacity 0.5s; transition: opacity 0.5s;
+        opacity:0;
+    }
     .ui__plus {
         background-position:-1.5625em -2.8125em; display:block;
         width:0.5em; height:0.5em;
     }
+    .ui__x {
+        background-position:-1.5625em -3.6875em;
+        width:1.125em; height:1.125em; display: block;
+    }
+        .ui__x--red {
+            background-position:-2.6875em -3.6875em;
+        }
+        .ui__x--white {
+            background-position:-3.8125em -3.6875em;
+        }
+    .ui__xSmall {
+        background-position:-3.625em -5.125em;
+        width:0.75em; height:0.75em; display: block;
+    }
+        .ui__xSmall--red {
+            background-position:-4.4375em -5.125em;
+        }
+        .ui__xSmall--white {
+            background-position:-5.25em -5.125em;
+        }
     .ui__add {
         background-position:-5.3125em -2.8125em; display: block;
         width:2.25em; height:2.25em;
@@ -220,12 +256,12 @@
         }
         .modal__closeBtn {
             width:1.125em; height:1.125em;
-            background-position:-25px -59px;
+            background-position:-1.5625em -3.6875em;
             position:absolute; top:20px; right:20px;
             cursor:pointer;
         }
             .modal__closeBtn:hover {
-                background-position: -43px -59px;
+                background-position:-2.6875em -3.6875em;
             }
         .modal__radioBtn {
             cursor:pointer;
@@ -247,6 +283,7 @@
         }
         .modal__btnFooter {
             text-align: right;
+            position:absolute; bottom:1.5em; left:1.5em; right:1.5em;
         }
     /*  modal forms
     ========================================================================== */
@@ -298,7 +335,7 @@
             font-size:1rem;
         }
             .modal__cardCopy {
-                height:22rem;
+                height:19.375rem;
                 line-height: 1.75em;
                 font-family: 'museo-sans', Arial, Helvetica, sans-serif;
             }
@@ -454,29 +491,91 @@
         .pageHeader--editor {
             margin-bottom:0; padding-bottom:1px;
         }
-        .pageTitle {
-            color:#565656; font-weight:100; font-size:1.875em; 
-            margin:1rem 0 0 0;
+        .pageHeader__coverImg {
+            width:7.5em; height:7.5em;
+            background:#ccc; margin:0.5em 0 0 0;
+            position:absolute;
+            cursor:pointer;
+            overflow: hidden;
         }
-            .pageTitle__status {
-                font-weight:700; color:#ccc; font-size:0.667em;
+            .coverImg__edit {
+                width:100%; height:100%;
+                position:absolute; top:0;
+                background:black; background:rgba(0,0,0,0.6);
+                -webkit-transition: opacity 0.5s; transition: opacity 0.5s;
+                opacity:0;
             }
-                .pageTitle__status em {
-                    font-style:normal;
+                .pageHeader__coverImg:hover .coverImg__edit {
+                    opacity:1;
                 }
-                .pageTitle__status--private {
-                    color:#646464;
+                .coverImg__edit .ui__editToolTip {
+                    margin:-1em 0 0 -2em;
+                    position:absolute; top:50%; left:50%;
                 }
-                .pageTitle__status--public {
-                    color:#72ad25;
+                    .coverImg__edit:hover .ui__editToolTip {
+                        opacity:1;
+                    }
+                .coverImg__edit .ui__edit {
+                    position:absolute; margin:0.25em 0.5em; left:0;
                 }
-        .pageHeader__actions .filters__list,
-        .pageHeader__actions .metaData__group {
-            float:left;
+        .pageHeader__titlePane {
+            margin:0 0 0 8.25em;
         }
-        .pageHeader__actions .toolbar__group {
-            float:right; margin-bottom:0.6875em;
-        }
+            .pageTitle {
+                color:#565656; font-weight:100; font-size:1.875em; 
+                margin:1rem 0 0 0;
+            }
+                .pageTitle__status {
+                    font-weight:700; color:#ccc; font-size:0.667em;
+                }
+                    .pageTitle__status em {
+                        font-style:normal;
+                    }
+                    .pageTitle__status--private {
+                        color:#646464;
+                    }
+                    .pageTitle__status--public {
+                        color:#72ad25;
+                    }
+            .pageHeader__actions .filters__list,
+            .pageHeader__actions .metaData__group {
+                float:left;
+            }
+            .pageHeader__actions .toolbar__group {
+                float:right; margin-bottom:0.6875em;
+            }
+
+            .theTitle__text {
+                position:relative; cursor:pointer;
+            }
+                .theTitle__text:hover {
+                    background:#eff9ff;
+                }
+                .theTitle__text .ui__editToolTip {
+                    position:absolute; top:0.375em; right:0;
+                }
+                    .theTitle__text:hover .ui__editToolTip {
+                        opacity:1;
+                    }
+                .theTitle__text .ui__edit {
+                    position:absolute; margin:0.25em 0.5em; left:0;
+                }
+            .theTitle__textBox {
+                border:1px solid #b0b0b0;
+                margin:0; padding:3px 0;
+                width:100%; height:1.5em;
+                color:#b0b0b0; font-weight:100; font-size:1.875em; line-height: 1;
+                margin:1rem 0 0 0;
+                -webkit-box-sizing: border-box;
+                -moz-box-sizing: border-box;
+                box-sizing: border-box;
+            }
+                .theTitle__textBox:focus {
+                    border:1px solid #4a9cd1;
+                    color:#565656;
+                    background:#eff9ff;
+                }
+        
 
     /*  filters__list
     ========================================================================== */
@@ -620,50 +719,37 @@
                 width:33.333%;
             }
         }
-        .miniReel__group--deleted {
-            background:#eee;
-        }
-            .miniReel__group--deleted .miniReel__quickActions {
-                background:#ddd;
-            }
-        .miniReel__imgBox {
-            width:100%; height:0; padding-bottom:66.667%; display:block;
-            position:relative; background:#eee;
+        .miniReel__group {
             cursor:pointer;
+        }
+            .miniReel__group--deleted {
+                background:#eee;
+            }
+                .miniReel__group--deleted .miniReel__quickActions {
+                    background:#ddd;
+                }
+
+        .miniReel__body {
+            width:100%; height:0; padding-bottom:100%;
+            background:#eee;
+            position:relative;
         }
             .miniReel__img {
                 display: block; width:100%; height:100%;
                 position:absolute;
             }
-        .miniReel__body {
-            border:1px solid #eee; border-top:0; border-bottom:0;
-            padding:0 0.75em 1.1875em 0.75em;
-            cursor:pointer;
-            -webkit-transition: border 0.5s; transition: border 0.5s;
-        }
-            .miniReel__group:hover .miniReel__body {
-                border-color:#333;
+            .miniReel__title {
+                font-size:1em; line-height: 1.5; font-weight:700; color:#fff;
+                margin:0; padding:0.6875em 0.75em;
+                background:rgba(0,0,0,0.8);
+                position:absolute; bottom:0; left:0; right:0;
+                -webkit-transition: all 0.5s; transition: all 0.5s;
             }
-            .miniReel__copy {
-                height:10em; overflow: hidden;
-            }
-                .miniReel__title {
-                    font-size:1em; line-height: 1.5; font-weight:700; color:#444;
-                    margin:0; padding:0.6875em 0 0 0;
-                }
-                .miniReel__titleText {
-                    -webkit-transition: color 0.5s; transition: color 0.5s;
-                }
-                    .miniReel__group:hover .miniReel__titleText {
-                        color:#13a2ff; border-bottom:1px dotted #13a2ff;
-                    }
-                .miniReel__summary {
-                    font-size:0.8125em; line-height:1.4;
-                    margin:0.769em 0;
+                .miniReel__body:hover .miniReel__title {
+                    background:#13a2ff; background:rgba(19,162,255,0.8);
                 }
             .miniReel__status {
-                font-size:0.75em; color:#b0b0b0; margin:0.4375rem 0 0 0;
-                position:relative;
+                font-size:0.75em; color:#b0b0b0; margin:0 0 0.4375rem 0;
             }
                 .ui__statusIcon {
                     width:1em; height:0.8125em; display:block;
@@ -689,14 +775,9 @@
                 }
 
         .miniReel__quickActions {
-            background:#eee; font-size:0.75em; color:#b0b0b0;
-            -webkit-transition: border 0.5s; transition: border 0.5s;
-            padding:0.833em 1em 0.667em 1em;
-            border:1px solid #eee; border-top:0;
+            font-size:0.75em; color:#b0b0b0;
+            padding:0.833em 0 0;
         }
-            .miniReel__group:hover .miniReel__quickActions {
-                border-color:#333;
-            }
             .quickActions__btn {
                 background:transparent; border:0; margin:0; padding:0;
                 display:inline; color:#4a9cd1;
@@ -782,11 +863,29 @@
     }
         .card__list-item {
             display: inline-block;
+            position:relative;
         }
             .card__type {
                 color:#646464; font-size:0.75em; font-weight:100; text-align: center;
                 margin:-1.5625rem 0 0.4375rem 0; position:relative;
             }
+            .card__deleteBtn {
+                position:absolute; z-index: 4;
+                background:black; background:rgba(0,0,0,0.75);
+                border:2px solid #fff; border-radius:50%; 
+                padding:0.5em; margin:-14px 0 0 196px;
+                font-size:1rem;
+                cursor:pointer;
+                -webkit-box-shadow: 0 3px 5px 0 rgba(0,0,0,0.5);
+                box-shadow: 0 3px 5px 0 rgba(0,0,0,0.5);
+                -webkit-transition: background 0.4s; transition: background 0.3s;
+            }
+                .card__deleteBtn:hover {
+                    background:#d61212; background:rgba(214,18,18,0.75);
+                }
+                .card__deleteBtn:focus {
+                    border:2px solid #fff;
+                }
             .card__item {
                 width: 13.5em;
                 white-space: normal; vertical-align: top;
@@ -796,29 +895,67 @@
                 .card__item.c6-over-zone {
                     opacity: 1;
                 }
-                .card__item .miniReel__imgBox {
+                .card__imgBox {
                     background:#ccc;
+                    width:100%; height:0; padding-bottom:66.667%; display:block;
+                    position:relative; background:#eee;
+                    cursor:pointer;
                 }
+                    .card__img {
+                        display: block; width:100%; height:100%;
+                        position:absolute;
+                    }
+                .card__body {
+                    border:1px solid #eee; border-top:0; border-bottom:0;
+                    padding:0 0.75em 1.1875em 0.625em;
+                    cursor:pointer;
+                    -webkit-transition: border 0.5s; transition: border 0.5s;
+                }
+                    .card__item:hover .card__body {
+                        border-color:#333;
+                    }
+                    .card__copy {
+                        height:10em; overflow: hidden;
+                    }
+                        .card__title {
+                            font-size:1em; line-height: 1.5; font-weight:700; color:#444;
+                            margin:0; padding:0.6875em 0 0 0;
+                        }
+                        .card__summary {
+                            font-size:0.8125em; line-height:1.4;
+                            margin:0.769em 0;
+                        }
             .card__statusIndicator {
                 position:absolute; z-index:1; top:0; left:0;
                 width:100%; height:100%;
                 -webkit-box-sizing: border-box;
                 -moz-box-sizing: border-box;
                 box-sizing: border-box;
-                -webkit-transition: border 0.2s; transition: border 0.2s;
+                -webkit-transition: border 0.2s, background 0.5s; transition: border 0.2s, background 0.5s;
                 cursor:pointer;
-                border:0;
+                border:1px solid #fff;
             }
                 .card__statusIndicator:hover {
-                    border:3px solid #13a2ff;
+                    border:1px solid #13a2ff;
+                    background:#4a9cd1; background:rgba(74,156,209,0.25);
                 }
-                .card__statusIndicator--error, 
-                .card__statusIndicator--error:hover {
+                .card__statusIndicator--error {
                     border:3px solid #d61212;
-                }
-            .card__item .miniReel__body {
-                padding-bottom:0.625em;
-            }
+                } 
+                    .card__statusIndicator--error:hover {
+                        border:3px solid #d61212;
+                        background:#ee1b1b; background:rgba(214,18,18,0.25);
+                    }
+                    .card__statusIndicator .ui__editToolTip {
+                        margin:-1em 0 0 -2em;
+                        position:absolute; top:44%; left:50%;
+                    }
+                        .card__statusIndicator .ui__edit {
+                            position:absolute; margin:0.25em 0.5em; left:0;
+                        }
+                        .card__statusIndicator:hover .ui__editToolTip {
+                            opacity:1;
+                        }
             .card__contextBar {
                 text-align: center; font-size:0.75em;
                 margin:0.4166em 0 0 0;

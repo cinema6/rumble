@@ -1,38 +1,56 @@
 <c6-alias model="EditorCtrl.model" as="minireel">
     <header class="pageHeader pageHeader--editor container">
-        <h1 class="pageTitle">{{minireel.title}} 
-            <span ng-show="minireel.status === 'pending'" class="pageTitle__status">(<em class="pageTitle__status--private">private</em>)</span>
-            <span ng-show="minireel.status === 'active'" class="pageTitle__status">(<em class="pageTitle__status--public">public</em>)</span>
-        </h1>
-        <div class="pageHeader__actions clearfix">
-            <div class="metaData__group">
-                Type: <a href="#" class="miniReel__type" title="AutoPlay MiniReel"><strong>Lightbox, with Companion Ad</strong></a> 
-                <span class="ui__divider--bar">&nbsp;|&nbsp;</span>
-                Created 3/13/2014
-                <span class="ui__divider--bar">&nbsp;|&nbsp;</span>
-                {{minireel.data.deck.length - 1}} Cards
+        <div class="pageHeader__coverImg">
+            <img src="http://lorempixel.com/120/120/" alt="cover image">
+            <div class="coverImg__edit">
+                <span class="ui__editToolTip">
+                    <span class="ui__edit sprite--alpha"><span class="ir">Edit</span></span>
+                    Edit
+                </span>
             </div>
         </div>
-        <div class="publish__actions clearfix">
-            <ul class="actionbar__group">
-                <li class="toolbar__item">
-                    <button ng-click="EditorCtrl.makePrivate()" ng-show="minireel.status === 'active'" class="toolbar__btn toolbar__makePrivate" type="button">Make Private</button>
-                </li>
-                <li class="toolbar__item">
-                    <button ng-click="EditorCtrl.publish()" ng-show="minireel.status === 'pending'" class="toolbar__btn toolbar__publish" type="button">Publish</button>
-                </li>
-                <li class="toolbar__item">
-                    <button class="toolbar__btn toolbar__delete" type="button">Delete</button>
-                </li>
-            </ul>
-            <ul class="toolbar__group">
-                <li class="toolbar__item">
-                    <button class="toolbar__btn toolbar__preview" type="button" ng-click="EditorCtrl.previewMode()">Preview</button>
-                </li>
-                <li class="toolbar__item">
-                    <button class="toolbar__btn toolbar__save" type="button">Save</button>
-                </li>
-            </ul>
+        <div class="pageHeader__titlePane">
+            <h1 class="pageTitle theTitle__text">{{minireel.title}} 
+                <span ng-show="minireel.status === 'pending'" class="pageTitle__status">(<em class="pageTitle__status--private">private</em>)</span>
+                <span ng-show="minireel.status === 'active'" class="pageTitle__status">(<em class="pageTitle__status--public">public</em>)</span>
+                <span class="ui__editToolTip">
+                    <span class="ui__edit sprite--alpha"><span class="ir">Edit</span></span>
+                    Edit
+                </span>
+            </h1>
+            <form>
+                <input type="text" value="{{minireel.title}}" class="theTitle__textBox">
+            </form>
+            <div class="pageHeader__actions clearfix">
+                <div class="metaData__group">
+                    Type: <a href="#" class="miniReel__type" title="AutoPlay MiniReel"><strong>Lightbox, with Companion Ad</strong></a> 
+                    <span class="ui__divider--bar">&nbsp;|&nbsp;</span>
+                    Created 3/13/2014
+                    <span class="ui__divider--bar">&nbsp;|&nbsp;</span>
+                    {{minireel.data.deck.length - 1}} Cards
+                </div>
+            </div>
+            <div class="publish__actions clearfix">
+                <ul class="actionbar__group">
+                    <li class="toolbar__item">
+                        <button ng-click="EditorCtrl.makePrivate()" ng-show="minireel.status === 'active'" class="toolbar__btn toolbar__makePrivate" type="button">Make Private</button>
+                    </li>
+                    <li class="toolbar__item">
+                        <button ng-click="EditorCtrl.publish()" ng-show="minireel.status === 'pending'" class="toolbar__btn toolbar__publish" type="button">Publish</button>
+                    </li>
+                    <li class="toolbar__item">
+                        <button class="toolbar__btn toolbar__delete" type="button">Delete</button>
+                    </li>
+                </ul>
+                <ul class="toolbar__group">
+                    <li class="toolbar__item">
+                        <button class="toolbar__btn toolbar__preview" type="button" ng-click="EditorCtrl.previewMode()">Preview</button>
+                    </li>
+                    <li class="toolbar__item">
+                        <button class="toolbar__btn toolbar__save" type="button">Save</button>
+                    </li>
+                </ul>
+            </div>
         </div>
     </header>
 
