@@ -438,37 +438,8 @@
                             expect(success.calls.mostRecent().args[0].data.branding).toBe('elitedaily');
                         });
 
-                        it('should insert an intro card that is data-bound to the minireel itself', function() {
-                            var minireel = success.calls.mostRecent().args[0],
-                                intro = deck[0];
-
-                            expect(intro).toEqual({
-                                id: jasmine.any(String),
-                                title: minireel.title,
-                                note: minireel.summary,
-                                type: 'intro',
-                                label: 'Intro',
-                                ad: false,
-                                data: {}
-                            });
-
-                            minireel.title = 'Your MiniReel';
-                            minireel.summary = 'Oh no...';
-
-                            expect(intro.title).toBe(minireel.title);
-                            expect(intro.note).toBe(minireel.summary);
-
-                            intro.title = 'Our MiniReel';
-                            intro.note = 'Okay!';
-
-                            expect(minireel.title).toBe(intro.title);
-                            expect(minireel.summary).toBe(intro.note);
-
-                            expect(deck[0].id).toMatch(/rc-[a-zA-Z0-9]{14}/);
-                        });
-
                         it('should transpile the various video cards into two cards', function() {
-                            expect(deck[1]).toEqual({
+                            expect(deck[0]).toEqual({
                                 id: 'rc-c9cf24e87307ac',
                                 type: 'video',
                                 title: 'The Slowest Turtle',
@@ -483,7 +454,7 @@
                                 }
                             });
 
-                            expect(deck[2]).toEqual({
+                            expect(deck[1]).toEqual({
                                 id: 'rc-17721b74ce2584',
                                 type: 'videoBallot',
                                 title: 'The Ugliest Turtle',
@@ -502,7 +473,7 @@
                                 }
                             });
 
-                            expect(deck[4]).toEqual({
+                            expect(deck[3]).toEqual({
                                 id: 'rc-61fa9683714e13',
                                 type: 'videoBallot',
                                 title: 'The Smartest Turtle',
@@ -521,7 +492,7 @@
                                 }
                             });
 
-                            expect(deck[5]).toEqual({
+                            expect(deck[4]).toEqual({
                                 id: 'rc-d8ebd5461ba524',
                                 type: 'video',
                                 title: 'The Dumbest Turtle',
@@ -538,7 +509,7 @@
                         });
 
                         it('should transpile the ad cards', function() {
-                            expect(deck[3]).toEqual({
+                            expect(deck[2]).toEqual({
                                 id: 'rc-1c7a46097a5d4a',
                                 type: 'ad',
                                 title: 'Advertisement',
@@ -550,7 +521,7 @@
                                     publisher: true
                                 }
                             });
-                            expect(deck[6]).toEqual({
+                            expect(deck[5]).toEqual({
                                 id: 'rc-f31cabb9193ef9',
                                 type: 'ad',
                                 title: 'Advertisement',
@@ -565,7 +536,7 @@
                         });
 
                         it('should transpile the links cards', function() {
-                            expect(deck[7]).toEqual({
+                            expect(deck[6]).toEqual({
                                 id: 'rc-25c1f60b933186',
                                 type: 'links',
                                 title: 'If You Love Turtles',
@@ -579,7 +550,7 @@
                         });
 
                         it('should transpile the recap cards', function() {
-                            expect(deck[8]).toEqual({
+                            expect(deck[7]).toEqual({
                                 id: 'rc-b74a127991ee75',
                                 type: 'recap',
                                 title: 'Recap',
@@ -628,16 +599,6 @@
                                 expect(result.id).not.toBe(minireel.id);
                             });
 
-                            it('should generate a new intro card that is bound to the new minireel', function() {
-                                var intro = result.data.deck[0];
-
-                                intro.title = 'foo';
-                                expect(result.title).toBe('foo');
-
-                                intro.note = 'hey';
-                                expect(result.summary).toBe('hey');
-                            });
-
                             it('should cache the new minireel', function() {
                                 var success = jasmine.createSpy('success');
 
@@ -665,15 +626,6 @@
                                     status: 'pending',
                                     data: {
                                         deck: [
-                                            {
-                                                id: jasmine.any(String),
-                                                title: 'Untitled',
-                                                note: null,
-                                                type: 'intro',
-                                                label: 'Intro',
-                                                ad: false,
-                                                data: {}
-                                            },
                                             {
                                                 id: jasmine.any(String),
                                                 title: 'Recap',
