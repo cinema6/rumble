@@ -185,6 +185,10 @@
         position:absolute; z-index:11; top:50%; left:50%;
         background:#fff;
     }
+        .ui__modal--confirmation {
+            width:24em; height:7em;
+            margin:-3.5em 0 0 -12em;
+        }
     /*  shared modal styles
     ========================================================================== */
         .modal__content {
@@ -224,6 +228,9 @@
             text-align: right;
             position:absolute; bottom:1.5em; left:1.5em; right:1.5em;
         }
+            .modal__btnFooter--confirmation {
+                text-align: left;
+            }
 
     /*  preview panel
     ========================================================================== */
@@ -784,16 +791,16 @@
                 .toolbar__makePrivate:hover {
                     background:#8e8e8e;
                 }
-            .toolbar__publish {
+            .toolbar__publish, .toolbar__confirm {
                 background:#72ad25;
             }
-                .toolbar__publish:hover {
+                .toolbar__publish:hover, .toolbar__confirm:hover {
                     background:#7cc61b;
                 }
-            .toolbar__delete {
+            .toolbar__delete, .toolbar__cancel {
                 background:#d61212;
             }
-                .toolbar__delete:hover {
+                .toolbar__delete:hover, .toolbar__cancel:hover {
                     background:#ee1b1b;
                 }
 
