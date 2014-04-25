@@ -7,7 +7,7 @@
             </div>
         </li>
         <li class="card__list-item" render-deck="deck">
-            <div class="card__container"
+            <div class="card__container card--{{this.type}}"
                 ng-class="{
                     'card__container--dragging': DragCtrl.currentDrags[0] === DragCtrl.draggables[this.id]
                 }"
