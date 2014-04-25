@@ -47,14 +47,16 @@
             });
         }])
 
-        .controller('NewModeController', ['c6State',
-        function                         ( c6State ) {
-            this.launchEditor = function() {
+        .controller('NewModeController', ['$scope','c6State',
+        function                         ( $scope , c6State ) {
+            var NewCtrl = $scope.NewCtrl;
+
+            this.setMode = function() {
                 var minireel = this.model.minireel,
                     mode = this.mode;
 
                 minireel.mode = mode;
-                c6State.goTo('editor', { minireelId: minireel.id });
+                c6State.goTo(NewCtrl.baseState + '.autoplay');
             };
         }]);
 }());
