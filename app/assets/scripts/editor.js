@@ -481,7 +481,13 @@
                         }
 
                         function scan(time) {
-                            video.currentTime = time;
+                            if (video.readyState < 3) {
+                                video.play();
+                            }
+
+                            if (video.readyState > 0) {
+                                video.currentTime = time;
+                            }
                         }
 
                         function finishScan() {

@@ -120,7 +120,7 @@
                         it('should open the minireel with the id provided, create a new one based on it, and go to the editor with that minireel', function() {
                             expect(MiniReelService.open).toHaveBeenCalledWith('e-abc');
                             expect(MiniReelService.create).toHaveBeenCalledWith(minireel);
-                            expect(c6State.goTo).toHaveBeenCalledWith('editor', { minireelId: 'e-a48e32a8c1a87f' });
+                            expect(c6State.goTo).toHaveBeenCalledWith('editor.setMode.category', { minireelId: 'e-a48e32a8c1a87f' });
                         });
 
                         it('should close the dialog', function() {
