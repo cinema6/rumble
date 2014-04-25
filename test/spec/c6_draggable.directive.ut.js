@@ -83,6 +83,33 @@
                 });
             });
 
+            it('should not allow clicks to propagate on an element after it is dragged', function() {
+                var finger = new Finger(),
+                    $draggable = $('<span c6-draggable ng-click="spy()"></span>');
+
+                $scope.spy = jasmine.createSpy('click spy');
+                testFrame.$body.append($draggable);
+                $scope.$apply(function() {
+                    $compile($draggable)($scope);
+                });
+
+                finger.placeOn($draggable);
+                finger.lift($draggable);
+                expect($scope.spy).toHaveBeenCalled();
+
+                $scope.spy.calls.reset();
+
+                finger.placeOn($draggable);
+                finger.drag(0, 0);
+                finger.lift();
+
+                expect($scope.spy).not.toHaveBeenCalled();
+
+                finger.placeOn($draggable);
+                finger.lift();
+                expect($scope.spy).toHaveBeenCalled();
+            });
+
             it('should support disabling the draggability of an item if "false" is passed into the c6-draggable attribute', function() {
                 var finger = new Finger(),
                     $draggable = $('<span c6-draggable="enabled" style="display: inline-block; width: 50px; height: 50px;"></span>'),
