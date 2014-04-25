@@ -1,0 +1,6 @@
+<div ng-if="model.dialog">
+    <c6-alias model="model.dialog" as="dialog">
+        <h3>{{dialog.prompt}}</h3>
+        <button ng-click="dialog.onAffirm()">{{dialog.affirm}}</button><button ng-click="dialog.onCancel()">{{dialog.cancel}}</button>
+    </c6-alias>
+</div>
