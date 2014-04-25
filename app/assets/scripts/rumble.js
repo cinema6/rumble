@@ -783,6 +783,9 @@
                         shouldPlay = true;
                         iface.play();
                     }
+
+                    self.dismissBallot();
+                    self.dismissBallotResults();
                 } else {
                     if (_data.modules.ballot.ballotActive) {
                         _data.modules.ballot.vote = -1;

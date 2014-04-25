@@ -292,6 +292,9 @@
 
                     describe('when active', function() {
                         beforeEach(function() {
+                            spyOn(VideoEmbedCardCtrl, 'dismissBallot');
+                            spyOn(VideoEmbedCardCtrl, 'dismissBallotResults');
+
                             $scope.$apply(function() {
                                 $scope.active = false;
                             });
@@ -303,6 +306,11 @@
 
                         it('should bind to the controls', function() {
                             expect(ControlsService.bindTo).toHaveBeenCalledWith(iface);
+                        });
+
+                        it('should dismiss the ballot and results', function() {
+                            expect(VideoEmbedCardCtrl.dismissBallot).toHaveBeenCalled();
+                            expect(VideoEmbedCardCtrl.dismissBallotResults).toHaveBeenCalled();
                         });
 
                         describe('if the behavior can autoplay and the experience is set to autoplay', function() {
@@ -553,11 +561,12 @@
                         it('should be temporarily overrideable by VideoEmbedCardCtrl.dismissBallot()', function() {
                             $scope.$apply(function() {
                                 $scope.active = true;
-                                iface.emit('play', iface);
-                                iface.emit('play', iface);
-                                iface.paused = true;
-                                iface.ended = false;
                             });
+                            iface.emit('play', iface);
+                            iface.emit('play', iface);
+                            iface.paused = true;
+                            iface.ended = false;
+
                             expect(ballot.ballotActive).toBe(true);
 
                             $scope.$apply(function() {
