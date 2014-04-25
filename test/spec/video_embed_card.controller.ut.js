@@ -645,7 +645,29 @@
                             });
                         });
 
+                        describe('if this is an autoplay minireel', function() {
+                            beforeEach(function() {
+                                c6AppData.experience.data.autoplay = true;
+
+                                $scope.$apply(function() {
+                                    VideoEmbedCardCtrl = $controller('VideoEmbedCardController', { $scope: $scope });
+                                });
+                            });
+
+                            it('should be false', function() {
+                                expect(VideoEmbedCardCtrl.enablePlayButton).toBe(false);
+                            });
+                        });
+
                         describe('otherwise', function() {
+                            beforeEach(function() {
+                                c6AppData.experience.data.autoplay = false;
+
+                                $scope.$apply(function() {
+                                    VideoEmbedCardCtrl = $controller('VideoEmbedCardController', { $scope: $scope });
+                                });
+                            });
+
                             it('should be true', function() {
                                 expect(VideoEmbedCardCtrl.enablePlayButton).toBe(true);
                             });

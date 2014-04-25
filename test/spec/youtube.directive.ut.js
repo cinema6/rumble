@@ -25,7 +25,12 @@
                 module('c6.rumble',function($provide){
                     $provide.value('c6AppData', {
                         mode: 'mobile',
-                        behaviors: {}
+                        behaviors: {},
+                        experience: {
+                            data: {
+                                autoplay: true
+                            }
+                        }
                     });
 
                     youtube.createPlayer = jasmine.createSpy('youtube.createPlayer')
