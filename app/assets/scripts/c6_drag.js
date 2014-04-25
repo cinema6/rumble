@@ -2,6 +2,8 @@
     'use strict';
     /* global define:true */
 
+    var forEach = angular.forEach;
+
     var styles = document.createElement('style');
 
     styles.type = 'text/css';
@@ -238,6 +240,7 @@
                         self.removeClass('c6-drag-zone-under-' + draggable.id);
                     }
 
+                    this.enabled = true;
                     this.currentlyUnder = [];
 
                     this.init.apply(this, arguments);
@@ -259,7 +262,6 @@
             // collision.
             .controller('C6DragSpaceController', ['$scope','c6EventEmitter',
             function                             ( $scope , c6EventEmitter ) {
-                var forEach = angular.forEach;
 
                 var C6DragSpaceCtrl = this;
 
@@ -283,7 +285,7 @@
                 function emitCollision(zone, draggable, skipApply) {
                     var hit;
 
-                    if (zone.currentlyUnder.indexOf(draggable) < 0) {
+                    if (zone.currentlyUnder.indexOf(draggable) < 0 && zone.enabled) {
                         hit = function hit() {
                             zone.emit('draggableEnter', draggable);
                             draggable.emit('enterZone', zone);
@@ -490,6 +492,20 @@
                         $element.on('$destroy', function() {
                             zone.removeAllListeners();
                             C6DragSpaceCtrl.removeZone(zone);
+                        });
+
+                        scope.$watch($attrs.c6DragZone, function(enabled, wasEnabled) {
+                            if (enabled === false) {
+                                zone.enabled = false;
+
+                                forEach(zone.currentlyUnder, function(draggable) {
+                                    zone.emit('draggableLeave', draggable);
+                                    draggable.emit('leaveZone', zone);
+                                });
+                            } else if (enabled !== wasEnabled) {
+                                zone.enabled = true;
+                                C6DragSpaceCtrl.refresh();
+                            }
                         });
                     }
                 };
