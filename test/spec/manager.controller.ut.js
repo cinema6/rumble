@@ -7,6 +7,7 @@
                 $scope,
                 $controller,
                 $q,
+                ConfirmDialogService,
                 MiniReelService,
                 ManagerCtrl;
 
@@ -35,6 +36,7 @@
                     $rootScope = $injector.get('$rootScope');
                     $controller = $injector.get('$controller');
                     MiniReelService = $injector.get('MiniReelService');
+                    ConfirmDialogService = $injector.get('ConfirmDialogService');
                     $q = $injector.get('$q');
 
                     c6State = $injector.get('c6State');
@@ -42,6 +44,9 @@
                     $scope = $rootScope.$new();
                     ManagerCtrl = $controller('ManagerController', { $scope: $scope, cModel: model });
                 });
+
+                spyOn(ConfirmDialogService, 'display');
+                spyOn(ConfirmDialogService, 'close');
             });
 
             it('should exist', function() {
@@ -57,6 +62,20 @@
             });
 
             describe('methods', function() {
+                function assertDialogPresented() {
+                    expect(ConfirmDialogService.display).toHaveBeenCalledWith({
+                        prompt: jasmine.any(String),
+                        affirm: jasmine.any(String),
+                        cancel: jasmine.any(String),
+                        onAffirm: jasmine.any(Function),
+                        onCancel: jasmine.any(Function)
+                    });
+                }
+
+                function dialog() {
+                    return ConfirmDialogService.display.calls.mostRecent().args[0];
+                }
+
                 describe('copy(minireelId)', function() {
                     var minireel,
                         newMiniReel;
@@ -75,11 +94,40 @@
                         });
                     });
 
-                    it('should open the minireel with the id provided, create a new one based on it, and go to the editor with that minireel', function() {
-                        expect(MiniReelService.open).toHaveBeenCalledWith('e-abc');
-                        expect(MiniReelService.create).toHaveBeenCalledWith(minireel);
-                        expect(c6State.goTo).toHaveBeenCalledWith('editor', { minireelId: 'e-a48e32a8c1a87f' });
+                    it('should not create a minireel', function() {
+                        expect(MiniReelService.create).not.toHaveBeenCalled();
                     });
+
+                    it('should display a confirmation dialog', assertDialogPresented);
+
+                    describe('if the confirmation is canceled', function() {
+                        beforeEach(function() {
+                            dialog().onCancel();
+                        });
+
+                        it('should close the dialog', function() {
+                            expect(ConfirmDialogService.close).toHaveBeenCalled();
+                        });
+                    });
+
+                    describe('if the confirmation is affirmed', function() {
+                        beforeEach(function() {
+                            $scope.$apply(function() {
+                                dialog().onAffirm();
+                            });
+                        });
+
+                        it('should open the minireel with the id provided, create a new one based on it, and go to the editor with that minireel', function() {
+                            expect(MiniReelService.open).toHaveBeenCalledWith('e-abc');
+                            expect(MiniReelService.create).toHaveBeenCalledWith(minireel);
+                            expect(c6State.goTo).toHaveBeenCalledWith('editor.setMode.category', { minireelId: 'e-a48e32a8c1a87f' });
+                        });
+
+                        it('should close the dialog', function() {
+                            expect(ConfirmDialogService.close).toHaveBeenCalled();
+                        });
+                    });
+
                 });
 
                 describe('edit(minireel)', function() {
@@ -104,8 +152,34 @@
                         ManagerCtrl.makePublic(minireel);
                     });
 
-                    it('should publish the minireel', function() {
-                        expect(MiniReelService.publish).toHaveBeenCalledWith(minireel);
+                    it('should not publish the minireel', function() {
+                        expect(MiniReelService.publish).not.toHaveBeenCalled();
+                    });
+
+                    it('should display a confirmation dialog', assertDialogPresented);
+
+                    describe('if the confirmation is canceled', function() {
+                        beforeEach(function() {
+                            dialog().onCancel();
+                        });
+
+                        it('should close the dialog', function() {
+                            expect(ConfirmDialogService.close).toHaveBeenCalled();
+                        });
+                    });
+
+                    describe('if the confirmation is affirmed', function() {
+                        beforeEach(function() {
+                            dialog().onAffirm();
+                        });
+
+                        it('should publish the minireel', function() {
+                            expect(MiniReelService.publish).toHaveBeenCalledWith(minireel);
+                        });
+
+                        it('should close the dialog', function() {
+                            expect(ConfirmDialogService.close).toHaveBeenCalled();
+                        });
                     });
                 });
 
@@ -121,8 +195,56 @@
                         ManagerCtrl.makePrivate(minireel);
                     });
 
-                    it('should unpublish the minireel', function() {
-                        expect(MiniReelService.unpublish).toHaveBeenCalledWith(minireel);
+                    it('should not unpublish the minireel', function() {
+                        expect(MiniReelService.unpublish).not.toHaveBeenCalled();
+                    });
+
+                    it('should display a confirmation dialog', assertDialogPresented);
+
+                    describe('if the confirmation is canceled', function() {
+                        beforeEach(function() {
+                            dialog().onCancel();
+                        });
+
+                        it('should close the dialog', function() {
+                            expect(ConfirmDialogService.close).toHaveBeenCalled();
+                        });
+                    });
+
+                    describe('if the confirmation is affirmed', function() {
+                        beforeEach(function() {
+                            dialog().onAffirm();
+                        });
+
+                        it('should close the dialog', function() {
+                            expect(ConfirmDialogService.close).toHaveBeenCalled();
+                        });
+
+                        it('should unpublish the minireel', function() {
+                            expect(MiniReelService.unpublish).toHaveBeenCalledWith(minireel);
+                        });
+                    });
+                });
+
+                describe('remove(minireel)', function() {
+                    var minireel;
+
+                    beforeEach(function() {
+                        minireel = {};
+
+                        ManagerCtrl.remove(minireel);
+                    });
+
+                    it('should display a confirmation', assertDialogPresented);
+
+                    describe('if the confirmation is canceled', function() {
+                        beforeEach(function() {
+                            dialog().onCancel();
+                        });
+
+                        it('should close the dialog', function() {
+                            expect(ConfirmDialogService.close).toHaveBeenCalled();
+                        });
                     });
                 });
 

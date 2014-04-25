@@ -9,7 +9,9 @@
 
     angular.module('c6.mrmaker')
         .controller('EditorController', ['c6State','$scope','MiniReelService',
-        function                        ( c6State , $scope , MiniReelService ) {
+                                         'ConfirmDialogService',
+        function                        ( c6State , $scope , MiniReelService ,
+                                          ConfirmDialogService ) {
             var self = this,
                 AppCtrl = $scope.AppCtrl;
 
@@ -40,11 +42,35 @@
             });
 
             this.publish = function() {
-                MiniReelService.publish(this.model);
+                ConfirmDialogService.display({
+                    prompt: 'Are you sure you want to make this MiniReel public?',
+                    affirm: 'Publish',
+                    cancel: 'Cancel',
+                    onAffirm: function() {
+                        ConfirmDialogService.close();
+
+                        MiniReelService.publish(self.model);
+                    },
+                    onCancel: function() {
+                        ConfirmDialogService.close();
+                    }
+                });
             };
 
             this.makePrivate = function() {
-                MiniReelService.unpublish(this.model);
+                ConfirmDialogService.display({
+                    prompt: 'Are you sure you want to make this MiniReel private?',
+                    affirm: 'Make Private',
+                    cancel: 'Cancel',
+                    onAffirm: function() {
+                        ConfirmDialogService.close();
+
+                        MiniReelService.unpublish(self.model);
+                    },
+                    onCancel: function() {
+                        ConfirmDialogService.close();
+                    }
+                });
             };
 
             this.editCard = function(card) {
@@ -56,9 +82,21 @@
             };
 
             this.deleteCard = function(card) {
-                var deck = this.model.data.deck;
+                ConfirmDialogService.display({
+                    prompt: 'Are you sure you want to delete this card?',
+                    affirm: 'Delete',
+                    cancel: 'Keep',
+                    onAffirm: function() {
+                        var deck = self.model.data.deck;
 
-                deck.splice(deck.indexOf(card), 1);
+                        ConfirmDialogService.close();
+
+                        deck.splice(deck.indexOf(card), 1);
+                    },
+                    onCancel: function() {
+                        ConfirmDialogService.close();
+                    }
+                });
             };
 
             this.previewMode = function(card) {
@@ -68,6 +106,20 @@
 
             this.closePreview = function() {
                 this.preview = false;
+            };
+
+            this.deleteMinireel = function() {
+                ConfirmDialogService.display({
+                    prompt: 'Are you sure you want to delete this MiniReel?',
+                    affirm: 'Delete',
+                    cancel: 'Keep',
+                    onCancel: function() {
+                        ConfirmDialogService.close();
+                    },
+                    onAffirm: function() {
+                        // TODO: DELETE
+                    }
+                });
             };
 
             $scope.$on('addCard', function(event, card, index) {
@@ -124,9 +176,9 @@
             // override the device setting for previewing
             profile.device = this.device;
 
-            $scope.$on('mrPreview:initExperience', function(event, experience, session) {
+            $scope.$on('mrPreview:initExperience', function(event, exp, session) {
                 // convert the MRinator experience to a MRplayer experience
-                experience = MiniReelService.convertForPlayer(experience);
+                var experience = MiniReelService.convertForPlayer(exp);
 
                 // add the converted experience to the session for comparing later
                 session.experience = copy(experience);
@@ -157,13 +209,13 @@
 
                 // register another listener within the init handler
                 // this will share the session
-                $scope.$on('mrPreview:updateExperience', function(event, experience, newCard) {
+                $scope.$on('mrPreview:updateExperience', function(event, exp, newCard) {
                     // the EditorCtrl $broadcasts the most up-to-date experience model
                     // when the user clicks 'preview'.
                     // it may have a newCard to go to
 
                     // we convert the experience
-                    experience = MiniReelService.convertForPlayer(experience);
+                    experience = MiniReelService.convertForPlayer(exp);
 
                     // if it's been changed or we're previewing a specific card
                     // then we ping the player
@@ -429,7 +481,13 @@
                         }
 
                         function scan(time) {
-                            video.currentTime = time;
+                            if (video.readyState < 3) {
+                                video.play();
+                            }
+
+                            if (video.readyState > 0) {
+                                video.currentTime = time;
+                            }
                         }
 
                         function finishScan() {

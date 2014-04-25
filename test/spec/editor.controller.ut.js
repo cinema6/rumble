@@ -9,6 +9,7 @@
                 $controller,
                 c6State,
                 MiniReelService,
+                ConfirmDialogService,
                 AppCtrl,
                 EditorCtrl;
 
@@ -39,6 +40,7 @@
                     $controller = $injector.get('$controller');
                     c6State = $injector.get('c6State');
                     MiniReelService = $injector.get('MiniReelService');
+                    ConfirmDialogService = $injector.get('ConfirmDialogService');
 
                     $scope = $rootScope.$new();
                     AppCtrl = $scope.AppCtrl = {
@@ -48,6 +50,9 @@
                     EditorCtrl = $controller('EditorController', { $scope: $scope, cModel: cModel });
                     EditorCtrl.model = cModel;
                 });
+
+                spyOn(ConfirmDialogService, 'display');
+                spyOn(ConfirmDialogService, 'close');
             });
 
             it('should exist', function() {
@@ -125,6 +130,20 @@
             });
 
             describe('methods', function() {
+                function assertDialogPresented() {
+                    expect(ConfirmDialogService.display).toHaveBeenCalledWith({
+                        prompt: jasmine.any(String),
+                        affirm: jasmine.any(String),
+                        cancel: jasmine.any(String),
+                        onAffirm: jasmine.any(Function),
+                        onCancel: jasmine.any(Function)
+                    });
+                }
+
+                function dialog() {
+                    return ConfirmDialogService.display.calls.mostRecent().args[0];
+                }
+
                 describe('publish()', function() {
                     beforeEach(function() {
                         spyOn(MiniReelService, 'publish');
@@ -132,8 +151,34 @@
                         EditorCtrl.publish();
                     });
 
-                    it('should publish the minireel', function() {
-                        expect(MiniReelService.publish).toHaveBeenCalledWith(cModel);
+                    it('should not publish the minireel', function() {
+                        expect(MiniReelService.publish).not.toHaveBeenCalled();
+                    });
+
+                    it('should display a confirmation dialog', assertDialogPresented);
+
+                    describe('if the confirmation is canceled', function() {
+                        beforeEach(function() {
+                            dialog().onCancel();
+                        });
+
+                        it('should close the dialog', function() {
+                            expect(ConfirmDialogService.close).toHaveBeenCalled();
+                        });
+                    });
+
+                    describe('if the confirmation is affirmed', function() {
+                        beforeEach(function() {
+                            dialog().onAffirm();
+                        });
+
+                        it('should publish the minireel', function() {
+                            expect(MiniReelService.publish).toHaveBeenCalledWith(cModel);
+                        });
+
+                        it('should close the dialog', function() {
+                            expect(ConfirmDialogService.close).toHaveBeenCalled();
+                        });
                     });
                 });
 
@@ -144,8 +189,34 @@
                         EditorCtrl.makePrivate();
                     });
 
-                    it('should unpublish the minireel', function() {
-                        expect(MiniReelService.unpublish).toHaveBeenCalledWith(cModel);
+                    it('should not unpublish the minireel', function() {
+                        expect(MiniReelService.unpublish).not.toHaveBeenCalled();
+                    });
+
+                    it('should display a confirmation dialog', assertDialogPresented);
+
+                    describe('if the confirmation is canceled', function() {
+                        beforeEach(function() {
+                            dialog().onCancel();
+                        });
+
+                        it('should close the dialog', function() {
+                            expect(ConfirmDialogService.close).toHaveBeenCalled();
+                        });
+                    });
+
+                    describe('if the confirmation is affirmed', function() {
+                        beforeEach(function() {
+                            dialog().onAffirm();
+                        });
+
+                        it('should close the dialog', function() {
+                            expect(ConfirmDialogService.close).toHaveBeenCalled();
+                        });
+
+                        it('should unpublish the minireel', function() {
+                            expect(MiniReelService.unpublish).toHaveBeenCalledWith(cModel);
+                        });
                     });
                 });
 
@@ -182,9 +253,54 @@
                         EditorCtrl.deleteCard(card);
                     });
 
-                    it('should remove the provided card from the deck', function() {
-                        expect(cModel.data.deck.length).toBe(2);
-                        expect(cModel.data.deck).not.toContain(card);
+                    it('should not remove the card from the deck', function() {
+                        expect(cModel.data.deck.length).toBe(3);
+                        expect(cModel.data.deck).toContain(card);
+                    });
+
+                    it('should display a confirmation dialog', assertDialogPresented);
+
+                    describe('if the confirmation is canceled', function() {
+                        beforeEach(function() {
+                            dialog().onCancel();
+                        });
+
+                        it('should close the dialog', function() {
+                            expect(ConfirmDialogService.close).toHaveBeenCalled();
+                        });
+                    });
+
+                    describe('if the confirmation is affirmed', function() {
+                        beforeEach(function() {
+                            dialog().onAffirm();
+                        });
+
+                        it('should close the dialog', function() {
+                            expect(ConfirmDialogService.close).toHaveBeenCalled();
+                        });
+
+                        it('should remove the provided card from the deck', function() {
+                            expect(cModel.data.deck.length).toBe(2);
+                            expect(cModel.data.deck).not.toContain(card);
+                        });
+                    });
+                });
+
+                describe('deleteMinireel()', function() {
+                    beforeEach(function() {
+                        EditorCtrl.deleteMinireel();
+                    });
+
+                    it('should display a confirmation', assertDialogPresented);
+
+                    describe('if the confirmation is canceled', function() {
+                        beforeEach(function() {
+                            dialog().onCancel();
+                        });
+
+                        it('should close the dialog', function() {
+                            expect(ConfirmDialogService.close).toHaveBeenCalled();
+                        });
                     });
                 });
 

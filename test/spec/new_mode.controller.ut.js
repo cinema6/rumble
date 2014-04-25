@@ -7,6 +7,7 @@
                 $scope,
                 $controller,
                 c6State,
+                NewCtrl,
                 NewModeCtrl;
 
             beforeEach(function() {
@@ -18,6 +19,9 @@
                     c6State = $injector.get('c6State');
 
                     $scope = $rootScope.$new();
+                    NewCtrl = $scope.NewCtrl = {
+                        baseState: 'manager.new'
+                    };
                     NewModeCtrl = $controller('NewModeController', { $scope: $scope });
                     NewModeCtrl.model = {
                         minireel: {
@@ -33,12 +37,12 @@
             });
 
             describe('methods', function() {
-                describe('launchEditor()', function() {
+                describe('setMode()', function() {
                     beforeEach(function() {
                         spyOn(c6State, 'goTo');
 
                         NewModeCtrl.mode = 'foo';
-                        NewModeCtrl.launchEditor();
+                        NewModeCtrl.setMode();
                     });
 
                     it('should set the experience\'s mode to the provided mode', function() {
@@ -46,7 +50,7 @@
                     });
 
                     it('should go to the editor state with the id of the new minireel', function() {
-                        expect(c6State.goTo).toHaveBeenCalledWith('editor', { minireelId: 'e-123' });
+                        expect(c6State.goTo).toHaveBeenCalledWith(NewCtrl.baseState + '.autoplay');
                     });
                 });
             });
