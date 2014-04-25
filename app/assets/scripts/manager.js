@@ -2,20 +2,33 @@
     'use strict';
 
     angular.module('c6.mrmaker')
-        .controller('ManagerController', ['c6State','MiniReelService',
-        function                         ( c6State , MiniReelService ) {
+        .controller('ManagerController', ['c6State','MiniReelService','ConfirmDialogService',
+        function                         ( c6State , MiniReelService , ConfirmDialogService ) {
             var self = this;
 
             this.filter = 'all';
 
             this.copy = function(minireelId) {
-                MiniReelService.open(minireelId)
-                    .then(function copyExisting(minireel) {
-                        return MiniReelService.create(minireel);
-                    })
-                    .then(function editCopy(minireel) {
-                        c6State.goTo('editor', { minireelId: minireel.id });
-                    });
+                ConfirmDialogService.display({
+                    prompt: 'Are you sure you want to copy this MiniReel?',
+                    affirm: 'Yes',
+                    cancel: 'No',
+                    onAffirm: function() {
+                        ConfirmDialogService.close();
+
+                        MiniReelService.open(minireelId)
+                            .then(function copyExisting(minireel) {
+                                return MiniReelService.create(minireel);
+                            })
+                            .then(function editCopy(minireel) {
+                                c6State.goTo('editor', { minireelId: minireel.id });
+                            });
+                    },
+                    onCancel: function() {
+                        ConfirmDialogService.close();
+                    }
+                });
+
             };
 
             this.edit = function(minireel) {

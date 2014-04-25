@@ -7,6 +7,7 @@
                 $scope,
                 $controller,
                 $q,
+                ConfirmDialogService,
                 MiniReelService,
                 ManagerCtrl;
 
@@ -35,6 +36,7 @@
                     $rootScope = $injector.get('$rootScope');
                     $controller = $injector.get('$controller');
                     MiniReelService = $injector.get('MiniReelService');
+                    ConfirmDialogService = $injector.get('ConfirmDialogService');
                     $q = $injector.get('$q');
 
                     c6State = $injector.get('c6State');
@@ -67,6 +69,8 @@
                             id: 'e-a48e32a8c1a87f'
                         };
 
+                        spyOn(ConfirmDialogService, 'display');
+                        spyOn(ConfirmDialogService, 'close');
                         spyOn(MiniReelService, 'open').and.returnValue($q.when(minireel));
                         spyOn(MiniReelService, 'create').and.returnValue(newMiniReel);
 
@@ -75,11 +79,48 @@
                         });
                     });
 
-                    it('should open the minireel with the id provided, create a new one based on it, and go to the editor with that minireel', function() {
-                        expect(MiniReelService.open).toHaveBeenCalledWith('e-abc');
-                        expect(MiniReelService.create).toHaveBeenCalledWith(minireel);
-                        expect(c6State.goTo).toHaveBeenCalledWith('editor', { minireelId: 'e-a48e32a8c1a87f' });
+                    it('should not create a minireel', function() {
+                        expect(MiniReelService.create).not.toHaveBeenCalled();
                     });
+
+                    it('should display a confirmation dialog', function() {
+                        expect(ConfirmDialogService.display).toHaveBeenCalledWith({
+                            prompt: jasmine.any(String),
+                            affirm: jasmine.any(String),
+                            cancel: jasmine.any(String),
+                            onAffirm: jasmine.any(Function),
+                            onCancel: jasmine.any(Function)
+                        });
+                    });
+
+                    describe('if the confirmation is canceled', function() {
+                        beforeEach(function() {
+                            ConfirmDialogService.display.calls.mostRecent().args[0].onCancel();
+                        });
+
+                        it('should close the dialog', function() {
+                            expect(ConfirmDialogService.close).toHaveBeenCalled();
+                        });
+                    });
+
+                    describe('if the confirmation is affirmed', function() {
+                        beforeEach(function() {
+                            $scope.$apply(function() {
+                                ConfirmDialogService.display.calls.mostRecent().args[0].onAffirm();
+                            });
+                        });
+
+                        it('should open the minireel with the id provided, create a new one based on it, and go to the editor with that minireel', function() {
+                            expect(MiniReelService.open).toHaveBeenCalledWith('e-abc');
+                            expect(MiniReelService.create).toHaveBeenCalledWith(minireel);
+                            expect(c6State.goTo).toHaveBeenCalledWith('editor', { minireelId: 'e-a48e32a8c1a87f' });
+                        });
+
+                        it('should close the dialog', function() {
+                            expect(ConfirmDialogService.close).toHaveBeenCalled();
+                        });
+                    });
+
                 });
 
                 describe('edit(minireel)', function() {
