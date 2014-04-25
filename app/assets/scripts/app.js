@@ -334,6 +334,43 @@
                 .index('manager');
         }])
 
+        .service('ConfirmDialogService', [function() {
+            var model = {},
+                dialog = null;
+
+            Object.defineProperty(this, 'model', {
+                get: function() {
+                    return model;
+                }
+            });
+
+            Object.defineProperty(model, 'dialog', {
+                get: function() {
+                    return dialog;
+                }
+            });
+
+            this.display = function(dialogModel) {
+                dialog = dialogModel;
+            };
+
+            this.close = function() {
+                dialog = null;
+            };
+        }])
+
+        .directive('confirmDialog', ['c6UrlMaker','ConfirmDialogService',
+        function                    ( c6UrlMaker , ConfirmDialogService ) {
+            return {
+                restrict: 'E',
+                templateUrl: c6UrlMaker('views/directives/confirm_dialog.html'),
+                scope: {},
+                link: function(scope) {
+                    scope.model = ConfirmDialogService.model;
+                }
+            };
+        }])
+
         .directive('c6ClickOutside', ['$document','$timeout',
         function                     ( $document , $timeout ) {
             return {
