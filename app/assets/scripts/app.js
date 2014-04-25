@@ -123,6 +123,14 @@
                         controller.model = model;
                         controller.mode = model.modes[0].value;
                     }]
+                },
+                autoplay: {
+                    controller: 'GenericController',
+                    controllerAs: 'NewAutoplayCtrl',
+                    templateUrl: assets('views/manager/new/autoplay.html'),
+                    model:  [function() {
+                        return this.cParent.cModel.minireel;
+                    }]
                 }
             };
 

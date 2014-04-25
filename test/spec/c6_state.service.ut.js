@@ -381,6 +381,18 @@
                                 expect(success).toHaveBeenCalledWith(childState1);
                             });
 
+                            it('should clean up after a state if the transition fails', function() {
+                                $rootScope.$apply(function() {
+                                    c6State.transitionTo('home');
+                                });
+                                homeState.cModel = {};
+
+                                $rootScope.$apply(function() {
+                                    resolveState.reject('There was an error');
+                                });
+                                expect(homeState.cModel).toBeNull();
+                            });
+
                             it('should support "backing out" of nested states', function() {
                                 $rootScope.$apply(function() {
                                     c6State.transitionTo('parent.child2.grandchild');
@@ -443,6 +455,19 @@
                                 expect(c6State.current).toBeNull();
                                 finish(homeState);
                                 expect(c6State.current).toBe(homeState);
+                            });
+
+                            it('should return a rejected promise if something fails', function() {
+                                var fail = jasmine.createSpy('transitionTo() fail');
+
+                                $rootScope.$apply(function() {
+                                    c6State.transitionTo('home').catch(fail);
+                                });
+                                $rootScope.$apply(function() {
+                                    resolveState.reject('error!');
+                                });
+
+                                expect(fail).toHaveBeenCalledWith('error!');
                             });
 
                             it('should wait for any pending transitions and the call resolveState', function() {

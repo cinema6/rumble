@@ -122,30 +122,6 @@
 
         .animation('.card__container', function() {
             return {
-                beforeAddClass: function($element, className, done) {
-                    function shrink($element, done) {
-                        $element.animate({
-                            width: '0'
-                        }, {
-                            complete: done,
-                            progress: function() {
-                                refresh($element);
-                            }
-                        });
-
-                        return function() {
-                            $element.stop();
-                            $element.removeAttr('style');
-                        };
-                    }
-
-                    switch (className) {
-                    case 'card__container--dragging':
-                        return shrink($element, done);
-                    default:
-                        return done();
-                    }
-                },
                 removeClass: function($element, className, done) {
                     function grow($element, done) {
                         var zone = $element.data('cDragZone');
@@ -154,7 +130,6 @@
                             width: '10rem'
                         }, {
                             complete: function() {
-                                zone.emit('animationComplete');
                                 done();
                             },
                             progress: function() {
@@ -165,6 +140,7 @@
                         return function() {
                             $element.stop();
                             $element.removeAttr('style');
+                            zone.emit('animationComplete');
                         };
                     }
 
