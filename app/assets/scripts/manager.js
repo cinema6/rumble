@@ -36,11 +36,49 @@
             };
 
             this.makePublic = function(minireel) {
-                MiniReelService.publish(minireel);
+                ConfirmDialogService.display({
+                    prompt: 'Are you sure you want to make this MiniReel public?',
+                    affirm: 'Publish',
+                    cancel: 'Cancel',
+                    onAffirm: function() {
+                        ConfirmDialogService.close();
+
+                        MiniReelService.publish(minireel);
+                    },
+                    onCancel: function() {
+                        ConfirmDialogService.close();
+                    }
+                });
             };
 
             this.makePrivate = function(minireel) {
-                MiniReelService.unpublish(minireel);
+                ConfirmDialogService.display({
+                    prompt: 'Are you sure you want to make this MiniReel private?',
+                    affirm: 'Make Private',
+                    cancel: 'Cancel',
+                    onAffirm: function() {
+                        ConfirmDialogService.close();
+
+                        MiniReelService.unpublish(minireel);
+                    },
+                    onCancel: function() {
+                        ConfirmDialogService.close();
+                    }
+                });
+            };
+
+            this.remove = function() {
+                ConfirmDialogService.display({
+                    prompt: 'Are you sure you want to delete this MiniReel?',
+                    affirm: 'Delete',
+                    cancel: 'Keep',
+                    onCancel: function() {
+                        ConfirmDialogService.close();
+                    },
+                    onAffirm: function() {
+                        // TODO: DELETE
+                    }
+                });
             };
 
             this.determineInclusionWithFilter = function(minireel) {
