@@ -29,8 +29,9 @@
                                       '<script>window.c6={' +
                                       'kDebug:' + grunt.config.get('settings.debug') + ',' +
                                       'kCollateralUrl:\'' + grunt.config.get('settings.locations.collateral') + '\',' +
-                                      'kApiUrl:\'' + grunt.config.get('settings.locations.api') + '\'' +
-                                      '}; __C6_DEV__ = true;</script>'; 
+                                      'kApiUrl:\'' + grunt.config.get('settings.locations.api') + '\',' +
+                                      'kDevMode: true' +
+                                      '};</script>'; 
                                 }
                             }]
                         }),

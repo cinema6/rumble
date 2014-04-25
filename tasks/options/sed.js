@@ -19,11 +19,6 @@
             replacement: '<%= _version %>',
             path: '<%= settings.distDir %>/index.html'
         },
-        index2: {
-            pattern: '__C6_DEV__',
-            replacement: 'false',
-            path: '<%= settings.distDir %>/index.html'
-        },
         app_map: {
             pattern: 'app\/assets\/scripts',
             replacement: 'rumble/<%= _version %>/scripts/raw',
