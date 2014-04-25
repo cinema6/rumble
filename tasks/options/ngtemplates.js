@@ -10,9 +10,14 @@
             prefix: '<%= _version %>/<%= buildMode %>'
         },
         dist: {
-            cwd: '<%= settings.appDir %>/assets',
-            src: 'views/<%= buildMode %>/**/*.html',
-            dest: '.tmp/templates-<%= buildMode %>.js'
+            files: [
+                {
+                    cwd: '<%= settings.appDir %>/assets',
+                    src: ['views/<%= buildMode %>/**/*.html',
+                          'views/vpaid_object_embed.html'],
+                    dest: '.tmp/templates-<%= buildMode %>.js'
+                }
+            ]
         },
         test: {
             options: {
