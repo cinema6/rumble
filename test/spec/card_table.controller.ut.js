@@ -65,6 +65,12 @@
                         expect(CardTableCtrl.position).toEqual({ x: 0 });
                     });
                 });
+
+                describe('enableDrop', function() {
+                    it('should be true', function() {
+                        expect(CardTableCtrl.enableDrop).toBe(true);
+                    });
+                });
             });
 
             describe('methods', function() {
@@ -95,30 +101,6 @@
                         })).toBe(thumbs);
                         expect(VideoThumbnailService.getThumbsFor).toHaveBeenCalledWith('vimeo', '12345');
                     });
-                });
-            });
-
-            describe('when "c6-bind-scroll(card-scroller):scroll" is $emitted', function() {
-                beforeEach(function() {
-                    DragCtrl.addZone(new Zone('scroll-left'));
-                    DragCtrl.addZone(new Zone('scroll-right'));
-
-                    $scope.$apply(function() {
-                        $scope.DragCtrl = DragCtrl;
-                    });
-
-                    spyOn(DragCtrl, 'refresh');
-                });
-
-                function $emit() {
-                    $scope.$emit('c6-bind-scroll(card-scroller):scroll');
-                }
-
-                it('should refresh the DragCtrl', function() {
-                    for (var count = 1; count < 10; count++) {
-                        $emit();
-                        expect(DragCtrl.refresh.calls.count()).toBe(count);
-                    }
                 });
             });
 
@@ -242,6 +224,23 @@
                         expect(CardTableCtrl.position.x).toBe(0);
                     });
 
+                    it('should set enableDrop to false', function() {
+                        DragCtrl.currentDrags.push(card2);
+
+                        scrollZoneRight.currentlyUnder.push(card3);
+                        scrollZoneRight.emit('draggableEnter', card3);
+
+                        scrollZoneRight.currentlyUnder.push(card2);
+                        scrollZoneRight.emit('draggableEnter', card2);
+
+                        expect(CardTableCtrl.enableDrop).toBe(false);
+
+                        scrollZoneRight.currentlyUnder.length = 0;
+                        scrollZoneRight.emit('draggableLeave', card2);
+
+                        expect(CardTableCtrl.enableDrop).toBe(true);
+                    });
+
                     it('should scroll to the right 5px every 17ms while the card is in the zone', function() {
                         DragCtrl.currentDrags.push(card2);
 
@@ -303,6 +302,7 @@
 
                         $interval.flush(1000);
                         expect(CardTableCtrl.position.x).toBe(0);
+                        expect(CardTableCtrl.enableDrop).toBe(true);
                     });
                 });
 
@@ -317,7 +317,24 @@
                         expect(CardTableCtrl.position.x).toBe(0);
                     });
 
-                    it('should scroll to the left 1px every 5ms while the card is in the zone', function() {
+                    it('should set enableDrop to false', function() {
+                        DragCtrl.currentDrags.push(card2);
+
+                        scrollZoneLeft.currentlyUnder.push(card3);
+                        scrollZoneLeft.emit('draggableEnter', card3);
+
+                        scrollZoneLeft.currentlyUnder.push(card2);
+                        scrollZoneLeft.emit('draggableEnter', card2);
+
+                        expect(CardTableCtrl.enableDrop).toBe(false);
+
+                        scrollZoneLeft.currentlyUnder.length = 0;
+                        scrollZoneLeft.emit('draggableLeave', card2);
+
+                        expect(CardTableCtrl.enableDrop).toBe(true);
+                    });
+
+                    it('should scroll to the left 1px every 17ms while the card is in the zone', function() {
                         CardTableCtrl.position.x = 50;
 
                         DragCtrl.currentDrags.push(card2);
@@ -382,6 +399,7 @@
 
                         $interval.flush(1000);
                         expect(CardTableCtrl.position.x).toBe(300);
+                        expect(CardTableCtrl.enableDrop).toBe(true);
                     });
                 });
             });
