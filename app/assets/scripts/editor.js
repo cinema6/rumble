@@ -9,7 +9,9 @@
 
     angular.module('c6.mrmaker')
         .controller('EditorController', ['c6State','$scope','MiniReelService',
-        function                        ( c6State , $scope , MiniReelService ) {
+                                         'ConfirmDialogService',
+        function                        ( c6State , $scope , MiniReelService ,
+                                          ConfirmDialogService ) {
             var self = this,
                 AppCtrl = $scope.AppCtrl;
 
@@ -40,11 +42,35 @@
             });
 
             this.publish = function() {
-                MiniReelService.publish(this.model);
+                ConfirmDialogService.display({
+                    prompt: 'Are you sure you want to make this MiniReel public?',
+                    affirm: 'Publish',
+                    cancel: 'Cancel',
+                    onAffirm: function() {
+                        ConfirmDialogService.close();
+
+                        MiniReelService.publish(self.model);
+                    },
+                    onCancel: function() {
+                        ConfirmDialogService.close();
+                    }
+                });
             };
 
             this.makePrivate = function() {
-                MiniReelService.unpublish(this.model);
+                ConfirmDialogService.display({
+                    prompt: 'Are you sure you want to make this MiniReel private?',
+                    affirm: 'Make Private',
+                    cancel: 'Cancel',
+                    onAffirm: function() {
+                        ConfirmDialogService.close();
+
+                        MiniReelService.unpublish(self.model);
+                    },
+                    onCancel: function() {
+                        ConfirmDialogService.close();
+                    }
+                });
             };
 
             this.editCard = function(card) {
@@ -56,9 +82,21 @@
             };
 
             this.deleteCard = function(card) {
-                var deck = this.model.data.deck;
+                ConfirmDialogService.display({
+                    prompt: 'Are you sure you want to delete this card?',
+                    affirm: 'Delete',
+                    cancel: 'Keep',
+                    onAffirm: function() {
+                        var deck = self.model.data.deck;
 
-                deck.splice(deck.indexOf(card), 1);
+                        ConfirmDialogService.close();
+
+                        deck.splice(deck.indexOf(card), 1);
+                    },
+                    onCancel: function() {
+                        ConfirmDialogService.close();
+                    }
+                });
             };
 
             this.previewMode = function(card) {
@@ -68,6 +106,20 @@
 
             this.closePreview = function() {
                 this.preview = false;
+            };
+
+            this.deleteMinireel = function() {
+                ConfirmDialogService.display({
+                    prompt: 'Are you sure you want to delete this MiniReel?',
+                    affirm: 'Delete',
+                    cancel: 'Keep',
+                    onCancel: function() {
+                        ConfirmDialogService.close();
+                    },
+                    onAffirm: function() {
+                        // TODO: DELETE
+                    }
+                });
             };
 
             $scope.$on('addCard', function(event, card, index) {
