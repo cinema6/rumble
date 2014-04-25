@@ -197,6 +197,9 @@
         .modal__title {
             font-weight:100; font-size:1.5em; margin:-0.25em 0 0.25em;
         }
+            .ui__modal--confirmation .modal__title {
+                font-size:1.25em; font-weight:300;
+            }
         .modal__closeBtn {
             width:1.125em; height:1.125em;
             background-position:-1.5625em -3.6875em;
@@ -803,6 +806,13 @@
                 .toolbar__delete:hover, .toolbar__cancel:hover {
                     background:#ee1b1b;
                 }
+            .toolbar__neutral {
+                background:#848484;
+            }
+                .toolbar__neutral:hover {
+                    background:#aeaeae;
+                }
+
 
     /*  publish__actions
     ========================================================================== */
