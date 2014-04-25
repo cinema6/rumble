@@ -380,6 +380,7 @@
                         scrollInterval = $interval(function() {
                             self.position.x += (5 * multiplyer);
                         }, 17);
+                        self.enableDrop = false;
                     }
 
                     function leaveScrollZone(draggable) {
@@ -390,6 +391,7 @@
                         }
 
                         $interval.cancel(scrollInterval);
+                        self.enableDrop = true;
                     }
 
                     zone.on('draggableEnter', enterScrollZone)
@@ -431,13 +433,10 @@
 
                 forEach(DragCtrl.draggables, addCard);
                 DragCtrl.on('draggableAdded', addCard);
-
-                $scope.$on('c6-bind-scroll(card-scroller):scroll', function() {
-                    DragCtrl.refresh();
-                });
             }
 
             this.position = { x: 0 };
+            this.enableDrop = true;
 
             this.getThumbs = function(card) {
                 var data = card.data;
