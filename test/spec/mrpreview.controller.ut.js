@@ -126,7 +126,8 @@
                 });
 
                 describe('mrPreview:updateExperience', function() {
-                    var newCard;
+                    var newCard,
+                    dataSentToPlayer;
 
                     beforeEach(function() {
                         newCard = {
@@ -140,7 +141,10 @@
                     });
 
                     it('should convert the experience', function() {
+                        experience.data.deck.push(newCard);
+
                         $scope.$emit('mrPreview:updateExperience', experience);
+                        expect()
                         expect(MiniReelService.convertForPlayer).toHaveBeenCalled();
                     });
 
@@ -177,11 +181,44 @@
             describe('$watcher', function() {
                 describe('device', function() {
                     describe('when the device has been changed', function() {
-                        var dataSentToPlayer;
+                        var dataSentToPlayer, updatedExperience, emitCount;
 
                         beforeEach(function() {
-                            spyOn(MiniReelService, 'convertForPlayer').and.returnValue(experience);
+                            updatedExperience = {
+                                id: 'foo',
+                                data: {
+                                    deck: [
+                                        {
+                                            id: '1'
+                                        },
+                                        {
+                                            id: '2'
+                                        },
+                                        {
+                                            id: '3'
+                                        },
+                                        {
+                                            id: 'new'
+                                        }
+                                    ]
+                                }
+                            };
+
+                            emitCount = 0;
+
+                            spyOn($scope, '$emit').and.callThrough();
+
+                            spyOn(MiniReelService, 'convertForPlayer').and.callFake(function() {
+                                if((emitCount === 0) && $scope.$emit.calls.argsFor(0)[0] === 'mrPreview:initExperience') {
+                                    emitCount++;
+                                    return experience;
+                                } else if($scope.$emit.calls.argsFor(1)[0] === 'mrPreview:updateExperience') {
+                                    return updatedExperience;
+                                }
+                            });
+
                             $scope.$emit('mrPreview:initExperience', experience, session);
+                            $scope.$emit('mrPreview:updateExperience', updatedExperience);
 
                             $scope.$apply(function() {
                                 PreviewController.device = 'desktop';
@@ -193,7 +230,7 @@
                         });
 
                         it('should tell the player to reload', function() {
-                            expect(session.ping.calls.argsFor(0)[0]).toBe('mrPreview:updateMode');
+                            expect(session.ping.calls.argsFor(2)[0]).toBe('mrPreview:updateMode');
                         });
 
                         it('should send an updated profile to the player after it reloads', function() {
@@ -202,6 +239,14 @@
                             dataSentToPlayer = responseCallback.calls.argsFor(0)[0];
 
                             expect(dataSentToPlayer.appData.profile.device).toBe('phone');
+                        });
+                        it('should send an updated experience to the player after it reloads', function() {
+                            session.emit('handshake', {}, responseCallback);
+
+                            dataSentToPlayer = responseCallback.calls.argsFor(0)[0];
+
+                            expect(dataSentToPlayer.appData.experience).not.toEqual(session.experience);
+                            expect(dataSentToPlayer.appData.experience).toEqual(updatedExperience);
                         });
                     });
                 });
