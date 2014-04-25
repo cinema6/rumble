@@ -106,6 +106,7 @@
 
             this.closePreview = function() {
                 this.preview = false;
+                $scope.$broadcast('mrPreview:reset');
             };
 
             this.deleteMinireel = function() {
@@ -232,6 +233,10 @@
                     } else {
                         session.ping('mrPreview:reset');
                     }
+                });
+
+                $scope.$on('mrPreview:reset', function() {
+                    session.ping('mrPreview:reset');
                 });
 
                 $scope.$watch(function() {
