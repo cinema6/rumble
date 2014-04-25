@@ -140,8 +140,8 @@
             box-shadow: 0 3px 3px 0 rgba(0,0,0,0.5);
         }
         .mr-nav__btn {
-            width:3rem; height:5.5rem; margin:-2.75rem 0 0 0;
-            position:absolute; top:45%; left:0; z-index: 10;
+            width:3rem; height:5.5rem; margin:-5.375rem 0 0 0;
+            position:absolute; top:50%; left:0; z-index: 10;
             background:rgba(0,0,0,0.8);
             border:0;
             cursor:pointer;
@@ -163,6 +163,18 @@
                 .mr-nav__icon-path {
                     fill: #fff;
                 }
+            @media screen and (min-width:76rem) and (max-width:88.6875rem) {
+                /*1216px - 1419px*/
+                .mr-nav__btn {
+                    margin:-5.875rem 0 0 0;
+                }
+            }
+            @media screen and (min-width:88.75rem) {
+                /*1420px +*/
+                .mr-nav__btn {
+                    margin:-5.875rem 0 0 0;
+                }
+            }
     
 
 /*  ==========================================================================
@@ -327,7 +339,7 @@
             }
                 .mr-player__play-btn {
                     width: 6.375rem;/*68px*/ height: 5.4375rem;/*58px*/
-                    padding: 0; margin: -2.71875rem 0 0 -3.1875rem; border: 0; 
+                    padding: 0; margin: -3.875rem 0 0 -3.1875rem; border: 0; 
                     cursor: pointer;
                     background: rgba(0,0,0,0.8);
                     position: absolute; left: 50%; top: 50%; z-index:1;
@@ -413,7 +425,7 @@
         z-index: 2; left:0; top:0;
     }
     .mr-ballot__group {
-        position: absolute; z-index: 500; top:26%; bottom: 0; width:100%;
+        position: absolute; z-index: 500; top:14%; bottom: 0; width:100%;
         text-align: center;
     }
     .mr-ballot__title {
@@ -474,7 +486,7 @@
     @media screen and (min-width:50rem) and (max-width:59.9375rem) {
         /*800px - 959px*/
         .mr-ballot__group {
-            top:32%;
+            top:22%;
         }
         .mr-ballot__item {
             margin:0 0.5em;
@@ -489,7 +501,7 @@
     @media screen and (min-width:60rem) and (max-width:64.9375rem) {
         /*960px - 1039px*/
         .mr-ballot__group {
-            top:32%;
+            top:25%;
         }
         .mr-ballot__list {
             margin-left:8.125em;/*130px*/
@@ -498,7 +510,7 @@
     @media screen and (min-width:65rem) and (max-width:75.9375rem) {
         /*1040px - 1215px*/
         .mr-ballot__group {
-            top:32%;
+            top:27%;
         }
         .mr-ballot__list {
             margin-left:10.125em;/*162px*/
@@ -507,7 +519,7 @@
     @media screen and (min-width:76rem) and (max-width:88.6875rem) {
         /*1216px - 1419px*/
         .mr-ballot__group {
-            top:32%;
+            top:29%;
         }
         .mr-ballot__list {
             margin-left:13.625em;/*218px*/
@@ -522,7 +534,7 @@
     @media screen and (min-width:88.75rem) {
         /*1420px +*/
         .mr-ballot__group {
-            top:35%;
+            top:32%;
         }
         .mr-ballot__list {
             margin-left:19.625em;/*314px*/
