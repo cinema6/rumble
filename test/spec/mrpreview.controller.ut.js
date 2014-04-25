@@ -176,6 +176,15 @@
                         });
                     });
                 });
+
+                describe('mrPreview:reset', function() {
+                    it('should tell the player to reset', function() {
+                        spyOn(MiniReelService, 'convertForPlayer').and.returnValue(experience);
+                        $scope.$emit('mrPreview:initExperience', experience, session);
+                        $scope.$emit('mrPreview:reset');
+                        expect(session.ping.calls.argsFor(0)[0]).toBe('mrPreview:reset');
+                    });
+                });
             });
 
             describe('$watcher', function() {

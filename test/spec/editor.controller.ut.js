@@ -335,8 +335,10 @@
 
                 describe('closePreview()', function() {
                     it('should set preview mode to false', function() {
+                        spyOn($scope, '$broadcast');
                         EditorCtrl.closePreview();
                         expect(EditorCtrl.preview).toBe(false);
+                        expect($scope.$broadcast.calls.argsFor(0)[0]).toBe('mrPreview:reset');
                     });
                 });
             });
