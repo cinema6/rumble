@@ -353,6 +353,12 @@
                             return deferred.promise;
                         }
 
+                        function cleanState(error) {
+                            state.cModel = null;
+
+                            return $q.reject(error);
+                        }
+
                         function setCurrent(state) {
                             c6State.current = state;
 
@@ -363,6 +369,7 @@
 
                         return resolveState(state)
                             .then(changeView)
+                            .catch(cleanState)
                             .then(setCurrent);
                     }
 

@@ -45,8 +45,10 @@
                     var ready = false;
 
                     this.currentTime = 0;
+                    this.readyState = 3;
 
                     this.pause = jasmine.createSpy('video.pause()');
+                    this.play = jasmine.createSpy('video.play()');
 
                     c6EventEmitter(this);
 
@@ -134,6 +136,31 @@
 
                             notify(12);
                             expect(video.currentTime).toBe(12);
+                        });
+                    });
+
+                    describe('if a video has not played yet', function() {
+                        beforeEach(function() {
+                            video.readyState = 0;
+                        });
+
+                        it('should play the video', function() {
+                            notify(5);
+                            expect(video.play).toHaveBeenCalled();
+                            expect(video.currentTime).toBe(0);
+
+                            video.readyState = 1;
+                            notify(10);
+                            expect(video.currentTime).toBe(10);
+                            expect(video.play.calls.count()).toBe(2);
+
+                            video.readyState = 3;
+                            video.play.calls.reset();
+                            notify(13);
+                            expect(video.play).not.toHaveBeenCalled();
+
+                            notify(23);
+                            expect(video.play).not.toHaveBeenCalled();
                         });
                     });
 
