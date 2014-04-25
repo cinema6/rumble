@@ -383,6 +383,26 @@
                     });
                 });
             });
+
+            describe('$watchers', function() {
+                describe('mode and autoplay', function() {
+                    it('should broadcast mrPreview:updateMode and send experience', function() {
+                        spyOn($scope, '$broadcast');
+                        $scope.$digest();
+                        EditorCtrl.model.mode = 'full';
+                        $scope.$digest();
+
+                        expect($scope.$broadcast.calls.argsFor(0)[0]).toBe('mrPreview:updateMode');
+                        expect($scope.$broadcast.calls.argsFor(0)[1].mode).toEqual('full');
+
+                        EditorCtrl.model.data.autoplay = true;
+                        $scope.$digest();
+
+                        expect($scope.$broadcast.calls.argsFor(1)[0]).toBe('mrPreview:updateMode');
+                        expect($scope.$broadcast.calls.argsFor(1)[1].data.autoplay).toBe(true);
+                    });
+                });
+            });
         });
     });
 }());
