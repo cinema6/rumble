@@ -123,6 +123,13 @@
                 });
             };
 
+            $scope.$watch(function() {
+                return self.model.mode + self.model.data.autoplay;
+            }, function(newMode, oldMode) {
+                if(newMode === oldMode) { return; }
+                $scope.$broadcast('mrPreview:updateMode', self.model);
+            });
+
             $scope.$on('addCard', function(event, card, index) {
                 self.model.data.deck.splice(index, 0, card);
             });
@@ -233,6 +240,15 @@
                     } else {
                         session.ping('mrPreview:reset');
                     }
+                });
+
+                $scope.$on('mrPreview:updateMode', function(event, exp) {
+                    // the EditorCtrl $broadcasts when the experience
+                    // when the mode (full, light, etc) changes
+                    // we need to convert and save the updated
+                    // experience and then tell the player to reload
+                    experience = MiniReelService.convertForPlayer(exp);
+                    session.ping('mrPreview:updateMode');
                 });
 
                 $scope.$on('mrPreview:reset', function() {
