@@ -691,12 +691,14 @@
             },
             showPlay: {
                 get: function() {
-                    return !c6AppData.experience.data.autoplay || !!player && player.paused;
+                    return !!player && player.paused;
                 }
             }
         });
 
-        this.enablePlayButton = config.type !== 'dailymotion' && !profile.touch;
+        this.enablePlayButton = (config.type !== 'dailymotion') &&
+            !profile.touch &&
+            !c6AppData.experience.data.autoplay;
 
         this.videoUrl = null;
 
@@ -781,6 +783,9 @@
                         shouldPlay = true;
                         iface.play();
                     }
+
+                    self.dismissBallot();
+                    self.dismissBallotResults();
                 } else {
                     if (_data.modules.ballot.ballotActive) {
                         _data.modules.ballot.vote = -1;
