@@ -328,7 +328,10 @@
                     video: videoDataTemplate,
                     videoBallot: extend(ngCopy(videoDataTemplate), {
                         ballot: function(data, key, card) {
-                            return card.ballot || [];
+                            return card.ballot || {
+                                prompt: null,
+                                choices: []
+                            };
                         }
                     }),
                     ad: {

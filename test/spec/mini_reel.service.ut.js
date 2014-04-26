@@ -45,10 +45,13 @@
                                 note: 'Blah blah blah',
                                 source: 'Vimeo',
                                 modules: ['ballot'],
-                                ballot: [
-                                    'Awesome',
-                                    'Lame'
-                                ],
+                                ballot: {
+                                    prompt: 'Was it ugly?',
+                                    choices: [
+                                        'Really Ugly',
+                                        'Not That Ugly'
+                                    ]
+                                },
                                 data: {
                                     videoid: '48hfrei49'
                                 }
@@ -70,10 +73,13 @@
                                 note: 'Blah blah blah',
                                 source: 'DailyMotion',
                                 modules: ['ballot'],
-                                ballot: [
-                                    'Funny',
-                                    'Stupid'
-                                ],
+                                ballot: {
+                                    prompt: 'How smart was it?',
+                                    choices: [
+                                        'Really Smart',
+                                        'Pretty Stupid'
+                                    ]
+                                },
                                 data: {
                                     videoid: 'vfu85f5',
                                     related: 0
@@ -190,7 +196,10 @@
                                     videoid: null,
                                     start: null,
                                     end: null,
-                                    ballot: []
+                                    ballot: {
+                                        prompt: null,
+                                        choices: []
+                                    }
                                 }
                             });
 
@@ -291,7 +300,10 @@
                                     videoid: null,
                                     start: null,
                                     end: null,
-                                    ballot: []
+                                    ballot: {
+                                        prompt: null,
+                                        choices: []
+                                    }
                                 }
                             });
 
@@ -466,10 +478,13 @@
                                     videoid: '48hfrei49',
                                     start: null,
                                     end: null,
-                                    ballot: [
-                                        'Awesome',
-                                        'Lame'
-                                    ]
+                                    ballot: {
+                                        prompt: 'Was it ugly?',
+                                        choices: [
+                                            'Really Ugly',
+                                            'Not That Ugly'
+                                        ]
+                                    }
                                 }
                             });
 
@@ -485,10 +500,13 @@
                                     videoid: 'vfu85f5',
                                     start: undefined,
                                     end: undefined,
-                                    ballot: [
-                                        'Funny',
-                                        'Stupid'
-                                    ]
+                                    ballot: {
+                                        prompt: 'How smart was it?',
+                                        choices: [
+                                            'Really Smart',
+                                            'Pretty Stupid'
+                                        ]
+                                    }
                                 }
                             });
 
