@@ -545,7 +545,7 @@
         background:#282b2c; min-height:4.5em; color:#fff;
     }
         .mainNav {
-            float:left;
+            float:left; visibility: hidden;
         }
         .mainNav__list {
             margin:0; padding:0; list-style: none;
@@ -576,7 +576,7 @@
     pageHeader
     ========================================================================== */
     .userPane__group {
-        float:right;
+        float:right; visibility: hidden;
     }
         .userPane__display {
             float:left; margin:1.5625em 0.625em 0 0;
