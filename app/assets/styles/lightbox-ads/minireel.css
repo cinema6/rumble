@@ -210,7 +210,7 @@
             right:0;
         }
     .mr-pager__icon {
-        display:block; width:0.75rem;/*12px*/ height:auto;
+        display:block; width:0.75rem;/*12px*/ height:100%;
         position:absolute; top:0; left:12.5%; margin:0;
         z-index:1;
     }
@@ -268,9 +268,10 @@
                 }
                     .mr-pages__page {
                         width:4.5625rem;/*73px*/ height:3rem;/*48px*/
-                        margin:0; padding:0; border:0; background:black;
+                        margin:0; padding:0; border:0;
                         position:relative; overflow: hidden;
                         cursor: pointer;
+                        background:black url('../../img/default_square.jpg') 50% 50% / cover no-repeat;
                     }
                         .mr-pages__preview-img {
                             position:absolute; top:0;
@@ -285,13 +286,10 @@
                                 -ms-transform: scale(1.12);
                                 transform: scale(1.12);
                             }
-                            .mr-pages__page:last-child .mr-pages__preview-img {
-                                background-image:url('../../img/more-reels__preview.jpg');
-                            }
                         .mr-pages__label {
-                            display: block; width:100%;
-                            position: absolute; top:-0.875rem; left:0;
-                            color:#5c5c5c; font-size:6rem; line-height: 1; font-weight: bold;
+                            display: block; width:100%; opacity:0.5;
+                            position: absolute; top:-0.5rem; left:0;
+                            color:#000; font-size:4rem; line-height: 1; font-weight: bold;
                         }
                         .mr-pages__fader {
                             background:#000; opacity:0.5;
@@ -347,7 +345,7 @@
             .mr-player__group {
                 padding:0 0 66.67%; margin:0;
                 width:100%; height:0; position:relative;
-                background:#000;
+                background:black url('../../img/default_square.jpg') 50% 50% / cover no-repeat;
             }
                 .mr-player__play-btn {
                     width: 6.375rem;/*68px*/ height: 5.4375rem;/*58px*/
@@ -659,93 +657,6 @@
 
 
 /*  ==========================================================================
-    .mr-comments
-    ========================================================================== */
-    .mr-comments__title {
-        color:#747474; font-weight:700; font-size:1em; margin:1.0625em 0 0.3125em 0;
-    }
-    .mr-comments__body {
-        -webkit-border-radius: 3px; border-radius: 3px; overflow: hidden;
-        margin:0 0 0.875em 0;
-    }
-        .mr-comments__hdr-bar {
-            background:#747474; color:#f2f2f2;
-            border-bottom:1px solid #5e5e5e;
-        }
-            .mr-comments__hdr-label {
-                margin:3px 0 2px 8px; font-weight:700; font-size:14px;
-            }
-        .mr-comments__textbox {
-            background:#fff;
-        }
-            .mr-comments__textarea {
-                width:80%; margin:3px 0 3px 8px; font-size:1em; font-weight:300; color:#999999; float:left; display: block;
-                border:0;
-            }
-            .mr-comments__post-btn {
-                border-radius:3px; font-size:0.75em; font-weight:700; color:#fff; text-align:center;
-                border:0; margin:0.67em 0.67em 1em 0; padding:0;
-                float:right; width:12%; height:3.83em;
-            }
-    .mr-comments__select {
-        width:100%; border-radius:3px; border:0; height:2.25em;/*36px*/
-    }
-
-    .mr-comments__list {
-        margin:0; padding:1.125em 0 0 0; list-style:none; 
-        background:url('../../img/border__ccc@2x.png') 17px 0 repeat-y; background-size:1px 1px;
-    }
-        .mr-comments__comment {
-            margin:0 0 0.75em 0;
-        }
-            .mr-comments__userpic {
-                border-radius:5px; overflow: hidden; background:#fff; padding:2px;
-                width:1.75em; height:1.75em; /*28px*/ float:left; margin:0 0.875em 0 0;
-            }
-                .mr-comments__userpic-img {
-                    display:block; width:1.75em; height:1.75em; /*28px*/
-                    border-radius:3px; overflow: hidden;
-                }
-            .mr-comments__comment--friend .mr-comments__userpic, .mr-comments__comment--friend .mr-comments__meta {
-                background:#e2f7ff;
-            }
-        .mr-comments__comment .mr-comments__body {
-            background:#fff; margin:0;
-        }
-            .mr-comments__meta {
-                background:#f2f2f2; padding:0.3125em 0.5em 0.1875em 0.5em; border-bottom:1px solid #eeeeee;
-            }
-                .mr-comments__comment--friend .mr-comments__meta {
-                    border-bottom:1px solid #daf5ff;
-                }
-                .mr-comm-meta__username {
-                    float:left; color:#747474; font-weight:700; font-size:0.875em; /*14px*/
-                    width:68%; margin:0;
-                }
-                    .mr-comments__comment--friend .mr-comm-meta__username {
-                        color:#0086b9;
-                    }
-                .mr-comm-meta__timestamp {
-                    float:right; color:#999999; font-weight:300; font-size:0.75em; /*12px*/ text-align: right;
-                    width:32%; margin:0.167em 0 0 0;
-                }
-            .mr-comments__copy {
-                padding:0.4167em 0.667em 0.583em 0.667em; color:#747474; font-size:0.75em;/*12px*/ 
-            }
-            .mr-comments__breaker {
-                display:block; width:2.25em; height:0.375em; margin:0 auto 0.75em auto;
-                background-position:-2.5em -12.5em; opacity:0.1;
-            }
-        .mr-comments__terminator-outer {
-            background:#ddd;
-        }
-            .mr-comments__terminator {
-                width:0.375em;/*6px*/ height:0.375em;/*6px*/ background-position:-2.5em -12.5em;
-                display:block; margin:1em 0 0 0.9375em; opacity:0.3;
-            }
-
-
-/*  ==========================================================================
     VAST Ad styles
     ========================================================================== */
     .mr-vast__group {
@@ -817,6 +728,72 @@
                 color:#c2c2c2; line-height:1.69; height: 4.875rem;/*78px*/
             }  
 
+/*  ==========================================================================
+    recap card classes
+    ========================================================================== */
+    .mr-recap__copy {
+        position: relative; 
+        height: 0; width: 100%; 
+        padding: 0 0 66%; 
+        border-top:1px dotted #c2c2c2;
+    }
+        .mr-recap__group .mr-ad__med-rect {
+            bottom:auto; top:0;
+        }
+    .mr-recap__list {
+        width:100%; height:100%;
+        position: absolute;
+        overflow-y:auto; overflow-x:hidden;
+        margin:0; padding:0; list-style: none;
+    }
+        .mr-recap__item {
+            position:relative;
+            width:100%; 
+            padding:0.75em 0; border-bottom:1px dotted #c2c2c2;
+            -moz-box-sizing: border-box; box-sizing: border-box; 
+            cursor:pointer;
+        }
+            .mr-recap__imgBtn {
+                width:27%; height:0; display:block;
+                border:0; margin:0; padding:0 0 18% 0;
+                font-size:1rem;
+                background:url('../../img/default_square.jpg') 50% 50% / cover no-repeat;
+                float:left;
+                position:relative;
+                cursor:pointer;
+            }
+                .mr-recap__imgBox {
+                    width:100%; height:100%; display: block;
+                    position:absolute;
+                    background: 50% 50% / cover no-repeat;
+                }
+            .mr-recap__copyBox {
+                float:right;
+                width:71.3%;
+            }
+                .mr-recap__copyBox .mr-card__title-h1 {
+                    font-size:1.125em;
+                }
+                .mr-recap__ballotInfo {
+                    color:#929292; font-size:0.875em;
+                }
+                    .mr-recap__ballotQuestion {
+                        font-size:1em; font-weight:normal;
+                        margin:0;
+                    }
+                        .mr-recap__ballotQuestion strong {
+                            color:#000; font-style:italic;
+                        }
+                    .mr-recap__ballotResults {
+                        margin:0;
+                    }
+                    .mr-recap__ballotA {
+                        color:#8ac12a;
+                    }
+                    .mr-recap__ballotB {
+                        color:#19cbe6;
+                    } 
+
 
 /*  ==========================================================================
     Splash Screen classes
@@ -825,6 +802,7 @@
         width:100%; height:8.125rem;/*130px*/ padding:0 0 63% 0;
         position: absolute; top:0; z-index:5; min-width:18.75rem;/*300px*/ 
         overflow:hidden;
+        background:black url('../../img/default_square.jpg') 50% 50% / cover no-repeat;
     }
         .mr-splash__start, .mr-splash__loading {
             position:absolute; width:100%; height:100%; top:0; left: 0; min-height: 20.625rem;/*350px*/

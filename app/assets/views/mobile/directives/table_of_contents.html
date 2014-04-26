@@ -2,8 +2,8 @@
     <h1 class="mr-toc__title tk--hdr">{{app.data.experience.title}}</h1>
     <ul class="mr-toc__list clearfix">
         <li class="mr-toc__item c6-show clearfix" ng-repeat="this in cards" ng-show="!!this.title" ng-click="Ctrl.select(this)">
-            <div class="mr-toc-item__thumbnail" ng-style="{'background-image': this.thumbs && 'url(' + this.thumbs.large + ')'}">
-                &nbsp;
+            <div class="mr-toc-item__imgBox">
+                <div class="mr-toc-item__img" ng-style="{'background-image': this.thumbs && 'url(' + this.thumbs.large + ')'}">&nbsp;</div>
             </div>
             <div class="mr-toc-item__details">
                 <h1 class="mr-toc-item__title tk--hdr">{{this.title}}</h1>

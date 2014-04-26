@@ -3,7 +3,7 @@
         <span class="sprite mr-icons__close"><span class="ir">Close</span></span>
     </button>
     <div class="mr-card__container">
-        <h1 class="mr-title tk--hdr">The Title of the MiniReel Goes Here</h1>
+        <h1 class="mr-title tk--hdr">{{app.data.experience.title}}</h1>
         <ng-include src="'deck.html' | asset:'views'"></ng-include>
         
         <button ng-click="RumbleCtrl.goBack('nav')"

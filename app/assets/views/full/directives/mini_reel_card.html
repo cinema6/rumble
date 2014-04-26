@@ -1,4 +1,36 @@
-<article class="mr-card__group mr-more-reels__group c6-height-limiter">
+<article class="mr-card__group mr-recap__group c6-height-limiter">
+    <div class="mr-switch__group">
+        <h3 class="mr-recap__intro tk--hdr clearfix">You just watched : &ldquo;<em>MINIREEL TITLE HERE</em>&rdquo;</h3>
+        <div class="mr-switch__counter tk--hdr clearfix">{{number}}/{{total}}</div>
+    </div>
+
+    <div class="mr-recap__copy">
+        <ul class="mr-recap__list">
+            <li class="mr-recap__item clearfix">
+                <button class="mr-recap__imgBtn" type="button">
+                    <span class="mr-recap__imgBox" style="background-image:url( IMG URL HERE );">&nbsp;</span>
+                </button>
+                <div class="mr-recap__copyBox">
+                    <h1 class="mr-card__title-h1 tk--hdr">The Title of the Card Goes Here and then...</h1>
+                    <p class="mr-card__attributes">via <a ng-href="{{Ctrl.videoUrl}}" target="_blank" title="YouTube">Source goes here</a></p>
+                    <div class="mr-recap__ballotInfo">
+                        <h3 class="mr-recap__ballotQuestion">Questionnaire: <strong>What did the Fox Say?</strong></h3>
+                        <p class="mr-recap__ballotResults">
+                            <span class="mr-recap__ballotA">
+                                Awesome!!! <strong>32.6%</strong>
+                            </span> &nbsp;&nbsp;|&nbsp;&nbsp;
+                            <span class="mr-recap__ballotB">
+                                F--cking Awesome!!! <strong>67.4%</strong>
+                            </span>
+                        </p>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+</article>
+
+<!--<article class="mr-card__group mr-more-reels__group c6-height-limiter">
     <div class="mr-switch__group">
         <h3 class="mr-more-reels__intro tk--hdr clearfix">{{config.data.message}}</h3>
         <div class="mr-switch__counter tk--hdr clearfix">1/16</div>
@@ -15,4 +47,4 @@
             <p class="mr-more-reels__link"><a>Watch Now</a></p>
         </div>
     </div>
-</article>
+</article>-->
