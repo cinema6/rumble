@@ -185,6 +185,10 @@
         position:absolute; z-index:11; top:50%; left:50%;
         background:#fff;
     }
+        .ui__modal--confirmation {
+            width:24em; height:7em;
+            margin:-3.5em 0 0 -12em;
+        }
     /*  shared modal styles
     ========================================================================== */
         .modal__content {
@@ -193,6 +197,9 @@
         .modal__title {
             font-weight:100; font-size:1.5em; margin:-0.25em 0 0.25em;
         }
+            .ui__modal--confirmation .modal__title {
+                font-size:1.25em; font-weight:300;
+            }
         .modal__closeBtn {
             width:1.125em; height:1.125em;
             background-position:-1.5625em -3.6875em;
@@ -224,6 +231,9 @@
             text-align: right;
             position:absolute; bottom:1.5em; left:1.5em; right:1.5em;
         }
+            .modal__btnFooter--confirmation {
+                text-align: left;
+            }
 
     /*  preview panel
     ========================================================================== */
@@ -784,18 +794,25 @@
                 .toolbar__makePrivate:hover {
                     background:#8e8e8e;
                 }
-            .toolbar__publish {
+            .toolbar__publish, .toolbar__confirm {
                 background:#72ad25;
             }
-                .toolbar__publish:hover {
+                .toolbar__publish:hover, .toolbar__confirm:hover {
                     background:#7cc61b;
                 }
-            .toolbar__delete {
+            .toolbar__delete, .toolbar__cancel {
                 background:#d61212;
             }
-                .toolbar__delete:hover {
+                .toolbar__delete:hover, .toolbar__cancel:hover {
                     background:#ee1b1b;
                 }
+            .toolbar__neutral {
+                background:#848484;
+            }
+                .toolbar__neutral:hover {
+                    background:#aeaeae;
+                }
+
 
     /*  publish__actions
     ========================================================================== */
