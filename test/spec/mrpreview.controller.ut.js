@@ -185,6 +185,52 @@
                         expect(session.ping.calls.argsFor(0)[0]).toBe('mrPreview:reset');
                     });
                 });
+
+                describe('mrPreview:updateMode', function() {
+                    it('should tell the player to reset', function() {
+                        var dataSentToPlayer,
+                            emitCount = 0,
+                            updatedExperience = {
+                                id: 'foo',
+                                data: {
+                                    deck: [
+                                        {
+                                            id: '1'
+                                        },
+                                        {
+                                            id: '2'
+                                        },
+                                        {
+                                            id: '3'
+                                        },
+                                        {
+                                            id: 'new'
+                                        }
+                                    ]
+                                }
+                            };
+
+                        spyOn($scope, '$emit').and.callThrough();
+                        spyOn(MiniReelService, 'convertForPlayer').and.callFake(function() {
+                            if((emitCount === 0) && $scope.$emit.calls.argsFor(0)[0] === 'mrPreview:initExperience') {
+                                emitCount++;
+                                return experience;
+                            } else if($scope.$emit.calls.argsFor(1)[0] === 'mrPreview:updateMode') {
+                                return updatedExperience;
+                            }
+                        });
+                        $scope.$emit('mrPreview:initExperience', experience, session);
+                        $scope.$emit('mrPreview:updateMode', updatedExperience);
+                        expect(session.ping.calls.argsFor(0)[0]).toBe('mrPreview:updateMode');
+
+                        session.emit('handshake', {}, responseCallback);
+
+                        dataSentToPlayer = responseCallback.calls.argsFor(0)[0];
+
+                        expect(dataSentToPlayer.appData.experience).not.toEqual(session.experience);
+                        expect(dataSentToPlayer.appData.experience).toEqual(updatedExperience);
+                    });
+                });
             });
 
             describe('$watcher', function() {

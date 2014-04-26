@@ -2,7 +2,6 @@
     'use strict';
 
     var isNumber = angular.isNumber,
-        jqLite = angular.element,
         equals = angular.equals,
         copy = angular.copy,
         forEach = angular.forEach;
@@ -123,6 +122,13 @@
                 });
             };
 
+            $scope.$watch(function() {
+                return self.model.mode + self.model.data.autoplay;
+            }, function(newMode, oldMode) {
+                if(newMode === oldMode) { return; }
+                $scope.$broadcast('mrPreview:updateMode', self.model);
+            });
+
             $scope.$on('addCard', function(event, card, index) {
                 self.model.data.deck.splice(index, 0, card);
             });
@@ -235,6 +241,15 @@
                     }
                 });
 
+                $scope.$on('mrPreview:updateMode', function(event, exp) {
+                    // the EditorCtrl $broadcasts when the experience
+                    // when the mode (full, light, etc) changes
+                    // we need to convert and save the updated
+                    // experience and then tell the player to reload
+                    experience = MiniReelService.convertForPlayer(exp);
+                    session.ping('mrPreview:updateMode');
+                });
+
                 $scope.$on('mrPreview:reset', function() {
                     session.ping('mrPreview:reset');
                 });
@@ -293,144 +308,152 @@
                     onEndScan: '&'
                 },
                 link: function(scope, $element) {
-                    var DragCtrl = $element.children('div').data('cDragCtrl'),
-                        startMarker = $element.find('#start-marker').data('cDrag'),
+                    var startMarker = $element.find('#start-marker').data('cDrag'),
                         endMarker = $element.find('#end-marker').data('cDrag'),
                         seekBar = $element.find('#seek-bar').data('cDragZone'),
-                        $$window = jqLite($window),
-                        scanDeferred = null,
-                        notifyScan = c6Debounce(function(args) {
-                            var item = args[0];
+                        currentScanDeferred = null,
+                        notifyProgress = c6Debounce(function(args) {
+                            var value = args[0],
+                                scopeProp = args[1];
 
-                            scanDeferred.notify(markerValue(item));
+                            currentScanDeferred.notify(value);
+                            scope[scopeProp + 'Stamp'] = secondsToTimestamp(value);
                         }, 250);
-
-                    function markerValue(marker) {
-                        var pxTraveled = marker.display.center.x - seekBar.display.left,
-                            totalPx = seekBar.display.width;
-
-                        return (pxTraveled * duration()) / totalPx;
-                    }
-
-                    function duration() {
-                        return parseFloat(scope.duration);
-                    }
 
                     function start() {
                         return scope.start || 0;
                     }
 
                     function end() {
-                        return isNumber(scope.end) ? scope.end : duration();
+                        return isNumber(scope.end) ? scope.end : scope.duration;
+                    }
+
+                    function eachMarker(cb) {
+                        [startMarker, endMarker].forEach(cb);
+                    }
+
+                    function secondsToTimestamp(seconds) {
+                        var minutes = Math.floor(seconds / 60);
+                        seconds = Math.floor(seconds - (minutes * 60));
+
+                        return minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
+                    }
+
+                    function positionToValue(rect, prop) {
+                        var pxMoved = rect.left - seekBar.display.left,
+                            total = seekBar.display.width;
+
+                        if (prop === 'end') {
+                            pxMoved += rect.width;
+                        }
+
+                        return ((pxMoved * scope.duration) / total);
+                    }
+
+                    function scopePropForMarker(marker) {
+                        return marker.id.replace(/-marker$/, '');
+                    }
+
+                    function constrain(marker, desired) {
+                        switch (marker.id) {
+                        case 'start-marker':
+                            return Math.max(
+                                Math.min(
+                                    desired.left,
+                                    endMarker.display.left
+                                ),
+                                seekBar.display.left
+                            );
+
+                        case 'end-marker':
+                            return Math.max(
+                                Math.min(
+                                    desired.left,
+                                    seekBar.display.right - desired.width
+                                ),
+                                startMarker.display.left
+                            );
+                        }
+                    }
+
+                    function begin(marker) {
+                        var scopeProp = scopePropForMarker(marker),
+                            methodBit = scopeProp.substring(0, 1).toUpperCase() +
+                                scopeProp.substring(1);
+
+                        eachMarker(function(marker) {
+                            marker.refresh(true);
+                        });
+
+                        currentScanDeferred = $q.defer();
+
+                        scope['on' + methodBit + 'Scan']({
+                            promise: currentScanDeferred.promise
+                        });
+                    }
+
+                    function beforeMove(marker, event) {
+                        var $marker = marker.$element,
+                            desired = event.desired,
+                            position = constrain(marker, desired),
+                            scopeProp = scopePropForMarker(marker);
+
+                        event.preventDefault();
+
+                        $marker.css({
+                            left: position + 'px'
+                        });
+
+                        notifyProgress(
+                            positionToValue(
+                                desired,
+                                scopeProp
+                            ),
+                            scopeProp
+                        );
+                    }
+
+                    function dropStart(marker) {
+                        var scopeProp = scopePropForMarker(marker);
+
+                        scope[scopeProp] = positionToValue(marker.display, scopeProp);
+                        currentScanDeferred.resolve(scope[scopeProp]);
+
+                        marker.$element.css('top', '');
                     }
 
                     scope.position = {};
                     Object.defineProperties(scope.position, {
                         startMarker: {
                             get: function() {
-                                return ((seekBar.display.width * start()) /
-                                    duration()) + 'px';
+                                return ((scope.start * seekBar.display.width) /
+                                    scope.duration) + 'px';
                             }
                         },
                         endMarker: {
                             get: function() {
-                                return ((seekBar.display.width * end()) /
-                                    duration()) + 'px';
+                                return ((end() * seekBar.display.width) /
+                                    scope.duration) - endMarker.display.width + 'px';
                             }
                         },
                         playhead: {
                             get: function() {
-                                var currentTime = scope.currentTime;
-
-                                return ((currentTime / duration()) * 100) + '%';
+                                return ((scope.currentTime * 100) / scope.duration) + '%';
                             }
                         }
                     });
 
-                    function adjustPosition(item, desired) {
-                        var halfWidth = (item.display.width / 2),
-                            seekDisplay = seekBar.display;
-
-                        switch (item.id) {
-                        case 'start-marker':
-                            // The start marker can't move past the left side of the timeline or
-                            // past the end marker.
-                            endMarker.refresh();
-                            return Math.max(
-                                seekDisplay.left - halfWidth,
-                                Math.min(
-                                    desired.left,
-                                    endMarker.display.center.x - halfWidth
-                                )
-                            );
-
-                        case 'end-marker':
-                            // The end marker can't move past the right side of the timeline or
-                            // past the start marker.
-                            startMarker.refresh();
-                            return Math.max(
-                                startMarker.display.center.x - halfWidth,
-                                Math.min(
-                                    desired.left,
-                                    seekDisplay.right - halfWidth
-                                )
-                            );
-                        }
-                    }
-
-                    function begin(item) {
-                        var marker = item.id.replace(/-marker$/, ''),
-                            fnName;
-
-                        marker = marker.slice(0, 1).toUpperCase() + marker.slice(1);
-                        fnName = 'on' + marker + 'Scan';
-
-                        scanDeferred = $q.defer();
-
-                        scope[fnName]({
-                            promise: scanDeferred.promise
-                        });
-                    }
-
-                    function beforeMove(item, event) {
-                        var desired = event.desired,
-                            $marker = item.$element;
-
-                        event.preventDefault();
-
-                        $marker.css({
-                            left: adjustPosition(item, desired) + 'px'
-                        });
-
-                        notifyScan(item);
-                    }
-
-                    function dropStart(item) {
-                        scope.$apply(function() {
-                            var scopeProp = item.id.replace(/-marker$/, ''),
-                                seconds = markerValue(item);
-
-                            scope[scopeProp] = seconds;
-                            scanDeferred.resolve(seconds);
-                        });
-                        item.$element.css('top', 'auto');
-                    }
-
-                    function resize() {
-                        DragCtrl.refresh();
-                        scope.$digest();
-                    }
-
-                    $$window.on('resize', resize);
-
-                    [startMarker, endMarker].forEach(function(marker) {
+                    eachMarker(function(marker) {
                         marker.on('begin', begin)
                             .on('beforeMove', beforeMove)
                             .on('dropStart', dropStart);
                     });
 
-                    scope.$on('$destroy', function() {
-                        $$window.off('resize', resize);
+                    scope.$watch(start, function(start) {
+                        scope.startStamp = secondsToTimestamp(start);
+                    });
+                    scope.$watch(end, function(end) {
+                        scope.endStamp = secondsToTimestamp(end);
                     });
                 }
             };

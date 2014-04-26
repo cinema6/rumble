@@ -63,6 +63,68 @@
                 expect(zone.refresh.calls.count()).toBe(2);
             });
 
+            it('should be disable-able by passing in "false" to c6-drag-zone', function() {
+                var finger = new Finger(),
+                    $dragSpace = $([
+                        '<c6-drag-space>',
+                        '    <span c6-draggable style="display: inline-block; position: fixed; top: 0; left: 0; width: 50px; height: 150px;"></span>',
+                        '    <div id="zone1" c6-drag-zone="enabled" style="height: 50px;"></div>',
+                        '    <div id="zone2" c6-drag-zone style="height: 50px;"></div>',
+                        '    <div id="zone3" c6-drag-zone="enabled" style="height: 50px;"></div>',
+                        '</c6-drag-space>'
+                    ].join('\n')),
+                    $draggable,
+                    draggable,
+                    $zone1, $zone2, $zone3,
+                    zone1, zone2, zone3;
+
+                function assertEnabled() {
+                    expect(zone1.currentlyUnder).toEqual([draggable]);
+                    expect(zone2.currentlyUnder).toEqual([draggable]);
+                    expect(zone3.currentlyUnder).toEqual([draggable]);
+                    expect(draggable.currentlyOver).toContain(zone1, zone2, zone3);
+                }
+
+                function assertDisabled() {
+                    expect(zone1.currentlyUnder).toEqual([]);
+                    expect(zone2.currentlyUnder).toEqual([draggable]);
+                    expect(zone3.currentlyUnder).toEqual([]);
+                    expect(draggable.currentlyOver).toEqual([zone2]);
+                }
+
+                testFrame.$body.append($dragSpace);
+
+                $scope.enabled = true;
+                $scope.$apply(function() {
+                    $compile($dragSpace)($scope);
+                });
+                $draggable = $dragSpace.find('span');
+                draggable = $draggable.data('cDrag');
+                $zone1 = $dragSpace.find('#zone1');
+                $zone2 = $dragSpace.find('#zone2');
+                $zone3 = $dragSpace.find('#zone3');
+                zone1 = $zone1.data('cDragZone');
+                zone2 = $zone2.data('cDragZone');
+                zone3 = $zone3.data('cDragZone');
+
+                finger.placeOn($draggable);
+                finger.drag(0, 0);
+                assertEnabled();
+
+                $scope.$apply(function() {
+                    $scope.enabled = false;
+                });
+                assertDisabled();
+
+                finger.drag(10, 0);
+                assertDisabled();
+
+                $scope.$apply(function() {
+                    $scope.enabled = undefined;
+                });
+                assertEnabled();
+            });
+
             describe('when a draggable is above', function() {
                 var $dragSpace;
 
