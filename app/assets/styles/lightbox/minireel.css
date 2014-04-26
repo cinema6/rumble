@@ -202,7 +202,7 @@
             right:0;
         }
     .mr-pager__icon {
-        display:block; width:0.75rem;/*12px*/ height:auto;
+        display:block; width:0.75rem;/*12px*/ height:100%;
         position:absolute; top:0; left:12.5%; margin:0;
         z-index:1;
     }
