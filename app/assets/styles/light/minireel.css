@@ -148,9 +148,10 @@
                 }
                     .mr-pages__page {
                         width:5.625rem;/*90px*/ height:3.75rem;/*60px*/
-                        margin:0; padding:0; border:0; background:black;
+                        margin:0; padding:0; border:0;
                         position:relative; overflow: hidden;
                         cursor: pointer;
+                        background:black url('../../img/default_square.jpg') 50% 50% / cover no-repeat;
                     }
                         .mr-pages__preview-img {
                             position:absolute; top:0;
@@ -164,13 +165,11 @@
                                 -ms-transform: scale(1.12);
                                 transform: scale(1.12);
                             }
-                            .mr-pages__page:last-child .mr-pages__preview-img {
-                                background-image:url('../../img/more-reels__preview.jpg');
-                            }
                         .mr-pages__label {
                             display: block; width:100%;
                             position: absolute; top:-0.875rem; left:0;
-                            color:#5c5c5c; font-size:6rem; line-height: 1; font-weight: bold;
+                            color:#000; font-size:6rem; line-height: 1; font-weight: bold;
+                            opacity:0.5;
                         }
                         .mr-pages__fader {
                             background:#000; opacity:0.4;
@@ -216,7 +215,7 @@
             .mr-player__group {
                 padding:0 0 64%; margin:0;
                 width:100%; height:0; position:relative;
-                background:#000;
+                background:black url('../../img/default_square.jpg') 50% 50% / cover no-repeat;
             }
                 .mr-player__play-btn {
                     width: 6.375rem;/*68px*/ height: 5.4375rem;/*58px*/
@@ -616,7 +615,78 @@
             .mr-more-reels__desc {
                 margin: -0.5em 0 0 0;/*8px*/ font-size:0.8125rem;/*13px*/ 
                 color:#c2c2c2; line-height:1.69; height: 4.875rem;/*78px*/
-            }  
+            } 
+
+
+/*  ==========================================================================
+    recap card classes
+    ========================================================================== */
+    .mr-recap__group {
+        overflow:hidden;
+    }
+        .mr-recap__intro {
+            font-size:0.875rem; color:#929292; font-weight:300; text-align: left;
+            margin:0; padding: 0.125rem 0 0.4375rem 0;
+        }
+            .mr-recap__copy {
+                position: relative; 
+                height: 0; width: 100%; 
+                padding: 0 0 66%; 
+                border-top:1px dotted #565656;
+            }
+            .mr-recap__list {
+                width:100%; height:100%;
+                position: absolute;
+                overflow-y:auto; overflow-x:hidden;
+                margin:0; padding:0; list-style: none;
+            }
+                .mr-recap__item {
+                    position:relative;
+                    width:100%; 
+                    padding:0.75em 0; border-bottom:1px dotted #565656;
+                    -moz-box-sizing: border-box; box-sizing: border-box; 
+                    cursor:pointer;
+                }
+                    .mr-recap__imgBtn {
+                        width:27%; height:0; display:block;
+                        border:0; margin:0; padding:0 0 18% 0;
+                        font-size:1rem;
+                        background:url('../../img/default_square.jpg') 50% 50% / cover no-repeat;
+                        float:left;
+                        position:relative;
+                        cursor:pointer;
+                    }
+                        .mr-recap__imgBox {
+                            width:100%; height:100%; display: block;
+                            position:absolute;
+                            background: 50% 50% / cover no-repeat;
+                        }
+                    .mr-recap__copyBox {
+                        float:right;
+                        width:71.3%;
+                    }
+                        .mr-recap__copyBox .mr-card__title-h1 {
+                            font-size:1.125em;
+                        }
+                        .mr-recap__ballotInfo {
+                            color:#999; font-size:0.875em;
+                        }
+                            .mr-recap__ballotQuestion {
+                                font-size:1em; font-weight:normal;
+                                margin:0;
+                            }
+                                .mr-recap__ballotQuestion strong {
+                                    color:#fff; font-style:italic;
+                                }
+                            .mr-recap__ballotResults {
+                                margin:0;
+                            }
+                            .mr-recap__ballotA {
+                                color:#8ac12a;
+                            }
+                            .mr-recap__ballotB {
+                                color:#19cbe6;
+                            } 
 
 
 /*  ==========================================================================
