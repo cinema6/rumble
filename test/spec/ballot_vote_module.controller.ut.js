@@ -49,7 +49,13 @@
 
                     $scope = $rootScope.$new();
                     $scope.cardId = 'rc-76tfg5467ug';
-                    $scope.ballot = ['Catchy', 'Lame'];
+                    $scope.ballot = {
+                        prompt: 'How did it go?',
+                        choices: [
+                            'Catchy',
+                            'Lame'
+                        ]
+                    };
 
                     BallotVoteModuleCtrl = $controller('BallotVoteModuleController', { $scope: $scope });
                 });

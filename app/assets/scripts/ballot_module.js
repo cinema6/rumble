@@ -52,7 +52,7 @@
             $log = $log.context('BallotVoteModuleController');
 
             this.vote = function(index) {
-                var voteName = $scope.ballot[index];
+                var voteName = $scope.ballot.choices[index];
 
                 $scope.vote = index;
 
