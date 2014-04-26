@@ -136,7 +136,7 @@ module.exports = function(grunt) {
 
                             choices = ballot[card.id] = {};
 
-                            card.ballot.forEach(function(choice) {
+                            card.ballot.choices.forEach(function(choice) {
                                 choices[choice] = 0;
                             });
                         });
