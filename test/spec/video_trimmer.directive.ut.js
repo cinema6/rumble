@@ -20,33 +20,62 @@
 
                 $([
                     '<style type="text/css">',
+                    '    .c6-dragging {',
+                    '        position: fixed !important;',
+                    '    }',
                     '    video-trimmer {',
                     '        display: block;',
                     '    }',
-                    '        .video-trimmer__start-marker {',
-                    '            position: relative;',
-                    '            width: 0; height: 0;',
-                    '            border-left: 1rem solid transparent; border-right: 1rem solid transparent;',
-                    '            border-top: 1rem solid green;',
+                    '    .video-trimmer__group {',
+                    '        width:75%; background:#282b2c; ',
+                    '        margin: 20px auto;',
+                    '        padding:1.5em 0;',
+                    '        position:relative;',
+                    '    }',
+                    '        .video-trimmer__start-marker,',
+                    '        .video-trimmer__end-marker {',
+                    '            position: absolute;',
                     '            cursor: pointer;',
+                    '            height:1.25em;',
+                    '            display: inline-block; padding:3px 0 0 0;',
                     '        }',
+                    '        .video-trimmer__start-marker {',
+                    '            top:0;',
+                    '        }',
+                    '        .video-trimmer__end-marker {',
+                    '            bottom:0;',
+                    '            padding:0 0 3px 0;',
+                    '        }',
+                    '            .ui__startMarker,',
+                    '            .ui__endMarker {',
+                    '                background-position:-6.0625em -5.125em;',
+                    '                width: 0.75em; height: 1.125em;',
+                    '                display: block;',
+                    '                position: absolute; bottom:0; left:0;',
+                    '            }',
+                    '            .ui__endMarker {',
+                    '                background-position:-6.875em -5.125em;',
+                    '                left:auto; right:0; bottom:auto; top:0;',
+                    '            }',
+                    '            .video-trimmer__timestamp {',
+                    '                font-size:0.75em; color:#ccc; line-height:1;',
+                    '                display:block;',
+                    '                margin:0 0 0 1.5em;',
+                    '            }',
+                    '                .video-trimmer__end-marker .video-trimmer__timestamp {',
+                    '                    text-align:right; ',
+                    '                    margin: 0 1.5em 0.25em 0; padding:7px 0 0 0;',
+                    '                }',
                     '        .video-trimmer__seek-bar {',
-                    '            height: 2rem;',
-                    '            margin: 0 1rem;',
-                    '            background: blue;',
+                    '            height: 0.1875rem; width:100%;',
+                    '            margin:0;',
+                    '            background: #4a9cd1;',
                     '        }',
                     '            .video-trimmer__playhead {',
-                    '                position: relative; margin-left: -5px;',
-                    '                height: 100%; width: 10px;',
+                    '                position: relative;',
+                    '                height: 100%; width: 10px; margin-left: -5px;',
                     '                background: yellow;',
                     '            }',
-                    '        .video-trimmer__end-marker {',
-                    '            position: relative;',
-                    '            width: 0; height: 0;',
-                    '            border-left: 1rem solid transparent; border-right: 1rem solid transparent;',
-                    '            border-bottom: 1rem solid red;',
-                    '            cursor: pointer;',
-                    '        }',
                     '</style>'
                 ].join('\n'))
                     .appendTo(frame.$document.find('head'));
@@ -63,8 +92,6 @@
                 });
 
                 $scope.currentTime = 0;
-                $scope.start = 10;
-                $scope.end = 40;
 
                 $trimmer = $('<video-trimmer start="start" end="end" duration="60" current-time="currentTime" on-start-scan="startScan(promise)" on-end-scan="endScan(promise)"></video-trimmer>');
                 frame.$body.append($trimmer);
@@ -77,471 +104,369 @@
                 frame.destroy();
             });
 
-            describe('the start/end markers', function() {
-                var $start, $end,
-                    initial;
+            it('should initialize the timestamps', function() {
+                var scope = $trimmer.isolateScope();
 
-                function assertPosition($element, left, top) {
-                    expect($element.css('left')).toBe(left + 'px');
-                    expect($element.css('top')).toBe(top + 'px');
-                }
-
-                beforeEach(function() {
-                    $start = $trimmer.find('#start-marker');
-                    $end = $trimmer.find('#end-marker');
-
-                    initial = {
-                        start: {
-                            top: $start.offset().top,
-                            left: $start.offset().left
-                        },
-                        end: {
-                            top: $end.offset().top,
-                            left: $end.offset().left
-                        }
-                    };
-                });
-
-                it('should be draggable along the x axis', function() {
-                    var finger = new Finger();
-
-                    $scope.$apply(function() {
-                        $scope.end = 60;
-                    });
-
-                    finger.placeOn($start);
-                    finger.drag(0, 0);
-                    assertPosition($start, initial.start.left, initial.start.top);
-
-                    finger.drag(10, 5);
-                    assertPosition($start, initial.start.left + 10, initial.start.top);
-
-                    finger.drag(10, 5);
-                    assertPosition($start, initial.start.left + 20, initial.start.top);
-                    finger.lift();
-
-                    $scope.$apply(function() {
-                        $scope.end = 40;
-                        $scope.start = 0;
-                    });
-
-                    finger.placeOn($end);
-                    finger.drag(0, 0);
-                    assertPosition($end, initial.end.left, initial.end.top);
-
-                    finger.drag(10, 5);
-                    assertPosition($end, initial.end.left + 10, initial.end.top);
-
-                    finger.drag(10, 5);
-                    assertPosition($end, initial.end.left + 20, initial.end.top);
-                    finger.lift();
-                });
-
-                it('should not be able to move past the boundaries of the timeline', function() {
-                    var finger = new Finger(),
-                        $seek = $trimmer.find('.video-trimmer__seek-bar'),
-                        seekZone = $seek.data('cDragZone');
-
-                    // set the start/end time to min/max to make this easier
-                    $scope.$apply(function() {
-                        $scope.start = 0;
-                        $scope.end = 60;
-                    });
-                    initial.start.top = $start.offset().top;
-                    initial.start.left = $start.offset().left;
-
-                    finger.placeOn($start);
-                    finger.drag(10, 0);
-                    assertPosition($start, initial.start.left + 10, initial.start.top);
-
-                    finger.drag(-10);
-                    assertPosition($start, initial.start.left, initial.start.top);
-
-                    finger.drag(-5, 0);
-                    assertPosition($start, initial.start.left, initial.start.top);
-                    finger.lift();
-
-                    $scope.$apply(function() {
-                        $scope.end = 0;
-                    });
-                    initial.end.top = $end.offset().top;
-                    initial.end.left = $end.offset().left;
-
-                    finger.placeOn($end);
-                    finger.drag(10, 0);
-                    assertPosition($end, initial.end.left + 10, initial.end.top);
-
-                    finger.drag(-10);
-                    assertPosition($end, initial.end.left, initial.end.top);
-
-                    finger.drag(-5, 0);
-                    assertPosition($end, initial.end.left, initial.end.top);
-
-                    finger.drag(seekZone.display.width + 5, 0);
-                    assertPosition($end, initial.end.left + seekZone.display.width, initial.end.top);
-
-                    finger.drag(10, 0);
-                    assertPosition($end, initial.end.left + seekZone.display.width, initial.end.top);
-                    finger.lift();
-                });
+                expect(scope.startStamp).toBe('0:00');
+                expect(scope.endStamp).toBe('1:00');
             });
 
-            describe('the start marker', function() {
-                var $start,
-                    $seek;
+            it('should set timestamps in response to start/end scope prop changes', function() {
+                var scope = $trimmer.isolateScope();
 
-                beforeEach(function() {
-                    $start = $trimmer.find('#start-marker');
-                    $seek = $trimmer.find('#seek-bar');
+                $scope.$apply(function() {
+                    $scope.start = 14;
                 });
+                expect(scope.startStamp).toBe('0:14');
 
-                it('should be at its 0 position if there is no start time specified', function() {
-                    $scope.$apply(function() {
-                        $scope.start = null;
-                    });
-
-                    expect($start.css('left')).toBe('0px');
+                $scope.$apply(function() {
+                    $scope.end = 42;
                 });
-
-                it('should adjust its position based on the provided start time', function() {
-                    var seekWidth = $seek.width();
-
-                    function positionFor(start) {
-                        return Math.floor((seekWidth * start) / 60) + 'px';
-                    }
-
-                    expect($start.css('position')).toBe('relative');
-                    expect($start.css('left')).toBe(positionFor(10));
-
-                    $scope.$apply(function() {
-                        $scope.start = 20;
-                    });
-                    expect($start.css('left')).toBe(positionFor(20));
-
-                    $scope.$apply(function() {
-                        $scope.start = 48;
-                    });
-                    expect($start.css('left')).toBe(positionFor(48));
-                });
-
-                it('should modify the start time based on the position to which its moved', function() {
-                    var finger = new Finger(),
-                        seekWidth = $seek.width();
-
-                    function pxMovedToDuration(px) {
-                        return (px * 60) / seekWidth;
-                    }
-
-                    // Start at 0
-                    $scope.$apply(function() {
-                        $scope.start = 0;
-                    });
-
-                    finger.placeOn($start);
-                    finger.drag(10, 0);
-                    finger.lift();
-
-                    expect($scope.start).toBe(pxMovedToDuration(10));
-                    expect($start.css('left')).toBe('10px');
-
-                    finger.placeOn($start);
-                    finger.drag(20, 0);
-                    finger.lift();
-
-                    expect($scope.start).toBe(pxMovedToDuration(30));
-                    expect($start.css('left')).toBe('30px');
-
-                    finger.placeOn($start);
-                    finger.drag(17, 0);
-                    finger.lift();
-
-                    expect($scope.start).toBe(pxMovedToDuration(47));
-                    expect($start.css('left')).toBe('47px');
-                    expect($start.css('top')).toBe('auto');
-                });
-
-                it('should notify the outside world about its scan', function() {
-                    var finger = new Finger(),
-                        seekWidth = $seek.width(),
-                        update, done;
-
-                    function createSpies() {
-                        update = jasmine.createSpy('scan update');
-                        done = jasmine.createSpy('scan done');
-
-                        $scope.startScan = jasmine.createSpy('$scope.startScan()')
-                            .and.callFake(function(promise) {
-                                promise.then(done, null, update);
-                            });
-                    }
-
-                    createSpies();
-
-                    $scope.$apply(function() {
-                        $scope.start = 0;
-                        $scope.end = 60;
-                    });
-
-                    finger.placeOn($start);
-                    finger.drag(0, 0);
-                    expect($scope.startScan).toHaveBeenCalled();
-
-                    finger.drag(seekWidth * 0.25, 0);
-                    $timeout.flush();
-                    expect(update).toHaveBeenCalledWith(15);
-
-                    finger.drag(seekWidth * 0.25, 0);
-                    $timeout.flush();
-                    expect(update).toHaveBeenCalledWith(30);
-
-                    finger.drag(seekWidth * 0.25, 0);
-                    $timeout.flush();
-                    expect(update).toHaveBeenCalledWith(45);
-
-                    finger.lift();
-                    expect(done).toHaveBeenCalledWith(45);
-
-                    createSpies();
-
-                    finger.placeOn($start);
-                    finger.drag(0, 0);
-                    expect($scope.startScan).toHaveBeenCalled();
-
-                    finger.drag(seekWidth * -0.25, 0);
-                    $timeout.flush();
-                    expect(update).toHaveBeenCalledWith(30);
-
-                    finger.lift();
-                    expect(done).toHaveBeenCalledWith(30);
-                });
-
-                it('should not be able to move past the end marker', function() {
-                    var finger = new Finger(),
-                        seekWidth = $seek.width(),
-                        end = $trimmer.find('#end-marker').data('cDrag'),
-                        endPosition = end.display;
-
-                    end.refresh();
-
-                    // Start at 0
-                    $scope.$apply(function() {
-                        $scope.start = 0;
-                    });
-
-                    finger.placeOn($start);
-                    finger.drag(seekWidth, 0);
-                    expect($start.css('left')).toBe((endPosition.center.x - ($start.outerWidth() / 2)) + 'px');
-                });
+                expect(scope.endStamp).toBe('0:42');
             });
 
-            describe('the end marker', function() {
-                var $end,
-                    $seek;
+            describe('playhead', function() {
+                it('should be based on the currentTime', function() {
+                    var $playhead = $trimmer.find('.video-trimmer__playhead');
 
-                beforeEach(function() {
-                    $end = $trimmer.find('#end-marker');
-                    $seek = $trimmer.find('#seek-bar');
-                });
-
-                it('should move to its end position if there is no end time specified', function() {
-                    $scope.$apply(function() {
-                        $scope.end = null;
-                    });
-
-                    expect($end.css('left')).toBe($seek.width() + 'px');
-                });
-
-                it('should adjust its position based on the provided end time', function() {
-                    var seekWidth = $seek.width();
-
-                    function positionFor(end) {
-                        return Math.floor((seekWidth * end) / 60) + 'px';
-                    }
-
-                    expect($end.css('position')).toBe('relative');
-                    expect($end.css('left')).toBe(positionFor(40));
-
-                    $scope.$apply(function() {
-                        $scope.end = 30;
-                    });
-                    expect($end.css('left')).toBe(positionFor(30));
-
-                    $scope.$apply(function() {
-                        $scope.end = 57;
-                    });
-                    expect($end.css('left')).toBe(positionFor(57));
-                });
-
-                it('should modify the end time based on the position to which its moved', function() {
-                    var finger = new Finger(),
-                        seekWidth = $seek.width();
-
-                    function pxMovedToDuration(px) {
-                        return (60 - (px * 60) / seekWidth);
-                    }
-
-                    // Start at the end
-                    $scope.$apply(function() {
-                        $scope.end = 60;
-                    });
-
-                    finger.placeOn($end);
-                    finger.drag(-10, 0);
-                    finger.lift();
-
-                    expect($scope.end).toBe(pxMovedToDuration(10));
-                    expect($end.css('left')).toBe((seekWidth - 10) + 'px');
-
-                    finger.placeOn($end);
-                    finger.drag(-20, 0);
-                    finger.lift();
-
-                    expect($scope.end).toBe(pxMovedToDuration(30));
-                    expect($end.css('left')).toBe((seekWidth - 30) + 'px');
-
-                    finger.placeOn($end);
-                    finger.drag(-17, 0);
-                    finger.lift();
-
-                    expect($scope.end).toBe(pxMovedToDuration(47));
-                    expect($end.css('left')).toBe((seekWidth - 47) + 'px');
-                    expect($end.css('top')).toBe('auto');
-                });
-
-                it('should notify the outside world about its scan', function() {
-                    var finger = new Finger(),
-                        seekWidth = $seek.width(),
-                        update, done;
-
-                    function createSpies() {
-                        update = jasmine.createSpy('scan update');
-                        done = jasmine.createSpy('scan done');
-
-                        $scope.endScan = jasmine.createSpy('$scope.endScan()')
-                            .and.callFake(function(promise) {
-                                promise.then(done, null, update);
-                            });
-                    }
-
-                    createSpies();
-
-                    $scope.$apply(function() {
-                        $scope.start = 0;
-                        $scope.end = 60;
-                    });
-
-                    finger.placeOn($end);
-                    finger.drag(0, 0);
-                    expect($scope.endScan).toHaveBeenCalled();
-
-                    finger.drag(seekWidth * -0.25, 0);
-                    $timeout.flush();
-                    expect(update).toHaveBeenCalledWith(45);
-
-                    finger.drag(seekWidth * -0.25, 0);
-                    $timeout.flush();
-                    expect(update).toHaveBeenCalledWith(30);
-
-                    finger.drag(seekWidth * -0.25, 0);
-                    $timeout.flush();
-                    expect(update).toHaveBeenCalledWith(15);
-
-                    finger.lift();
-                    expect(done).toHaveBeenCalledWith(15);
-
-                    createSpies();
-
-                    finger.placeOn($end);
-                    finger.drag(0, 0);
-                    expect($scope.endScan).toHaveBeenCalled();
-
-                    finger.drag(seekWidth * 0.25, 0);
-                    $timeout.flush();
-                    expect(update).toHaveBeenCalledWith(30);
-
-                    finger.lift();
-                    expect(done).toHaveBeenCalledWith(30);
-                });
-
-                it('should not be able to move past the start marker', function() {
-                    var finger = new Finger(),
-                        seekWidth = $seek.width(),
-                        start = $trimmer.find('#start-marker').data('cDrag'),
-                        startPosition = start.display;
-
-                    start.refresh();
-
-                    // Start at the end
-                    $scope.$apply(function() {
-                        $scope.end = 60;
-                    });
-
-                    finger.placeOn($end);
-                    finger.drag(seekWidth * -1, 0);
-                    expect($end.css('left')).toBe((startPosition.center.x - ($end.outerWidth() / 2)) + 'px');
-                });
-            });
-
-            describe('the playhead', function() {
-                var $seek,
-                    $playhead;
-
-                beforeEach(function() {
-                    $seek = $trimmer.find('#seek-bar');
-                    $playhead = $seek.find('.video-trimmer__playhead');
-                });
-
-                it('should be positioned as a percentage (currentTime / duration.)', function() {
-                    function toPixels(percent) {
-                        return ($seek.width() * percent) + 16 + 'px';
-                    }
-
-                    expect($playhead.css('left')).toBe(toPixels(0));
+                    expect($playhead.css('left')).toBe('0px');
 
                     $scope.$apply(function() {
                         $scope.currentTime = 15;
                     });
-                    expect($playhead.css('left')).toBe(toPixels(0.25));
+                    expect($playhead.css('left')).toBe('150px');
 
                     $scope.$apply(function() {
                         $scope.currentTime = 30;
                     });
-                    expect($playhead.css('left')).toBe(toPixels(0.5));
+                    expect($playhead.css('left')).toBe('300px');
 
                     $scope.$apply(function() {
                         $scope.currentTime = 45;
                     });
-                    expect($playhead.css('left')).toBe(toPixels(0.75));
+                    expect($playhead.css('left')).toBe('450px');
 
                     $scope.$apply(function() {
                         $scope.currentTime = 60;
                     });
-                    expect($playhead.css('left')).toBe(toPixels(1));
+                    expect($playhead.css('left')).toBe('600px');
                 });
             });
 
-            describe('when the window is resized', function() {
-                var scope,
-                    DragCtrl;
+            describe('markers: ', function() {
+                var $timeline,
+                    timeline;
 
                 beforeEach(function() {
-                    scope = $trimmer.isolateScope();
-                    DragCtrl = $trimmer.find('.video-trimmer__group').data('cDragCtrl');
-
-                    spyOn(scope, '$digest').and.callThrough();
-                    spyOn(DragCtrl, 'refresh').and.callThrough();
+                    $timeline = $trimmer.find('#seek-bar');
+                    timeline = $timeline.data('cDragZone');
                 });
 
-                it('should refresh the DragCtrl and $digest the scope', function() {
-                    var $$window = $($window);
+                function absTimelinePx(percent) {
+                    return timeline.display.left + (timeline.display.width * percent);
+                }
 
-                    $$window.trigger('resize');
-                    expect(DragCtrl.refresh).toHaveBeenCalled();
-                    expect(scope.$digest).toHaveBeenCalled();
+                describe('start marker', function() {
+                    var $start,
+                        start;
 
-                    $$window.trigger('resize');
-                    expect(DragCtrl.refresh.calls.count()).toBe(2);
-                    expect(scope.$digest.calls.count()).toBe(2);
+                    function left(px) {
+                        return timeline.display.left + px;
+                    }
+
+                    beforeEach(function() {
+                        $start = $trimmer.find('#start-marker');
+                        start = $start.data('cDrag');
+                    });
+
+                    describe('without a start time', function() {
+                        it('should be placed at the beginning of the timeline', function() {
+                            expect(start.display.left).toBe(timeline.display.left);
+                        });
+                    });
+
+                    describe('with a start time', function() {
+                        it('should be positioned on the part of the timeline that corresponds to the start time', function() {
+
+                            expect(start.display.left).toBe(timeline.display.left);
+
+                            $scope.$apply(function() {
+                                $scope.start = 15;
+                            });
+                            start.refresh();
+                            expect(start.display.left).toBe(absTimelinePx(0.25));
+
+                            $scope.$apply(function() {
+                                $scope.start = 30;
+                            });
+                            start.refresh();
+                            expect(start.display.left).toBe(absTimelinePx(0.5));
+
+                            $scope.$apply(function() {
+                                $scope.start = 45;
+                            });
+                            start.refresh();
+                            expect(start.display.left).toBe(absTimelinePx(0.75));
+                        });
+                    });
+
+                    it('should only be draggable along the x axis', function() {
+                        var finger = new Finger(),
+                            top;
+
+
+                        start.refresh();
+                        top = start.display.top;
+
+                        finger.placeOn($start);
+                        finger.drag(10, 10);
+                        $scope.$apply();
+                        start.refresh();
+                        expect(start.display.left).toBe(left(10));
+
+                        finger.drag(10, 10);
+                        $scope.$apply();
+                        start.refresh();
+                        expect(start.display.left).toBe(left(20));
+                        expect(start.display.top).toBe(top);
+                    });
+
+                    it('should not be draggable past the left side of the timeline', function() {
+                        var finger = new Finger();
+
+                        finger.placeOn($start);
+                        finger.drag(-30, 0);
+                        expect(start.display.left).toBe(left(0));
+
+                        finger.drag(40, 0);
+                        expect(start.display.left).toBe(left(10));
+                    });
+
+                    it('should not be draggable past the end marker', function() {
+                        var indexFinger = new Finger(),
+                            middleFinger = new Finger(),
+                            $end = $trimmer.find('#end-marker'),
+                            end = $end.data('cDrag');
+
+                        middleFinger.placeOn($end);
+                        middleFinger.drag(-100, 0);
+
+                        indexFinger.placeOn($start);
+                        indexFinger.drag(600, 0);
+                        expect(start.display.left).toBe(end.display.left);
+                    });
+
+                    it('should set the start property when dropped', function() {
+                        var finger = new Finger();
+
+                        finger.placeOn($start);
+                        finger.drag(150, 0);
+                        finger.lift();
+                        expect($scope.start).toBe(15);
+                        expect(start.display.top).toBe(20);
+
+                        finger.placeOn($start);
+                        finger.drag(150, 0);
+                        finger.lift();
+                        expect($scope.start).toBe(30);
+                        expect(start.display.top).toBe(20);
+
+                        finger.placeOn($start);
+                        finger.drag(150, 0);
+                        finger.lift();
+                        expect($scope.start).toBe(45);
+                        expect(start.display.top).toBe(20);
+                    });
+
+                    it('should notify of the scan progress as the scan occurs and update the startStamp', function() {
+                        var notify = jasmine.createSpy('notify'),
+                            finish = jasmine.createSpy('finish'),
+                            finger = new Finger(),
+                            scope = $trimmer.isolateScope();
+
+                        $scope.startScan = jasmine.createSpy('$scope.startScan()')
+                            .and.callFake(function(promise) {
+                                promise.then(finish, null, notify);
+                            });
+
+                        finger.placeOn($start);
+                        finger.drag(0, 0);
+                        $timeout.flush();
+                        expect($scope.startScan).toHaveBeenCalled();
+                        expect(scope.startStamp).toBe('0:00');
+
+
+                        finger.drag(150, 0);
+                        $timeout.flush();
+                        expect(notify).toHaveBeenCalledWith(15);
+                        expect(scope.startStamp).toBe('0:15');
+
+                        finger.drag(150, 0);
+                        $timeout.flush();
+                        expect(notify).toHaveBeenCalledWith(30);
+                        expect(scope.startStamp).toBe('0:30');
+
+                        finger.drag(150, 0);
+                        $timeout.flush();
+                        expect(notify).toHaveBeenCalledWith(45);
+                        expect(scope.startStamp).toBe('0:45');
+
+                        finger.lift();
+                        expect(finish).toHaveBeenCalledWith(45);
+                    });
+                });
+
+                describe('end marker', function() {
+                    var $end,
+                        end;
+
+                    function right(px) {
+                        return timeline.display.right - px;
+                    }
+
+                    beforeEach(function() {
+                        $end = $trimmer.find('#end-marker');
+                        end = $end.data('cDrag');
+                    });
+
+                    describe('without an end time', function() {
+                        it('should be placed at the end of the timeline', function() {
+                            end.refresh();
+
+                            expect(end.display.right).toBe(timeline.display.right);
+                        });
+                    });
+
+                    describe('with an end time', function() {
+                        it('should be positioned on the part of the timeline that corresponds to the end time', function() {
+                            end.refresh();
+
+                            expect(end.display.right).toBe(timeline.display.right);
+
+                            $scope.$apply(function() {
+                                $scope.end = 45;
+                            });
+                            end.refresh();
+                            expect(end.display.right).toBe(absTimelinePx(0.75));
+
+                            $scope.$apply(function() {
+                                $scope.end = 30;
+                            });
+                            end.refresh();
+                            expect(end.display.right).toBe(absTimelinePx(0.5));
+
+                            $scope.$apply(function() {
+                                $scope.end = 15;
+                            });
+                            end.refresh();
+                            expect(end.display.right).toBe(absTimelinePx(0.25));
+                        });
+                    });
+
+                    it('should only be draggable along the x axis', function() {
+                        var finger = new Finger(),
+                            top,
+                            scope = $trimmer.isolateScope();
+
+                        end.refresh();
+                        top = end.display.top;
+
+                        finger.placeOn($end);
+                        finger.drag(-10, 10);
+                        $timeout.flush();
+                        end.refresh();
+                        expect(end.display.right).toBe(right(10));
+
+                        finger.drag(-10, 10);
+                        $end.width($end.width() + 2);
+                        scope.$digest();
+                        end.refresh();
+                        expect(end.display.right).toBe(right(18));
+                        expect(end.display.top).toBe(top);
+                    });
+
+                    it('should not be draggable past the right side of the timeline', function() {
+                        var finger = new Finger();
+
+                        finger.placeOn($end);
+                        finger.drag(30, 0);
+                        expect(end.display.right).toBe(right(0));
+
+                        finger.drag(-40, 0);
+                        expect(end.display.right).toBe(right(10));
+                    });
+
+                    it('should not be draggable past the start marker', function() {
+                        var indexFinger = new Finger(),
+                            middleFinger = new Finger(),
+                            $start = $trimmer.find('#start-marker'),
+                            start = $start.data('cDrag');
+
+                        middleFinger.placeOn($start);
+                        middleFinger.drag(200, 0);
+
+                        indexFinger.placeOn($end);
+                        indexFinger.drag(-600, 0);
+                        expect(end.display.left).toBe(start.display.left);
+                    });
+
+                    it('should set the end property when dropped', function() {
+                        var finger = new Finger();
+
+                        finger.placeOn($end);
+                        finger.drag(-150, 0);
+                        finger.lift();
+                        expect($scope.end).toBe(45);
+                        expect(end.display.top).toBe(48);
+
+                        finger.placeOn($end);
+                        finger.drag(-150, 0);
+                        finger.lift();
+                        expect($scope.end).toBe(30);
+                        expect(end.display.top).toBe(48);
+
+                        finger.placeOn($end);
+                        finger.drag(-150, 0);
+                        finger.lift();
+                        expect($scope.end).toBe(15);
+                        expect(end.display.top).toBe(48);
+                    });
+
+                    it('should notify of the scan progress as the scan occurs and update the endStamp', function() {
+                        var notify = jasmine.createSpy('notify'),
+                            finish = jasmine.createSpy('finish'),
+                            finger = new Finger(),
+                            scope = $trimmer.isolateScope();
+
+                        $scope.endScan = jasmine.createSpy('$scope.endScan()')
+                            .and.callFake(function(promise) {
+                                promise.then(finish, null, notify);
+                            });
+
+                        finger.placeOn($end);
+                        finger.drag(0, 0);
+                        $timeout.flush();
+                        expect($scope.endScan).toHaveBeenCalled();
+                        expect(scope.endStamp).toBe('1:00');
+
+                        finger.drag(-150, 0);
+                        $timeout.flush();
+                        expect(notify).toHaveBeenCalledWith(45);
+                        expect(scope.endStamp).toBe('0:45');
+
+                        finger.drag(-150, 0);
+                        $timeout.flush();
+                        expect(notify).toHaveBeenCalledWith(30);
+                        expect(scope.endStamp).toBe('0:30');
+
+                        finger.drag(-150, 0);
+                        $timeout.flush();
+                        expect(notify).toHaveBeenCalledWith(15);
+                        expect(scope.endStamp).toBe('0:15');
+
+                        finger.lift();
+                        expect(finish).toHaveBeenCalledWith(15);
+                    });
                 });
             });
         });
