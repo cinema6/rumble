@@ -61,10 +61,13 @@
                         "ballot",
                         "comments"
                     ],
-                    "ballot": [
-                        "Catchy",
-                        "Painful"
-                    ],
+                    "ballot": {
+                        "prompt": "What did you think of this video?",
+                        "choices": [
+                            "Catchy",
+                            "Painful"
+                        ]
+                    },
                     "data": {
                         "videoid": "gy1B3agGNxw",
                         "start": 42,
@@ -95,10 +98,13 @@
                     "modules": [
                         "ballot"
                     ],
-                    "ballot": [
-                        "Funny",
-                        "Lame"
-                    ],
+                    "ballot": {
+                        "prompt": "What did you think of this video?",
+                        "choices": [
+                            "Funny",
+                            "Lame"
+                        ]
+                    },
                     "data": {
                         "videoid": "x18b09a",
                         "related": 0
@@ -113,10 +119,13 @@
                     "modules": [
                         "ballot"
                     ],
-                    "ballot": [
-                        "Cute",
-                        "Ugly"
-                    ],
+                    "ballot": {
+                        "prompt": "What did you think of this video?",
+                        "choices": [
+                            "Cute",
+                            "Ugly"
+                        ]
+                    },
                     "data": {
                         "videoid": "81766071",
                         "start": 35,
@@ -132,10 +141,13 @@
                     "modules": [
                         "ballot"
                     ],
-                    "ballot": [
-                        "Cool",
-                        "Geeky"
-                    ],
+                    "ballot": {
+                        "prompt": "What did you think of this video?",
+                        "choices": [
+                            "Cool",
+                            "Geeky"
+                        ]
+                    },
                     "data": {
                         "videoid": "Cn9yJrrm2tk",
                         "rel": 0,
@@ -152,10 +164,13 @@
                     "modules": [
                         "ballot"
                     ],
-                    "ballot": [
-                        "Funny",
-                        "Gross"
-                    ],
+                    "ballot": {
+                        "prompt": "What did you think of this video?",
+                        "choices": [
+                            "Funny",
+                            "Gross"
+                        ]
+                    },
                     "data": {
                         "videoid": "xorbb7",
                         "related": 0
@@ -206,10 +221,13 @@
                     "modules": [
                         "ballot"
                     ],
-                    "ballot": [
-                        "Cool",
-                        "Lame"
-                    ],
+                    "ballot": {
+                        "prompt": "What did you think of this video?",
+                        "choices": [
+                            "Cool",
+                            "Lame"
+                        ]
+                    },
                     "data": {
                         "videoid": "IqVPwcvgOWQ",
                         "rel": 0,
@@ -225,10 +243,13 @@
                     "modules": [
                         "ballot"
                     ],
-                    "ballot": [
-                        "Funny",
-                        "Gross"
-                    ],
+                    "ballot": {
+                        "prompt": "What did you think of this video?",
+                        "choices": [
+                            "Cool",
+                            "Lame"
+                        ]
+                    },
                     "data": {
                         "videoid": "MNCzSfv4hX8",
                         "rel": 0,
@@ -244,10 +265,13 @@
                     "modules": [
                         "ballot"
                     ],
-                    "ballot": [
-                        "Cool",
-                        "Lame"
-                    ],
+                    "ballot": {
+                        "prompt": "What did you think of this video?",
+                        "choices": [
+                            "Cool",
+                            "Lame"
+                        ]
+                    },
                     "data": {
                         "videoid": "HrqXTHCGVEo",
                         "rel": 0,
@@ -263,10 +287,13 @@
                     "modules": [
                         "ballot"
                     ],
-                    "ballot": [
-                        "Cool",
-                        "Lame"
-                    ],
+                    "ballot": {
+                        "prompt": "What did you think of this video?",
+                        "choices": [
+                            "Cool",
+                            "Lame"
+                        ]
+                    },
                     "data": {
                         "videoid": "x76VEPXYaI0",
                         "rel": 0,
@@ -282,10 +309,13 @@
                     "modules": [
                         "ballot"
                     ],
-                    "ballot": [
-                        "Cool",
-                        "Lame"
-                    ],
+                    "ballot": {
+                        "prompt": "What did you think of this video?",
+                        "choices": [
+                            "Cool",
+                            "Lame"
+                        ]
+                    },
                     "data": {
                         "videoid": "af2m0gf6TtA",
                         "rel": 0,
@@ -301,10 +331,13 @@
                     "modules": [
                         "ballot"
                     ],
-                    "ballot": [
-                        "Cool",
-                        "Lame"
-                    ],
+                    "ballot": {
+                        "prompt": "What did you think of this video?",
+                        "choices": [
+                            "Cool",
+                            "Lame"
+                        ]
+                    },
                     "data": {
                         "videoid": "GdEKSyad_rk",
                         "rel": 0,
@@ -320,10 +353,13 @@
                     "modules": [
                         "ballot"
                     ],
-                    "ballot": [
-                        "Cute",
-                        "Lame"
-                    ],
+                    "ballot": {
+                        "prompt": "What did you think of this video?",
+                        "choices": [
+                            "Cool",
+                            "Lame"
+                        ]
+                    },
                     "data": {
                         "videoid": "T8F8WR2rzPA",
                         "rel": 0,
@@ -351,10 +387,13 @@
                     "modules": [
                         "ballot"
                     ],
-                    "ballot": [
-                        "Cool",
-                        "Lame"
-                    ],
+                    "ballot": {
+                        "prompt": "What did you think of this video?",
+                        "choices": [
+                            "Cool",
+                            "Lame"
+                        ]
+                    },
                     "data": {
                         "videoid": "SwbP9WLX3fY",
                         "rel": 0,
@@ -370,10 +409,13 @@
                     "modules": [
                         "ballot"
                     ],
-                    "ballot": [
-                        "Cool",
-                        "Lame"
-                    ],
+                    "ballot": {
+                        "prompt": "What did you think of this video?",
+                        "choices": [
+                            "Cool",
+                            "Lame"
+                        ]
+                    },
                     "data": {
                         "videoid": "ZCAnLxRvNNc",
                         "rel": 0,
@@ -389,10 +431,13 @@
                     "modules": [
                         "ballot"
                     ],
-                    "ballot": [
-                        "Awesome",
-                        "Stupid"
-                    ],
+                    "ballot": {
+                        "prompt": "What did you think of this video?",
+                        "choices": [
+                            "Awesome",
+                            "Stupid"
+                        ]
+                    },
                     "data": {
                         "videoid": "pOoy7_l2EbI",
                         "rel": 0,
@@ -408,10 +453,13 @@
                     "modules": [
                         "ballot"
                     ],
-                    "ballot": [
-                        "Cool",
-                        "Lame"
-                    ],
+                    "ballot": {
+                        "prompt": "What did you think of this video?",
+                        "choices": [
+                            "Cool",
+                            "Lame"
+                        ]
+                    },
                     "data": {
                         "videoid": "rIu5B3Fsstg",
                         "rel": 0,
@@ -427,10 +475,13 @@
                     "modules": [
                         "ballot"
                     ],
-                    "ballot": [
-                        "Cool",
-                        "Lame"
-                    ],
+                    "ballot": {
+                        "prompt": "What did you think of this video?",
+                        "choices": [
+                            "Cool",
+                            "Lame"
+                        ]
+                    },
                     "data": {
                         "videoid": "oEG1V7rkIK8",
                         "rel": 0,
@@ -446,10 +497,13 @@
                     "modules": [
                         "ballot"
                     ],
-                    "ballot": [
-                        "Cool",
-                        "Lame"
-                    ],
+                    "ballot": {
+                        "prompt": "What did you think of this video?",
+                        "choices": [
+                            "Cool",
+                            "Lame"
+                        ]
+                    },
                     "data": {
                         "videoid": "zqIjZFV4YAU",
                         "rel": 0,
@@ -465,10 +519,13 @@
                     "modules": [
                         "ballot"
                     ],
-                    "ballot": [
-                        "Cute",
-                        "Lame"
-                    ],
+                    "ballot": {
+                        "prompt": "What did you think of this video?",
+                        "choices": [
+                            "Cute",
+                            "Lame"
+                        ]
+                    },
                     "data": {
                         "videoid": "CjB_oVeq8Lo",
                         "rel": 0,
@@ -484,10 +541,13 @@
                     "modules": [
                         "ballot"
                     ],
-                    "ballot": [
-                        "YAY!",
-                        "ARGH!"
-                    ],
+                    "ballot": {
+                        "prompt": "What did you think of this video?",
+                        "choices": [
+                            "YAY!",
+                            "ARGH!"
+                        ]
+                    },
                     "data": {
                         "videoid": "eesJwsJoczY",
                         "rel": 0,
@@ -540,10 +600,13 @@
                         "ballot",
                         "displayAd"
                     ],
-                    "ballot": [
-                        "Cool",
-                        "Lame"
-                    ],
+                    "ballot": {
+                        "prompt": "What did you think of this video?",
+                        "choices": [
+                            "Cool",
+                            "Lame"
+                        ]
+                    },
                     "data": {
                         "videoid": "IqVPwcvgOWQ",
                         "rel": 0,
@@ -561,10 +624,13 @@
                         "ballot",
                         "displayAd"
                     ],
-                    "ballot": [
-                        "Funny",
-                        "Gross"
-                    ],
+                    "ballot": {
+                        "prompt": "What did you think of this video?",
+                        "choices": [
+                            "Cool",
+                            "Lame"
+                        ]
+                    },
                     "data": {
                         "videoid": "MNCzSfv4hX8",
                         "rel": 0,
@@ -582,10 +648,13 @@
                         "ballot",
                         "displayAd"
                     ],
-                    "ballot": [
-                        "Cool",
-                        "Lame"
-                    ],
+                    "ballot": {
+                        "prompt": "What did you think of this video?",
+                        "choices": [
+                            "Cool",
+                            "Lame"
+                        ]
+                    },
                     "data": {
                         "videoid": "HrqXTHCGVEo",
                         "rel": 0,
@@ -603,10 +672,13 @@
                         "ballot",
                         "displayAd"
                     ],
-                    "ballot": [
-                        "Cool",
-                        "Lame"
-                    ],
+                    "ballot": {
+                        "prompt": "What did you think of this video?",
+                        "choices": [
+                            "Cool",
+                            "Lame"
+                        ]
+                    },
                     "data": {
                         "videoid": "x76VEPXYaI0",
                         "rel": 0,
@@ -624,10 +696,13 @@
                         "ballot",
                         "displayAd"
                     ],
-                    "ballot": [
-                        "Cool",
-                        "Lame"
-                    ],
+                    "ballot": {
+                        "prompt": "What did you think of this video?",
+                        "choices": [
+                            "Cool",
+                            "Lame"
+                        ]
+                    },
                     "data": {
                         "videoid": "af2m0gf6TtA",
                         "rel": 0,
@@ -645,10 +720,13 @@
                         "ballot",
                         "displayAd"
                     ],
-                    "ballot": [
-                        "Cool",
-                        "Lame"
-                    ],
+                    "ballot": {
+                        "prompt": "What did you think of this video?",
+                        "choices": [
+                            "Cool",
+                            "Lame"
+                        ]
+                    },
                     "data": {
                         "videoid": "GdEKSyad_rk",
                         "rel": 0,
@@ -666,10 +744,13 @@
                         "ballot",
                         "displayAd"
                     ],
-                    "ballot": [
-                        "Cute",
-                        "Lame"
-                    ],
+                    "ballot": {
+                        "prompt": "What did you think of this video?",
+                        "choices": [
+                            "Cute",
+                            "Lame"
+                        ]
+                    },
                     "data": {
                         "videoid": "T8F8WR2rzPA",
                         "rel": 0,
@@ -699,10 +780,13 @@
                         "ballot",
                         "displayAd"
                     ],
-                    "ballot": [
-                        "Cool",
-                        "Lame"
-                    ],
+                    "ballot": {
+                        "prompt": "What did you think of this video?",
+                        "choices": [
+                            "Cool",
+                            "Lame"
+                        ]
+                    },
                     "data": {
                         "videoid": "SwbP9WLX3fY",
                         "rel": 0,
@@ -720,10 +804,13 @@
                         "ballot",
                         "displayAd"
                     ],
-                    "ballot": [
-                        "Cool",
-                        "Lame"
-                    ],
+                    "ballot": {
+                        "prompt": "What did you think of this video?",
+                        "choices": [
+                            "Cool",
+                            "Lame"
+                        ]
+                    },
                     "data": {
                         "videoid": "ZCAnLxRvNNc",
                         "rel": 0,
@@ -741,10 +828,13 @@
                         "ballot",
                         "displayAd"
                     ],
-                    "ballot": [
-                        "Awesome",
-                        "Stupid"
-                    ],
+                    "ballot": {
+                        "prompt": "What did you think of this video?",
+                        "choices": [
+                            "Awesome",
+                            "Stupid"
+                        ]
+                    },
                     "data": {
                         "videoid": "pOoy7_l2EbI",
                         "rel": 0,
@@ -762,10 +852,13 @@
                         "ballot",
                         "displayAd"
                     ],
-                    "ballot": [
-                        "Cool",
-                        "Lame"
-                    ],
+                    "ballot": {
+                        "prompt": "What did you think of this video?",
+                        "choices": [
+                            "Cool",
+                            "Lame"
+                        ]
+                    },
                     "data": {
                         "videoid": "rIu5B3Fsstg",
                         "rel": 0,
@@ -783,10 +876,13 @@
                         "ballot",
                         "displayAd"
                     ],
-                    "ballot": [
-                        "Cool",
-                        "Lame"
-                    ],
+                    "ballot": {
+                        "prompt": "What did you think of this video?",
+                        "choices": [
+                            "Cool",
+                            "Lame"
+                        ]
+                    },
                     "data": {
                         "videoid": "oEG1V7rkIK8",
                         "rel": 0,
@@ -804,10 +900,13 @@
                         "ballot",
                         "displayAd"
                     ],
-                    "ballot": [
-                        "Cool",
-                        "Lame"
-                    ],
+                    "ballot": {
+                        "prompt": "What did you think of this video?",
+                        "choices": [
+                            "Cool",
+                            "Lame"
+                        ]
+                    },
                     "data": {
                         "videoid": "zqIjZFV4YAU",
                         "rel": 0,
@@ -825,10 +924,13 @@
                         "ballot",
                         "displayAd"
                     ],
-                    "ballot": [
-                        "Cute",
-                        "Lame"
-                    ],
+                    "ballot": {
+                        "prompt": "What did you think of this video?",
+                        "choices": [
+                            "Cute",
+                            "Lame"
+                        ]
+                    },
                     "data": {
                         "videoid": "CjB_oVeq8Lo",
                         "rel": 0,
@@ -846,10 +948,13 @@
                         "ballot",
                         "displayAd"
                     ],
-                    "ballot": [
-                        "YAY!",
-                        "ARGH!"
-                    ],
+                    "ballot": {
+                        "prompt": "What did you think of this video?",
+                        "choices": [
+                            "YAY!",
+                            "ARGH!"
+                        ]
+                    },
                     "data": {
                         "videoid": "eesJwsJoczY",
                         "rel": 0,
@@ -903,10 +1008,13 @@
                         "ballot",
                         "displayAd"
                     ],
-                    "ballot": [
-                        "Cool",
-                        "Lame"
-                    ],
+                    "ballot": {
+                        "prompt": "What did you think of this video?",
+                        "choices": [
+                            "Cool",
+                            "Lame"
+                        ]
+                    },
                     "data": {
                         "videoid": "IqVPwcvgOWQ",
                         "rel": 0,
@@ -924,10 +1032,13 @@
                         "ballot",
                         "displayAd"
                     ],
-                    "ballot": [
-                        "Funny",
-                        "Gross"
-                    ],
+                    "ballot": {
+                        "prompt": "What did you think of this video?",
+                        "choices": [
+                            "Cool",
+                            "Lame"
+                        ]
+                    },
                     "data": {
                         "videoid": "MNCzSfv4hX8",
                         "rel": 0,
@@ -945,10 +1056,13 @@
                         "ballot",
                         "displayAd"
                     ],
-                    "ballot": [
-                        "Cool",
-                        "Lame"
-                    ],
+                    "ballot": {
+                        "prompt": "What did you think of this video?",
+                        "choices": [
+                            "Cool",
+                            "Lame"
+                        ]
+                    },
                     "data": {
                         "videoid": "HrqXTHCGVEo",
                         "rel": 0,
@@ -966,10 +1080,13 @@
                         "ballot",
                         "displayAd"
                     ],
-                    "ballot": [
-                        "Cool",
-                        "Lame"
-                    ],
+                    "ballot": {
+                        "prompt": "What did you think of this video?",
+                        "choices": [
+                            "Cool",
+                            "Lame"
+                        ]
+                    },
                     "data": {
                         "videoid": "x76VEPXYaI0",
                         "rel": 0,
@@ -987,10 +1104,13 @@
                         "ballot",
                         "displayAd"
                     ],
-                    "ballot": [
-                        "Cool",
-                        "Lame"
-                    ],
+                    "ballot": {
+                        "prompt": "What did you think of this video?",
+                        "choices": [
+                            "Cool",
+                            "Lame"
+                        ]
+                    },
                     "data": {
                         "videoid": "af2m0gf6TtA",
                         "rel": 0,
@@ -1008,10 +1128,13 @@
                         "ballot",
                         "displayAd"
                     ],
-                    "ballot": [
-                        "Cool",
-                        "Lame"
-                    ],
+                    "ballot": {
+                        "prompt": "What did you think of this video?",
+                        "choices": [
+                            "Cool",
+                            "Lame"
+                        ]
+                    },
                     "data": {
                         "videoid": "GdEKSyad_rk",
                         "rel": 0,
@@ -1029,10 +1152,13 @@
                         "ballot",
                         "displayAd"
                     ],
-                    "ballot": [
-                        "Cute",
-                        "Lame"
-                    ],
+                    "ballot": {
+                        "prompt": "What did you think of this video?",
+                        "choices": [
+                            "Cute",
+                            "Lame"
+                        ]
+                    },
                     "data": {
                         "videoid": "T8F8WR2rzPA",
                         "rel": 0,
@@ -1062,10 +1188,13 @@
                         "ballot",
                         "displayAd"
                     ],
-                    "ballot": [
-                        "Cool",
-                        "Lame"
-                    ],
+                    "ballot": {
+                        "prompt": "What did you think of this video?",
+                        "choices": [
+                            "Cool",
+                            "Lame"
+                        ]
+                    },
                     "data": {
                         "videoid": "SwbP9WLX3fY",
                         "rel": 0,
@@ -1083,10 +1212,13 @@
                         "ballot",
                         "displayAd"
                     ],
-                    "ballot": [
-                        "Cool",
-                        "Lame"
-                    ],
+                    "ballot": {
+                        "prompt": "What did you think of this video?",
+                        "choices": [
+                            "Cool",
+                            "Lame"
+                        ]
+                    },
                     "data": {
                         "videoid": "ZCAnLxRvNNc",
                         "rel": 0,
@@ -1104,10 +1236,13 @@
                         "ballot",
                         "displayAd"
                     ],
-                    "ballot": [
-                        "Awesome",
-                        "Stupid"
-                    ],
+                    "ballot": {
+                        "prompt": "What did you think of this video?",
+                        "choices": [
+                            "Awesome",
+                            "Stupid"
+                        ]
+                    },
                     "data": {
                         "videoid": "pOoy7_l2EbI",
                         "rel": 0,
@@ -1125,10 +1260,13 @@
                         "ballot",
                         "displayAd"
                     ],
-                    "ballot": [
-                        "Cool",
-                        "Lame"
-                    ],
+                    "ballot": {
+                        "prompt": "What did you think of this video?",
+                        "choices": [
+                            "Cool",
+                            "Lame"
+                        ]
+                    },
                     "data": {
                         "videoid": "rIu5B3Fsstg",
                         "rel": 0,
@@ -1146,10 +1284,13 @@
                         "ballot",
                         "displayAd"
                     ],
-                    "ballot": [
-                        "Cool",
-                        "Lame"
-                    ],
+                    "ballot": {
+                        "prompt": "What did you think of this video?",
+                        "choices": [
+                            "Cool",
+                            "Lame"
+                        ]
+                    },
                     "data": {
                         "videoid": "oEG1V7rkIK8",
                         "rel": 0,
@@ -1167,10 +1308,13 @@
                         "ballot",
                         "displayAd"
                     ],
-                    "ballot": [
-                        "Cool",
-                        "Lame"
-                    ],
+                    "ballot": {
+                        "prompt": "What did you think of this video?",
+                        "choices": [
+                            "Cool",
+                            "Lame"
+                        ]
+                    },
                     "data": {
                         "videoid": "zqIjZFV4YAU",
                         "rel": 0,
@@ -1188,10 +1332,13 @@
                         "ballot",
                         "displayAd"
                     ],
-                    "ballot": [
-                        "Cute",
-                        "Lame"
-                    ],
+                    "ballot": {
+                        "prompt": "What did you think of this video?",
+                        "choices": [
+                            "Cute",
+                            "Lame"
+                        ]
+                    },
                     "data": {
                         "videoid": "CjB_oVeq8Lo",
                         "rel": 0,
@@ -1209,10 +1356,13 @@
                         "ballot",
                         "displayAd"
                     ],
-                    "ballot": [
-                        "YAY!",
-                        "ARGH!"
-                    ],
+                    "ballot": {
+                        "prompt": "What did you think of this video?",
+                        "choices": [
+                            "YAY!",
+                            "ARGH!"
+                        ]
+                    },
                     "data": {
                         "videoid": "eesJwsJoczY",
                         "rel": 0,
@@ -1264,10 +1414,13 @@
                     "modules": [
                         "ballot"
                     ],
-                    "ballot": [
-                        "All Skill",
-                        "All Luck"
-                    ],
+                    "ballot": {
+                        "prompt": "What did you think of this video?",
+                        "choices": [
+                            "All Skill",
+                            "All Luck"
+                        ]
+                    },
                     "data": {
                         "videoid": "WpJaJM4Cy8o",
                         "rel": 0,
@@ -1283,10 +1436,13 @@
                     "modules": [
                         "ballot"
                     ],
-                    "ballot": [
-                        "All Skill",
-                        "All Luck"
-                    ],
+                    "ballot": {
+                        "prompt": "What did you think of this video?",
+                        "choices": [
+                            "All Skill",
+                            "All Luck"
+                        ]
+                    },
                     "data": {
                         "videoid": "-T1D_H-vOSA",
                         "rel": 0,
@@ -1302,10 +1458,13 @@
                     "modules": [
                         "ballot"
                     ],
-                    "ballot": [
-                        "All Skill",
-                        "All Luck"
-                    ],
+                    "ballot": {
+                        "prompt": "What did you think of this video?",
+                        "choices": [
+                            "All Skill",
+                            "All Luck"
+                        ]
+                    },
                     "data": {
                         "videoid": "u_Hrv5TNb2Y",
                         "rel": 0,
@@ -1321,10 +1480,13 @@
                     "modules": [
                         "ballot"
                     ],
-                    "ballot": [
-                        "All Skill",
-                        "All Luck"
-                    ],
+                    "ballot": {
+                        "prompt": "What did you think of this video?",
+                        "choices": [
+                            "All Skill",
+                            "All Luck"
+                        ]
+                    },
                     "data": {
                         "videoid": "MVT91mNMS8A",
                         "rel": 0,
@@ -1340,10 +1502,13 @@
                     "modules": [
                         "ballot"
                     ],
-                    "ballot": [
-                        "All Skill",
-                        "All Luck"
-                    ],
+                    "ballot": {
+                        "prompt": "What did you think of this video?",
+                        "choices": [
+                            "All Skill",
+                            "All Luck"
+                        ]
+                    },
                     "data": {
                         "videoid": "O-5mLe8n9QI",
                         "rel": 0,
@@ -1359,10 +1524,13 @@
                     "modules": [
                         "ballot"
                     ],
-                    "ballot": [
-                        "All Skill",
-                        "All Luck"
-                    ],
+                    "ballot": {
+                        "prompt": "What did you think of this video?",
+                        "choices": [
+                            "All Skill",
+                            "All Luck"
+                        ]
+                    },
                     "data": {
                         "videoid": "xKaGdvnQUz4",
                         "rel": 0,
@@ -1387,10 +1555,13 @@
                     "modules": [
                         "ballot"
                     ],
-                    "ballot": [
-                        "All Skill",
-                        "All Luck"
-                    ],
+                    "ballot": {
+                        "prompt": "What did you think of this video?",
+                        "choices": [
+                            "All Skill",
+                            "All Luck"
+                        ]
+                    },
                     "data": {
                         "videoid": "lmvQVz1-bOU",
                         "rel": 0,
@@ -1406,10 +1577,13 @@
                     "modules": [
                         "ballot"
                     ],
-                    "ballot": [
-                        "All Skill",
-                        "All Luck"
-                    ],
+                    "ballot": {
+                        "prompt": "What did you think of this video?",
+                        "choices": [
+                            "All Skill",
+                            "All Luck"
+                        ]
+                    },
                     "data": {
                         "videoid": "27XeNefwABw",
                         "rel": 0,
@@ -1425,10 +1599,13 @@
                     "modules": [
                         "ballot"
                     ],
-                    "ballot": [
-                        "All Skill",
-                        "All Luck"
-                    ],
+                    "ballot": {
+                        "prompt": "What did you think of this video?",
+                        "choices": [
+                            "All Skill",
+                            "All Luck"
+                        ]
+                    },
                     "data": {
                         "videoid": "RqnQwKAI4OE",
                         "rel": 0,
@@ -1480,10 +1657,13 @@
                     "modules": [
                         "ballot"
                     ],
-                    "ballot": [
-                        "All Skill",
-                        "All Luck"
-                    ],
+                    "ballot": {
+                        "prompt": "What did you think of this video?",
+                        "choices": [
+                            "All Skill",
+                            "All Luck"
+                        ]
+                    },
                     "data": {
                         "videoid": "WpJaJM4Cy8o",
                         "rel": 0,
@@ -1499,10 +1679,13 @@
                     "modules": [
                         "ballot"
                     ],
-                    "ballot": [
-                        "All Skill",
-                        "All Luck"
-                    ],
+                    "ballot": {
+                        "prompt": "What did you think of this video?",
+                        "choices": [
+                            "All Skill",
+                            "All Luck"
+                        ]
+                    },
                     "data": {
                         "videoid": "-T1D_H-vOSA",
                         "rel": 0,
@@ -1518,10 +1701,13 @@
                     "modules": [
                         "ballot"
                     ],
-                    "ballot": [
-                        "All Skill",
-                        "All Luck"
-                    ],
+                    "ballot": {
+                        "prompt": "What did you think of this video?",
+                        "choices": [
+                            "All Skill",
+                            "All Luck"
+                        ]
+                    },
                     "data": {
                         "videoid": "u_Hrv5TNb2Y",
                         "rel": 0,
@@ -1537,10 +1723,13 @@
                     "modules": [
                         "ballot"
                     ],
-                    "ballot": [
-                        "All Skill",
-                        "All Luck"
-                    ],
+                    "ballot": {
+                        "prompt": "What did you think of this video?",
+                        "choices": [
+                            "All Skill",
+                            "All Luck"
+                        ]
+                    },
                     "data": {
                         "videoid": "MVT91mNMS8A",
                         "rel": 0,
@@ -1556,10 +1745,13 @@
                     "modules": [
                         "ballot"
                     ],
-                    "ballot": [
-                        "All Skill",
-                        "All Luck"
-                    ],
+                    "ballot": {
+                        "prompt": "What did you think of this video?",
+                        "choices": [
+                            "All Skill",
+                            "All Luck"
+                        ]
+                    },
                     "data": {
                         "videoid": "O-5mLe8n9QI",
                         "rel": 0,
@@ -1575,10 +1767,13 @@
                     "modules": [
                         "ballot"
                     ],
-                    "ballot": [
-                        "All Skill",
-                        "All Luck"
-                    ],
+                    "ballot": {
+                        "prompt": "What did you think of this video?",
+                        "choices": [
+                            "All Skill",
+                            "All Luck"
+                        ]
+                    },
                     "data": {
                         "videoid": "xKaGdvnQUz4",
                         "rel": 0,
@@ -1603,10 +1798,13 @@
                     "modules": [
                         "ballot"
                     ],
-                    "ballot": [
-                        "All Skill",
-                        "All Luck"
-                    ],
+                    "ballot": {
+                        "prompt": "What did you think of this video?",
+                        "choices": [
+                            "All Skill",
+                            "All Luck"
+                        ]
+                    },
                     "data": {
                         "videoid": "lmvQVz1-bOU",
                         "rel": 0,
@@ -1622,10 +1820,13 @@
                     "modules": [
                         "ballot"
                     ],
-                    "ballot": [
-                        "All Skill",
-                        "All Luck"
-                    ],
+                    "ballot": {
+                        "prompt": "What did you think of this video?",
+                        "choices": [
+                            "All Skill",
+                            "All Luck"
+                        ]
+                    },
                     "data": {
                         "videoid": "27XeNefwABw",
                         "rel": 0,
@@ -1641,10 +1842,13 @@
                     "modules": [
                         "ballot"
                     ],
-                    "ballot": [
-                        "All Skill",
-                        "All Luck"
-                    ],
+                    "ballot": {
+                        "prompt": "What did you think of this video?",
+                        "choices": [
+                            "All Skill",
+                            "All Luck"
+                        ]
+                    },
                     "data": {
                         "videoid": "RqnQwKAI4OE",
                         "rel": 0,
@@ -1696,10 +1900,13 @@
                     "modules": [
                         "ballot"
                     ],
-                    "ballot": [
-                        "All Skill",
-                        "All Luck"
-                    ],
+                    "ballot": {
+                        "prompt": "What did you think of this video?",
+                        "choices": [
+                            "All Skill",
+                            "All Luck"
+                        ]
+                    },
                     "data": {
                         "videoid": "WpJaJM4Cy8o",
                         "rel": 0,
@@ -1715,10 +1922,13 @@
                     "modules": [
                         "ballot"
                     ],
-                    "ballot": [
-                        "All Skill",
-                        "All Luck"
-                    ],
+                    "ballot": {
+                        "prompt": "What did you think of this video?",
+                        "choices": [
+                            "All Skill",
+                            "All Luck"
+                        ]
+                    },
                     "data": {
                         "videoid": "-T1D_H-vOSA",
                         "rel": 0,
@@ -1734,10 +1944,13 @@
                     "modules": [
                         "ballot"
                     ],
-                    "ballot": [
-                        "All Skill",
-                        "All Luck"
-                    ],
+                    "ballot": {
+                        "prompt": "What did you think of this video?",
+                        "choices": [
+                            "All Skill",
+                            "All Luck"
+                        ]
+                    },
                     "data": {
                         "videoid": "u_Hrv5TNb2Y",
                         "rel": 0,
@@ -1753,10 +1966,13 @@
                     "modules": [
                         "ballot"
                     ],
-                    "ballot": [
-                        "All Skill",
-                        "All Luck"
-                    ],
+                    "ballot": {
+                        "prompt": "What did you think of this video?",
+                        "choices": [
+                            "All Skill",
+                            "All Luck"
+                        ]
+                    },
                     "data": {
                         "videoid": "MVT91mNMS8A",
                         "rel": 0,
@@ -1772,10 +1988,13 @@
                     "modules": [
                         "ballot"
                     ],
-                    "ballot": [
-                        "All Skill",
-                        "All Luck"
-                    ],
+                    "ballot": {
+                        "prompt": "What did you think of this video?",
+                        "choices": [
+                            "All Skill",
+                            "All Luck"
+                        ]
+                    },
                     "data": {
                         "videoid": "O-5mLe8n9QI",
                         "rel": 0,
@@ -1791,10 +2010,13 @@
                     "modules": [
                         "ballot"
                     ],
-                    "ballot": [
-                        "All Skill",
-                        "All Luck"
-                    ],
+                    "ballot": {
+                        "prompt": "What did you think of this video?",
+                        "choices": [
+                            "All Skill",
+                            "All Luck"
+                        ]
+                    },
                     "data": {
                         "videoid": "xKaGdvnQUz4",
                         "rel": 0,
@@ -1819,10 +2041,13 @@
                     "modules": [
                         "ballot"
                     ],
-                    "ballot": [
-                        "All Skill",
-                        "All Luck"
-                    ],
+                    "ballot": {
+                        "prompt": "What did you think of this video?",
+                        "choices": [
+                            "All Skill",
+                            "All Luck"
+                        ]
+                    },
                     "data": {
                         "videoid": "lmvQVz1-bOU",
                         "rel": 0,
@@ -1838,10 +2063,13 @@
                     "modules": [
                         "ballot"
                     ],
-                    "ballot": [
-                        "All Skill",
-                        "All Luck"
-                    ],
+                    "ballot": {
+                        "prompt": "What did you think of this video?",
+                        "choices": [
+                            "All Skill",
+                            "All Luck"
+                        ]
+                    },
                     "data": {
                         "videoid": "27XeNefwABw",
                         "rel": 0,
@@ -1857,10 +2085,13 @@
                     "modules": [
                         "ballot"
                     ],
-                    "ballot": [
-                        "All Skill",
-                        "All Luck"
-                    ],
+                    "ballot": {
+                        "prompt": "What did you think of this video?",
+                        "choices": [
+                            "All Skill",
+                            "All Luck"
+                        ]
+                    },
                     "data": {
                         "videoid": "RqnQwKAI4OE",
                         "rel": 0,
@@ -1911,10 +2142,13 @@
                     "modules": [
                         "ballot"
                     ],
-                    "ballot": [
-                        "Strong",
-                        "Weak"
-                    ],
+                    "ballot": {
+                        "prompt": "What did you think of this video?",
+                        "choices": [
+                            "Strong",
+                            "Weak"
+                        ]
+                    },
                     "data": {
                         "videoid": "E0q7PPu_NIg",
                         "rel": 0,
@@ -1930,10 +2164,13 @@
                     "modules": [
                         "ballot"
                     ],
-                    "ballot": [
-                        "Strong",
-                        "Weak"
-                    ],
+                    "ballot": {
+                        "prompt": "What did you think of this video?",
+                        "choices": [
+                            "Strong",
+                            "Weak"
+                        ]
+                    },
                     "data": {
                         "videoid": "SrliMvIPALU",
                         "rel": 0,
@@ -1949,10 +2186,13 @@
                     "modules": [
                         "ballot"
                     ],
-                    "ballot": [
-                        "Strong",
-                        "Weak"
-                    ],
+                    "ballot": {
+                        "prompt": "What did you think of this video?",
+                        "choices": [
+                            "Strong",
+                            "Weak"
+                        ]
+                    },
                     "data": {
                         "videoid": "Z5lMOIFAJVI",
                         "rel": 0,
@@ -1968,10 +2208,13 @@
                     "modules": [
                         "ballot"
                     ],
-                    "ballot": [
-                        "Strong",
-                        "Weak"
-                    ],
+                    "ballot": {
+                        "prompt": "What did you think of this video?",
+                        "choices": [
+                            "Strong",
+                            "Weak"
+                        ]
+                    },
                     "data": {
                         "videoid": "5oJtvopJoAU",
                         "rel": 0,
@@ -1998,10 +2241,13 @@
                     "modules": [
                         "ballot"
                     ],
-                    "ballot": [
-                        "Strong",
-                        "Weak"
-                    ],
+                    "ballot": {
+                        "prompt": "What did you think of this video?",
+                        "choices": [
+                            "Strong",
+                            "Weak"
+                        ]
+                    },
                     "data": {
                         "videoid": "HBq-FYvAFmk",
                         "rel": 0,
@@ -2017,10 +2263,13 @@
                     "modules": [
                         "ballot"
                     ],
-                    "ballot": [
-                        "Strong",
-                        "Weak"
-                    ],
+                    "ballot": {
+                        "prompt": "What did you think of this video?",
+                        "choices": [
+                            "Strong",
+                            "Weak"
+                        ]
+                    },
                     "data": {
                         "videoid": "GQly9YfEhpA",
                         "rel": 0,
@@ -2036,10 +2285,13 @@
                     "modules": [
                         "ballot"
                     ],
-                    "ballot": [
-                        "Strong",
-                        "Weak"
-                    ],
+                    "ballot": {
+                        "prompt": "What did you think of this video?",
+                        "choices": [
+                            "Strong",
+                            "Weak"
+                        ]
+                    },
                     "data": {
                         "videoid": "MNhe8ghamyE",
                         "rel": 0,
