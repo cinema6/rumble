@@ -37,6 +37,8 @@
                     '            position: absolute;',
                     '            cursor: pointer;',
                     '            height:1.25em;',
+                    '            height:1.25em; width:0.75em;',
+                    '            overflow-x: visible;',
                     '            display: inline-block; padding:3px 0 0 0;',
                     '        }',
                     '        .video-trimmer__start-marker {',
@@ -45,6 +47,7 @@
                     '        .video-trimmer__end-marker {',
                     '            bottom:0;',
                     '            padding:0 0 3px 0;',
+                    '            direction: rtl;',
                     '        }',
                     '            .ui__startMarker,',
                     '            .ui__endMarker {',
@@ -365,8 +368,7 @@
 
                     it('should only be draggable along the x axis', function() {
                         var finger = new Finger(),
-                            top,
-                            scope = $trimmer.isolateScope();
+                            top;
 
                         end.refresh();
                         top = end.display.top;
@@ -378,10 +380,8 @@
                         expect(end.display.right).toBe(right(10));
 
                         finger.drag(-10, 10);
-                        $end.width($end.width() + 2);
-                        scope.$digest();
                         end.refresh();
-                        expect(end.display.right).toBe(right(18));
+                        expect(end.display.right).toBe(right(20));
                         expect(end.display.top).toBe(top);
                     });
 

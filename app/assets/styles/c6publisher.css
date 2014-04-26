@@ -1120,7 +1120,8 @@
         .video-trimmer__end-marker {
             position: absolute;
             cursor: pointer;
-            height:1.25em;
+            height:1.25em; width:0.75em;
+            overflow-x: visible;
             display: inline-block; padding:3px 0 0 0;
         }
         .video-trimmer__start-marker {
@@ -1129,6 +1130,7 @@
         .video-trimmer__end-marker {
             bottom:0;
             padding:0 0 3px 0;
+            direction: rtl;
         }
             .ui__startMarker,
             .ui__endMarker {

@@ -235,8 +235,7 @@
                     onEndScan: '&'
                 },
                 link: function(scope, $element) {
-                    var DragCtrl = $element.children('div').data('cDragCtrl'),
-                        startMarker = $element.find('#start-marker').data('cDrag'),
+                    var startMarker = $element.find('#start-marker').data('cDrag'),
                         endMarker = $element.find('#end-marker').data('cDrag'),
                         seekBar = $element.find('#seek-bar').data('cDragZone'),
                         currentScanDeferred = null,
@@ -254,6 +253,10 @@
 
                     function end() {
                         return isNumber(scope.end) ? scope.end : scope.duration;
+                    }
+
+                    function eachMarker(cb) {
+                        [startMarker, endMarker].forEach(cb);
                     }
 
                     function secondsToTimestamp(seconds) {
@@ -281,8 +284,6 @@
                     function constrain(marker, desired) {
                         switch (marker.id) {
                         case 'start-marker':
-                            endMarker.refresh();
-
                             return Math.max(
                                 Math.min(
                                     desired.left,
@@ -306,6 +307,10 @@
                         var scopeProp = scopePropForMarker(marker),
                             methodBit = scopeProp.substring(0, 1).toUpperCase() +
                                 scopeProp.substring(1);
+
+                        eachMarker(function(marker) {
+                            marker.refresh(true);
+                        });
 
                         currentScanDeferred = $q.defer();
 
@@ -344,9 +349,6 @@
                         marker.$element.css('top', '');
                     }
 
-                    scope.startStamp = secondsToTimestamp(start());
-                    scope.endStamp = secondsToTimestamp(end());
-
                     scope.position = {};
                     Object.defineProperties(scope.position, {
                         startMarker: {
@@ -357,12 +359,6 @@
                         },
                         endMarker: {
                             get: function() {
-                                if (DragCtrl.currentDrags[0] === endMarker) {
-                                    return endMarker.display.left + 'px';
-                                }
-
-                                endMarker.refresh();
-
                                 return ((end() * seekBar.display.width) /
                                     scope.duration) - endMarker.display.width + 'px';
                             }
@@ -374,7 +370,7 @@
                         }
                     });
 
-                    [startMarker, endMarker].forEach(function(marker) {
+                    eachMarker(function(marker) {
                         marker.on('begin', begin)
                             .on('beforeMove', beforeMove)
                             .on('dropStart', dropStart);
