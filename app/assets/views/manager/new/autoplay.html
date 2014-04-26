@@ -1,8 +1,9 @@
 <h1 class="modal__title modal__title--lightboxWizard">Should the MiniReel Autoplay?</h1>
 <form>
-    <input type="checkbox" ng-model="NewAutoplayCtrl.model.data.autoplay" />
+    <input id="hasAutoplay" type="checkbox" ng-model="NewAutoplayCtrl.model.data.autoplay" />
+    <label for="hasAutoplay">Yes, all videos should play automatically.</label>
 </form>
 <footer class="modal__btnFooter">
     <button class="modal__btn toolbar__delete" c6-sref="{{NewCtrl.returnState}}" title="Cancel">Cancel</button>
-    <button c6-sref="editor" params="{ minireelId: NewAutoplayCtrl.model.id }" class="modal__btn" type="button" title="Create MiniReel">Next</button>
+    <button c6-sref="editor" params="{ minireelId: NewAutoplayCtrl.model.id }" class="modal__btn" type="button" title="Create MiniReel">Create MiniReel</button>
 </footer>
