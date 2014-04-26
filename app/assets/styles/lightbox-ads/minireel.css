@@ -288,8 +288,8 @@
                             }
                         .mr-pages__label {
                             display: block; width:100%; opacity:0.5;
-                            position: absolute; top:-0.875rem; left:0;
-                            color:#000; font-size:6rem; line-height: 1; font-weight: bold;
+                            position: absolute; top:-0.5rem; left:0;
+                            color:#000; font-size:4rem; line-height: 1; font-weight: bold;
                         }
                         .mr-pages__fader {
                             background:#000; opacity:0.5;
