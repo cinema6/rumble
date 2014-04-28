@@ -141,9 +141,9 @@
                     templateUrl: assets('views/manager.html'),
                     model:  ['cinema6',
                     function( cinema6 ) {
-                        return cinema6.db.findAll('currentUser')
-                            .then(function(currentUsers) {
-                                var user = currentUsers[0];
+                        return cinema6.getAppData()
+                            .then(function(appData) {
+                                var user = appData.user;
 
                                 return cinema6.db.findAll(
                                     'experience',
