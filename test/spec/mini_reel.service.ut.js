@@ -889,6 +889,7 @@
                             result = MiniReelService.convertForPlayer(converted, minireel);
 
                             expect(result).toBe(minireel);
+                            expect(result.data).not.toBe(converted.data);
                             expect(minireel.data.deck[0].title).toBe('New Title');
                         });
                     });

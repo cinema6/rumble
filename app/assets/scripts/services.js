@@ -650,7 +650,14 @@
                 target = target || {};
 
                 forEach(minireel, function(value, key) {
-                    target[key] = value;
+                    if (key !== 'data') {
+                        target[key] = value;
+                    } else {
+                        target[key] = {};
+                    }
+                });
+                forEach(minireel.data, function(value, key) {
+                    target.data[key] = value;
                 });
                 forEach(minireel.data.deck, function(card) {
                     convertedDeck.push(self.convertCard(card));
