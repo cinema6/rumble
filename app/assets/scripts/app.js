@@ -3,7 +3,8 @@
     'use strict';
 
     var noop = angular.noop,
-        copy = angular.copy;
+        copy = angular.copy,
+        forEach = angular.forEach;
 
     angular.module('c6.mrmaker', window$.c6.kModDeps)
         .constant('c6Defines', window$.c6)
@@ -188,12 +189,43 @@
             };
         }])
 
-        .config(['cinema6Provider','c6UrlMakerProvider','ContentAdapter',
-        function( cinema6Provider , c6UrlMakerProvider , ContentAdapter ) {
+        .constant('CWRXAdapter', ['config','$injector',
+        function                 ( config , $injector ) {
+            var self = this,
+                adapters = {};
+
+            forEach(config, function(Constructor, type) {
+                adapters[type] = $injector.instantiate(Constructor, {
+                    config: Constructor.config
+                });
+            });
+
+            ['find', 'findAll', 'findQuery', 'create', 'erase', 'update']
+                .forEach(function(method) {
+                    self[method] = function(type) {
+                        var delegate = adapters[type];
+
+                        return delegate[method].apply(delegate, arguments);
+                    };
+                });
+        }])
+
+        .config(['cinema6Provider','c6UrlMakerProvider','ContentAdapter','CWRXAdapter',
+                 'VoteAdapter',
+        function( cinema6Provider , c6UrlMakerProvider , ContentAdapter , CWRXAdapter ,
+                  VoteAdapter ) {
             var FixtureAdapter = cinema6Provider.adapters.fixture;
 
             ContentAdapter.config = {
                 apiBase: '/api'
+            };
+            VoteAdapter.config = {
+                apiBase: '/api'
+            };
+
+            CWRXAdapter.config = {
+                election: VoteAdapter,
+                experience: ContentAdapter
             };
 
             FixtureAdapter.config = {
