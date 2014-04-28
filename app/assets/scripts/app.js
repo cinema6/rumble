@@ -79,9 +79,75 @@
             }())] ,'video');
         }])
 
-        .config(['cinema6Provider','c6UrlMakerProvider',
-        function( cinema6Provider , c6UrlMakerProvider ) {
+        .constant('CWRXAdapter', ['$http','$q','config',
+        function                 ( $http , $q , config ) {
+            function clean(model) {
+                delete model.id;
+                delete model.org;
+                delete model.created;
+
+                return model;
+            }
+
+            this.findAll = function() {
+                return $http.get(config.apiBase + '/content/experiences')
+                    .then(function returnData(response) {
+                        return response.data;
+                    });
+            };
+
+            this.find = function(type, id) {
+                return $http.get(config.apiBase + '/content/experience/' + id)
+                    .then(function arrayify(response) {
+                        return [response.data];
+                    });
+            };
+
+            this.findQuery = function(type, query) {
+                function returnData(response) {
+                    return response.data;
+                }
+
+                function handleError(response) {
+                    return response.status === 404 ?
+                        [] : $q.reject(response);
+                }
+
+                return $http.get(config.apiBase + '/content/experiences', {
+                        params: query
+                    })
+                    .then(returnData, handleError);
+            };
+
+            this.create = function(type, data) {
+                return $http.post(config.apiBase + '/content/experience', clean(data))
+                    .then(function arrayify(response) {
+                        return [response.data];
+                    });
+            };
+
+            this.erase = function(type, model) {
+                return $http.delete(config.apiBase + '/content/experience/' + model.id)
+                    .then(function returnNull() {
+                        return null;
+                    });
+            };
+
+            this.update = function(type, model) {
+                return $http.put(config.apiBase + '/content/experience/' + model.id, clean(model))
+                    .then(function arrayify(response) {
+                        return [response.data];
+                    });
+            };
+        }])
+
+        .config(['cinema6Provider','c6UrlMakerProvider','CWRXAdapter',
+        function( cinema6Provider , c6UrlMakerProvider , CWRXAdapter ) {
             var FixtureAdapter = cinema6Provider.adapters.fixture;
+
+            CWRXAdapter.config = {
+                apiBase: '/api'
+            };
 
             FixtureAdapter.config = {
                 jsonSrc: c6UrlMakerProvider.makeUrl('mock/fixtures.json')
