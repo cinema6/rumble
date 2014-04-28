@@ -320,8 +320,18 @@
             };
         }])
 
+        .service('YouTubeService', ['$http',
+        function                   ( $http ) {
+            this.getMetaData = function(id) {
+                var url = 'http://gdata.youtube.com/feeds/api/videos/'+ id + '?v=2&alt=jsonc';
+                return $http.get(url);
+            };
+        }])
+
         .directive('youtubePlayer', ['youtube','c6EventEmitter','$interval','$compile',
-        function                    ( youtube , c6EventEmitter , $interval , $compile ) {
+                                     'YouTubeService',
+        function                    ( youtube , c6EventEmitter , $interval , $compile ,
+                                      YouTubeService ) {
             return {
                 restrict: 'E',
                 scope: {
@@ -351,7 +361,8 @@
                                 player = null,
                                 seekStartTime = null,
                                 publicTime = 0,
-                                state;
+                                state,
+                                playerData;
 
                             function setupState() {
                                 return {
@@ -362,6 +373,12 @@
                                     readyState: -1
                                 };
                             }
+
+                            function setupData(data) {
+                                playerData = data.data.data;
+                            }
+
+                            YouTubeService.getMetaData(id).then(setupData);
 
                             Object.defineProperties(this, {
                                 currentTime: {
@@ -383,11 +400,12 @@
                                 },
                                 duration: {
                                     get: function() {
-                                        if (state.readyState < 0) {
-                                            return 0;
+                                        // if (state.readyState < 0) {
+                                        //     return 0;
+                                        // }
+                                        if(playerData) {
+                                            return playerData.duration || 0;
                                         }
-
-                                        return player.getDuration();
                                     }
                                 },
                                 ended: {
