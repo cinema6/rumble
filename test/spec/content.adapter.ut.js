@@ -6,8 +6,8 @@
         var copy = angular.copy,
             extend = angular.extend;
 
-        describe('CWRXAdapter', function() {
-            var CWRXAdapter,
+        describe('ContentAdapter', function() {
+            var ContentAdapter,
                 adapter;
 
             var $httpBackend;
@@ -16,13 +16,13 @@
                 module('c6.mrmaker');
 
                 inject(function($injector) {
-                    CWRXAdapter = $injector.get('CWRXAdapter');
-                    CWRXAdapter.config = {
+                    ContentAdapter = $injector.get('ContentAdapter');
+                    ContentAdapter.config = {
                         apiBase: '/api'
                     };
 
-                    adapter = $injector.instantiate(CWRXAdapter, {
-                        config: CWRXAdapter.config
+                    adapter = $injector.instantiate(ContentAdapter, {
+                        config: ContentAdapter.config
                     });
 
                     $httpBackend = $injector.get('$httpBackend');
