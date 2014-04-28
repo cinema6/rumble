@@ -948,13 +948,5 @@
                 ]
             }
         }
-    ],
-    "currentUser": [
-        {
-            "id": "u-c67a1678f06c1d",
-            "username": "jtestmonkey",
-            "org": "o-d1f0be2ea473cb",
-            "status": "active"
-        }
     ]
 }
