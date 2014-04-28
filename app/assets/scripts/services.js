@@ -64,8 +64,8 @@
 
             this.update = function(minireel) {
                 return cinema6.db.findAll('election', { id: minireel.data.election })
-                    .then(function updateElection(election) {
-                        return generateData(minireel.data.deck, election);
+                    .then(function updateElection(elections) {
+                        return generateData(minireel.data.deck, elections[0]);
                     })
                     .then(function saveElection(election) {
                         return election.save();

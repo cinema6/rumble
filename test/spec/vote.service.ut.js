@@ -291,7 +291,7 @@
                         );
 
                         spyOn(cinema6.db, 'findAll')
-                            .and.returnValue($q.when(election));
+                            .and.returnValue($q.when([election]));
 
                         $rootScope.$apply(function() {
                             VoteService.update(minireel).then(success);
