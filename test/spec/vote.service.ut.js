@@ -7,9 +7,10 @@
             extend = angular.extend;
 
         describe('VoteService', function() {
-            var VoteService;
-
-            var $httpBackend;
+            var VoteService,
+                cinema6,
+                $q,
+                $rootScope;
 
             var minireel;
 
@@ -166,8 +167,9 @@
 
                 inject(function($injector) {
                     VoteService = $injector.get('VoteService');
-
-                    $httpBackend = $injector.get('$httpBackend');
+                    cinema6 = $injector.get('cinema6');
+                    $q = $injector.get('$q');
+                    $rootScope = $injector.get('$rootScope');
                 });
             });
 
@@ -178,13 +180,17 @@
             describe('methods', function() {
                 describe('initialize(minireel)', function() {
                     var success,
-                        requestData,
-                        response;
+                        electionData,
+                        election,
+                        saveDeferred;
 
                     beforeEach(function() {
+                        var create = cinema6.db.create;
+
+                        saveDeferred = $q.defer();
                         success = jasmine.createSpy('success');
 
-                        requestData = {
+                        electionData = {
                             ballot: {
                                 'rc-22119a8cf9f755': {
                                     'Catchy': 0,
@@ -205,35 +211,47 @@
                             }
                         };
 
-                        response = extend(copy(requestData), { id: 'el-57048d8a02fdd6' });
+                        spyOn(cinema6.db, 'create')
+                            .and.callFake(function() {
+                                election = create.apply(cinema6.db, arguments);
 
-                        $httpBackend.expectPOST('/api/election', copy(requestData))
-                            .respond(201, response);
+                                spyOn(election, 'save')
+                                    .and.returnValue(saveDeferred.promise);
 
-                        VoteService.initialize(minireel).then(success);
+                                return election;
+                            });
 
-                        $httpBackend.flush();
+                        $rootScope.$apply(function() {
+                            VoteService.initialize(minireel).then(success);
+                        });
                     });
 
-                    it('should respond with the response', function() {
-                        expect(success).toHaveBeenCalledWith(response);
+                    it('should create and election', function() {
+                        expect(cinema6.db.create).toHaveBeenCalledWith('election', electionData);
                     });
 
-                    it('should store the electionId on the minireel', function() {
-                        expect(minireel.data.election).toBe(response.id);
+                    it('should store the electionId on the minireel and resolve to the election', function() {
+                        $rootScope.$apply(function() {
+                            saveDeferred.resolve(extend(election), {
+                                id: 'fixture0'
+                            });
+                        });
+
+                        expect(minireel.data.election).toBe(election.id);
+                        expect(success).toHaveBeenCalledWith(election);
                     });
                 });
 
                 describe('update(minireel)', function() {
                     var success,
-                        requestData,
-                        response,
-                        election;
+                        election,
+                        saveDeferred;
 
                     beforeEach(function() {
+                        saveDeferred = $q.defer();
                         success = jasmine.createSpy('success');
 
-                        election = {
+                        election = cinema6.db.create('election', {
                             id: 'el-6d75a6bc5b273b',
                             ballot: {
                                 'rc-22119a8cf9f755': {
@@ -253,7 +271,8 @@
                                     'Too Geeky': 800
                                 }
                             }
-                        };
+                        });
+                        spyOn(election, 'save').and.returnValue(saveDeferred.promise);
 
                         minireel.data.election = 'el-6d75a6bc5b273b';
                         minireel.data.deck.splice(2, 1);
@@ -271,7 +290,22 @@
                             }
                         );
 
-                        requestData = {
+                        spyOn(cinema6.db, 'findAll')
+                            .and.returnValue($q.when(election));
+
+                        $rootScope.$apply(function() {
+                            VoteService.update(minireel).then(success);
+                        });
+                    });
+
+                    it('should fetch the election', function() {
+                        expect(cinema6.db.findAll).toHaveBeenCalledWith('election', {
+                            id: minireel.data.election
+                        });
+                    });
+
+                    it('should update the election', function() {
+                        expect(election).toEqual(jasmine.objectContaining({
                             ballot: {
                                 'rc-22119a8cf9f755': {
                                     'Catchy': 100,
@@ -290,23 +324,19 @@
                                     'Minznered It': 0
                                 }
                             }
-                        };
-
-                        response = extend(copy(requestData), { id: 'el-6d75a6bc5b273b' });
-
-                        $httpBackend.expectGET('/api/election/el-6d75a6bc5b273b')
-                            .respond(200, election);
-
-                        $httpBackend.expectPUT('/api/election/el-6d75a6bc5b273b', copy(requestData))
-                            .respond(200, response);
-
-                        VoteService.update(minireel).then(success);
-
-                        $httpBackend.flush();
+                        }));
                     });
 
-                    it('should resolve to the updated election', function() {
-                        expect(success).toHaveBeenCalledWith(response);
+                    it('should save the election', function() {
+                        expect(election.save).toHaveBeenCalled();
+                    });
+
+                    it('should resolve the promsie after the save completes', function() {
+                        $rootScope.$apply(function() {
+                            saveDeferred.resolve(election);
+                        });
+
+                        expect(success).toHaveBeenCalledWith(election);
                     });
                 });
             });

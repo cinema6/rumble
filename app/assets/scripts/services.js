@@ -10,8 +10,8 @@
         isFunction = angular.isFunction;
 
     angular.module('c6.mrmaker')
-        .service('VoteService', ['$http',
-        function                ( $http ) {
+        .service('VoteService', ['cinema6',
+        function                ( cinema6 ) {
             function generateData(deck, election) {
                 function cardWithId(id) {
                     return deck.filter(function(card) {
@@ -53,10 +53,9 @@
             }
 
             this.initialize = function(minireel) {
-                return $http.post('/api/election', generateData(minireel.data.deck))
-                    .then(function returnData(response) {
-                        var election = response.data;
-
+                return cinema6.db.create('election', generateData(minireel.data.deck))
+                    .save()
+                    .then(function attachId(election) {
                         minireel.data.election = election.id;
 
                         return election;
@@ -64,19 +63,12 @@
             };
 
             this.update = function(minireel) {
-                var id = minireel.data.election;
-
-                return $http.get('/api/election/' + id)
-                    .then(function diffItems(response) {
-                        var election = response.data;
-
+                return cinema6.db.findAll('election', { id: minireel.data.election })
+                    .then(function updateElection(election) {
                         return generateData(minireel.data.deck, election);
                     })
-                    .then(function updateElection(election) {
-                        return $http.put('/api/election/' + id, election);
-                    })
-                    .then(function returnData(response) {
-                        return response.data;
+                    .then(function saveElection(election) {
+                        return election.save();
                     });
             };
         }])
