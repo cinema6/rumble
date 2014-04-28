@@ -51,8 +51,8 @@
                     <li class="toolbar__item">
                         <button class="toolbar__btn toolbar__preview" type="button" ng-click="EditorCtrl.previewMode()">Preview</button>
                     </li>
-                    <li class="toolbar__item">
-                        <button class="toolbar__btn toolbar__save" type="button">Save</button>
+                    <li ng-show="minireel.status === 'active'" class="toolbar__item">
+                        <button ng-click="EditorCtrl.save()" class="toolbar__btn toolbar__save" type="button">Save</button>
                     </li>
                 </ul>
             </div>

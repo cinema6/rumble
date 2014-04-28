@@ -532,15 +532,12 @@
                             expect(minireel.save).toHaveBeenCalled();
                         });
 
-                        it('should re-open the minireel after the save is complete', function() {
-                            expect(MiniReelService.open).not.toHaveBeenCalled();
-
+                        it('should resolve when the minireel is saved', function() {
                             $rootScope.$apply(function() {
                                 saveDeferred.resolve(minireel);
                             });
 
-                            expect(MiniReelService.open).toHaveBeenCalledWith(minireel.id);
-                            expect(success).toHaveBeenCalledWith(MiniReelService.opened.editor);
+                            expect(success).toHaveBeenCalledWith(minireel);
                         });
 
                         describe('if the minireel has an associated election', function() {

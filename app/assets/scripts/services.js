@@ -504,9 +504,6 @@
                 return handleElection()
                     .then(function save() {
                         return opened.player.save();
-                    })
-                    .then(function reopen(minireel) {
-                        return self.open(minireel.id);
                     });
             };
 

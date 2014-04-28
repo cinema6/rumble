@@ -536,69 +536,17 @@
                     margin:0;
                 }
 
-
-
 /*  ==========================================================================
     masthead navigation
     ========================================================================== */
     .mast__group {
-        background:#282b2c; min-height:4.5em; color:#fff;
+        background:#eee; min-height:3.75em; color:#fff;
     }
-        .mainNav {
-            float:left; visibility: hidden;
+    @media screen and (max-width:42em) {
+        .mast__group {
+            min-height:4.5em;
         }
-        .mainNav__list {
-            margin:0; padding:0; list-style: none;
-        }
-            .mainNav__item {
-                padding:1.5em 0 0 0; margin:0 2em 0 0; float:left;
-            }
-                .mainNav__item:last-child {
-                    margin:0;
-                }
-            .mainNav__c6BrandItem {
-                padding:0.75em 0 0 0; margin-right:3em;
-            }
-                .mainNav__c6Brand {
-                    width:11em; height:2.75em; display: block;
-                    font-size:1em;
-                    background-position:0 0;
-                    border:0; padding:0;
-                    cursor:pointer;
-                }
-
-
-/*  ==========================================================================
-    pageHeader
-    ========================================================================== */
-    .userPane__group {
-        float:right; visibility: hidden;
     }
-        .userPane__display {
-            float:left; margin:1.5625em 0.625em 0 0;
-        }
-        .userPane__avatar {
-            float:left; margin:0.875em 0;
-            width:2.75em; height:2.75em;
-            background:#000 url('../img/default_square.jpg') center center / cover no-repeat;
-        }
-            .userPane__avatar img {
-                display: block; width:2.75em; height:2.75em;
-            }
-            .userPane__avatar:hover {
-                border:0;
-            }
-        .userPane__settings {
-            float:left;
-            margin:1.5em 0 0 0.75em;
-            cursor:pointer;
-            -webkit-transition: all 0.5s; transition: all 0.5s;
-        }
-            .userPane__settings:hover {
-                transform:rotate(90deg);
-                -ms-transform:rotate(90deg); /* IE 9 */
-                -webkit-transform:rotate(90deg); /* Opera, Chrome, and Safari */
-            }
 
 /*  ==========================================================================
     pageHeader
