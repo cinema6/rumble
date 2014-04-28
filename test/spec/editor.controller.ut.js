@@ -463,6 +463,22 @@
                     it('should close the current MiniReel', function() {
                         expect(MiniReelService.close).toHaveBeenCalled();
                     });
+
+                    describe('if the minireel is active', function() {
+                        beforeEach(function() {
+                            MiniReelService.opened.player = {};
+                            MiniReelService.opened.editor = {};
+                            EditorCtrl.save.calls.reset();
+
+                            cModel.status = 'active';
+
+                            $scope.$emit('$destroy');
+                        });
+
+                        it('should not save the minireel', function() {
+                            expect(EditorCtrl.save).not.toHaveBeenCalled();
+                        });
+                    });
                 });
             });
 
@@ -502,6 +518,31 @@
                         });
                         $timeout.flush();
                         expect(EditorCtrl.save.calls.count()).toBe(2);
+                    });
+
+                    describe('if the minireel is active', function() {
+                        beforeEach(function() {
+                            EditorCtrl.save.calls.reset();
+
+                            $scope.$apply(function() {
+                                cModel.status = 'active';
+                            });
+                        });
+
+                        it('should not autosave', function() {
+                            expect(function() {
+                                $timeout.flush();
+                            }).toThrow();
+                            expect(EditorCtrl.save).not.toHaveBeenCalled();
+
+                            $scope.$apply(function() {
+                                cModel.data.deck[1].title = 'Bar';
+                            });
+                            expect(function() {
+                                $timeout.flush();
+                            }).toThrow();
+                            expect(EditorCtrl.save).not.toHaveBeenCalled();
+                        });
                     });
                 });
             });

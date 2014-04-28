@@ -16,7 +16,18 @@
                 saveAfterTenSeconds = c6Debounce(function() {
                     $log.info('Autosaving MiniReel');
                     self.save();
-                }, 10000);
+                }, 10000),
+                cancelAutosave = $scope.$watch(function() {
+                    return self.model;
+                }, function(minireel, prevMinireel) {
+                    if (minireel.status === 'active') {
+                        $log.warn('MiniReel is published. Will not autosave.');
+                        return cancelAutosave();
+                    }
+                    if (minireel === prevMinireel) { return; }
+
+                    saveAfterTenSeconds();
+                }, true);
 
             $log = $log.context('EditorController');
 
@@ -147,14 +158,6 @@
                 $scope.$broadcast('mrPreview:updateMode', self.model);
             });
 
-            $scope.$watch(function() {
-                return self.model;
-            }, function(minireel, prevMinireel) {
-                if (minireel === prevMinireel) { return; }
-
-                saveAfterTenSeconds();
-            }, true);
-
             $scope.$on('addCard', function(event, card, index) {
                 self.model.data.deck.splice(index, 0, card);
             });
@@ -168,7 +171,10 @@
             });
 
             $scope.$on('$destroy', function() {
-                self.save();
+                if (self.model.status !== 'active') {
+                    self.save();
+                }
+
                 MiniReelService.close();
             });
         }])
