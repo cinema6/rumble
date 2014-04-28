@@ -10,6 +10,69 @@
         isFunction = angular.isFunction;
 
     angular.module('c6.mrmaker')
+        .service('VoteService', ['cinema6',
+        function                ( cinema6 ) {
+            function generateData(deck, election) {
+                function cardWithId(id) {
+                    return deck.filter(function(card) {
+                        return card.id === id;
+                    })[0];
+                }
+
+                election = election || {
+                    ballot: {}
+                };
+
+                delete election.id;
+
+                forEach(deck, function(card) {
+                    var item;
+
+                    if (card.modules.indexOf('ballot') < 0) {
+                        return;
+                    }
+
+                    item = election.ballot[card.id] || {};
+
+                    forEach(card.ballot.choices, function(choice) {
+                        item[choice] = item[choice] || 0;
+                    });
+
+                    election.ballot[card.id] = item;
+                });
+                forEach(Object.keys(election.ballot), function(id) {
+                    var card = cardWithId(id),
+                        shouldHaveBallot = !!card && card.modules.indexOf('ballot') > -1;
+
+                    if (!shouldHaveBallot) {
+                        delete election.ballot[id];
+                    }
+                });
+
+                return election;
+            }
+
+            this.initialize = function(minireel) {
+                return cinema6.db.create('election', generateData(minireel.data.deck))
+                    .save()
+                    .then(function attachId(election) {
+                        minireel.data.election = election.id;
+
+                        return election;
+                    });
+            };
+
+            this.update = function(minireel) {
+                return cinema6.db.findAll('election', { id: minireel.data.election })
+                    .then(function updateElection(elections) {
+                        return generateData(minireel.data.deck, elections[0]);
+                    })
+                    .then(function saveElection(election) {
+                        return election.save();
+                    });
+            };
+        }])
+
         .service('VideoThumbnailService', ['$q','$cacheFactory','$http',
         function                          ( $q , $cacheFactory , $http ) {
             var _private = {},
@@ -189,8 +252,8 @@
             };
         }])
 
-        .service('MiniReelService', ['crypto','$window','cinema6','$q',
-        function                    ( crypto , $window , cinema6 , $q ) {
+        .service('MiniReelService', ['crypto','$window','cinema6','$q','VoteService',
+        function                    ( crypto , $window , cinema6 , $q , VoteService ) {
             var self = this;
 
             function generateId(prefix) {
@@ -394,6 +457,14 @@
 
             this.publish = function(minireelId) {
                 return cinema6.db.find('experience', minireelId)
+                    .then(function initializeElection(minireel) {
+                        if (minireel.data.election) { return minireel; }
+
+                        return VoteService.initialize(minireel)
+                            .then(function returnMiniReel() {
+                                return minireel;
+                            });
+                    })
                     .then(function setActive(minireel) {
                         minireel.status = 'active';
 
@@ -417,11 +488,23 @@
             };
 
             this.save = function() {
-                var opened = this.opened;
+                var opened = this.opened,
+                    playerMR = opened.player;
 
-                this.convertForPlayer(opened.editor, opened.player);
+                function handleElection() {
+                    if (playerMR.data.election) {
+                        return VoteService.update(playerMR);
+                    }
 
-                return opened.player.save();
+                    return $q.when({});
+                }
+
+                this.convertForPlayer(opened.editor, playerMR);
+
+                return handleElection()
+                    .then(function save() {
+                        return opened.player.save();
+                    });
             };
 
             this.erase = function(minireelId) {
@@ -436,6 +519,7 @@
                     var model = {
                         data: {
                             branding: minireel.data.branding,
+                            election: minireel.data.election,
                             deck: minireel.data.deck.map(function(card) {
                                 return makeCard(card);
                             })

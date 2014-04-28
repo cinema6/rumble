@@ -7,6 +7,7 @@
 
         describe('MiniReelService', function() {
             var MiniReelService,
+                VoteService,
                 $rootScope,
                 cinema6,
                 $q;
@@ -28,6 +29,7 @@
                 inject(function($injector) {
                     $rootScope = $injector.get('$rootScope');
                     MiniReelService = $injector.get('MiniReelService');
+                    VoteService = $injector.get('VoteService');
                     cinema6 = $injector.get('cinema6');
                     $q = $injector.get('$q');
                 });
@@ -42,6 +44,7 @@
                     theme: 'ed-videos',
                     status: 'pending',
                     data: {
+                        election: 'el-76506623bf22d9',
                         branding: 'elitedaily',
                         deck: [
                             {
@@ -425,6 +428,36 @@
 
                             expect(success).toHaveBeenCalledWith(minireel);
                         });
+
+                        describe('if the minireel has no election', function() {
+                            var initializeDeferred;
+
+                            beforeEach(function() {
+                                success.calls.reset();
+                                minireel.save.calls.reset();
+
+                                initializeDeferred = $q.defer();
+
+                                spyOn(VoteService, 'initialize').and.returnValue(initializeDeferred.promise);
+
+                                delete minireel.data.election;
+
+                                $rootScope.$apply(function() {
+                                    MiniReelService.publish(minireel.id).then(success);
+                                });
+                            });
+
+                            it('should initialize the election before saving the minireel', function() {
+                                expect(minireel.save).not.toHaveBeenCalled();
+                                expect(VoteService.initialize).toHaveBeenCalledWith(minireel);
+
+                                $rootScope.$apply(function() {
+                                    initializeDeferred.resolve({});
+                                });
+
+                                expect(minireel.save).toHaveBeenCalled();
+                            });
+                        });
                     });
 
                     describe('unpublish(minireelId)', function() {
@@ -505,6 +538,36 @@
                             });
 
                             expect(success).toHaveBeenCalledWith(minireel);
+                        });
+
+                        describe('if the minireel has an associated election', function() {
+                            var updateDeferred;
+
+                            beforeEach(function() {
+                                MiniReelService.opened.editor.data.election = '123345';
+
+                                success.calls.reset();
+                                minireel.save.calls.reset();
+
+                                updateDeferred = $q.defer();
+
+                                spyOn(VoteService, 'update').and.returnValue(updateDeferred.promise);
+
+                                $rootScope.$apply(function() {
+                                    MiniReelService.save().then(success);
+                                });
+                            });
+
+                            it('should update the election before saving', function() {
+                                expect(minireel.save).not.toHaveBeenCalled();
+                                expect(VoteService.update).toHaveBeenCalledWith(minireel);
+
+                                $rootScope.$apply(function() {
+                                    updateDeferred.resolve({});
+                                });
+
+                                expect(minireel.save).toHaveBeenCalled();
+                            });
                         });
                     });
 

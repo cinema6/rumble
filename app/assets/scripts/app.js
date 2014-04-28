@@ -3,7 +3,8 @@
     'use strict';
 
     var noop = angular.noop,
-        copy = angular.copy;
+        copy = angular.copy,
+        forEach = angular.forEach;
 
     angular.module('c6.mrmaker', window$.c6.kModDeps)
         .constant('c6Defines', window$.c6)
@@ -79,8 +80,55 @@
             }())] ,'video');
         }])
 
-        .constant('CWRXAdapter', ['$http','$q','config',
-        function                 ( $http , $q , config ) {
+        .constant('VoteAdapter', ['$http','config','$q',
+        function                 ( $http , config , $q ) {
+            function clean(model) {
+                delete model.org;
+                delete model.created;
+                delete model.id;
+
+                return model;
+            }
+
+            this.findAll = function() {
+                return $q.reject('The vote service does not support finding all elections.');
+            };
+
+            this.find = function(type, id) {
+                return $http.get(config.apiBase + '/election/' + id)
+                    .then(function arrayify(response) {
+                        return [response.data];
+                    });
+            };
+
+            this.findQuery = function(type, query) {
+                return this.find(type, query.id);
+            };
+
+            this.create = function(type, data) {
+                return $http.post(config.apiBase + '/election', clean(data))
+                    .then(function arrayify(response) {
+                        return [response.data];
+                    });
+            };
+
+            this.erase = function(type, model) {
+                return $http.delete(config.apiBase + '/election/' + model.id)
+                    .then(function returnNull() {
+                        return null;
+                    });
+            };
+
+            this.update = function(type, model) {
+                return $http.put(config.apiBase + '/election/' + model.id, clean(model))
+                    .then(function arrayify(response) {
+                        return [response.data];
+                    });
+            };
+        }])
+
+        .constant('ContentAdapter', ['$http','$q','config',
+        function                    ( $http , $q , config ) {
             function clean(model) {
                 delete model.id;
                 delete model.org;
@@ -141,12 +189,43 @@
             };
         }])
 
-        .config(['cinema6Provider','c6UrlMakerProvider','CWRXAdapter',
-        function( cinema6Provider , c6UrlMakerProvider , CWRXAdapter ) {
+        .constant('CWRXAdapter', ['config','$injector',
+        function                 ( config , $injector ) {
+            var self = this,
+                adapters = {};
+
+            forEach(config, function(Constructor, type) {
+                adapters[type] = $injector.instantiate(Constructor, {
+                    config: Constructor.config
+                });
+            });
+
+            ['find', 'findAll', 'findQuery', 'create', 'erase', 'update']
+                .forEach(function(method) {
+                    self[method] = function(type) {
+                        var delegate = adapters[type];
+
+                        return delegate[method].apply(delegate, arguments);
+                    };
+                });
+        }])
+
+        .config(['cinema6Provider','c6UrlMakerProvider','ContentAdapter','CWRXAdapter',
+                 'VoteAdapter',
+        function( cinema6Provider , c6UrlMakerProvider , ContentAdapter , CWRXAdapter ,
+                  VoteAdapter ) {
             var FixtureAdapter = cinema6Provider.adapters.fixture;
 
-            CWRXAdapter.config = {
+            ContentAdapter.config = {
                 apiBase: '/api'
+            };
+            VoteAdapter.config = {
+                apiBase: '/api'
+            };
+
+            CWRXAdapter.config = {
+                election: VoteAdapter,
+                experience: ContentAdapter
             };
 
             FixtureAdapter.config = {
