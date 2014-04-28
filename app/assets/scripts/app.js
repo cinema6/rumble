@@ -147,7 +147,7 @@
                     element.on('touchleave touchcancel', cancel);
 
                     element.on('touchend', function(event) {
-                        if (!touching) { return; }
+                        if (!touching || attrs.disabled) { return; }
                         handle(event);
                     });
 

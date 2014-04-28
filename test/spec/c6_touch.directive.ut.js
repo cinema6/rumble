@@ -29,10 +29,11 @@
                         .andCallFake(function() {
                             expect(function() { $rootScope.$digest(); }).toThrow();
                         });
+                    $scope.atTail = false;
                 });
 
                 $scope.$apply(function() {
-                    $link = $compile('<a href="" c6-touch="spy($event)">Foo</a>')($scope);
+                    $link = $compile('<a href="" c6-touch="spy($event)" ng-disabled="atTail">Foo</a>')($scope);
                 });
             });
 
@@ -68,6 +69,16 @@
             it('should evaluate the expression on click if touch is not supported on the device', function() {
                 $link.trigger('click');
                 expect($scope.spy).toHaveBeenCalled();
+            });
+
+            it('should not evaluate the expression if button is disabled', function() {
+                $scope.$apply(function() {
+                    $scope.atTail = true;
+                });
+                
+                $link.trigger('touchstart');
+                $link.trigger('touchend');
+                expect($scope.spy).not.toHaveBeenCalled();
             });
         });
     });
