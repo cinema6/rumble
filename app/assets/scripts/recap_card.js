@@ -2,8 +2,8 @@
     'use strict';
 
     angular.module('c6.rumble')
-        .controller('RecapCardController', ['$scope','$log', 'cinema6','c6AppData', 'MiniReelService', 'BallotService', 'ModuleService',
-        function                           ( $scope , $log ,  cinema6 , c6AppData ,  MiniReelService ,  BallotService ,  ModuleService ) {
+        .controller('RecapCardController', ['$scope','$log', 'c6AppData', 'MiniReelService', 'BallotService', 'ModuleService',
+        function                           ( $scope , $log ,  c6AppData ,  MiniReelService ,  BallotService ,  ModuleService ) {
             var self = this,
                 _deck = MiniReelService.createDeck(c6AppData.experience.data);
 
@@ -57,7 +57,7 @@
         }])
 
         .directive('recapCard', ['c6UrlMaker','assetFilter',
-        function                   ( c6UrlMaker , assetFilter ) {
+        function                ( c6UrlMaker , assetFilter ) {
             return {
                 restrict: 'E',
                 templateUrl : assetFilter('directives/recap_card.html', 'views'),
