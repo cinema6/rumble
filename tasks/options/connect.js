@@ -41,7 +41,8 @@
                                 grunt.file.readJSON(
                                     grunt.template.process('<%= settings.experiencesJSON %>')
                                 )
-                            )
+                            ),
+                            users: [{}]
                         })
                     ];
                 }

@@ -1,27 +1,33 @@
 <article class="mr-card__group mr-recap__group">
     <div class="mr-recap__copy">
         <ul class="mr-recap__list">
-            <li class="mr-recap__item clearfix">
-                <button class="mr-recap__imgBtn" type="button">
-                    <span class="mr-recap__imgBox" style="background-image:url( IMG URL HERE );">&nbsp;</span>
+            <li class="mr-recap__item clearfix" ng-repeat="card in Ctrl.deck">
+                <button class="mr-recap__imgBtn" type="button" ng-click="Ctrl.jumpTo(card)">
+                    <span class="mr-recap__imgBox" style="background-image:url({{card.thumbs.large}});">&nbsp;</span>
                 </button>
                 <div class="mr-recap__copyBox">
-                    <h1 class="mr-card__title tk--hdr">The Title of the Card Goes Here and then...</h1>
-                    <p class="mr-card__attributes">via <a ng-href="{{Ctrl.videoUrl}}" target="_blank" title="YouTube">Source goes here</a></p>
-                    <div class="mr-recap__ballotInfo">
-                        <h3 class="mr-recap__ballotQuestion">Questionnaire: <strong>What did the Fox Say?</strong></h3>
+                    <h1 class="mr-card__title tk--hdr" ng-click="Ctrl.jumpTo(card)">{{card.title}}</h1>
+                    <p class="mr-card__attributes">via <a ng-href="{{card.webHref}}" target="_blank" title="{{card.source}}">{{card.source}}</a></p>
+                    <div class="mr-recap__ballotInfo" ng-show="card.hasModule('ballot')">
+                        <h3 class="mr-recap__ballotQuestion">Questionnaire: <strong>{{card.ballot.prompt}}</strong></h3>
                         <p class="mr-recap__ballotResults">
                             <span class="mr-recap__ballotA">
-                                Awesome!!! <strong>32.6%</strong>
+                                {{card.ballot.choices[0]}} <strong>{{card.ballot.results[0].votes | percent}}</strong>
                             </span> &nbsp;&nbsp;|&nbsp;&nbsp;
                             <span class="mr-recap__ballotB">
-                                F--cking Awesome!!! <strong>67.4%</strong>
+                                {{card.ballot.choices[1]}} <strong>{{card.ballot.results[1].votes | percent}}</strong>
                             </span>
                         </p>
                     </div>
                 </div>
             </li>
         </ul>
+    </div>
+    <div class="mr-ad__med-rect">
+        <display-ad-module ng-if="Ctrl.hasModule('displayAd')"
+            active="true"
+            ad-src="{{config.displayAd}}">
+        </display-ad-module>
     </div>
 </article>
 

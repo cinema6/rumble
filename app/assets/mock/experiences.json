@@ -178,7 +178,7 @@
                 },
                 {
                     "id": "rc-235d41cde02032",
-                    "type": "miniReel",
+                    "type": "recap",
                     "data": {
                         "message": "Check out these other MiniReels!",
                         "query": {
@@ -556,7 +556,7 @@
                 },
                 {
                     "id": "rc-ee5f1c11d8d42f",
-                    "type": "miniReel",
+                    "type": "recap",
                     "data": {
                         "message": "Now check out...",
                         "query": {
@@ -964,7 +964,7 @@
                 },
                 {
                     "id": "rc-ee5f1c11d8d42f",
-                    "type": "miniReel",
+                    "type": "recap",
                     "data": {
                         "message": "Now check out...",
                         "query": {
@@ -1372,7 +1372,7 @@
                 },
                 {
                     "id": "rc-ee5f1c11d8d42f",
-                    "type": "miniReel",
+                    "type": "recap",
                     "data": {
                         "message": "Now check out...",
                         "query": {
@@ -1614,7 +1614,7 @@
                 },
                 {
                     "id": "rc-1a327c199e4387",
-                    "type": "miniReel",
+                    "type": "recap",
                     "data": {
                         "message": "Now check out...",
                         "query": {
@@ -1857,7 +1857,7 @@
                 },
                 {
                     "id": "rc-1a327c199e4387",
-                    "type": "miniReel",
+                    "type": "recap",
                     "data": {
                         "message": "Now check out...",
                         "query": {
@@ -2100,7 +2100,7 @@
                 },
                 {
                     "id": "rc-1a327c199e4387",
-                    "type": "miniReel",
+                    "type": "recap",
                     "data": {
                         "message": "Now check out...",
                         "query": {
@@ -2300,7 +2300,7 @@
                 },
                 {
                     "id": "rc-b4b209132e2674",
-                    "type": "miniReel",
+                    "type": "recap",
                     "data": {
                         "message": "Now check out...",
                         "query": {

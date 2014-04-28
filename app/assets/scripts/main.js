@@ -26,7 +26,7 @@
                     'scripts/table_of_contents',
                     'scripts/vimeo',
                     'scripts/youtube',
-                    'scripts/mini_reel_card',
+                    'scripts/recap_card',
                     'scripts/video_card',
                     'scripts/vast_card',
                     'scripts/ad_card',

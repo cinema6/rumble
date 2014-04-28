@@ -381,6 +381,10 @@
             }
         });
 
+        $scope.$on('<recap-card>:jumpTo', function(event, index) {
+            self.setPosition(index);
+        });
+
         cinema6.getSession().then(function(session) {
             // When the RumbleController is loaded we need to set up
             // some listeners for messages from above (ie. the parent window).
@@ -883,6 +887,7 @@
                 profile : '=',
                 active  : '=',
                 onDeck  : '=',
+                deck    : '=',
                 number  : '@',
                 total   : '@'
             }
