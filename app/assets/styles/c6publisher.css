@@ -4,7 +4,7 @@
     body {
         font-family: 'museo-sans', Arial, Helvetica, sans-serif; 
         font-size: 100%; font-weight:300; line-height: 1.5;
-        background:#262626; margin:0; color:#646464;
+        background:#fff; margin:0; color:#646464;
     }
     ::-moz-selection {
         background: #e900a4; text-shadow: none; color:#fff;
@@ -118,7 +118,7 @@
     ui classes
     ========================================================================== */
     .ui__mainView {
-        background:#fff; padding-bottom:2em;
+        padding-bottom:2em;
     }
     .ui__gear {
         background-position:0 -2.8125em; display:block;
@@ -545,7 +545,7 @@
         background:#282b2c; min-height:4.5em; color:#fff;
     }
         .mainNav {
-            float:left;
+            float:left; visibility: hidden;
         }
         .mainNav__list {
             margin:0; padding:0; list-style: none;
@@ -556,10 +556,6 @@
                 .mainNav__item:last-child {
                     margin:0;
                 }
-            .mainNav__link {
-                color:#fff;
-            }
-            
             .mainNav__c6BrandItem {
                 padding:0.75em 0 0 0; margin-right:3em;
             }
@@ -576,7 +572,7 @@
     pageHeader
     ========================================================================== */
     .userPane__group {
-        float:right;
+        float:right; visibility: hidden;
     }
         .userPane__display {
             float:left; margin:1.5625em 0.625em 0 0;
@@ -584,7 +580,7 @@
         .userPane__avatar {
             float:left; margin:0.875em 0;
             width:2.75em; height:2.75em;
-            background:#000;
+            background:#000 url('../img/default_square.jpg') center center / cover no-repeat;
         }
             .userPane__avatar img {
                 display: block; width:2.75em; height:2.75em;
@@ -608,7 +604,7 @@
     pageHeader
     ========================================================================== */
     .pageHeader {
-        margin-bottom:1.5em; margin-top:1em;
+        margin-bottom:1.5em; margin-top:0.5em;
     }
         .pageHeader--editor {
             margin-bottom:0; padding-bottom:1px;
@@ -1224,11 +1220,3 @@
             margin:0.125rem 0 0 0; width:34.5rem;
             font-size:0.8125rem;
         }
-
-/*  ==========================================================================
-    footer
-    ========================================================================== */
-    .footer__group {
-        padding:0.875rem 0 0.8125rem 0;
-        color:#7d7d7d; text-align: center; font-size:0.75em;
-    }

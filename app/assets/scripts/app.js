@@ -409,6 +409,7 @@
             this.config = null;
             cinema6.getAppData()
                 .then(function setControllerProps(appData) {
+                    $log.info('My current user is:',appData.user);
                     self.config = appData.experience;
                 });
 
