@@ -9,6 +9,7 @@
     "sandboxPort": 9000,
     "collateralDir": "c6Content",
     "experiencesJSON": "<%= settings.appDir %>/assets/mock/experiences.json",
+    "usersJSON": "<%= settings.appDir %>/assets/mock/users.json",
     "libUrl": "http://s3.amazonaws.com/c6.dev/ext/",
     "defaultE2EEnv": "browserstack",
     "s3": {
