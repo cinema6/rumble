@@ -48,7 +48,7 @@
                     onAffirm: function() {
                         ConfirmDialogService.close();
 
-                        MiniReelService.publish(self.model);
+                        MiniReelService.publish(self.model.id);
                     },
                     onCancel: function() {
                         ConfirmDialogService.close();
@@ -64,7 +64,7 @@
                     onAffirm: function() {
                         ConfirmDialogService.close();
 
-                        MiniReelService.unpublish(self.model);
+                        MiniReelService.unpublish(self.model.id);
                     },
                     onCancel: function() {
                         ConfirmDialogService.close();
@@ -117,7 +117,12 @@
                         ConfirmDialogService.close();
                     },
                     onAffirm: function() {
-                        // TODO: DELETE
+                        MiniReelService.erase(self.model.id)
+                            .then(function backToManager() {
+                                c6State.goTo('manager');
+                            });
+
+                        ConfirmDialogService.close();
                     }
                 });
             };
@@ -139,6 +144,10 @@
                 })[0];
 
                 copy(cardProxy, card);
+            });
+
+            $scope.$on('$destroy', function() {
+                MiniReelService.close();
             });
         }])
 

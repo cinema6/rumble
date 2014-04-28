@@ -2,6 +2,9 @@
     'use strict';
 
     define(['services'], function() {
+        /* global angular:true */
+        var copy = angular.copy;
+
         describe('MiniReelService', function() {
             var MiniReelService,
                 $rootScope,
@@ -10,8 +13,26 @@
 
             var minireel;
 
+            function DBModel(type, data) {
+                copy(data, this);
+
+                this._type = type;
+            }
+            DBModel.prototype = {
+                save: jasmine.createSpy('DBModel.save()')
+            };
+
             beforeEach(function() {
-                minireel = {
+                module('c6.mrmaker');
+
+                inject(function($injector) {
+                    $rootScope = $injector.get('$rootScope');
+                    MiniReelService = $injector.get('MiniReelService');
+                    cinema6 = $injector.get('cinema6');
+                    $q = $injector.get('$q');
+                });
+
+                minireel = cinema6.db.create('experience', {
                     id: 'e-15aa87f5da34c3',
                     title: 'My MiniReel',
                     subtitle: 'I <3 Turtles',
@@ -144,15 +165,6 @@
                             }
                         ]
                     }
-                };
-
-                module('c6.mrmaker');
-
-                inject(function($injector) {
-                    $rootScope = $injector.get('$rootScope');
-                    MiniReelService = $injector.get('MiniReelService');
-                    cinema6 = $injector.get('cinema6');
-                    $q = $injector.get('$q');
                 });
             });
 
@@ -161,6 +173,17 @@
             });
 
             describe('@public', function() {
+                describe('properties', function() {
+                    describe('opened', function() {
+                        it('should have null player and editor properties', function() {
+                            expect(MiniReelService.opened).toEqual({
+                                player: null,
+                                editor: null
+                            });
+                        });
+                    });
+                });
+
                 describe('methods', function() {
                     describe('createCard(type)', function() {
                         it('should create a new card based on the type provided', function() {
@@ -366,37 +389,141 @@
                         });
                     });
 
-                    describe('publish(minireel)', function() {
-                        var result;
+                    describe('publish(minireelId)', function() {
+                        var result,
+                            success,
+                            saveDeferred;
 
                         beforeEach(function() {
-                            result = MiniReelService.publish(minireel);
+                            saveDeferred = $q.defer();
+                            success = jasmine.createSpy('success');
+
+                            spyOn(minireel, 'save').and.returnValue(saveDeferred.promise);
+                            spyOn(cinema6.db, 'find').and.returnValue($q.when(minireel));
+
+                            $rootScope.$apply(function() {
+                                result = MiniReelService.publish(minireel.id).then(success);
+                            });
+                        });
+
+                        it('should get the minireel from cinema6.db', function() {
+                            expect(cinema6.db.find).toHaveBeenCalledWith('experience', minireel.id);
                         });
 
                         it('should set the minireel\'s status to "active"', function() {
                             expect(minireel.status).toBe('active');
                         });
 
-                        it('should return the minireel', function() {
-                            expect(result).toBe(minireel);
+                        it('should save the minireel', function() {
+                            expect(minireel.save).toHaveBeenCalled();
+                        });
+
+                        it('should resolve to the minireel when the save is complete', function() {
+                            $rootScope.$apply(function() {
+                                saveDeferred.resolve(minireel);
+                            });
+
+                            expect(success).toHaveBeenCalledWith(minireel);
                         });
                     });
 
-                    describe('unpublish(minireel)', function() {
-                        var result;
+                    describe('unpublish(minireelId)', function() {
+                        var result,
+                            success,
+                            saveDeferred;
 
                         beforeEach(function() {
-                            minireel.status = 'active';
+                            saveDeferred = $q.defer();
+                            success = jasmine.createSpy('success');
 
-                            result = MiniReelService.unpublish(minireel);
+                            spyOn(minireel, 'save').and.returnValue(saveDeferred.promise);
+                            spyOn(cinema6.db, 'find').and.returnValue($q.when(minireel));
+
+                            $rootScope.$apply(function() {
+                                result = MiniReelService.unpublish(minireel.id).then(success);
+                            });
+                        });
+
+                        it('should get the minireel from cinema6.db', function() {
+                            expect(cinema6.db.find).toHaveBeenCalledWith('experience', minireel.id);
                         });
 
                         it('should set the minireel\'s status to "pending"', function() {
                             expect(minireel.status).toBe('pending');
                         });
 
-                        it('should return the minireel', function() {
-                            expect(result).toBe(minireel);
+                        it('should save the minireel', function() {
+                            expect(minireel.save).toHaveBeenCalled();
+                        });
+
+                        it('should resolve to the minireel when the save is complete', function() {
+                            $rootScope.$apply(function() {
+                                saveDeferred.resolve(minireel);
+                            });
+
+                            expect(success).toHaveBeenCalledWith(minireel);
+                        });
+                    });
+
+                    describe('save()', function() {
+                        var saveDeferred,
+                            success;
+
+                        beforeEach(function() {
+                            success = jasmine.createSpy('success');
+                            saveDeferred = $q.defer();
+
+                            spyOn(cinema6.db, 'find').and.returnValue($q.when(minireel));
+                            spyOn(MiniReelService, 'open').and.callThrough();
+                            spyOn(MiniReelService, 'convertForPlayer').and.callThrough();
+
+                            MiniReelService.opened.player = minireel;
+                            MiniReelService.opened.editor = {
+                                data: {
+                                    deck: []
+                                }
+                            };
+
+                            spyOn(minireel, 'save').and.returnValue(saveDeferred.promise);
+
+                            $rootScope.$apply(function() {
+                                MiniReelService.save().then(success);
+                            });
+                        });
+
+                        it('should update the player-formatted model', function() {
+                            expect(MiniReelService.convertForPlayer).toHaveBeenCalledWith(MiniReelService.opened.editor, minireel);
+                        });
+
+                        it('should save the minireel', function() {
+                            expect(minireel.save).toHaveBeenCalled();
+                        });
+
+                        it('should re-open the minireel after the save is complete', function() {
+                            expect(MiniReelService.open).not.toHaveBeenCalled();
+
+                            $rootScope.$apply(function() {
+                                saveDeferred.resolve(minireel);
+                            });
+
+                            expect(MiniReelService.open).toHaveBeenCalledWith(minireel.id);
+                            expect(success).toHaveBeenCalledWith(MiniReelService.opened.editor);
+                        });
+                    });
+
+                    describe('close()', function() {
+                        beforeEach(function() {
+                            MiniReelService.opened = {
+                                player: {},
+                                editor: {}
+                            };
+
+                            MiniReelService.close();
+                        });
+
+                        it('should nullify the opened editor and player', function() {
+                            expect(MiniReelService.opened.player).toBeNull();
+                            expect(MiniReelService.opened.editor).toBeNull();
                         });
                     });
 
@@ -420,18 +547,6 @@
                             expect(cinema6.db.find).toHaveBeenCalledWith('experience', 'e-15aa87f5da34c3');
                         });
 
-                        it('should resolve to a cached minireel if it has already been opened', function() {
-                            var secondSuccess = jasmine.createSpy('open() success');
-
-                            $rootScope.$apply(function() {
-                                MiniReelService.open('e-15aa87f5da34c3')
-                                    .then(secondSuccess);
-                            });
-
-                            expect(success.calls.mostRecent().args[0])
-                                .toBe(secondSuccess.calls.mostRecent().args[0]);
-                        });
-
                         it('should return an object with all the non-data content of the original', function() {
                             expect(success).toHaveBeenCalledWith({
                                 id: 'e-15aa87f5da34c3',
@@ -442,12 +557,18 @@
                                 mode: 'lightbox',
                                 theme: 'ed-videos',
                                 status: 'pending',
+                                _type: 'experience',
                                 data: jasmine.any(Object)
                             });
                         });
 
                         it('should copy the branding of the minireel', function() {
                             expect(success.calls.mostRecent().args[0].data.branding).toBe('elitedaily');
+                        });
+
+                        it('should set update MiniReelService\'s opened object to refrences to its data-models', function() {
+                            expect(MiniReelService.opened.player).toBe(minireel);
+                            expect(MiniReelService.opened.editor).toBe(success.calls.mostRecent().args[0]);
                         });
 
                         it('should transpile the various video cards into two cards', function() {
@@ -580,18 +701,48 @@
                         });
                     });
 
-                    describe('create(template)', function() {
-                        var result;
+                    describe('create(minireelId)', function() {
+                        var result,
+                            success,
+                            newModel,
+                            saveDeferred;
+
+                        beforeEach(function() {
+                            var dbCreate = cinema6.db.create;
+
+                            saveDeferred = $q.defer();
+                            success = jasmine.createSpy('success');
+
+                            spyOn(cinema6.db, 'create').and.callFake(function() {
+                                newModel = dbCreate.apply(cinema6.db, arguments);
+
+                                spyOn(newModel, 'save').and.callFake(function() {
+                                    expect(this.id).not.toBeDefined();
+
+                                    return saveDeferred.promise;
+                                });
+
+                                return newModel;
+                            });
+                        });
 
                         describe('with a template', function() {
                             beforeEach(function() {
-                                result = MiniReelService.create(minireel);
+                                spyOn(cinema6.db, 'find').and.returnValue($q.when(minireel));
+
+                                $rootScope.$apply(function() {
+                                    result = MiniReelService.create(minireel.id).then(success);
+                                });
                             });
 
-                            it('should copy the minireel', function() {
-                                expect(result).toEqual({
+                            it('should get the minireel to copy from cinema6.db', function() {
+                                expect(cinema6.db.find).toHaveBeenCalledWith('experience', minireel.id);
+                            });
+
+                            it('should create a new minireel experience based off of the old one', function() {
+                                expect(cinema6.db.create).toHaveBeenCalledWith('experience', {
                                     id: jasmine.any(String),
-                                    title: 'My MiniReel (copy)',
+                                    title: 'My MiniReel',
                                     subtitle: 'I <3 Turtles',
                                     summary: 'I AM THE TURTLE MONSTER!',
                                     type: 'minireel',
@@ -601,47 +752,42 @@
                                     data: jasmine.any(Object)
                                 });
 
-                                result.data.deck.forEach(function(card, index) {
+                                cinema6.db.create.calls.mostRecent().args[1].data.deck.forEach(function(card, index) {
                                     if (index === 0) { return; }
 
                                     expect(minireel.data.deck[index]).toEqual(card);
                                 });
                             });
 
-                            it('should return a copy', function() {
-                                expect(result).not.toBe(minireel);
+                            it('should save the minireel', function() {
+                                expect(newModel.save).toHaveBeenCalled();
                             });
 
-                            it('should generate a new id', function() {
-                                expect(result.id).toMatch(/e-[a-zA-Z0-9]{14}/);
-                                expect(result.id).not.toBe(minireel.id);
-                            });
-
-                            it('should cache the new minireel', function() {
-                                var success = jasmine.createSpy('success');
-
+                            it('should resolve the promise after the minireel is saved', function() {
                                 $rootScope.$apply(function() {
-                                    MiniReelService.open(result.id).then(success);
+                                    saveDeferred.resolve(newModel);
                                 });
 
-                                expect(success).toHaveBeenCalledWith(result);
+                                expect(success).toHaveBeenCalledWith(newModel);
+                                expect(newModel.title).toBe('My MiniReel (copy)');
+                                expect(newModel.status).toBe('pending');
                             });
                         });
 
                         describe('without a template', function() {
                             beforeEach(function() {
-                                result = MiniReelService.create();
+                                $rootScope.$apply(function() {
+                                    result = MiniReelService.create().then(success);
+                                });
                             });
 
                             it('should initialize a new minireel', function() {
-                                expect(result).toEqual({
-                                    id: jasmine.any(String),
+                                expect(cinema6.db.create).toHaveBeenCalledWith('experience', {
                                     title: 'Untitled',
                                     subtitle: null,
                                     summary: null,
                                     type: 'minireel',
                                     mode: 'light',
-                                    status: 'pending',
                                     data: {
                                         deck: [
                                             {
@@ -656,18 +802,53 @@
                                         ]
                                     }
                                 });
-                                expect(result.id).toMatch(/e-[a-zA-Z0-9]{14}/);
                             });
 
-                            it('should cache the new minireel', function() {
-                                var success = jasmine.createSpy('success');
+                            it('should save the minireel', function() {
+                                expect(newModel.save).toHaveBeenCalled();
+                            });
 
+                            it('should resolve the promise when the minireel is saved', function() {
                                 $rootScope.$apply(function() {
-                                    MiniReelService.open(result.id).then(success);
+                                    saveDeferred.resolve(newModel);
                                 });
 
-                                expect(success).toHaveBeenCalledWith(result);
+                                expect(success).toHaveBeenCalledWith(newModel);
+                                expect(newModel.status).toBe('pending');
                             });
+                        });
+                    });
+
+                    describe('erase(minireelId)', function() {
+                        var success,
+                            eraseDeferred;
+
+                        beforeEach(function() {
+                            success = jasmine.createSpy('success');
+                            eraseDeferred = $q.defer();
+
+                            spyOn(cinema6.db, 'find').and.returnValue($q.when(minireel));
+                            spyOn(minireel, 'erase').and.returnValue(eraseDeferred.promise);
+
+                            $rootScope.$apply(function() {
+                                MiniReelService.erase(minireel.id).then(success);
+                            });
+                        });
+
+                        it('should fetch the minireel from cinema6.db', function() {
+                            expect(cinema6.db.find).toHaveBeenCalledWith('experience', minireel.id);
+                        });
+
+                        it('should erase the minireel', function() {
+                            expect(minireel.erase).toHaveBeenCalled();
+                        });
+
+                        it('should resolve with null when finished', function() {
+                            $rootScope.$apply(function() {
+                                eraseDeferred.resolve(null);
+                            });
+
+                            expect(success).toHaveBeenCalledWith(null);
                         });
                     });
 
@@ -688,6 +869,28 @@
 
                             expect(result).toEqual(minireel);
                             expect(result).not.toBe(minireel);
+                        });
+
+                        it('should support performing the conversion on a specified object', function() {
+                            var success = jasmine.createSpy('success'),
+                                converted,
+                                result;
+
+                            spyOn(cinema6.db, 'find').and.returnValue($q.when(minireel));
+
+                            $rootScope.$apply(function() {
+                                MiniReelService.open('e-15aa87f5da34c3')
+                                    .then(success);
+                            });
+                            converted = success.calls.mostRecent().args[0];
+
+                            converted.data.deck[0].title = 'New Title';
+
+                            result = MiniReelService.convertForPlayer(converted, minireel);
+
+                            expect(result).toBe(minireel);
+                            expect(result.data).not.toBe(converted.data);
+                            expect(minireel.data.deck[0].title).toBe('New Title');
                         });
                     });
                 });
