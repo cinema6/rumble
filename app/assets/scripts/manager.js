@@ -84,6 +84,8 @@
 
                                 minireels.splice(minireels.indexOf(minireel), 1);
                             });
+
+                        ConfirmDialogService.close();
                     }
                 });
             };

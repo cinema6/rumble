@@ -295,6 +295,10 @@
                             expect(MiniReelService.erase).toHaveBeenCalledWith(minireel.id);
                         });
 
+                        it('should close the confirmation', function() {
+                            expect(ConfirmDialogService.close).toHaveBeenCalled();
+                        });
+
                         it('should remove the minireel from the model array when erasing is finished', function() {
                             expect(ManagerCtrl.model).toContain(minireel);
 
