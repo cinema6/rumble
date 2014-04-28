@@ -25,8 +25,17 @@
 
                 module('c6.mrmaker', function($provide) {
                     $provide.service('MiniReelService', function($q) {
+                        this.opened = {
+                            player: null,
+                            editor: null
+                        };
+
                         this.open = jasmine.createSpy('MiniReelService.open()')
-                            .and.returnValue($q.when(minireel));
+                            .and.callFake(function() {
+                                this.opened.editor = minireel;
+
+                                return $q.when(minireel);
+                            });
                     });
                 });
 
@@ -74,6 +83,12 @@
 
                 it('should resolve to the transpiled minireel', function() {
                     expect(success).toHaveBeenCalledWith(minireel);
+                });
+
+                describe('if there is already a MiniReel open', function() {
+                    it('should return the minireel in the editor format', function() {
+                        expect($injector.invoke(EditorState.model, EditorState)).toBe(MiniReelService.opened.editor);
+                    });
                 });
             });
         });

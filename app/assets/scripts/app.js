@@ -197,7 +197,8 @@
                     templateUrl: assets('views/editor.html'),
                     model:  ['cinema6','c6StateParams','MiniReelService',
                     function( cinema6 , c6StateParams , MiniReelService ) {
-                        return MiniReelService.open(c6StateParams.minireelId);
+                        return MiniReelService.opened.editor ||
+                            MiniReelService.open(c6StateParams.minireelId);
                     }],
                     children: {
                         splash: {
