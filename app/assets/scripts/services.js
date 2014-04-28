@@ -421,10 +421,7 @@
 
                 this.convertForPlayer(opened.editor, opened.player);
 
-                return opened.player.save()
-                    .then(function reopen(minireel) {
-                        return self.open(minireel.id);
-                    });
+                return opened.player.save();
             };
 
             this.erase = function(minireelId) {
