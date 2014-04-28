@@ -8,11 +8,17 @@
 
     angular.module('c6.mrmaker')
         .controller('EditorController', ['c6State','$scope','MiniReelService',
-                                         'ConfirmDialogService',
+                                         'ConfirmDialogService','c6Debounce','$log',
         function                        ( c6State , $scope , MiniReelService ,
-                                          ConfirmDialogService ) {
+                                          ConfirmDialogService , c6Debounce , $log ) {
             var self = this,
-                AppCtrl = $scope.AppCtrl;
+                AppCtrl = $scope.AppCtrl,
+                saveAfterTenSeconds = c6Debounce(function() {
+                    $log.info('Autosaving MiniReel');
+                    self.save();
+                }, 10000);
+
+            $log = $log.context('EditorController');
 
             this.preview = false;
             this.editTitle = false;
@@ -127,12 +133,27 @@
                 });
             };
 
+            this.save = function() {
+                MiniReelService.save()
+                    .then(function log(minireel) {
+                        $log.info('MiniReel save success!', minireel);
+                    });
+            };
+
             $scope.$watch(function() {
                 return self.model.mode + self.model.data.autoplay;
             }, function(newMode, oldMode) {
                 if(newMode === oldMode) { return; }
                 $scope.$broadcast('mrPreview:updateMode', self.model);
             });
+
+            $scope.$watch(function() {
+                return self.model;
+            }, function(minireel, prevMinireel) {
+                if (minireel === prevMinireel) { return; }
+
+                saveAfterTenSeconds();
+            }, true);
 
             $scope.$on('addCard', function(event, card, index) {
                 self.model.data.deck.splice(index, 0, card);
@@ -147,6 +168,7 @@
             });
 
             $scope.$on('$destroy', function() {
+                self.save();
                 MiniReelService.close();
             });
         }])
