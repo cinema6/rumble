@@ -887,7 +887,6 @@
                 profile : '=',
                 active  : '=',
                 onDeck  : '=',
-                deck    : '=',
                 number  : '@',
                 total   : '@'
             }
