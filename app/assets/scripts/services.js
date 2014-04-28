@@ -260,8 +260,8 @@
             };
         }])
 
-        .service('MiniReelService', ['crypto','$window','cinema6','$q',
-        function                    ( crypto , $window , cinema6 , $q ) {
+        .service('MiniReelService', ['crypto','$window','cinema6','$q','VoteService',
+        function                    ( crypto , $window , cinema6 , $q , VoteService ) {
             var self = this;
 
             function generateId(prefix) {
@@ -465,6 +465,14 @@
 
             this.publish = function(minireelId) {
                 return cinema6.db.find('experience', minireelId)
+                    .then(function initializeElection(minireel) {
+                        if (minireel.data.election) { return minireel; }
+
+                        return VoteService.initialize(minireel)
+                            .then(function returnMiniReel() {
+                                return minireel;
+                            });
+                    })
                     .then(function setActive(minireel) {
                         minireel.status = 'active';
 
@@ -488,11 +496,23 @@
             };
 
             this.save = function() {
-                var opened = this.opened;
+                var opened = this.opened,
+                    playerMR = opened.player;
 
-                this.convertForPlayer(opened.editor, opened.player);
+                function handleElection() {
+                    if (playerMR.data.election) {
+                        return VoteService.update(playerMR);
+                    }
 
-                return opened.player.save()
+                    return $q.when({});
+                }
+
+                this.convertForPlayer(opened.editor, playerMR);
+
+                return handleElection()
+                    .then(function save() {
+                        return opened.player.save();
+                    })
                     .then(function reopen(minireel) {
                         return self.open(minireel.id);
                     });
@@ -510,6 +530,7 @@
                     var model = {
                         data: {
                             branding: minireel.data.branding,
+                            election: minireel.data.election,
                             deck: minireel.data.deck.map(function(card) {
                                 return makeCard(card);
                             })
