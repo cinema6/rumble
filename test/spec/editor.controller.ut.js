@@ -7,6 +7,7 @@
                 $scope,
                 $childScope,
                 $controller,
+                $q,
                 c6State,
                 MiniReelService,
                 ConfirmDialogService,
@@ -17,6 +18,7 @@
 
             beforeEach(function() {
                 cModel = {
+                    id: 'e-53ae461c63b015',
                     mode: 'lightbox',
                     data: {
                         deck: [
@@ -39,6 +41,7 @@
                     $rootScope = $injector.get('$rootScope');
                     $controller = $injector.get('$controller');
                     c6State = $injector.get('c6State');
+                    $q = $injector.get('$q');
                     MiniReelService = $injector.get('MiniReelService');
                     ConfirmDialogService = $injector.get('ConfirmDialogService');
 
@@ -173,7 +176,7 @@
                         });
 
                         it('should publish the minireel', function() {
-                            expect(MiniReelService.publish).toHaveBeenCalledWith(cModel);
+                            expect(MiniReelService.publish).toHaveBeenCalledWith(cModel.id);
                         });
 
                         it('should close the dialog', function() {
@@ -215,7 +218,7 @@
                         });
 
                         it('should unpublish the minireel', function() {
-                            expect(MiniReelService.unpublish).toHaveBeenCalledWith(cModel);
+                            expect(MiniReelService.unpublish).toHaveBeenCalledWith(cModel.id);
                         });
                     });
                 });
@@ -302,6 +305,37 @@
                             expect(ConfirmDialogService.close).toHaveBeenCalled();
                         });
                     });
+
+                    describe('if the confirmation is affirmed', function() {
+                        var eraseDeferred;
+
+                        beforeEach(function() {
+                            eraseDeferred = $q.defer();
+
+                            spyOn(c6State, 'goTo');
+                            spyOn(MiniReelService, 'erase').and.returnValue(eraseDeferred.promise);
+
+                            dialog().onAffirm();
+                        });
+
+                        it('should erase the minireel', function() {
+                            expect(MiniReelService.erase).toHaveBeenCalledWith(cModel.id);
+                        });
+
+                        it('should close the confirmation', function() {
+                            expect(ConfirmDialogService.close).toHaveBeenCalled();
+                        });
+
+                        it('should go back to the manager after the deletion', function() {
+                            expect(c6State.goTo).not.toHaveBeenCalled();
+
+                            $scope.$apply(function() {
+                                eraseDeferred.resolve(null);
+                            });
+
+                            expect(c6State.goTo).toHaveBeenCalledWith('manager');
+                        });
+                    });
                 });
 
                 describe('previewMode(card)', function() {
@@ -380,6 +414,18 @@
                     it('should copy the properties of the provided card to the actual card in the deck', function() {
                         expect(cModel.data.deck[1]).toEqual(card);
                         expect(cModel.data.deck[1]).not.toBe(card);
+                    });
+                });
+
+                describe('$destroy', function() {
+                    beforeEach(function() {
+                        spyOn(MiniReelService, 'close').and.callThrough();
+
+                        $scope.$emit('$destroy');
+                    });
+
+                    it('should close the current MiniReel', function() {
+                        expect(MiniReelService.close).toHaveBeenCalled();
                     });
                 });
             });
