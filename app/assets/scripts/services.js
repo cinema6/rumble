@@ -10,6 +10,77 @@
         isFunction = angular.isFunction;
 
     angular.module('c6.mrmaker')
+        .service('VoteService', ['$http',
+        function                ( $http ) {
+            function generateData(deck, election) {
+                function cardWithId(id) {
+                    return deck.filter(function(card) {
+                        return card.id === id;
+                    })[0];
+                }
+
+                election = election || {
+                    ballot: {}
+                };
+
+                delete election.id;
+
+                forEach(deck, function(card) {
+                    var item;
+
+                    if (card.modules.indexOf('ballot') < 0) {
+                        return;
+                    }
+
+                    item = election.ballot[card.id] || {};
+
+                    forEach(card.ballot.choices, function(choice) {
+                        item[choice] = item[choice] || 0;
+                    });
+
+                    election.ballot[card.id] = item;
+                });
+                forEach(Object.keys(election.ballot), function(id) {
+                    var card = cardWithId(id),
+                        shouldHaveBallot = !!card && card.modules.indexOf('ballot') > -1;
+
+                    if (!shouldHaveBallot) {
+                        delete election.ballot[id];
+                    }
+                });
+
+                return election;
+            }
+
+            this.initialize = function(minireel) {
+                return $http.post('/api/election', generateData(minireel.data.deck))
+                    .then(function returnData(response) {
+                        var election = response.data;
+
+                        minireel.data.election = election.id;
+
+                        return election;
+                    });
+            };
+
+            this.update = function(minireel) {
+                var id = minireel.data.election;
+
+                return $http.get('/api/election/' + id)
+                    .then(function diffItems(response) {
+                        var election = response.data;
+
+                        return generateData(minireel.data.deck, election);
+                    })
+                    .then(function updateElection(election) {
+                        return $http.put('/api/election/' + id, election);
+                    })
+                    .then(function returnData(response) {
+                        return response.data;
+                    });
+            };
+        }])
+
         .service('VideoThumbnailService', ['$q','$cacheFactory','$http',
         function                          ( $q , $cacheFactory , $http ) {
             var _private = {},
