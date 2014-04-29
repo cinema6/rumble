@@ -458,9 +458,15 @@
                         });
 
                         notifyProgress(
-                            positionToValue(
-                                desired,
-                                scopeProp
+                            Math.max(
+                                0,
+                                Math.min(
+                                    scope.duration,
+                                    positionToValue(
+                                        desired,
+                                        scopeProp
+                                    )
+                                )
                             ),
                             scopeProp
                         );
