@@ -25,6 +25,7 @@
                     cwd: '<%= settings.appDir %>/assets',
                     src: [
                         '**/*.html',
+                        '!apps/**',
                         '!views/**/*.html'
                     ],
                     dest: '<%= _versionDir %>'
