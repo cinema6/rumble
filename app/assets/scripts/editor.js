@@ -231,7 +231,7 @@
                             ('/app/index.html?kCollateralUrl=' +
                                 encodeURIComponent('../c6Content') +
                                 '&kDebug=true&kDevMode=true') :
-                            ('?kCollateralUrl=' + encodeURIComponent(c6Defines.kCollateralUrl) +
+                            ('/?kCollateralUrl=' + encodeURIComponent(c6Defines.kCollateralUrl) +
                                 '&kDevice=' + encodeURIComponent(this.device) +
                                 '&kMode=' + encodeURIComponent(experience.mode))
                         )

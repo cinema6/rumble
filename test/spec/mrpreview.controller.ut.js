@@ -143,14 +143,14 @@
                         });
 
                         it('should be "/apps/rumble?kCollateralUrl=/collateral"', function() {
-                            expect(controller().playerSrc).toBe('/apps/rumble?kCollateralUrl=' + encodeURIComponent('/collateral') + '&kDevice=desktop&kMode=full');
+                            expect(controller().playerSrc).toBe('/apps/rumble/?kCollateralUrl=' + encodeURIComponent('/collateral') + '&kDevice=desktop&kMode=full');
                         });
 
                         it('should pass the current mode and device', function() {
                             spyOn(MiniReelService, 'convertForPlayer').and.returnValue(experience);
                             $scope.$emit('mrPreview:initExperience', experience, session);
 
-                            expect(PreviewController.playerSrc).toBe('/apps/rumble?kCollateralUrl=' + encodeURIComponent('/collateral') + '&kDevice=desktop&kMode=light');
+                            expect(PreviewController.playerSrc).toBe('/apps/rumble/?kCollateralUrl=' + encodeURIComponent('/collateral') + '&kDevice=desktop&kMode=light');
 
                             experience.mode = 'lightbox';
                             $scope.$apply(function() {
@@ -158,7 +158,7 @@
                             });
                             $scope.$emit('mrPreview:updateExperience', experience);
 
-                            expect(PreviewController.playerSrc).toBe('/apps/rumble?kCollateralUrl=' + encodeURIComponent('/collateral') + '&kDevice=phone&kMode=lightbox');
+                            expect(PreviewController.playerSrc).toBe('/apps/rumble/?kCollateralUrl=' + encodeURIComponent('/collateral') + '&kDevice=phone&kMode=lightbox');
                         });
                     });
 
@@ -179,14 +179,14 @@
                         });
 
                         it('should be "/apps/rumble?kCollateralUrl=/collateral"', function() {
-                            expect(controller().playerSrc).toBe('/apps/rumble?kCollateralUrl=' + encodeURIComponent('/collateral') + '&kDevice=desktop&kMode=full');
+                            expect(controller().playerSrc).toBe('/apps/rumble/?kCollateralUrl=' + encodeURIComponent('/collateral') + '&kDevice=desktop&kMode=full');
                         });
 
                         it('should pass the current mode and device', function() {
                             spyOn(MiniReelService, 'convertForPlayer').and.returnValue(experience);
                             $scope.$emit('mrPreview:initExperience', experience, session);
 
-                            expect(PreviewController.playerSrc).toBe('/apps/rumble?kCollateralUrl=' + encodeURIComponent('/collateral') + '&kDevice=desktop&kMode=light');
+                            expect(PreviewController.playerSrc).toBe('/apps/rumble/?kCollateralUrl=' + encodeURIComponent('/collateral') + '&kDevice=desktop&kMode=light');
 
                             experience.mode = 'lightbox';
                             $scope.$apply(function() {
@@ -194,7 +194,7 @@
                             });
                             $scope.$emit('mrPreview:updateExperience', experience);
 
-                            expect(PreviewController.playerSrc).toBe('/apps/rumble?kCollateralUrl=' + encodeURIComponent('/collateral') + '&kDevice=phone&kMode=lightbox');
+                            expect(PreviewController.playerSrc).toBe('/apps/rumble/?kCollateralUrl=' + encodeURIComponent('/collateral') + '&kDevice=phone&kMode=lightbox');
                         });
                     });
                 });
