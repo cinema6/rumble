@@ -43,7 +43,7 @@
                     if(parent.location.href !== location.href && query) {
                         query.forEach(function(param){
                             if(queryCheck.indexOf(param[0]) > -1) {
-                                c6[param[0]] = param[1];
+                                c6[param[0]] = decodeURIComponent(param[1]);
                             }
                         });
                     }
