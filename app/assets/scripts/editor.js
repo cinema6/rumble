@@ -65,7 +65,10 @@
                     onAffirm: function() {
                         ConfirmDialogService.close();
 
-                        MiniReelService.publish(self.model.id);
+                        MiniReelService.publish(self.model.id)
+                            .then(function setActive() {
+                                self.model.status = 'active';
+                            });
                     },
                     onCancel: function() {
                         ConfirmDialogService.close();
@@ -81,7 +84,10 @@
                     onAffirm: function() {
                         ConfirmDialogService.close();
 
-                        MiniReelService.unpublish(self.model.id);
+                        MiniReelService.unpublish(self.model.id)
+                            .then(function setActive() {
+                                self.model.status = 'pending';
+                            });
                     },
                     onCancel: function() {
                         ConfirmDialogService.close();
