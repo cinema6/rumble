@@ -83,7 +83,7 @@
                 });
 
                 it('should get all the minireels that are associated with the user\'s org', function() {
-                    expect(cinema6.db.findAll).toHaveBeenCalledWith('experience', { appUri: 'rumble', org: currentUser.org });
+                    expect(cinema6.db.findAll).toHaveBeenCalledWith('experience', { type: 'minireel', org: currentUser.org });
                 });
             });
         });

@@ -503,7 +503,7 @@
 
                 return handleElection()
                     .then(function save() {
-                        return opened.player.save();
+                        return playerMR.save();
                     });
             };
 
@@ -688,7 +688,7 @@
             };
 
             this.create = function(toCopyId) {
-                function fetchTemplate() {
+                function fetchTemplate(appData) {
                     return $q.when(toCopyId ?
                         cinema6.db.find('experience', toCopyId)
                             .then(function returnPojo(minireel) {
@@ -700,6 +700,7 @@
                             summary: null,
                             type: 'minireel',
                             mode: 'light',
+                            org: appData.user.org,
                             data: {
                                 deck: [
                                     self.createCard('recap')
@@ -718,7 +719,8 @@
                     return minireel;
                 }
 
-                return fetchTemplate()
+                return cinema6.getAppData()
+                    .then(fetchTemplate)
                     .then(createMinireel)
                     .then(function save(minireel) {
                         return minireel.save();
