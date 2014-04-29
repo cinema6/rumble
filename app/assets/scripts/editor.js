@@ -205,13 +205,28 @@
         }])
 
         .controller('PreviewController',['$scope','MiniReelService','postMessage','c6BrowserInfo',
-        function                        ( $scope , MiniReelService , postMessage , c6BrowserInfo ) {
+                                         'c6Defines',
+        function                        ( $scope , MiniReelService , postMessage , c6BrowserInfo ,
+                                          c6Defines ) {
             var self = this,
                 profile,
                 card;
 
             // set a default device mode
             this.device = 'desktop';
+            this.playerSrc = (c6Defines.kLocal ?
+                ('assets' + c6Defines.kExpUrl + '/rumble/app/index.html') :
+                (c6Defines.kExpUrl + '/rumble')) + '?' + (
+                    'kCollateralUrl=' + encodeURIComponent(
+                        c6Defines.kLocal ? '../c6Content' :
+                        (c6Defines.kEnv === 'staging' ?
+                            'http://staging.cinema6.com/collateral' :
+                            'http://portal.cinema6.com/collateral')
+                    ) + (c6Defines.kLocal ?
+                        '&kDebug=true&kDevMode=true' :
+                        ''
+                    )
+                );
 
             // set a profile based on the current browser
             // this is needed to instantiate a player

@@ -10,7 +10,8 @@
                 MiniReelService,
                 c6EventEmitter,
                 c6BrowserInfo,
-                postMessage;
+                postMessage,
+                c6Defines;
 
             var responseCallback,
                 experience,
@@ -39,6 +40,8 @@
                     MiniReelService = $injector.get('MiniReelService');
                     postMessage = $injector.get('postMessage');
                     c6EventEmitter = $injector.get('c6EventEmitter');
+                    c6Defines = $injector.get('c6Defines');
+                    c6Defines.kExpUrl = '/apps';
 
                     $scope = $rootScope.$new();
 
@@ -80,6 +83,55 @@
 
                 it('should set the default mode to full', function() {
                     expect(PreviewController.device).toBe('desktop');
+                });
+            });
+
+            describe('properties', function() {
+                function controller() {
+                    $scope = $rootScope.$new();
+                    $scope.$apply(function() {
+                        PreviewController = $controller('PreviewController', { $scope: $scope });
+                    });
+
+                    return PreviewController;
+                }
+
+                describe('playerSrc', function() {
+                    describe('when developing locally', function() {
+                        beforeEach(function() {
+                            c6Defines.kDebug = true;
+                            c6Defines.kEnv = 'dev';
+                            c6Defines.kLocal = true;
+                        });
+
+                        it('should be "assets/apps/rumble/app/index.html?kCollateralUrl=../c6Content&kDebug=true&kDevMode=true"', function() {
+                            expect(controller().playerSrc).toBe('assets/apps/rumble/app/index.html?kCollateralUrl=' + encodeURIComponent('../c6Content') + '&kDebug=true&kDevMode=true');
+                        });
+                    });
+
+                    describe('in staging', function() {
+                        beforeEach(function() {
+                            c6Defines.kDebug = true;
+                            c6Defines.kEnv = 'staging';
+                            c6Defines.kLocal = false;
+                        });
+
+                        it('should be "/apps/rumble?kCollateralUrl=http://staging.cinema6.com/collateral"', function() {
+                            expect(controller().playerSrc).toBe('/apps/rumble?kCollateralUrl=' + encodeURIComponent('http://staging.cinema6.com/collateral'));
+                        });
+                    });
+
+                    describe('in production', function() {
+                        beforeEach(function() {
+                            c6Defines.kDebug = false;
+                            c6Defines.kEnv = 'production';
+                            c6Defines.kLocal = false;
+                        });
+
+                        it('should be "/apps/rumble?kCollateralUrl=http://portal.cinema6.com/collateral"', function() {
+                            expect(controller().playerSrc).toBe('/apps/rumble?kCollateralUrl=' + encodeURIComponent('http://portal.cinema6.com/collateral'));
+                        });
+                    });
                 });
             });
 
