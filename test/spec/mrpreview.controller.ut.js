@@ -422,17 +422,12 @@
                             });
                         });
 
-<<<<<<< HEAD
                         it('should leave fullscreen', function() {
                             expect(PreviewController.fullscreen).toBe(false);
                         });
 
-                        it('should tell the player to reload', function() {
-                            expect(session.ping.calls.argsFor(2)[0]).toBe('mrPreview:updateMode');
-=======
                         it('should cause the playerSrc to change', function() {
                             expect(PreviewController.playerSrc).toContain('kDevice=phone');
->>>>>>> 40dcb1ed11c344b0ba0b36ae8f2162f5751b445a
                         });
 
                         it('should send an updated profile to the player after it reloads', function() {
