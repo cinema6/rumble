@@ -388,6 +388,10 @@
                             });
                         });
 
+                        it('should leave fullscreen', function() {
+                            expect(PreviewController.fullscreen).toBe(false);
+                        });
+
                         it('should tell the player to reload', function() {
                             expect(session.ping.calls.argsFor(2)[0]).toBe('mrPreview:updateMode');
                         });
