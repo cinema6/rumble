@@ -7,3 +7,4 @@
 * [FIX]: Query for minireels with minireel type
 * [FIX]: Don't throw errors if MiniReelService.close() is called after MiniReelService.save() in the same event loop
 * [FIX]: Show newly-created MiniReels in development
+* [FIX]: Use min-safe DI in animation
