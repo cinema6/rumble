@@ -769,14 +769,22 @@
                         var result,
                             success,
                             newModel,
-                            saveDeferred;
+                            saveDeferred,
+                            appData;
 
                         beforeEach(function() {
                             var dbCreate = cinema6.db.create;
 
+                            appData = {
+                                user: {
+                                    org: 'o-17593d7a2bf294'
+                                }
+                            };
+
                             saveDeferred = $q.defer();
                             success = jasmine.createSpy('success');
 
+                            spyOn(cinema6, 'getAppData').and.returnValue($q.when(appData));
                             spyOn(cinema6.db, 'create').and.callFake(function() {
                                 newModel = dbCreate.apply(cinema6.db, arguments);
 
@@ -852,6 +860,7 @@
                                     summary: null,
                                     type: 'minireel',
                                     mode: 'light',
+                                    org: 'o-17593d7a2bf294',
                                     data: {
                                         deck: [
                                             {
