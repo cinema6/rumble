@@ -296,6 +296,7 @@
                         card = MiniReelService.convertCard(newCard);
                         session.ping('mrPreview:jumpToCard', card);
                     } else {
+                        card = null;
                         session.ping('mrPreview:reset');
                     }
                 });
@@ -319,6 +320,7 @@
                     if(newDevice === oldDevice) { return; }
 
                     profile.device = newDevice;
+                    self.fullscreen = false;
 
                     // ping the MR player
                     // sending 'updateMode' will trigger a refresh
