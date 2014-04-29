@@ -11,3 +11,4 @@
 * [FIX]: Add kMode and kDevice query params to preview player
 * [FIX]: Add trailing slash for passing query params to preview player
 * [FIX]: Use preview player src to trigger refresh for mode/device changes
+* [FIX]: Copy autoplay settings when opening MiniReel
