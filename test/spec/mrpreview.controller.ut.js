@@ -122,7 +122,7 @@
                         });
 
                         it('should be "assets/apps/rumble/app/index.html?kCollateralUrl=../c6Content&kDebug=true&kDevMode=true"', function() {
-                            expect(controller().playerSrc).toBe('assets/apps/rumble/app/index.html?kCollateralUrl=' + encodeURIComponent('../c6Content') + '&kDebug=true&kDevMode=true');
+                            expect(controller().playerSrc).toBe('assets/apps/rumble/app/index.html?kCollateralUrl=' + encodeURIComponent('../c6Content') + '&kDebug=true&kDevMode=true&kDevice=desktop&kMode=full');
                         });
                     });
 
@@ -279,7 +279,6 @@
                         experience.data.deck.push(newCard);
 
                         $scope.$emit('mrPreview:updateExperience', experience);
-                        expect()
                         expect(MiniReelService.convertForPlayer).toHaveBeenCalled();
                     });
 
@@ -322,11 +321,12 @@
                 });
 
                 describe('mrPreview:updateMode', function() {
-                    it('should tell the player to reset', function() {
+                    it('should change the playerSrc, cause a refresh, and send an updated experience', function() {
                         var dataSentToPlayer,
                             emitCount = 0,
                             updatedExperience = {
                                 id: 'foo',
+                                mode: 'lightbox',
                                 data: {
                                     deck: [
                                         {
@@ -355,8 +355,10 @@
                             }
                         });
                         $scope.$emit('mrPreview:initExperience', experience, session);
+                        expect(PreviewController.playerSrc).toContain('kMode=light');
+                        
                         $scope.$emit('mrPreview:updateMode', updatedExperience);
-                        expect(session.ping.calls.argsFor(0)[0]).toBe('mrPreview:updateMode');
+                        expect(PreviewController.playerSrc).toContain('kMode=lightbox');
 
                         session.emit('handshake', {}, responseCallback);
 
@@ -376,6 +378,7 @@
                         beforeEach(function() {
                             updatedExperience = {
                                 id: 'foo',
+                                mode: 'light',
                                 data: {
                                     deck: [
                                         {
@@ -419,8 +422,8 @@
                             });
                         });
 
-                        it('should tell the player to reload', function() {
-                            expect(session.ping.calls.argsFor(2)[0]).toBe('mrPreview:updateMode');
+                        it('should cause the playerSrc to change', function() {
+                            expect(PreviewController.playerSrc).toContain('kDevice=phone');
                         });
 
                         it('should send an updated profile to the player after it reloads', function() {
