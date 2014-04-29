@@ -40,8 +40,8 @@
         libUrl('cryptojs/v3.1.2/sha1.js'),
         libUrl('angular/v1.2.14-0-g729fb13/angular.js'),
         libUrl('angular/v1.2.14-0-g729fb13/angular-animate.js'),
-        libUrl('c6ui/v2.6.1-0-g0d1a105/c6uilib.js'),
-        libUrl('c6ui/v2.6.1-0-g0d1a105/c6log.js')
+        libUrl('c6ui/v2.6.2-0-ga18aaf8/c6uilib.js'),
+        libUrl('c6ui/v2.6.2-0-ga18aaf8/c6log.js')
     ] :
     [
         '//www.youtube.com/iframe_api',
@@ -52,8 +52,8 @@
         libUrl('cryptojs/v3.1.2/sha1.js'),
         libUrl('angular/v1.2.14-0-g729fb13/angular.min.js'),
         libUrl('angular/v1.2.14-0-g729fb13/angular-animate.min.js'),
-        libUrl('c6ui/v2.6.1-0-g0d1a105/c6uilib.min.js'),
-        libUrl('c6ui/v2.6.1-0-g0d1a105/c6log.min.js')
+        libUrl('c6ui/v2.6.2-0-ga18aaf8/c6uilib.min.js'),
+        libUrl('c6ui/v2.6.2-0-ga18aaf8/c6log.min.js')
     ];
 
     function loadScriptsInOrder(scriptsList, done) {
@@ -99,7 +99,7 @@
                     libUrl('angular/v1.2.14-0-g729fb13/angular-touch.min.js')
             ],
             nope: [
-                libUrl('c6ui/v2.6.1-0-g0d1a105/css/c6uilib--hover.min.css'),
+                libUrl('c6ui/v2.6.2-0-ga18aaf8/css/c6uilib--hover.min.css'),
                 c6.kBaseUrl + '/styles/main--hover.css'
             ],
             complete: function() {
