@@ -216,19 +216,28 @@
                                           c6Defines , c6UrlMaker ) {
             var self = this,
                 profile,
-                card;
+                card,
+                experience = {
+                    mode: 'full'
+                };
 
             // set a default device mode
             this.device = 'desktop';
             this.fullscreen = false;
-            this.playerSrc = c6UrlMaker((
-                'rumble' + (c6Defines.kLocal ?
-                    ('/app/index.html?kCollateralUrl=' +
-                        encodeURIComponent('../c6Content') +
-                        '&kDebug=true&kDevMode=true') :
-                    ('?kCollateralUrl=' + encodeURIComponent(c6Defines.kCollateralUrl))
-                )
-            ), 'app');
+            Object.defineProperty(this, 'playerSrc', {
+                get: function() {
+                    return c6UrlMaker((
+                        'rumble' + (c6Defines.kLocal ?
+                            ('/app/index.html?kCollateralUrl=' +
+                                encodeURIComponent('../c6Content') +
+                                '&kDebug=true&kDevMode=true') :
+                            ('?kCollateralUrl=' + encodeURIComponent(c6Defines.kCollateralUrl) +
+                                '&kDevice=' + encodeURIComponent(this.device) +
+                                '&kMode=' + encodeURIComponent(experience.mode))
+                        )
+                    ), 'app');
+                }
+            });
 
             // set a profile based on the current browser
             // this is needed to instantiate a player
@@ -239,7 +248,7 @@
 
             $scope.$on('mrPreview:initExperience', function(event, exp, session) {
                 // convert the MRinator experience to a MRplayer experience
-                var experience = MiniReelService.convertForPlayer(exp);
+                experience = MiniReelService.convertForPlayer(exp);
 
                 // add the converted experience to the session for comparing later
                 session.experience = copy(experience);
