@@ -423,10 +423,6 @@
                             expect(session.ping.calls.argsFor(2)[0]).toBe('mrPreview:updateMode');
                         });
 
-                        it('should leave fullscreen', function() {
-                            expect(PreviewController.fullscreen).toBe(false);
-                        });
-
                         it('should send an updated profile to the player after it reloads', function() {
                             session.emit('handshake', {}, responseCallback);
 
