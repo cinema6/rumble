@@ -212,6 +212,7 @@
 
             // set a default device mode
             this.device = 'desktop';
+            this.fullscreen = false;
 
             // set a profile based on the current browser
             // this is needed to instantiate a player
@@ -249,6 +250,11 @@
                 // and see if it still needs to go to that card
                 session.on('mrPreview:getCard', function(data, respond) {
                     respond(card);
+                });
+
+                session.on('fullscreenMode', function(bool) {
+                    self.fullscreen = bool;
+                    $scope.$digest();
                 });
 
                 // register another listener within the init handler

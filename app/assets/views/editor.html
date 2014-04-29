@@ -78,7 +78,7 @@
                 <label for="previewMode_mobile">Mobile</label>
                 <button class="modal__closeBtn sprite--alpha" ng-click="EditorCtrl.closePreview()"><span class="ir">Close</span></button>
             </form>
-            <iframe mr-preview="minireel" src="assets/rumble/app/index.html?kCollateralUrl=../c6Content&kDebug=true&kDevMode=true" ng-class="{ 'preview__iframe--desktop' : (PreviewCtrl.device === 'desktop'), 'preview__iframe--mobile' : (PreviewCtrl.device === 'phone') }" class="preview__iframe"></iframe>
+            <iframe mr-preview="minireel" src="assets/rumble/app/index.html?kCollateralUrl=../c6Content&kDebug=true&kDevMode=true" ng-class="{ 'preview__iframe--fullscreen' : (PreviewCtrl.fullscreen), 'preview__iframe--desktop' : (PreviewCtrl.device === 'desktop'), 'preview__iframe--mobile' : (PreviewCtrl.device === 'phone')  }" class="preview__iframe"></iframe>
         </div>
         <div class="ui__overlay">&nbsp;</div>
     </div>
