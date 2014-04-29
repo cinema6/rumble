@@ -466,28 +466,39 @@
                         );
                     }
 
+                    function absStartMarkerPos() {
+                        return ((scope.start * seekBar.display.width) /
+                            scope.duration) + 'px';
+                    }
+
+                    function absEndMarkerPos() {
+                        return ((end() * seekBar.display.width) /
+                            scope.duration) - endMarker.display.width + 'px';
+                    }
+
                     function dropStart(marker) {
-                        var scopeProp = scopePropForMarker(marker);
+                        var scopeProp = scopePropForMarker(marker),
+                            absCompFns = {
+                                start: absStartMarkerPos,
+                                end: absEndMarkerPos
+                            };
 
                         scope[scopeProp] = positionToValue(marker.display, scopeProp);
                         currentScanDeferred.resolve(scope[scopeProp]);
 
-                        marker.$element.css('top', '');
+                        marker.$element.css({
+                            top: '',
+                            left: absCompFns[scopeProp]()
+                        });
                     }
 
                     scope.position = {};
                     Object.defineProperties(scope.position, {
                         startMarker: {
-                            get: function() {
-                                return ((scope.start * seekBar.display.width) /
-                                    scope.duration) + 'px';
-                            }
+                            get: absStartMarkerPos
                         },
                         endMarker: {
-                            get: function() {
-                                return ((end() * seekBar.display.width) /
-                                    scope.duration) - endMarker.display.width + 'px';
-                            }
+                            get: absEndMarkerPos
                         },
                         playhead: {
                             get: function() {

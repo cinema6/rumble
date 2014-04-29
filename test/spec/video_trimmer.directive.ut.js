@@ -2,6 +2,9 @@
     'use strict';
 
     define(['helpers/drag', 'editor'], function(helpers) {
+        /* global angular:true */
+        var copy = angular.copy;
+
         var TestFrame = helpers.TestFrame,
             Finger = helpers.Finger;
 
@@ -317,6 +320,20 @@
                         finger.lift();
                         expect(finish).toHaveBeenCalledWith(45);
                     });
+
+                    it('should not jump if dropped after not moving', function() {
+                        var finger = new Finger(),
+                            startPosition;
+
+                        start.refresh();
+                        startPosition = copy(start.display);
+
+                        finger.placeOn($start);
+                        finger.drag(0, 0);
+                        finger.lift();
+
+                        expect(copy(start.display)).toEqual(startPosition);
+                    });
                 });
 
                 describe('end marker', function() {
@@ -466,6 +483,20 @@
 
                         finger.lift();
                         expect(finish).toHaveBeenCalledWith(15);
+                    });
+
+                    it('should not jump if dropped after not moving', function() {
+                        var finger = new Finger(),
+                            startPosition;
+
+                        end.refresh();
+                        startPosition = copy(end.display);
+
+                        finger.placeOn($end);
+                        finger.drag(0, 0);
+                        finger.lift();
+
+                        expect(copy(end.display)).toEqual(startPosition);
                     });
                 });
             });
