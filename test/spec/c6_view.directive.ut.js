@@ -40,6 +40,7 @@
                     $animate = $injector.get('$animate');
 
                     c6State = $injector.get('c6State');
+                    spyOn(c6State, 'removeListener').and.callThrough();
 
                     $scope = $rootScope.$new();
                 });
@@ -115,7 +116,7 @@
             it('should nullify the cModel of a state when it is removed from view', function() {
                 var parentState = {
                         name: 'parent',
-                        cTemplate: '<c6-view></c6-view>',
+                        cTemplate: '<c6-view id="foo"></c6-view>',
                         cModel: {}
                     },
                     childState = {
@@ -141,6 +142,7 @@
                 $scope.$apply(function() {
                     c6State.emit('viewChangeStart', siblingState, childState, true);
                 });
+                expect(c6State.removeListener).toHaveBeenCalledWith('viewChangeStart', jasmine.any(Function));
                 expect(parentState.cModel).toBeNull();
                 expect(childState.cModel).toBeNull();
             });
