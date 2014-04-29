@@ -155,8 +155,13 @@
                 }
 
                 describe('publish()', function() {
+                    var publishDeferred;
+
                     beforeEach(function() {
-                        spyOn(MiniReelService, 'publish');
+                        publishDeferred = $q.defer();
+
+                        spyOn(MiniReelService, 'publish')
+                            .and.returnValue(publishDeferred.promise);
 
                         EditorCtrl.publish();
                     });
@@ -186,6 +191,14 @@
                             expect(MiniReelService.publish).toHaveBeenCalledWith(cModel.id);
                         });
 
+                        it('should set the model\'s status to active after publishing', function() {
+                            $scope.$apply(function() {
+                                publishDeferred.resolve({});
+                            });
+
+                            expect(cModel.status).toBe('active');
+                        });
+
                         it('should close the dialog', function() {
                             expect(ConfirmDialogService.close).toHaveBeenCalled();
                         });
@@ -193,8 +206,13 @@
                 });
 
                 describe('makePrivate()', function() {
+                    var unpublishDeferred;
+
                     beforeEach(function() {
-                        spyOn(MiniReelService, 'unpublish');
+                        unpublishDeferred = $q.defer();
+
+                        spyOn(MiniReelService, 'unpublish')
+                            .and.returnValue(unpublishDeferred.promise);
 
                         EditorCtrl.makePrivate();
                     });
@@ -222,6 +240,14 @@
 
                         it('should close the dialog', function() {
                             expect(ConfirmDialogService.close).toHaveBeenCalled();
+                        });
+
+                        it('should set the model\'s status to pending after unpublishing', function() {
+                            $scope.$apply(function() {
+                                unpublishDeferred.resolve({});
+                            });
+
+                            expect(cModel.status).toBe('pending');
                         });
 
                         it('should unpublish the minireel', function() {
