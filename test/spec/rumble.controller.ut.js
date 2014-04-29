@@ -950,6 +950,21 @@
                         });
                     });
 
+                    describe('when player should be in fullscreen mode', function() {
+                        it('should emit fullscreen event', function() {
+                            appData.behaviors.fullscreen = true;
+                            session.emit('mrPreview:jumpToCard', card);
+                            expect(cinema6.fullscreen).toHaveBeenCalledWith(true);
+                        });
+                    });
+
+                    describe('when player shouldn\'t be in fullscreen mode', function() {
+                        it('should emit fullscreen event', function() {
+                            appData.behaviors.fullscreen = false;
+                            session.emit('mrPreview:jumpToCard', card);
+                            expect(cinema6.fullscreen).not.toHaveBeenCalledWith(false);
+                        });
+                    });
                 });
 
                 describe('mrPreview:reset', function() {
@@ -998,6 +1013,30 @@
                             });
 
                             expect($scope.$emit).toHaveBeenCalledWith('reelStart');
+                        });
+
+                        describe('when player should be in fullscreen mode', function() {
+                            it('should emit fullscreen event', function() {
+                                appData.behaviors.fullscreen = true;
+
+                                $scope.$apply(function() {
+                                    request.resolve(card);
+                                });
+                                
+                                expect(cinema6.fullscreen).toHaveBeenCalledWith(true);
+                            });
+                        });
+
+                        describe('when player shouldn\'t be in fullscreen mode', function() {
+                            it('should emit fullscreen event', function() {
+                                appData.behaviors.fullscreen = false;
+
+                                $scope.$apply(function() {
+                                    request.resolve(card);
+                                });
+                                
+                                expect(cinema6.fullscreen).not.toHaveBeenCalledWith(false);
+                            });
                         });
                     });
                 });
