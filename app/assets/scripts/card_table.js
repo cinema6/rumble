@@ -154,7 +154,8 @@
             };
         })
 
-        .animation('.card__item', function($animate) {
+        .animation('.card__item', ['$animate',
+        function                  ( $animate ) {
             var forEach = angular.forEach,
                 $ = angular.element;
 
@@ -239,7 +240,7 @@
                     }
                 }
             };
-        })
+        }])
 
         .directive('c6BindScroll', ['c6Debounce',
         function                   ( c6Debounce ) {
