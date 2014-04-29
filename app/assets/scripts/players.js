@@ -320,8 +320,8 @@
             };
         }])
 
-        .directive('youtubePlayer', ['youtube','c6EventEmitter','$interval','$compile',
-        function                    ( youtube , c6EventEmitter , $interval , $compile ) {
+        .directive('youtubePlayer', ['youtube','c6EventEmitter','$interval','$compile', '$http',
+        function                    ( youtube , c6EventEmitter , $interval , $compile ,  $http ) {
             return {
                 restrict: 'E',
                 scope: {
@@ -356,6 +356,7 @@
                             function setupState() {
                                 return {
                                     currentTime: 0,
+                                    duration: 0,
                                     ended: false,
                                     paused: true,
                                     seeking: false,
@@ -383,11 +384,7 @@
                                 },
                                 duration: {
                                     get: function() {
-                                        if (state.readyState < 0) {
-                                            return 0;
-                                        }
-
-                                        return player.getDuration();
+                                        return state.duration;
                                     }
                                 },
                                 ended: {
@@ -445,6 +442,15 @@
 
                                 state = setupState();
 
+                                
+                                $http.get('http://gdata.youtube.com/feeds/api/videos/'+
+                                    id+'?v=2&alt=jsonc')
+                                        .then(function(data){
+                                            state.duration = data.data.data.duration;
+                                            state.readyState = 1;
+                                            self.emit('loadedmetadata');
+                                        });
+
                                 $iframe = $compile(iframeTemplate)(scope, function($iframe) {
                                     $element.append($iframe);
                                 });
@@ -486,9 +492,8 @@
                                                 state.ended = false;
                                                 state.paused = false;
 
-                                                if (state.readyState < 1) {
+                                                if (state.readyState < 2) {
                                                     state.readyState = 3;
-                                                    self.emit('loadedmetadata');
                                                     self.emit('canplay');
                                                 }
 

@@ -65,7 +65,10 @@
                     onAffirm: function() {
                         ConfirmDialogService.close();
 
-                        MiniReelService.publish(self.model.id);
+                        MiniReelService.publish(self.model.id)
+                            .then(function setActive() {
+                                self.model.status = 'active';
+                            });
                     },
                     onCancel: function() {
                         ConfirmDialogService.close();
@@ -81,7 +84,10 @@
                     onAffirm: function() {
                         ConfirmDialogService.close();
 
-                        MiniReelService.unpublish(self.model.id);
+                        MiniReelService.unpublish(self.model.id)
+                            .then(function setActive() {
+                                self.model.status = 'pending';
+                            });
                     },
                     onCancel: function() {
                         ConfirmDialogService.close();
@@ -205,7 +211,9 @@
         }])
 
         .controller('PreviewController',['$scope','MiniReelService','postMessage','c6BrowserInfo',
-        function                        ( $scope , MiniReelService , postMessage , c6BrowserInfo ) {
+                                         'c6Defines','c6UrlMaker',
+        function                        ( $scope , MiniReelService , postMessage , c6BrowserInfo ,
+                                          c6Defines , c6UrlMaker ) {
             var self = this,
                 profile,
                 card;
@@ -213,6 +221,14 @@
             // set a default device mode
             this.device = 'desktop';
             this.fullscreen = false;
+            this.playerSrc = c6UrlMaker((
+                'rumble' + (c6Defines.kLocal ?
+                    ('/app/index.html?kCollateralUrl=' +
+                        encodeURIComponent('../c6Content') +
+                        '&kDebug=true&kDevMode=true') :
+                    ('?kCollateralUrl=' + encodeURIComponent(c6Defines.kCollateralUrl))
+                )
+            ), 'app');
 
             // set a profile based on the current browser
             // this is needed to instantiate a player

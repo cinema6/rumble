@@ -6,19 +6,26 @@
             var $rootScope,
                 $scope,
                 $compile,
-                $interval;
+                $interval,
+                $httpBackend;
 
             var youtube,
                 players,
                 player,
                 intervals,
-                interval;
+                interval,
+                metadata;
 
             var $player;
 
             beforeEach(function() {
                 players = [];
                 intervals = [];
+                metadata = {
+                    data: {
+                        duration: 100
+                    }
+                };
 
                 module('c6.mrmaker', function($provide) {
                     $provide.value('youtube', {
@@ -90,11 +97,15 @@
                     $rootScope = $injector.get('$rootScope');
                     $compile = $injector.get('$compile');
                     $interval = $injector.get('$interval');
+                    $httpBackend = $injector.get('$httpBackend');
 
                     youtube = $injector.get('youtube');
 
                     $scope = $rootScope.$new();
                 });
+
+                $httpBackend.expectGET('http://gdata.youtube.com/feeds/api/videos/gy1B3agGNxw?v=2&alt=jsonc')
+                    .respond(200, metadata);
 
                 $scope.id = 'gy1B3agGNxw';
             });
@@ -139,10 +150,16 @@
                     $interval.flush(250);
                     player._trigger('onStateChange', { data: youtube.PlayerState.ENDED });
 
+                    $httpBackend.expectGET('http://gdata.youtube.com/feeds/api/videos/f9h85495jf?v=2&alt=jsonc')
+                        .respond(200, metadata);
+                    
                     $scope.$apply(function() {
                         $scope.id = 'f9h85495jf';
                     });
-                    expect(video.readyState).toBe(-1);
+                    
+                    $httpBackend.flush();
+                    
+                    expect(video.readyState).toBe(1);
                     expect(video.currentTime).toBe(0);
                     expect(video.ended).toBe(false);
                     $newFrame = $player.find('iframe');
@@ -261,16 +278,12 @@
 
                     describe('duration', function() {
                         describe('getting', function() {
-                            it('should proxy to the player', function() {
-                                player.getDuration.and.returnValue(30);
+                            it('should come from youtube http request', function() {
                                 expect(video.duration).toBe(0);
+                                
+                                $httpBackend.flush();
 
-                                player._trigger('onReady', {});
-                                player.getDuration.and.returnValue(2);
-                                expect(video.duration).toBe(2);
-
-                                player.getDuration.and.returnValue(6);
-                                expect(video.duration).toBe(6);
+                                expect(video.duration).toBe(100);
                             });
                         });
 
@@ -358,6 +371,12 @@
                                 player._trigger('onReady', {});
 
                                 expect(video.readyState).toBe(0);
+                            });
+
+                            it('should be 1 after metadata is loaded', function() {
+                                $httpBackend.flush();
+
+                                expect(video.readyState).toBe(1);
                             });
 
                             it('should be 3 when the video starts playing', function() {
@@ -471,17 +490,14 @@
                     });
 
                     describe('loadedmetadata', function() {
-                        it('should be emitted the first time the video plays', function() {
+                        it('should be emitted when we request data from youtube', function() {
                             var metadataSpy = jasmine.createSpy('loadedmetadata');
 
                             video.on('loadedmetadata', metadataSpy);
 
-                            player._trigger('onStateChange', { data: youtube.PlayerState.PLAYING });
-                            expect(metadataSpy).toHaveBeenCalled();
+                            $httpBackend.flush();
 
-                            player._trigger('onStateChange', { data: youtube.PlayerState.PAUSED });
-                            player._trigger('onStateChange', { data: youtube.PlayerState.PLAYING });
-                            expect(metadataSpy.calls.count()).toBe(1);
+                            expect(metadataSpy).toHaveBeenCalled();
                         });
                     });
 

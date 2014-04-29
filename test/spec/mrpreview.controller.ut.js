@@ -6,11 +6,13 @@
             var $rootScope,
                 $scope,
                 $controller,
+                c6UrlMaker,
                 PreviewController,
                 MiniReelService,
                 c6EventEmitter,
                 c6BrowserInfo,
-                postMessage;
+                postMessage,
+                c6Defines;
 
             var responseCallback,
                 experience,
@@ -29,6 +31,11 @@
 
                 module('c6.ui', function($provide) {
                     $provide.value('c6BrowserInfo',c6BrowserInfo);
+
+                    $provide.decorator('c6UrlMaker', function($delegate) {
+                        return jasmine.createSpy('c6UrlMaker()')
+                            .and.callFake($delegate);
+                    });
                 });
 
                 module('c6.mrmaker');
@@ -39,6 +46,9 @@
                     MiniReelService = $injector.get('MiniReelService');
                     postMessage = $injector.get('postMessage');
                     c6EventEmitter = $injector.get('c6EventEmitter');
+                    c6Defines = $injector.get('c6Defines');
+                    c6UrlMaker = $injector.get('c6UrlMaker');
+                    c6Defines.kExpUrl = '/apps';
 
                     $scope = $rootScope.$new();
 
@@ -84,6 +94,80 @@
             });
 
             describe('properties', function() {
+
+                function controller() {
+                    $scope = $rootScope.$new();
+                    $scope.$apply(function() {
+                        PreviewController = $controller('PreviewController', { $scope: $scope });
+                    });
+
+                    return PreviewController;
+                }
+
+                describe('playerSrc', function() {
+                    describe('when developing locally', function() {
+                        beforeEach(function() {
+                            c6Defines.kDebug = true;
+                            c6Defines.kEnv = 'dev';
+                            c6Defines.kLocal = true;
+
+                            c6UrlMaker.and.callFake(function(url, base) {
+                                if (base !== 'app') {
+                                    throw new Error('Must use app base');
+                                }
+
+                                return 'assets/apps/' + url;
+                            });
+                        });
+
+                        it('should be "assets/apps/rumble/app/index.html?kCollateralUrl=../c6Content&kDebug=true&kDevMode=true"', function() {
+                            expect(controller().playerSrc).toBe('assets/apps/rumble/app/index.html?kCollateralUrl=' + encodeURIComponent('../c6Content') + '&kDebug=true&kDevMode=true');
+                        });
+                    });
+
+                    describe('in staging', function() {
+                        beforeEach(function() {
+                            c6Defines.kDebug = true;
+                            c6Defines.kEnv = 'staging';
+                            c6Defines.kLocal = false;
+                            c6Defines.kCollateralUrl = '/collateral';
+
+                            c6UrlMaker.and.callFake(function(url, base) {
+                                if (base !== 'app') {
+                                    throw new Error('Must use app base');
+                                }
+
+                                return '/apps/' + url;
+                            });
+                        });
+
+                        it('should be "/apps/rumble?kCollateralUrl=/collateral"', function() {
+                            expect(controller().playerSrc).toBe('/apps/rumble?kCollateralUrl=' + encodeURIComponent('/collateral'));
+                        });
+                    });
+
+                    describe('in production', function() {
+                        beforeEach(function() {
+                            c6Defines.kDebug = false;
+                            c6Defines.kEnv = 'production';
+                            c6Defines.kLocal = false;
+                            c6Defines.kCollateralUrl = '/collateral';
+
+                            c6UrlMaker.and.callFake(function(url, base) {
+                                if (base !== 'app') {
+                                    throw new Error('Must use app base');
+                                }
+
+                                return '/apps/' + url;
+                            });
+                        });
+
+                        it('should be "/apps/rumble?kCollateralUrl=/collateral"', function() {
+                            expect(controller().playerSrc).toBe('/apps/rumble?kCollateralUrl=' + encodeURIComponent('/collateral'));
+                        });
+                    });
+                });
+                
                 describe('fullscreen', function() {
                     it('should default to false', function() {
                         expect(PreviewController.fullscreen).toBe(false);

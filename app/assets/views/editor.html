@@ -78,11 +78,11 @@
                 <label for="previewMode_mobile">Mobile</label>
                 <button class="modal__closeBtn sprite--alpha" ng-click="EditorCtrl.closePreview()"><span class="ir">Close</span></button>
             </form>
-            <iframe mr-preview="minireel" src="assets/rumble/app/index.html?kCollateralUrl=../c6Content&kDebug=true&kDevMode=true" ng-class="{ 'preview__iframe--fullscreen' : (PreviewCtrl.fullscreen), 'preview__iframe--desktop' : (PreviewCtrl.device === 'desktop'), 'preview__iframe--mobile' : (PreviewCtrl.device === 'phone')  }" class="preview__iframe"></iframe>
+            <iframe mr-preview="minireel" ng-src="{{PreviewCtrl.playerSrc}}" ng-class="{ 'preview__iframe--fullscreen' : (PreviewCtrl.fullscreen), 'preview__iframe--desktop' : (PreviewCtrl.device === 'desktop'), 'preview__iframe--mobile' : (PreviewCtrl.device === 'phone') }" class="preview__iframe"></iframe>
         </div>
         <div class="ui__overlay">&nbsp;</div>
     </div>
 </c6-alias>
 <c6-view></c6-view>
 
-<embed-code minireel-id="{{EditorCtrl.model.id}}" class="embedCode__group container"></embed-code>
+<embed-code ng-show="EditorCtrl.model.status === 'active'" minireel-id="{{EditorCtrl.model.id}}" class="embedCode__group container"></embed-code>
