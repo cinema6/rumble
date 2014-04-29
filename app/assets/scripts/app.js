@@ -293,7 +293,7 @@
 
                                 return cinema6.db.findAll(
                                     'experience',
-                                    { appUri: 'rumble', org: user.org }
+                                    { type: 'minireel', org: user.org }
                                 );
                             });
                     }],
