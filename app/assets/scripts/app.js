@@ -75,6 +75,10 @@
         .config(['c6UrlMakerProvider', 'c6Defines',
         function( c6UrlMakerProvider ,  c6Defines ) {
             c6UrlMakerProvider.location(c6Defines.kBaseUrl,'default');
+            c6UrlMakerProvider.location((c6Defines.kLocal ?
+                'assets' + c6Defines.kExpUrl :
+                c6Defines.kExpUrl
+            ), 'app');
         }])
 
         .constant('VoteAdapter', ['$http','config','$q',
