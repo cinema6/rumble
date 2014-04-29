@@ -519,6 +519,7 @@
                     var model = {
                         data: {
                             branding: minireel.data.branding,
+                            autoplay: minireel.data.autoplay,
                             election: minireel.data.election,
                             deck: minireel.data.deck.map(function(card) {
                                 return makeCard(card);
