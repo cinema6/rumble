@@ -307,6 +307,7 @@
                         card = MiniReelService.convertCard(newCard);
                         session.ping('mrPreview:jumpToCard', card);
                     } else {
+                        card = null;
                         session.ping('mrPreview:reset');
                     }
                 });
@@ -331,6 +332,7 @@
                     // the iframe src will update and trigger a refresh automatically
                     // we just prepare the profile for the refresh handshake call
                     profile.device = newDevice;
+                    self.fullscreen = false;
                 });
             });
         }])

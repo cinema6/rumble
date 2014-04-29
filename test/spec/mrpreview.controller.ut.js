@@ -422,6 +422,10 @@
                             });
                         });
 
+                        it('should leave fullscreen', function() {
+                            expect(PreviewController.fullscreen).toBe(false);
+                        });
+
                         it('should cause the playerSrc to change', function() {
                             expect(PreviewController.playerSrc).toContain('kDevice=phone');
                         });
