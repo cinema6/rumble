@@ -205,13 +205,23 @@
         }])
 
         .controller('PreviewController',['$scope','MiniReelService','postMessage','c6BrowserInfo',
-        function                        ( $scope , MiniReelService , postMessage , c6BrowserInfo ) {
+                                         'c6Defines','c6UrlMaker',
+        function                        ( $scope , MiniReelService , postMessage , c6BrowserInfo ,
+                                          c6Defines , c6UrlMaker ) {
             var self = this,
                 profile,
                 card;
 
             // set a default device mode
             this.device = 'desktop';
+            this.playerSrc = c6UrlMaker((
+                'rumble' + (c6Defines.kLocal ?
+                    ('/app/index.html?kCollateralUrl=' +
+                        encodeURIComponent('../c6Content') +
+                        '&kDebug=true&kDevMode=true') :
+                    ('?kCollateralUrl=' + encodeURIComponent(c6Defines.kCollateralUrl))
+                )
+            ), 'app');
 
             // set a profile based on the current browser
             // this is needed to instantiate a player
