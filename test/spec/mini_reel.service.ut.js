@@ -44,6 +44,7 @@
                     theme: 'ed-videos',
                     status: 'pending',
                     data: {
+                        autoplay: true,
                         election: 'el-76506623bf22d9',
                         branding: 'elitedaily',
                         deck: [
@@ -500,7 +501,8 @@
 
                     describe('save()', function() {
                         var saveDeferred,
-                            success;
+                            success,
+                            editorMR;
 
                         beforeEach(function() {
                             success = jasmine.createSpy('success');
@@ -511,7 +513,7 @@
                             spyOn(MiniReelService, 'convertForPlayer').and.callThrough();
 
                             MiniReelService.opened.player = minireel;
-                            MiniReelService.opened.editor = {
+                            editorMR = MiniReelService.opened.editor = {
                                 data: {
                                     deck: []
                                 }
@@ -521,11 +523,12 @@
 
                             $rootScope.$apply(function() {
                                 MiniReelService.save().then(success);
+                                MiniReelService.close();
                             });
                         });
 
                         it('should update the player-formatted model', function() {
-                            expect(MiniReelService.convertForPlayer).toHaveBeenCalledWith(MiniReelService.opened.editor, minireel);
+                            expect(MiniReelService.convertForPlayer).toHaveBeenCalledWith(editorMR, minireel);
                         });
 
                         it('should save the minireel', function() {
@@ -544,6 +547,8 @@
                             var updateDeferred;
 
                             beforeEach(function() {
+                                MiniReelService.opened.editor = editorMR;
+                                MiniReelService.opened.player = minireel;
                                 MiniReelService.opened.editor.data.election = '123345';
 
                                 success.calls.reset();
@@ -624,6 +629,10 @@
 
                         it('should copy the branding of the minireel', function() {
                             expect(success.calls.mostRecent().args[0].data.branding).toBe('elitedaily');
+                        });
+
+                        it('should copy the autoplay settings of the minireel', function() {
+                            expect(success.calls.mostRecent().args[0].data.autoplay).toBe(true);
                         });
 
                         it('should set update MiniReelService\'s opened object to refrences to its data-models', function() {
@@ -765,14 +774,22 @@
                         var result,
                             success,
                             newModel,
-                            saveDeferred;
+                            saveDeferred,
+                            appData;
 
                         beforeEach(function() {
                             var dbCreate = cinema6.db.create;
 
+                            appData = {
+                                user: {
+                                    org: 'o-17593d7a2bf294'
+                                }
+                            };
+
                             saveDeferred = $q.defer();
                             success = jasmine.createSpy('success');
 
+                            spyOn(cinema6, 'getAppData').and.returnValue($q.when(appData));
                             spyOn(cinema6.db, 'create').and.callFake(function() {
                                 newModel = dbCreate.apply(cinema6.db, arguments);
 
@@ -848,6 +865,7 @@
                                     summary: null,
                                     type: 'minireel',
                                     mode: 'light',
+                                    org: 'o-17593d7a2bf294',
                                     data: {
                                         deck: [
                                             {

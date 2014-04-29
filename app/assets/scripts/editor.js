@@ -216,19 +216,30 @@
                                           c6Defines , c6UrlMaker ) {
             var self = this,
                 profile,
-                card;
+                card,
+                experience = {
+                    mode: 'full'
+                };
 
             // set a default device mode
             this.device = 'desktop';
             this.fullscreen = false;
-            this.playerSrc = c6UrlMaker((
-                'rumble' + (c6Defines.kLocal ?
-                    ('/app/index.html?kCollateralUrl=' +
-                        encodeURIComponent('../c6Content') +
-                        '&kDebug=true&kDevMode=true') :
-                    ('?kCollateralUrl=' + encodeURIComponent(c6Defines.kCollateralUrl))
-                )
-            ), 'app');
+            Object.defineProperty(this, 'playerSrc', {
+                get: function() {
+                    return c6UrlMaker((
+                        'rumble' + (c6Defines.kLocal ?
+                            ('/app/index.html?kCollateralUrl=' +
+                                encodeURIComponent('../c6Content') +
+                                '&kDebug=true&kDevMode=true' +
+                                '&kDevice=' + encodeURIComponent(this.device) +
+                                '&kMode=' + encodeURIComponent(experience.mode)) :
+                            ('/?kCollateralUrl=' + encodeURIComponent(c6Defines.kCollateralUrl) +
+                                '&kDevice=' + encodeURIComponent(this.device) +
+                                '&kMode=' + encodeURIComponent(experience.mode))
+                        )
+                    ), 'app');
+                }
+            });
 
             // set a profile based on the current browser
             // this is needed to instantiate a player
@@ -239,7 +250,7 @@
 
             $scope.$on('mrPreview:initExperience', function(event, exp, session) {
                 // convert the MRinator experience to a MRplayer experience
-                var experience = MiniReelService.convertForPlayer(exp);
+                experience = MiniReelService.convertForPlayer(exp);
 
                 // add the converted experience to the session for comparing later
                 session.experience = copy(experience);
@@ -301,12 +312,11 @@
                 });
 
                 $scope.$on('mrPreview:updateMode', function(event, exp) {
-                    // the EditorCtrl $broadcasts when the experience
-                    // when the mode (full, light, etc) changes
+                    // the EditorCtrl $broadcasts the experience
+                    // when the mode (full, light, etc) changes.
                     // we need to convert and save the updated
-                    // experience and then tell the player to reload
+                    // experience, this will trigger a refresh automatically
                     experience = MiniReelService.convertForPlayer(exp);
-                    session.ping('mrPreview:updateMode');
                 });
 
                 $scope.$on('mrPreview:reset', function() {
@@ -317,15 +327,10 @@
                     return self.device;
                 }, function(newDevice, oldDevice) {
                     if(newDevice === oldDevice) { return; }
-
+                    // we longer have to tell the player that the mode changed
+                    // the iframe src will update and trigger a refresh automatically
+                    // we just prepare the profile for the refresh handshake call
                     profile.device = newDevice;
-
-                    // ping the MR player
-                    // sending 'updateMode' will trigger a refresh
-                    // and the player will call for another handshake
-                    // and will call for a specific card
-                    // in case we're previewing that card
-                    session.ping('mrPreview:updateMode');
                 });
             });
         }])
@@ -464,36 +469,53 @@
                         });
 
                         notifyProgress(
-                            positionToValue(
-                                desired,
-                                scopeProp
+                            Math.max(
+                                0,
+                                Math.min(
+                                    scope.duration,
+                                    positionToValue(
+                                        desired,
+                                        scopeProp
+                                    )
+                                )
                             ),
                             scopeProp
                         );
                     }
 
+                    function absStartMarkerPos() {
+                        return ((scope.start * seekBar.display.width) /
+                            scope.duration) + 'px';
+                    }
+
+                    function absEndMarkerPos() {
+                        return ((end() * seekBar.display.width) /
+                            scope.duration) - endMarker.display.width + 'px';
+                    }
+
                     function dropStart(marker) {
-                        var scopeProp = scopePropForMarker(marker);
+                        var scopeProp = scopePropForMarker(marker),
+                            absCompFns = {
+                                start: absStartMarkerPos,
+                                end: absEndMarkerPos
+                            };
 
                         scope[scopeProp] = positionToValue(marker.display, scopeProp);
                         currentScanDeferred.resolve(scope[scopeProp]);
 
-                        marker.$element.css('top', '');
+                        marker.$element.css({
+                            top: '',
+                            left: absCompFns[scopeProp]()
+                        });
                     }
 
                     scope.position = {};
                     Object.defineProperties(scope.position, {
                         startMarker: {
-                            get: function() {
-                                return ((scope.start * seekBar.display.width) /
-                                    scope.duration) + 'px';
-                            }
+                            get: absStartMarkerPos
                         },
                         endMarker: {
-                            get: function() {
-                                return ((end() * seekBar.display.width) /
-                                    scope.duration) - endMarker.display.width + 'px';
-                            }
+                            get: absEndMarkerPos
                         },
                         playhead: {
                             get: function() {
