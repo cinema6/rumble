@@ -16,9 +16,9 @@
                     onAffirm: function() {
                         ConfirmDialogService.close();
 
-                        MiniReelService.open(minireelId)
-                            .then(function copyExisting(minireel) {
-                                return MiniReelService.create(minireel);
+                        return MiniReelService.create(minireelId)
+                            .then(function open(minireel) {
+                                return MiniReelService.open(minireel.id);
                             })
                             .then(function editCopy(minireel) {
                                 c6State.goTo(
@@ -45,7 +45,7 @@
                     onAffirm: function() {
                         ConfirmDialogService.close();
 
-                        MiniReelService.publish(minireel);
+                        MiniReelService.publish(minireel.id);
                     },
                     onCancel: function() {
                         ConfirmDialogService.close();
@@ -61,7 +61,7 @@
                     onAffirm: function() {
                         ConfirmDialogService.close();
 
-                        MiniReelService.unpublish(minireel);
+                        MiniReelService.unpublish(minireel.id);
                     },
                     onCancel: function() {
                         ConfirmDialogService.close();
@@ -69,7 +69,7 @@
                 });
             };
 
-            this.remove = function() {
+            this.remove = function(minireel) {
                 ConfirmDialogService.display({
                     prompt: 'Are you sure you want to delete this MiniReel?',
                     affirm: 'Delete',
@@ -78,7 +78,14 @@
                         ConfirmDialogService.close();
                     },
                     onAffirm: function() {
-                        // TODO: DELETE
+                        MiniReelService.erase(minireel.id)
+                            .then(function removeFromModel() {
+                                var minireels = self.model;
+
+                                minireels.splice(minireels.indexOf(minireel), 1);
+                            });
+
+                        ConfirmDialogService.close();
                     }
                 });
             };

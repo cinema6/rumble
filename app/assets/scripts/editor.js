@@ -8,11 +8,28 @@
 
     angular.module('c6.mrmaker')
         .controller('EditorController', ['c6State','$scope','MiniReelService',
-                                         'ConfirmDialogService',
+                                         'ConfirmDialogService','c6Debounce','$log',
         function                        ( c6State , $scope , MiniReelService ,
-                                          ConfirmDialogService ) {
+                                          ConfirmDialogService , c6Debounce , $log ) {
             var self = this,
-                AppCtrl = $scope.AppCtrl;
+                AppCtrl = $scope.AppCtrl,
+                saveAfterTenSeconds = c6Debounce(function() {
+                    $log.info('Autosaving MiniReel');
+                    self.save();
+                }, 10000),
+                cancelAutosave = $scope.$watch(function() {
+                    return self.model;
+                }, function(minireel, prevMinireel) {
+                    if (minireel.status === 'active') {
+                        $log.warn('MiniReel is published. Will not autosave.');
+                        return cancelAutosave();
+                    }
+                    if (minireel === prevMinireel) { return; }
+
+                    saveAfterTenSeconds();
+                }, true);
+
+            $log = $log.context('EditorController');
 
             this.preview = false;
             this.editTitle = false;
@@ -48,7 +65,7 @@
                     onAffirm: function() {
                         ConfirmDialogService.close();
 
-                        MiniReelService.publish(self.model);
+                        MiniReelService.publish(self.model.id);
                     },
                     onCancel: function() {
                         ConfirmDialogService.close();
@@ -64,7 +81,7 @@
                     onAffirm: function() {
                         ConfirmDialogService.close();
 
-                        MiniReelService.unpublish(self.model);
+                        MiniReelService.unpublish(self.model.id);
                     },
                     onCancel: function() {
                         ConfirmDialogService.close();
@@ -117,9 +134,21 @@
                         ConfirmDialogService.close();
                     },
                     onAffirm: function() {
-                        // TODO: DELETE
+                        MiniReelService.erase(self.model.id)
+                            .then(function backToManager() {
+                                c6State.goTo('manager');
+                            });
+
+                        ConfirmDialogService.close();
                     }
                 });
+            };
+
+            this.save = function() {
+                MiniReelService.save()
+                    .then(function log(minireel) {
+                        $log.info('MiniReel save success!', minireel);
+                    });
             };
 
             $scope.$watch(function() {
@@ -139,6 +168,14 @@
                 })[0];
 
                 copy(cardProxy, card);
+            });
+
+            $scope.$on('$destroy', function() {
+                if (self.model.status !== 'active') {
+                    self.save();
+                }
+
+                MiniReelService.close();
             });
         }])
 

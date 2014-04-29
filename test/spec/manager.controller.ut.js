@@ -43,6 +43,7 @@
 
                     $scope = $rootScope.$new();
                     ManagerCtrl = $controller('ManagerController', { $scope: $scope, cModel: model });
+                    ManagerCtrl.model = model;
                 });
 
                 spyOn(ConfirmDialogService, 'display');
@@ -78,16 +79,18 @@
 
                 describe('copy(minireelId)', function() {
                     var minireel,
-                        newMiniReel;
+                        newMiniReel,
+                        newMiniReelDeferred;
 
                     beforeEach(function() {
                         minireel = {};
                         newMiniReel = {
                             id: 'e-a48e32a8c1a87f'
                         };
+                        newMiniReelDeferred = $q.defer();
 
-                        spyOn(MiniReelService, 'open').and.returnValue($q.when(minireel));
-                        spyOn(MiniReelService, 'create').and.returnValue(newMiniReel);
+                        spyOn(MiniReelService, 'open').and.returnValue($q.when(newMiniReel));
+                        spyOn(MiniReelService, 'create').and.returnValue(newMiniReelDeferred.promise);
 
                         $scope.$apply(function() {
                             ManagerCtrl.copy('e-abc');
@@ -117,10 +120,24 @@
                             });
                         });
 
-                        it('should open the minireel with the id provided, create a new one based on it, and go to the editor with that minireel', function() {
-                            expect(MiniReelService.open).toHaveBeenCalledWith('e-abc');
-                            expect(MiniReelService.create).toHaveBeenCalledWith(minireel);
-                            expect(c6State.goTo).toHaveBeenCalledWith('editor.setMode.category', { minireelId: 'e-a48e32a8c1a87f' });
+                        it('should create a new minireel, passing in the minireelId', function() {
+                            expect(MiniReelService.create).toHaveBeenCalledWith('e-abc');
+                        });
+
+                        describe('after the minireel is created', function() {
+                            beforeEach(function() {
+                                $scope.$apply(function() {
+                                    newMiniReelDeferred.resolve(newMiniReel);
+                                });
+                            });
+
+                            it('should open the new minireel for editing', function() {
+                                expect(MiniReelService.open).toHaveBeenCalledWith('e-a48e32a8c1a87f');
+                            });
+
+                            it('should transition to the editor.setMode.category state', function() {
+                                expect(c6State.goTo).toHaveBeenCalledWith('editor.setMode.category', { minireelId: newMiniReel.id });
+                            });
                         });
 
                         it('should close the dialog', function() {
@@ -145,6 +162,7 @@
 
                     beforeEach(function() {
                         minireel = {
+                            id: 'e-a618062c3a1be1',
                             status: 'pending'
                         };
 
@@ -174,7 +192,7 @@
                         });
 
                         it('should publish the minireel', function() {
-                            expect(MiniReelService.publish).toHaveBeenCalledWith(minireel);
+                            expect(MiniReelService.publish).toHaveBeenCalledWith(minireel.id);
                         });
 
                         it('should close the dialog', function() {
@@ -188,6 +206,7 @@
 
                     beforeEach(function() {
                         minireel = {
+                            id: 'e-a618062c3a1be1',
                             status: 'active'
                         };
 
@@ -221,7 +240,7 @@
                         });
 
                         it('should unpublish the minireel', function() {
-                            expect(MiniReelService.unpublish).toHaveBeenCalledWith(minireel);
+                            expect(MiniReelService.unpublish).toHaveBeenCalledWith(minireel.id);
                         });
                     });
                 });
@@ -230,7 +249,9 @@
                     var minireel;
 
                     beforeEach(function() {
-                        minireel = {};
+                        minireel = {
+                            id: 'e-e5c83f0c89ee1a'
+                        };
 
                         ManagerCtrl.remove(minireel);
                     });
@@ -244,6 +265,48 @@
 
                         it('should close the dialog', function() {
                             expect(ConfirmDialogService.close).toHaveBeenCalled();
+                        });
+                    });
+
+                    describe('if the confirmation is affirmed', function() {
+                        var eraseDeferred;
+
+                        beforeEach(function() {
+                            eraseDeferred = $q.defer();
+                            spyOn(MiniReelService, 'erase').and.returnValue(eraseDeferred.promise);
+
+                            ManagerCtrl.model.push(
+                                {
+                                    id: 'e-9286cac37b4cd1'
+                                },
+                                {
+                                    id: 'e-c7be2af57c3b72'
+                                },
+                                minireel,
+                                {
+                                    id: 'e-530de8630e9990'
+                                }
+                            );
+
+                            dialog().onAffirm();
+                        });
+
+                        it('should erase the provided minireel', function() {
+                            expect(MiniReelService.erase).toHaveBeenCalledWith(minireel.id);
+                        });
+
+                        it('should close the confirmation', function() {
+                            expect(ConfirmDialogService.close).toHaveBeenCalled();
+                        });
+
+                        it('should remove the minireel from the model array when erasing is finished', function() {
+                            expect(ManagerCtrl.model).toContain(minireel);
+
+                            $scope.$apply(function() {
+                                eraseDeferred.resolve(null);
+                            });
+
+                            expect(ManagerCtrl.model).not.toContain(minireel);
                         });
                     });
                 });

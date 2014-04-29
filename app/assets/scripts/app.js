@@ -3,7 +3,8 @@
     'use strict';
 
     var noop = angular.noop,
-        copy = angular.copy;
+        copy = angular.copy,
+        forEach = angular.forEach;
 
     angular.module('c6.mrmaker', window$.c6.kModDeps)
         .constant('c6Defines', window$.c6)
@@ -79,9 +80,153 @@
             }())] ,'video');
         }])
 
-        .config(['cinema6Provider','c6UrlMakerProvider',
-        function( cinema6Provider , c6UrlMakerProvider ) {
+        .constant('VoteAdapter', ['$http','config','$q',
+        function                 ( $http , config , $q ) {
+            function clean(model) {
+                delete model.org;
+                delete model.created;
+                delete model.id;
+
+                return model;
+            }
+
+            this.findAll = function() {
+                return $q.reject('The vote service does not support finding all elections.');
+            };
+
+            this.find = function(type, id) {
+                return $http.get(config.apiBase + '/election/' + id)
+                    .then(function arrayify(response) {
+                        return [response.data];
+                    });
+            };
+
+            this.findQuery = function(type, query) {
+                return this.find(type, query.id);
+            };
+
+            this.create = function(type, data) {
+                return $http.post(config.apiBase + '/election', clean(data))
+                    .then(function arrayify(response) {
+                        return [response.data];
+                    });
+            };
+
+            this.erase = function(type, model) {
+                return $http.delete(config.apiBase + '/election/' + model.id)
+                    .then(function returnNull() {
+                        return null;
+                    });
+            };
+
+            this.update = function(type, model) {
+                return $http.put(config.apiBase + '/election/' + model.id, clean(model))
+                    .then(function arrayify(response) {
+                        return [response.data];
+                    });
+            };
+        }])
+
+        .constant('ContentAdapter', ['$http','$q','config',
+        function                    ( $http , $q , config ) {
+            function clean(model) {
+                delete model.id;
+                delete model.org;
+                delete model.created;
+
+                return model;
+            }
+
+            this.findAll = function() {
+                return $http.get(config.apiBase + '/content/experiences')
+                    .then(function returnData(response) {
+                        return response.data;
+                    });
+            };
+
+            this.find = function(type, id) {
+                return $http.get(config.apiBase + '/content/experience/' + id)
+                    .then(function arrayify(response) {
+                        return [response.data];
+                    });
+            };
+
+            this.findQuery = function(type, query) {
+                function returnData(response) {
+                    return response.data;
+                }
+
+                function handleError(response) {
+                    return response.status === 404 ?
+                        [] : $q.reject(response);
+                }
+
+                return $http.get(config.apiBase + '/content/experiences', {
+                        params: query
+                    })
+                    .then(returnData, handleError);
+            };
+
+            this.create = function(type, data) {
+                return $http.post(config.apiBase + '/content/experience', clean(data))
+                    .then(function arrayify(response) {
+                        return [response.data];
+                    });
+            };
+
+            this.erase = function(type, model) {
+                return $http.delete(config.apiBase + '/content/experience/' + model.id)
+                    .then(function returnNull() {
+                        return null;
+                    });
+            };
+
+            this.update = function(type, model) {
+                return $http.put(config.apiBase + '/content/experience/' + model.id, clean(model))
+                    .then(function arrayify(response) {
+                        return [response.data];
+                    });
+            };
+        }])
+
+        .constant('CWRXAdapter', ['config','$injector',
+        function                 ( config , $injector ) {
+            var self = this,
+                adapters = {};
+
+            forEach(config, function(Constructor, type) {
+                adapters[type] = $injector.instantiate(Constructor, {
+                    config: Constructor.config
+                });
+            });
+
+            ['find', 'findAll', 'findQuery', 'create', 'erase', 'update']
+                .forEach(function(method) {
+                    self[method] = function(type) {
+                        var delegate = adapters[type];
+
+                        return delegate[method].apply(delegate, arguments);
+                    };
+                });
+        }])
+
+        .config(['cinema6Provider','c6UrlMakerProvider','ContentAdapter','CWRXAdapter',
+                 'VoteAdapter',
+        function( cinema6Provider , c6UrlMakerProvider , ContentAdapter , CWRXAdapter ,
+                  VoteAdapter ) {
             var FixtureAdapter = cinema6Provider.adapters.fixture;
+
+            ContentAdapter.config = {
+                apiBase: '/api'
+            };
+            VoteAdapter.config = {
+                apiBase: '/api'
+            };
+
+            CWRXAdapter.config = {
+                election: VoteAdapter,
+                experience: ContentAdapter
+            };
 
             FixtureAdapter.config = {
                 jsonSrc: c6UrlMakerProvider.makeUrl('mock/fixtures.json')
@@ -141,9 +286,9 @@
                     templateUrl: assets('views/manager.html'),
                     model:  ['cinema6',
                     function( cinema6 ) {
-                        return cinema6.db.findAll('currentUser')
-                            .then(function(currentUsers) {
-                                var user = currentUsers[0];
+                        return cinema6.getAppData()
+                            .then(function(appData) {
+                                var user = appData.user;
 
                                 return cinema6.db.findAll(
                                     'experience',
@@ -197,7 +342,8 @@
                     templateUrl: assets('views/editor.html'),
                     model:  ['cinema6','c6StateParams','MiniReelService',
                     function( cinema6 , c6StateParams , MiniReelService ) {
-                        return MiniReelService.open(c6StateParams.minireelId);
+                        return MiniReelService.opened.editor ||
+                            MiniReelService.open(c6StateParams.minireelId);
                     }],
                     children: {
                         splash: {
@@ -408,6 +554,7 @@
             this.config = null;
             cinema6.getAppData()
                 .then(function setControllerProps(appData) {
+                    $log.info('My current user is:',appData.user);
                     self.config = appData.experience;
                 });
 

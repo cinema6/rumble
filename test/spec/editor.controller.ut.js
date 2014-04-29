@@ -7,6 +7,9 @@
                 $scope,
                 $childScope,
                 $controller,
+                $q,
+                $timeout,
+                $log,
                 c6State,
                 MiniReelService,
                 ConfirmDialogService,
@@ -17,6 +20,7 @@
 
             beforeEach(function() {
                 cModel = {
+                    id: 'e-53ae461c63b015',
                     mode: 'lightbox',
                     data: {
                         deck: [
@@ -39,16 +43,22 @@
                     $rootScope = $injector.get('$rootScope');
                     $controller = $injector.get('$controller');
                     c6State = $injector.get('c6State');
+                    $q = $injector.get('$q');
                     MiniReelService = $injector.get('MiniReelService');
                     ConfirmDialogService = $injector.get('ConfirmDialogService');
+                    $timeout = $injector.get('$timeout');
+                    $log = $injector.get('$log');
+                    $log.context = function() { return $log; };
 
                     $scope = $rootScope.$new();
                     AppCtrl = $scope.AppCtrl = {
                         config: null
                     };
                     $childScope = $scope.$new();
-                    EditorCtrl = $controller('EditorController', { $scope: $scope, cModel: cModel });
-                    EditorCtrl.model = cModel;
+                    $scope.$apply(function() {
+                        EditorCtrl = $controller('EditorController', { $scope: $scope, cModel: cModel });
+                        EditorCtrl.model = cModel;
+                    });
                 });
 
                 spyOn(ConfirmDialogService, 'display');
@@ -173,7 +183,7 @@
                         });
 
                         it('should publish the minireel', function() {
-                            expect(MiniReelService.publish).toHaveBeenCalledWith(cModel);
+                            expect(MiniReelService.publish).toHaveBeenCalledWith(cModel.id);
                         });
 
                         it('should close the dialog', function() {
@@ -215,7 +225,7 @@
                         });
 
                         it('should unpublish the minireel', function() {
-                            expect(MiniReelService.unpublish).toHaveBeenCalledWith(cModel);
+                            expect(MiniReelService.unpublish).toHaveBeenCalledWith(cModel.id);
                         });
                     });
                 });
@@ -302,6 +312,37 @@
                             expect(ConfirmDialogService.close).toHaveBeenCalled();
                         });
                     });
+
+                    describe('if the confirmation is affirmed', function() {
+                        var eraseDeferred;
+
+                        beforeEach(function() {
+                            eraseDeferred = $q.defer();
+
+                            spyOn(c6State, 'goTo');
+                            spyOn(MiniReelService, 'erase').and.returnValue(eraseDeferred.promise);
+
+                            dialog().onAffirm();
+                        });
+
+                        it('should erase the minireel', function() {
+                            expect(MiniReelService.erase).toHaveBeenCalledWith(cModel.id);
+                        });
+
+                        it('should close the confirmation', function() {
+                            expect(ConfirmDialogService.close).toHaveBeenCalled();
+                        });
+
+                        it('should go back to the manager after the deletion', function() {
+                            expect(c6State.goTo).not.toHaveBeenCalled();
+
+                            $scope.$apply(function() {
+                                eraseDeferred.resolve(null);
+                            });
+
+                            expect(c6State.goTo).toHaveBeenCalledWith('manager');
+                        });
+                    });
                 });
 
                 describe('previewMode(card)', function() {
@@ -339,6 +380,20 @@
                         EditorCtrl.closePreview();
                         expect(EditorCtrl.preview).toBe(false);
                         expect($scope.$broadcast.calls.argsFor(0)[0]).toBe('mrPreview:reset');
+                    });
+                });
+
+                describe('save()', function() {
+                    beforeEach(function() {
+                        spyOn(MiniReelService, 'save').and.returnValue($q.when({}));
+                    });
+
+                    it('should call MiniReelService.save()', function() {
+                        EditorCtrl.save();
+                        expect(MiniReelService.save).toHaveBeenCalled();
+
+                        EditorCtrl.save();
+                        expect(MiniReelService.save.calls.count()).toBe(2);
                     });
                 });
             });
@@ -382,6 +437,49 @@
                         expect(cModel.data.deck[1]).not.toBe(card);
                     });
                 });
+
+                describe('$destroy', function() {
+                    beforeEach(function() {
+                        MiniReelService.opened.player = {};
+                        MiniReelService.opened.editor = {};
+
+                        spyOn(MiniReelService, 'close').and.callThrough();
+                        spyOn(MiniReelService, 'save').and.callFake(function() {
+                            if (!MiniReelService.opened.player || !MiniReelService.opened.editor) {
+                                throw new Error('Can\'t save if there\'s nothing open.');
+                            }
+
+                            return $q.when({});
+                        });
+                        spyOn(EditorCtrl, 'save').and.callThrough();
+
+                        $scope.$emit('$destroy');
+                    });
+
+                    it('should save the minireel', function() {
+                        expect(EditorCtrl.save).toHaveBeenCalled();
+                    });
+
+                    it('should close the current MiniReel', function() {
+                        expect(MiniReelService.close).toHaveBeenCalled();
+                    });
+
+                    describe('if the minireel is active', function() {
+                        beforeEach(function() {
+                            MiniReelService.opened.player = {};
+                            MiniReelService.opened.editor = {};
+                            EditorCtrl.save.calls.reset();
+
+                            cModel.status = 'active';
+
+                            $scope.$emit('$destroy');
+                        });
+
+                        it('should not save the minireel', function() {
+                            expect(EditorCtrl.save).not.toHaveBeenCalled();
+                        });
+                    });
+                });
             });
 
             describe('$watchers', function() {
@@ -400,6 +498,51 @@
 
                         expect($scope.$broadcast.calls.argsFor(1)[0]).toBe('mrPreview:updateMode');
                         expect($scope.$broadcast.calls.argsFor(1)[1].data.autoplay).toBe(true);
+                    });
+                });
+
+                describe('model', function() {
+                    beforeEach(function() {
+                        spyOn(EditorCtrl, 'save');
+                    });
+
+                    it('should save the minireel (debounced) every time it is changed', function() {
+                        $scope.$apply(function() {
+                            cModel.title = 'Foo!';
+                        });
+                        $timeout.flush();
+                        expect(EditorCtrl.save).toHaveBeenCalled();
+
+                        $scope.$apply(function() {
+                            cModel.data.deck[0].videoid = '4fh3944f';
+                        });
+                        $timeout.flush();
+                        expect(EditorCtrl.save.calls.count()).toBe(2);
+                    });
+
+                    describe('if the minireel is active', function() {
+                        beforeEach(function() {
+                            EditorCtrl.save.calls.reset();
+
+                            $scope.$apply(function() {
+                                cModel.status = 'active';
+                            });
+                        });
+
+                        it('should not autosave', function() {
+                            expect(function() {
+                                $timeout.flush();
+                            }).toThrow();
+                            expect(EditorCtrl.save).not.toHaveBeenCalled();
+
+                            $scope.$apply(function() {
+                                cModel.data.deck[1].title = 'Bar';
+                            });
+                            expect(function() {
+                                $timeout.flush();
+                            }).toThrow();
+                            expect(EditorCtrl.save).not.toHaveBeenCalled();
+                        });
                     });
                 });
             });

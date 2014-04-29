@@ -11,7 +11,8 @@
                 c6State;
 
             var currentUser,
-                experiences;
+                experiences,
+                appData;
 
             beforeEach(function() {
                 currentUser = {
@@ -28,6 +29,10 @@
                         id: 'e-2'
                     }
                 ];
+
+                appData = {
+                    user: currentUser
+                };
 
                 module('c6.mrmaker');
 
@@ -56,16 +61,13 @@
                                 deferred.resolve(experiences);
                                 break;
 
-                            case 'currentUser':
-                                deferred.resolve([currentUser]);
-                                break;
-
                             default:
                                 deferred.reject('404 not found');
                             }
 
                             return deferred.promise;
                         });
+                    spyOn(cinema6, 'getAppData').and.returnValue($q.when(appData));
 
                     $rootScope.$apply(function() {
                         result = $injector.invoke(ManagerState.model);
@@ -77,7 +79,7 @@
                 });
 
                 it('should get the currentUser', function() {
-                    expect(cinema6.db.findAll).toHaveBeenCalledWith('currentUser');
+                    expect(cinema6.getAppData).toHaveBeenCalled();
                 });
 
                 it('should get all the minireels that are associated with the user\'s org', function() {

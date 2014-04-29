@@ -20,6 +20,11 @@
                                 grunt.file.readJSON(
                                     grunt.template.process('<%= settings.experiencesJSON %>')
                                 )
+                            ),
+                            users: grunt.config.process(
+                                grunt.file.readJSON(
+                                    grunt.template.process('<%= settings.usersJSON %>')
+                                )
                             )
                         })
                     ];

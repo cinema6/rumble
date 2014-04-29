@@ -6,9 +6,73 @@
         isNumber = angular.isNumber,
         isUndefined = angular.isUndefined,
         isDefined = angular.isDefined,
-        extend = angular.extend;
+        extend = angular.extend,
+        isFunction = angular.isFunction;
 
     angular.module('c6.mrmaker')
+        .service('VoteService', ['cinema6',
+        function                ( cinema6 ) {
+            function generateData(deck, election) {
+                function cardWithId(id) {
+                    return deck.filter(function(card) {
+                        return card.id === id;
+                    })[0];
+                }
+
+                election = election || {
+                    ballot: {}
+                };
+
+                delete election.id;
+
+                forEach(deck, function(card) {
+                    var item;
+
+                    if (card.modules.indexOf('ballot') < 0) {
+                        return;
+                    }
+
+                    item = election.ballot[card.id] || {};
+
+                    forEach(card.ballot.choices, function(choice) {
+                        item[choice] = item[choice] || 0;
+                    });
+
+                    election.ballot[card.id] = item;
+                });
+                forEach(Object.keys(election.ballot), function(id) {
+                    var card = cardWithId(id),
+                        shouldHaveBallot = !!card && card.modules.indexOf('ballot') > -1;
+
+                    if (!shouldHaveBallot) {
+                        delete election.ballot[id];
+                    }
+                });
+
+                return election;
+            }
+
+            this.initialize = function(minireel) {
+                return cinema6.db.create('election', generateData(minireel.data.deck))
+                    .save()
+                    .then(function attachId(election) {
+                        minireel.data.election = election.id;
+
+                        return election;
+                    });
+            };
+
+            this.update = function(minireel) {
+                return cinema6.db.findAll('election', { id: minireel.data.election })
+                    .then(function updateElection(elections) {
+                        return generateData(minireel.data.deck, elections[0]);
+                    })
+                    .then(function saveElection(election) {
+                        return election.save();
+                    });
+            };
+        }])
+
         .service('VideoThumbnailService', ['$q','$cacheFactory','$http',
         function                          ( $q , $cacheFactory , $http ) {
             var _private = {},
@@ -188,10 +252,9 @@
             };
         }])
 
-        .service('MiniReelService', ['crypto','$window','cinema6','$cacheFactory','$q',
-        function                    ( crypto , $window , cinema6 , $cacheFactory , $q ) {
-            var cache = $cacheFactory('MiniReelService:minireels'),
-                self = this;
+        .service('MiniReelService', ['crypto','$window','cinema6','$q','VoteService',
+        function                    ( crypto , $window , cinema6 , $q , VoteService ) {
+            var self = this;
 
             function generateId(prefix) {
                 return prefix + '-' +
@@ -367,6 +430,11 @@
                 return card;
             }
 
+            this.opened = {
+                player: null,
+                editor: null
+            };
+
             this.findCard = function(deck, id) {
                 return deck.filter(function(card) {
                     return card.id === id;
@@ -387,60 +455,108 @@
                 });
             };
 
-            this.publish = function(minireel) {
-                minireel.status = 'active';
+            this.publish = function(minireelId) {
+                return cinema6.db.find('experience', minireelId)
+                    .then(function initializeElection(minireel) {
+                        if (minireel.data.election) { return minireel; }
 
-                return minireel;
+                        return VoteService.initialize(minireel)
+                            .then(function returnMiniReel() {
+                                return minireel;
+                            });
+                    })
+                    .then(function setActive(minireel) {
+                        minireel.status = 'active';
+
+                        return minireel;
+                    })
+                    .then(function save(minireel) {
+                        return minireel.save();
+                    });
             };
 
-            this.unpublish = function(minireel) {
-                minireel.status = 'pending';
+            this.unpublish = function(minireelId) {
+                return cinema6.db.find('experience', minireelId)
+                    .then(function setActive(minireel) {
+                        minireel.status = 'pending';
 
-                return minireel;
+                        return minireel;
+                    })
+                    .then(function save(minireel) {
+                        return minireel.save();
+                    });
+            };
+
+            this.save = function() {
+                var opened = this.opened,
+                    playerMR = opened.player;
+
+                function handleElection() {
+                    if (playerMR.data.election) {
+                        return VoteService.update(playerMR);
+                    }
+
+                    return $q.when({});
+                }
+
+                this.convertForPlayer(opened.editor, playerMR);
+
+                return handleElection()
+                    .then(function save() {
+                        return opened.player.save();
+                    });
+            };
+
+            this.erase = function(minireelId) {
+                return cinema6.db.find('experience', minireelId)
+                    .then(function erase(minireel) {
+                        return minireel.erase();
+                    });
             };
 
             this.open = function(id) {
-                function fetchFromCache() {
-                    var minireel = cache.get(id);
+                function transform(minireel) {
+                    var model = {
+                        data: {
+                            branding: minireel.data.branding,
+                            election: minireel.data.election,
+                            deck: minireel.data.deck.map(function(card) {
+                                return makeCard(card);
+                            })
+                        }
+                    };
 
-                    return minireel ?
-                        $q.when(minireel) :
-                        $q.reject('No minireel with id [' + id + '] in cache.');
+                    // Loop through the experience and copy everything but
+                    // the "data" object.
+                    forEach(minireel, function(value, key) {
+                        if (key !== 'data' && !isFunction(value)) {
+                            model[key] = value;
+                        }
+                    });
+
+                    return {
+                        player: minireel,
+                        editor: model
+                    };
                 }
 
-                function fetchFromServer() {
-                    function putInCache(minireel) {
-                        return cache.put(minireel.id, minireel);
-                    }
+                function setOpened(models) {
+                    var opened = self.opened;
 
-                    function transform(minireel) {
-                        var model = {
-                            data: {
-                                branding: minireel.data.branding,
-                                deck: minireel.data.deck.map(function(card) {
-                                    return makeCard(card);
-                                })
-                            }
-                        };
+                    opened.player = models.player;
+                    opened.editor = models.editor;
 
-                        // Loop through the experience and copy everything but
-                        // the "data" object.
-                        forEach(minireel, function(value, key) {
-                            if (key !== 'data') {
-                                model[key] = value;
-                            }
-                        });
-
-                        return model;
-                    }
-
-                    return cinema6.db.find('experience', id)
-                        .then(transform)
-                        .then(putInCache);
+                    return models.editor;
                 }
 
-                return fetchFromCache()
-                    .catch(fetchFromServer);
+                return cinema6.db.find('experience', id)
+                    .then(transform)
+                    .then(setOpened);
+            };
+
+            this.close = function() {
+                this.opened.player = null;
+                this.opened.editor = null;
             };
 
             this.convertCard = function(card) {
@@ -571,41 +687,66 @@
                 return newCard;
             };
 
-            this.create = function(toCopy) {
-                var template = toCopy ? ngCopy(toCopy) :
-                    {
-                        title: 'Untitled',
-                        subtitle: null,
-                        summary: null,
-                        type: 'minireel',
-                        mode: 'light',
-                        data: {
-                            deck: [
-                                this.createCard('recap')
-                            ]
-                        }
-                    };
+            this.create = function(toCopyId) {
+                function fetchTemplate() {
+                    return $q.when(toCopyId ?
+                        cinema6.db.find('experience', toCopyId)
+                            .then(function returnPojo(minireel) {
+                                return minireel.pojoify();
+                            }) :
+                        {
+                            title: 'Untitled',
+                            subtitle: null,
+                            summary: null,
+                            type: 'minireel',
+                            mode: 'light',
+                            data: {
+                                deck: [
+                                    self.createCard('recap')
+                                ]
+                            }
+                        });
+                }
 
-                template.id = generateId('e');
-                template.title += toCopy ? ' (copy)' : '';
-                template.status = 'pending';
+                function createMinireel(template) {
+                    var minireel = cinema6.db.create('experience', template);
 
-                cache.put(template.id, template);
+                    delete minireel.id;
+                    minireel.title += toCopyId ? ' (copy)' : '';
+                    minireel.status = 'pending';
 
-                return template;
+                    return minireel;
+                }
+
+                return fetchTemplate()
+                    .then(createMinireel)
+                    .then(function save(minireel) {
+                        return minireel.save();
+                    });
             };
 
-            this.convertForPlayer = function(minireel) {
-                var mrExperience = ngCopy(minireel),
-                    convertedDeck = [];
+            this.convertForPlayer = function(minireel, target) {
+                var convertedDeck = [];
 
-                forEach(mrExperience.data.deck, function(card) {
+                target = target || {};
+
+                forEach(minireel, function(value, key) {
+                    if (key !== 'data') {
+                        target[key] = value;
+                    } else {
+                        target[key] = {};
+                    }
+                });
+                forEach(minireel.data, function(value, key) {
+                    target.data[key] = value;
+                });
+                forEach(minireel.data.deck, function(card) {
                     convertedDeck.push(self.convertCard(card));
                 });
 
-                mrExperience.data.deck = convertedDeck;
+                target.data.deck = convertedDeck;
 
-                return mrExperience;
+                return target;
             };
         }]);
 }());
