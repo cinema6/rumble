@@ -2,7 +2,16 @@
     <div class="table__left-zone" id="scroll-left" c6-drag-zone>&nbsp;</div>
     <ul id="card-scroller" class="card__list" c6-bind-scroll="Ctrl.position">
         <li class="card__list-item">
-            <div class="new__container" ng-hide="DragCtrl.currentDrags.length" ng-style="{ visibility: $index === (deck.length - 1) ? 'hidden' : '' }">
+            <div class="card__container card--createNew" ng-if="deck.length === 1">
+                <h4 class="card__type">&nbsp;</h4>
+                <div class="card__item">
+                    <button ng-click="addCard({ index: 0 })" class="createNew__button">
+                        <span class="ui__add sprite--alpha"><span class="ir">Add Here</span></span>
+                    </button>
+                    <h1 class="card__title"><span class="card__titleText">Create A New Card</span></h1>
+                </div>
+            </div><!--
+            --><div class="new__container" ng-hide="DragCtrl.currentDrags.length" ng-style="{ visibility: $index === (deck.length - 1) ? 'hidden' : '' }">
                 <button ng-click="addCard({ index: 0 })" class="new__button ui__add sprite--alpha"><span class="ir">Add Here</span></button>
             </div>
         </li>

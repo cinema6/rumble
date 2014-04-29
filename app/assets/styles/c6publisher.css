@@ -883,6 +883,31 @@
                     color:#ee1b1b; border-bottom:1px dotted #ee1b1b;
                 }
 
+        .miniReelCreator {
+            border:1px dashed #b0b0b0;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+            margin-top:1.5625em;
+        }
+            .miniReelCreator:hover {
+                border:1px dashed #13a2ff;
+            }
+            .miniReelCreator .miniReel__body {
+                background:#eee url('../img/altImg_square.png') 50% 50% / cover no-repeat;
+                -webkit-transition: background 0.4s; transition: background 0.3s;
+            }
+                .miniReelCreator:hover .miniReel__body {
+                    background-color:#D1E6F3;
+                }
+            .miniReelCreator .miniReel__title {
+                text-align: center; background:none;
+                color: #646464
+            }
+                .miniReelCreator:hover .miniReel__title {
+                    background:none;
+                }
+
 
 /*  ==========================================================================
     miniReel editor styles
@@ -917,6 +942,44 @@
         .card__container--reordering {
             width: 0 !important;
         }
+        .card--createNew {
+            margin-right:0.75em;
+        }
+            .card--createNew .card__item {
+                height:21.1875em; opacity:1;
+                border:1px dashed #b0b0b0;
+                -webkit-box-sizing: border-box;
+                -moz-box-sizing: border-box;
+                box-sizing: border-box;
+                -webkit-transition: background 0.4s; transition: background 0.3s;
+            }
+                .card--createNew:hover .card__item {
+                    border:1px dashed #13a2ff;
+                    background:#D1E6F3;
+                }
+            .card--createNew .card__title {
+                text-align: center; font-weight:100; color:#b0b0b0;
+                padding:5em 0 0 0;
+            }
+                .card--createNew:hover .card__title {
+                    color:#444;
+                }
+            .card--createNew .createNew__button {
+                width:100%; height:100%;
+                border:0; margin:0; padding:0; background:transparent;
+                position: absolute;
+                cursor: pointer;
+            }
+            .card--createNew .ui__add {
+                width:72px; height:72px;
+                background-size:800px 800px;
+                background-position:-244px -90px;
+                margin:0 auto; opacity:0.25;
+                -webkit-transition: opacity 0.4s; transition: opacity 0.3s;
+            }
+                .card--createNew:hover .ui__add {
+                    opacity:1;
+                }
     .card__drop-zone {
         display: inline-block;
         width: 2px; height: 20.625rem;

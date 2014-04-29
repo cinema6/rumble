@@ -24,6 +24,14 @@
 
 <div class="container miniReels__group">
     <ul class="miniReels__list grid">
+        <li class="miniReels__item grid__item" ng-show="!minireels.length">
+            <article class="miniReel__group miniReelCreator" c6-sref="manager.new.category">
+                <div class="miniReel__body">
+                    <h1 class="miniReel__title"><span class="miniReel__titleText">Create a MiniReel</span></h1>
+                </div>
+            </article>
+        </li>
+
         <li class="miniReels__item grid__item" ng-repeat="this in minireels | filter:ManagerCtrl.determineInclusionWithFilter track by this.id">
             <article class="miniReel__group">
                 <div class="miniReel__status miniReel__status--{{this.status}}">
@@ -55,7 +63,7 @@
             </article>
         </li>
     </ul>
-    <p ng-show="!minireels.length">You have no Mini Reels. Would you like to <a href="#" title="Create A MiniReel">create one?</a></p>
+    <p ng-show="!minireels.length">You have no Mini Reels. Would you like to <a c6-sref="manager.new.category" title="Create A MiniReel">create one?</a></p>
 </div>
 </main>
 <c6-view></c6-view>
