@@ -208,9 +208,9 @@
         }])
 
         .config(['cinema6Provider','c6UrlMakerProvider','ContentAdapter','CWRXAdapter',
-                 'VoteAdapter',
+                 'VoteAdapter','c6Defines',
         function( cinema6Provider , c6UrlMakerProvider , ContentAdapter , CWRXAdapter ,
-                  VoteAdapter ) {
+                  VoteAdapter , c6Defines ) {
             var FixtureAdapter = cinema6Provider.adapters.fixture;
 
             ContentAdapter.config = {
@@ -229,7 +229,7 @@
                 jsonSrc: c6UrlMakerProvider.makeUrl('mock/fixtures.json')
             };
 
-            cinema6Provider.useAdapter(FixtureAdapter);
+            cinema6Provider.useAdapter(c6Defines.kLocal ? FixtureAdapter : CWRXAdapter);
         }])
 
         .config(['c6StateProvider','c6UrlMakerProvider',
