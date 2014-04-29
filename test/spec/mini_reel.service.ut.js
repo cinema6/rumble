@@ -44,6 +44,7 @@
                     theme: 'ed-videos',
                     status: 'pending',
                     data: {
+                        autoplay: true,
                         election: 'el-76506623bf22d9',
                         branding: 'elitedaily',
                         deck: [
@@ -628,6 +629,10 @@
 
                         it('should copy the branding of the minireel', function() {
                             expect(success.calls.mostRecent().args[0].data.branding).toBe('elitedaily');
+                        });
+
+                        it('should copy the autoplay settings of the minireel', function() {
+                            expect(success.calls.mostRecent().args[0].data.autoplay).toBe(true);
                         });
 
                         it('should set update MiniReelService\'s opened object to refrences to its data-models', function() {
