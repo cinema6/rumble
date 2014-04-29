@@ -6,6 +6,7 @@
             var $rootScope,
                 $scope,
                 $controller,
+                c6UrlMaker,
                 PreviewController,
                 MiniReelService,
                 c6EventEmitter,
@@ -30,6 +31,11 @@
 
                 module('c6.ui', function($provide) {
                     $provide.value('c6BrowserInfo',c6BrowserInfo);
+
+                    $provide.decorator('c6UrlMaker', function($delegate) {
+                        return jasmine.createSpy('c6UrlMaker()')
+                            .and.callFake($delegate);
+                    });
                 });
 
                 module('c6.mrmaker');
@@ -41,6 +47,7 @@
                     postMessage = $injector.get('postMessage');
                     c6EventEmitter = $injector.get('c6EventEmitter');
                     c6Defines = $injector.get('c6Defines');
+                    c6UrlMaker = $injector.get('c6UrlMaker');
                     c6Defines.kExpUrl = '/apps';
 
                     $scope = $rootScope.$new();
@@ -102,6 +109,14 @@
                             c6Defines.kDebug = true;
                             c6Defines.kEnv = 'dev';
                             c6Defines.kLocal = true;
+
+                            c6UrlMaker.and.callFake(function(url, base) {
+                                if (base !== 'app') {
+                                    throw new Error('Must use app base');
+                                }
+
+                                return 'assets/apps/' + url;
+                            });
                         });
 
                         it('should be "assets/apps/rumble/app/index.html?kCollateralUrl=../c6Content&kDebug=true&kDevMode=true"', function() {
@@ -114,10 +129,19 @@
                             c6Defines.kDebug = true;
                             c6Defines.kEnv = 'staging';
                             c6Defines.kLocal = false;
+                            c6Defines.kCollateralUrl = '/collateral';
+
+                            c6UrlMaker.and.callFake(function(url, base) {
+                                if (base !== 'app') {
+                                    throw new Error('Must use app base');
+                                }
+
+                                return '/apps/' + url;
+                            });
                         });
 
-                        it('should be "/apps/rumble?kCollateralUrl=http://staging.cinema6.com/collateral"', function() {
-                            expect(controller().playerSrc).toBe('/apps/rumble?kCollateralUrl=' + encodeURIComponent('http://staging.cinema6.com/collateral'));
+                        it('should be "/apps/rumble?kCollateralUrl=/collateral"', function() {
+                            expect(controller().playerSrc).toBe('/apps/rumble?kCollateralUrl=' + encodeURIComponent('/collateral'));
                         });
                     });
 
@@ -126,10 +150,19 @@
                             c6Defines.kDebug = false;
                             c6Defines.kEnv = 'production';
                             c6Defines.kLocal = false;
+                            c6Defines.kCollateralUrl = '/collateral';
+
+                            c6UrlMaker.and.callFake(function(url, base) {
+                                if (base !== 'app') {
+                                    throw new Error('Must use app base');
+                                }
+
+                                return '/apps/' + url;
+                            });
                         });
 
-                        it('should be "/apps/rumble?kCollateralUrl=http://portal.cinema6.com/collateral"', function() {
-                            expect(controller().playerSrc).toBe('/apps/rumble?kCollateralUrl=' + encodeURIComponent('http://portal.cinema6.com/collateral'));
+                        it('should be "/apps/rumble?kCollateralUrl=/collateral"', function() {
+                            expect(controller().playerSrc).toBe('/apps/rumble?kCollateralUrl=' + encodeURIComponent('/collateral'));
                         });
                     });
                 });
