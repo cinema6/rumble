@@ -423,6 +423,10 @@
                     $scope.$emit('reelStart');
                 }
 
+                if (appData.behaviors.fullscreen) {
+                    cinema6.fullscreen(true);
+                }
+
                 self.jumpTo(getCard(card));
             });
 
@@ -443,6 +447,10 @@
 
                     if($scope.currentIndex === -1) {
                         $scope.$emit('reelStart');
+                    }
+
+                    if (appData.behaviors.fullscreen) {
+                        cinema6.fullscreen(true);
                     }
 
                     self.jumpTo(getCard(card));
