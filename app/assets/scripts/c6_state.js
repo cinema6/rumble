@@ -121,6 +121,9 @@
                     c6State.emit('viewReady');
 
                     c6State.on('viewChangeStart', update);
+                    scope.$on('$destroy', function() {
+                        c6State.removeListener('viewChangeStart', update);
+                    });
                 }
             };
         }])
@@ -252,6 +255,8 @@
 
                     return climbTree([state]);
                 }
+
+                c6State.setMaxListenersWarning(0);
 
                 _service.resolveState = function(state) {
                     function setTemplate() {
