@@ -73,9 +73,11 @@
                 <input id="previewMode_desktop" type="radio" ng-model="PreviewCtrl.device" value="desktop"
                 class="modal__radioBtn" />
                 <label for="previewMode_desktop">Desktop</label>
+
                 <input id="previewMode_mobile" type="radio" ng-model="PreviewCtrl.device" value="phone"
                 class="modal__radioBtn" />
                 <label for="previewMode_mobile">Mobile</label>
+                
                 <button class="modal__closeBtn sprite--alpha" ng-click="EditorCtrl.closePreview()"><span class="ir">Close</span></button>
             </form>
             <iframe mr-preview="minireel" ng-src="{{PreviewCtrl.playerSrc}}" ng-class="{ 'preview__iframe--fullscreen' : (PreviewCtrl.fullscreen), 'preview__iframe--desktop' : (PreviewCtrl.device === 'desktop'), 'preview__iframe--mobile' : (PreviewCtrl.device === 'phone') }" class="preview__iframe"></iframe>
