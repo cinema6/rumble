@@ -220,6 +220,7 @@
 
             // set a default device mode
             this.device = 'desktop';
+            this.fullscreen = false;
             this.playerSrc = c6UrlMaker((
                 'rumble' + (c6Defines.kLocal ?
                     ('/app/index.html?kCollateralUrl=' +
@@ -265,6 +266,11 @@
                 // and see if it still needs to go to that card
                 session.on('mrPreview:getCard', function(data, respond) {
                     respond(card);
+                });
+
+                session.on('fullscreenMode', function(bool) {
+                    self.fullscreen = bool;
+                    $scope.$digest();
                 });
 
                 // register another listener within the init handler

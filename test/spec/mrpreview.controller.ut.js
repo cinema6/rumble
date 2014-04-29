@@ -94,6 +94,7 @@
             });
 
             describe('properties', function() {
+
                 function controller() {
                     $scope = $rootScope.$new();
                     $scope.$apply(function() {
@@ -166,6 +167,24 @@
                         });
                     });
                 });
+                
+                describe('fullscreen', function() {
+                    it('should default to false', function() {
+                        expect(PreviewController.fullscreen).toBe(false);
+                    });
+                    it('should do stuff', function() {
+                        spyOn(MiniReelService, 'convertForPlayer').and.returnValue(experience);
+                        $scope.$emit('mrPreview:initExperience', experience, session);
+
+                        session.emit('fullscreenMode', true);
+
+                        expect(PreviewController.fullscreen).toBe(true);
+
+                        session.emit('fullscreenMode', false);
+
+                        expect(PreviewController.fullscreen).toBe(false);
+                    });
+                });
             });
 
             describe('$scope listeners', function() {
@@ -182,9 +201,9 @@
                         expect(session.experience).toEqual(experience);
                     });
 
-                    it('should register two session listeners', function() {
+                    it('should register three session listeners', function() {
                         expect(session.on).toHaveBeenCalledWith(jasmine.any(String), jasmine.any(Function));
-                        expect(session.on.calls.count()).toBe(2);
+                        expect(session.on.calls.count()).toBe(3);
                     });
 
                     describe('handshake request', function() {
