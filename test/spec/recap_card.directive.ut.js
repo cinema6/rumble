@@ -1,7 +1,7 @@
 (function() {
     'use strict';
 
-    define(['mini_reel_card'], function() {
+    define(['recap_card'], function() {
         describe('<mini-reel-card>', function() {
             var $rootScope,
                 $scope,

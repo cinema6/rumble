@@ -95,7 +95,7 @@
                 services: {
                     deps: ['angular', 'angularMocks']
                 },
-                mini_reel_card: {
+                recap_card: {
                     deps: ['app']
                 },
                 video_card: {
