@@ -123,7 +123,8 @@ module.exports = function(grunt) {
         // loop through modes and run these
         modes.forEach(function(mode) {
             grunt.task.run('setmode:'+mode);
-            grunt.task.run('git_last_commit');
+            //grunt.task.run('git_last_commit');
+            grunt.task.run('git_describe_tags');
             grunt.task.run('copy:dist');
             grunt.task.run('ngtemplates:dist');
             grunt.task.run('htmlmin:dist');
