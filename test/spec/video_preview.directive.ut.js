@@ -9,7 +9,8 @@
                 $timeout,
                 c6EventEmitter,
                 $q,
-                $preview;
+                $preview,
+                $httpBackend;
 
             beforeEach(function() {
                 module('c6.mrmaker', function($provide) {
@@ -24,6 +25,7 @@
                     c6EventEmitter = $injector.get('c6EventEmitter');
                     $timeout = $injector.get('$timeout');
                     $q = $injector.get('$q');
+                    $httpBackend = $injector.get('$httpBackend');
 
                     $scope = $rootScope.$new();
                 });
@@ -343,6 +345,9 @@
 
                 it('should create a youtube player when a videoid is provided', function() {
                     var $youtube;
+
+                    $httpBackend.expectGET('http://gdata.youtube.com/feeds/api/videos/gy1B3agGNxw?v=2&alt=jsonc')
+                        .respond(200, {data:{duration:100}});
 
                     $scope.$apply(function() {
                         $scope.videoid = 'gy1B3agGNxw';

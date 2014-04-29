@@ -320,18 +320,8 @@
             };
         }])
 
-        .service('YouTubeService', ['$http',
-        function                   ( $http ) {
-            this.getMetaData = function(id) {
-                var url = 'http://gdata.youtube.com/feeds/api/videos/'+ id + '?v=2&alt=jsonc';
-                return $http.get(url);
-            };
-        }])
-
-        .directive('youtubePlayer', ['youtube','c6EventEmitter','$interval','$compile',
-                                     'YouTubeService',
-        function                    ( youtube , c6EventEmitter , $interval , $compile ,
-                                      YouTubeService ) {
+        .directive('youtubePlayer', ['youtube','c6EventEmitter','$interval','$compile', '$http',
+        function                    ( youtube , c6EventEmitter , $interval , $compile ,  $http ) {
             return {
                 restrict: 'E',
                 scope: {
@@ -361,24 +351,18 @@
                                 player = null,
                                 seekStartTime = null,
                                 publicTime = 0,
-                                state,
-                                playerData;
+                                state;
 
                             function setupState() {
                                 return {
                                     currentTime: 0,
+                                    duration: 0,
                                     ended: false,
                                     paused: true,
                                     seeking: false,
                                     readyState: -1
                                 };
                             }
-
-                            function setupData(data) {
-                                playerData = data.data.data;
-                            }
-
-                            YouTubeService.getMetaData(id).then(setupData);
 
                             Object.defineProperties(this, {
                                 currentTime: {
@@ -400,12 +384,7 @@
                                 },
                                 duration: {
                                     get: function() {
-                                        // if (state.readyState < 0) {
-                                        //     return 0;
-                                        // }
-                                        if(playerData) {
-                                            return playerData.duration || 0;
-                                        }
+                                        return state.duration;
                                     }
                                 },
                                 ended: {
@@ -463,6 +442,15 @@
 
                                 state = setupState();
 
+                                
+                                $http.get('http://gdata.youtube.com/feeds/api/videos/'+
+                                    id+'?v=2&alt=jsonc')
+                                        .then(function(data){
+                                            state.duration = data.data.data.duration;
+                                            state.readyState = 1;
+                                            self.emit('loadedmetadata');
+                                        });
+
                                 $iframe = $compile(iframeTemplate)(scope, function($iframe) {
                                     $element.append($iframe);
                                 });
@@ -504,9 +492,8 @@
                                                 state.ended = false;
                                                 state.paused = false;
 
-                                                if (state.readyState < 1) {
+                                                if (state.readyState < 2) {
                                                     state.readyState = 3;
-                                                    self.emit('loadedmetadata');
                                                     self.emit('canplay');
                                                 }
 
