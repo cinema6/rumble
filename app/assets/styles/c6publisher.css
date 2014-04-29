@@ -883,6 +883,31 @@
                     color:#ee1b1b; border-bottom:1px dotted #ee1b1b;
                 }
 
+        .miniReelCreator {
+            border:1px dashed #b0b0b0;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+            margin-top:1.5625em;
+        }
+            .miniReelCreator:hover {
+                border:1px dashed #13a2ff;
+            }
+            .miniReelCreator .miniReel__body {
+                background:#eee url('../img/altImg_square.png') 50% 50% / cover no-repeat;
+                -webkit-transition: background 0.4s; transition: background 0.3s;
+            }
+                .miniReelCreator:hover .miniReel__body {
+                    background-color:#D1E6F3;
+                }
+            .miniReelCreator .miniReel__title {
+                text-align: center; background:none;
+                color: #646464
+            }
+                .miniReelCreator:hover .miniReel__title {
+                    background:none;
+                }
+
 
 /*  ==========================================================================
     miniReel editor styles
@@ -918,7 +943,7 @@
             width: 0 !important;
         }
         .card--createNew {
-            margin-right:12px;
+            margin-right:0.75em;
         }
             .card--createNew .card__item {
                 height:21.1875em; opacity:1;
