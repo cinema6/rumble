@@ -500,7 +500,8 @@
 
                     describe('save()', function() {
                         var saveDeferred,
-                            success;
+                            success,
+                            editorMR;
 
                         beforeEach(function() {
                             success = jasmine.createSpy('success');
@@ -511,7 +512,7 @@
                             spyOn(MiniReelService, 'convertForPlayer').and.callThrough();
 
                             MiniReelService.opened.player = minireel;
-                            MiniReelService.opened.editor = {
+                            editorMR = MiniReelService.opened.editor = {
                                 data: {
                                     deck: []
                                 }
@@ -521,11 +522,12 @@
 
                             $rootScope.$apply(function() {
                                 MiniReelService.save().then(success);
+                                MiniReelService.close();
                             });
                         });
 
                         it('should update the player-formatted model', function() {
-                            expect(MiniReelService.convertForPlayer).toHaveBeenCalledWith(MiniReelService.opened.editor, minireel);
+                            expect(MiniReelService.convertForPlayer).toHaveBeenCalledWith(editorMR, minireel);
                         });
 
                         it('should save the minireel', function() {
@@ -544,6 +546,8 @@
                             var updateDeferred;
 
                             beforeEach(function() {
+                                MiniReelService.opened.editor = editorMR;
+                                MiniReelService.opened.player = minireel;
                                 MiniReelService.opened.editor.data.election = '123345';
 
                                 success.calls.reset();

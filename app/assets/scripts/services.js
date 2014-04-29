@@ -503,7 +503,7 @@
 
                 return handleElection()
                     .then(function save() {
-                        return opened.player.save();
+                        return playerMR.save();
                     });
             };
 
