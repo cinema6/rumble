@@ -23,3 +23,4 @@
   * [FIX]: Use protocol-relative URLs
   * [FIX]: Add listener to c6AppData to update the experience on mrPreview session ping
   * [FIX]: Update recap card controller to set/reset properties when active
+  * [FIX]: Default mobile theme added
