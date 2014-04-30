@@ -157,6 +157,13 @@
                                     "videoid": "xorbb7",
                                     "related": 0
                                 }
+                            },
+                            {
+                                id: 'rc-b74a127991ee75',
+                                type: 'recap',
+                                title: 'Recap',
+                                note: null,
+                                data: {}
                             }
                         ]
                     }
