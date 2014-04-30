@@ -422,7 +422,9 @@
     Navigation classes
     ========================================================================== */
     .ui-control--portrait {
-        position:fixed; bottom:0; height:3.75em;/*60px*/ width:100%; z-index: 10000;
+        position:fixed; bottom:0; z-index: 10000;
+        height:3.75em;/*60px*/ width:100%;
+        background:#2a2a2a;
     }
         .ui-control__prev, .ui-control__next, .ui-control__view-list, .ui-context__close, 
         .ui-control__preview-img, .ui-control__label, .ui-control__activator, .ui-context__label, .ui-nav__prev, .ui-nav__next, .ui-nav__view-list, .ui-nav__close {
@@ -454,7 +456,7 @@
                     opacity:0.5;
                 }
             .ui-control__next, .ui-control__prev, .ui-nav__next, .ui-nav__prev {
-                background-color: #b69823;
+                background-color: #d94040;
             }
         .ui-control__label {
             top:1em; z-index: 10; color:#fff; width:auto; height:0; line-height: 1;
@@ -484,7 +486,9 @@
         }
 
     .ui-context--portrait {
-        position:fixed; top:0; height:2.5em;/*40px*/ width:100%; z-index: 10000;
+        position:fixed; top:0; z-index: 10000;
+        height:2.5em;/*40px*/ width:100%; 
+        background:#2a2a2a;
     }
         .publisher__branding-logo {
             display: block; width:2.5em;/*40px*/ height:2.5em;/*40px*/ margin:0 0 0 0.4375em; /*0 0 0 7px*/ border:0; padding:0; font-size:1em;
@@ -508,7 +512,9 @@
         }
 
     .ui-nav-left--landscape, .ui-nav-right--landscape {
-        position:fixed; top:0; width:3.75em;/*60px*/ height:100%; z-index: 10000;
+        position:fixed; top:0; z-index: 10000;
+        width:3.75em;/*60px*/ height:100%;
+        background:#2a2a2a;
     }
         .ui-nav-left--landscape {
             left:0;
@@ -839,6 +845,7 @@
     .mr-toc {
         background:#fff; position:absolute; z-index: 5; 
         padding:0 0.375em; width:100%; height:100%;
+        border-top:0.25em solid #2a2a2a;
         box-sizing:border-box; -moz-box-sizing:border-box;
     }
     .mr-toc__title {
@@ -880,7 +887,7 @@
     ========================================================================== */
     .more-reels__intro {
         font-size:0.875em;/*14px*/ color:#747474; font-weight:300; text-align: center;
-        margin:0 0 0.5em 0;
+        margin:0 0 0.5em 0; background:#252626;
     }
     .more-reels__list {
         margin:0; padding:0; list-style:none;
@@ -971,17 +978,12 @@
     .mr-splash__loading {
         background: url('../../img/spinner-dots.gif') 50% 50% / 1rem auto no-repeat;
     }
-    .mr-splash__bar, .mr-splash__copy {
-            display:block; width: 100%; height: 0; padding: 0 0 13.5%;
-            position:absolute; top: 50%; margin-top: -6.75%; z-index:2;
-            border-top: #fff 4px solid; border-bottom: #fff 4px solid;
-        }
-            .mr-splash__bar {
-                background: #252626;
-            }
-            .mr-splash__copy {
-                background: url('../../img/click-to-start.svg') 50% 50% / 55% auto no-repeat;
-            }
+    .mr-splash__copy {
+        display:block; width: 100%; height: 0; padding: 0 0 13.5%;
+        position:absolute; top: 50%; margin-top: -6.75%; z-index:2;
+        border-top: #fff 4px solid; border-bottom: #fff 4px solid;
+        background:#252626 url('../../img/click-to-start.svg') 50% 50% / 55% auto no-repeat;
+    }
     @media only screen and (max-width : 320px) {
         .mr-splash__bar, .mr-splash__copy {
             padding:0 0 20%; margin-top: -10%;
