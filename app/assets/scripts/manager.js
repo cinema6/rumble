@@ -100,8 +100,6 @@
             var NewCtrl = $scope.NewCtrl,
                 self = this;
 
-            this.mode = 'lightbox';
-
             $scope.$watch(function() { return self.mode; }, function(mode) {
                 NewCtrl.category = mode;
             });

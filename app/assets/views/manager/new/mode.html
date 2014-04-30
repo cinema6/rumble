@@ -1,7 +1,10 @@
 <h1 class="modal__title modal__title--lightboxWizard">Choose the MiniReel Type</h1>
 <ul class="wizard__group">
-    <li ng-repeat="$this in NewModeCtrl.model.modes" class="wizard__choice">
+    <li ng-repeat="$this in NewModeCtrl.model.modes" 
+        class="wizard__choice"
+        ng-class="{'wizard__choice--disabled': $this.disabled}">
         <input id="mode-{{$this.value}}" type="radio" 
+            ng-disabled="$this.disabled"
             name="minireel-mode" value="{{$this.value}}"
             class="modal__radioBtn" ng-model="NewModeCtrl.mode"/>
         <label class="wizard__hitarea" for="mode-{{$this.value}}"><span class="ir">{{$this.name}}</span></label>

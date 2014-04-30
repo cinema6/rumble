@@ -223,6 +223,56 @@
                 });
 
                 describe('methods', function() {
+                    describe('modeCategoryOf(minireel, categories)', function() {
+                        var categories;
+
+                        function result() {
+                            return MiniReelService.modeCategoryOf.apply(MiniReelService, arguments);
+                        }
+
+                        beforeEach(function() {
+                            categories = [
+                                {
+                                    value: 'lightbox',
+                                    modes: [
+                                        {
+                                            value: 'lightbox'
+                                        },
+                                        {
+                                            value: 'lightbox-ads'
+                                        }
+                                    ]
+                                },
+                                {
+                                    value: 'inline',
+                                    modes: [
+                                        {
+                                            value: 'light'
+                                        },
+                                        {
+                                            value: 'full'
+                                        }
+                                    ]
+                                }
+                            ];
+                        });
+
+                        it('should return an empty object if something falsy is passed in', function() {
+                            expect(result()).toEqual({});
+                        });
+
+                        it('should return an empty object if a mode with no category is passed in', function() {
+                            expect(result({ mode: 'foo' }, categories)).toEqual({});
+                        });
+
+                        it('should return the category of the minireel\'s mode', function() {
+                            expect(result({ mode: 'lightbox' }, categories)).toBe(categories[0]);
+                            expect(result({ mode: 'lightbox-ads' }, categories)).toBe(categories[0]);
+                            expect(result({ mode: 'light' }, categories)).toBe(categories[1]);
+                            expect(result({ mode: 'full' }, categories)).toBe(categories[1]);
+                        });
+                    });
+
                     describe('createCard(type)', function() {
                         it('should create a new card based on the type provided', function() {
                             var videoCard = MiniReelService.createCard('video'),
@@ -898,7 +948,7 @@
                                     subtitle: null,
                                     summary: null,
                                     type: 'minireel',
-                                    mode: 'light',
+                                    mode: 'lightbox',
                                     org: 'o-17593d7a2bf294',
                                     data: {
                                         deck: [

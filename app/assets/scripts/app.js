@@ -247,6 +247,16 @@
                     templateUrl: assets('views/manager/new/category.html'),
                     model:  [function() {
                         return this.cParent.cModel.modes;
+                    }],
+                    updateControllerModel: ['controller','model','MiniReelService',
+                    function               ( controller , model , MiniReelService ) {
+                        var minireel = this.cParent.cModel.minireel;
+
+                        controller.model = model;
+                        controller.mode = MiniReelService.modeCategoryOf(
+                            minireel,
+                            model
+                        ).value || model[0].value;
                     }]
                 },
                 mode: {
@@ -266,8 +276,15 @@
                     }],
                     updateControllerModel: ['controller','model',
                     function               ( controller , model ) {
+                        var minireel = model.minireel,
+                            modeValues = model.modes.map(function(mode) {
+                                return mode.value;
+                            });
+
+
                         controller.model = model;
-                        controller.mode = model.modes[0].value;
+                        controller.mode = modeValues.indexOf(minireel.mode) > -1 ?
+                            minireel.mode : modeValues[0];
                     }]
                 },
                 autoplay: {
@@ -287,7 +304,7 @@
                     templateUrl: assets('views/manager.html'),
                     model:  ['cinema6',
                     function( cinema6 ) {
-                        return cinema6.getAppData()
+                        return this.cModel || cinema6.getAppData()
                             .then(function(appData) {
                                 var user = appData.user;
 

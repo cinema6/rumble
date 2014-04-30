@@ -435,6 +435,21 @@
                 editor: null
             };
 
+            this.modeCategoryOf = function(minireel, categories) {
+                var result = {},
+                    modeValue = minireel && minireel.mode;
+
+                forEach(categories || [], function(category) {
+                    forEach(category.modes, function(mode) {
+                        if (mode.value === modeValue) {
+                            result = category;
+                        }
+                    });
+                });
+
+                return result;
+            };
+
             this.findCard = function(deck, id) {
                 return deck.filter(function(card) {
                     return card.id === id;
@@ -700,7 +715,7 @@
                             subtitle: null,
                             summary: null,
                             type: 'minireel',
-                            mode: 'light',
+                            mode: 'lightbox',
                             org: appData.user.org,
                             data: {
                                 deck: [

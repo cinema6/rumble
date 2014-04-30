@@ -59,6 +59,13 @@
             describe('updateControllerModel()', function() {
                 var model, controller;
 
+                function invoke() {
+                    $injector.invoke(NewModeState.updateControllerModel, NewModeState, {
+                        controller: controller,
+                        model: model
+                    });
+                }
+
                 beforeEach(function() {
                     controller = {};
                     model = {
@@ -73,10 +80,7 @@
                         ]
                     };
 
-                    $injector.invoke(NewModeState.updateControllerModel, NewModeState, {
-                        controller: controller,
-                        model: model
-                    });
+                    invoke();
                 });
 
                 it('should set the "model" property on the controller', function() {
@@ -84,6 +88,31 @@
                 });
 
                 it('should set the mode to be the value of the first mode in the model\'s modes', function() {
+                    expect(controller.mode).toBe('foo');
+                });
+
+                it('should be the MiniReel\'s mode if it has one', function() {
+                    model.minireel.mode = 'bar';
+                    invoke();
+
+                    expect(controller.mode).toBe('bar');
+                });
+
+                it('should set the mode to be the value of the first mode in the model\'s modes if the minireel\'s mode is not a member of the model\'s modes', function() {
+                    model.minireel.mode = 'foo';
+                    invoke();
+                    expect(controller.mode).toBe('foo');
+
+                    model.minireel.mode = 'lightbox';
+                    invoke();
+                    expect(controller.mode).toBe('foo');
+
+                    model.minireel.mode = 'bar';
+                    invoke();
+                    expect(controller.mode).toBe('bar');
+
+                    model.minireel.mode = 'lightbox-ads';
+                    invoke();
                     expect(controller.mode).toBe('foo');
                 });
             });
