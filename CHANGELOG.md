@@ -39,3 +39,5 @@
   * [FIX]: MiniReelService: Compile recap cards to player format with
     modules array
   * [FIX]: playhead scrubber style updated for non-dragging
+* *[Beta1.rc10]*
+  * [FIX]: Use protocol relative URLs

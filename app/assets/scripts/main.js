@@ -6,7 +6,7 @@
         appScripts, libScripts;
 
     function libUrl(url) {
-        return 'http://lib.cinema6.com/' + url;
+        return '//lib.cinema6.com/' + url;
     }
 
     c6.kLocal = (c6.kBaseUrl === 'assets');
