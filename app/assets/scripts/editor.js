@@ -4,7 +4,8 @@
     var isNumber = angular.isNumber,
         equals = angular.equals,
         copy = angular.copy,
-        forEach = angular.forEach;
+        forEach = angular.forEach,
+        isDefined = angular.isDefined;
 
     angular.module('c6.mrmaker')
         .controller('EditorController', ['c6State','$scope','MiniReelService',
@@ -381,8 +382,18 @@
                         seekBar = $element.find('#seek-bar').data('cDragZone'),
                         currentScanDeferred = null,
                         notifyProgress = c6Debounce(function(args) {
-                            var value = args[0],
-                                scopeProp = args[1];
+                            var marker = args[0],
+                                scopeProp = args[1],
+                                value = Math.max(
+                                    0,
+                                    Math.min(
+                                        duration(),
+                                        positionToValue(
+                                            marker.display,
+                                            scopeProp
+                                        )
+                                    )
+                                );
 
                             currentScanDeferred.notify(value);
                             scope[scopeProp + 'Stamp'] = secondsToTimestamp(value);
@@ -394,6 +405,10 @@
 
                     function end() {
                         return isNumber(scope.end) ? scope.end : scope.duration;
+                    }
+
+                    function duration() {
+                        return parseFloat(scope.duration);
                     }
 
                     function eachMarker(cb) {
@@ -415,7 +430,7 @@
                             pxMoved += rect.width;
                         }
 
-                        return ((pxMoved * scope.duration) / total);
+                        return ((pxMoved * duration()) / total);
                     }
 
                     function scopePropForMarker(marker) {
@@ -473,28 +488,19 @@
                         });
 
                         notifyProgress(
-                            Math.max(
-                                0,
-                                Math.min(
-                                    scope.duration,
-                                    positionToValue(
-                                        desired,
-                                        scopeProp
-                                    )
-                                )
-                            ),
+                            marker,
                             scopeProp
                         );
                     }
 
                     function absStartMarkerPos() {
                         return ((scope.start * seekBar.display.width) /
-                            scope.duration) + 'px';
+                            duration()) + 'px';
                     }
 
                     function absEndMarkerPos() {
                         return ((end() * seekBar.display.width) /
-                            scope.duration) - endMarker.display.width + 'px';
+                            duration()) - endMarker.display.width + 'px';
                     }
 
                     function dropStart(marker) {
@@ -513,6 +519,16 @@
                         });
                     }
 
+                    Object.defineProperties(scope, {
+                        enabled: {
+                            get: function() {
+                                return isDefined(this.start) &&
+                                    isDefined(this.end) &&
+                                    !!duration();
+                            }
+                        }
+                    });
+
                     scope.position = {};
                     Object.defineProperties(scope.position, {
                         startMarker: {
@@ -523,7 +539,7 @@
                         },
                         playhead: {
                             get: function() {
-                                return ((scope.currentTime * 100) / scope.duration) + '%';
+                                return ((scope.currentTime * 100) / duration()) + '%';
                             }
                         }
                     });
