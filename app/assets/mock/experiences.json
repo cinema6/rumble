@@ -179,16 +179,7 @@
                 {
                     "id": "rc-235d41cde02032",
                     "type": "recap",
-                    "data": {
-                        "message": "Check out these other MiniReels!",
-                        "query": {
-                            "id": [
-                                "1",
-                                "2",
-                                "3"
-                            ]
-                        }
-                    }
+                    "data": {}
                 }
             ]
         }
@@ -557,16 +548,7 @@
                 {
                     "id": "rc-ee5f1c11d8d42f",
                     "type": "recap",
-                    "data": {
-                        "message": "Now check out...",
-                        "query": {
-                            "id": [
-                                "1",
-                                "2",
-                                "3"
-                            ]
-                        }
-                    }
+                    "data": {}
                 }
             ]
         }
@@ -965,16 +947,11 @@
                 {
                     "id": "rc-ee5f1c11d8d42f",
                     "type": "recap",
-                    "data": {
-                        "message": "Now check out...",
-                        "query": {
-                            "id": [
-                                "1",
-                                "2",
-                                "3"
-                            ]
-                        }
-                    }
+                    "modules": [
+                        "displayAd"
+                    ],
+                    "data": {},
+                    "displayAd": "http://2.bp.blogspot.com/-TlM_3FT89Y0/UMzLr7kVykI/AAAAAAAACjs/lKrdhgp6OQg/s1600/brad-turner.jpg"
                 }
             ]
         }
@@ -1373,16 +1350,11 @@
                 {
                     "id": "rc-ee5f1c11d8d42f",
                     "type": "recap",
-                    "data": {
-                        "message": "Now check out...",
-                        "query": {
-                            "id": [
-                                "1",
-                                "2",
-                                "3"
-                            ]
-                        }
-                    }
+                    "modules": [
+                        "displayAd"
+                    ],
+                    "data": {},
+                    "displayAd": "http://2.bp.blogspot.com/-TlM_3FT89Y0/UMzLr7kVykI/AAAAAAAACjs/lKrdhgp6OQg/s1600/brad-turner.jpg"
                 }
             ]
         }
@@ -1615,16 +1587,7 @@
                 {
                     "id": "rc-1a327c199e4387",
                     "type": "recap",
-                    "data": {
-                        "message": "Now check out...",
-                        "query": {
-                            "id": [
-                                "1",
-                                "2",
-                                "3"
-                            ]
-                        }
-                    }
+                    "data": {}
                 }
             ]
         }
@@ -1858,16 +1821,7 @@
                 {
                     "id": "rc-1a327c199e4387",
                     "type": "recap",
-                    "data": {
-                        "message": "Now check out...",
-                        "query": {
-                            "id": [
-                                "1",
-                                "2",
-                                "3"
-                            ]
-                        }
-                    }
+                    "data": {}
                 }
             ]
         }
@@ -2101,16 +2055,7 @@
                 {
                     "id": "rc-1a327c199e4387",
                     "type": "recap",
-                    "data": {
-                        "message": "Now check out...",
-                        "query": {
-                            "id": [
-                                "1",
-                                "2",
-                                "3"
-                            ]
-                        }
-                    }
+                    "data": {}
                 }
             ]
         }
@@ -2301,16 +2246,7 @@
                 {
                     "id": "rc-b4b209132e2674",
                     "type": "recap",
-                    "data": {
-                        "message": "Now check out...",
-                        "query": {
-                            "id": [
-                                "1",
-                                "2",
-                                "3"
-                            ]
-                        }
-                    }
+                    "data": {}
                 }
             ]
         }

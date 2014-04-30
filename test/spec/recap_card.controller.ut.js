@@ -10,7 +10,8 @@
 
             var MiniReelService,
                 c6AppData,
-                BallotService;
+                BallotService,
+                ModuleService;
 
             c6AppData = {
                 experience: {
@@ -103,8 +104,13 @@
 
                     MiniReelService = $injector.get('MiniReelService');
                     BallotService = $injector.get('BallotService');
+                    ModuleService = $injector.get('ModuleService');
 
                     $scope = $rootScope.$new();
+                    $scope.config = {
+                        modules: ['displayAd'],
+                        displayAd: 'http://test.com/ad.jpg'
+                    }
                     RecapCardCtrl = $controller('RecapCardController', { $scope: $scope });
                 });
 
@@ -165,6 +171,16 @@
 
                             RecapCardCtrl.jumpTo(RecapCardCtrl.deck[0]);
                             expect($scope.$emit).toHaveBeenCalledWith('<recap-card>:jumpTo',0);
+                        });
+                    });
+
+                    describe('hasModule(module)', function() {
+                        it('should call ModuleService.hasModule() with the configured modules and the provided module', function() {
+                            spyOn(ModuleService, 'hasModule').andCallThrough();
+                            RecapCardCtrl = $controller('RecapCardController', { $scope: $scope });
+                            RecapCardCtrl.hasModule('displayAd');
+                            expect(ModuleService.hasModule).toHaveBeenCalledWith($scope.config.modules, 'displayAd');
+                            expect(RecapCardCtrl.hasModule('displayAd')).toBe(true);
                         });
                     });
                 });
