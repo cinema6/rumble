@@ -233,17 +233,12 @@
                         'rumble' + (c6Defines.kLocal ?
                             ('/app/index.html?kCollateralUrl=' +
                                 encodeURIComponent('../c6Content') +
-                                '&kDebug=true&kDevMode=true' +
-                                '&autoplay=' + encodeURIComponent(experience.data.autoplay) +
-                                '&kEnvUrlRoot=' +
-                                '&kDevice=' + encodeURIComponent(this.device) +
-                                '&kMode=' + encodeURIComponent(experience.mode)) :
-                            ('/?kCollateralUrl=' + encodeURIComponent(c6Defines.kCollateralUrl) +
-                                '&autoplay=' + encodeURIComponent(experience.data.autoplay) +
-                                '&kEnvUrlRoot=' +
-                                '&kDevice=' + encodeURIComponent(this.device) +
-                                '&kMode=' + encodeURIComponent(experience.mode))
-                        )
+                                '&kDebug=true&kDevMode=true') : 
+                            ('/?kCollateralUrl=' + encodeURIComponent(c6Defines.kCollateralUrl))) +
+                        '&autoplay=' + encodeURIComponent(experience.data.autoplay) +
+                        '&kDevice=' + encodeURIComponent(this.device) +
+                        '&kMode=' + encodeURIComponent(experience.mode) +
+                        '&kEnvUrlRoot='
                     ), 'app');
                 }
             });
