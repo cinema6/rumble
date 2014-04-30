@@ -1199,18 +1199,14 @@
                     margin: 0 1.5em 0.25em 0; padding:7px 0 0 0;
                 }
         .video-trimmer__seek-bar {
-            height: 0.1875rem; width:100%;
-            margin:0;
+            height: 0.1875rem;
+            margin:0; padding-right:6px;
             background: #4a9cd1;
         }
             .video-trimmer__playhead {
-                position: absolute;
-                border-radius:10px; border:5px solid #fff;
-                height:6px; width:6px; margin:-6px 0 0 -6px;
-                background: #4a9cd1;
-                -webkit-box-shadow: 0 3px 5px 0 rgba(0,0,0,0.5);
-                box-shadow: 0 3px 5px 0 rgba(0,0,0,0.5);
-                cursor:pointer;
+                position: relative;
+                height:100%; width:6px; margin:0;
+                background:#ccc;
             }
 
 
