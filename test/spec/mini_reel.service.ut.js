@@ -866,7 +866,8 @@
 
                             appData = {
                                 user: {
-                                    org: 'o-17593d7a2bf294'
+                                    org: 'o-17593d7a2bf294',
+                                    branding: 'elitedaily'
                                 }
                             };
 
@@ -951,6 +952,7 @@
                                     mode: 'lightbox',
                                     org: 'o-17593d7a2bf294',
                                     data: {
+                                        branding: appData.user.branding,
                                         deck: [
                                             {
                                                 id: jasmine.any(String),

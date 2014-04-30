@@ -12,24 +12,25 @@
 * [FIX]: Add trailing slash for passing query params to preview player
 * [FIX]: Use preview player src to trigger refresh for mode/device changes
 * *[Beta1.rc7]*
-* [FIX]: Remove "viewChangeStart" event handler when c6-view is destroyed, prevent memory leak
-* [FIX]: Copy autoplay settings when opening MiniReel
-* [FEATURE]: Add blank card to deck when user has not created one
-* [FIX]: Fix issue where start/end trimmers would leap if returned to
+  * [FIX]: Remove "viewChangeStart" event handler when c6-view is destroyed, prevent memory leak
+  * [FIX]: Copy autoplay settings when opening MiniReel
+  * [FEATURE]: Add blank card to deck when user has not created one
+  * [FIX]: Fix issue where start/end trimmers would leap if returned to
   original position after drag
 * *[Beta1.rc8]*
-* [FIX]: Use "ng-style" instead of normal style attribute when setting card video thumbnail to prevent 404 on uncompiled template
-* [FIX]: Hide video trimming sliders when video duration is unknown (to prevent them looking broken for a second)
-* [FIX]: Hide video trimming sliders on DailyMotion videos (as this feature is not supported with them)
-* [FIX]: Fix for issue where the last notified time of a video trimming marker is slightly innacurate after dragging
-* [FIX]: Prevent video/videoBallot cards without a video assigned from becoming un-eitable after closing and reopening a MiniReel that contains such a card
-* [FIX]: Add autoplay query param to preview player src to trigger refresh
-* [FIX]: Add kEnvUrlRoot query param to preview player to fix vote service path in the player
-* [FIX]: Disable lightbox-ads mode choice. **REQUIRED STEPS: MiniReelinator experience must be updated in the Content Service**
-* [FIX]: Modal for choosing mode is now correctly populated with MiniReel's mode
-* [FIX]: Don't query the content service every time the state changes as the user selects the mode for their new MiniReel
-* [FIX]: Placeholder image added to new card - video player
-* [FIX]: 'Create MiniReel' text updated to simply 'Done'
-* [FIX]: Unset previewed card when closing preview modal to prevent autoplaying when the preview rehreshes in the background
-* [FIX]: For MiniReel details modal, 'Coming Soon' text added to Desktop Lightbox with Ads option
-* [FIX]: Unset previewed card when closing preview modal to prevent autoplaying when the preview rehreshes in the background
+  * [FIX]: Use "ng-style" instead of normal style attribute when setting card video thumbnail to prevent 404 on uncompiled template
+  * [FIX]: Hide video trimming sliders when video duration is unknown (to prevent them looking broken for a second)
+  * [FIX]: Hide video trimming sliders on DailyMotion videos (as this feature is not supported with them)
+  * [FIX]: Fix for issue where the last notified time of a video trimming marker is slightly innacurate after dragging
+  * [FIX]: Prevent video/videoBallot cards without a video assigned from becoming un-eitable after closing and reopening a MiniReel that contains such a card
+  * [FIX]: Add autoplay query param to preview player src to trigger refresh
+  * [FIX]: Add kEnvUrlRoot query param to preview player to fix vote service path in the player
+  * [FIX]: Disable lightbox-ads mode choice. **REQUIRED STEPS: MiniReelinator experience must be updated in the Content Service**
+  * [FIX]: Modal for choosing mode is now correctly populated with MiniReel's mode
+  * [FIX]: Don't query the content service every time the state changes as the user selects the mode for their new MiniReel
+  * [FIX]: Placeholder image added to new card - video player
+  * [FIX]: 'Create MiniReel' text updated to simply 'Done'
+  * [FIX]: Copy "branding" of new MiniReels from the currently logged-in user
+  * [FIX]: Unset previewed card when closing preview modal to prevent autoplaying when the preview rehreshes in the background
+  * [FIX]: For MiniReel details modal, 'Coming Soon' text added to Desktop Lightbox with Ads option
+  * [FIX]: Unset previewed card when closing preview modal to prevent autoplaying when the preview rehreshes in the background
