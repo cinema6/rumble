@@ -218,7 +218,10 @@
                 profile,
                 card,
                 experience = {
-                    mode: 'full'
+                    mode: 'full',
+                    data: {
+                        autoplay: false
+                    }
                 };
 
             // set a default device mode
@@ -231,9 +234,13 @@
                             ('/app/index.html?kCollateralUrl=' +
                                 encodeURIComponent('../c6Content') +
                                 '&kDebug=true&kDevMode=true' +
+                                '&autoplay=' + encodeURIComponent(experience.data.autoplay) +
+                                '&kEnvUrlRoot=' +
                                 '&kDevice=' + encodeURIComponent(this.device) +
                                 '&kMode=' + encodeURIComponent(experience.mode)) :
                             ('/?kCollateralUrl=' + encodeURIComponent(c6Defines.kCollateralUrl) +
+                                '&autoplay=' + encodeURIComponent(experience.data.autoplay) +
+                                '&kEnvUrlRoot=' +
                                 '&kDevice=' + encodeURIComponent(this.device) +
                                 '&kMode=' + encodeURIComponent(experience.mode))
                         )
