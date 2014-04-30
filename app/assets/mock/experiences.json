@@ -13,8 +13,7 @@
         "mode": "light",
         "theme": "ed-entertainment",
         "data": {
-            "id": "r-738c2403d83ddc",
-            "electionId": "el-662dd344a98698",
+            "election": "e-d0e407bb69675b",
             "branding": "elitedaily",
             "conversations": [
                 {
@@ -198,8 +197,7 @@
         "mode": "light",
         "theme": "ed-videos",
         "data": {
-            "id": "r-ea8caee7de7582",
-            "electionId": "el-2f173cf1a9a8ef",
+            "election": "e-dde721e25274a7",
             "branding": "elitedaily",
             "autoplay": true,
             "deck": [
@@ -567,8 +565,7 @@
         "mode": "lightbox-ads",
         "theme": "ed-videos",
         "data": {
-            "id": "r-ea8caee7de7582",
-            "electionId": "el-2f173cf1a9a8ef",
+            "election": "e-ad5c74dcb1f638",
             "branding": "elitedaily",
             "autoplay": true,
             "deck": [
@@ -970,8 +967,7 @@
         "mode": "lightbox-ads",
         "theme": "ed-videos",
         "data": {
-            "id": "r-ea8caee7de7582",
-            "electionId": "el-2f173cf1a9a8ef",
+            "election": "e-5fd1f0451a0eb8",
             "branding": "elitedaily",
             "autoplay": false,
             "deck": [
@@ -1372,8 +1368,7 @@
         },
         "theme": "ed-sports",
         "data": {
-            "id": "r-a798237d2e522f",
-            "electionId": "el-8b1b6847d575ac",
+            "election": "e-6ab02642b45eb8",
             "branding": "elitedaily",
             "autoplay": true,
             "deck": [
@@ -1606,8 +1601,7 @@
         "theme": "ed-sports",
         "mode": "lightbox",
         "data": {
-            "id": "r-a798237d2e522f",
-            "electionId": "el-8b1b6847d575ac",
+            "election": "e-bad9dc9276ec49",
             "branding": "elitedaily",
             "autoplay": true,
             "deck": [
@@ -1840,8 +1834,7 @@
         "theme": "ed-sports",
         "mode": "lightbox",
         "data": {
-            "id": "r-a798237d2e522f",
-            "electionId": "el-8b1b6847d575ac",
+            "election": "e-e177289d9ca0b2",
             "branding": "elitedaily",
             "autoplay": false,
             "deck": [
@@ -2073,8 +2066,7 @@
         },
         "theme": "ed-sports",
         "data": {
-            "id": "r-ea8caee7de7582",
-            "electionId": "el-8b1b6847d575ac",
+            "election": "e-55b499581cb19e",
             "branding": "elitedaily",
             "autoplay": true,
             "deck": [
