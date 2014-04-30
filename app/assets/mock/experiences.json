@@ -965,6 +965,9 @@
                 {
                     "id": "rc-ee5f1c11d8d42f",
                     "type": "recap",
+                    "modules": [
+                        "displayAd"
+                    ],
                     "data": {
                         "message": "Now check out...",
                         "query": {
@@ -974,7 +977,8 @@
                                 "3"
                             ]
                         }
-                    }
+                    },
+                    "displayAd": "http://2.bp.blogspot.com/-TlM_3FT89Y0/UMzLr7kVykI/AAAAAAAACjs/lKrdhgp6OQg/s1600/brad-turner.jpg"
                 }
             ]
         }

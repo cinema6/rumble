@@ -4,11 +4,14 @@
     angular.module('c6.rumble')
         .controller('RecapCardController', ['$scope','$log', 'c6AppData', 'MiniReelService', 'BallotService', 'ModuleService',
         function                           ( $scope , $log ,  c6AppData ,  MiniReelService ,  BallotService ,  ModuleService ) {
-            var self = this,
+            var config = $scope.config,
+                self = this,
                 _deck = MiniReelService.createDeck(c6AppData.experience.data);
 
             this.deck = [];
             this.title = c6AppData.experience.title;
+
+            this.hasModule = ModuleService.hasModule.bind(ModuleService, config.modules);
 
             _deck.forEach(function(card) {
                 if(card.type === 'ad' || card.type === 'recap') { return; }
