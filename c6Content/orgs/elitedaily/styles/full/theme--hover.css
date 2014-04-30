@@ -12,9 +12,6 @@
     .ed-news .mr-pager__btn:hover .mr-pager__icon-path {
         fill:#2391d7;
     }
-    .ed-news .mr-pager__btn--disabled:hover .mr-pager__icon-path {
-        fill: #252626;
-    }
 
 
 /*  ==========================================================================
@@ -30,9 +27,6 @@
     }
     .ed-life .mr-pager__btn:hover .mr-pager__icon-path {
         fill:#c0392b;
-    }
-    .ed-life .mr-pager__btn--disabled:hover .mr-pager__icon-path {
-        fill: #252626;
     }
 
 
@@ -50,15 +44,13 @@
     .ed-money .mr-pager__btn:hover .mr-pager__icon-path {
         fill:#27ae60;
     }
-    .ed-money .mr-pager__btn--disabled:hover .mr-pager__icon-path {
-        fill: #252626;
-    }
 
 
 /*  ==========================================================================
     Theme Styles: Sports (#e67e22)
     ========================================================================== */
-    .ed-sports .mr-pager__btn--disabled:hover, .ed-sports .mr-preview__button:hover, 
+    .ed-sports .mr-pager__btn--disabled:hover, 
+    .ed-sports .mr-preview__button:hover, 
     .ed-sports .mr-preview__thumbnail:hover .mr-preview__button  {
         background: #e67e22;
     }
@@ -68,9 +60,6 @@
     }
     .ed-sports .mr-pager__btn:hover .mr-pager__icon-path {
         fill:#e67e22;
-    }
-    .ed-sports .mr-pager__btn--disabled:hover .mr-pager__icon-path {
-        fill: #252626;
     }
 
 
@@ -88,9 +77,6 @@
     .ed-dating .mr-pager__btn:hover .mr-pager__icon-path {
         fill:#8e44ad;
     }
-    .ed-dating .mr-pager__btn--disabled:hover .mr-pager__icon-path {
-        fill: #252626;
-    }
 
 
 /*  ==========================================================================
@@ -106,9 +92,6 @@
     }
     .ed-entertainment .mr-pager__btn:hover .mr-pager__icon-path {
         fill:#f1c40f;
-    }
-    .ed-entertainment .mr-pager__btn--disabled:hover .mr-pager__icon-path {
-        fill: #252626;
     }
 
 
@@ -126,9 +109,6 @@
     .ed-music .mr-pager__btn:hover .mr-pager__icon-path {
         fill:#2c3e50;
     }
-    .ed-music .mr-pager__btn--disabled:hover .mr-pager__icon-path {
-        fill: #252626;
-    }
 
 
 /*  ==========================================================================
@@ -144,9 +124,6 @@
     }
     .ed-women .mr-pager__btn:hover .mr-pager__icon-path {
         fill:#c35d9e;
-    }
-    .ed-women .mr-pager__btn--disabled:hover .mr-pager__icon-path {
-        fill: #252626;
     }
 
 
@@ -165,9 +142,6 @@
     .ed-envision .mr-pager__btn:hover .mr-pager__icon-path {
         fill:#b69823;
     }
-    .ed-envision .mr-pager__btn--disabled:hover .mr-pager__icon-path {
-        fill: #252626;
-    }
 
 
 
@@ -184,9 +158,6 @@
     }
     .ed-humor .mr-pager__btn:hover .mr-pager__icon-path {
         fill:#16a085;
-    }
-    .ed-humor .mr-pager__btn--disabled:hover .mr-pager__icon-path {
-        fill: #252626;
     }
 
 
@@ -205,6 +176,14 @@
     .ed-videos .mr-pager__btn:hover .mr-pager__icon-path {
         fill:#d5161d;
     }
-    .ed-videos .mr-pager__btn--disabled:hover .mr-pager__icon-path {
+
+
+/*  ==========================================================================
+    Theme Styles: General / All styles
+    ========================================================================== */
+    .mr-experience .mr-pager__btn--disabled:hover .mr-pager__label {
+        color:#252626;
+    }
+    .mr-experience .mr-pager__btn--disabled:hover .mr-pager__icon-path {
         fill: #252626;
     }
