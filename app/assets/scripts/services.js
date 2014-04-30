@@ -28,7 +28,7 @@
                 forEach(deck, function(card) {
                     var item;
 
-                    if (card.modules.indexOf('ballot') < 0) {
+                    if ((card.modules || []).indexOf('ballot') < 0) {
                         return;
                     }
 
@@ -42,7 +42,7 @@
                 });
                 forEach(Object.keys(election.ballot), function(id) {
                     var card = cardWithId(id),
-                        shouldHaveBallot = !!card && card.modules.indexOf('ballot') > -1;
+                        shouldHaveBallot = !!card && (card.modules || []).indexOf('ballot') > -1;
 
                     if (!shouldHaveBallot) {
                         delete election.ballot[id];
