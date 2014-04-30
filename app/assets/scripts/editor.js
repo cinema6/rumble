@@ -654,7 +654,7 @@
                         if (!id) { return; }
 
                         $timeout(function() {
-                            controlVideo($element.find('div *'));
+                            controlVideo($element.find('#videoEmbedPlayer *'));
                         });
                     });
                 }
