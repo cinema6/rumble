@@ -715,7 +715,7 @@
                             subtitle: null,
                             summary: null,
                             type: 'minireel',
-                            mode: 'light',
+                            mode: null,
                             org: appData.user.org,
                             data: {
                                 deck: [

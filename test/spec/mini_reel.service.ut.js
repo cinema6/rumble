@@ -914,7 +914,7 @@
                                     subtitle: null,
                                     summary: null,
                                     type: 'minireel',
-                                    mode: 'light',
+                                    mode: null,
                                     org: 'o-17593d7a2bf294',
                                     data: {
                                         deck: [
