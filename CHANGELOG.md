@@ -16,4 +16,8 @@
   * [FIX]: Queue a pause on the ad if ad is not loaded when user leaves card
   * [FIX]: Adds displayAd functionality to recap card in lightbox-ads mode **Need to update experiences in the content service**
 * *[Beta3.rc5]*
+  * [FIX]: Ballot service is initialized with election id, not
+    experience id **Need to update experiences in the content service**
+  * [FIX]: Ballot service is only initialized if it has an associated
+    election
   * [FIX]: Use protocol-relative URLs

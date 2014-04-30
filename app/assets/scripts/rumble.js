@@ -167,6 +167,10 @@
             return choices;
         }
 
+        function fail() {
+            return $q.reject('The BallotService has not been initialized with an election id.');
+        }
+
         this.init = function(id) {
             electionId = id;
         };
@@ -185,6 +189,10 @@
 
             function cache(election) {
                 return electionCache.put(electionId, election);
+            }
+
+            if (!electionId) {
+                return fail();
             }
 
             return $http.get(c6UrlMaker(
@@ -212,6 +220,10 @@
                 return election[id];
             }
 
+            if (!electionId) {
+                return fail();
+            }
+
             return fetchFromCache()
                 .catch(fetchFromService)
                 .then(getBallot);
@@ -220,6 +232,10 @@
         this.vote = function(id, name) {
             function process() {
                 return true;
+            }
+
+            if (!electionId) {
+                return fail();
             }
 
             return $http.post(c6UrlMaker('public/vote', 'api'), {
@@ -239,6 +255,7 @@
         var self    = this, readyTimeout,
             appData = $scope.app.data,
             id = appData.experience.id,
+            election = appData.experience.data.election,
             c = c6Computed($scope),
             pageViewTimer = null;
 
@@ -246,7 +263,9 @@
             return (card || null) && (card.ad && !card.sponsored);
         }
 
-        BallotService.init(id);
+        if (election) {
+            BallotService.init(election);
+        }
 
         CommentsService.init(id);
 
