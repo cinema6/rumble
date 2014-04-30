@@ -40,16 +40,8 @@
         background:#252626;
     }
 
-    .ui-control--portrait, .ui-context--portrait, .ui-nav-left--landscape, .ui-nav-right--landscape {
-        background:#2a2a2a;
-    }
-
     .mr-pager__btn--disabled .mr-pager__icon-path {
         fill: #252626;
-    }
-
-    .mr-toc {
-        border-top:0.25em solid #2a2a2a;
     }
 
 
@@ -59,20 +51,18 @@
     .ed-news a {
         color:#2391d7; border-bottom:1px dotted #2391d7;
     }
-    .ed-news .mr-pager__btn, .ed-news .mr-card__btn, .ed-news .mr-card__btn-watch {
-        background: #2391d7;
-    }
-    .ed-news .mr-switch__btn--active, .ed-news .mr-switch__btn:focus {
+    .ed-news .mr-switch__btn--active, 
+    .ed-news .mr-switch__btn:focus {
         border-bottom: 2px solid #2391d7;
     }
     .ed-news .mr-preview__button {
         background: rgba(35,145,215,0.7);
     }
+    .ed-news .mr-pager__btn, 
+    .ed-news .mr-card__btn, 
+    .ed-news .mr-card__btn-watch,
     .ed-news .mr-player__play-btn,
-    .ed-news .ui-control__next, 
-    .ed-news .ui-control__prev, 
-    .ed-news .ui-nav__next, 
-    .ed-news .ui-nav__prev {
+    .ed-news .mr-splash__copy {
         background-color: #2391d7;
     }
 
@@ -84,20 +74,18 @@
     .ed-life a {
         color:#c0392b; border-bottom:1px dotted #c0392b;
     }
-    .ed-life .mr-pager__btn, .ed-life .mr-card__btn, .ed-life .mr-card__btn-watch {
-        background: #c0392b;
-    }
-    .ed-life .mr-switch__btn--active, .ed-life .mr-switch__btn:focus {
+    .ed-life .mr-switch__btn--active, 
+    .ed-life .mr-switch__btn:focus {
         border-bottom: 2px solid #c0392b;
     }
-    .ed-life .mr-preview__button {
+    .ed-news .mr-preview__button {
         background: rgba(192,57,43,0.7);
     }
+    .ed-life .mr-pager__btn, 
+    .ed-life .mr-card__btn, 
+    .ed-life .mr-card__btn-watch,
     .ed-life .mr-player__play-btn,
-    .ed-life .ui-control__next, 
-    .ed-life .ui-control__prev, 
-    .ed-life .ui-nav__next, 
-    .ed-life .ui-nav__prev {
+    .ed-life .mr-splash__copy {
         background-color: #c0392b;
     }
 
@@ -109,20 +97,18 @@
     .ed-money a {
         color:#27ae60; border-bottom:1px dotted #27ae60;
     }
-    .ed-money .mr-pager__btn, .ed-money .mr-card__btn, .ed-money .mr-card__btn-watch {
-        background: #27ae60;
-    }
-    .ed-money .mr-switch__btn--active, .ed-money .mr-switch__btn:focus {
+    .ed-money .mr-switch__btn--active, 
+    .ed-money .mr-switch__btn:focus {
         border-bottom: 2px solid #27ae60;
     }
     .ed-money .mr-preview__button {
         background: rgba(39,174,96,0.7);
     }
+    .ed-money .mr-pager__btn, 
+    .ed-money .mr-card__btn, 
+    .ed-money .mr-card__btn-watch,
     .ed-money .mr-player__play-btn,
-    .ed-money .ui-control__next, 
-    .ed-money .ui-control__prev, 
-    .ed-money .ui-nav__next, 
-    .ed-money .ui-nav__prev {
+    .ed-money .mr-splash__copy {
         background-color: #27ae60;
     }
 
@@ -134,20 +120,18 @@
     .ed-sports a {
         color:#e67e22; border-bottom:1px dotted #e67e22;
     }
-    .ed-sports .mr-pager__btn, .ed-sports .mr-card__btn, .ed-sports .mr-card__btn-watch {
-        background: #e67e22;
-    }
-    .ed-sports .mr-switch__btn--active, .ed-sports .mr-switch__btn:focus {
+    .ed-sports .mr-switch__btn--active, 
+    .ed-sports .mr-switch__btn:focus {
         border-bottom: 2px solid #e67e22;
     }
     .ed-sports .mr-preview__button {
         background: rgba(230,126,34,0.7);
     }
+    .ed-sports .mr-pager__btn, 
+    .ed-sports .mr-card__btn, 
+    .ed-sports .mr-card__btn-watch,
     .ed-sports .mr-player__play-btn,
-    .ed-sports .ui-control__next, 
-    .ed-sports .ui-control__prev, 
-    .ed-sports .ui-nav__next, 
-    .ed-sports .ui-nav__prev {
+    .ed-sports .mr-splash__copy {
         background-color: #e67e22;
     }
 
@@ -159,20 +143,18 @@
     .ed-dating a {
         color:#8e44ad; border-bottom:1px dotted #8e44ad;
     }
-    .ed-dating .mr-pager__btn, .ed-dating .mr-card__btn, .ed-dating .mr-card__btn-watch {
-        background: #8e44ad;
-    }
-    .ed-dating .mr-switch__btn--active, .ed-dating .mr-switch__btn:focus {
+    .ed-dating .mr-switch__btn--active, 
+    .ed-dating .mr-switch__btn:focus {
         border-bottom: 2px solid #8e44ad;
     }
     .ed-dating .mr-preview__button {
         background: rgba(142,68,173,0.7);
     }
+    .ed-dating .mr-pager__btn, 
+    .ed-dating .mr-card__btn, 
+    .ed-dating .mr-card__btn-watch,
     .ed-dating .mr-player__play-btn,
-    .ed-dating .ui-control__next, 
-    .ed-dating .ui-control__prev, 
-    .ed-dating .ui-nav__next, 
-    .ed-dating .ui-nav__prev {
+    .ed-dating .mr-splash__copy {
         background-color: #8e44ad;
     }
 
@@ -184,20 +166,18 @@
     .ed-entertainment a {
         color:#f1c40f; border-bottom:1px dotted #f1c40f;
     }
-    .ed-entertainment .mr-pager__btn, .ed-entertainment .mr-card__btn, .ed-entertainment .mr-card__btn-watch {
-        background: #f1c40f;
-    }
-    .ed-entertainment .mr-switch__btn--active, .ed-entertainment .mr-switch__btn:focus {
+    .ed-entertainment .mr-switch__btn--active, 
+    .ed-entertainment .mr-switch__btn:focus {
         border-bottom: 2px solid #f1c40f;
     }
     .ed-entertainment .mr-preview__button {
         background: rgba(241,196,15,0.7);
     }
+    .ed-entertainment .mr-pager__btn, 
+    .ed-entertainment .mr-card__btn, 
+    .ed-entertainment .mr-card__btn-watch,
     .ed-entertainment .mr-player__play-btn,
-    .ed-entertainment .ui-control__next, 
-    .ed-entertainment .ui-control__prev, 
-    .ed-entertainment .ui-nav__next, 
-    .ed-entertainment .ui-nav__prev {
+    .ed-entertainment .mr-splash__copy {
         background-color: #f1c40f;
     }
 
@@ -207,22 +187,20 @@
     Theme Styles: Music (#2c3e50)
     ========================================================================== */
     .ed-music a {
-        color:#3f5a74; border-bottom:1px dotted #3f5a74;
+        color:#2c3e50; border-bottom:1px dotted #2c3e50;
     }
-    .ed-music .mr-pager__btn, .ed-music .mr-card__btn, .ed-music .mr-card__btn-watch {
-        background: #2c3e50;
-    }
-    .ed-music .mr-switch__btn--active, .ed-music .mr-switch__btn:focus {
+    .ed-music .mr-switch__btn--active, 
+    .ed-music .mr-switch__btn:focus {
         border-bottom: 2px solid #2c3e50;
     }
     .ed-music .mr-preview__button {
         background: rgba(44,62,80,0.7);
     }
+    .ed-music .mr-pager__btn, 
+    .ed-music .mr-card__btn, 
+    .ed-music .mr-card__btn-watch,
     .ed-music .mr-player__play-btn,
-    .ed-music .ui-control__next, 
-    .ed-music .ui-control__prev, 
-    .ed-music .ui-nav__next, 
-    .ed-music .ui-nav__prev {
+    .ed-music .mr-splash__copy {
         background-color: #2c3e50;
     }
 
@@ -234,20 +212,18 @@
     .ed-women a {
         color:#c35d9e; border-bottom:1px dotted #c35d9e;
     }
-    .ed-women .mr-pager__btn, .ed-women .mr-card__btn, .ed-women .mr-card__btn-watch {
-        background: #c35d9e;
-    }
-    .ed-women .mr-switch__btn--active, .ed-women .mr-switch__btn:focus {
+    .ed-women .mr-switch__btn--active, 
+    .ed-women .mr-switch__btn:focus {
         border-bottom: 2px solid #c35d9e;
     }
     .ed-women .mr-preview__button {
         background: rgba(195,93,158,0.7);
     }
+    .ed-women .mr-pager__btn, 
+    .ed-women .mr-card__btn, 
+    .ed-women .mr-card__btn-watch,
     .ed-women .mr-player__play-btn,
-    .ed-women .ui-control__next, 
-    .ed-women .ui-control__prev, 
-    .ed-women .ui-nav__next, 
-    .ed-women .ui-nav__prev {
+    .ed-women .mr-splash__copy {
         background-color: #c35d9e;
     }
 
@@ -259,20 +235,18 @@
     .ed-envision a {
         color:#b69823; border-bottom:1px dotted #b69823;
     }
-    .ed-envision .mr-pager__btn, .ed-envision .mr-card__btn, .ed-envision .mr-card__btn-watch {
-        background: #b69823;
-    }
-    .ed-envision .mr-switch__btn--active, .ed-envision .mr-switch__btn:focus {
+    .ed-envision .mr-switch__btn--active, 
+    .ed-envision .mr-switch__btn:focus {
         border-bottom: 2px solid #b69823;
     }
     .ed-envision .mr-preview__button {
         background: rgba(182,152,35,0.7);
     }
+    .ed-envision .mr-pager__btn, 
+    .ed-envision .mr-card__btn, 
+    .ed-envision .mr-card__btn-watch,
     .ed-envision .mr-player__play-btn,
-    .ed-envision .ui-control__next, 
-    .ed-envision .ui-control__prev, 
-    .ed-envision .ui-nav__next, 
-    .ed-envision .ui-nav__prev {
+    .ed-envision .mr-splash__copy {
         background-color: #b69823;
     }
 
@@ -284,20 +258,18 @@
     .ed-humor a {
         color:#16a085; border-bottom:1px dotted #16a085;
     }
-    .ed-humor .mr-pager__btn, .ed-humor .mr-card__btn, .ed-humor .mr-card__btn-watch {
-        background: #16a085;
-    }
-    .ed-humor .mr-switch__btn--active, .ed-humor .mr-switch__btn:focus {
+    .ed-humor .mr-switch__btn--active, 
+    .ed-humor .mr-switch__btn:focus {
         border-bottom: 2px solid #16a085;
     }
     .ed-humor .mr-preview__button {
         background: rgba(22,160,133,0.7);
     }
+    .ed-humor .mr-pager__btn, 
+    .ed-humor .mr-card__btn, 
+    .ed-humor .mr-card__btn-watch,
     .ed-humor .mr-player__play-btn,
-    .ed-humor .ui-control__next, 
-    .ed-humor .ui-control__prev, 
-    .ed-humor .ui-nav__next, 
-    .ed-humor .ui-nav__prev {
+    .ed-humor .mr-splash__copy {
         background-color: #16a085;
     }
 
@@ -309,20 +281,18 @@
     .ed-videos a {
         color:#d5161d; border-bottom:1px dotted #d5161d;
     }
-    .ed-videos .mr-pager__btn, .ed-videos .mr-card__btn, .ed-videos .mr-card__btn-watch {
-        background: #d5161d;
-    }
-    .ed-videos .mr-switch__btn--active, .ed-videos .mr-switch__btn:focus {
+    .ed-videos .mr-switch__btn--active, 
+    .ed-videos .mr-switch__btn:focus {
         border-bottom: 2px solid #d5161d;
     }
     .ed-videos .mr-preview__button {
         background: rgba(213,22,29,0.7);
     }
+    .ed-videos .mr-pager__btn, 
+    .ed-videos .mr-card__btn, 
+    .ed-videos .mr-card__btn-watch,
     .ed-videos .mr-player__play-btn,
-    .ed-videos .ui-control__next, 
-    .ed-videos .ui-control__prev, 
-    .ed-videos .ui-nav__next, 
-    .ed-videos .ui-nav__prev {
+    .ed-videos .mr-splash__copy {
         background-color: #d5161d;
     }
 
