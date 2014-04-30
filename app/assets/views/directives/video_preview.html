@@ -1,7 +1,9 @@
-<div ng-switch="service" ng-if="!!videoid">
-    <youtube-player ng-switch-when="youtube" videoid="{{videoid}}"></youtube-player>
-    <vimeo-player ng-switch-when="vimeo" id="preview" videoid="{{videoid}}"></vimeo-player>
-    <iframe ng-switch-when="dailymotion" frameborder="0" width="480" height="270" src="{{'http://www.dailymotion.com/embed/video/' + videoid}}" allowfullscreen></iframe>
+<div class="videoPlayer">
+    <div id="videoEmbedPlayer" ng-switch="service" ng-if="!!videoid">
+        <youtube-player ng-switch-when="youtube" videoid="{{videoid}}"></youtube-player>
+        <vimeo-player ng-switch-when="vimeo" id="preview" videoid="{{videoid}}"></vimeo-player>
+        <iframe class="vidFrame" ng-switch-when="dailymotion" frameborder="0" width="480" height="270" src="{{'http://www.dailymotion.com/embed/video/' + videoid}}" allowfullscreen></iframe>
+    </div>
 </div>
 <video-trimmer start="start"
     end="end"

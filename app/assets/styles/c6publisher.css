@@ -27,7 +27,7 @@
     label {
         cursor:pointer;
     }
-    youtube-player, vimeo-player {
+    youtube-player, vimeo-player, .vidFrame {
         display: block;
         width: 100%; height: 18em;
     }
@@ -522,6 +522,10 @@
                     font-size:2em;
                     margin-top:1.25em;
                 }
+            .videoPlayer {
+                width:100%; height:18em; 
+                background:#ccc url('../img/default_square.jpg') 50% 50% / cover no-repeat;
+            }
 
         .wizard__group--small .wizard__choice {
             padding:1em 0 0 0;
@@ -1200,9 +1204,13 @@
             background: #4a9cd1;
         }
             .video-trimmer__playhead {
-                position: relative;
-                height: 100%; width: 10px; margin-left: -5px;
-                background: yellow;
+                position: absolute;
+                border-radius:10px; border:5px solid #fff;
+                height:6px; width:6px; margin:-6px 0 0 -6px;
+                background: #4a9cd1;
+                -webkit-box-shadow: 0 3px 5px 0 rgba(0,0,0,0.5);
+                box-shadow: 0 3px 5px 0 rgba(0,0,0,0.5);
+                cursor:pointer;
             }
 
 
