@@ -129,7 +129,6 @@
                 describe('and when the player fires "adLoaded"', function() {
                     beforeEach(function() {
                         spyOn(_player, 'getDuration').andCallThrough();
-                        
                     });
 
                     it('should pause if a pause was queued', function() {
@@ -144,6 +143,12 @@
                         iface.pause();
 
                         expect(_player.pause).toHaveBeenCalled();
+                    });
+
+                    it('should not allow pause if not fired', function() {
+                        iface.pause();
+
+                        expect(_player.pause).not.toHaveBeenCalled();
                     });
                 });
 
