@@ -453,6 +453,11 @@
                                 $log.info('EVENT: ', data.__vpaid__.type);
 
                                 switch(data.__vpaid__.type) {
+                                    case 'AdLoaded':
+                                        {
+                                            self.emit('adLoaded', self);
+                                            break;
+                                        }
                                     case 'AdStarted':
                                         {
                                             self.emit('play', self);

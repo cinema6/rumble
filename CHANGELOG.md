@@ -6,4 +6,5 @@
 * [FIX]: Decode query params
 * [FIX]: Update percent filter to return 0 if input isNaN
 * [FIX]: Hide next/prev buttons on recap card
+* [FIX]: Queue a pause on the ad if ad is not loaded when user leaves card
 * [FIX]: Adds displayAd functionality to recap card in lightbox-ads mode
