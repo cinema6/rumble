@@ -15,7 +15,8 @@
 
             beforeEach(function() {
                 session = {
-                    ping: jasmine.createSpy('session.ping()')
+                    ping: jasmine.createSpy('session.ping()'),
+                    on: jasmine.createSpy('session.on()')
                 };
 
                 responsive = {
@@ -138,6 +139,27 @@
                     });
 
                     expect(session.ping).toHaveBeenCalledWith('responsiveStyles', {});
+                }));
+            });
+
+            describe('updating the experience', function() {
+                it('should change the c6AppData.experience', inject(function(c6AppData) {
+                    var callback;
+
+                    $httpBackend.flush();
+                    $rootScope.$apply(function() {
+                        deferreds.getAppData.resolve(appData);
+                    });
+                    $rootScope.$apply(function() {
+                        deferreds.getSession.resolve(session);
+                    });
+
+                    callback = session.on.calls[0].args[1];
+
+                    callback({data:'foo'});
+
+                    expect(session.on).toHaveBeenCalled();
+                    expect(c6AppData.experience).toEqual({data:'foo'});
                 }));
             });
 

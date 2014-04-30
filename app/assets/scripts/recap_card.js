@@ -6,42 +6,45 @@
         function                           ( $scope , $log ,  c6AppData ,  MiniReelService ,  BallotService ,  ModuleService ) {
             var config = $scope.config,
                 self = this,
-                _deck = MiniReelService.createDeck(c6AppData.experience.data);
+                _deck;
 
             this.deck = [];
-            this.title = c6AppData.experience.title;
 
             this.hasModule = ModuleService.hasModule.bind(ModuleService, config.modules);
 
-            _deck.forEach(function(card) {
-                if(card.type === 'ad' || card.type === 'recap') { return; }
-                
-                switch (card.type) {
-                    case 'youtube':
-                        card.webHref = 'https://www.youtube.com/watch?v=' + card.data.videoid;
-                        break;
-                    case 'dailymotion':
-                        card.webHref = 'http://www.dailymotion.com/video/' + card.data.videoid;
-                        break;
-                    case 'vimeo':
-                        card.webHref = 'http://vimeo.com/' + card.data.videoid;
-                        break;
-                }
+            function setupDeck(deck) {
+                deck.forEach(function(card) {
+                    if(card.type === 'ad' || card.type === 'recap') { return; }
+                    
+                    switch (card.type) {
+                        case 'youtube':
+                            card.webHref = 'https://www.youtube.com/watch?v=' + card.data.videoid;
+                            break;
+                        case 'dailymotion':
+                            card.webHref = 'http://www.dailymotion.com/video/' + card.data.videoid;
+                            break;
+                        case 'vimeo':
+                            card.webHref = 'http://vimeo.com/' + card.data.videoid;
+                            break;
+                    }
 
-                card.hasModule = ModuleService.hasModule.bind(ModuleService, card.modules);
+                    card.hasModule = ModuleService.hasModule.bind(ModuleService, card.modules);
 
-                if(card.hasModule('ballot')) {
-                    BallotService.getBallot(card.id)
-                        .then(function(ballot) {
-                            card.ballot.results = ballot;
-                        })
-                        .catch(function(error) {
-                            $log.error(error);
-                        });
-                }
-                
-                self.deck.push(card);
-            });
+                    if(card.hasModule('ballot')) {
+                        BallotService.getBallot(card.id)
+                            .then(function(ballot) {
+                                card.ballot.results = ballot;
+                            })
+                            .catch(function(error) {
+                                $log.error(error);
+                            });
+                    }
+                    
+                    self.deck.push(card);
+                });
+                return deck;
+            }
+            
 
             this.jumpTo = function(card) {
                 function getIndex(card) {
@@ -56,6 +59,14 @@
 
                 $scope.$emit('<recap-card>:jumpTo', getIndex(card));
             };
+
+            $scope.$watch('active', function(isActive) {
+                if(isActive) {
+                    self.deck = [];
+                    _deck = setupDeck(MiniReelService.createDeck(c6AppData.experience.data));
+                    self.title = c6AppData.experience.title;
+                }
+            });
 
         }])
 

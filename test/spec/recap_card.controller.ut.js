@@ -36,11 +36,11 @@
                                 }
                             },
                             {
-                                id: '4',
+                                id: '2',
                                 type: 'ad',
                             },
                             {
-                                id: '2',
+                                id: '3',
                                 title: 'Card 2',
                                 type: 'dailymotion',
                                 source: 'DailyMotion',
@@ -54,7 +54,7 @@
                                 }
                             },
                             {
-                                id: '3',
+                                id: '4',
                                 title: 'Card 3',
                                 type: 'vimeo',
                                 source: 'Vimeo',
@@ -123,8 +123,36 @@
                 expect(RecapCardCtrl).toBeDefined();
             });
 
+            describe('$watch', function() {
+                describe('active', function() {
+                    it('should do nothing if false', function() {
+                        $scope.$apply(function() {
+                            $scope.active = false;
+                        });
+
+                        expect(RecapCardCtrl.title).toBeUndefined();
+                        expect(RecapCardCtrl.deck).toEqual([]);
+                    });
+
+                    it('should set up the deck and set the title', function() {
+                        $scope.$apply(function() {
+                            $scope.active = true;
+                        });
+
+                        expect(RecapCardCtrl.title).toBe('Test Title');
+                        expect(RecapCardCtrl.deck.length).toBe(3);
+                        expect(RecapCardCtrl.deck[2].id).toBe('4');
+                    });
+                });
+            });
+
             describe('@public', function() {
                 describe('properties', function() {
+                    beforeEach(function() {
+                        $scope.$apply(function() {
+                            $scope.active = true;
+                        });
+                    });
                     describe('title', function() {
                         it('should be come form the experience', function() {
                             expect(RecapCardCtrl.title).toEqual(c6AppData.experience.title);
@@ -164,6 +192,9 @@
                 describe('methods', function() {
                     describe('jumpTo', function() {
                         it('should emit an event and pass the index from the experience, not the filtered deck', function() {
+                            $scope.$apply(function() {
+                                $scope.active = true;
+                            });
                             spyOn($scope, '$emit').andReturn(undefined);
 
                             RecapCardCtrl.jumpTo(RecapCardCtrl.deck[1]);
