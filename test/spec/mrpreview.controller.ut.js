@@ -59,6 +59,7 @@
                     id: 'foo',
                     mode: 'light',
                     data: {
+                        autoplay: false,
                         deck: [
                             {
                                 id: '1'
@@ -122,7 +123,7 @@
                         });
 
                         it('should be "assets/apps/rumble/app/index.html?kCollateralUrl=../c6Content&kDebug=true&kDevMode=true"', function() {
-                            expect(controller().playerSrc).toBe('assets/apps/rumble/app/index.html?kCollateralUrl=' + encodeURIComponent('../c6Content') + '&kDebug=true&kDevMode=true&kDevice=desktop&kMode=full');
+                            expect(controller().playerSrc).toBe('assets/apps/rumble/app/index.html?kCollateralUrl=' + encodeURIComponent('../c6Content') + '&kDebug=true&kDevMode=true&autoplay=false&kDevice=desktop&kMode=full&kEnvUrlRoot=');
                         });
                     });
 
@@ -143,14 +144,14 @@
                         });
 
                         it('should be "/apps/rumble?kCollateralUrl=/collateral"', function() {
-                            expect(controller().playerSrc).toBe('/apps/rumble/?kCollateralUrl=' + encodeURIComponent('/collateral') + '&kDevice=desktop&kMode=full');
+                            expect(controller().playerSrc).toBe('/apps/rumble/?kCollateralUrl=' + encodeURIComponent('/collateral') + '&autoplay=false&kDevice=desktop&kMode=full&kEnvUrlRoot=');
                         });
 
                         it('should pass the current mode and device', function() {
                             spyOn(MiniReelService, 'convertForPlayer').and.returnValue(experience);
                             $scope.$emit('mrPreview:initExperience', experience, session);
 
-                            expect(PreviewController.playerSrc).toBe('/apps/rumble/?kCollateralUrl=' + encodeURIComponent('/collateral') + '&kDevice=desktop&kMode=light');
+                            expect(PreviewController.playerSrc).toBe('/apps/rumble/?kCollateralUrl=' + encodeURIComponent('/collateral') + '&autoplay=false&kDevice=desktop&kMode=light&kEnvUrlRoot=');
 
                             experience.mode = 'lightbox';
                             $scope.$apply(function() {
@@ -158,7 +159,7 @@
                             });
                             $scope.$emit('mrPreview:updateExperience', experience);
 
-                            expect(PreviewController.playerSrc).toBe('/apps/rumble/?kCollateralUrl=' + encodeURIComponent('/collateral') + '&kDevice=phone&kMode=lightbox');
+                            expect(PreviewController.playerSrc).toBe('/apps/rumble/?kCollateralUrl=' + encodeURIComponent('/collateral') + '&autoplay=false&kDevice=phone&kMode=lightbox&kEnvUrlRoot=');
                         });
                     });
 
@@ -179,14 +180,14 @@
                         });
 
                         it('should be "/apps/rumble?kCollateralUrl=/collateral"', function() {
-                            expect(controller().playerSrc).toBe('/apps/rumble/?kCollateralUrl=' + encodeURIComponent('/collateral') + '&kDevice=desktop&kMode=full');
+                            expect(controller().playerSrc).toBe('/apps/rumble/?kCollateralUrl=' + encodeURIComponent('/collateral') + '&autoplay=false&kDevice=desktop&kMode=full&kEnvUrlRoot=');
                         });
 
                         it('should pass the current mode and device', function() {
                             spyOn(MiniReelService, 'convertForPlayer').and.returnValue(experience);
                             $scope.$emit('mrPreview:initExperience', experience, session);
 
-                            expect(PreviewController.playerSrc).toBe('/apps/rumble/?kCollateralUrl=' + encodeURIComponent('/collateral') + '&kDevice=desktop&kMode=light');
+                            expect(PreviewController.playerSrc).toBe('/apps/rumble/?kCollateralUrl=' + encodeURIComponent('/collateral') + '&autoplay=false&kDevice=desktop&kMode=light&kEnvUrlRoot=');
 
                             experience.mode = 'lightbox';
                             $scope.$apply(function() {
@@ -194,7 +195,7 @@
                             });
                             $scope.$emit('mrPreview:updateExperience', experience);
 
-                            expect(PreviewController.playerSrc).toBe('/apps/rumble/?kCollateralUrl=' + encodeURIComponent('/collateral') + '&kDevice=phone&kMode=lightbox');
+                            expect(PreviewController.playerSrc).toBe('/apps/rumble/?kCollateralUrl=' + encodeURIComponent('/collateral') + '&autoplay=false&kDevice=phone&kMode=lightbox&kEnvUrlRoot=');
                         });
                     });
                 });
@@ -285,10 +286,12 @@
                     describe('when the experience has changed', function() {
                         it('should send the experience to the player', function() {
                             experience.data.deck.push(newCard);
+                            experience.data.autoplay = true;
 
                             $scope.$emit('mrPreview:updateExperience', experience, newCard);
 
                             expect(experience).not.toEqual(session.experience);
+                            expect(PreviewController.playerSrc).toContain('autoplay=true');
                             expect(session.ping.calls.argsFor(0)[0]).toBe('mrPreview:updateExperience');
                         });
                     });
@@ -328,6 +331,7 @@
                                 id: 'foo',
                                 mode: 'lightbox',
                                 data: {
+                                    autoplay: true,
                                     deck: [
                                         {
                                             id: '1'
@@ -359,6 +363,7 @@
                         
                         $scope.$emit('mrPreview:updateMode', updatedExperience);
                         expect(PreviewController.playerSrc).toContain('kMode=lightbox');
+                        expect(PreviewController.playerSrc).toContain('autoplay=true');
 
                         session.emit('handshake', {}, responseCallback);
 
