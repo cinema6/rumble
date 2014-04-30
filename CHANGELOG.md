@@ -29,3 +29,5 @@
 * [FIX]: Modal for choosing mode is now correctly populated with MiniReel's mode
 * [FIX]: Don't query the content service every time the state changes as the user selects the mode for their new MiniReel
 * [FIX]: For MiniReel details modal, 'Coming Soon' text added to Desktop Lightbox with Ads option
+* [FIX]: Unset previewed card when closing preview modal to prevent autoplaying when the preview rehreshes in the background
+>>>>>>> 2e5e3b712d220af26bf909cd91b5f73a15d23707
