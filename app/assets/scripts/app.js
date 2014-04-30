@@ -304,7 +304,7 @@
                     templateUrl: assets('views/manager.html'),
                     model:  ['cinema6',
                     function( cinema6 ) {
-                        return cinema6.getAppData()
+                        return this.cModel || cinema6.getAppData()
                             .then(function(appData) {
                                 var user = appData.user;
 
