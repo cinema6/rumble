@@ -56,6 +56,18 @@
                 expect(BallotService).toEqual(jasmine.any(Object));
             });
 
+            it('should return rejected promises if it is never initialized', function() {
+                var fail = jasmine.createSpy('fail');
+
+                $rootScope.$apply(function() {
+                    BallotService.getElection().catch(fail);
+                    BallotService.getBallot('abc').catch(fail);
+                    BallotService.vote('abc', 'Too Far').catch(fail);
+                });
+
+                expect(fail.callCount).toBe(3);
+            });
+
             describe('@public', function() {
                 describe('methods', function() {
                     describe('init', function() {
