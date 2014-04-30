@@ -41,16 +41,22 @@
             transition-delay: 0;
             background:#fff no-repeat 50% 50%;
         }
+            .mr-pager__btn:hover .mr-pager__label {
+                color:#d94040;
+            }
             .mr-pager__btn:hover .mr-pager__icon-path {
                 -webkit-transition-delay: 0;
                 -moz-transition-delay: 0;
                 -o-transition-delay: 0;
                 transition-delay: 0;
-                fill: #b69823;
+                fill: #d94040;
             }
         .mr-pager__btn--disabled:hover {
-            background:#b69823 no-repeat 50% 50%;
+            background:#d94040 no-repeat 50% 50%;
         }
+            .mr-pager__btn--disabled:hover .mr-pager__label {
+                color:#252626;
+            }
             .mr-pager__btn--disabled:hover .mr-pager__icon-path {
                 fill: #252626;
             }
@@ -110,7 +116,7 @@
         transition: background 0.4s ease;
     }
         .mr-preview__button:hover, .mr-preview__thumbnail:hover .mr-preview__button {
-            background: #b69823;
+            background:#d94040;
         }
     .mr-card__btn-watch {
         -webkit-transition: all 0.4s ease; 
@@ -120,7 +126,7 @@
     }
         .mr-card__btn-watch:hover {
             background-color: #fff;
-            color: #b69823;
+            color: #d94040;
         }
 
     .mr-card__text-watch a, .mr-more-reels__link a{

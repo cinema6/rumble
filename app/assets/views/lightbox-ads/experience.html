@@ -53,7 +53,7 @@
 
 <div class="mr-overlay">&nbsp;</div>
 
-<article id="card" class="mr-container">
+<article id="card" class="mr-container" ng-class="app.data.experience.theme">
     <ng-switch on="app.state">
         <div class="splash-screen" ng-switch-when="splash">
             <ng-include src="'splash.html' | asset:'views'"></ng-include>
