@@ -17,3 +17,5 @@
   * [FIX]: Adds displayAd functionality to recap card in lightbox-ads mode **Need to update experiences in the content service**
 * *[Beta3.rc5]*
   * [FIX]: Use protocol-relative URLs
+  * [FIX]: Add listener to c6AppData to update the experience on mrPreview session ping
+  * [FIX]: Update recap card controller to set/reset properties when active
