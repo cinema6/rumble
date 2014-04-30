@@ -233,7 +233,7 @@
                         'rumble' + (c6Defines.kLocal ?
                             ('/app/index.html?kCollateralUrl=' +
                                 encodeURIComponent('../c6Content') +
-                                '&kDebug=true&kDevMode=true') : 
+                                '&kDebug=true&kDevMode=true') :
                             ('/?kCollateralUrl=' + encodeURIComponent(c6Defines.kCollateralUrl))) +
                         '&autoplay=' + encodeURIComponent(experience.data.autoplay) +
                         '&kDevice=' + encodeURIComponent(this.device) +
