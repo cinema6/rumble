@@ -315,11 +315,26 @@
                 });
 
                 describe('mrPreview:reset', function() {
-                    it('should tell the player to reset', function() {
+                    beforeEach(function() {
                         spyOn(MiniReelService, 'convertForPlayer').and.returnValue(experience);
                         $scope.$emit('mrPreview:initExperience', experience, session);
+                    });
+                    it('should tell the player to reset', function() {
                         $scope.$emit('mrPreview:reset');
                         expect(session.ping.calls.argsFor(0)[0]).toBe('mrPreview:reset');
+                    });
+
+                    describe('if a card has been previewed then reset it', function() {
+                        it('should reset it so no card is returned', function() {
+                            spyOn(MiniReelService, 'convertCard').and.returnValue({id: '1'});
+                            $scope.$emit('mrPreview:updateExperience', experience, {id: '1'});
+                            $scope.$emit('mrPreview:reset');
+                            session.emit('mrPreview:getCard', {}, responseCallback);
+
+                            var dataSentToPlayer = responseCallback.calls.argsFor(0)[0];
+
+                            expect(dataSentToPlayer).toBe(null);
+                        });
                     });
                 });
 
