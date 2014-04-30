@@ -67,7 +67,7 @@
         }])
         .filter('percent',function(){
             return function(input){
-                return Math.round((input * 100)) + '%';
+                return Math.round(isNaN(input) ? 0 : (input * 100)) + '%';
             };
         })
         .filter('collateral', ['c6UrlMaker',
