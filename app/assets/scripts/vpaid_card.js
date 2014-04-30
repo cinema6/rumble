@@ -100,6 +100,8 @@
                         },
                         playerIsReady = false,
                         adIsReady = false,
+                        adIsLoaded = false,
+                        shouldPause = false,
                         player;
 
                     Object.defineProperties(iface, {
@@ -149,8 +151,10 @@
                     };
 
                     iface.pause = function() {
-                        if (playerIsReady) {
+                        if (playerIsReady && adIsLoaded) {
                             player.pause();
+                        } else {
+                            shouldPause = true;
                         }
                     };
 
@@ -178,6 +182,14 @@
                             playerIsReady = true;
 
                             iface.emit('ready', iface);
+
+                            player.on('adLoaded', function() {
+                                if(shouldPause) {
+                                    player.pause();
+                                }
+                                adIsLoaded = true;
+                                shouldPause = false;
+                            });
 
                             player.on('adReady', function() {
                                 adIsReady = true;

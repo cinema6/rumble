@@ -126,6 +126,32 @@
                     expect(iface.emit).toHaveBeenCalledWith('ready', iface);
                 });
 
+                describe('and when the player fires "adLoaded"', function() {
+                    beforeEach(function() {
+                        spyOn(_player, 'getDuration').andCallThrough();
+                    });
+
+                    it('should pause if a pause was queued', function() {
+                        iface.pause();
+                        _player.emit('adLoaded', _player);
+
+                        expect(_player.pause).toHaveBeenCalled();
+                    });
+
+                    it('should allow a pause', function() {
+                        _player.emit('adLoaded', _player);
+                        iface.pause();
+
+                        expect(_player.pause).toHaveBeenCalled();
+                    });
+
+                    it('should not allow pause if not fired', function() {
+                        iface.pause();
+
+                        expect(_player.pause).not.toHaveBeenCalled();
+                    });
+                });
+
                 describe('and when the player fires "play"', function() {
                     beforeEach(function() {
                         spyOn(_player, 'getDuration').andCallThrough();
@@ -366,14 +392,23 @@
                 });
 
                 describe('pause', function() {
-                    it('should not call pause() on the player if player isn\'t ready', function() {
+                    it('should only call pause() if player is ready and ad is loaded', function() {
                         iface.pause();
                         expect(_player.pause).not.toHaveBeenCalled();
-                    });
-
-                    it('should call pause() on the player if it\'s ready', function() {
+                        
                         _player.emit('ready', _player);
                         iface.pause();
+                        expect(_player.pause).not.toHaveBeenCalled();
+
+                        _player.emit('adLoaded', _player);
+                        iface.pause();
+                        expect(_player.pause).toHaveBeenCalled();
+                    });
+
+                    it('should defer pause() if called before ad is loaded', function() {
+                        iface.pause();
+                        _player.emit('ready', _player);
+                        _player.emit('adLoaded', _player);
                         expect(_player.pause).toHaveBeenCalled();
                     });
                 });
