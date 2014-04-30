@@ -31,3 +31,5 @@
 * [FIX]: Placeholder image added to new card - video player
 * [FIX]: 'Create MiniReel' text updated to simply 'Done'
 * [FIX]: Unset previewed card when closing preview modal to prevent autoplaying when the preview rehreshes in the background
+* [FIX]: For MiniReel details modal, 'Coming Soon' text added to Desktop Lightbox with Ads option
+* [FIX]: Unset previewed card when closing preview modal to prevent autoplaying when the preview rehreshes in the background
