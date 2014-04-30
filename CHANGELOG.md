@@ -20,3 +20,4 @@
     experience id **Need to update experiences in the content service**
   * [FIX]: Ballot service is only initialized if it has an associated
     election
+  * [FIX]: Use protocol-relative URLs
