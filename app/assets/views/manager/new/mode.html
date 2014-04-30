@@ -3,6 +3,9 @@
     <li ng-repeat="$this in NewModeCtrl.model.modes" 
         class="wizard__choice"
         ng-class="{'wizard__choice--disabled': $this.disabled}">
+        <div class="wizard__disabler" ng-if="$this.disabled">
+            <h3 class="disabler__title">Coming Soon</h3>
+        </div>
         <input id="mode-{{$this.value}}" type="radio" 
             ng-disabled="$this.disabled"
             name="minireel-mode" value="{{$this.value}}"
