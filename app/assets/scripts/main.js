@@ -87,7 +87,7 @@
     c6.kHasKarma = false;
     c6.kLogFormats = c6.kDebug;
     c6.kLogLevels = (c6.kDebug) ? ['error','warn','log','info'] : [];
-    c6.kEnvUrlRoot = (c6.kEnvUrlRoot || 'http://portal.cinema6.com');
+    c6.kEnvUrlRoot = (( c6.kEnvUrlRoot || c6.kEnvUrlRoot === '') ? c6.kEnvUrlRoot : 'http://portal.cinema6.com');
     c6.kCollateralUrl = (c6.kCollateralUrl || (c6.kEnvUrlRoot + '/collateral'));
     c6.kApiUrl = (c6.kApiUrl || (c6.kEnvUrlRoot + '/api'));
     c6.kModDeps = [
