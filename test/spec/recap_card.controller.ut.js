@@ -161,7 +161,6 @@
                     
                     describe('deck', function() {
                         it('should create the deck from the experience data', function() {
-
                             expect(MiniReelService.createDeck).toHaveBeenCalledWith(c6AppData.experience.data);
                         });
 
