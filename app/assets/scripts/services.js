@@ -678,7 +678,8 @@
                         id: copy(),
                         type: copy(),
                         title: copy(),
-                        note: copy()
+                        note: copy(),
+                        modules: value([])
                     }
                 };
 

@@ -195,6 +195,7 @@
                                 type: 'recap',
                                 title: 'Recap',
                                 note: null,
+                                modules: [],
                                 data: {}
                             }
                         ]
