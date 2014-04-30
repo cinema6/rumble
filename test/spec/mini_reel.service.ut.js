@@ -26,6 +26,16 @@
             beforeEach(function() {
                 module('c6.mrmaker');
 
+                Object.defineProperty(Object.prototype, 'jasmineToString', {
+                    enumerable: false,
+                    configurable: true,
+                    get: function() {
+                        return function() {
+                            return JSON.stringify(this, null, 4);
+                        };
+                    }
+                });
+
                 inject(function($injector) {
                     $rootScope = $injector.get('$rootScope');
                     MiniReelService = $injector.get('MiniReelService');
@@ -136,6 +146,26 @@
                                 }
                             },
                             {
+                                id: 'rc-f940abe0c1f3f0',
+                                type: 'video',
+                                title: 'No video yet..',
+                                note: 'Lame...',
+                                modules: [],
+                                data: {}
+                            },
+                            {
+                                id: 'rc-d98fad7e413692',
+                                type: 'videoBallot',
+                                title: 'Vote on nothing!',
+                                note: 'Pretty meta, right?',
+                                modules: ['ballot'],
+                                ballot: {
+                                    prompt: null,
+                                    choices: []
+                                },
+                                data: {}
+                            },
+                            {
                                 id: 'rc-25c1f60b933186',
                                 type: 'links',
                                 title: 'If You Love Turtles',
@@ -170,6 +200,10 @@
                         ]
                     }
                 });
+            });
+
+            afterEach(function() {
+                delete Object.prototype.jasmineToString;
             });
 
             it('should exist', function() {
@@ -794,21 +828,21 @@
                         });
 
                         it('should transpile the links cards', function() {
-                            expect(deck[6]).toEqual({
+                            expect(deck[8]).toEqual({
                                 id: 'rc-25c1f60b933186',
                                 type: 'links',
                                 title: 'If You Love Turtles',
                                 note: 'Blah blah blah',
                                 label: 'Suggested Links',
                                 ad: false,
-                                data: minireel.data.deck[6].data
+                                data: minireel.data.deck[8].data
                             });
 
-                            expect(deck[7].data.links).not.toBe(minireel.data.deck[6].data.links);
+                            expect(deck[8].data.links).not.toBe(minireel.data.deck[8].data.links);
                         });
 
                         it('should transpile the recap cards', function() {
-                            expect(deck[7]).toEqual({
+                            expect(deck[9]).toEqual({
                                 id: 'rc-b74a127991ee75',
                                 type: 'recap',
                                 title: 'Recap',

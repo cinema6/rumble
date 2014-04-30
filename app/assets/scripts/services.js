@@ -648,7 +648,7 @@
                     video: {
                         id: copy(),
                         type: function(card) {
-                            return card.data.service;
+                            return card.data.service || card.type;
                         },
                         title: copy(null),
                         note: copy(null),
