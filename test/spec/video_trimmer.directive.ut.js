@@ -13,7 +13,8 @@
                 $scope,
                 $compile,
                 $window,
-                $timeout;
+                $timeout,
+                scope;
 
             var frame,
                 $trimmer;
@@ -98,12 +99,16 @@
                 });
 
                 $scope.currentTime = 0;
+                $scope.duration = 60;
+                $scope.start = null;
+                $scope.end = null;
 
-                $trimmer = $('<video-trimmer start="start" end="end" duration="60" current-time="currentTime" on-start-scan="startScan(promise)" on-end-scan="endScan(promise)"></video-trimmer>');
+                $trimmer = $('<video-trimmer start="start" end="end" duration="{{duration}}" current-time="currentTime" on-start-scan="startScan(promise)" on-end-scan="endScan(promise)"></video-trimmer>');
                 frame.$body.append($trimmer);
                 $scope.$apply(function() {
                     $compile($trimmer)($scope);
                 });
+                scope = $trimmer.isolateScope();
             });
 
             afterEach(function() {
@@ -111,15 +116,11 @@
             });
 
             it('should initialize the timestamps', function() {
-                var scope = $trimmer.isolateScope();
-
                 expect(scope.startStamp).toBe('0:00');
                 expect(scope.endStamp).toBe('1:00');
             });
 
             it('should set timestamps in response to start/end scope prop changes', function() {
-                var scope = $trimmer.isolateScope();
-
                 $scope.$apply(function() {
                     $scope.start = 14;
                 });
@@ -129,6 +130,40 @@
                     $scope.end = 42;
                 });
                 expect(scope.endStamp).toBe('0:42');
+            });
+
+            describe('scope.enabled', function() {
+                it('should be false if the duration is 0', function() {
+                    $scope.$apply(function() {
+                        $scope.duration = 0;
+                    });
+                    expect(scope.enabled).toBe(false);
+
+                    $scope.$apply(function() {
+                        $scope.duration = 60;
+                    });
+                    expect(scope.enabled).toBe(true);
+                });
+
+                it('should be false if start or end are undefined', function() {
+                    $scope.$apply(function() {
+                        $scope.duration = 60;
+                        $scope.start = undefined;
+                        $scope.end = undefined;
+                    });
+
+                    expect(scope.enabled).toBe(false);
+
+                    $scope.$apply(function() {
+                        $scope.start = null;
+                    });
+                    expect(scope.enabled).toBe(false);
+
+                    $scope.$apply(function() {
+                        $scope.end = null;
+                    });
+                    expect(scope.enabled).toBe(true);
+                });
             });
 
             describe('playhead', function() {
