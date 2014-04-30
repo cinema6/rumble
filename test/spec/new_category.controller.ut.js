@@ -28,17 +28,12 @@
                 expect(NewCategoryCtrl).toEqual(jasmine.any(Object));
             });
 
-            describe('properties', function() {
-                describe('mode', function() {
-                    it('should be lightbox', function() {
-                        expect(NewCategoryCtrl.mode).toBe('lightbox');
-                    });
-                });
-            });
-
             describe('$watchers', function() {
                 describe('mode', function() {
                     it('should data-bind to the "category" property of the NewCtrl', function() {
+                        $scope.$apply(function() {
+                            NewCategoryCtrl.mode = 'lightbox';
+                        });
                         expect(NewCtrl.category).toBe('lightbox');
 
                         $scope.$apply(function() {

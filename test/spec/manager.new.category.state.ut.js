@@ -40,6 +40,78 @@
                     expect(result).toBe(ManagerNewState.cModel.modes);
                 });
             });
+
+            describe('updateControllerModel()', function() {
+                var controller, model,
+                    minireel;
+
+                function invoke() {
+                    $injector.invoke(NewCategoryState.updateControllerModel, NewCategoryState, {
+                        controller: controller,
+                        model: model
+                    });
+                }
+
+                beforeEach(function() {
+                    controller = {};
+                    model = [
+                        {
+                            value: 'lightbox',
+                            modes: [
+                                {
+                                    value: 'lightbox'
+                                },
+                                {
+                                    value: 'lightbox-ads'
+                                }
+                            ]
+                        },
+                        {
+                            value: 'inline',
+                            modes: [
+                                {
+                                    value: 'light'
+                                },
+                                {
+                                    value: 'full'
+                                }
+                            ]
+                        }
+                    ];
+
+                    minireel = {};
+
+                    ManagerNewState.cModel = {
+                        minireel: minireel
+                    };
+
+                    invoke();
+                });
+
+                it('should set the model as the controller\'s model', function() {
+                    expect(controller.model).toBe(model);
+                });
+
+                describe('controller.mode', function() {
+                    it('should be the first mode value in the model if the minireel has no mode', function() {
+                        expect(controller.mode).toBe(model[0].value);
+                    });
+
+                    it('should be the category of the model\'s mode if it has one', function() {
+                        minireel.mode = 'lightbox'; invoke();
+                        expect(controller.mode).toBe('lightbox');
+
+                        minireel.mode = 'lightbox-ads'; invoke();
+                        expect(controller.mode).toBe('lightbox');
+
+                        minireel.mode = 'light'; invoke();
+                        expect(controller.mode).toBe('inline');
+
+                        minireel.mode = 'full';
+                        expect(controller.mode).toBe('inline');
+                    });
+                });
+            });
         });
     });
 }());
