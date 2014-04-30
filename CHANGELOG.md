@@ -22,3 +22,5 @@
 * [FIX]: Hide video trimming sliders when video duration is unknown (to prevent them looking broken for a second)
 * [FIX]: Hide video trimming sliders on DailyMotion videos (as this feature is not supported with them)
 * [FIX]: Fix for issue where the last notified time of a video trimming marker is slightly innacurate after dragging
+* [FIX]: Add autoplay query param to preview player src to trigger refresh
+* [FIX]: Add kEnvUrlRoot query param to preview player to fix vote service path in the player
