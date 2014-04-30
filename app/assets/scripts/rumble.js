@@ -239,6 +239,7 @@
         var self    = this, readyTimeout,
             appData = $scope.app.data,
             id = appData.experience.id,
+            election = appData.experience.data.election,
             c = c6Computed($scope),
             pageViewTimer = null;
 
@@ -246,7 +247,9 @@
             return (card || null) && (card.ad && !card.sponsored);
         }
 
-        BallotService.init(id);
+        if (election) {
+            BallotService.init(election);
+        }
 
         CommentsService.init(id);
 

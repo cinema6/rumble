@@ -138,7 +138,7 @@
                         id: 'e-722bd3c4942331',
                         title: 'my title',
                         data : {
-                            id: 'r-43yt3fh85',
+                            election: 'el-a30a5954440d66',
                             deck : deck 
                         }
                     },
@@ -211,7 +211,24 @@
                 });
 
                 it('should initialize BallotService with the id', function() {
-                    expect(BallotService.init).toHaveBeenCalledWith(appData.experience.id);
+                    expect(BallotService.init).toHaveBeenCalledWith(appData.experience.data.election);
+                });
+
+                it('should not initialize the BallotService if there is no election', function() {
+                    $rootScope.$apply(function() {
+                        $scope = $rootScope.$new();
+                        $scope.AppCtrl = {};
+                        $scope.app = {
+                            data: appData
+                        };
+                        delete appData.experience.data.election;
+                        RumbleCtrl = $controller('RumbleController', {
+                            $scope: $scope,
+                            $log: $log
+                        });
+                    });
+
+                    expect(BallotService.init.callCount).toBe(1);
                 });
 
                 it('should initialize the CommentsService with the id', function() {
