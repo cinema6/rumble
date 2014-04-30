@@ -28,3 +28,4 @@
 * [FIX]: Disable lightbox-ads mode choice. **REQUIRED STEPS: MiniReelinator experience must be updated in the Content Service**
 * [FIX]: Modal for choosing mode is now correctly populated with MiniReel's mode
 * [FIX]: Don't query the content service every time the state changes as the user selects the mode for their new MiniReel
+* [FIX]: Unset previewed card when closing preview modal to prevent autoplaying when the preview rehreshes in the background
