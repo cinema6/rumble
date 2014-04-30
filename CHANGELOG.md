@@ -6,3 +6,4 @@
 * [FIX]: Decode query params
 * [FIX]: Update percent filter to return 0 if input isNaN
 * [FIX]: Hide next/prev buttons on recap card
+* [FIX]: Adds displayAd functionality to recap card in lightbox-ads mode
