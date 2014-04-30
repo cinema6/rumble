@@ -337,7 +337,8 @@
                         expect(scope.startStamp).toBe('0:00');
 
 
-                        finger.drag(150, 0);
+                        finger.drag(75, 0);
+                        finger.drag(75, 0);
                         $timeout.flush();
                         expect(notify).toHaveBeenCalledWith(15);
                         expect(scope.startStamp).toBe('0:15');
@@ -519,7 +520,8 @@
                         expect($scope.endScan).toHaveBeenCalled();
                         expect(scope.endStamp).toBe('1:00');
 
-                        finger.drag(-150, 0);
+                        finger.drag(-75, 0);
+                        finger.drag(-75, 0);
                         $timeout.flush();
                         expect(notify).toHaveBeenCalledWith(45);
                         expect(scope.endStamp).toBe('0:45');

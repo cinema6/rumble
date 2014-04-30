@@ -380,8 +380,18 @@
                         seekBar = $element.find('#seek-bar').data('cDragZone'),
                         currentScanDeferred = null,
                         notifyProgress = c6Debounce(function(args) {
-                            var value = args[0],
-                                scopeProp = args[1];
+                            var marker = args[0],
+                                scopeProp = args[1],
+                                value = Math.max(
+                                    0,
+                                    Math.min(
+                                        duration(),
+                                        positionToValue(
+                                            marker.display,
+                                            scopeProp
+                                        )
+                                    )
+                                );
 
                             currentScanDeferred.notify(value);
                             scope[scopeProp + 'Stamp'] = secondsToTimestamp(value);
@@ -476,16 +486,7 @@
                         });
 
                         notifyProgress(
-                            Math.max(
-                                0,
-                                Math.min(
-                                    duration(),
-                                    positionToValue(
-                                        desired,
-                                        scopeProp
-                                    )
-                                )
-                            ),
+                            marker,
                             scopeProp
                         );
                     }

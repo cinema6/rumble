@@ -21,3 +21,4 @@
 * [FIX]: Use "ng-style" instead of normal style attribute when setting card video thumbnail to prevent 404 on uncompiled template
 * [FIX]: Hide video trimming sliders when video duration is unknown (to prevent them looking broken for a second)
 * [FIX]: Hide video trimming sliders on DailyMotion videos (as this feature is not supported with them)
+* [FIX]: Fix for issue where the last notified time of a video trimming marker is slightly innacurate after dragging
