@@ -324,6 +324,7 @@
                 });
 
                 $scope.$on('mrPreview:reset', function() {
+                    card = null;
                     session.ping('mrPreview:reset');
                 });
 
