@@ -301,13 +301,16 @@
 
                     setMode(c6AppData, appData);
                     setBehaviors(c6AppData, c6AppData.mode);
-
+                    
                     return $q.all([getResponsiveStyles, cinema6.getSession()]);
                 }).then(function(promises) {
                     var styles = promises[0].data,
                         session = promises[1];
 
                     session.ping('responsiveStyles', styles[c6AppData.mode] || {});
+                    session.on('mrPreview:updateExperience', function(experience) {
+                        c6AppData.experience = experience;
+                    });
                 });
 
             return c6AppData;
