@@ -19,3 +19,5 @@
   original position after drag
 * *[Beta1.rc8]*
 * [FIX]: Use "ng-style" instead of normal style attribute when setting card video thumbnail to prevent 404 on uncompiled template
+* [FIX]: Add autoplay query param to preview player src to trigger refresh
+* [FIX]: Add kEnvUrlRoot query param to preview player to fix vote service path in the player
