@@ -71,7 +71,7 @@ module.exports = function(grunt) {
             log.subhead('Authenticating');
 
             return send('POST', api(options.authenticate), {
-                username: options.username,
+                email: options.username,
                 password: options.password
             });
         }
