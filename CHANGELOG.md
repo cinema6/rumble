@@ -30,3 +30,4 @@
 * [FIX]: Don't query the content service every time the state changes as the user selects the mode for their new MiniReel
 * [FIX]: Placeholder image added to new card - video player
 * [FIX]: 'Create MiniReel' text updated to simply 'Done'
+* [FIX]: Copy "branding" of new MiniReels from the currently logged-in user

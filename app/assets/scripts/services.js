@@ -705,6 +705,8 @@
 
             this.create = function(toCopyId) {
                 function fetchTemplate(appData) {
+                    var user = appData.user;
+
                     return $q.when(toCopyId ?
                         cinema6.db.find('experience', toCopyId)
                             .then(function returnPojo(minireel) {
@@ -716,8 +718,9 @@
                             summary: null,
                             type: 'minireel',
                             mode: 'lightbox',
-                            org: appData.user.org,
+                            org: user.org,
                             data: {
+                                branding: user.branding,
                                 deck: [
                                     self.createCard('recap')
                                 ]
