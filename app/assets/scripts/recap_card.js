@@ -15,16 +15,16 @@
             function setupDeck(deck) {
                 deck.forEach(function(card) {
                     if(card.type === 'ad' || card.type === 'recap') { return; }
-                    
+
                     switch (card.type) {
                         case 'youtube':
-                            card.webHref = 'https://www.youtube.com/watch?v=' + card.data.videoid;
+                            card.webHref = '//www.youtube.com/watch?v=' + card.data.videoid;
                             break;
                         case 'dailymotion':
-                            card.webHref = 'http://www.dailymotion.com/video/' + card.data.videoid;
+                            card.webHref = '//www.dailymotion.com/video/' + card.data.videoid;
                             break;
                         case 'vimeo':
-                            card.webHref = 'http://vimeo.com/' + card.data.videoid;
+                            card.webHref = '//vimeo.com/' + card.data.videoid;
                             break;
                     }
 
@@ -39,12 +39,12 @@
                                 $log.error(error);
                             });
                     }
-                    
+
                     self.deck.push(card);
                 });
                 return deck;
             }
-            
+
 
             this.jumpTo = function(card) {
                 function getIndex(card) {
