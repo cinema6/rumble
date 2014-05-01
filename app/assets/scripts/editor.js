@@ -8,9 +8,9 @@
         isDefined = angular.isDefined;
 
     angular.module('c6.mrmaker')
-        .controller('EditorController', ['c6State','$scope','MiniReelService',
+        .controller('EditorController', ['c6State','$scope','MiniReelService','cinema6',
                                          'ConfirmDialogService','c6Debounce','$log',
-        function                        ( c6State , $scope , MiniReelService ,
+        function                        ( c6State , $scope , MiniReelService , cinema6 ,
                                           ConfirmDialogService , c6Debounce , $log ) {
             var self = this,
                 AppCtrl = $scope.AppCtrl,
@@ -125,6 +125,10 @@
             this.previewMode = function(card) {
                 self.preview = true;
                 $scope.$broadcast('mrPreview:updateExperience', self.model, card);
+                cinema6.getSession()
+                    .then(function pingStateChange(session) {
+                        session.ping('stateChange', { name: 'editor.preview' });
+                    });
             };
 
             this.closePreview = function() {
