@@ -281,7 +281,7 @@
                         scope.$watch('videoid', function(videoid, lastVideoid) {
                             state = setupState();
 
-                            $iframe.attr('src', 'http://player.vimeo.com/video/' +
+                            $iframe.attr('src', '//player.vimeo.com/video/' +
                                 videoid +
                                 '?api=1&player_id=' +
                                 scope.id);
@@ -442,8 +442,7 @@
 
                                 state = setupState();
 
-                                
-                                $http.get('http://gdata.youtube.com/feeds/api/videos/'+
+                                $http.get('//gdata.youtube.com/feeds/api/videos/'+
                                     id+'?v=2&alt=jsonc')
                                         .then(function(data){
                                             state.duration = data.data.data.duration;

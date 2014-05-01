@@ -6,6 +6,7 @@
             var $rootScope,
                 $scope,
                 $q,
+                c6State,
                 AppCtrl;
 
             var cinema6,
@@ -46,14 +47,14 @@
                             cinema6 = {
                                 init: jasmine.createSpy('cinema6.init()'),
                                 getSession: jasmine.createSpy('cinema6.getSiteSession()').and.callFake(function() {
-                                    return cinema6._.getSessionResult.promise;
+                                    return cinema6._.getSessionDeferred.promise;
                                 }),
                                 getAppData: jasmine.createSpy('cinema6.getAppData()')
                                     .and.callFake(function() {
                                         return cinema6._.getAppDataDeferred.promise;
                                     }),
                                 _: {
-                                    getSessionResult: $q.defer(),
+                                    getSessionDeferred: $q.defer(),
                                     getAppDataDeferred: $q.defer()
                                 }
                             };
@@ -71,13 +72,16 @@
                 inject(function($injector, $controller, c6EventEmitter) {
                     $rootScope = $injector.get('$rootScope');
                     $q = $injector.get('$q');
+                    c6State = $injector.get('c6State');
 
                     $scope = $rootScope.$new();
                     AppCtrl = $controller('AppController', {
                         $scope: $scope
                     });
 
-                    cinema6Session = c6EventEmitter({});
+                    cinema6Session = c6EventEmitter({
+                        ping: jasmine.createSpy('session.ping()')
+                    });
                 });
             });
 
@@ -122,6 +126,26 @@
 
                 it('should configure gsap', function() {
                     expect(gsap.TweenLite.ticker.useRAF).toHaveBeenCalledWith(appData.profile.raf);
+                });
+            });
+
+            describe('events', function() {
+                describe('c6State: stateChangeSuccess', function() {
+                    it('should ping the session', function() {
+                        expect(cinema6.getSession).not.toHaveBeenCalled();
+                        c6State.emit('stateChangeSuccess', c6State.get('manager'), null);
+                        $rootScope.$apply(function() {
+                            cinema6._.getSessionDeferred.resolve(cinema6Session);
+                        });
+                        expect(cinema6Session.ping).toHaveBeenCalledWith('stateChange', { name: 'manager' });
+                        cinema6.getSession.calls.reset();
+
+                        $rootScope.$apply(function() {
+                            c6State.emit('stateChangeSuccess', c6State.get('editor'), c6State.get('manager'));
+                        });
+                        expect(cinema6.getSession).toHaveBeenCalled();
+                        expect(cinema6Session.ping).toHaveBeenCalledWith('stateChange', { name: 'editor' });
+                    });
                 });
             });
         });

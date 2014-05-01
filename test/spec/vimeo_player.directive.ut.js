@@ -72,7 +72,7 @@
                     var $iframe = $vimeo.find('iframe');
 
                     expect($iframe.length).toBe(1);
-                    expect($iframe.attr('src')).toBe('http://player.vimeo.com/video/abc123?api=1&player_id=rc-1');
+                    expect($iframe.attr('src')).toBe('//player.vimeo.com/video/abc123?api=1&player_id=rc-1');
                 });
             });
 
