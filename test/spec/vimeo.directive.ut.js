@@ -245,7 +245,7 @@
 
                     describe('webHref property', function() {
                         it('should be computed based on the video\'s id', function() {
-                            expect(iface.webHref).toBe('http://vimeo.com/abc123');
+                            expect(iface.webHref).toBe('//vimeo.com/abc123');
                         });
                     });
 

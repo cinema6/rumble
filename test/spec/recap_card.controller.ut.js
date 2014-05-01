@@ -182,9 +182,9 @@
                         });
 
                         it('should set the webHref for each card', function() {
-                            expect(RecapCardCtrl.deck[0].webHref).toBe('https://www.youtube.com/watch?v=1234');
-                            expect(RecapCardCtrl.deck[1].webHref).toBe('http://www.dailymotion.com/video/1234');
-                            expect(RecapCardCtrl.deck[2].webHref).toBe('http://vimeo.com/1234');
+                            expect(RecapCardCtrl.deck[0].webHref).toBe('//www.youtube.com/watch?v=1234');
+                            expect(RecapCardCtrl.deck[1].webHref).toBe('//www.dailymotion.com/video/1234');
+                            expect(RecapCardCtrl.deck[2].webHref).toBe('//vimeo.com/1234');
                         });
                     });
                 });

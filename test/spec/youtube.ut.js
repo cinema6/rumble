@@ -24,11 +24,11 @@
             describe('formatPlayerSrc',function(){
                 it('should format without params',function(){
                     expect(youtube.formatPlayerSrc('x123'))
-                        .toEqual('https://www.youtube.com/embed/x123?html5=1&wmode=opaque');
+                        .toEqual('http://www.youtube.com/embed/x123?html5=1&wmode=opaque');
                 });
                 it('should format with params', function(){
                     expect(youtube.formatPlayerSrc('x123',{ autoPlay : 1, loop: 1}))
-                        .toEqual('https://www.youtube.com/embed/x123?html5=1&wmode=opaque&autoplay=1&loop=1');
+                        .toEqual('http://www.youtube.com/embed/x123?html5=1&wmode=opaque&autoplay=1&loop=1');
                 });
             });
 
