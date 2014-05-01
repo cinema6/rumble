@@ -8,7 +8,7 @@
         $log = $log.context('vimeo');
         var service = {};
 
-        service.origin = '//player.vimeo.com';
+        service.origin = $window.location.protocol + '//player.vimeo.com';
         service.formatPlayerSrc = function(videoId,playerId,params){
             var src = this.origin + '/video/' + videoId + '?api=1' +
                 (playerId ? ('&player_id=' + playerId) : '');

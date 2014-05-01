@@ -91,7 +91,7 @@
 
                         spyOn(dailymotion, 'formatPlayerSrc')
                             .andCallFake(function(videoId,playerId,params){
-                                return '//www.dailymotion.com/embed/video/x123?api=postMessage&id=player1';
+                                return 'http://www.dailymotion.com/embed/video/x123?api=postMessage&id=player1';
                             });
 
                         result = dailymotion.createPlayer('player1',{
@@ -102,7 +102,7 @@
 
                         expect(dailymotion.formatPlayerSrc)
                             .toHaveBeenCalledWith('x123','player1',undefined);
-                        expect(angular.element.calls[0].args[0]).toEqual('<iframe id="player1" src="//www.dailymotion.com/embed/video/x123?api=postMessage&id=player1" width="100" height="100"></iframe>');
+                        expect(angular.element.calls[0].args[0]).toEqual('<iframe id="player1" src="http://www.dailymotion.com/embed/video/x123?api=postMessage&id=player1" width="100" height="100"></iframe>');
                         expect(angular.element.calls[1].args[0]).toEqual(angularElementMock);
 
                         expect(angularElementMock.prepend)
@@ -116,7 +116,7 @@
                     
                         spyOn(angularElementMock,'attr').andCallFake(function(name){
                             return (name === 'src') ? 
-                                '//www.dailymotion.com/embed/video/x123?api=postMessage&id=player1' : '';
+                                'http://www.dailymotion.com/embed/video/x123?api=postMessage&id=player1' : '';
                         });
 
                         player = dailymotion.createPlayer('player1',{
@@ -140,7 +140,7 @@
                         });
 
                         it('getUrl', function(){
-                            expect(player.getUrl()).toEqual('//www.dailymotion.com/embed/video/x123');
+                            expect(player.getUrl()).toEqual('http://www.dailymotion.com/embed/video/x123');
                         });
                         
 
@@ -156,7 +156,7 @@
                             expect(angularElementMock[0].contentWindow.postMessage)
                                 .toHaveBeenCalledWith(
                                     'pause',
-                                    '//www.dailymotion.com/embed/video/x123'
+                                    'http://www.dailymotion.com/embed/video/x123'
                                 );
                         });
 
@@ -171,7 +171,7 @@
                             expect(angularElementMock[0].contentWindow.postMessage)
                                 .toHaveBeenCalledWith(
                                     'play',
-                                    '//www.dailymotion.com/embed/video/x123'
+                                    'http://www.dailymotion.com/embed/video/x123'
                                 );
                         });
 
@@ -180,7 +180,7 @@
                             expect(angularElementMock[0].contentWindow.postMessage)
                                 .toHaveBeenCalledWith(
                                     'pause',
-                                    '//www.dailymotion.com/embed/video/x123'
+                                    'http://www.dailymotion.com/embed/video/x123'
                                 );
                         });
 
@@ -206,14 +206,14 @@
                         });
                         it('filters on player',function(){
                             msgListener({
-                                origin : '//www.dailymotion.com',
+                                origin : 'http://www.dailymotion.com',
                                 data : 'event=apiready'
                             });
                             expect(readySpy).not.toHaveBeenCalled();
                         });
                         it('ready', function(){
                             msgListener({
-                                origin : '//www.dailymotion.com',
+                                origin : 'http://www.dailymotion.com',
                                 data : 'event=apiready&id=player1'
                             });
                             expect(readySpy).toHaveBeenCalled();
@@ -223,7 +223,7 @@
                             var pauseSpy = jasmine.createSpy('pause');
                             player.on('pause',pauseSpy);
                             msgListener({
-                                origin : '//www.dailymotion.com',
+                                origin : 'http://www.dailymotion.com',
                                 data : 'event=pause&id=player1'
                             });
                             expect(pauseSpy).toHaveBeenCalled();
@@ -233,7 +233,7 @@
                             var timeupdateSpy = jasmine.createSpy('timeupdate');
                             player.on('timeupdate',timeupdateSpy);
                             msgListener({
-                                origin : '//www.dailymotion.com',
+                                origin : 'http://www.dailymotion.com',
                                 data : 'event=timeupdate&id=player1&time=3.264'
                             });
                             expect(timeupdateSpy).toHaveBeenCalled();
@@ -243,7 +243,7 @@
                             var durationchangeSpy = jasmine.createSpy('durationchange');
                             player.on('durationchange',durationchangeSpy);
                             msgListener({
-                                origin : '//www.dailymotion.com',
+                                origin : 'http://www.dailymotion.com',
                                 data : 'event=durationchange&id=player1&duration=9.264'
                             });
                             expect(durationchangeSpy).toHaveBeenCalled();

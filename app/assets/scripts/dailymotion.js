@@ -7,7 +7,7 @@
         $log = $log.context('dailymotion');
         var service = {};
 
-        service.origin = '//www.dailymotion.com';
+        service.origin = $window.location.protocol + '//www.dailymotion.com';
         service.formatPlayerSrc = function(videoId,playerId,params){
             var src = this.origin + '/embed/video/' + videoId + '?api=postMessage' +
                 (playerId ? ('&id=' + playerId) : '');
@@ -102,7 +102,6 @@
                     if (value){
                         data += '=' + value;
                     }
-
                     _iframe$[0].contentWindow.postMessage(data, _url);
                     return self;
                 };
