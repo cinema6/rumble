@@ -41,3 +41,4 @@
   * [FIX]: playhead scrubber style updated for non-dragging
 * *[Beta1.rc10]*
   * [FIX]: Use protocol relative URLs
+  * [FIX]: Static image placeholder for recap cards
