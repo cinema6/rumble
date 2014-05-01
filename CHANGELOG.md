@@ -46,4 +46,6 @@
   * [FIX]: Use protocol relative URLs
 * *[/Beta1.rc10]*
 * *[Beta1.rc11]*
-  * [FIX]: Parent window is now notified of state changes
+  * [FEATURE]: Parent window is now notified of state changes
+  * [FIX]: Use protocol-relative URLs for embedded players to ease HTTPS
+    woes.

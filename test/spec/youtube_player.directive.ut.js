@@ -104,7 +104,7 @@
                     $scope = $rootScope.$new();
                 });
 
-                $httpBackend.expectGET('http://gdata.youtube.com/feeds/api/videos/gy1B3agGNxw?v=2&alt=jsonc')
+                $httpBackend.expectGET('//gdata.youtube.com/feeds/api/videos/gy1B3agGNxw?v=2&alt=jsonc')
                     .respond(200, metadata);
 
                 $scope.id = 'gy1B3agGNxw';
@@ -150,7 +150,7 @@
                     $interval.flush(250);
                     player._trigger('onStateChange', { data: youtube.PlayerState.ENDED });
 
-                    $httpBackend.expectGET('http://gdata.youtube.com/feeds/api/videos/f9h85495jf?v=2&alt=jsonc')
+                    $httpBackend.expectGET('//gdata.youtube.com/feeds/api/videos/f9h85495jf?v=2&alt=jsonc')
                         .respond(200, metadata);
                     
                     $scope.$apply(function() {

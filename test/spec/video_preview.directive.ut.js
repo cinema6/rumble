@@ -346,7 +346,7 @@
                 it('should create a youtube player when a videoid is provided', function() {
                     var $youtube;
 
-                    $httpBackend.expectGET('http://gdata.youtube.com/feeds/api/videos/gy1B3agGNxw?v=2&alt=jsonc')
+                    $httpBackend.expectGET('//gdata.youtube.com/feeds/api/videos/gy1B3agGNxw?v=2&alt=jsonc')
                         .respond(200, {data:{duration:100}});
 
                     $scope.$apply(function() {
@@ -407,7 +407,7 @@
 
                     expect($iframe.length).toBe(1);
 
-                    expect($iframe.attr('src')).toBe('http://www.dailymotion.com/embed/video/x199caf');
+                    expect($iframe.attr('src')).toBe('//www.dailymotion.com/embed/video/x199caf');
                 });
             });
         });
