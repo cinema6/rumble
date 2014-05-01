@@ -25,4 +25,6 @@
   * [FIX]: Update recap card controller to set/reset properties when active
 * *[Beta3.rc6]*
   * [FIX]: Default mobile theme added
+  * [FIX]: Lightbox, no ads - media query updated to properly center ballots at large screen sizes
   * [FIX]: Change YouTube, DailyMotion, Vimeo urls to be protocol-relative
+
