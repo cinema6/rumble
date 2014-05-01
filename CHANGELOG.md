@@ -26,5 +26,5 @@
 * *[Beta3.rc6]*
   * [FIX]: Default mobile theme added
   * [FIX]: Lightbox, no ads - media query updated to properly center ballots at large screen sizes
+  * [FIX]: Lightbox, no ads, white bg
   * [FIX]: Change YouTube, DailyMotion, Vimeo urls to be protocol-relative
-
