@@ -11,6 +11,7 @@
                 $timeout,
                 $log,
                 c6State,
+                cinema6,
                 MiniReelService,
                 ConfirmDialogService,
                 AppCtrl,
@@ -47,6 +48,7 @@
                     MiniReelService = $injector.get('MiniReelService');
                     ConfirmDialogService = $injector.get('ConfirmDialogService');
                     $timeout = $injector.get('$timeout');
+                    cinema6 = $injector.get('cinema6');
                     $log = $injector.get('$log');
                     $log.context = function() { return $log; };
 
@@ -372,12 +374,27 @@
                 });
 
                 describe('previewMode(card)', function() {
+                    var session;
+
                     beforeEach(function() {
+                        session = {
+                            ping: jasmine.createSpy('session.ping()')
+                        };
+
                         spyOn($scope, '$broadcast');
+                        spyOn(cinema6, 'getSession').and.returnValue($q.when(session));
                     });
                     it('should set preview mode to true', function() {
                         EditorCtrl.previewMode();
                         expect(EditorCtrl.preview).toBe(true);
+                    });
+
+                    it('should ping the parent with the "stateChange" event', function() {
+                        $scope.$apply(function() {
+                            EditorCtrl.previewMode();
+                        });
+
+                        expect(session.ping).toHaveBeenCalledWith('stateChange', { name: 'editor.preview' });
                     });
 
                     describe('without a card', function() {
