@@ -49,3 +49,4 @@
   * [FEATURE]: Parent window is now notified of state changes
   * [FIX]: Use protocol-relative URLs for embedded players to ease HTTPS
     woes.
+  * [FIX]: Static image placeholder for recap cards
