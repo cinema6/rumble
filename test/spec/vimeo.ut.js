@@ -26,19 +26,19 @@
             describe('formatPlayerSrc',function(){
                 it('should format without playerId',function(){
                     expect(vimeo.formatPlayerSrc('x123'))
-                        .toEqual('http://player.vimeo.com/video/x123?api=1');
+                        .toEqual('//player.vimeo.com/video/x123?api=1');
                 });
                 it('should format with playerId',function(){
                     expect(vimeo.formatPlayerSrc('x123','player1'))
-                        .toEqual('http://player.vimeo.com/video/x123?api=1&player_id=player1');
+                        .toEqual('//player.vimeo.com/video/x123?api=1&player_id=player1');
                 });
                 it('should format without playerId but with params', function(){
                     expect(vimeo.formatPlayerSrc('x123',null,{ autoPlay : 1, loop: 1}))
-                        .toEqual('http://player.vimeo.com/video/x123?api=1&autoplay=1&loop=1');
+                        .toEqual('//player.vimeo.com/video/x123?api=1&autoplay=1&loop=1');
                 });
                 it('should format with playerId and with params', function(){
                     expect(vimeo.formatPlayerSrc('x123','player1',{ autoPlay : 1, loop: 1}))
-                        .toEqual('http://player.vimeo.com/video/x123?api=1&player_id=player1&autoplay=1&loop=1');
+                        .toEqual('//player.vimeo.com/video/x123?api=1&player_id=player1&autoplay=1&loop=1');
                 });
             });
 
@@ -96,7 +96,7 @@
 
                         spyOn(vimeo, 'formatPlayerSrc')
                             .andCallFake(function(videoId,playerId,params){
-                                return 'http://player.vimeo.com/x123?api=1&player_id=player1';
+                                return '//player.vimeo.com/x123?api=1&player_id=player1';
                             });
 
                         result = vimeo.createPlayer('player1',{
@@ -107,7 +107,7 @@
 
                         expect(vimeo.formatPlayerSrc)
                             .toHaveBeenCalledWith('x123','player1',undefined);
-                        expect(angular.element.calls[0].args[0]).toEqual('<iframe id="player1" src="http://player.vimeo.com/x123?api=1&player_id=player1" width="100" height="100"></iframe>');
+                        expect(angular.element.calls[0].args[0]).toEqual('<iframe id="player1" src="//player.vimeo.com/x123?api=1&player_id=player1" width="100" height="100"></iframe>');
                         expect(angular.element.calls[1].args[0]).toEqual(angularElementMock);
 
                         expect(angularElementMock.prepend)
@@ -122,7 +122,7 @@
                     
                         spyOn(angularElementMock,'attr').andCallFake(function(name){
                             return (name === 'src') ? 
-                                'http://player.vimeo.com/x123?api=1&player_id=player1' : '';
+                                '//player.vimeo.com/x123?api=1&player_id=player1' : '';
                         });
 
                         player = vimeo.createPlayer('player1',{
@@ -146,7 +146,7 @@
                         });
 
                         it('getUrl', function(){
-                            expect(player.getUrl()).toEqual('http://player.vimeo.com/x123');
+                            expect(player.getUrl()).toEqual('//player.vimeo.com/x123');
                         });
                         
 
@@ -162,7 +162,7 @@
                             expect(angularElementMock[0].contentWindow.postMessage)
                                 .toHaveBeenCalledWith(
                                     '{"method":"addEventListener","value":"pause"}',
-                                    'http://player.vimeo.com/x123'
+                                    '//player.vimeo.com/x123'
                                 );
                         });
 
@@ -171,7 +171,7 @@
                             expect(angularElementMock[0].contentWindow.postMessage)
                                 .toHaveBeenCalledWith(
                                     '{"method":"addEventListener","value":"finish"}',
-                                    'http://player.vimeo.com/x123'
+                                    '//player.vimeo.com/x123'
                                 );
                         });
 
@@ -180,7 +180,7 @@
                             expect(angularElementMock[0].contentWindow.postMessage)
                                 .toHaveBeenCalledWith(
                                     '{"method":"play"}',
-                                    'http://player.vimeo.com/x123'
+                                    '//player.vimeo.com/x123'
                                 );
                         });
 
@@ -189,7 +189,7 @@
                             expect(angularElementMock[0].contentWindow.postMessage)
                                 .toHaveBeenCalledWith(
                                     '{"method":"pause"}',
-                                    'http://player.vimeo.com/x123'
+                                    '//player.vimeo.com/x123'
                                 );
                         });
 
@@ -209,7 +209,7 @@
                             p1.then(function(v){ d1 = v.value; });
                             p2.then(function(v){ d2 = v.value; });
                             msgListener({
-                                origin : 'http://player.vimeo.com',
+                                origin : '//player.vimeo.com',
                                 data : '{ "method":"getDuration","value":120,"player_id":"player1"}'
                             });
                             $rootScope.$apply();
@@ -227,7 +227,7 @@
                             player.getCurrentTimeAsync().then(currentTimeSpy);
 
                             msgListener({
-                                origin : 'http://player.vimeo.com',
+                                origin : '//player.vimeo.com',
                                 data : angular.toJson(data)
                             });
 
@@ -245,7 +245,7 @@
                             player.getPausedAsync().then(pausedSpy);
 
                             msgListener({
-                                origin : 'http://player.vimeo.com',
+                                origin : '//player.vimeo.com',
                                 data : angular.toJson(data)
                             });
 
@@ -291,14 +291,14 @@
                         });
                         it('filters on player',function(){
                             msgListener({
-                                origin : 'http://player.vimeo.com',
+                                origin : '//player.vimeo.com',
                                 data : '{ "event" : "ready"}'
                             });
                             expect(readySpy).not.toHaveBeenCalled();
                         });
                         it('ready', function(){
                             msgListener({
-                                origin : 'http://player.vimeo.com',
+                                origin : '//player.vimeo.com',
                                 data : '{ "event" : "ready", "player_id" : "player1" }'
                             });
                             expect(readySpy).toHaveBeenCalled();

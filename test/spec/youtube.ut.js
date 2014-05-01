@@ -24,11 +24,11 @@
             describe('formatPlayerSrc',function(){
                 it('should format without params',function(){
                     expect(youtube.formatPlayerSrc('x123'))
-                        .toEqual('https://www.youtube.com/embed/x123?html5=1&wmode=opaque');
+                        .toEqual('//www.youtube.com/embed/x123?html5=1&wmode=opaque');
                 });
                 it('should format with params', function(){
                     expect(youtube.formatPlayerSrc('x123',{ autoPlay : 1, loop: 1}))
-                        .toEqual('https://www.youtube.com/embed/x123?html5=1&wmode=opaque&autoplay=1&loop=1');
+                        .toEqual('//www.youtube.com/embed/x123?html5=1&wmode=opaque&autoplay=1&loop=1');
                 });
             });
 
@@ -117,7 +117,7 @@
 
                         spyOn(youtube, 'formatPlayerSrc')
                             .andCallFake(function(videoId,params){
-                                return 'http://www.youtube.com/embed/x123?enablejsapi=1';
+                                return '//www.youtube.com/embed/x123?enablejsapi=1';
                             });
 
                         result = youtube.createPlayer('player1',{
@@ -126,7 +126,7 @@
 
                         expect(youtube.formatPlayerSrc)
                             .toHaveBeenCalledWith('x123',undefined);
-                        expect(angular.element.calls[0].args[0]).toEqual('<iframe id="player1" src="http://www.youtube.com/embed/x123?enablejsapi=1"></iframe>');
+                        expect(angular.element.calls[0].args[0]).toEqual('<iframe id="player1" src="//www.youtube.com/embed/x123?enablejsapi=1"></iframe>');
                         expect(angular.element.calls[1].args[0]).toEqual(angularElementMock);
 
                         expect(angularElementMock.prepend)
