@@ -17,6 +17,7 @@
   * [FEATURE]: Add blank card to deck when user has not created one
   * [FIX]: Fix issue where start/end trimmers would leap if returned to
   original position after drag
+* *[/Beta1.rc7]*
 * *[Beta1.rc8]*
   * [FIX]: Use "ng-style" instead of normal style attribute when setting card video thumbnail to prevent 404 on uncompiled template
   * [FIX]: Hide video trimming sliders when video duration is unknown (to prevent them looking broken for a second)
@@ -34,11 +35,18 @@
   * [FIX]: Unset previewed card when closing preview modal to prevent autoplaying when the preview rehreshes in the background
   * [FIX]: For MiniReel details modal, 'Coming Soon' text added to Desktop Lightbox with Ads option
   * [FIX]: Unset previewed card when closing preview modal to prevent autoplaying when the preview rehreshes in the background
+* *[/Beta1.rc8]*
 * *[Beta1.rc9]*
   * [FIX]: VoteService: Handle cards without a 'modules' array
   * [FIX]: MiniReelService: Compile recap cards to player format with
     modules array
   * [FIX]: playhead scrubber style updated for non-dragging
+* *[/Beta1.rc9]*
 * *[Beta1.rc10]*
   * [FIX]: Use protocol relative URLs
+* *[/Beta1.rc10]*
+* *[Beta1.rc11]*
+  * [FEATURE]: Parent window is now notified of state changes
+  * [FIX]: Use protocol-relative URLs for embedded players to ease HTTPS
+    woes.
   * [FIX]: Static image placeholder for recap cards

@@ -563,8 +563,8 @@
 
         .controller('GenericController', noop)
 
-        .controller('AppController', ['$scope', '$log', 'cinema6', 'gsap',
-        function                     ( $scope ,  $log ,  cinema6 ,  gsap ) {
+        .controller('AppController', ['$scope','$log','cinema6','gsap','c6State',
+        function                     ( $scope , $log , cinema6 , gsap , c6State ) {
             var self = this;
 
             $log.info('AppCtlr loaded.');
@@ -580,6 +580,13 @@
                 setup: function(appData) {
                     gsap.TweenLite.ticker.useRAF(appData.profile.raf);
                 }
+            });
+
+            c6State.on('stateChangeSuccess', function(state) {
+                cinema6.getSession()
+                    .then(function pingSession(session) {
+                        session.ping('stateChange', { name: state.name });
+                    });
             });
 
             $scope.AppCtrl = this;
