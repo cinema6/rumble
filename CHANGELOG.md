@@ -25,3 +25,4 @@
   * [FIX]: Update recap card controller to set/reset properties when active
 * *[Beta3.rc6]*
   * [FIX]: Default mobile theme added
+  * [FIX]: Change youtube, dailymotion, vimeo urls to be protocol-relative
