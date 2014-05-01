@@ -50,3 +50,4 @@
   * [FIX]: Use protocol-relative URLs for embedded players to ease HTTPS
     woes.
   * [FIX]: Static image placeholder for recap cards
+* *[/Beta1.rc11]*
