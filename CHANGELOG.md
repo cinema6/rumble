@@ -51,3 +51,5 @@
     woes.
   * [FIX]: Static image placeholder for recap cards
 * *[/Beta1.rc11]*
+* *[Beta1.rc12]*
+  * [FIX]: Removed chrome spacer
