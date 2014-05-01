@@ -30,5 +30,6 @@
 * *[/Beta3.rc6]*
 * *[Beta3.rc7]*
   * [FIX]: Lightbox, no ads - media query updated to properly center ballots at large screen sizes
+  * [FIX]: Lightbox, no ads, white bg
   * [FIX]: Change YouTube, DailyMotion, Vimeo urls to be protocol-relative
 * *[/Beta3.rc7]*
