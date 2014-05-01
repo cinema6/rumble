@@ -55,3 +55,4 @@
   * [FIX]: Removed chrome spacer
   * [FEATURE]: Notify parent of player preview modal opening as a state
     change
+* *[/Beta1.rc12]*
