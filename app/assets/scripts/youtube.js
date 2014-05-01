@@ -8,7 +8,7 @@
         $log = $log.context('youtube');
         var service = {};
 
-        service.origin = 'https://www.youtube.com';
+        service.origin = '//www.youtube.com';
         service.formatPlayerSrc = function(videoId,params){
             var src = this.origin + '/embed/' + videoId + '?html5=1&wmode=opaque';
 
@@ -377,7 +377,7 @@
             Object.defineProperties(playerIface, {
                 webHref: {
                     get: function() {
-                        return 'https://www.youtube.com/watch?v=' + $attr.videoid;
+                        return '//www.youtube.com/watch?v=' + $attr.videoid;
                     }
                 },
                 currentTime: {

@@ -7,7 +7,7 @@
         $log = $log.context('dailymotion');
         var service = {};
 
-        service.origin = 'http://www.dailymotion.com';
+        service.origin = '//www.dailymotion.com';
         service.formatPlayerSrc = function(videoId,playerId,params){
             var src = this.origin + '/embed/video/' + videoId + '?api=postMessage' +
                 (playerId ? ('&id=' + playerId) : '');
@@ -268,7 +268,7 @@
             Object.defineProperties(playerIface, {
                 webHref: {
                     get: function() {
-                        return ('http://www.dailymotion.com/video/' + $attr.videoid);
+                        return ('//www.dailymotion.com/video/' + $attr.videoid);
                     }
                 },
                 currentTime: {

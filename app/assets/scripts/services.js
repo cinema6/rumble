@@ -8,13 +8,13 @@
 
             _private.getFromYoutube = function(id) {
                 return $q.when({
-                    small: 'http://img.youtube.com/vi/' + id + '/2.jpg',
-                    large: 'http://img.youtube.com/vi/' + id + '/0.jpg'
+                    small: '//img.youtube.com/vi/' + id + '/2.jpg',
+                    large: '//img.youtube.com/vi/' + id + '/0.jpg'
                 });
             };
 
             _private.getFromVimeo = function(id) {
-                return $http.get('http://vimeo.com/api/v2/video/' + id + '.json')
+                return $http.get('//vimeo.com/api/v2/video/' + id + '.json')
                     .then(function(response) {
                         /* jshint camelcase:false */
                         var data = response.data[0];
