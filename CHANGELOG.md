@@ -36,3 +36,4 @@
 * *[Beta3.rc8]*
   * [FIX]: Make sure FireFox doesn't break when app is loaded in an
     iframe using the "javascript:" protocol
+  * [FIX]: Use https for youtube iframe embeds

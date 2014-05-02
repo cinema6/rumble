@@ -3,12 +3,12 @@
     'use strict';
 
     angular.module('c6.rumble')
-    .factory('youtube',['$log','$window','c6EventEmitter','iframe','c6UrlMaker',
-    function           ( $log , $window , c6EventEmitter , iframe , c6UrlMaker ){
+    .factory('youtube',['$log','$window','c6EventEmitter','iframe',
+    function           ( $log , $window , c6EventEmitter , iframe ){
         $log = $log.context('youtube');
         var service = {};
 
-        service.origin = c6UrlMaker('www.youtube.com', 'protocol');
+        service.origin = 'https://www.youtube.com';
         service.formatPlayerSrc = function(videoId,params){
             var src = this.origin + '/embed/' + videoId + '?html5=1&wmode=opaque';
 
