@@ -64,3 +64,6 @@
     broken iframe height being calculated
   * [FIX]: Use https for youtube iframe embeds
 * *[Beta1.rc13]*
+* *[Beta1.rc14]*
+  * [FIX]: Explicitly request HTTPS assets from DailyMotion
+* *[/Beta1.rc14]*
