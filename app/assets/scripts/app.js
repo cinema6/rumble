@@ -42,6 +42,7 @@
             c6UrlMakerProvider.location(c6Defines.kBaseUrl,'default');
             c6UrlMakerProvider.location(c6Defines.kCollateralUrl,'collateral');
             c6UrlMakerProvider.location(c6Defines.kApiUrl,'api');
+            c6UrlMakerProvider.location(c6Defines.kProtocol + '/', 'protocol');
         }])
         .config(['VASTServiceProvider', 'VPAIDServiceProvider',
         function( VASTServiceProvider, VPAIDServiceProvider ) {

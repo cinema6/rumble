@@ -2,12 +2,12 @@
     'use strict';
 
     angular.module('c6.rumble')
-    .factory('dailymotion',['$log','$window','$q','c6EventEmitter','iframe',
-        function($log,$window,$q,c6EventEmitter,iframe){
+    .factory('dailymotion',['$log','$window','$q','c6EventEmitter','iframe','c6UrlMaker',
+    function               ( $log , $window , $q , c6EventEmitter , iframe , c6UrlMaker ) {
         $log = $log.context('dailymotion');
         var service = {};
 
-        service.origin = $window.location.protocol + '//www.dailymotion.com';
+        service.origin = c6UrlMaker('www.dailymotion.com', 'protocol');
         service.formatPlayerSrc = function(videoId,playerId,params){
             var src = this.origin + '/embed/video/' + videoId + '?api=postMessage' +
                 (playerId ? ('&id=' + playerId) : '');
@@ -267,7 +267,7 @@
             Object.defineProperties(playerIface, {
                 webHref: {
                     get: function() {
-                        return ('//www.dailymotion.com/video/' + $attr.videoid);
+                        return ('http://www.dailymotion.com/video/' + $attr.videoid);
                     }
                 },
                 currentTime: {

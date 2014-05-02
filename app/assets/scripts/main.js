@@ -8,8 +8,23 @@
         baseUrl: c6.kBaseUrl
     });
 
-    var libUrl = function(url) {
-            return '//lib.cinema6.com/' + url;
+    var protocol = (function() {
+            var currentProtocol = window.location.protocol,
+                isValid = currentProtocol.search(/^https?/) > -1,
+                parentProtocol;
+
+            if (isValid) { return currentProtocol; }
+
+            try {
+                parentProtocol = window.parent.location.protocol;
+            } catch(e) {
+                parentProtocol = 'http:';
+            }
+
+            return parentProtocol;
+        }()),
+        libUrl = function(url) {
+            return protocol + '//lib.cinema6.com/' + url;
         },
         appScripts = (function() {
             if (__C6_BUILD_VERSION__) {
@@ -49,7 +64,7 @@
                     libUrl('angular/v1.2.12-0-g5cc5cc1/angular-sanitize.min.js'),
                     libUrl('c6ui/v2.5.0-0-gc58e712/c6uilib.min.js'),
                     libUrl('c6ui/v2.5.0-0-gc58e712/c6log.min.js'),
-                    '//www.youtube.com/iframe_api'
+                    protocol + '//www.youtube.com/iframe_api'
                 ];
             } else {
                 return [
@@ -60,7 +75,7 @@
                     libUrl('angular/v1.2.12-0-g5cc5cc1/angular-sanitize.js'),
                     libUrl('c6ui/v2.5.0-0-gc58e712/c6uilib.js'),
                     libUrl('c6ui/v2.5.0-0-gc58e712/c6log.js'),
-                    '//www.youtube.com/iframe_api'
+                    protocol + '//www.youtube.com/iframe_api'
                 ];
             }
         }());
@@ -87,9 +102,10 @@
     c6.kHasKarma = false;
     c6.kLogFormats = c6.kDebug;
     c6.kLogLevels = (c6.kDebug) ? ['error','warn','log','info'] : [];
-    c6.kEnvUrlRoot = (( c6.kEnvUrlRoot || c6.kEnvUrlRoot === '') ? c6.kEnvUrlRoot : '//portal.cinema6.com');
+    c6.kEnvUrlRoot = (( c6.kEnvUrlRoot || c6.kEnvUrlRoot === '') ? c6.kEnvUrlRoot : (protocol + '//portal.cinema6.com'));
     c6.kCollateralUrl = (c6.kCollateralUrl || (c6.kEnvUrlRoot + '/collateral'));
     c6.kApiUrl = (c6.kApiUrl || (c6.kEnvUrlRoot + '/api'));
+    c6.kProtocol = protocol;
     c6.kModDeps = [
         'c6.rumble.services', 'ngAnimate', 'ngSanitize', 'c6.ui', 'c6.log', 'c6.http'
     ];

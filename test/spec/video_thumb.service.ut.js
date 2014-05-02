@@ -10,7 +10,7 @@
                 _private;
 
             beforeEach(function() {
-                module('c6.rumble.services');
+                module('c6.rumble');
 
                 inject(function($injector) {
                     $rootScope = $injector.get('$rootScope');
@@ -41,24 +41,24 @@
                                 _private.getFromYoutube('abcd').then(spy);
                             });
                             expect(spy).toHaveBeenCalledWith({
-                                small: '//img.youtube.com/vi/abcd/2.jpg',
-                                large: '//img.youtube.com/vi/abcd/0.jpg'
+                                small: 'http://img.youtube.com/vi/abcd/2.jpg',
+                                large: 'http://img.youtube.com/vi/abcd/0.jpg'
                             });
 
                             $rootScope.$apply(function() {
                                 _private.getFromYoutube('1234').then(spy);
                             });
                             expect(spy).toHaveBeenCalledWith({
-                                small: '//img.youtube.com/vi/1234/2.jpg',
-                                large: '//img.youtube.com/vi/1234/0.jpg'
+                                small: 'http://img.youtube.com/vi/1234/2.jpg',
+                                large: 'http://img.youtube.com/vi/1234/0.jpg'
                             });
 
                             $rootScope.$apply(function() {
                                 _private.getFromYoutube('abc123').then(spy);
                             });
                             expect(spy).toHaveBeenCalledWith({
-                                small: '//img.youtube.com/vi/abc123/2.jpg',
-                                large: '//img.youtube.com/vi/abc123/0.jpg'
+                                small: 'http://img.youtube.com/vi/abc123/2.jpg',
+                                large: 'http://img.youtube.com/vi/abc123/0.jpg'
                             });
                         });
                     });
@@ -129,7 +129,7 @@
                         it('should return a promise that resolves to a small thumbnail', function() {
                             var spy = jasmine.createSpy('getFromVimeo spy');
 
-                            $httpBackend.expectGET('//vimeo.com/api/v2/video/81766071.json')
+                            $httpBackend.expectGET('http://vimeo.com/api/v2/video/81766071.json')
                                 .respond(200, json1);
                             _private.getFromVimeo('81766071').then(spy);
                             $httpBackend.flush();
@@ -138,7 +138,7 @@
                                 large: 'http://b.vimeocdn.com/ts/457/952/457952450_640.jpg'
                             });
 
-                            $httpBackend.expectGET('//vimeo.com/api/v2/video/85509673.json')
+                            $httpBackend.expectGET('http://vimeo.com/api/v2/video/85509673.json')
                                 .respond(200, json2);
                             _private.getFromVimeo('85509673').then(spy);
                             $httpBackend.flush();
