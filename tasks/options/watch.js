@@ -21,7 +21,7 @@
                 '<%= settings.appDir %>/assets/views/**/*.html',
                 'test/spec/**/*.js'
             ],
-            tasks: ['jshint', 'ngtemplates:test', 'karma:debug:run']
+            tasks: ['ngtemplates:test', 'karma:debug:run', 'jshint']
         },
         e2e: {
             files: [
