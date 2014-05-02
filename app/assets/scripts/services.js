@@ -92,13 +92,13 @@
 
             _private.fetchYouTubeThumbs = function(videoid) {
                 return $q.when({
-                    small: 'http://img.youtube.com/vi/' + videoid + '/2.jpg',
-                    large: 'http://img.youtube.com/vi/' + videoid + '/0.jpg'
+                    small: '//img.youtube.com/vi/' + videoid + '/2.jpg',
+                    large: '//img.youtube.com/vi/' + videoid + '/0.jpg'
                 });
             };
 
             _private.fetchVimeoThumbs = function(videoid) {
-                return $http.get('http://vimeo.com/api/v2/video/' + videoid + '.json')
+                return $http.get('//vimeo.com/api/v2/video/' + videoid + '.json')
                     .then(function handleResponse(response) {
                         var data = response.data[0];
 

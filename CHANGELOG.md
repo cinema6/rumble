@@ -59,3 +59,4 @@
 * *[Beta1.rc13]*
   * [FIX]: Fix issue where vimeo player would not respond to API events
     on HTTPs
+  * [FIX]: Use protocol-relative URLs to get video thumbnails
