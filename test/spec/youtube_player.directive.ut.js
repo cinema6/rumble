@@ -121,7 +121,7 @@
                     var $iframe = $player.find('iframe');
 
                     expect($iframe.length).toBe(1);
-                    expect($iframe.attr('src')).toBe('//www.youtube.com/embed/gy1B3agGNxw?rel=0&enablejsapi=1');
+                    expect($iframe.attr('src')).toBe('https://www.youtube.com/embed/gy1B3agGNxw?rel=0&enablejsapi=1');
                 });
 
                 it('should create a YouTube player with the iframe', function() {
@@ -170,7 +170,7 @@
                     expect($interval.calls.count()).toBe(2);
                     expect($iframe[0]).not.toBe($newFrame[0]);
                     expect(player).not.toBe(players[0]);
-                    expect($newFrame.attr('src')).toBe('//www.youtube.com/embed/f9h85495jf?rel=0&enablejsapi=1');
+                    expect($newFrame.attr('src')).toBe('https://www.youtube.com/embed/f9h85495jf?rel=0&enablejsapi=1');
                 });
             });
 

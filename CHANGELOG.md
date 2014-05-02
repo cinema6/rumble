@@ -62,3 +62,4 @@
   * [FIX]: Use protocol-relative URLs to get video thumbnails
   * [FIX]: Ping parent page whenever the DOM is modified to prevent a
     broken iframe height being calculated
+  * [FIX]: Use https for youtube iframe embeds
