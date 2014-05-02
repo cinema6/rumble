@@ -104,10 +104,6 @@
                 return (calculateRemainingSpace() / 2) + 'px';
             }, ['Ctrl.availableWidth','Ctrl.items.@each.width']);
 
-            c(this, 'thumbsMargin', function() {
-
-            }, ['Ctrl.availableWidth','Ctrl.items.@each.width']);
-
             this.addItem = function(data) {
                 this.items.push(data);
             };
