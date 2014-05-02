@@ -38,3 +38,7 @@
     iframe using the "javascript:" protocol
   * [FIX]: Use https for youtube iframe embeds
 * *[/Beta3.rc8]*
+* *[Beta3.rc9]*
+  * [FIX]: Explicitly ask for SSL assets from dailymotion when on an
+    HTTPS connection
+* *[/Beta3.rc9]*
