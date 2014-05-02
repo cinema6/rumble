@@ -4,7 +4,8 @@
 
     var noop = angular.noop,
         copy = angular.copy,
-        forEach = angular.forEach;
+        forEach = angular.forEach,
+        jqLite = angular.element;
 
     angular.module('c6.mrmaker', window$.c6.kModDeps)
         .constant('c6Defines', window$.c6)
@@ -496,6 +497,52 @@
                     }
                 })
                 .index('manager');
+        }])
+
+        .service('c6Runner', ['$timeout',
+        function             ( $timeout ) {
+            this.runOnce = function(fn, waitTime) {
+                var timer;
+
+                return function() {
+                    $timeout.cancel(timer);
+                    timer = $timeout(fn, waitTime);
+                };
+            };
+        }])
+
+        .run    (['c6Runner','cinema6',
+        function ( c6Runner , cinema6 ) {
+            var proto = jqLite.fn,
+                notifyDOMModified = c6Runner.runOnce(function() {
+                    cinema6.getSession()
+                        .then(function ping(session) {
+                            session.ping('domModified');
+                        });
+                }, 100);
+
+            [
+                'addClass',
+                'after',
+                'append',
+                'attr',
+                'css',
+                'empty',
+                'html',
+                'prepend',
+                'remove',
+                'removeAttr',
+                'removeClass'
+            ].forEach(function(methodName) {
+                var method = proto[methodName];
+
+                proto[methodName] = function() {
+                    var result = method.apply(this, arguments);
+                    notifyDOMModified();
+
+                    return result;
+                };
+            });
         }])
 
         .service('ConfirmDialogService', [function() {
