@@ -115,7 +115,7 @@
                 return $http.get(
                     'https://api.dailymotion.com/video/' +
                     videoid +
-                    '?fields=thumbnail_120_url,thumbnail_url'
+                    '?fields=thumbnail_120_url,thumbnail_url&ssl_assets=1'
                 ).then(function handleResponse(response) {
                     var data = response.data;
 

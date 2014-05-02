@@ -109,7 +109,7 @@
                         beforeEach(function() {
                             success = jasmine.createSpy('fetchDailyMotionThumbs()');
 
-                            $httpBackend.expectGET('https://api.dailymotion.com/video/x1quygb?fields=thumbnail_120_url,thumbnail_url')
+                            $httpBackend.expectGET('https://api.dailymotion.com/video/x1quygb?fields=thumbnail_120_url,thumbnail_url&ssl_assets=1')
                                 .respond(200, {
                                     /* jshint quotmark:false */
                                     "thumbnail_120_url": "http://s2.dmcdn.net/EZ-Ut/x120-3BS.jpg",
