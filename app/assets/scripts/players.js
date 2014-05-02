@@ -13,9 +13,10 @@
 
             function delegateMessage(event) {
                 var data = event.data,
+                    origin = c6UrlParser(event.origin),
                     player;
 
-                if (event.origin !== 'http://player.vimeo.com') { return; }
+                if (origin.hostname !== 'player.vimeo.com') { return; }
 
                 data = fromJson(data);
 

@@ -45,8 +45,8 @@
                         it('should return an object that has thumbnail urls for the video', function() {
                             var model = success.calls.mostRecent().args[0];
 
-                            expect(model.small).toBe('http://img.youtube.com/vi/abc123/2.jpg');
-                            expect(model.large).toBe('http://img.youtube.com/vi/abc123/0.jpg');
+                            expect(model.small).toBe('//img.youtube.com/vi/abc123/2.jpg');
+                            expect(model.large).toBe('//img.youtube.com/vi/abc123/0.jpg');
                         });
                     });
 
@@ -56,7 +56,7 @@
                         beforeEach(function() {
                             success = jasmine.createSpy('fetchVimeoThumbs()');
 
-                            $httpBackend.expectGET('http://vimeo.com/api/v2/video/92354665.json')
+                            $httpBackend.expectGET('//vimeo.com/api/v2/video/92354665.json')
                                 .respond(200, [
                                     /* jshint quotmark:false */
                                     {
