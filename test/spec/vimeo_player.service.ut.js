@@ -105,17 +105,18 @@
                     });
 
                     describe('event handling', function() {
-                        var vimeo;
+                        var vimeo,
+                            emitCount = 1;
 
-                        beforeEach(function() {
-                            vimeo = new VimeoPlayerService.Player(new IFrame('http://player.vimeo.com/video/27855315?api=1&player_id=rc-2'));
+                        function isEven(number) {
+                            var remainder = (number % 2);
 
-                            spyOn(vimeo, 'call').and.callThrough();
-                        });
+                            return !!remainder;
+                        }
 
                         function emit(event, data, id) {
                             $window.trigger('message', {
-                                origin: 'http://player.vimeo.com',
+                                origin: 'http' + (isEven(emitCount++) ? 's' : '') + '://player.vimeo.com',
                                 data: JSON.stringify({
                                     player_id: id || 'rc-2',
                                     event: event,
@@ -123,6 +124,12 @@
                                 })
                             });
                         }
+
+                        beforeEach(function() {
+                            vimeo = new VimeoPlayerService.Player(new IFrame('http://player.vimeo.com/video/27855315?api=1&player_id=rc-2'));
+
+                            spyOn(vimeo, 'call').and.callThrough();
+                        });
 
                         it('should call the "addEventListener" method when a non-c6EventEmitter or ready event listener is added', function() {
                             vimeo.on('ready', function() {});
