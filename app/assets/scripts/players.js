@@ -437,7 +437,7 @@
                             scope.$watch('videoid', function(id) {
                                 var $iframe;
 
-                                scope.url = '//www.youtube.com/embed/' +
+                                scope.url = 'https://www.youtube.com/embed/' +
                                     id +
                                     '?rel=0&enablejsapi=1';
 
