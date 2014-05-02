@@ -63,3 +63,4 @@
   * [FIX]: Ping parent page whenever the DOM is modified to prevent a
     broken iframe height being calculated
   * [FIX]: Use https for youtube iframe embeds
+* *[Beta1.rc13]*
