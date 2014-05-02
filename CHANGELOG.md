@@ -33,3 +33,6 @@
   * [FIX]: Lightbox, no ads, white bg
   * [FIX]: Change YouTube, DailyMotion, Vimeo urls to be protocol-relative
 * *[/Beta3.rc7]*
+* *[Beta3.rc8]*
+  * [FIX]: Make sure FireFox doesn't break when app is loaded in an
+    iframe using the "javascript:" protocol

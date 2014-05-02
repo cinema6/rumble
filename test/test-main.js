@@ -23,6 +23,7 @@
     c6.kCollateralUrl = (c6.kCollateralUrl || (c6.envUrlRoot + '/collateral'));
     c6.kApiUrl = '/api';
     c6.kModDeps = ['c6.rumble.services', 'c6.ui', 'c6.log'];
+    c6.kProtocol = 'http:';
 
     packageRequest.onload = function(event) {
         var settings = JSON.parse(event.target.response),
@@ -75,7 +76,7 @@
                     deps: ['app']
                 },
                 app: {
-                    deps: ['angular', 'angularMocks', 'modernizr', 'timelinemax', 'c6ui', 'c6log', 'services']
+                    deps: ['angular', 'angularMocks', 'modernizr', 'timelinemax', 'c6ui', 'c6log']
                 },
                 rumble: {
                     deps: ['angular', 'angularMocks', 'c6ui', 'c6log', 'app']
@@ -93,7 +94,7 @@
                     deps: ['angular', 'angularMocks', 'c6ui', 'c6log', 'app']
                 },
                 services: {
-                    deps: ['angular', 'angularMocks']
+                    deps: ['app']
                 },
                 recap_card: {
                     deps: ['app']

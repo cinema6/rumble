@@ -293,7 +293,7 @@
 
                     describe('webHref property', function() {
                         it('should be computed based on the video\'s id', function() {
-                            expect(iface.webHref).toBe('//www.youtube.com/watch?v=abc123');
+                            expect(iface.webHref).toBe('https://www.youtube.com/watch?v=abc123');
                         });
                     });
 

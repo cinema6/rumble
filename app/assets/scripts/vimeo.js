@@ -3,12 +3,12 @@
     'use strict';
 
     angular.module('c6.rumble')
-    .factory('vimeo',['$log','$window','$q','c6EventEmitter','iframe',
-        function($log,$window,$q,c6EventEmitter,iframe){
+    .factory('vimeo',['$log','$window','$q','c6EventEmitter','iframe','c6UrlMaker',
+    function         ( $log , $window , $q , c6EventEmitter , iframe , c6UrlMaker ){
         $log = $log.context('vimeo');
         var service = {};
 
-        service.origin = $window.location.protocol + '//player.vimeo.com';
+        service.origin = c6UrlMaker('player.vimeo.com', 'protocol');
         service.formatPlayerSrc = function(videoId,playerId,params){
             var src = this.origin + '/video/' + videoId + '?api=1' +
                 (playerId ? ('&player_id=' + playerId) : '');
@@ -334,7 +334,7 @@
             Object.defineProperties(playerIface, {
                 webHref: {
                     get: function() {
-                        return ('//vimeo.com/' + $attr.videoid);
+                        return ('http://vimeo.com/' + $attr.videoid);
                     }
                 },
                 currentTime: {

@@ -18,13 +18,13 @@
 
                     switch (card.type) {
                         case 'youtube':
-                            card.webHref = '//www.youtube.com/watch?v=' + card.data.videoid;
+                            card.webHref = 'https://www.youtube.com/watch?v=' + card.data.videoid;
                             break;
                         case 'dailymotion':
-                            card.webHref = '//www.dailymotion.com/video/' + card.data.videoid;
+                            card.webHref = 'http://www.dailymotion.com/video/' + card.data.videoid;
                             break;
                         case 'vimeo':
-                            card.webHref = '//vimeo.com/' + card.data.videoid;
+                            card.webHref = 'http://vimeo.com/' + card.data.videoid;
                             break;
                     }
 

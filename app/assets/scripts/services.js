@@ -2,19 +2,19 @@
     'use strict';
 
     angular.module('c6.rumble.services', ['c6.ui'])
-        .service('VideoThumbService', ['$http','$q',
-        function                      ( $http , $q ) {
+        .service('VideoThumbService', ['$http','$q','c6UrlMaker',
+        function                      ( $http , $q , c6UrlMaker ) {
             var _private = {};
 
             _private.getFromYoutube = function(id) {
                 return $q.when({
-                    small: '//img.youtube.com/vi/' + id + '/2.jpg',
-                    large: '//img.youtube.com/vi/' + id + '/0.jpg'
+                    small: c6UrlMaker('img.youtube.com/vi/' + id + '/2.jpg', 'protocol'),
+                    large: c6UrlMaker('img.youtube.com/vi/' + id + '/0.jpg', 'protocol')
                 });
             };
 
             _private.getFromVimeo = function(id) {
-                return $http.get('//vimeo.com/api/v2/video/' + id + '.json')
+                return $http.get(c6UrlMaker('vimeo.com/api/v2/video/' + id + '.json', 'protocol'))
                     .then(function(response) {
                         /* jshint camelcase:false */
                         var data = response.data[0];

@@ -231,7 +231,7 @@
 
                     describe('webHref property', function() {
                         it('should be computed based on the video\'s id', function() {
-                            expect(iface.webHref).toBe('//www.dailymotion.com/video/abc123');
+                            expect(iface.webHref).toBe('http://www.dailymotion.com/video/abc123');
                         });
                     });
 

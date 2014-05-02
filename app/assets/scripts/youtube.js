@@ -3,12 +3,12 @@
     'use strict';
 
     angular.module('c6.rumble')
-    .factory('youtube',['$log','$window','c6EventEmitter','iframe',
-        function($log,$window,c6EventEmitter,iframe){
+    .factory('youtube',['$log','$window','c6EventEmitter','iframe','c6UrlMaker',
+    function           ( $log , $window , c6EventEmitter , iframe , c6UrlMaker ){
         $log = $log.context('youtube');
         var service = {};
 
-        service.origin = $window.location.protocol + '//www.youtube.com';
+        service.origin = c6UrlMaker('www.youtube.com', 'protocol');
         service.formatPlayerSrc = function(videoId,params){
             var src = this.origin + '/embed/' + videoId + '?html5=1&wmode=opaque';
 
@@ -377,7 +377,7 @@
             Object.defineProperties(playerIface, {
                 webHref: {
                     get: function() {
-                        return '//www.youtube.com/watch?v=' + $attr.videoid;
+                        return 'https://www.youtube.com/watch?v=' + $attr.videoid;
                     }
                 },
                 currentTime: {
