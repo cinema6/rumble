@@ -60,3 +60,5 @@
   * [FIX]: Fix issue where vimeo player would not respond to API events
     on HTTPs
   * [FIX]: Use protocol-relative URLs to get video thumbnails
+  * [FIX]: Ping parent page whenever the DOM is modified to prevent a
+    broken iframe height being calculated
