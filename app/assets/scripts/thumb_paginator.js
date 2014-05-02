@@ -41,6 +41,29 @@
             var self = this,
                 c = c6Computed($scope);
 
+            function calculateRemainingSpace() {
+                var availableWidth = self.availableWidth,
+                    elementWidth = self.elementWidth,
+                    items = self.items,
+                    pageWidth = (function() {
+                        var total = 0,
+                            index = 0,
+                            length = items.length;
+
+                        for ( ; index < length; index++) {
+                            if ((total + items[index].width) > availableWidth) {
+                                return total;
+                            }
+
+                            total += items[index].width;
+                        }
+
+                        return total;
+                    }());
+
+                return (elementWidth - pageWidth);
+            }
+
             $scope.page = $scope.page || 0;
 
             $scope.$watch('active()', function(index, prevIndex) {
@@ -72,27 +95,18 @@
             }, ['Ctrl.itemsPerPage', 'Ctrl.items.length']);
 
             c(this, 'buttonWidth', function() {
-                var availableWidth = this.availableWidth,
-                    elementWidth = this.elementWidth,
-                    items = this.items,
-                    pageWidth = (function() {
-                        var total = 0,
-                            index = 0,
-                            length = items.length;
+                var pages = this.pagesCount;
 
-                        for ( ; index < length; index++) {
-                            if ((total + items[index].width) > availableWidth) {
-                                return total;
-                            }
+                return pages > 1 ? ((calculateRemainingSpace() / 2) + 'px') : '';
+            }, ['Ctrl.availableWidth','Ctrl.items.@each.width','Ctrl.pagesCount']);
 
-                            total += items[index].width;
-                        }
+            c(this, 'thumbsOffset', function() {
+                return (calculateRemainingSpace() / 2) + 'px';
+            }, ['Ctrl.availableWidth','Ctrl.items.@each.width']);
 
-                        return total;
-                    }());
+            c(this, 'thumbsMargin', function() {
 
-                return (elementWidth - pageWidth) / 2;
-            }, ['Ctrl.availableWidth', 'Ctrl.items.@each.width']);
+            }, ['Ctrl.availableWidth','Ctrl.items.@each.width']);
 
             this.addItem = function(data) {
                 this.items.push(data);

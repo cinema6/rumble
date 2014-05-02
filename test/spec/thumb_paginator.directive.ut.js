@@ -149,6 +149,21 @@
                     expect($pager.find('.mr-pager__prev').width()).toBe(74);
                     expect($pager.find('.mr-pager__next').width()).toBe(74);
                 });
+
+                it('should not impose a width if all the buttons fit on one page', function() {
+                    $pager = create([
+                        '<ul>',
+                        '    <li ng-repeat="index in [0,1,2,3,4]">',
+                        '        <span thumb-paginator-item style="display: inline-block; width: 100px;">Foo</span>',
+                        '    </li>',
+                        '</ul>'
+                    ].join('\n'));
+
+                    expect($pager.find('.mr-pager__prev').prop('style').width).toBe('');
+                    expect($pager.find('.mr-pager__next').prop('style').width).toBe('');
+                    expect($pager.find('.mr-pages__group').prop('style').left).not.toBe('');
+                    expect($pager.find('.mr-pages__group').prop('style').right).not.toBe('');
+                });
             });
 
             describe('the paginator', function() {
