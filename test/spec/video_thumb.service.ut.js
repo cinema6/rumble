@@ -7,6 +7,7 @@
                 $httpBackend,
                 $q,
                 VideoThumbService,
+                c6Defines,
                 _private;
 
             beforeEach(function() {
@@ -15,6 +16,7 @@
                 inject(function($injector) {
                     $rootScope = $injector.get('$rootScope');
                     $q = $injector.get('$q');
+                    c6Defines = $injector.get('c6Defines');
 
                     $httpBackend = $injector.get('$httpBackend');
 
@@ -150,8 +152,7 @@
                     });
 
                     describe('getFromDailymotion(id)', function() {
-                        var json1,
-                            json2;
+                        var json1, json2, json3;
 
                         beforeEach(function() {
                             json1 = {
@@ -161,6 +162,10 @@
                             json2 = {
                                 'thumbnail_120_url': 'http://s2.dmcdn.net/Dm9Np/x120-6Xz.jpg',
                                 'thumbnail_720_url': 'http://s2.dmcdn.net/Dm9Np/x720-lyL.jpg'
+                            };
+                            json3 = {
+                                'thumbnail_120_url': 'https://s2.dmcdn.net/Dm9Np/x120-6Xz.jpg',
+                                'thumbnail_720_url': 'https://s2.dmcdn.net/Dm9Np/x720-lyL.jpg'
                             };
                         });
 
@@ -184,6 +189,23 @@
                                 small: 'http://s2.dmcdn.net/Dm9Np/x120-6Xz.jpg',
                                 large: 'http://s2.dmcdn.net/Dm9Np/x720-lyL.jpg'
                             });
+                        });
+
+                        it('should request SSL images from DailyMotion if the app is running on an HTTPS page', function() {
+                            var spy = jasmine.createSpy('getFromDailymotion spy');
+
+                            c6Defines.kProtocol = 'https:';
+
+                            $httpBackend.expectGET('https://api.dailymotion.com/video/x1bxmgq?fields=thumbnail_120_url,thumbnail_720_url&ssl_assets=1')
+                                .respond(200, json3);
+                            _private.getFromDailymotion('x1bxmgq').then(spy);
+                            $httpBackend.flush();
+                            expect(spy).toHaveBeenCalledWith({
+                                small: 'https://s2.dmcdn.net/Dm9Np/x120-6Xz.jpg',
+                                large: 'https://s2.dmcdn.net/Dm9Np/x720-lyL.jpg'
+                            });
+
+                            c6Defines.kProtocol = 'http:';
                         });
                     });
                 });

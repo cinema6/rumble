@@ -2,8 +2,8 @@
     'use strict';
 
     angular.module('c6.rumble.services', ['c6.ui'])
-        .service('VideoThumbService', ['$http','$q','c6UrlMaker',
-        function                      ( $http , $q , c6UrlMaker ) {
+        .service('VideoThumbService', ['$http','$q','c6UrlMaker','c6Defines',
+        function                      ( $http , $q , c6UrlMaker , c6Defines ) {
             var _private = {};
 
             _private.getFromYoutube = function(id) {
@@ -27,7 +27,11 @@
             };
 
             _private.getFromDailymotion = function(id) {
-                return $http.get('https://api.dailymotion.com/video/' + id + '?fields=thumbnail_120_url,thumbnail_720_url')
+                return $http.get('https://api.dailymotion.com/video/' +
+                        id +
+                        '?fields=thumbnail_120_url,thumbnail_720_url' +
+                        (c6Defines.kProtocol === 'https:' ? '&ssl_assets=1' : '')
+                    )
                     .then(function(response) {
                         /* jshint camelcase:false */
                         var data = response.data;
