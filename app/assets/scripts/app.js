@@ -643,6 +643,17 @@
             };
         }])
 
+        .directive('c6BgImg', [function() {
+            return {
+                restrict: 'AC',
+                link: function(scope, element, attrs) {
+                    attrs.$observe('c6BgImg', function(src) {
+                        element.css('background-image', (src || '') && ('url("' + src + '")'));
+                    });
+                }
+            };
+        }])
+
         .filter('percent', [function() {
             return function(number) {
                 return ((number || 0) * 100) + '%';
