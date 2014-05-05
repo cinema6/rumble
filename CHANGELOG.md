@@ -72,3 +72,4 @@
   * [FIX]: Editor has character limit context guides
   * [FIX]: Video content editor now shows list of supported sources
   * [FIX]: Dashboard public/private icons do not use pointer cursor
+  * [FEATURE]: User can now upload custom splash images
