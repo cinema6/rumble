@@ -190,6 +190,28 @@
             });
         }])
 
+        .controller('EditorSplashController', ['CollateralService',
+        function                              ( CollateralService ) {
+            var self = this;
+
+            this.splash = null;
+            this.currentUpload = null;
+
+            this.upload = function() {
+                var upload;
+
+                this.currentUpload = upload = CollateralService.set(
+                    'splash',
+                    this.splash,
+                    this.model
+                );
+
+                upload.finally(function() {
+                    self.currentUpload = null;
+                });
+            };
+        }])
+
         .controller('EditCardController', ['$scope','c6Computed','c6State','VideoService',
         function                          ( $scope , c6Computed , c6State , VideoService ) {
             var c = c6Computed($scope);

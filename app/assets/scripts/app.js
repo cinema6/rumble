@@ -366,9 +366,12 @@
                     }],
                     children: {
                         splash: {
-                            controller: 'GenericController',
+                            controller: 'EditorSplashController',
                             controllerAs: 'EditorSplashCtrl',
-                            templateUrl: assets('views/editor/splash.html')
+                            templateUrl: assets('views/editor/splash.html'),
+                            model:  [function() {
+                                return this.cParent.cModel;
+                            }]
                         },
                         setMode: {
                             controller: 'GenericController',
@@ -637,6 +640,12 @@
                         );
                     };
                 }
+            };
+        }])
+
+        .filter('percent', [function() {
+            return function(number) {
+                return ((number || 0) * 100) + '%';
             };
         }])
 
