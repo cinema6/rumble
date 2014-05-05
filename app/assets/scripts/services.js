@@ -10,6 +10,32 @@
         isFunction = angular.isFunction;
 
     angular.module('c6.mrmaker')
+        .service('CollateralService', ['FileService',
+        function                      ( FileService ) {
+            this.set = function(key, file, experience) {
+                var promise;
+
+                function setResult(response) {
+                    experience.collateral[key] = '/' + response.data[0].path;
+
+                    return experience;
+                }
+
+                function updateProgress(progress) {
+                    promise.progress = progress;
+
+                    return progress;
+                }
+
+                file = FileService.open(file);
+
+                promise = FileService.upload('/api/collateral/files', [file])
+                    .then(setResult, null, updateProgress);
+
+                return promise;
+            };
+        }])
+
         .service('FileService', ['$window','$q','$rootScope',
         function                ( $window , $q , $rootScope ) {
             var URL = $window.URL,
