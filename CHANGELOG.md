@@ -67,3 +67,5 @@
 * *[Beta1.rc14]*
   * [FIX]: Explicitly request HTTPS assets from DailyMotion
 * *[/Beta1.rc14]*
+* *[Beta1.rc15]*
+  * [FIX]: MiniReel type added to dashboard preview
