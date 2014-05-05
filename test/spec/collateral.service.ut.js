@@ -37,7 +37,9 @@
                             url: 'http://localhost:9000/f7394fn83'
                         };
                         experience = {
-                            collateral: {}
+                            data: {
+                                collateral: {}
+                            }
                         };
                         uploadDeferred = $q.defer();
 
@@ -114,11 +116,37 @@
                         });
 
                         it('should set the collateral asset\'s path to the provided key on the collateral object of the experience', function() {
-                            expect(experience.collateral.splash).toBe('/collateral/e2e-org/ce114e4501d2f4e2dcea3e17b546f339.splash.jpg');
+                            expect(experience.data.collateral.splash).toBe('/collateral/e2e-org/ce114e4501d2f4e2dcea3e17b546f339.splash.jpg');
                         });
 
                         it('should resolve to the experience', function() {
                             expect(success).toHaveBeenCalledWith(experience);
+                        });
+                    });
+
+                    it('should be forgiving of experiences without a "collateral" hash', function() {
+                        experience = {
+                            data: {}
+                        };
+
+                        $rootScope.$apply(function() {
+                            CollateralService.set('splash', splashImage, experience);
+                        });
+                        $rootScope.$apply(function() {
+                            uploadDeferred.resolve({
+                                status: 201,
+                                data: [
+                                    {
+                                        name: 'splash',
+                                        code: 201,
+                                        path: 'collateral/e2e-org/ce114e4501d2f4e2dcea3e17b546f339.splash.jpg'
+                                    }
+                                ]
+                            });
+                        });
+
+                        expect(experience.data.collateral).toEqual({
+                            splash: '/collateral/e2e-org/ce114e4501d2f4e2dcea3e17b546f339.splash.jpg'
                         });
                     });
                 });

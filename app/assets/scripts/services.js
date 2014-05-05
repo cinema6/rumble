@@ -16,7 +16,10 @@
                 var promise;
 
                 function setResult(response) {
-                    experience.collateral[key] = '/' + response.data[0].path;
+                    var data = experience.data;
+
+                    (data.collateral || (data.collateral = {}))[key] =
+                        '/' + response.data[0].path;
 
                     return experience;
                 }
@@ -644,6 +647,7 @@
                             branding: minireel.data.branding,
                             autoplay: minireel.data.autoplay,
                             election: minireel.data.election,
+                            collateral: minireel.data.collateral,
                             deck: minireel.data.deck.map(function(card) {
                                 return makeCard(card);
                             })
