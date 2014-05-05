@@ -637,6 +637,10 @@
                     });
             });
 
+            self.sendEvent = function() {
+                tracker.event.apply(tracker,arguments);
+            };
+
             self.sendPageview = function(page,title) {
                 if (self.config === null){
                     $log.error('Unable to send pageview for %1, config is null.', page);

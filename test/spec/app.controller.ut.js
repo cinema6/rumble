@@ -35,6 +35,7 @@
                 tracker = {
                     create   :  jasmine.createSpy('tracker.create'),
                     send     :  jasmine.createSpy('tracker.send'),
+                    event    :  jasmine.createSpy('tracker.event'),
                     pageview :  jasmine.createSpy('tracker.pageview')
                 };
 
@@ -185,6 +186,14 @@
                         expect(tracker.pageview)
                             .toHaveBeenCalledWith('/mini-reel-maker/test','Some Title - Test');
                     });
+                });
+
+                describe('sendEvent',function(){
+                    it(' calls tracker.event',function(){
+                        AppCtrl.sendEvent('Editor','Click','Add New');
+                        expect(tracker.event).toHaveBeenCalledWith('Editor','Click','Add New');
+                    });
+
                 });
             });
         });
