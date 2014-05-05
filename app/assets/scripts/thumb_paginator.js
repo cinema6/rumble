@@ -120,9 +120,13 @@
 
             $scope.$watch(function() {
                 return self.pagesCount;
-            }, function(newPageCount) {                
+            }, function(newPageCount) {
+                var targetPage = Math.max(Math.ceil($scope.active() / self.itemsPerPage), 0);
+
                 if($scope.page > (newPageCount - 1)) {
                     $scope.page = newPageCount - 1;
+                } else if($scope.page !== targetPage){
+                    $scope.page = targetPage;
                 }
             });
         }])
