@@ -58,8 +58,6 @@
             this.elementWidth = 0;
             this.minButtonWidth = 0;
 
-
-
             c(this, 'availableWidth', function() {
                 return this.elementWidth - (this.minButtonWidth * 2);
             }, ['Ctrl.elementWidth', 'Ctrl.minButtonWidth']);
