@@ -28,6 +28,8 @@
                     });
 
                     resetWidth();
+
+                    scope.$on('resize', resetWidth);
                 },
                 controller: 'ThumbPaginatorController',
                 controllerAs: 'Ctrl',

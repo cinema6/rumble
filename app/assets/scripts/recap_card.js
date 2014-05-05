@@ -2,8 +2,8 @@
     'use strict';
 
     angular.module('c6.rumble')
-        .controller('RecapCardController', ['$scope','$log', 'c6AppData', 'MiniReelService', 'BallotService', 'ModuleService',
-        function                           ( $scope , $log ,  c6AppData ,  MiniReelService ,  BallotService ,  ModuleService ) {
+        .controller('RecapCardController', ['$rootScope','$scope','$log', 'c6AppData', 'MiniReelService', 'BallotService', 'ModuleService',
+        function                           ( $rootScope , $scope , $log ,  c6AppData ,  MiniReelService ,  BallotService ,  ModuleService ) {
             var config = $scope.config,
                 self = this,
                 _deck;
@@ -65,9 +65,12 @@
                     self.deck = [];
                     _deck = setupDeck(MiniReelService.createDeck(c6AppData.experience.data));
                     self.title = c6AppData.experience.title;
+
+                    if(c6AppData.experience.mode === 'lightbox') {
+                        $rootScope.$broadcast('resize');
+                    }
                 }
             });
-
         }])
 
         .directive('recapCard', ['c6UrlMaker','assetFilter',
