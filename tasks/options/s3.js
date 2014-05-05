@@ -24,14 +24,14 @@
                     src: '<%= settings.distDir %>/index.html',
                     dest: '<%= settings.s3.test.app %><%= _version %>/index.html',
                     options: {
-                        CacheControl: 'max-age=0'
+                        CacheControl: 'max-age=60'
                     }
                 },
                 {
                     src: '<%= settings.distDir %>/index.html',
                     dest: '<%= settings.s3.test.app %>index.html',
                     options: {
-                        CacheControl: 'max-age=0'
+                        CacheControl: 'max-age=60'
                     }
                 }
             ]
@@ -42,19 +42,11 @@
             },
             upload: [
                 {
-                    src: '.tmp/collateral/**',
-                    rel: '.tmp/collateral/',
-                    dest: '<%= settings.s3.test.collateral %>',
-                    options: {
-                        CacheControl: 'max-age=31556926'
-                    }
-                },
-                {
                     src: '<%= settings.collateralDir %>/**',
                     rel: '<%= settings.collateralDir %>/',
                     dest: '<%= settings.s3.test.collateral %>',
                     options: {
-                        CacheControl: 'max-age=0'
+                        CacheControl: 'max-age=60'
                     }
                 }
             ]
@@ -76,14 +68,14 @@
                     src: '<%= settings.distDir %>/index.html',
                     dest: '<%= settings.s3.production.app %><%= _version %>/index.html',
                     options: {
-                        CacheControl: 'max-age=0'
+                        CacheControl: 'max-age=60'
                     }
                 },
                 {
                     src: '<%= settings.distDir %>/index.html',
                     dest: '<%= settings.s3.production.app %>index.html',
                     options: {
-                        CacheControl: 'max-age=0'
+                        CacheControl: 'max-age=60'
                     }
                 }
             ]
@@ -94,19 +86,11 @@
             },
             upload: [
                 {
-                    src: '.tmp/collateral/**',
-                    rel: '.tmp/collateral/',
-                    dest: '<%= settings.s3.production.collateral %>',
-                    options: {
-                        CacheControl: 'max-age=31556926'
-                    }
-                },
-                {
                     src: '<%= settings.collateralDir %>/**',
                     rel: '<%= settings.collateralDir %>/',
                     dest: '<%= settings.s3.production.collateral %>',
                     options: {
-                        CacheControl: 'max-age=0'
+                        CacheControl: 'max-age=60'
                     }
                 }
             ]
