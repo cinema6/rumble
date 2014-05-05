@@ -1,14 +1,16 @@
 <form c6-alias="EditCardBallotCtrl.model as ballot">
-    <label class="field field--noBreak clearfix">
-        <span class="modal__label">Question:</span> 
+    <label class="field">
+        <span class="modal__label">Question: <strong class="field__context">(0 of 100 max characters)</strong></span> 
         <input ng-model="ballot.prompt" class="modal__textBox">
     </label>
     <label class="field field--noBreak clearfix">
         <span class="modal__label">Option 1:</span> 
         <input class="modal__textBox modal__textBox--short" ng-model="ballot.choices[0]">
+        <span class="field__context field__context--short"><strong>(0 of 40 max characters)</strong></span> 
     </label>
     <label class="field field--noBreak clearfix">
         <span class="modal__label">Option 2:</span> 
         <input class="modal__textBox modal__textBox--short" ng-model="ballot.choices[1]">
+        <span class="field__context field__context--short"><strong>(0 of 40 max characters)</strong></span> 
     </label>
 </form>
