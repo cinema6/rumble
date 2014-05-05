@@ -42,3 +42,4 @@
   * [FIX]: Explicitly ask for SSL assets from dailymotion when on an
     HTTPS connection
 * *[/Beta3.rc9]*
+  * [FIX]: Update thumb-paginator to recalculate width when recap-card broadcasts a resize event
