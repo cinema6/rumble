@@ -67,3 +67,7 @@
 * *[Beta1.rc14]*
   * [FIX]: Explicitly request HTTPS assets from DailyMotion
 * *[/Beta1.rc14]*
+* *[Beta1.rc15]*
+  * [FIX]: Editor has character limit context guides
+  * [FIX]: Video content editor now shows list of supported sources
+  * [FIX]: Dashboard public/private icons do not use pointer cursor
