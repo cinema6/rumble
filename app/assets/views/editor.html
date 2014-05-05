@@ -66,6 +66,13 @@
                             <span class="pubState sprite--alpha">&nbsp;</span>
                             <span class="pubText">Publish Changes</span>
                         </button>
+
+                        <button ng-click="EditorCtrl.save()" 
+                        class="toolbar__btn toolbar__confirm toolbar__publish toolbar__publish--waiting" 
+                        type="button">
+                            <span class="pubState sprite--alpha">&nbsp;</span>
+                            <span class="pubText">Publishing...</span>
+                        </button>
                         
                         <button ng-click="EditorCtrl.save()" 
                         class="toolbar__btn toolbar__confirm toolbar__publish toolbar__publish--confirm" 
