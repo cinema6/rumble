@@ -22,6 +22,8 @@
                             controller.setWidth(element.width());
                         }, 250);
 
+                    // console.log(scope.page);
+
                     $$window.on('resize', resetWidth);
                     element.on('$destroy', function() {
                         $$window.off('resize', resetWidth);
@@ -58,6 +60,8 @@
             this.elementWidth = 0;
             this.minButtonWidth = 0;
 
+
+
             c(this, 'availableWidth', function() {
                 return this.elementWidth - (this.minButtonWidth * 2);
             }, ['Ctrl.elementWidth', 'Ctrl.minButtonWidth']);
@@ -66,11 +70,14 @@
                 var itemWidth = (this.items[0] && this.items[0].width) || 0,
                     availableWidth = this.availableWidth;
 
+                // console.log('WIDTH', itemWidth, 'AVAIL WIDTH',availableWidth);
+
                 return itemWidth && Math.floor(availableWidth / itemWidth);
             }, ['Ctrl.availableWidth', 'Ctrl.items[0].width']);
 
             c(this, 'pagesCount', function() {
-                return Math.ceil(this.items.length / this.itemsPerPage);
+                // console.log('LENGTH', this.items.length, 'PER PAGE',this.itemsPerPage);
+                return Math.max(Math.ceil(this.items.length / this.itemsPerPage), 1);
             }, ['Ctrl.itemsPerPage', 'Ctrl.items.length']);
 
             c(this, 'buttonWidth', function() {
@@ -107,6 +114,20 @@
             this.setMinButtonWidth = function(minWidth) {
                 this.minButtonWidth = minWidth;
             };
+
+            // watch Ctrl.pagesCount
+            // if pagesCount is > $scope.page
+            // then set $scope.page--
+            $scope.$watch(function() {
+                return self.pagesCount;
+            }, function(newPageCount) {
+                // console.log('PAGE',$scope.page,'COUNT',newPageCount);
+                
+                if($scope.page > (newPageCount - 1)) {
+                    // console.log('IN HERE');
+                    $scope.page = newPageCount - 1;
+                }
+            });
         }])
 
         .directive('thumbPaginatorItem', ['$window','c6Debounce',

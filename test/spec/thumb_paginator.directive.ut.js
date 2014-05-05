@@ -223,6 +223,56 @@
                 });
             });
 
+            describe('$watch', function() {
+                describe('pagesCount', function() {
+                    var $pagerScope, content;
+                    
+                    beforeEach(function() {
+                        content = [
+                            '<ul>',
+                            '    <li ng-repeat="index in [0,1,2,3,4,5,6,7,8,9,10,11]">',
+                            '        <span thumb-paginator-item style="display: inline-block; width: 40px;">Foo</span>',
+                            '    </li>',
+                            '</ul>'
+                        ].join('\n');
+
+                        $testBox = $('<div style="width: 500px; height: 768px; position: relative;">');
+                        $testBox.appendTo('body');
+
+                        $scope.$apply(function() {
+                            $pager = $('<thumb-paginator active="activeIndex" class="mr-pager__group">' + content + '</thumb-paginator>');
+                            $testBox.append($pager);
+                            $pagerScope = $compile($testBox.contents())($scope);
+                        });
+                        $timeout.flush();
+                    });
+
+                    it('should start at page 0', function() {
+                        expect($pagerScope.children().scope().page).toBe(0);
+                    });
+
+                    it('should move pages when the activeIndex changes', function() {
+                        $scope.$apply(function() {
+                            $scope.activeIndex = 12;
+                        });
+
+                        expect($pagerScope.children().scope().page).toBe(1);
+                    });
+
+                    it('should go to first page if the width changes and causes the pageCount to be less than the current page number', function() {
+                        $scope.$apply(function() {
+                            $testBox.css('width','1000px');
+                            $rootScope.$broadcast('resize');
+                            $scope.activeIndex = 12;
+                        });
+                        
+                        $timeout.flush();
+
+                        expect($pagerScope.children().scope().page).toBe(0);
+                    });
+                });
+            });
+
             afterEach(function() {
                 $testBox.remove();
                 $style.remove();
