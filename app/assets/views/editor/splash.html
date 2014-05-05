@@ -2,7 +2,7 @@
     <h1 class="modal__title">Choose An Image For Your MiniReel</h1>
     <button class="modal__closeBtn sprite--alpha" c6-sref="editor"><span class="ir">Close</span></button>
     <form class="coverUploader__group">
-        <div class="coverUploader__imgBox" ng-style="{'background-image': EditorSplashCtrl.splash && ('url(' + (EditorSplashCtrl.splash | image) + ')') }">
+        <div class="coverUploader__imgBox" c6-bg-img="{{(EditorSplashCtrl.splash | image) || minireel.data.collateral.splash}}">
             <!--<input class="coverUploader__fileDrop" type="file">-->
             <div class="coverUploader__imgCropMarks coverUploader__imgCropMarks--landscape">&nbsp;</div>
             <div class="coverUploader__imgCropMarks coverUploader__imgCropMarks--portrait">&nbsp;</div>
@@ -31,7 +31,7 @@
 
     <footer class="modal__btnFooter">
         <button class="modal__btn toolbar__delete" title="Cancel" c6-sref="editor">Cancel</button>
-        <button class="modal__btn" title="Save">Save</button>
+        <button class="modal__btn" title="Save" c6-sref="editor">Save</button>
     </footer>
 </div>
 <div class="ui__overlay">&nbsp;</div>
