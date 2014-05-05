@@ -67,8 +67,6 @@
                     self.deck = [];
                     _deck = setupDeck(MiniReelService.createDeck(c6AppData.experience.data));
                     self.title = c6AppData.experience.title;
-
-                    
                 }
 
                 if(c6AppData.experience.mode === 'lightbox') {
