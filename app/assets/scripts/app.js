@@ -608,6 +608,45 @@
             };
         }])
 
+        .directive('input', [function() {
+            return {
+                restrict: 'E',
+                require: '?ngModel',
+                link: function(scope, $element, attrs, ctrl) {
+                    var getFile;
+
+                    if (!ctrl || attrs.type !== 'file') { return; }
+
+                    getFile = function() {
+                        return $element.prop('files')[0];
+                    };
+
+                    $element.on('change', function() {
+                        var file = getFile();
+
+                        scope.$apply(function() {
+                            ctrl.$setViewValue(file, 'change');
+                        });
+                    });
+
+                    ctrl.$render = function() {
+                        if (!ctrl.$modelValue && !getFile()) { return; }
+
+                        throw new Error(
+                            'An <input type="file">\'s value cannot be set via data-binding.'
+                        );
+                    };
+                }
+            };
+        }])
+
+        .filter('image', ['FileService',
+        function         ( FileService ) {
+            return function(file) {
+                return (file || null) && FileService.open(file).url;
+            };
+        }])
+
         .controller('GenericController', noop)
 
         .controller('AppController', ['$scope','$log','cinema6','gsap','c6State',

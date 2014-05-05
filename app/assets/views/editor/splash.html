@@ -2,15 +2,15 @@
     <h1 class="modal__title">Choose An Image For Your MiniReel</h1>
     <button class="modal__closeBtn sprite--alpha" c6-sref="editor"><span class="ir">Close</span></button>
     <form class="coverUploader__group">
-        <div class="coverUploader__imgBox">
-            <input class="coverUploader__fileDrop" type="file">
+        <div class="coverUploader__imgBox" ng-style="{'background-image': EditorSplashCtrl.splash && ('url(' + (EditorSplashCtrl.splash | image) + ')') }">
+            <!--<input class="coverUploader__fileDrop" type="file">-->
             <div class="coverUploader__imgCropMarks coverUploader__imgCropMarks--landscape">&nbsp;</div>
             <div class="coverUploader__imgCropMarks coverUploader__imgCropMarks--portrait">&nbsp;</div>
         </div>
         <div class="coverUploader__copy">
             <p>Upload your image or drag and drop it into the image space on the left.</p>
 
-            <input class="coverUploader__filePath" type="file">
+            <input class="coverUploader__filePath" ng-model="EditorSplashCtrl.splash" type="file">
             <div class="progressBar">
                 <div class="progressBar__status">&nbsp;</div>
             </div>

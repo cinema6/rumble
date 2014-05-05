@@ -10,6 +10,88 @@
         isFunction = angular.isFunction;
 
     angular.module('c6.mrmaker')
+        .service('FileService', ['$window','$q','$rootScope',
+        function                ( $window , $q , $rootScope ) {
+            var URL = $window.URL,
+                FormData = $window.FormData,
+                XMLHttpRequest = $window.XMLHttpRequest;
+
+            var files = [],
+                wrappers = [];
+
+            function FileWrapper(file) {
+                this.file = file;
+                this.url = URL.createObjectURL(file);
+            }
+            FileWrapper.prototype = {
+                close: function() {
+                    var index = wrappers.indexOf(this);
+
+                    wrappers.splice(index, 1);
+                    files.splice(index, 1);
+                }
+            };
+
+            this.open = function(file) {
+                files.push(file);
+
+                return wrappers[files.indexOf(file)] ||
+                    wrappers[wrappers.push(new FileWrapper(file)) - 1];
+            };
+
+            this.close = function(wrapper) {
+                var index = wrappers.indexOf(wrapper);
+
+                wrappers.splice(index, 1);
+                files.splice(index, 1);
+            };
+
+            this.upload = function(url, fileWrappers) {
+                var deferred = $q.defer(),
+                    data = new FormData(),
+                    xhr = new XMLHttpRequest();
+
+                forEach(fileWrappers, function(wrapper, index) {
+                    data.append('image' + index, wrapper.file);
+                });
+
+                xhr.open('POST', url);
+
+                xhr.responseType = 'json';
+
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState < 4) { return; }
+
+                    $rootScope.$apply(function() {
+                        deferred[ xhr.status < 400 ?
+                            'resolve' : 'reject']({
+                                data: xhr.response,
+                                status: xhr.status,
+                                statusText: xhr.statusText
+                            });
+                    });
+                };
+                xhr.upload.onprogress = function(event) {
+                    $rootScope.$apply(function() {
+                        var progress = {
+                            uploaded: event.loaded
+                        };
+
+                        if (event.lengthComputable) {
+                            progress.total = event.total;
+                            progress.complete = progress.uploaded / progress.total;
+                        }
+
+                        deferred.notify(progress);
+                    });
+                };
+
+                xhr.send(data);
+
+                return deferred.promise;
+            };
+        }])
+
         .service('VoteService', ['cinema6',
         function                ( cinema6 ) {
             function generateData(deck, election) {
