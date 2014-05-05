@@ -29,9 +29,7 @@
 
                     resetWidth();
 
-                    scope.$on('resize', function() {
-                        resetWidth();
-                    });
+                    scope.$on('resize', resetWidth);
                 },
                 controller: 'ThumbPaginatorController',
                 controllerAs: 'Ctrl',
