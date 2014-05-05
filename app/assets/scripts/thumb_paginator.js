@@ -22,8 +22,6 @@
                             controller.setWidth(element.width());
                         }, 250);
 
-                    // console.log(scope.page);
-
                     $$window.on('resize', resetWidth);
                     element.on('$destroy', function() {
                         $$window.off('resize', resetWidth);
@@ -70,13 +68,10 @@
                 var itemWidth = (this.items[0] && this.items[0].width) || 0,
                     availableWidth = this.availableWidth;
 
-                // console.log('WIDTH', itemWidth, 'AVAIL WIDTH',availableWidth);
-
                 return itemWidth && Math.floor(availableWidth / itemWidth);
             }, ['Ctrl.availableWidth', 'Ctrl.items[0].width']);
 
             c(this, 'pagesCount', function() {
-                // console.log('LENGTH', this.items.length, 'PER PAGE',this.itemsPerPage);
                 return Math.max(Math.ceil(this.items.length / this.itemsPerPage), 1);
             }, ['Ctrl.itemsPerPage', 'Ctrl.items.length']);
 
@@ -115,16 +110,10 @@
                 this.minButtonWidth = minWidth;
             };
 
-            // watch Ctrl.pagesCount
-            // if pagesCount is > $scope.page
-            // then set $scope.page--
             $scope.$watch(function() {
                 return self.pagesCount;
-            }, function(newPageCount) {
-                // console.log('PAGE',$scope.page,'COUNT',newPageCount);
-                
+            }, function(newPageCount) {                
                 if($scope.page > (newPageCount - 1)) {
-                    // console.log('IN HERE');
                     $scope.page = newPageCount - 1;
                 }
             });
