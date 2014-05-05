@@ -179,6 +179,22 @@
                     expect($pages.css('right')).toBe('50px');
                 });
 
+                it('should recalculate when resize is broadcast', function() {
+                    $testBox.width(800);
+                    $rootScope.$broadcast('resize');
+                    $timeout.flush();
+
+                    expect($pages.css('left')).toBe('50px');
+                    expect($pages.css('right')).toBe('50px');
+
+                    $testBox.width(1000);
+                    $rootScope.$broadcast('resize');
+                    $timeout.flush();
+
+                    expect($pages.css('left')).toBe('62px');
+                    expect($pages.css('right')).toBe('62px');
+                });
+
                 it('should watch the activeIndex and move to the correct page when it changes', function() {
                     var $scroller = $pager.find('.mr-pages__scroller'),
                         style = $scroller.prop('style');

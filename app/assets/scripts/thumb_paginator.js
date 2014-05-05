@@ -28,6 +28,10 @@
                     });
 
                     resetWidth();
+
+                    scope.$on('resize', function() {
+                        resetWidth();
+                    });
                 },
                 controller: 'ThumbPaginatorController',
                 controllerAs: 'Ctrl',
@@ -40,6 +44,8 @@
         function                                ( $scope , c6Computed ) {
             var self = this,
                 c = c6Computed($scope);
+
+            // console.log($scope);
 
             $scope.page = $scope.page || 0;
 

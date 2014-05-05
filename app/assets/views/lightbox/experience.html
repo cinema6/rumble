@@ -36,6 +36,7 @@
         <thumb-paginator active="tocIndex"
             ng-if="currentIndex > -1"
             class="mr-pager__group"
+            ng-class="{'mr-pager__group--fullWidth' : currentCard.type === 'recap'}"
             disable-prev-when="false"
             disable-next-when="atTail"
             on-prev="RumbleCtrl.goBack('thumb')"

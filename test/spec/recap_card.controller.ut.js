@@ -143,6 +143,15 @@
                         expect(RecapCardCtrl.deck.length).toBe(3);
                         expect(RecapCardCtrl.deck[2].id).toBe('4');
                     });
+
+                    it('should broadcast resize event if mode is lightbox', function() {
+                        spyOn($rootScope, '$broadcast');
+                        $scope.$apply(function() {
+                            c6AppData.experience.mode = 'lightbox';
+                            $scope.active = true;
+                        });
+                        expect($rootScope.$broadcast).toHaveBeenCalled();
+                    });
                 });
             });
 
