@@ -1,8 +1,9 @@
 <c6-alias model="EditCardCopyCtrl.model" as="card">
     <form>
-        <label class="field field--noBreak clearfix">
-            <span class="modal__label">Card Title:</span>
+        <label class="field field--noBreak field--smMargin clearfix">
+            <span class="modal__label">Card Title: </span>
             <input ng-model="card.title" type="text" class="modal__textBox" ng-model="card.title">
+            <span class="field__context"><strong>(0 of 100 max characters recommended)</strong></span>
         </label>
         <label class="field">
             <span class="modal__label">Card Copy: <strong class="field__context">(0 of 200 max characters)</strong></span>
