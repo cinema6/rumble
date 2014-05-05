@@ -72,3 +72,5 @@
   * [FIX]: Editor has character limit context guides
   * [FIX]: Video content editor now shows list of supported sources
   * [FIX]: Dashboard public/private icons do not use pointer cursor
+  * [FIX]: Added 3 states for "Publish Changes" button : 'alert', 'confirm', and 'disabled'
+  * [FIX]: Added special alert area at top of page to show special messages 

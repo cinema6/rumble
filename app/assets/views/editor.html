@@ -1,4 +1,12 @@
 <c6-alias model="EditorCtrl.model" as="minireel">
+    <div class="pageAlert__group">
+        <div class="ui__alert sprite--alpha"><span class="ir">Warning!</span></div>
+        <p class="pageAlert__msg">
+            <strong>Warning!</strong> You have unsaved changes. 
+            Make sure you click <strong>&ldquo;Publish Changes&rdquo;</strong> to update your MiniReel.
+        </p>
+        <button class="modal__closeBtn sprite--alpha"><span class="ir">Close</span></button>
+    </div>
     <header class="pageHeader pageHeader--editor container">
         &lsaquo; <a c6-sref="manager" class="mainNav__link" title="Dashboard">Back to the Dashboard</a>
         <div c6-sref="editor.splash" class="pageHeader__coverImg">
@@ -41,7 +49,7 @@
                         <button ng-click="EditorCtrl.makePrivate()" ng-show="minireel.status === 'active'" class="toolbar__btn toolbar__makePrivate" type="button">Make Private</button>
                     </li>
                     <li class="toolbar__item">
-                        <button ng-click="EditorCtrl.publish()" ng-show="minireel.status === 'pending'" class="toolbar__btn toolbar__publish" type="button">Publish</button>
+                        <button ng-click="EditorCtrl.publish()" ng-show="minireel.status === 'pending'" class="toolbar__btn toolbar__confirm" type="button">Publish</button>
                     </li>
                     <li class="toolbar__item">
                         <button ng-click="EditorCtrl.deleteMinireel()" class="toolbar__btn toolbar__delete" type="button">Delete</button>
@@ -52,7 +60,26 @@
                         <button class="toolbar__btn toolbar__preview" type="button" ng-click="EditorCtrl.previewMode()">Preview</button>
                     </li>
                     <li ng-show="minireel.status === 'active'" class="toolbar__item">
-                        <button ng-click="EditorCtrl.save()" class="toolbar__btn toolbar__save" type="button">Save</button>
+                        <button ng-click="EditorCtrl.save()" 
+                        class="toolbar__btn toolbar__confirm toolbar__publish toolbar__publish--alert" 
+                        type="button">
+                            <span class="pubState sprite--alpha">&nbsp;</span>
+                            <span class="pubText">Publish Changes</span>
+                        </button>
+                        
+                        <button ng-click="EditorCtrl.save()" 
+                        class="toolbar__btn toolbar__confirm toolbar__publish toolbar__publish--confirm" 
+                        type="button">
+                            <span class="pubState sprite--alpha">&nbsp;</span>
+                            <span class="pubText">Publish Changes</span>
+                        </button>
+
+                        <button ng-click="EditorCtrl.save()" 
+                        class="toolbar__btn toolbar__confirm toolbar__publish toolbar__publish--disabled" 
+                        type="button">
+                            <span class="pubState sprite--alpha">&nbsp;</span>
+                            <span class="pubText">Publish Changes</span>
+                        </button>
                     </li>
                 </ul>
             </div>

@@ -203,7 +203,7 @@
         .modal__closeBtn {
             width:1.125em; height:1.125em;
             background-position:-1.5625em -3.6875em;
-            position:absolute; top:20px; right:20px;
+            position:absolute; top:1.25em; right:1.25em;
             cursor:pointer;
         }
             .modal__closeBtn:hover {
@@ -217,14 +217,14 @@
         .modal__radioBtn:before {
             content:"";
             display:inline-block;
-            width:28px; height:28px;
-            margin:-10px 0 0 -10px;
+            width:1.75rem; height:1.75rem;
+            margin:-0.625rem 0 0 -0.625rem;
             vertical-align:middle;
-            background:url('../img/sprite--alpha@2x.png') 0 -77px / 25rem 25rem no-repeat;
+            background:url('../img/sprite--alpha@2x.png') 0 -4.8125rem / 25rem 25rem no-repeat;
             cursor:pointer;
         }
         .modal__radioBtn:checked:before {
-            background:url('../img/sprite--alpha@2x.png') -29px -77px / 25rem 25rem no-repeat;
+            background:url('../img/sprite--alpha@2x.png') -1.8125rem -4.8125rem / 25rem 25rem no-repeat;
             cursor:pointer;
         }
         .modal__btnFooter {
@@ -567,6 +567,34 @@
                 }
 
 /*  ==========================================================================
+    pageAlert styles
+    ========================================================================== */
+    .pageAlert__group {
+        background:#d61212;
+        text-align: center; color:#fff;
+        padding:0.5em 3em;
+    }
+        .pageAlert__group--disabled {
+            display:none;
+        }
+        .pageAlert__msg {
+            margin:0;
+        }
+        .pageAlert__group .modal__closeBtn {
+            top:0.75em; right:0.75em;
+        }
+            .pageAlert__group .modal__closeBtn:hover {
+                background-position:-1.5625em -3.6875em;
+            }
+
+        .pageAlert__group .ui__alert {
+            width:1.5rem; height:1.5rem;
+            display:block; margin:-5px 0 0 0;
+            position:absolute; top:0.75em; left:0.75em;
+            background-position:-123px -82px;
+        }
+
+/*  ==========================================================================
     pageHeader
     ========================================================================== */
     .pageHeader {
@@ -756,10 +784,10 @@
                 .toolbar__makePrivate:hover {
                     background:#8e8e8e;
                 }
-            .toolbar__publish, .toolbar__confirm {
+            .toolbar__confirm {
                 background:#72ad25;
             }
-                .toolbar__publish:hover, .toolbar__confirm:hover {
+                .toolbar__confirm:hover {
                     background:#7cc61b;
                 }
             .toolbar__delete, .toolbar__cancel {
@@ -774,6 +802,33 @@
                 .toolbar__neutral:hover {
                     background:#aeaeae;
                 }
+            .toolbar__publish {
+                padding-left:1rem;
+                -webkit-transition: background 0.5s, opacity 0.5s; 
+                transition: background 0.5s, opacity 0.5s
+            }
+                .toolbar__publish--disabled {
+                    opacity:0.4; cursor:default;
+                }
+                    .toolbar__publish--disabled:hover {
+                        background:#72ad25;
+                    }
+
+                .toolbar__publish .pubText {
+                    padding-left:1.75rem;
+                }
+                .toolbar__publish .pubState {
+                    width:1.5rem; height:1.5rem;
+                    display:block; margin:-5px 0 0 0;
+                    position:absolute;
+                }
+                    .toolbar__publish--alert .pubState {
+                        background-position:-123px -82px;
+                    }
+                    .toolbar__publish--confirm .pubState,
+                    .toolbar__publish--disabled .pubState {
+                        background-position:-148px -82px;
+                    }
 
 
     /*  publish__actions
@@ -1046,6 +1101,7 @@
                 border:2px solid #fff; border-radius:50%; 
                 padding:0.5em; margin:-14px 0 0 196px;
                 font-size:1rem;
+                width:2em; height:2em;
                 cursor:pointer;
                 -webkit-box-shadow: 0 3px 5px 0 rgba(0,0,0,0.5);
                 box-shadow: 0 3px 5px 0 rgba(0,0,0,0.5);
