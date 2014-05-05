@@ -56,6 +56,8 @@
                 close: function() {
                     var index = wrappers.indexOf(this);
 
+                    URL.revokeObjectURL(this.url);
+
                     wrappers.splice(index, 1);
                     files.splice(index, 1);
                 }
@@ -66,13 +68,6 @@
 
                 return wrappers[files.indexOf(file)] ||
                     wrappers[wrappers.push(new FileWrapper(file)) - 1];
-            };
-
-            this.close = function(wrapper) {
-                var index = wrappers.indexOf(wrapper);
-
-                wrappers.splice(index, 1);
-                files.splice(index, 1);
             };
 
             this.upload = function(url, fileWrappers) {

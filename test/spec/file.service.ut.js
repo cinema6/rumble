@@ -52,7 +52,8 @@
                 module('ng', function($provide) {
                     $provide.value('$window', {
                         URL: {
-                            createObjectURL: jasmine.createSpy('URL.createObjectURL()')
+                            createObjectURL: jasmine.createSpy('URL.createObjectURL()'),
+                            revokeObjectURL: jasmine.createSpy('URL.revokeObjectURL()')
                         },
                         FormData: MockFormData,
                         XMLHttpRequest: MockXHR,
@@ -240,13 +241,22 @@
 
             describe('FileWrapper()', function() {
                 describe('close()', function() {
-                    it('should remove cached references to the file and wrapper', function() {
-                        var file = {},
-                            wrapper = FileService.open(file);
+                    var file, wrapper;
+
+                    beforeEach(function() {
+                        $window.URL.createObjectURL.and.returnValue({});
+                        file = {};
+                        wrapper = FileService.open(file);
 
                         wrapper.close();
+                    });
 
+                    it('should remove cached references to the file and wrapper', function() {
                         expect(FileService.open(file)).not.toBe(wrapper);
+                    });
+
+                    it('should revoke the generated URL', function() {
+                        expect($window.URL.revokeObjectURL).toHaveBeenCalledWith(wrapper.url);
                     });
                 });
             });
