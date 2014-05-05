@@ -379,21 +379,29 @@
     /*  modal forms
     ========================================================================== */
         .field {
-            display:block;
+            display:block; margin:0 0 1.5em 0;
         }
-            .field--noBreak {
-                margin:0 0 1.5em 0;
+            .field--smMargin {
+                margin:0 0 1em 0;
             }
-                .field--noBreak .modal__label {
-                    float:left;
-                }
-                .field--noBreak .modal__textBox {
-                    float:right;
-                }
+            
+            .field--noBreak .modal__label {
+                float:left; width:7rem;
+            }
+            .field--noBreak .modal__textBox,
+            .field--noBreak .field__context {
+                float:right; width:36.5rem;
+            }
+            .field--noBreak .field__context--short {
+                float:left; margin:5px 0 0 0.5em;
+                width:auto;
+            }
         .modal__label {
             font-weight:100;
             display:block;
-            width:7rem;
+        }
+        .field__context {
+            font-size:0.75em;
         }
         .modal__textBox, 
         .modal__textarea {
@@ -405,7 +413,7 @@
             box-sizing: border-box;
             background:#f4f4f4;
             color:#646464;
-            width:36.5rem;
+            width:100%;
             resize: none;
         }
             .modal__textBox:focus,
@@ -810,20 +818,18 @@
                 width:33.333%;
             }
         }
-        .miniReel__group {
-            cursor:pointer;
+        .miniReel__group--deleted {
+            background:#eee;
         }
-            .miniReel__group--deleted {
-                background:#eee;
+            .miniReel__group--deleted .miniReel__quickActions {
+                background:#ddd;
             }
-                .miniReel__group--deleted .miniReel__quickActions {
-                    background:#ddd;
-                }
 
         .miniReel__body {
             width:100%; height:0; padding-bottom:100%;
             background:#ccc url('../img/default_square.jpg') 50% 50% / cover no-repeat;
             position:relative;
+            cursor:pointer;
         }
             .miniReel__imgBox {
                 width:100%; height:100%;
