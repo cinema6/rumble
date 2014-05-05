@@ -60,8 +60,8 @@
                 $scope.$emit('<recap-card>:jumpTo', getIndex(card));
             };
 
-            $scope.$watch('active', function(isActive) {
-                // if(isActive === wasActive) { return; }
+            $scope.$watch('active', function(isActive, wasActive) {
+                if(isActive === wasActive) { return; }
                 
                 if(isActive) {
                     self.deck = [];
