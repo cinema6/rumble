@@ -2,8 +2,10 @@
     'use strict';
 
     angular.module('c6.mrmaker')
-        .controller('ManagerController', ['c6State','MiniReelService','ConfirmDialogService',
-        function                         ( c6State , MiniReelService , ConfirmDialogService ) {
+        .controller('ManagerController', [  'c6State','MiniReelService','ConfirmDialogService',
+                                            '$scope',
+        function                         (  c6State , MiniReelService , ConfirmDialogService,
+                                            $scope) {
             var self = this;
 
             this.filter = 'all';
@@ -93,6 +95,8 @@
             this.determineInclusionWithFilter = function(minireel) {
                 return self.filter === 'all' || self.filter === minireel.status;
             };
+
+            $scope.AppCtrl.sendPageview('manager','Manager');
         }])
 
         .controller('NewCategoryController', ['$scope',

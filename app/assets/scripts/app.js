@@ -41,7 +41,6 @@
                     'SteppedEase',
                     'Strong'
                 ],
-                googleAnalytics: 'ga',
                 crypto: 'CryptoJS',
                 youtube: 'YT'
             };
@@ -610,8 +609,10 @@
 
         .controller('GenericController', noop)
 
-        .controller('AppController', ['$scope','$log','cinema6','gsap','c6State',
-        function                     ( $scope , $log , cinema6 , gsap , c6State ) {
+        .controller('AppController', [  '$scope','$log','cinema6','gsap',
+                                        'c6State', 'c6Defines', 'tracker',
+        function                     (  $scope , $log , cinema6 , gsap ,
+                                        c6State, c6Defines, tracker ) {
             var self = this;
 
             $log.info('AppCtlr loaded.');
@@ -636,7 +637,21 @@
                     });
             });
 
+            self.sendPageview = function(page,title) {
+                if (self.config === null){
+                    $log.error('Unable to send pageview for %1, config is null.', page);
+                    return;
+                }
+
+                tracker.pageview('/' + self.config.uri + '/' + page,
+                    self.config.title + ' - ' + title);
+            };
+
+            $log.info('Initialize tracker with:',c6Defines.kTracker);
+            tracker.create(c6Defines.kTracker.accountId,c6Defines.kTracker.config);
+
             $scope.AppCtrl = this;
+
         }])
 
         .directive('embedCode', ['c6UrlMaker',

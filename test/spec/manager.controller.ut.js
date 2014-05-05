@@ -42,7 +42,11 @@
                     c6State = $injector.get('c6State');
 
                     $scope = $rootScope.$new();
-                    ManagerCtrl = $controller('ManagerController', { $scope: $scope, cModel: model });
+                    $scope.AppCtrl = {
+                        sendPageview : jasmine.createSpy('AppCtrl.sendPageview')
+                    };
+
+                    ManagerCtrl = $controller('ManagerController', { $scope: $scope, cModel: model});
                     ManagerCtrl.model = model;
                 });
 
@@ -59,6 +63,12 @@
                     it('should be initialized as "all"', function() {
                         expect(ManagerCtrl.filter).toBe('all');
                     });
+                });
+            });
+
+            describe('tracking', function(){
+                it('should send a pageview when loaded',function(){
+                    expect($scope.AppCtrl.sendPageview).toHaveBeenCalledWith('manager','Manager');
                 });
             });
 

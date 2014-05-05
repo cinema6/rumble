@@ -188,6 +188,8 @@
 
                 MiniReelService.close();
             });
+
+            AppCtrl.sendPageview('editor','Editor');
         }])
 
         .controller('EditCardController', ['$scope','c6Computed','c6State','VideoService',

@@ -7,11 +7,12 @@
                 $scope,
                 $q,
                 c6State,
-                AppCtrl;
+                AppCtrl,
+                c6Defines,
+                tracker;
 
             var cinema6,
                 gsap,
-                googleAnalytics,
                 appData,
                 cinema6Session;
 
@@ -23,8 +24,19 @@
                         }
                     }
                 };
+                
+                c6Defines = {
+                    kTracker : {
+                        accountId : 'account1',
+                        config    : 'auto'
+                    }
+                };
 
-                googleAnalytics = jasmine.createSpy('googleAnalytics');
+                tracker = {
+                    create   :  jasmine.createSpy('tracker.create'),
+                    send     :  jasmine.createSpy('tracker.send'),
+                    pageview :  jasmine.createSpy('tracker.pageview')
+                };
 
                 appData = {
                     experience: {
@@ -66,7 +78,6 @@
 
                 module('c6.mrmaker', function($provide) {
                     $provide.value('gsap', gsap);
-                    $provide.value('googleAnalytics', googleAnalytics);
                 });
 
                 inject(function($injector, $controller, c6EventEmitter) {
@@ -76,6 +87,8 @@
 
                     $scope = $rootScope.$new();
                     AppCtrl = $controller('AppController', {
+                        tracker        : tracker,
+                        c6Defines      : c6Defines,
                         $scope: $scope
                     });
 
@@ -145,6 +158,32 @@
                         });
                         expect(cinema6.getSession).toHaveBeenCalled();
                         expect(cinema6Session.ping).toHaveBeenCalledWith('stateChange', { name: 'editor' });
+                    });
+                });
+            });
+
+            describe('tracking',function(){
+                describe('create',function(){
+                    it('should initialize the tracker',function(){
+                        expect(tracker.create).toHaveBeenCalledWith('account1','auto');
+
+                    });
+                });
+                describe('sendPageview',function(){
+                    it('does nothing if AppCtrl.config is null',function(){
+                        AppCtrl.config = null;
+                        AppCtrl.sendPageview('test','Test');
+                        expect(tracker.pageview).not.toHaveBeenCalled();
+                    });
+
+                    it('calls tracker.pageview if config is set',function(){
+                        AppCtrl.config = {
+                            title : 'Some Title',
+                            uri   : 'mini-reel-maker'
+                        };
+                        AppCtrl.sendPageview('test','Test');
+                        expect(tracker.pageview)
+                            .toHaveBeenCalledWith('/mini-reel-maker/test','Some Title - Test');
                     });
                 });
             });

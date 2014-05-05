@@ -16,6 +16,10 @@
     c6.kModDeps = ['c6.ui', 'c6.state', 'c6.log', 'c6.drag', 'ngAnimate'];
     c6.kExpUrl = '/apps';
     c6.kCollateralUrl = '/collateral';
+    c6.kTracker  = {
+        accountId : 'UA-44457821-1',
+        config    : (c6.kLocal) ? { 'cookieDomain' : 'none' } : 'auto'
+    };
 
     appScripts = c6.kLocal ? [
         'scripts/app',
@@ -25,7 +29,8 @@
         'scripts/editor',
         'scripts/c6_state',
         'scripts/c6_drag',
-        'scripts/card_table'
+        'scripts/card_table',
+        'scripts/tracker'
     ] :
     [
         'scripts/c6app.min'
@@ -80,13 +85,6 @@
                 libUrl('hammer.js/1.0.9-0-g308cb9a/hammer.min')
         }
     });
-
-
-    if (window.location.host.match(/\/\/(www\.)*cinema6.com/) !== null){
-        ga('create', 'UA-44457821-2', 'cinema6.com');
-    } else {
-        ga('create', 'UA-44457821-1', { 'cookieDomain' : 'none' });
-    }
 
     loadScriptsInOrder(libScripts, function() {
         var Modernizr = window.Modernizr;
