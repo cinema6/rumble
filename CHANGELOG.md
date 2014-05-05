@@ -42,3 +42,5 @@
   * [FIX]: Explicitly ask for SSL assets from dailymotion when on an
     HTTPS connection
 * *[/Beta3.rc9]*
+* *[Beta3.rc10]*
+  * [FIX]: 'mr-pager__group--fullWidth' class added to lightbox, no-ad version of minireel player 
