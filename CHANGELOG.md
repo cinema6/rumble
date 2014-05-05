@@ -49,3 +49,4 @@
 * *[Beta3.rc10]*
   * [FIX]: 'mr-pager__group--fullWidth' class added to lightbox, no-ad version of minireel player
   * [FIX]: Update thumb-paginator to recalculate width when recap-card broadcasts a resize event
+  * [FIX]: Update thumb-paginator to monitor page count and change current page if necessary
