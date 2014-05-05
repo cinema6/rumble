@@ -45,8 +45,6 @@
             var self = this,
                 c = c6Computed($scope);
 
-            // console.log($scope);
-
             $scope.page = $scope.page || 0;
 
             $scope.$watch('active()', function(index, prevIndex) {
