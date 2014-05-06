@@ -53,3 +53,4 @@
   * [FIX]: Urban Times theme cleaned up
   * [FIX]: Updated cache times
   * [FIX]: Updated to pull all mr fields from data
+* *[/Beta3.rc10]*
