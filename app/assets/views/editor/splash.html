@@ -1,23 +1,26 @@
-<div class="ui__modal">
+<div class="ui__modal" c6-alias="EditorSplashCtrl.model as minireel">
     <h1 class="modal__title">Choose An Image For Your MiniReel</h1>
     <button class="modal__closeBtn sprite--alpha" c6-sref="editor"><span class="ir">Close</span></button>
     <form class="coverUploader__group">
-        <div class="coverUploader__imgBox">
-            <input class="coverUploader__fileDrop" type="file">
+        <div class="coverUploader__imgBox" c6-bg-img="{{(EditorSplashCtrl.splash | image) || minireel.data.collateral.splash}}">
+            <!--<input class="coverUploader__fileDrop" type="file">-->
             <div class="coverUploader__imgCropMarks coverUploader__imgCropMarks--landscape">&nbsp;</div>
             <div class="coverUploader__imgCropMarks coverUploader__imgCropMarks--portrait">&nbsp;</div>
         </div>
         <div class="coverUploader__copy">
-            <p>Upload your image or drag and drop it into the image space on the left.</p>
+            <!--<p>Upload your image or drag and drop it into the image space on the left.</p>-->
 
-            <input class="coverUploader__filePath" type="file">
-            <div class="progressBar">
-                <div class="progressBar__status">&nbsp;</div>
-            </div>
-            <p class="progressBar__statusText">
-                Loading 1000 kb of 2000 kb
-            </p>
-            <button class="coverUploader__button toolbar__btn">Upload</button>
+            <input class="coverUploader__filePath" ng-model="EditorSplashCtrl.splash" type="file">
+            <span ng-show="!!EditorSplashCtrl.currentUpload" c6-alias="EditorSplashCtrl.currentUpload.progress as progress">
+                <div class="progressBar">
+                    <div ng-style="{ width: (progress.complete | percent) }" class="progressBar__status">&nbsp;</div>
+                </div>
+                <p class="progressBar__statusText">
+                    Loading {{(progress.uploaded / 1024) | number:0}} kb of {{(progress.total / 1024) | number:0}} kb
+                </p>
+            </span>
+            <p ng-show="EditorSplashCtrl.fileTooBig">The file you selected is too large. It must be under {{EditorSplashCtrl.maxFileSize / 1024}} kb.</p>
+            <button ng-click="EditorSplashCtrl.upload()" ng-show="!!EditorSplashCtrl.splash && !EditorSplashCtrl.fileTooBig" class="coverUploader__button toolbar__btn">Upload</button>
 
             <ul class="coverUploader__helpTips">
                 <li>Images should be 600 pixels by 600 pixels.</li>
@@ -29,7 +32,7 @@
 
     <footer class="modal__btnFooter">
         <button class="modal__btn toolbar__delete" title="Cancel" c6-sref="editor">Cancel</button>
-        <button class="modal__btn" title="Save">Save</button>
+        <button class="modal__btn" title="Save" ng-click="EditorSplashCtrl.save()">Save</button>
     </footer>
 </div>
 <div class="ui__overlay">&nbsp;</div>

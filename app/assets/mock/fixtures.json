@@ -17,6 +17,9 @@
             "mode": "light",
             "type": "minireel",
             "data": {
+                "collateral": {
+                    "splash": "http://www.reactiongifs.us/wp-content/uploads/2013/11/brent_rambo_approves.gif"
+                },
                 "branding": "elitedaily",
                 "deck": [
                     {

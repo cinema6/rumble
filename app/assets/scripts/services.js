@@ -10,6 +10,112 @@
         isFunction = angular.isFunction;
 
     angular.module('c6.mrmaker')
+        .service('CollateralService', ['FileService',
+        function                      ( FileService ) {
+            this.set = function(key, file, experience) {
+                var promise;
+
+                function setResult(response) {
+                    var data = experience.data;
+
+                    (data.collateral || (data.collateral = {}))[key] =
+                        '/' + response.data[0].path;
+
+                    return experience;
+                }
+
+                function updateProgress(progress) {
+                    promise.progress = progress;
+
+                    return progress;
+                }
+
+                file = FileService.open(file);
+
+                promise = FileService.upload('/api/collateral/files', [file])
+                    .then(setResult, null, updateProgress);
+
+                return promise;
+            };
+        }])
+
+        .service('FileService', ['$window','$q','$rootScope',
+        function                ( $window , $q , $rootScope ) {
+            var URL = $window.URL,
+                FormData = $window.FormData,
+                XMLHttpRequest = $window.XMLHttpRequest;
+
+            var wrappers = [];
+
+            function FileWrapper(file) {
+                this.file = file;
+                this.url = URL.createObjectURL(file);
+            }
+            FileWrapper.prototype = {
+                close: function() {
+                    URL.revokeObjectURL(this.url);
+
+                    wrappers.splice(wrappers.indexOf(this), 1);
+                }
+            };
+
+            this.open = function(file) {
+                function findWrapperForFile(file) {
+                    return wrappers.filter(function(wrapper) {
+                        return wrapper.file === file;
+                    })[0];
+                }
+
+                return findWrapperForFile(file) ||
+                    wrappers[wrappers.push(new FileWrapper(file)) - 1];
+            };
+
+            this.upload = function(url, fileWrappers) {
+                var deferred = $q.defer(),
+                    data = new FormData(),
+                    xhr = new XMLHttpRequest();
+
+                forEach(fileWrappers, function(wrapper, index) {
+                    data.append('image' + index, wrapper.file);
+                });
+
+                xhr.open('POST', url);
+
+                xhr.responseType = 'json';
+
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState < 4) { return; }
+
+                    $rootScope.$apply(function() {
+                        deferred[ xhr.status < 400 ?
+                            'resolve' : 'reject']({
+                                data: xhr.response,
+                                status: xhr.status,
+                                statusText: xhr.statusText
+                            });
+                    });
+                };
+                xhr.upload.onprogress = function(event) {
+                    $rootScope.$apply(function() {
+                        var progress = {
+                            uploaded: event.loaded
+                        };
+
+                        if (event.lengthComputable) {
+                            progress.total = event.total;
+                            progress.complete = progress.uploaded / progress.total;
+                        }
+
+                        deferred.notify(progress);
+                    });
+                };
+
+                xhr.send(data);
+
+                return deferred.promise;
+            };
+        }])
+
         .service('VoteService', ['cinema6',
         function                ( cinema6 ) {
             function generateData(deck, election) {
@@ -536,6 +642,7 @@
                             branding: minireel.data.branding,
                             autoplay: minireel.data.autoplay,
                             election: minireel.data.election,
+                            collateral: minireel.data.collateral,
                             deck: minireel.data.deck.map(function(card) {
                                 return makeCard(card);
                             })
