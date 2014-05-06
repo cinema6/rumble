@@ -357,6 +357,15 @@
                     .coverUploader__filePath:focus {
                         background:#eff9ff;
                     }
+                .coverUploader__controls {
+                    height:9.375em;
+                }
+                    .coverUploader__controls .coverUploader__button {
+                        margin:0.75em 0 0 0;
+                    }
+                    .coverUploader__controls .typo--attention {
+                        margin:0.25em 0 0 0;
+                    }
                 .coverUploader__fileDrop {
                     display: block;
                     position:absolute; z-index: 5;
@@ -372,6 +381,9 @@
                 }
                     .progressBar__status {
                         background:#72ad25;
+                    }
+                    .progressBar__statusText {
+                        margin:0;
                     }
 
 
@@ -516,7 +528,8 @@
                 .wizard__choice:hover .wizard__title {
                     color:#13a2ff;
                 }
-                .wizard__choice--disabled:hover .wizard__title {
+                .wizard__choice--disabled:hover .wizard__title,
+                .wizard__choice:disabled:hover .wizard__title {
                     color:#444;
                 }
             .wizard__disabler {
@@ -758,16 +771,19 @@
                 font-size:0.875em; color:#fff; font-weight:700; line-height: 1;
                 background:#4a9cd1;
                 cursor:pointer;
-                -webkit-transition: background 0.5s; transition: background 0.5s;
+                -webkit-transition: background 0.5s, opacity 0.5s; 
+                transition: background 0.5s, opacity 0.5s;
             }
                 .toolbar__btn:hover, .modal__btn:hover {
                     background:#13a2ff;
                 }
-                .toolbar__btn--disabled, .modal__btn--disabled {
+                .toolbar__btn--disabled, .modal__btn--disabled,
+                .toolbar__btn:disabled, .modal__btn:disabled {
                     opacity:0.4;
                     cursor:default;
                 }
-                    .toolbar__btn--disabled:hover, .modal__btn--disabled:hover {
+                    .toolbar__btn--disabled:hover, .modal__btn--disabled:hover,
+                    .toolbar__btn:disabled:hover, .modal__btn:disabled:hover {
                         background:#4a9cd1;
                     }
             .toolbar__newMiniReel {
@@ -806,10 +822,12 @@
                 -webkit-transition: background 0.5s, opacity 0.5s; 
                 transition: background 0.5s, opacity 0.5s
             }
-                .toolbar__publish--disabled {
+                .toolbar__publish--disabled,
+                .toolbar__publish:disabled {
                     opacity:0.4; cursor:default;
                 }
-                    .toolbar__publish--disabled:hover {
+                    .toolbar__publish--disabled:hover,
+                    .toolbar__publish:disabled:hover {
                         background:#72ad25;
                     }
 
@@ -825,7 +843,8 @@
                         background-position:-123px -82px;
                     }
                     .toolbar__publish--confirm .pubState,
-                    .toolbar__publish--disabled .pubState {
+                    .toolbar__publish--disabled .pubState,
+                    .toolbar__publish:disabled .pubState {
                         background-position:-148px -82px;
                     }
                     .toolbar__publish--waiting .pubState {
