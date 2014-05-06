@@ -190,8 +190,8 @@
             });
         }])
 
-        .controller('EditorSplashController', ['CollateralService',
-        function                              ( CollateralService ) {
+        .controller('EditorSplashController', ['$scope','FileService','CollateralService',
+        function                              ( $scope , FileService , CollateralService ) {
             var self = this;
 
             this.splash = null;
@@ -210,6 +210,18 @@
                     self.currentUpload = null;
                 });
             };
+
+            $scope.$on('$destroy', function() {
+                if (!self.splash) { return; }
+
+                FileService.open(self.splash).close();
+            });
+
+            $scope.$watch(function() { return self.splash; }, function(newImage, oldImage) {
+                if (!oldImage) { return; }
+
+                FileService.open(oldImage).close();
+            });
         }])
 
         .controller('EditCardController', ['$scope','c6Computed','c6State','VideoService',
