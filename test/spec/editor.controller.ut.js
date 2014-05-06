@@ -54,6 +54,8 @@
 
                     $scope = $rootScope.$new();
                     AppCtrl = $scope.AppCtrl = {
+                        sendPageView : jasmine.createSpy('AppCtrl.sendPageView'),
+                        sendPageEvent : jasmine.createSpy('AppCtrl.sendPageEvent'),
                         config: null
                     };
                     $childScope = $scope.$new();
@@ -70,7 +72,14 @@
             it('should exist', function() {
                 expect(EditorCtrl).toEqual(jasmine.any(Object));
             });
-
+/*
+            describe('tracking', function(){
+                it('should send a pageview when loaded',function(){
+                    expect($scope.AppCtrl.sendPageView)
+                        .toHaveBeenCalledWith({page:'editor',title:'Editor'});
+                });
+            });
+*/
             describe('properties', function() {
                 describe('preview', function() {
                     it('should be false', function() {

@@ -7,11 +7,12 @@
                 $scope,
                 $q,
                 c6State,
-                AppCtrl;
+                AppCtrl,
+                c6Defines,
+                tracker;
 
             var cinema6,
                 gsap,
-                googleAnalytics,
                 appData,
                 cinema6Session;
 
@@ -23,8 +24,20 @@
                         }
                     }
                 };
+                
+                c6Defines = {
+                    kTracker : {
+                        accountId : 'account1',
+                        config    : 'auto'
+                    }
+                };
 
-                googleAnalytics = jasmine.createSpy('googleAnalytics');
+                tracker = {
+                    create   :  jasmine.createSpy('tracker.create'),
+                    send     :  jasmine.createSpy('tracker.send'),
+                    event    :  jasmine.createSpy('tracker.event'),
+                    pageview :  jasmine.createSpy('tracker.pageview')
+                };
 
                 appData = {
                     experience: {
@@ -66,7 +79,6 @@
 
                 module('c6.mrmaker', function($provide) {
                     $provide.value('gsap', gsap);
-                    $provide.value('googleAnalytics', googleAnalytics);
                 });
 
                 inject(function($injector, $controller, c6EventEmitter) {
@@ -76,6 +88,8 @@
 
                     $scope = $rootScope.$new();
                     AppCtrl = $controller('AppController', {
+                        tracker        : tracker,
+                        c6Defines      : c6Defines,
                         $scope: $scope
                     });
 
@@ -132,6 +146,7 @@
             describe('events', function() {
                 describe('c6State: stateChangeSuccess', function() {
                     it('should ping the session', function() {
+                        spyOn(AppCtrl,'trackStateChange');
                         expect(cinema6.getSession).not.toHaveBeenCalled();
                         c6State.emit('stateChangeSuccess', c6State.get('manager'), null);
                         $rootScope.$apply(function() {
@@ -143,9 +158,88 @@
                         $rootScope.$apply(function() {
                             c6State.emit('stateChangeSuccess', c6State.get('editor'), c6State.get('manager'));
                         });
+                        expect(AppCtrl.trackStateChange).toHaveBeenCalled();
                         expect(cinema6.getSession).toHaveBeenCalled();
                         expect(cinema6Session.ping).toHaveBeenCalledWith('stateChange', { name: 'editor' });
                     });
+                });
+            });
+
+            describe('tracking',function(){
+                describe('create',function(){
+                    it('should initialize the tracker',function(){
+                        expect(tracker.create).toHaveBeenCalledWith('account1','auto');
+
+                    });
+                });
+                describe('sendPageView',function(){
+                    it('does nothing if AppCtrl.config is null',function(){
+                        AppCtrl.config = null;
+                        AppCtrl.sendPageView({ page: 'test', title: 'Test'});
+                        expect(tracker.pageview).not.toHaveBeenCalled();
+                    });
+
+                    it('calls tracker.pageview if config is set',function(){
+                        AppCtrl.config = {
+                            title : 'Some Title',
+                            uri   : 'mini-reel-maker'
+                        };
+                        AppCtrl.sendPageView({page : 'test', title: 'Test'});
+                        expect(tracker.pageview)
+                            .toHaveBeenCalledWith('/mini-reel-maker/test','Some Title - Test');
+                    });
+                });
+
+                describe('sendPageEvent',function(){
+                    it('does nothing if AppCtrl.config is null',function(){
+                        AppCtrl.config = null;
+                        AppCtrl.sendPageEvent('Editor','Click','Add New',{page:'test',title:'Test'});
+                        expect(tracker.event).not.toHaveBeenCalled();
+                    });
+                    it(' calls tracker.event',function(){
+                        AppCtrl.config = {
+                            title : 'Some Title',
+                            uri   : 'mini-reel-maker'
+                        };
+                        AppCtrl.sendPageEvent('Editor','Click','Add New',{page:'test',title:'Test'});
+                        expect(tracker.event)
+                            .toHaveBeenCalledWith('Editor','Click','Add New',{page:'/mini-reel-maker/test',title:'Some Title - Test'});
+                    });
+
+                });
+
+                describe('trackStateChange',function(){
+                    it('does nothing if no config',function(){
+                        AppCtrl.config = null;
+                        AppCtrl.trackStateChange({ templateUrl : 'assets/views/manager.html' });
+                        expect(tracker.pageview)
+                            .not.toHaveBeenCalled();
+                    });
+
+                    it('does nothing if no templateUrl',function(){
+                        AppCtrl.config = {
+                            title : 'Some Title',
+                            uri   : 'mini-reel-maker'
+                        };
+                        AppCtrl.trackStateChange({  });
+                        expect(tracker.pageview)
+                            .not.toHaveBeenCalled();
+                    });
+
+                    it('calls tracker.pageview',function(){
+                        AppCtrl.config = {
+                            title : 'Some Title',
+                            uri   : 'mini-reel-maker'
+                        };
+                        AppCtrl.trackStateChange({
+                            templateUrl : 'assets/views/manager.html' ,
+                            name        : 'manager'
+                        });
+                        expect(tracker.pageview)
+                            .toHaveBeenCalledWith('/mini-reel-maker/manager.html',
+                                'Some Title - manager');
+                    });
+
                 });
             });
         });

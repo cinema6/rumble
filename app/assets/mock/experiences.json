@@ -2,6 +2,7 @@
     {
         "id": "e-51ae37625cb57f",
         "uri": "mini-reel-maker",
+        "title": "Minireelinator",
         "appUriPrefix": "<%= settings.appUrl %>",
         "appUri": "mini-reel-maker",
         "data": {
