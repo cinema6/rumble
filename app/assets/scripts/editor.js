@@ -366,6 +366,11 @@
                     get: function() {
                         return (this.model.note || '').length <= this.limits.copy;
                     }
+                },
+                saveText: {
+                    get: function() {
+                        return (EditorCtrl.model.status === 'active') ? 'Done' : 'Save';
+                    }
                 }
             });
 
@@ -376,10 +381,6 @@
 
                 c6State.goTo('editor');
             };
-
-            c(this, 'saveText', function() {
-                return (EditorCtrl.model.status === 'active') ? 'Done' : 'Save';
-            }, ['EditorCtrl.model.status']);
         }])
 
         .controller('NewCardController', ['$scope','c6State','c6StateParams','MiniReelService',
