@@ -1,11 +1,11 @@
 <c6-alias model="EditorCtrl.model" as="minireel">
-    <div class="pageAlert__group">
+    <div ng-if="minireel.status === 'active'" ng-show="EditorCtrl.isDirty && !EditorCtrl.dismissDirtyWarning" class="pageAlert__group">
         <div class="ui__alert sprite--alpha"><span class="ir">Warning!</span></div>
         <p class="pageAlert__msg">
             <strong>Warning!</strong> You have unsaved changes. 
             Make sure you click <strong>&ldquo;Publish Changes&rdquo;</strong> to update your MiniReel.
         </p>
-        <button class="modal__closeBtn sprite--alpha"><span class="ir">Close</span></button>
+        <button ng-click="EditorCtrl.dismissDirtyWarning = true" class="modal__closeBtn sprite--alpha"><span class="ir">Close</span></button>
     </div>
     <header class="pageHeader pageHeader--editor container">
         &lsaquo; <a c6-sref="manager" class="mainNav__link" title="Dashboard">Back to the Dashboard</a>
@@ -61,13 +61,19 @@
                     </li>
                     <li ng-show="minireel.status === 'active'" class="toolbar__item">
                         <button ng-click="EditorCtrl.save()" 
-                        class="toolbar__btn toolbar__confirm toolbar__publish toolbar__publish--alert" 
+                        class="toolbar__btn toolbar__confirm toolbar__publish" 
+                        ng-class="{
+                            'toolbar__publish--alert': EditorCtrl.isDirty,
+                            'toolbar__publish--waiting': EditorCtrl.inFlight,
+                            'toolbar__publish--disabled': !EditorCtrl.isDirty
+                        }"
+                        ng-disabled="!EditorCtrl.isDirty"
                         type="button">
                             <span class="pubState sprite--alpha">&nbsp;</span>
                             <span class="pubText">Publish Changes</span>
                         </button>
 
-                        <button ng-click="EditorCtrl.save()" 
+                        <!--<button ng-click="EditorCtrl.save()" 
                         class="toolbar__btn toolbar__confirm toolbar__publish toolbar__publish--waiting" 
                         type="button">
                             <span class="pubState sprite--alpha">&nbsp;</span>
@@ -86,7 +92,7 @@
                         type="button">
                             <span class="pubState sprite--alpha">&nbsp;</span>
                             <span class="pubText">Publish Changes</span>
-                        </button>
+                        </button>-->
                     </li>
                 </ul>
             </div>
