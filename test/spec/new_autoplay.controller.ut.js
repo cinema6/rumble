@@ -14,7 +14,9 @@
 
             beforeEach(function() {
                 minireel = {
-                    mode: 'full'
+                    data: {
+                        mode: 'full'
+                    }
                 };
 
                 module('c6.mrmaker');
@@ -68,13 +70,13 @@
                     it('should be the mode data for its model\'s mode', function() {
                         expect(NewAutoplayCtrl.modeData).toBe(NewCtrl.model.modes[1].modes[1]);
 
-                        minireel.mode = 'light';
+                        minireel.data.mode = 'light';
                         expect(NewAutoplayCtrl.modeData).toBe(NewCtrl.model.modes[1].modes[0]);
 
-                        minireel.mode = 'lightbox-ads';
+                        minireel.data.mode = 'lightbox-ads';
                         expect(NewAutoplayCtrl.modeData).toBe(NewCtrl.model.modes[0].modes[1]);
 
-                        minireel.mode = 'lightbox';
+                        minireel.data.mode = 'lightbox';
                         expect(NewAutoplayCtrl.modeData).toBe(NewCtrl.model.modes[0].modes[0]);
                     });
                 });

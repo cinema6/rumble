@@ -129,7 +129,7 @@
                 var minireel = this.model.minireel,
                     mode = this.mode;
 
-                minireel.mode = mode.value;
+                minireel.data.mode = mode.value;
                 minireel.data.autoplay = mode.autoplayable;
 
                 c6State.goTo(NewCtrl.baseState + '.autoplay');

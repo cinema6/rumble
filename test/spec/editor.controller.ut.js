@@ -22,8 +22,8 @@
             beforeEach(function() {
                 cModel = {
                     id: 'e-53ae461c63b015',
-                    mode: 'lightbox',
                     data: {
+                        mode: 'lightbox',
                         deck: [
                             {
                                 id: 'rc-e91e76c0ce486a'
@@ -155,13 +155,13 @@
                         it('should find the "name" for the mode\'s value', function() {
                             expect(EditorCtrl.prettyMode).toBe('Lightbox');
 
-                            cModel.mode = 'lightbox-ads';
+                            cModel.data.mode = 'lightbox-ads';
                             expect(EditorCtrl.prettyMode).toBe('Lightbox, with Companion Ad');
 
-                            cModel.mode = 'light';
+                            cModel.data.mode = 'light';
                             expect(EditorCtrl.prettyMode).toBe('Light Text');
 
-                            cModel.mode = 'full';
+                            cModel.data.mode = 'full';
                             expect(EditorCtrl.prettyMode).toBe('Heavy Text');
                         });
                     });
@@ -660,11 +660,11 @@
                     it('should broadcast mrPreview:updateMode and send experience', function() {
                         spyOn($scope, '$broadcast');
                         $scope.$digest();
-                        EditorCtrl.model.mode = 'full';
+                        EditorCtrl.model.data.mode = 'full';
                         $scope.$digest();
 
                         expect($scope.$broadcast.calls.argsFor(0)[0]).toBe('mrPreview:updateMode');
-                        expect($scope.$broadcast.calls.argsFor(0)[1].mode).toEqual('full');
+                        expect($scope.$broadcast.calls.argsFor(0)[1].data.mode).toEqual('full');
 
                         EditorCtrl.model.data.autoplay = true;
                         $scope.$digest();
@@ -690,14 +690,14 @@
                         EditorCtrl.isDirty = false;
 
                         $scope.$apply(function() {
-                            cModel.title = 'New Title!';
+                            cModel.data.title = 'New Title!';
                         });
                         expect(EditorCtrl.isDirty).toBe(true);
                     });
 
                     it('should save the minireel (debounced) every time it is changed', function() {
                         $scope.$apply(function() {
-                            cModel.title = 'Foo!';
+                            cModel.data.title = 'Foo!';
                         });
                         $timeout.flush();
                         expect(EditorCtrl.save).toHaveBeenCalled();

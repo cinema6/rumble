@@ -3,8 +3,7 @@
 
     define(['services'], function() {
         /* global angular:true */
-        var copy = angular.copy,
-            extend = angular.extend;
+        var extend = angular.extend;
 
         describe('VoteService', function() {
             var VoteService,
@@ -22,15 +21,14 @@
                     "appUriPrefix": "<%= settings.appUrl %>",
                     "appUri": "rumble",
                     "title": "Rumble Video",
-                    "subtitle": "You choose",
-                    "summary": "Pick the best",
                     "img": {},
                     "org": "o-d1f0be2ea473cb",
                     "status": "pending",
                     "created": "2014-02-08T10:42:51+00:00",
                     "lastModified": "2014-04-18T14:07:20+00:00",
-                    "mode": "light",
                     "data": {
+                        "title": "Rumble Video",
+                        "mode": "light",
                         "branding": "elitedaily",
                         "deck": [
                             {

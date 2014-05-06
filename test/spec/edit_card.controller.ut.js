@@ -79,7 +79,9 @@
                     $scope.$apply(function() {
                         $scope.EditorCtrl = EditorCtrl = {
                             model: {
-                                mode: 'full'
+                                data: {
+                                    mode: 'full'
+                                }
                             }
                         };
                         EditCardCtrl = $controller('EditCardController', { $scope: $scope, cModel: model });
@@ -172,7 +174,7 @@
                         }
 
                         function setMode(mode) {
-                            EditorCtrl.model.mode = mode;
+                            EditorCtrl.model.data.mode = mode;
                         }
 
                         function resolve() {
