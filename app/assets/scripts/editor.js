@@ -222,6 +222,8 @@
                         affirm: 'Yes, lose changes',
                         cancel: 'No, publish my changes first',
                         onCancel: function() {
+                            self.save();
+                            c6State.goTo('manager');
                             ConfirmDialogService.close();
                         },
                         onAffirm: function() {

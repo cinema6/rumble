@@ -495,6 +495,7 @@
                 describe('backToDashboard()', function() {
                     beforeEach(function() {
                         spyOn(c6State, 'goTo');
+                        spyOn(EditorCtrl,'save');
                     });
 
                     describe('when status is active and isDirty', function() {
@@ -509,6 +510,8 @@
                         describe('when canceled', function() {
                             it('should close the dialog', function() {
                                 dialog().onCancel();
+                                expect(EditorCtrl.save).toHaveBeenCalled();
+                                expect(c6State.goTo).toHaveBeenCalledWith('manager');
                                 expect(ConfirmDialogService.close).toHaveBeenCalled();
                             })
                         });
@@ -516,6 +519,7 @@
                         describe('when confirmed', function() {
                             it('should goTo manager state', function() {
                                 dialog().onAffirm();
+                                expect(EditorCtrl.save).not.toHaveBeenCalled();
                                 expect(c6State.goTo).toHaveBeenCalledWith('manager');
                                 expect(ConfirmDialogService.close).toHaveBeenCalled();
                             })
