@@ -8,6 +8,11 @@
                                             $scope) {
             var self = this;
 
+            this.pageObject = {
+                page : 'manager',
+                title : 'Manager'
+            };
+
             this.filter = 'all';
 
             this.copy = function(minireelId) {
@@ -96,7 +101,7 @@
                 return self.filter === 'all' || self.filter === minireel.status;
             };
 
-            $scope.AppCtrl.sendPageview('manager','Manager');
+            $scope.AppCtrl.sendPageView(this.pageObject);
         }])
 
         .controller('NewCategoryController', ['$scope',

@@ -43,7 +43,7 @@
 
                     $scope = $rootScope.$new();
                     $scope.AppCtrl = {
-                        sendPageview : jasmine.createSpy('AppCtrl.sendPageview')
+                        sendPageView : jasmine.createSpy('AppCtrl.sendPageView')
                     };
 
                     ManagerCtrl = $controller('ManagerController', { $scope: $scope, cModel: model});
@@ -68,7 +68,8 @@
 
             describe('tracking', function(){
                 it('should send a pageview when loaded',function(){
-                    expect($scope.AppCtrl.sendPageview).toHaveBeenCalledWith('manager','Manager');
+                    expect($scope.AppCtrl.sendPageView)
+                        .toHaveBeenCalledWith({page:'manager',title:'Manager'});
                 });
             });
 

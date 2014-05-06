@@ -94,10 +94,10 @@
     </header>
 
     <card-table deck="minireel.data.deck"
-        edit-card="EditorCtrl.editCard(card)"
-        add-card="EditorCtrl.newCard(index)"
-        delete-card="EditorCtrl.deleteCard(card)"
-        preview-card="EditorCtrl.previewMode(card)">
+        edit-card="EditorCtrl.editCard(card,evtSrc)"
+        add-card="EditorCtrl.newCard(index,evtSrc)"
+        delete-card="EditorCtrl.deleteCard(card,evtSrc)"
+        preview-card="EditorCtrl.previewMode(card,evtSrc)">
     </card-table>
 
     <div ng-show="EditorCtrl.preview" ng-controller="PreviewController as PreviewCtrl" class="preview__group">

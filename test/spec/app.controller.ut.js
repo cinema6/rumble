@@ -170,10 +170,10 @@
 
                     });
                 });
-                describe('sendPageview',function(){
+                describe('sendPageView',function(){
                     it('does nothing if AppCtrl.config is null',function(){
                         AppCtrl.config = null;
-                        AppCtrl.sendPageview('test','Test');
+                        AppCtrl.sendPageView({ page: 'test', title: 'Test'});
                         expect(tracker.pageview).not.toHaveBeenCalled();
                     });
 
@@ -182,16 +182,26 @@
                             title : 'Some Title',
                             uri   : 'mini-reel-maker'
                         };
-                        AppCtrl.sendPageview('test','Test');
+                        AppCtrl.sendPageView({page : 'test', title: 'Test'});
                         expect(tracker.pageview)
                             .toHaveBeenCalledWith('/mini-reel-maker/test','Some Title - Test');
                     });
                 });
 
-                describe('sendEvent',function(){
+                describe('sendPageEvent',function(){
+                    it('does nothing if AppCtrl.config is null',function(){
+                        AppCtrl.config = null;
+                        AppCtrl.sendPageEvent('Editor','Click','Add New',{page:'test',title:'Test'});
+                        expect(tracker.event).not.toHaveBeenCalled();
+                    });
                     it(' calls tracker.event',function(){
-                        AppCtrl.sendEvent('Editor','Click','Add New');
-                        expect(tracker.event).toHaveBeenCalledWith('Editor','Click','Add New');
+                        AppCtrl.config = {
+                            title : 'Some Title',
+                            uri   : 'mini-reel-maker'
+                        };
+                        AppCtrl.sendPageEvent('Editor','Click','Add New',{page:'test',title:'Test'});
+                        expect(tracker.event)
+                            .toHaveBeenCalledWith('Editor','Click','Add New',{page:'/mini-reel-maker/test',title:'Some Title - Test'});
                     });
 
                 });

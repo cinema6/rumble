@@ -696,18 +696,29 @@
                     });
             });
 
-            self.sendEvent = function() {
-                tracker.event.apply(tracker,arguments);
+            self.sendPageEvent = function() {
+                if (self.config === null){
+                    $log.error('Unable to send pageEvent for %1, config is null.',
+                        arguments[0]);
+                    return;
+                }
+                var args  = Array.prototype.slice.call(arguments,0), 
+                    pageObj = args.pop();
+                pageObj.page  = '/' + self.config.uri + '/' + pageObj.page;
+                pageObj.title = self.config.title + ' - ' + pageObj.title;
+                args.push(pageObj);
+                tracker.event.apply(tracker,args);
             };
 
-            self.sendPageview = function(page,title) {
+            self.sendPageView = function(pageObject) {
                 if (self.config === null){
-                    $log.error('Unable to send pageview for %1, config is null.', page);
+                    $log.error('Unable to send pageView for %1, config is null.',
+                        pageObject.page);
                     return;
                 }
 
-                tracker.pageview('/' + self.config.uri + '/' + page,
-                    self.config.title + ' - ' + title);
+                tracker.pageview('/' + self.config.uri + '/' + pageObject.page,
+                    self.config.title + ' - ' + pageObject.title);
             };
 
             $log.info('Initialize tracker with:',c6Defines.kTracker);
