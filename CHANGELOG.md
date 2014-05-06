@@ -80,5 +80,6 @@
 * *[/Beta1.rc15]*
 * *[Beta1.rc16]*
   * [FEATURE]: Autoplay option is disabled on MiniReel display modes
-    that don't support autoplay
+    that don't support autoplay **REQUIRED STEPS: The MiniReelinator
+    experience needs to be updated in the content service**
 * *[/Beta1.rc16]*
