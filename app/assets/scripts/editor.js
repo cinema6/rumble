@@ -56,7 +56,7 @@
                 prettyMode: {
                     get: function() {
                         var categories = AppCtrl.config && AppCtrl.config.data.modes,
-                            targetMode = this.model.mode;
+                            targetMode = this.model.data.mode;
 
                         return categories && (function() {
                             var result;
@@ -199,7 +199,7 @@
             };
 
             $scope.$watch(function() {
-                return self.model.mode + self.model.data.autoplay;
+                return self.model.data.mode + self.model.data.autoplay;
             }, function(newMode, oldMode) {
                 if(newMode === oldMode) { return; }
                 $scope.$broadcast('mrPreview:updateMode', self.model);
@@ -360,8 +360,8 @@
                 profile,
                 card,
                 experience = {
-                    mode: 'full',
                     data: {
+                        mode: 'full',
                         autoplay: false
                     }
                 };
@@ -379,7 +379,7 @@
                             ('/?kCollateralUrl=' + encodeURIComponent(c6Defines.kCollateralUrl))) +
                         '&autoplay=' + encodeURIComponent(experience.data.autoplay) +
                         '&kDevice=' + encodeURIComponent(this.device) +
-                        '&kMode=' + encodeURIComponent(experience.mode) +
+                        '&kMode=' + encodeURIComponent(experience.data.mode) +
                         '&kEnvUrlRoot='
                     ), 'app');
                 }

@@ -79,7 +79,9 @@
                         }
                     ];
 
-                    minireel = {};
+                    minireel = {
+                        data: {}
+                    };
 
                     ManagerNewState.cModel = {
                         minireel: minireel
@@ -98,16 +100,16 @@
                     });
 
                     it('should be the category of the model\'s mode if it has one', function() {
-                        minireel.mode = 'lightbox'; invoke();
+                        minireel.data.mode = 'lightbox'; invoke();
                         expect(controller.mode).toBe('lightbox');
 
-                        minireel.mode = 'lightbox-ads'; invoke();
+                        minireel.data.mode = 'lightbox-ads'; invoke();
                         expect(controller.mode).toBe('lightbox');
 
-                        minireel.mode = 'light'; invoke();
+                        minireel.data.mode = 'light'; invoke();
                         expect(controller.mode).toBe('inline');
 
-                        minireel.mode = 'full';
+                        minireel.data.mode = 'full';
                         expect(controller.mode).toBe('inline');
                     });
                 });

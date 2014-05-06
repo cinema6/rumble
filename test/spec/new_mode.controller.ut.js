@@ -26,8 +26,8 @@
                     NewModeCtrl.model = {
                         minireel: {
                             id: 'e-123',
-                            mode: 'light',
                             data: {
+                                mode: 'lightbox',
                                 autoplay: true
                             }
                         },
@@ -59,7 +59,7 @@
                     });
 
                     it('should set the experience\'s mode to the provided mode', function() {
-                        expect(NewModeCtrl.model.minireel.mode).toBe('light');
+                        expect(NewModeCtrl.model.minireel.data.mode).toBe('light');
                     });
 
                     it('should go to the editor state with the id of the new minireel', function() {

@@ -88,3 +88,7 @@
   * [FIX]: :disabled styles added where appropriate
   * [FIX]: removed unused css files
 * *[/Beta1.rc16]*
+* *[Beta1.rc17]*
+  * [FEATURE]: Move all mutatble data properties to the data {} object
+    (title, mode) **REQUIRED STEPS: The MiniReel player must be updated
+    to read these properties off of the data object as well**

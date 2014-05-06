@@ -279,7 +279,7 @@
                         var minireel = model.minireel,
                             modes = model.modes,
                             minireelModeData = modes.filter(function(mode) {
-                                return mode.value === minireel.mode;
+                                return mode.value === minireel.data.mode;
                             })[0];
 
 

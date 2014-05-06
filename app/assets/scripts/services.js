@@ -543,7 +543,7 @@
 
             this.modeCategoryOf = function(minireel, categories) {
                 var result = {},
-                    modeValue = minireel && minireel.mode;
+                    modeValue = minireel && minireel.data.mode;
 
                 forEach(categories || [], function(category) {
                     forEach(category.modes, function(mode) {
@@ -561,7 +561,7 @@
 
                 forEach(categories, function(category) {
                     forEach(category.modes, function(mode) {
-                        if (mode.value === minireel.mode) {
+                        if (mode.value === minireel.data.mode) {
                             result = mode;
                         }
                     });
@@ -653,6 +653,8 @@
                 function transform(minireel) {
                     var model = {
                         data: {
+                            title: minireel.data.title,
+                            mode: minireel.data.mode,
                             branding: minireel.data.branding,
                             autoplay: minireel.data.autoplay,
                             election: minireel.data.election,
@@ -835,13 +837,11 @@
                                 return minireel.pojoify();
                             }) :
                         {
-                            title: 'Untitled',
-                            subtitle: null,
-                            summary: null,
                             type: 'minireel',
-                            mode: 'lightbox',
                             org: user.org,
                             data: {
+                                title: 'Untitled',
+                                mode: 'lightbox',
                                 branding: user.branding,
                                 deck: [
                                     self.createCard('recap')
@@ -854,7 +854,7 @@
                     var minireel = cinema6.db.create('experience', template);
 
                     delete minireel.id;
-                    minireel.title += toCopyId ? ' (copy)' : '';
+                    minireel.data.title += toCopyId ? ' (copy)' : '';
                     minireel.status = 'pending';
 
                     return minireel;
