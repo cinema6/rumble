@@ -7,8 +7,6 @@
             "appUriPrefix": "<%= settings.appUrl %>",
             "appUri": "rumble",
             "title": "Rumble Video",
-            "subtitle": "You choose",
-            "summary": "Pick the best",
             "img": {},
             "org": "o-d1f0be2ea473cb",
             "status": "pending",
@@ -17,6 +15,7 @@
             "mode": "light",
             "type": "minireel",
             "data": {
+                "title": "Rumble Video",
                 "collateral": {
                     "splash": "http://www.reactiongifs.us/wp-content/uploads/2013/11/brent_rambo_approves.gif"
                 },
@@ -171,8 +170,6 @@
             "appUriPrefix": "<%= settings.appUrl %>",
             "appUri": "rumble",
             "title": "The 15 Most Amazing GoPro Videos Ever Recorded",
-            "subtitle": "",
-            "summary": "GoPro cameras are the only tech inventions we were introduced to in 2013 that we think deserve to continue trending in 2014. These handy-dandy cameras are perfect for just about any activity, including skydiving, surfing, or rescuing a baby kitten from a tree.",
             "org": "o-d1f0be2ea473cb",
             "status": "active",
             "created": "2014-02-08T10:42:51+00:00",
@@ -180,6 +177,7 @@
             "mode": "light",
             "type": "minireel",
             "data": {
+                "title": "The 15 Most Amazing GoPro Videos Ever Recorded",
                 "branding": "elitedaily",
                 "deck": [
                     {
@@ -530,8 +528,6 @@
             "appUriPrefix": "<%= settings.appUrl %>",
             "appUri": "rumble",
             "title": "The 10 Greatest Super Bowl Plays Of All Time",
-            "subtitle": "",
-            "summary": "From touchdowns, to big hits, spectacular catches and defensive stops, the highest level of competition never disappoints. To really appreciate what this Super Bowl will bring us on Sunday, it's important to remember some of the greatness of the past.",
             "org": "o-d1f0be2ea473cb",
             "status": "active",
             "created": "2014-02-08T10:42:51+00:00",
@@ -539,6 +535,7 @@
             "mode": "lightbox",
             "type": "minireel",
             "data": {
+                "title": "The 10 Greatest Super Bowl Plays Of All Time",
                 "branding": "elitedaily",
                 "deck": [
                     {
@@ -779,8 +776,6 @@
             "appUriPrefix": "<%= settings.appUrl %>",
             "appUri": "rumble",
             "title": "The 7 Most Legendary Pro Wrestling Intros Of All Time",
-            "subtitle": "",
-            "summary": "Nothing electrifies a crowd like a good wrestling entrance. Finishing moves are cool, but most of them don't even hurt!",
             "org": "o-d1f0be2ea473cb",
             "status": "pending",
             "created": "2014-02-08T10:42:51+00:00",
@@ -788,6 +783,7 @@
             "mode": "full",
             "type": "minireel",
             "data": {
+                "title": "The 7 Most Legendary Pro Wrestling Intros Of All Time",
                 "branding": "elitedaily",
                 "deck": [
                     {
