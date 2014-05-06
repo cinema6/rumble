@@ -277,14 +277,14 @@
                     updateControllerModel: ['controller','model',
                     function               ( controller , model ) {
                         var minireel = model.minireel,
-                            modeValues = model.modes.map(function(mode) {
-                                return mode.value;
-                            });
+                            modes = model.modes,
+                            minireelModeData = modes.filter(function(mode) {
+                                return mode.value === minireel.mode;
+                            })[0];
 
 
                         controller.model = model;
-                        controller.mode = modeValues.indexOf(minireel.mode) > -1 ?
-                            minireel.mode : modeValues[0];
+                        controller.mode = minireelModeData || modes[0];
                     }]
                 },
                 autoplay: {

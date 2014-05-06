@@ -78,3 +78,7 @@
   * [FIX]: Updated cache-control times when uploading to s3.
   * [FEATURE]: Added initial GA support.
 * *[/Beta1.rc15]*
+* *[Beta1.rc16]*
+  * [FEATURE]: Autoplay option is disabled on MiniReel display modes
+    that don't support autoplay
+* *[/Beta1.rc16]*
