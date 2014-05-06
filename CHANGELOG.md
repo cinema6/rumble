@@ -97,3 +97,4 @@
   * [FIX]: Changes edit card button text to 'Save' and 'Done' based on status
   * [FEATURE]: Don't allow user to save unless they successfully upload
     the last file they selected
+* *[/Beta1.rc17]*
