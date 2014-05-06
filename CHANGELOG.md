@@ -79,6 +79,9 @@
   * [FEATURE]: Added initial GA support.
 * *[/Beta1.rc15]*
 * *[Beta1.rc16]*
+  * [FEATURE]: Autoplay option is disabled on MiniReel display modes
+    that don't support autoplay **REQUIRED STEPS: The MiniReelinator
+    experience needs to be updated in the content service**
   * [FIX]: splash uploader spacing styles updated
   * [FIX]: :disabled styles added where appropriate
   * [FIX]: removed unused css files

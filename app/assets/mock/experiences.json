@@ -17,14 +17,16 @@
                             "name": "No Companion Ad",
                             "value": "lightbox",
                             "description": "Simple video and text MiniReel. No character limits, the content space will scroll as needed.",
-                            "limits": {}
+                            "limits": {},
+                            "autoplayable": true
                         },
                         {
                             "name": "With Companion Ad",
                             "disabled": true,
                             "value": "lightbox-ads",
                             "description": "A 300x250 ad will be displayed on every slide. No character limits, the content space will scroll as needed.",
-                            "limits": {}
+                            "limits": {},
+                            "autoplayable": true
                         }
                     ]
                 },
@@ -39,7 +41,8 @@
                             "description": "Recommended for content that is light on text. Copy is limited to approximately 200 characters.",
                             "limits": {
                                 "copy": 200
-                            }
+                            },
+                            "autoplayable": true
                         },
                         {
                             "name": "Heavy Text",
@@ -47,7 +50,8 @@
                             "description": "Provides more room for editorial content. Copy is limited to approximately 420 characters.",
                             "limits": {
                                 "copy": 420
-                            }
+                            },
+                            "autoplayable": false
                         }
                     ]
                 }
