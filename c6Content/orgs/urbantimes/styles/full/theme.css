@@ -4,65 +4,42 @@
     @import url(http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,800italic,400,700,800);
 
     body, .mr-card__btn-watch {
-        font-family: 'Open Sans', Arial, Helvetica, sans-serif;
+        font-family: 'Open Sans', Arial, Helvetica, sans-serif; font-weight: 400;
     }
-
     .tk--hdr, .ui-context__label {
         font-family: 'Open Sans', Arial, Helvetica, sans-serif; font-weight:700;
     }
-
-    body, .ui-nav__counter, .mr-card__type, .mr-card__title-h1, .mr-ballot__title, .mr-results__title, 
-    .mr-comments__textarea, .mr-comm-meta__timestamp, .mr-toc-item__title, .more-reels__intro  {
+    .ui-nav__counter, .mr-card__type, .mr-card__title-h1, 
+    .mr-ballot__title, .mr-results__title {
         font-weight: 400;
     }
-
-    a {
-        color:#2870a2; border-bottom:1px dotted #2870a2;
-    }
-
-    .mr-switch__btn {
-        background-color: #252626; border-bottom: 2px solid #252626;
-    }
-
-
-/*  ==========================================================================
-    experience color styles
-    ========================================================================== */
-    .mr-experience, .mr-card__copy, .mr-more-reels__intro {
-        background:#252626;
-    }
-
-    .ui-control--portrait, .ui-context--portrait, .ui-nav-left--landscape, .ui-nav-right--landscape {
-        background:#2a2a2a;
-    }
-
-    .mr-pager__btn--disabled .mr-pager__icon-path {
-        fill: #252626;
-    }
-        .mr-pager__btn--disabled .mr-pager__label {
-            color:#252626;
-        }
-    .mr-toc {
-        border-top:0.25em solid #2a2a2a;
-    }
-
 
 /*  ==========================================================================
     Theme Styles
     ========================================================================== */
-    .mr-pager__btn, .mr-card__btn, .mr-card__btn-watch {
-        background: #4394cb;
+    a {
+        color:#2870a2; border-bottom:1px dotted #2870a2;
     }
-    .mr-switch__btn--active, .mr-switch__btn:focus {
-        border-bottom: 2px solid #4394cb;
+    .mr-experience {
+        background:#252626;
     }
+    .mr-switch__btn {
+        background-color: #252626; border-bottom: 2px solid #252626;
+    }
+        .mr-switch__btn--active, 
+        .mr-switch__btn:focus {
+            border-bottom: 2px solid #4394cb;
+        }
+        .mr-pager__btn--disabled .mr-pager__icon-path {
+            fill: #252626;
+        }
     .mr-preview__button {
         background: rgba(35,145,215,0.7);
     }
+    .mr-pager__btn, 
+    .mr-card__btn, 
+    .mr-card__btn-watch,
     .mr-player__play-btn,
-    .ui-control__next, 
-    .ui-control__prev, 
-    .ui-nav__next, 
-    .ui-nav__prev {
+    .mr-splash__copy {
         background-color: #4394cb;
     }

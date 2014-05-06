@@ -50,3 +50,4 @@
   * [FIX]: 'mr-pager__group--fullWidth' class added to lightbox, no-ad version of minireel player
   * [FIX]: Update thumb-paginator to recalculate width when recap-card broadcasts a resize event
   * [FIX]: Update thumb-paginator to monitor available width and change current page if necessary
+  * [FIX]: Urban Times theme cleaned up

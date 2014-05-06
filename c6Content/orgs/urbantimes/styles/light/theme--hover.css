@@ -4,9 +4,6 @@
     a:hover {
         color:#4394cb; border-bottom:1px dotted #4394cb;
     }
-    .mr-splash__start:hover .mr-splash__bar {
-        background-color: #4394cb;
-    }
     .mr-pager__btn--disabled:hover, .mr-preview__button:hover, 
     .mr-preview__thumbnail:hover .mr-preview__button  {
         background: #4394cb;
@@ -17,6 +14,9 @@
     }
     .mr-pager__btn:hover .mr-pager__icon-path {
         fill:#4394cb;
+    }
+    .mr-pager__btn--disabled:hover .mr-pager__icon-path {
+        fill: #252626;
     }
     .mr-pager__btn--disabled:hover .mr-pager__icon-path {
         fill: #252626;
