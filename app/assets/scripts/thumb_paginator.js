@@ -119,7 +119,7 @@
             };
 
             $scope.$watch(function() {
-                return self.pagesCount + self.availableWidth;
+                return self.availableWidth;
             }, function() {
                 var targetPage = Math.max(Math.floor($scope.active() / self.itemsPerPage), 0);
 
