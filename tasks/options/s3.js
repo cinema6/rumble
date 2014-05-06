@@ -24,14 +24,14 @@
                     src: '<%= settings.distDir %>/index.html',
                     dest: '<%= settings.s3.test.app %><%= _version %>/index.html',
                     options: {
-                        CacheControl: 'max-age=60'
+                        CacheControl: 'max-age=15'
                     }
                 },
                 {
                     src: '<%= settings.distDir %>/index.html',
                     dest: '<%= settings.s3.test.app %>index.html',
                     options: {
-                        CacheControl: 'max-age=60'
+                        CacheControl: 'max-age=15'
                     }
                 }
             ]
@@ -90,7 +90,7 @@
                     rel: '<%= settings.collateralDir %>/',
                     dest: '<%= settings.s3.production.collateral %>',
                     options: {
-                        CacheControl: 'max-age=60'
+                        CacheControl: 'max-age=300'
                     }
                 }
             ]

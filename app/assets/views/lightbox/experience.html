@@ -1,8 +1,8 @@
-<div class="mr-experience" ng-class="app.data.experience.theme">
+<div class="mr-experience" ng-class="app.data.experience.data.theme">
     <button class="mr-ui__close" ng-click="RumbleCtrl.setPosition(-1);" type="button">
         <span class="sprite mr-icons__close"><span class="ir">Close</span></span>
     </button>
-    <h1 class="mr-title tk--hdr">{{app.data.experience.title}}</h1>
+    <h1 class="mr-title tk--hdr">{{app.data.experience.data.title}}</h1>
     <div class="mr-card__container">
         <ng-include src="'deck.html' | asset:'views'"></ng-include>
         
@@ -56,7 +56,7 @@
 
 <div class="mr-overlay">&nbsp;</div>
 
-<article id="card" class="mr-container" ng-class="app.data.experience.theme">
+<article id="card" class="mr-container" ng-class="app.data.experience.data.theme">
     <ng-switch on="app.state">
         <div class="splash-screen" ng-switch-when="splash">
             <ng-include src="'splash.html' | asset:'views'"></ng-include>

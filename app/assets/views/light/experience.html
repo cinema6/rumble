@@ -1,4 +1,4 @@
-<div class="mr-experience" ng-class="app.data.experience.theme">
+<div class="mr-experience" ng-class="app.data.experience.data.theme">
     <div class="mr-card__container">
         <ng-include src="'deck.html' | asset:'views'"></ng-include>
     </div>
@@ -22,7 +22,7 @@
     </thumb-paginator><!--.mr-pager__group-->
 </div><!--.mr-experience-->
 
-<article id="card" class="mr-container" ng-class="app.data.experience.theme">
+<article id="card" class="mr-container" ng-class="app.data.experience.data.theme">
     <ng-switch on="app.state">
         <div class="splash-screen" ng-switch-when="splash">
             <ng-include src="'splash.html' | asset:'views'"></ng-include>

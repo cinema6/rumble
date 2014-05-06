@@ -30,6 +30,7 @@
                                       'kDebug:' + grunt.config.get('settings.debug') + ',' +
                                       'kCollateralUrl:\'' + grunt.config.get('settings.locations.collateral') + '\',' +
                                       'kApiUrl:\'' + grunt.config.get('settings.locations.api') + '\',' +
+                                      'kEnvUrlRoot: \'http://staging.cinema6.com\',' +
                                       'kDevMode: true' +
                                       '};</script>'; 
                                 }

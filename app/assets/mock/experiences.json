@@ -5,15 +5,12 @@
         "appUriPrefix": "<%= settings.appUrl %>",
         "appUri": "rumble",
         "title": "Rumble Video",
-        "subtitle": "You choose",
-        "summary": "Pick the best",
-        "img": {
-            "splash": "experiences/rumble/splash-6thumb.jpg"
-        },
-        "mode": "light",
-        "theme": "ed-entertainment",
         "data": {
             "election": "e-d0e407bb69675b",
+            "mode": "light",
+            "theme": "ed-entertainment",
+            "collateral": { "splash" : "/collateral/experiences/rumble/splash-6thumb.jpg"},
+            "title": "Rumble Video",
             "branding": "elitedaily",
             "conversations": [
                 {
@@ -189,15 +186,12 @@
         "appUriPrefix": "<%= settings.appUrl %>",
         "appUri": "rumble",
         "title": "The 15 Most Amazing GoPro Videos Ever Recorded",
-        "subtitle": "",
-        "summary": "GoPro cameras are the only tech inventions we were introduced to in 2013 that we think deserve to continue trending in 2014. These handy-dandy cameras are perfect for just about any activity, including skydiving, surfing, or rescuing a baby kitten from a tree.",
-        "img": {
-            "splash": "experiences/gopro/splash-6thumb.jpg"
-        },
-        "mode": "light",
-        "theme": "ed-videos",
         "data": {
             "election": "e-dde721e25274a7",
+            "title": "The 15 Most Amazing GoPro Videos Ever Recorded",
+            "mode": "light",
+            "theme": "ed-videos",
+            "collateral": { "splash" : "/collateral/experiences/rumble/splash-6thumb.jpg"},
             "branding": "elitedaily",
             "autoplay": true,
             "deck": [
@@ -557,16 +551,13 @@
         "appUriPrefix": "<%= settings.appUrl %>",
         "appUri": "rumble",
         "title": "The 15 Most Amazing GoPro Videos Ever Recorded",
-        "subtitle": "",
-        "summary": "GoPro cameras are the only tech inventions we were introduced to in 2013 that we think deserve to continue trending in 2014. These handy-dandy cameras are perfect for just about any activity, including skydiving, surfing, or rescuing a baby kitten from a tree.",
-        "img": {
-            "splash": "experiences/gopro/splash-6thumb.jpg"
-        },
-        "mode": "lightbox-ads",
-        "theme": "ed-videos",
         "data": {
             "election": "e-ad5c74dcb1f638",
+            "title": "The 15 Most Amazing GoPro Videos Ever Recorded",
+            "mode": "lightbox-ads",
+            "theme": "ed-videos",
             "branding": "elitedaily",
+            "collateral": { "splash" : "/collateral/experiences/rumble/splash-6thumb.jpg"},
             "autoplay": true,
             "deck": [
                 {
@@ -959,16 +950,13 @@
         "appUriPrefix": "<%= settings.appUrl %>",
         "appUri": "rumble",
         "title": "The 15 Most Amazing GoPro Videos Ever Recorded",
-        "subtitle": "",
-        "summary": "GoPro cameras are the only tech inventions we were introduced to in 2013 that we think deserve to continue trending in 2014. These handy-dandy cameras are perfect for just about any activity, including skydiving, surfing, or rescuing a baby kitten from a tree.",
-        "img": {
-            "splash": "experiences/gopro/splash-6thumb.jpg"
-        },
-        "mode": "lightbox-ads",
-        "theme": "ed-videos",
         "data": {
             "election": "e-5fd1f0451a0eb8",
+            "title": "The 15 Most Amazing GoPro Videos Ever Recorded",
+            "mode": "lightbox-ads",
+            "theme": "ed-videos",
             "branding": "elitedaily",
+            "collateral": { "splash" : "/collateral/experiences/rumble/splash-6thumb.jpg"},
             "autoplay": false,
             "deck": [
                 {
@@ -1361,15 +1349,12 @@
         "appUriPrefix": "<%= settings.appUrl %>",
         "appUri": "rumble",
         "title": "The 10 Greatest Super Bowl Plays Of All Time",
-        "subtitle": "",
-        "summary": "From touchdowns, to big hits, spectacular catches and defensive stops, the highest level of competition never disappoints. To really appreciate what this Super Bowl will bring us on Sunday, it's important to remember some of the greatness of the past.",
-        "img": {
-            "splash": "experiences/superbowl/splash-6thumb.jpg"
-        },
-        "mode": "full",
-        "theme": "ed-sports",
         "data": {
             "election": "e-6ab02642b45eb8",
+            "title": "The 10 Greatest Super Bowl Plays Of All Time",
+            "mode": "full",
+            "theme": "ed-sports",
+            "collateral": { "splash" : "/collateral/experiences/rumble/splash-6thumb.jpg"},
             "branding": "elitedaily",
             "autoplay": true,
             "deck": [
@@ -1594,15 +1579,12 @@
         "appUriPrefix": "<%= settings.appUrl %>",
         "appUri": "rumble",
         "title": "The 10 Greatest Super Bowl Plays Of All Time",
-        "subtitle": "",
-        "summary": "From touchdowns, to big hits, spectacular catches and defensive stops, the highest level of competition never disappoints. To really appreciate what this Super Bowl will bring us on Sunday, it's important to remember some of the greatness of the past.",
-        "img": {
-            "splash": "experiences/superbowl/splash-6thumb.jpg"
-        },
-        "theme": "ed-sports",
-        "mode": "lightbox",
         "data": {
             "election": "e-bad9dc9276ec49",
+            "title": "The 10 Greatest Super Bowl Plays Of All Time",
+            "theme": "ed-sports",
+            "mode": "lightbox",
+            "collateral": { "splash" : "/collateral/experiences/rumble/splash-6thumb.jpg"},
             "branding": "elitedaily",
             "autoplay": true,
             "deck": [
@@ -1827,15 +1809,12 @@
         "appUriPrefix": "<%= settings.appUrl %>",
         "appUri": "rumble",
         "title": "The 10 Greatest Super Bowl Plays Of All Time",
-        "subtitle": "",
-        "summary": "From touchdowns, to big hits, spectacular catches and defensive stops, the highest level of competition never disappoints. To really appreciate what this Super Bowl will bring us on Sunday, it's important to remember some of the greatness of the past.",
-        "img": {
-            "splash": "experiences/superbowl/splash-6thumb.jpg"
-        },
-        "theme": "ed-sports",
-        "mode": "lightbox",
         "data": {
             "election": "e-e177289d9ca0b2",
+            "title": "The 10 Greatest Super Bowl Plays Of All Time",
+            "theme": "ed-sports",
+            "mode": "lightbox",
+            "collateral": { "splash" : "/collateral/experiences/rumble/splash-6thumb.jpg"},
             "branding": "elitedaily",
             "autoplay": false,
             "deck": [
@@ -2060,15 +2039,12 @@
         "appUriPrefix": "<%= settings.appUrl %>",
         "appUri": "rumble",
         "title": "The 7 Most Legendary Pro Wrestling Intros Of All Time",
-        "subtitle": "",
-        "summary": "Nothing electrifies a crowd like a good wrestling entrance. Finishing moves are cool, but most of them don't even hurt!",
-        "img": {
-            "splash": "experiences/wrestling/splash-6thumb.jpg"
-        },
-        "mode": "full",
-        "theme": "ed-sports",
         "data": {
             "election": "e-55b499581cb19e",
+            "title": "The 7 Most Legendary Pro Wrestling Intros Of All Time",
+            "mode": "full",
+            "theme": "ed-sports",
+            "collateral": { "splash" : "/collateral/experiences/rumble/splash-6thumb.jpg"},
             "branding": "elitedaily",
             "autoplay": true,
             "deck": [

@@ -138,8 +138,10 @@
                         id: 'e-722bd3c4942331',
                         title: 'my title',
                         data : {
+                            title : 'my title',
                             election: 'el-a30a5954440d66',
-                            deck : deck 
+                            deck : deck,
+                            mode : 'testMode'
                         }
                     },
                     behaviors: {},

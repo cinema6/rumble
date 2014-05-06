@@ -51,3 +51,5 @@
   * [FIX]: Update thumb-paginator to recalculate width when recap-card broadcasts a resize event
   * [FIX]: Update thumb-paginator to monitor available width and change current page if necessary
   * [FIX]: Urban Times theme cleaned up
+  * [FIX]: Updated cache times
+  * [FIX]: Updated to pull all mr fields from data

@@ -1,4 +1,4 @@
-<div ng-hide="currentIndex < 0" ng-class="app.data.experience.theme">
+<div ng-hide="currentIndex < 0" ng-class="app.data.experience.data.theme">
     <div ng-hide="showTOC" class="ui-nav-left--landscape c6-slide-bar--left css-promote">
         <button class="publisher__branding-logo" type="button" title="Elite Daily">
             <span class="ir">Elite Daily</span>
@@ -88,7 +88,7 @@
     </div><!--.ui-control-->
 </div><!-- end of the ng-hide div-->
 
-<article class="mr-container" ng-class="app.data.experience.theme" ng-class="app.data.experience.theme">
+<article class="mr-container"  ng-class="app.data.experience.data.theme">
     <ng-include src="'deck.html' | asset:'views'"></ng-include>
     <ng-switch on="app.state">
         <div class="splash-screen" ng-switch-when="splash">
