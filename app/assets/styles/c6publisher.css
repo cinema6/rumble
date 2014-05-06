@@ -842,9 +842,9 @@
                     .toolbar__publish--alert .pubState {
                         background-position:-123px -82px;
                     }
-                    .toolbar__publish--confirm .pubState,
                     .toolbar__publish--disabled .pubState,
-                    .toolbar__publish:disabled .pubState {
+                    .toolbar__publish:disabled .pubState,
+                    .toolbar__publish--confirm .pubState {
                         background-position:-148px -82px;
                     }
                     .toolbar__publish--waiting .pubState {
