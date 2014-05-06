@@ -45,8 +45,7 @@
                 FormData = $window.FormData,
                 XMLHttpRequest = $window.XMLHttpRequest;
 
-            var files = [],
-                wrappers = [];
+            var wrappers = [];
 
             function FileWrapper(file) {
                 this.file = file;
@@ -54,19 +53,20 @@
             }
             FileWrapper.prototype = {
                 close: function() {
-                    var index = wrappers.indexOf(this);
-
                     URL.revokeObjectURL(this.url);
 
-                    wrappers.splice(index, 1);
-                    files.splice(index, 1);
+                    wrappers.splice(wrappers.indexOf(this), 1);
                 }
             };
 
             this.open = function(file) {
-                files.push(file);
+                function findWrapperForFile(file) {
+                    return wrappers.filter(function(wrapper) {
+                        return wrapper.file === file;
+                    })[0];
+                }
 
-                return wrappers[files.indexOf(file)] ||
+                return findWrapperForFile(file) ||
                     wrappers[wrappers.push(new FileWrapper(file)) - 1];
             };
 
