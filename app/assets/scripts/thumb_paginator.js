@@ -119,13 +119,11 @@
             };
 
             $scope.$watch(function() {
-                return self.pagesCount;
-            }, function(newPageCount) {
-                var targetPage = Math.max(Math.ceil($scope.active() / self.itemsPerPage), 0);
+                return self.pagesCount + self.availableWidth;
+            }, function() {
+                var targetPage = Math.max(Math.floor($scope.active() / self.itemsPerPage), 0);
 
-                if($scope.page > (newPageCount - 1)) {
-                    $scope.page = newPageCount - 1;
-                } else if($scope.page !== targetPage){
+                if($scope.page !== targetPage) {
                     $scope.page = targetPage;
                 }
             });
