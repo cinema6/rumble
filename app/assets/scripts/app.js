@@ -44,7 +44,6 @@
             c6UrlMakerProvider.location(c6Defines.kApiUrl,'api');
             c6UrlMakerProvider.location(c6Defines.kProtocol + '/', 'protocol');
             c6UrlMakerProvider.location(c6Defines.kEnvUrlRoot,'envroot');
-            window.console.log('KENV:',c6Defines.kEnvUrlRoot);
         }])
         .config(['VASTServiceProvider', 'VPAIDServiceProvider',
         function( VASTServiceProvider, VPAIDServiceProvider ) {
@@ -76,7 +75,6 @@
         .filter('envroot', ['c6UrlMaker',
         function              ( c6UrlMaker ) {
             return function(url) {
-                window.console.log('envurl:',c6UrlMaker(url,'envroot'));
                 return url && c6UrlMaker(url.replace(/^\//,''), 'envroot');
             };
         }])
