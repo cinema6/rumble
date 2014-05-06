@@ -288,9 +288,10 @@
 
             $log = ($log.context || function() { return $log; })('EditorSplashCtrl');
 
-            this.maxFileSize = 204800;
+            this.maxFileSize = 307200;
             this.splash = null;
             this.currentUpload = null;
+            this.allowSave = false;
             Object.defineProperties(this, {
                 fileTooBig: {
                     get: function() {
@@ -309,10 +310,14 @@
                     this.model
                 );
 
-                upload.finally(function() {
-                    $log.info('Uploaded completed!');
-                    self.currentUpload = null;
-                });
+                upload
+                    .then(function allowSave() {
+                        self.allowSave = true;
+                    })
+                    .finally(function cleanup() {
+                        $log.info('Uploaded completed!');
+                        self.currentUpload = null;
+                    });
             };
 
             this.save = function() {
@@ -332,6 +337,8 @@
             });
 
             $scope.$watch(function() { return self.splash; }, function(newImage, oldImage) {
+                self.allowSave = false;
+
                 if (!oldImage) { return; }
 
                 FileService.open(oldImage).close();

@@ -60,8 +60,8 @@
 
             describe('properties', function() {
                 describe('maxFileSize', function() {
-                    it('should be 204800', function() {
-                        expect(EditorSplashCtrl.maxFileSize).toBe(204800);
+                    it('should be 307200', function() {
+                        expect(EditorSplashCtrl.maxFileSize).toBe(307200);
                     });
                 });
 
@@ -110,6 +110,12 @@
                         });
                     });
                 });
+
+                describe('allowSave', function() {
+                    it('should be false', function() {
+                        expect(EditorSplashCtrl.allowSave).toBe(false);
+                    });
+                });
             });
 
             describe('methods', function() {
@@ -147,6 +153,10 @@
                         it('should null-out the currentUpload property', function() {
                             expect(EditorSplashCtrl.currentUpload).toBeNull();
                         });
+
+                        it('should allow saving', function() {
+                            expect(EditorSplashCtrl.allowSave).toBe(true);
+                        });
                     });
 
                     describe('if the upload fails', function() {
@@ -158,6 +168,10 @@
 
                         it('should null-out the currentUpload property', function() {
                             expect(EditorSplashCtrl.currentUpload).toBeNull();
+                        });
+
+                        it('should not allow saving', function() {
+                            expect(EditorSplashCtrl.allowSave).toBe(false);
                         });
                     });
                 });
@@ -248,6 +262,16 @@
                         });
                         expect(FileService.open).toHaveBeenCalledWith(file);
                         expect(wrapper.close).toHaveBeenCalled();
+                    });
+
+                    it('should set allowSave to false', function() {
+                        EditorSplashCtrl.allowSave = true;
+
+                        $scope.$apply(function() {
+                            EditorSplashCtrl.splash ={};
+                        });
+
+                        expect(EditorSplashCtrl.allowSave).toBe(false);
                     });
                 });
             });

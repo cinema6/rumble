@@ -34,7 +34,7 @@
 
     <footer class="modal__btnFooter">
         <button class="modal__btn toolbar__delete" title="Cancel" c6-sref="editor">Cancel</button>
-        <button class="modal__btn" title="Save" ng-click="EditorSplashCtrl.save()">Save</button>
+        <button class="modal__btn" title="Save" ng-click="EditorSplashCtrl.save()" ng-disabled="!EditorSplashCtrl.allowSave">Save</button>
     </footer>
 </div>
 <div class="ui__overlay">&nbsp;</div>

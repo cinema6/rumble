@@ -95,3 +95,5 @@
   * [FIX]: Adds alert dialog before leaving a published and edited minireel
   * [FIX]: Adds alert dialog before saving changes to a published minireel
   * [FIX]: Changes edit card button text to 'Save' and 'Done' based on status
+  * [FEATURE]: Don't allow user to save unless they successfully upload
+    the last file they selected
