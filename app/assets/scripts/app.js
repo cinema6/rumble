@@ -289,7 +289,7 @@
                     }]
                 },
                 autoplay: {
-                    controller: 'GenericController',
+                    controller: 'NewAutoplayController',
                     controllerAs: 'NewAutoplayCtrl',
                     templateUrl: assets('views/manager/new/autoplay.html'),
                     model:  [function() {
