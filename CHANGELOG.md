@@ -88,3 +88,6 @@
   * [FIX]: :disabled styles added where appropriate
   * [FIX]: removed unused css files
 * *[/Beta1.rc16]*
+  * [FIX]: Adds alert dialog before leaving a published and edited minireel
+  * [FIX]: Adds alert dialog before saving changes to a published minireel
+  * [FIX]: Changes edit card button text to 'Save' and 'Done' based on status
