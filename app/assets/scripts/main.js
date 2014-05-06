@@ -96,10 +96,6 @@
                     libUrl('angular/v1.2.14-0-g729fb13/angular-touch.js') :
                     libUrl('angular/v1.2.14-0-g729fb13/angular-touch.min.js')
             ],
-            nope: [
-                libUrl('c6ui/v2.6.2-0-ga18aaf8/css/c6uilib--hover.min.css'),
-                c6.kBaseUrl + '/styles/main--hover.css'
-            ],
             complete: function() {
                 if (Modernizr.touch) { c6.kModDeps.push('ngTouch'); }
 
