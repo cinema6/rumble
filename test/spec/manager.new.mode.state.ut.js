@@ -88,32 +88,32 @@
                 });
 
                 it('should set the mode to be the value of the first mode in the model\'s modes', function() {
-                    expect(controller.mode).toBe('foo');
+                    expect(controller.mode).toBe(model.modes[0]);
                 });
 
                 it('should be the MiniReel\'s mode if it has one', function() {
                     model.minireel.mode = 'bar';
                     invoke();
 
-                    expect(controller.mode).toBe('bar');
+                    expect(controller.mode).toBe(model.modes[1]);
                 });
 
                 it('should set the mode to be the value of the first mode in the model\'s modes if the minireel\'s mode is not a member of the model\'s modes', function() {
                     model.minireel.mode = 'foo';
                     invoke();
-                    expect(controller.mode).toBe('foo');
+                    expect(controller.mode).toBe(model.modes[0]);
 
                     model.minireel.mode = 'lightbox';
                     invoke();
-                    expect(controller.mode).toBe('foo');
+                    expect(controller.mode).toBe(model.modes[0]);
 
                     model.minireel.mode = 'bar';
                     invoke();
-                    expect(controller.mode).toBe('bar');
+                    expect(controller.mode).toBe(model.modes[1]);
 
                     model.minireel.mode = 'lightbox-ads';
                     invoke();
-                    expect(controller.mode).toBe('foo');
+                    expect(controller.mode).toBe(model.modes[0]);
                 });
             });
         });
