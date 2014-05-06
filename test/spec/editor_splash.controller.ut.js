@@ -180,6 +180,13 @@
                     it('should transition back to the editor', function() {
                         expect(c6State.goTo).toHaveBeenCalledWith('editor');
                     });
+
+                    it('should create a collateral object on the original if it has none', function() {
+                        delete EditorCtrl.model.data.collateral;
+
+                        EditorSplashCtrl.save();
+                        expect(EditorCtrl.model.data.collateral).toEqual(minireel.data.collateral);
+                    });
                 });
             });
 

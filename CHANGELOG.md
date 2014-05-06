@@ -78,3 +78,13 @@
   * [FIX]: Updated cache-control times when uploading to s3.
   * [FEATURE]: Added initial GA support.
 * *[/Beta1.rc15]*
+* *[Beta1.rc16]*
+  * [FIX]: Fix issue where a MiniReel with no collateral assets could
+    not have its first one added
+  * [FEATURE]: Autoplay option is disabled on MiniReel display modes
+    that don't support autoplay **REQUIRED STEPS: The MiniReelinator
+    experience needs to be updated in the content service**
+  * [FIX]: splash uploader spacing styles updated
+  * [FIX]: :disabled styles added where appropriate
+  * [FIX]: removed unused css files
+* *[/Beta1.rc16]*

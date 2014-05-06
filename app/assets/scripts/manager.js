@@ -129,8 +129,26 @@
                 var minireel = this.model.minireel,
                     mode = this.mode;
 
-                minireel.mode = mode;
+                minireel.mode = mode.value;
+                minireel.data.autoplay = mode.autoplayable;
+
                 c6State.goTo(NewCtrl.baseState + '.autoplay');
             };
+        }])
+
+        .controller('NewAutoplayController', ['$scope','MiniReelService',
+        function                             ( $scope , MiniReelService ) {
+            var NewCtrl = $scope.NewCtrl;
+
+            Object.defineProperties(this, {
+                modeData: {
+                    get: function() {
+                        return MiniReelService.modeDataOf(
+                            this.model,
+                            NewCtrl.model.modes
+                        );
+                    }
+                }
+            });
         }]);
 }());

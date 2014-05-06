@@ -278,11 +278,13 @@
         }])
 
         .controller('EditorSplashController', ['$scope','FileService','CollateralService',
-                                               'c6State',
+                                               'c6State','$log',
         function                              ( $scope , FileService , CollateralService ,
-                                                c6State ) {
+                                                c6State , $log ) {
             var self = this,
                 EditorCtrl = $scope.EditorCtrl;
+
+            $log = ($log.context || function() { return $log; })('EditorSplashCtrl');
 
             this.maxFileSize = 204800;
             this.splash = null;
@@ -298,6 +300,7 @@
             this.upload = function() {
                 var upload;
 
+                $log.info('Upload started: ', this.splash);
                 this.currentUpload = upload = CollateralService.set(
                     'splash',
                     this.splash,
@@ -305,12 +308,17 @@
                 );
 
                 upload.finally(function() {
+                    $log.info('Uploaded completed!');
                     self.currentUpload = null;
                 });
             };
 
             this.save = function() {
-                copy(this.model.data.collateral, EditorCtrl.model.data.collateral);
+                var data = EditorCtrl.model.data;
+
+                $log.info('Saving data: ', this.model);
+                copy(this.model.data.collateral, data.collateral || (data.collateral = {}));
+                $log.info('Save complete: ', EditorCtrl.model);
 
                 c6State.goTo('editor');
             };

@@ -8,7 +8,7 @@
         </div>
         <input id="mode-{{$this.value}}" type="radio" 
             ng-disabled="$this.disabled"
-            name="minireel-mode" value="{{$this.value}}"
+            name="minireel-mode" ng-value="$this"
             class="modal__radioBtn" ng-model="NewModeCtrl.mode"/>
         <label class="wizard__hitarea" for="mode-{{$this.value}}"><span class="ir">{{$this.name}}</span></label>
         <div class="wizard__diagram sprite--fff diagram__{{$this.value}}">&nbsp;</div>
