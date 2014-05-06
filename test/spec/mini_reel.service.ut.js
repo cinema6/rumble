@@ -54,6 +54,7 @@
                     theme: 'ed-videos',
                     status: 'pending',
                     data: {
+                        title: 'My MiniReel',
                         autoplay: true,
                         election: 'el-76506623bf22d9',
                         branding: 'elitedaily',
@@ -723,6 +724,10 @@
                             expect(success.calls.mostRecent().args[0].data.autoplay).toBe(true);
                         });
 
+                        it('should copy the title of the minireel', function() {
+                            expect(success.calls.mostRecent().args[0].data.title).toBe('My MiniReel');
+                        });
+
                         it('should set update MiniReelService\'s opened object to refrences to its data-models', function() {
                             expect(MiniReelService.opened.player).toBe(minireel);
                             expect(MiniReelService.opened.editor).toBe(success.calls.mostRecent().args[0]);
@@ -935,7 +940,7 @@
                                 });
 
                                 expect(success).toHaveBeenCalledWith(newModel);
-                                expect(newModel.title).toBe('My MiniReel (copy)');
+                                expect(newModel.data.title).toBe('My MiniReel (copy)');
                                 expect(newModel.status).toBe('pending');
                             });
                         });
@@ -949,13 +954,11 @@
 
                             it('should initialize a new minireel', function() {
                                 expect(cinema6.db.create).toHaveBeenCalledWith('experience', {
-                                    title: 'Untitled',
-                                    subtitle: null,
-                                    summary: null,
                                     type: 'minireel',
                                     mode: 'lightbox',
                                     org: 'o-17593d7a2bf294',
                                     data: {
+                                        title: 'Untitled',
                                         branding: appData.user.branding,
                                         deck: [
                                             {

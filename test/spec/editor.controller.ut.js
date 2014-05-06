@@ -612,14 +612,14 @@
                         EditorCtrl.isDirty = false;
 
                         $scope.$apply(function() {
-                            cModel.title = 'New Title!';
+                            cModel.data.title = 'New Title!';
                         });
                         expect(EditorCtrl.isDirty).toBe(true);
                     });
 
                     it('should save the minireel (debounced) every time it is changed', function() {
                         $scope.$apply(function() {
-                            cModel.title = 'Foo!';
+                            cModel.data.title = 'Foo!';
                         });
                         $timeout.flush();
                         expect(EditorCtrl.save).toHaveBeenCalled();

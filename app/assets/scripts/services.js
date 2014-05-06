@@ -653,6 +653,7 @@
                 function transform(minireel) {
                     var model = {
                         data: {
+                            title: minireel.data.title,
                             branding: minireel.data.branding,
                             autoplay: minireel.data.autoplay,
                             election: minireel.data.election,
@@ -835,13 +836,11 @@
                                 return minireel.pojoify();
                             }) :
                         {
-                            title: 'Untitled',
-                            subtitle: null,
-                            summary: null,
                             type: 'minireel',
                             mode: 'lightbox',
                             org: user.org,
                             data: {
+                                title: 'Untitled',
                                 branding: user.branding,
                                 deck: [
                                     self.createCard('recap')
@@ -854,7 +853,7 @@
                     var minireel = cinema6.db.create('experience', template);
 
                     delete minireel.id;
-                    minireel.title += toCopyId ? ' (copy)' : '';
+                    minireel.data.title += toCopyId ? ' (copy)' : '';
                     minireel.status = 'pending';
 
                     return minireel;
