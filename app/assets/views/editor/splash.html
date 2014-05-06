@@ -19,7 +19,8 @@
                     Loading {{(progress.uploaded / 1024) | number:0}} kb of {{(progress.total / 1024) | number:0}} kb
                 </p>
             </span>
-            <button ng-click="EditorSplashCtrl.upload()" ng-show="!!EditorSplashCtrl.splash" class="coverUploader__button toolbar__btn">Upload</button>
+            <p ng-show="EditorSplashCtrl.fileTooBig">The file you selected is too large. It must be under {{EditorSplashCtrl.maxFileSize / 1024}} kb.</p>
+            <button ng-click="EditorSplashCtrl.upload()" ng-show="!!EditorSplashCtrl.splash && !EditorSplashCtrl.fileTooBig" class="coverUploader__button toolbar__btn">Upload</button>
 
             <ul class="coverUploader__helpTips">
                 <li>Images should be 600 pixels by 600 pixels.</li>

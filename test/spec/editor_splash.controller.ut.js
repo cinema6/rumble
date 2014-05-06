@@ -59,6 +59,12 @@
             });
 
             describe('properties', function() {
+                describe('maxFileSize', function() {
+                    it('should be 204800', function() {
+                        expect(EditorSplashCtrl.maxFileSize).toBe(204800);
+                    });
+                });
+
                 describe('splash', function() {
                     it('should be null', function() {
                         expect(EditorSplashCtrl.splash).toBeNull();
@@ -68,6 +74,40 @@
                 describe('currentUpload', function() {
                     it('should be null', function() {
                         expect(EditorSplashCtrl.splash).toBeNull();
+                    });
+                });
+
+                describe('fileTooBig', function() {
+                    beforeEach(function() {
+                        EditorSplashCtrl.maxFileSize = 204800;
+                    });
+
+                    it('should not throw any errors if there is no file', function() {
+                        expect(function() {
+                            return EditorSplashCtrl.fileTooBig;
+                        }).not.toThrow();
+                    });
+
+                    describe('if there is a file', function() {
+                        beforeEach(function() {
+                            EditorSplashCtrl.splash = {
+                                size: 102400
+                            };
+                        });
+
+                        it('should be true if the file\'s size is greater than the max size', function() {
+                            function tooBig() {
+                                return EditorSplashCtrl.fileTooBig;
+                            }
+
+                            expect(tooBig()).toBe(false);
+
+                            EditorSplashCtrl.splash.size = 204800;
+                            expect(tooBig()).toBe(false);
+
+                            EditorSplashCtrl.splash.size = 204801;
+                            expect(tooBig()).toBe(true);
+                        });
                     });
                 });
             });

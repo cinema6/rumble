@@ -197,8 +197,16 @@
             var self = this,
                 EditorCtrl = $scope.EditorCtrl;
 
+            this.maxFileSize = 204800;
             this.splash = null;
             this.currentUpload = null;
+            Object.defineProperties(this, {
+                fileTooBig: {
+                    get: function() {
+                        return ((this.splash || {}).size || 0) > this.maxFileSize;
+                    }
+                }
+            });
 
             this.upload = function() {
                 var upload;
