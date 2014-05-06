@@ -366,9 +366,12 @@
                     }],
                     children: {
                         splash: {
-                            controller: 'GenericController',
+                            controller: 'EditorSplashController',
                             controllerAs: 'EditorSplashCtrl',
-                            templateUrl: assets('views/editor/splash.html')
+                            templateUrl: assets('views/editor/splash.html'),
+                            model:  [function() {
+                                return copy(this.cParent.cModel);
+                            }]
                         },
                         setMode: {
                             controller: 'GenericController',
@@ -605,6 +608,62 @@
                         $document.off('click', handleClick);
                     });
                 }
+            };
+        }])
+
+        .directive('input', [function() {
+            return {
+                restrict: 'E',
+                require: '?ngModel',
+                link: function(scope, $element, attrs, ctrl) {
+                    var getFile;
+
+                    if (!ctrl || attrs.type !== 'file') { return; }
+
+                    getFile = function() {
+                        return $element.prop('files')[0];
+                    };
+
+                    $element.on('change', function() {
+                        var file = getFile();
+
+                        scope.$apply(function() {
+                            ctrl.$setViewValue(file, 'change');
+                        });
+                    });
+
+                    ctrl.$render = function() {
+                        if (!ctrl.$modelValue && !getFile()) { return; }
+
+                        throw new Error(
+                            'An <input type="file">\'s value cannot be set via data-binding.'
+                        );
+                    };
+                }
+            };
+        }])
+
+        .directive('c6BgImg', [function() {
+            return {
+                restrict: 'AC',
+                link: function(scope, element, attrs) {
+                    attrs.$observe('c6BgImg', function(src) {
+                        element.css('background-image', (src || '') && ('url("' + src + '")'));
+                    });
+                }
+            };
+        }])
+
+        .filter('percent', [function() {
+            return function(number) {
+                return ((number || 0) * 100) + '%';
+            };
+        }])
+
+        .filter('image', ['FileService',
+        function         ( FileService ) {
+            return function(file) {
+                return (file || null) && FileService.open(file).url;
             };
         }])
 

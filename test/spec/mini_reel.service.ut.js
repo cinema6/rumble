@@ -57,6 +57,9 @@
                         autoplay: true,
                         election: 'el-76506623bf22d9',
                         branding: 'elitedaily',
+                        collateral: {
+                            splash: 'splash.jpg'
+                        },
                         deck: [
                             {
                                 id: 'rc-c9cf24e87307ac',

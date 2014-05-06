@@ -190,6 +190,57 @@
             });
         }])
 
+        .controller('EditorSplashController', ['$scope','FileService','CollateralService',
+                                               'c6State',
+        function                              ( $scope , FileService , CollateralService ,
+                                                c6State ) {
+            var self = this,
+                EditorCtrl = $scope.EditorCtrl;
+
+            this.maxFileSize = 204800;
+            this.splash = null;
+            this.currentUpload = null;
+            Object.defineProperties(this, {
+                fileTooBig: {
+                    get: function() {
+                        return ((this.splash || {}).size || 0) > this.maxFileSize;
+                    }
+                }
+            });
+
+            this.upload = function() {
+                var upload;
+
+                this.currentUpload = upload = CollateralService.set(
+                    'splash',
+                    this.splash,
+                    this.model
+                );
+
+                upload.finally(function() {
+                    self.currentUpload = null;
+                });
+            };
+
+            this.save = function() {
+                copy(this.model.data.collateral, EditorCtrl.model.data.collateral);
+
+                c6State.goTo('editor');
+            };
+
+            $scope.$on('$destroy', function() {
+                if (!self.splash) { return; }
+
+                FileService.open(self.splash).close();
+            });
+
+            $scope.$watch(function() { return self.splash; }, function(newImage, oldImage) {
+                if (!oldImage) { return; }
+
+                FileService.open(oldImage).close();
+            });
+        }])
+
         .controller('EditCardController', ['$scope','c6Computed','c6State','VideoService',
         function                          ( $scope , c6Computed , c6State , VideoService ) {
             var c = c6Computed($scope);

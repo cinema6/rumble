@@ -9,6 +9,13 @@
             hostname: '0.0.0.0'
         },
         sandbox: {
+            proxies: [
+                {
+                    context: '/api',
+                    host: '<%= personal.apiHost %>',
+                    changeOrigin: true
+                }
+            ],
             options: {
                 port: '<%= settings.sandboxPort %>',
                 middleware: function() {
