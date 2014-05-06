@@ -50,11 +50,11 @@
                     subtitle: 'I <3 Turtles',
                     summary: 'I AM THE TURTLE MONSTER!',
                     type: 'minireel',
-                    mode: 'lightbox',
                     theme: 'ed-videos',
                     status: 'pending',
                     data: {
                         title: 'My MiniReel',
+                        mode: 'lightbox',
                         autoplay: true,
                         election: 'el-76506623bf22d9',
                         branding: 'elitedaily',
@@ -267,14 +267,14 @@
                         });
 
                         it('should return an empty object if a mode with no category is passed in', function() {
-                            expect(result({ mode: 'foo' }, categories)).toEqual({});
+                            expect(result({ data: { mode: 'foo' } }, categories)).toEqual({});
                         });
 
                         it('should return the category of the minireel\'s mode', function() {
-                            expect(result({ mode: 'lightbox' }, categories)).toBe(categories[0]);
-                            expect(result({ mode: 'lightbox-ads' }, categories)).toBe(categories[0]);
-                            expect(result({ mode: 'light' }, categories)).toBe(categories[1]);
-                            expect(result({ mode: 'full' }, categories)).toBe(categories[1]);
+                            expect(result({ data: { mode: 'lightbox' } }, categories)).toBe(categories[0]);
+                            expect(result({ data: { mode: 'lightbox-ads' } }, categories)).toBe(categories[0]);
+                            expect(result({ data: { mode: 'light' } }, categories)).toBe(categories[1]);
+                            expect(result({ data: { mode: 'full' } }, categories)).toBe(categories[1]);
                         });
                     });
 
@@ -708,7 +708,6 @@
                                 subtitle: 'I <3 Turtles',
                                 summary: 'I AM THE TURTLE MONSTER!',
                                 type: 'minireel',
-                                mode: 'lightbox',
                                 theme: 'ed-videos',
                                 status: 'pending',
                                 _type: 'experience',
@@ -726,6 +725,10 @@
 
                         it('should copy the title of the minireel', function() {
                             expect(success.calls.mostRecent().args[0].data.title).toBe('My MiniReel');
+                        });
+
+                        it('should copy the mode of the minireel', function() {
+                            expect(success.calls.mostRecent().args[0].data.mode).toBe('lightbox');
                         });
 
                         it('should set update MiniReelService\'s opened object to refrences to its data-models', function() {
@@ -917,7 +920,6 @@
                                     subtitle: 'I <3 Turtles',
                                     summary: 'I AM THE TURTLE MONSTER!',
                                     type: 'minireel',
-                                    mode: 'lightbox',
                                     theme: 'ed-videos',
                                     status: 'pending',
                                     data: jasmine.any(Object)
@@ -955,10 +957,10 @@
                             it('should initialize a new minireel', function() {
                                 expect(cinema6.db.create).toHaveBeenCalledWith('experience', {
                                     type: 'minireel',
-                                    mode: 'lightbox',
                                     org: 'o-17593d7a2bf294',
                                     data: {
                                         title: 'Untitled',
+                                        mode: 'lightbox',
                                         branding: appData.user.branding,
                                         deck: [
                                             {

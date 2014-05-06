@@ -543,7 +543,7 @@
 
             this.modeCategoryOf = function(minireel, categories) {
                 var result = {},
-                    modeValue = minireel && minireel.mode;
+                    modeValue = minireel && minireel.data.mode;
 
                 forEach(categories || [], function(category) {
                     forEach(category.modes, function(mode) {
@@ -561,7 +561,7 @@
 
                 forEach(categories, function(category) {
                     forEach(category.modes, function(mode) {
-                        if (mode.value === minireel.mode) {
+                        if (mode.value === minireel.data.mode) {
                             result = mode;
                         }
                     });
@@ -654,6 +654,7 @@
                     var model = {
                         data: {
                             title: minireel.data.title,
+                            mode: minireel.data.mode,
                             branding: minireel.data.branding,
                             autoplay: minireel.data.autoplay,
                             election: minireel.data.election,
@@ -837,10 +838,10 @@
                             }) :
                         {
                             type: 'minireel',
-                            mode: 'lightbox',
                             org: user.org,
                             data: {
                                 title: 'Untitled',
+                                mode: 'lightbox',
                                 branding: user.branding,
                                 deck: [
                                     self.createCard('recap')

@@ -57,8 +57,8 @@
 
                 experience = {
                     id: 'foo',
-                    mode: 'light',
                     data: {
+                        mode: 'light',
                         autoplay: false,
                         deck: [
                             {
@@ -90,7 +90,7 @@
                     expect(PreviewController).toEqual(jasmine.any(Object));
                 });
 
-                it('should set the default mode to full', function() {
+                it('should set the default mode to desktop', function() {
                     expect(PreviewController.device).toBe('desktop');
                 });
             });
@@ -153,7 +153,7 @@
 
                             expect(PreviewController.playerSrc).toBe('/apps/rumble/?kCollateralUrl=' + encodeURIComponent('/collateral') + '&autoplay=false&kDevice=desktop&kMode=light&kEnvUrlRoot=');
 
-                            experience.mode = 'lightbox';
+                            experience.data.mode = 'lightbox';
                             $scope.$apply(function() {
                                 PreviewController.device = 'phone';
                             });
@@ -189,7 +189,7 @@
 
                             expect(PreviewController.playerSrc).toBe('/apps/rumble/?kCollateralUrl=' + encodeURIComponent('/collateral') + '&autoplay=false&kDevice=desktop&kMode=light&kEnvUrlRoot=');
 
-                            experience.mode = 'lightbox';
+                            experience.data.mode = 'lightbox';
                             $scope.$apply(function() {
                                 PreviewController.device = 'phone';
                             });
@@ -344,8 +344,8 @@
                             emitCount = 0,
                             updatedExperience = {
                                 id: 'foo',
-                                mode: 'lightbox',
                                 data: {
+                                    mode: 'lightbox',
                                     autoplay: true,
                                     deck: [
                                         {
@@ -398,8 +398,8 @@
                         beforeEach(function() {
                             updatedExperience = {
                                 id: 'foo',
-                                mode: 'light',
                                 data: {
+                                    mode: 'light',
                                     deck: [
                                         {
                                             id: '1'

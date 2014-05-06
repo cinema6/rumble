@@ -198,7 +198,9 @@
 
                     beforeEach(function() {
                         minireel = {
-                            mode: 'full'
+                            data: {
+                                mode: 'full'
+                            }
                         };
                     });
 
@@ -218,13 +220,13 @@
                         it('should return the name of the mode for the given minireel', function() {
                             expect(ManagerCtrl.modeNameFor(minireel)).toBe('Heavy Text');
 
-                            minireel.mode = 'light';
+                            minireel.data.mode = 'light';
                             expect(ManagerCtrl.modeNameFor(minireel)).toBe('Light Text');
 
-                            minireel.mode = 'lightbox';
+                            minireel.data.mode = 'lightbox';
                             expect(ManagerCtrl.modeNameFor(minireel)).toBe('No Companion Ad');
 
-                            minireel.mode = 'lightbox-ads';
+                            minireel.data.mode = 'lightbox-ads';
                             expect(ManagerCtrl.modeNameFor(minireel)).toBe('With Companion Ad');
                         });
                     });

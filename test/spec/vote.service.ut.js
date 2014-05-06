@@ -26,8 +26,9 @@
                     "status": "pending",
                     "created": "2014-02-08T10:42:51+00:00",
                     "lastModified": "2014-04-18T14:07:20+00:00",
-                    "mode": "light",
                     "data": {
+                        "title": "Rumble Video",
+                        "mode": "light",
                         "branding": "elitedaily",
                         "deck": [
                             {
