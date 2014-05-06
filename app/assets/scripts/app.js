@@ -695,11 +695,23 @@
             });
 
             c6State.on('stateChangeSuccess', function(state) {
+                self.trackStateChange(state);
                 cinema6.getSession()
                     .then(function pingSession(session) {
                         session.ping('stateChange', { name: state.name });
                     });
             });
+
+            self.trackStateChange = function(state){
+                $log.info('trackChange:',state.name);
+                if ((self.config === null) || (!state.templateUrl)){
+                    return;
+                }
+                tracker.pageview(
+                    state.templateUrl.replace(/.*views/, '/' + self.config.uri),
+                    self.config.title + ' - ' + state.name
+                );
+            };
 
             self.sendPageEvent = function() {
                 if (self.config === null){
@@ -707,7 +719,7 @@
                         arguments[0]);
                     return;
                 }
-                var args  = Array.prototype.slice.call(arguments,0), 
+                var args  = Array.prototype.slice.call(arguments,0),
                     pageObj = args.pop();
                 pageObj.page  = '/' + self.config.uri + '/' + pageObj.page;
                 pageObj.title = self.config.title + ' - ' + pageObj.title;

@@ -3,15 +3,8 @@
 
     angular.module('c6.mrmaker')
         .controller('ManagerController', [  'c6State','MiniReelService','ConfirmDialogService',
-                                            '$scope',
-        function                         (  c6State , MiniReelService , ConfirmDialogService,
-                                            $scope) {
+        function                         (  c6State , MiniReelService , ConfirmDialogService) {
             var self = this;
-
-            this.pageObject = {
-                page : 'manager',
-                title : 'Manager'
-            };
 
             this.filter = 'all';
 
@@ -101,7 +94,6 @@
                 return self.filter === 'all' || self.filter === minireel.status;
             };
 
-            $scope.AppCtrl.sendPageView(this.pageObject);
         }])
 
         .controller('NewCategoryController', ['$scope',

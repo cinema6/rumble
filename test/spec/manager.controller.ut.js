@@ -42,9 +42,6 @@
                     c6State = $injector.get('c6State');
 
                     $scope = $rootScope.$new();
-                    $scope.AppCtrl = {
-                        sendPageView : jasmine.createSpy('AppCtrl.sendPageView')
-                    };
 
                     ManagerCtrl = $controller('ManagerController', { $scope: $scope, cModel: model});
                     ManagerCtrl.model = model;
@@ -63,13 +60,6 @@
                     it('should be initialized as "all"', function() {
                         expect(ManagerCtrl.filter).toBe('all');
                     });
-                });
-            });
-
-            describe('tracking', function(){
-                it('should send a pageview when loaded',function(){
-                    expect($scope.AppCtrl.sendPageView)
-                        .toHaveBeenCalledWith({page:'manager',title:'Manager'});
                 });
             });
 

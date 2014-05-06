@@ -45,7 +45,7 @@
 
             $log = $log.context('EditorController');
 
-            this.pageObject = { page : 'editor', title : 'Editor' };
+//            this.pageObject = { page : 'editor', title : 'Editor' };
             this.preview = false;
             this.editTitle = false;
             this.isDirty = false;
@@ -113,24 +113,24 @@
                 });
             };
 
-            this.editCard = function(card,evtSrc) {
-                if (evtSrc){
-                    AppCtrl.sendPageEvent('Editor','Click','Edit Card',self.pageObject);
-                }
+            this.editCard = function(card/*,evtSrc*/) {
+//                if (evtSrc){
+//                    AppCtrl.sendPageEvent('Editor','Click','Edit Card',self.pageObject);
+//                }
                 c6State.goTo('editor.editCard.copy', { cardId: card.id });
             };
 
-            this.newCard = function(insertionIndex,evtSrc) {
-                if (evtSrc){
-                    AppCtrl.sendPageEvent('Editor','Click','New Card',self.pageObject);
-                }
+            this.newCard = function(insertionIndex/*,evtSrc*/) {
+//                if (evtSrc){
+//                    AppCtrl.sendPageEvent('Editor','Click','New Card',self.pageObject);
+//                }
                 c6State.goTo('editor.newCard', { insertionIndex: insertionIndex });
             };
 
-            this.deleteCard = function(card,evtSrc) {
-                if (evtSrc){
-                    AppCtrl.sendPageEvent('Editor','Click','Delete Card',self.pageObject);
-                }
+            this.deleteCard = function(card/*,evtSrc*/) {
+//                if (evtSrc){
+//                    AppCtrl.sendPageEvent('Editor','Click','Delete Card',self.pageObject);
+//                }
                 ConfirmDialogService.display({
                     prompt: 'Are you sure you want to delete this card?',
                     affirm: 'Delete',
@@ -148,10 +148,10 @@
                 });
             };
 
-            this.previewMode = function(card,evtSrc) {
-                if (evtSrc){
-                    AppCtrl.sendPageEvent('Editor','Click','Preview Card',self.pageObject);
-                }
+            this.previewMode = function(card/*,evtSrc*/) {
+//                if (evtSrc){
+//                    AppCtrl.sendPageEvent('Editor','Click','Preview Card',self.pageObject);
+//                }
                 self.preview = true;
                 $scope.$broadcast('mrPreview:updateExperience', self.model, card);
                 cinema6.getSession()
@@ -238,7 +238,7 @@
                 MiniReelService.close();
             });
 
-            AppCtrl.sendPageView(this.pageObject);
+        //    AppCtrl.sendPageView(this.pageObject);
         }])
 
         .controller('EditorSplashController', ['$scope','FileService','CollateralService',
