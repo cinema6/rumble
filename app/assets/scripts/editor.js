@@ -198,6 +198,44 @@
                     });
             };
 
+            this.confirmSave = function() {
+                ConfirmDialogService.display({
+                    prompt: 'You are making changes to a published MiniReel. ' +
+                        'Are you sure you want to continue?',
+                    affirm: 'Yes, publish my changes',
+                    cancel: 'Cancel',
+                    onCancel: function() {
+                        ConfirmDialogService.close();
+                    },
+                    onAffirm: function() {
+                        self.save();
+                        ConfirmDialogService.close();
+                    }
+                });
+            };
+
+            this.backToDashboard = function() {
+                if (this.model.status === 'active' && this.isDirty) {
+                    ConfirmDialogService.display({
+                        prompt: 'You have unpublished changes. ' +
+                            'Are you sure you want to leave this screen? All changes will be lost.',
+                        affirm: 'Yes, lose changes',
+                        cancel: 'No, publish my changes first',
+                        onCancel: function() {
+                            self.save();
+                            c6State.goTo('manager');
+                            ConfirmDialogService.close();
+                        },
+                        onAffirm: function() {
+                            c6State.goTo('manager');
+                            ConfirmDialogService.close();
+                        }
+                    });
+                } else {
+                    c6State.goTo('manager');
+                }
+            };
+
             $scope.$watch(function() {
                 return self.model.data.mode + self.model.data.autoplay;
             }, function(newMode, oldMode) {
@@ -327,6 +365,11 @@
                 canSave: {
                     get: function() {
                         return (this.model.note || '').length <= this.limits.copy;
+                    }
+                },
+                saveText: {
+                    get: function() {
+                        return (EditorCtrl.model.status === 'active') ? 'Done' : 'Save';
                     }
                 }
             });

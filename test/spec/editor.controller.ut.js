@@ -491,6 +491,84 @@
                         });
                     });
                 });
+
+                describe('backToDashboard()', function() {
+                    beforeEach(function() {
+                        spyOn(c6State, 'goTo');
+                        spyOn(EditorCtrl,'save');
+                    });
+
+                    describe('when status is active and isDirty', function() {
+                        beforeEach(function() {
+                            EditorCtrl.isDirty = true;
+                            EditorCtrl.model.status = 'active';
+                            EditorCtrl.backToDashboard();
+                        });
+
+                        it('should display a confirmation dialog', assertDialogPresented);
+
+                        describe('when canceled', function() {
+                            it('should close the dialog', function() {
+                                dialog().onCancel();
+                                expect(EditorCtrl.save).toHaveBeenCalled();
+                                expect(c6State.goTo).toHaveBeenCalledWith('manager');
+                                expect(ConfirmDialogService.close).toHaveBeenCalled();
+                            })
+                        });
+
+                        describe('when confirmed', function() {
+                            it('should goTo manager state', function() {
+                                dialog().onAffirm();
+                                expect(EditorCtrl.save).not.toHaveBeenCalled();
+                                expect(c6State.goTo).toHaveBeenCalledWith('manager');
+                                expect(ConfirmDialogService.close).toHaveBeenCalled();
+                            })
+                        });
+                    });
+
+                    describe('when status is pending or not dirty', function() {
+                        it('should goTo manager state', function() {
+                            EditorCtrl.isDirty = false;
+                            EditorCtrl.model.status = 'active';
+                            EditorCtrl.backToDashboard();
+
+                            expect(c6State.goTo).toHaveBeenCalledWith('manager');
+
+                            EditorCtrl.isDirty = true;
+                            EditorCtrl.model.status = 'pending';
+                            EditorCtrl.backToDashboard();
+
+                            expect(c6State.goTo).toHaveBeenCalledWith('manager');
+
+                            expect(ConfirmDialogService.display).not.toHaveBeenCalled();
+                        });
+                    });
+                });
+
+                describe('confirmSave()', function() {
+                    beforeEach(function() {
+                        spyOn(EditorCtrl,'save');
+
+                        EditorCtrl.confirmSave();
+                    });
+
+                    it('should display a confirmation dialog', assertDialogPresented);
+
+                    describe('when dialog is confirmed', function() {
+                        it('should save and close the dialog', function() {
+                            dialog().onAffirm();
+                            expect(EditorCtrl.save).toHaveBeenCalled();
+                            expect(ConfirmDialogService.close).toHaveBeenCalled();
+                        });
+                    });
+
+                    describe('when dialog is canceled', function() {
+                        it('should close the dialog', function() {
+                            dialog().onCancel();
+                            expect(ConfirmDialogService.close).toHaveBeenCalled();
+                        });
+                    });
+                });
             });
 
             describe('events', function() {
