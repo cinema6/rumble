@@ -60,15 +60,17 @@
                 $scope.$emit('<recap-card>:jumpTo', getIndex(card));
             };
 
-            $scope.$watch('active', function(isActive) {
+            $scope.$watch('active', function(isActive, wasActive) {
+                if(isActive === wasActive) { return; }
+                
                 if(isActive) {
                     self.deck = [];
                     _deck = setupDeck(MiniReelService.createDeck(c6AppData.experience.data));
                     self.title = c6AppData.experience.title;
+                }
 
-                    if(c6AppData.experience.mode === 'lightbox') {
-                        $rootScope.$broadcast('resize');
-                    }
+                if(c6AppData.experience.mode === 'lightbox') {
+                    $rootScope.$broadcast('resize');
                 }
             });
         }])

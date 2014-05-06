@@ -93,7 +93,7 @@
             }, ['Ctrl.availableWidth', 'Ctrl.items[0].width']);
 
             c(this, 'pagesCount', function() {
-                return Math.ceil(this.items.length / this.itemsPerPage);
+                return Math.max(Math.ceil(this.items.length / this.itemsPerPage), 1);
             }, ['Ctrl.itemsPerPage', 'Ctrl.items.length']);
 
             c(this, 'buttonWidth', function() {
@@ -117,6 +117,16 @@
             this.setMinButtonWidth = function(minWidth) {
                 this.minButtonWidth = minWidth;
             };
+
+            $scope.$watch(function() {
+                return self.availableWidth;
+            }, function() {
+                var targetPage = Math.max(Math.floor($scope.active() / self.itemsPerPage), 0);
+
+                if($scope.page !== targetPage) {
+                    $scope.page = targetPage;
+                }
+            });
         }])
 
         .directive('thumbPaginatorItem', ['$window','c6Debounce',
