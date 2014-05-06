@@ -9,7 +9,9 @@
             "election": "e-d0e407bb69675b",
             "mode": "light",
             "theme": "ed-entertainment",
-            "collateral": { "splash" : "/collateral/experiences/rumble/splash-6thumb.jpg"},
+            "collateral": {
+                "splash": "/collateral/experiences/rumble/splash-6thumb.jpg"
+            },
             "title": "Rumble Video",
             "branding": "elitedaily",
             "conversations": [
@@ -191,7 +193,9 @@
             "title": "The 15 Most Amazing GoPro Videos Ever Recorded",
             "mode": "light",
             "theme": "ed-videos",
-            "collateral": { "splash" : "/collateral/experiences/rumble/splash-6thumb.jpg"},
+            "collateral": {
+                "splash": "/collateral/experiences/gopro/splash-6thumb.jpg"
+            },
             "branding": "elitedaily",
             "autoplay": true,
             "deck": [
@@ -557,7 +561,9 @@
             "mode": "lightbox-ads",
             "theme": "ed-videos",
             "branding": "elitedaily",
-            "collateral": { "splash" : "/collateral/experiences/rumble/splash-6thumb.jpg"},
+            "collateral": {
+                "splash": "/collateral/experiences/gopro-lightbox/splash-6thumb.jpg"
+            },
             "autoplay": true,
             "deck": [
                 {
@@ -956,7 +962,9 @@
             "mode": "lightbox-ads",
             "theme": "ed-videos",
             "branding": "elitedaily",
-            "collateral": { "splash" : "/collateral/experiences/rumble/splash-6thumb.jpg"},
+            "collateral": {
+                "splash": "/collateral/experiences/gopro-lightbox/splash-6thumb.jpg"
+            },
             "autoplay": false,
             "deck": [
                 {
@@ -1354,7 +1362,9 @@
             "title": "The 10 Greatest Super Bowl Plays Of All Time",
             "mode": "full",
             "theme": "ed-sports",
-            "collateral": { "splash" : "/collateral/experiences/rumble/splash-6thumb.jpg"},
+            "collateral": {
+                "splash": "/collateral/experiences/superbowl/splash-6thumb.jpg"
+            },
             "branding": "elitedaily",
             "autoplay": true,
             "deck": [
@@ -1584,7 +1594,9 @@
             "title": "The 10 Greatest Super Bowl Plays Of All Time",
             "theme": "ed-sports",
             "mode": "lightbox",
-            "collateral": { "splash" : "/collateral/experiences/rumble/splash-6thumb.jpg"},
+            "collateral": {
+                "splash": "/collateral/experiences/superbowl-lightbox/splash-6thumb.jpg"
+            },
             "branding": "elitedaily",
             "autoplay": true,
             "deck": [
@@ -1814,7 +1826,9 @@
             "title": "The 10 Greatest Super Bowl Plays Of All Time",
             "theme": "ed-sports",
             "mode": "lightbox",
-            "collateral": { "splash" : "/collateral/experiences/rumble/splash-6thumb.jpg"},
+            "collateral": {
+                "splash": "/collateral/experiences/superbowl-lightbox/splash-6thumb.jpg"
+            },
             "branding": "elitedaily",
             "autoplay": false,
             "deck": [
@@ -2044,7 +2058,9 @@
             "title": "The 7 Most Legendary Pro Wrestling Intros Of All Time",
             "mode": "full",
             "theme": "ed-sports",
-            "collateral": { "splash" : "/collateral/experiences/rumble/splash-6thumb.jpg"},
+            "collateral": {
+                "splash": "/collateral/experiences/wrestling/splash-6thumb.jpg"
+            },
             "branding": "elitedaily",
             "autoplay": true,
             "deck": [
