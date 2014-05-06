@@ -7,6 +7,7 @@
                 $scope,
                 $controller,
                 $q,
+                cinema6,
                 ConfirmDialogService,
                 MiniReelService,
                 ManagerCtrl;
@@ -14,8 +15,46 @@
             var model,
                 c6State;
 
+            var appData,
+                appDataDeferred;
+
             beforeEach(function() {
                 model = [];
+
+                /* jshint quotmark:false */
+                appData = {
+                    experience: {
+                        data: {
+                            "modes": [
+                                {
+                                    "modes": [
+                                        {
+                                            "name": "No Companion Ad",
+                                            "value": "lightbox"
+                                        },
+                                        {
+                                            "name": "With Companion Ad",
+                                            "value": "lightbox-ads"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "modes": [
+                                        {
+                                            "name": "Light Text",
+                                            "value": "light"
+                                        },
+                                        {
+                                            "name": "Heavy Text",
+                                            "value": "full"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    }
+                };
+                /* jshint quotmark:single */
 
                 module('c6.state', function($provide) {
                     $provide.provider('c6State', function() {
@@ -35,16 +74,23 @@
                 inject(function($injector) {
                     $rootScope = $injector.get('$rootScope');
                     $controller = $injector.get('$controller');
+                    $q = $injector.get('$q');
+
+                    appDataDeferred = $q.defer();
+                    cinema6 = $injector.get('cinema6');
+                    spyOn(cinema6, 'getAppData')
+                        .and.returnValue(appDataDeferred.promise);
+
                     MiniReelService = $injector.get('MiniReelService');
                     ConfirmDialogService = $injector.get('ConfirmDialogService');
-                    $q = $injector.get('$q');
 
                     c6State = $injector.get('c6State');
 
                     $scope = $rootScope.$new();
-
-                    ManagerCtrl = $controller('ManagerController', { $scope: $scope, cModel: model});
-                    ManagerCtrl.model = model;
+                    $scope.$apply(function() {
+                        ManagerCtrl = $controller('ManagerController', { $scope: $scope, cModel: model });
+                        ManagerCtrl.model = model;
+                    });
                 });
 
                 spyOn(ConfirmDialogService, 'display');
@@ -145,7 +191,43 @@
                             expect(ConfirmDialogService.close).toHaveBeenCalled();
                         });
                     });
+                });
 
+                describe('modeNameFor(minireel)', function() {
+                    var minireel;
+
+                    beforeEach(function() {
+                        minireel = {
+                            mode: 'full'
+                        };
+                    });
+
+                    describe('before the appData is fetched', function() {
+                        it('should return null', function() {
+                            expect(ManagerCtrl.modeNameFor(minireel)).toBeNull();
+                        });
+                    });
+
+                    describe('after the app data is retrived', function() {
+                        beforeEach(function() {
+                            $scope.$apply(function() {
+                                appDataDeferred.resolve(appData);
+                            });
+                        });
+
+                        it('should return the name of the mode for the given minireel', function() {
+                            expect(ManagerCtrl.modeNameFor(minireel)).toBe('Heavy Text');
+
+                            minireel.mode = 'light';
+                            expect(ManagerCtrl.modeNameFor(minireel)).toBe('Light Text');
+
+                            minireel.mode = 'lightbox';
+                            expect(ManagerCtrl.modeNameFor(minireel)).toBe('No Companion Ad');
+
+                            minireel.mode = 'lightbox-ads';
+                            expect(ManagerCtrl.modeNameFor(minireel)).toBe('With Companion Ad');
+                        });
+                    });
                 });
 
                 describe('edit(minireel)', function() {

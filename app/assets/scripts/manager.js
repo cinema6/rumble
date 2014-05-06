@@ -2,9 +2,12 @@
     'use strict';
 
     angular.module('c6.mrmaker')
-        .controller('ManagerController', [  'c6State','MiniReelService','ConfirmDialogService',
-        function                         (  c6State , MiniReelService , ConfirmDialogService) {
-            var self = this;
+        .controller('ManagerController', ['c6State','MiniReelService','ConfirmDialogService',
+                                          'cinema6',
+        function                         ( c6State , MiniReelService , ConfirmDialogService ,
+                                           cinema6 ) {
+            var self = this,
+                appData = null;
 
             this.filter = 'all';
 
@@ -90,10 +93,22 @@
                 });
             };
 
+            this.modeNameFor = function(minireel) {
+                return appData &&
+                    MiniReelService.modeDataOf(
+                        minireel,
+                        appData.experience.data.modes
+                    ).name;
+            };
+
             this.determineInclusionWithFilter = function(minireel) {
                 return self.filter === 'all' || self.filter === minireel.status;
             };
 
+            cinema6.getAppData()
+                .then(function save(data) {
+                    appData = data;
+                });
         }])
 
         .controller('NewCategoryController', ['$scope',
