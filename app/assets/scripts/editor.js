@@ -278,8 +278,10 @@
             };
 
             this.save = function() {
+                var data = EditorCtrl.model.data;
+
                 $log.info('Saving data: ', this.model);
-                copy(this.model.data.collateral, EditorCtrl.model.data.collateral);
+                copy(this.model.data.collateral, data.collateral || (data.collateral = {}));
                 $log.info('Save complete: ', EditorCtrl.model);
 
                 c6State.goTo('editor');
