@@ -7,15 +7,58 @@
                 $scope,
                 $controller,
                 c6State,
+                cinema6,
+                $q,
+                EditorCtrl,
                 EditCardCtrl;
 
-            var model;
+            var model,
+                appDataDeferred,
+                appData;
 
             beforeEach(function() {
                 model = {
+                    note: null,
                     data: {
                         service: 'youtube',
                         videoid: 'gy1B3agGNxw'
+                    }
+                };
+
+                appData = {
+                    experience: {
+                        data: {
+                            modes: [
+                                {
+                                    modes: [
+                                        {
+                                            value: 'lightbox',
+                                            limits: {}
+                                        },
+                                        {
+                                            value: 'lightbox-ads',
+                                            limits: {}
+                                        }
+                                    ]
+                                },
+                                {
+                                    modes: [
+                                        {
+                                            value: 'light',
+                                            limits: {
+                                                copy: 200
+                                            }
+                                        },
+                                        {
+                                            value: 'full',
+                                            limits: {
+                                                copy: 420
+                                            }
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
                     }
                 };
 
@@ -24,12 +67,25 @@
                 inject(function($injector) {
                     $rootScope = $injector.get('$rootScope');
                     $controller = $injector.get('$controller');
+                    $q = $injector.get('$q');
                     c6State = $injector.get('c6State');
 
+                    cinema6 = $injector.get('cinema6');
+                    appDataDeferred = $q.defer();
+                    spyOn(cinema6, 'getAppData')
+                        .and.returnValue(appDataDeferred.promise);
+
                     $scope = $rootScope.$new();
-                    EditCardCtrl = $controller('EditCardController', { $scope: $scope, cModel: model });
-                    EditCardCtrl.model = model;
-                    $scope.EditCardCtrl = EditCardCtrl;
+                    $scope.$apply(function() {
+                        $scope.EditorCtrl = EditorCtrl = {
+                            model: {
+                                mode: 'full'
+                            }
+                        };
+                        EditCardCtrl = $controller('EditCardController', { $scope: $scope, cModel: model });
+                        EditCardCtrl.model = model;
+                        $scope.EditCardCtrl = EditCardCtrl;
+                    });
                 });
 
                 spyOn(c6State, 'goTo');
@@ -58,6 +114,97 @@
             });
 
             describe('properties', function() {
+                describe('canSave', function() {
+                    function canSave() {
+                        return EditCardCtrl.canSave;
+                    }
+
+                    function setLength(length) {
+                        var count = 0,
+                            result = '';
+
+                        for ( ; count < length; count++) {
+                            result += 'a';
+                        }
+
+                        model.note = result;
+                    }
+
+                    it('should be true as long as the note\'s length is less than the limit on copy', function() {
+                        expect(canSave()).toBe(true);
+
+                        setLength(10);
+                        expect(canSave()).toBe(true);
+
+                        setLength(10000);
+                        expect(canSave()).toBe(true);
+
+                        EditCardCtrl.limits.copy = 50;
+                        expect(canSave()).toBe(false);
+
+                        setLength(50);
+                        expect(canSave()).toBe(true);
+
+                        setLength(51);
+                        expect(canSave()).toBe(false);
+                    });
+                });
+
+                describe('limits', function() {
+                    it('should have a liberal initial value', function() {
+                        expect(EditCardCtrl.limits).toEqual({
+                            copy: Infinity
+                        });
+                    });
+
+                    describe('when the appData is fetched', function() {
+                        function instantiate() {
+                            $scope = $rootScope.$new();
+
+                            $scope.$apply(function() {
+                                $scope.EditorCtrl = EditorCtrl;
+                                EditCardCtrl = $controller('EditCardController', { $scope: $scope });
+                                EditCardCtrl.model = model;
+                                $scope.EditCardCtrl = EditCardCtrl;
+                            });
+
+                            return EditCardCtrl;
+                        }
+
+                        function setMode(mode) {
+                            EditorCtrl.model.mode = mode;
+                        }
+
+                        function resolve() {
+                            $scope.$apply(function() {
+                                appDataDeferred.resolve(appData);
+                            });
+                        }
+
+                        it('should set the limits based off of the mode', function() {
+                            resolve();
+                            expect(EditCardCtrl.limits).toEqual({
+                                copy: 420
+                            });
+
+                            setMode('light'); instantiate(); resolve();
+                            expect(EditCardCtrl.limits).toEqual({
+                                copy: 200
+                            });
+
+                            setMode('lightbox'); instantiate(); resolve();
+                            expect(EditCardCtrl.limits).toEqual({
+                                copy: Infinity
+                            });
+
+                            setMode('lightbox-ads'); instantiate(); resolve();
+                            expect(EditCardCtrl.limits).toEqual({
+                                copy: Infinity
+                            });
+                        });
+                    });
+                });
+
                 describe('videoUrl', function() {
                     describe('getting', function() {
                         it('should use the service and videoid to formulate a url for the video', function() {

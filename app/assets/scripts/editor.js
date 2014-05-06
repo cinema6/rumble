@@ -242,8 +242,35 @@
         }])
 
         .controller('EditCardController', ['$scope','c6Computed','c6State','VideoService',
-        function                          ( $scope , c6Computed , c6State , VideoService ) {
-            var c = c6Computed($scope);
+                                           'MiniReelService','cinema6',
+        function                          ( $scope , c6Computed , c6State , VideoService ,
+                                            MiniReelService , cinema6 ) {
+            var self = this,
+                c = c6Computed($scope),
+                EditorCtrl = $scope.EditorCtrl;
+
+            this.limits = {
+                copy: Infinity
+            };
+            cinema6.getAppData()
+                .then(function setLimits(data) {
+                    var mode = MiniReelService.modeDataOf(
+                        EditorCtrl.model,
+                        data.experience.data.modes
+                    );
+
+                    forEach(self.limits, function(limit, prop) {
+                        self.limits[prop] = mode.limits[prop] || Infinity;
+                    });
+                });
+
+            Object.defineProperties(this, {
+                canSave: {
+                    get: function() {
+                        return (this.model.note || '').length <= this.limits.copy;
+                    }
+                }
+            });
 
             VideoService.createVideoUrl(c, this, 'EditCardCtrl');
 

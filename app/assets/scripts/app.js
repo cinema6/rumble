@@ -548,6 +548,11 @@
             });
         }])
 
+        .run   (['$rootScope',
+        function( $rootScope ) {
+            $rootScope.Infinity = Infinity;
+        }])
+
         .service('ConfirmDialogService', [function() {
             var model = {},
                 dialog = null;
