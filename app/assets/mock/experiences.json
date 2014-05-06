@@ -15,13 +15,15 @@
                         {
                             "name": "No Companion Ad",
                             "value": "lightbox",
-                            "description": "Simple video and text MiniReel. No character limits, the content space will scroll as needed."
+                            "description": "Simple video and text MiniReel. No character limits, the content space will scroll as needed.",
+                            "limits": {}
                         },
                         {
                             "name": "With Companion Ad",
                             "disabled": true,
                             "value": "lightbox-ads",
-                            "description": "A 300x250 ad will be displayed on every slide. No character limits, the content space will scroll as needed."
+                            "description": "A 300x250 ad will be displayed on every slide. No character limits, the content space will scroll as needed.",
+                            "limits": {}
                         }
                     ]
                 },
@@ -33,12 +35,18 @@
                         {
                             "name": "Light Text",
                             "value": "light",
-                            "description": "Recommended for content that is light on text. Copy is limited to approximately 200 characters."
+                            "description": "Recommended for content that is light on text. Copy is limited to approximately 200 characters.",
+                            "limits": {
+                                "copy": 200
+                            }
                         },
                         {
                             "name": "Heavy Text",
                             "value": "full",
-                            "description": "Provides more room for editorial content. Copy is limited to approximately 420 characters."
+                            "description": "Provides more room for editorial content. Copy is limited to approximately 420 characters.",
+                            "limits": {
+                                "copy": 420
+                            }
                         }
                     ]
                 }
