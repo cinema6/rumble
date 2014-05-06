@@ -6,57 +6,36 @@
     body, .mr-card__btn-watch {
         font-family: 'Open Sans', Arial, Helvetica, sans-serif;
     }
-
     .tk--hdr, .ui-context__label {
         font-family: 'Open Sans', Arial, Helvetica, sans-serif; font-weight:700;
     }
-
-    body, .ui-nav__counter, .mr-card__type, .mr-card__title-h1, .mr-ballot__title, .mr-results__title, 
-    .mr-comments__textarea, .mr-comm-meta__timestamp, .mr-toc-item__title, .more-reels__intro  {
+    body, .ui-nav__counter, .mr-card__type, .mr-card__title-h1, 
+    .mr-ballot__title, .mr-results__title {
         font-weight: 400;
     }
 
+
+/*  ==========================================================================
+    Theme Styles
+    ========================================================================== */
     a {
         color:#2870a2; border-bottom:1px dotted #2870a2;
-    }
-
-    .mr-switch__btn {
-        background-color: #4394cb; border-bottom: 2px solid #4394cb;
-    }
-
-
-/*  ==========================================================================
-    experience color styles
-    ========================================================================== */
-    .ui-control--portrait, .ui-context--portrait, .ui-nav-left--landscape, .ui-nav-right--landscape {
-        background:#2a2a2a;
-    }
-    .mr-toc {
-        border-top:0.25em solid #2a2a2a;
-    }
-
-
-/*  ==========================================================================
-    Interface Styles
-    ========================================================================== */
-    .mr-pager__btn, .mr-card__btn, .mr-card__btn-watch {
-        background: #4394cb;
-    }
-    .mr-switch__btn--active, .mr-switch__btn:focus {
-        border-bottom: 2px solid #4394cb;
     }
     .mr-preview__button {
         background: rgba(213,22,29,0.7);
     }
-    .ui-control__next, 
-    .ui-control__prev, 
+    .mr-pager__btn,
     .ui-nav__next, 
     .ui-nav__prev,
     .mr-player__play-btn,
-    .mr-pages__current-indicator {
+    .mr-pages__current-indicator,
+    .mr-splash__copy {
         background-color: #4394cb;
     }
 
-
-
-    
+    .mr-pager__btn--disabled .mr-pager__icon-path {
+        fill: #252626;
+    }
+    .mr-pager__btn--disabled .mr-pager__label {
+        color:#252626;
+    }

@@ -1366,6 +1366,7 @@
         "img": {
             "splash": "experiences/superbowl/splash-6thumb.jpg"
         },
+        "mode": "full",
         "theme": "ed-sports",
         "data": {
             "election": "e-6ab02642b45eb8",
@@ -2064,6 +2065,7 @@
         "img": {
             "splash": "experiences/wrestling/splash-6thumb.jpg"
         },
+        "mode": "full",
         "theme": "ed-sports",
         "data": {
             "election": "e-55b499581cb19e",
