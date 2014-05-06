@@ -8,6 +8,30 @@
         isDefined = angular.isDefined;
 
     angular.module('c6.mrmaker')
+        .animation('.toolbar__publish', ['$timeout',
+        function                        ( $timeout ) {
+            return {
+                beforeAddClass: function($element, className, done) {
+                    function showConfirmation($element, done) {
+                        $element.addClass('toolbar__publish--confirm');
+
+                        $timeout(function() {
+                            $element.removeClass('toolbar__publish--confirm');
+                            done();
+                        }, 3000, false);
+                    }
+
+                    switch (className) {
+                    case 'toolbar__publish--disabled':
+                        return showConfirmation($element, done);
+
+                    default:
+                        return done();
+                    }
+                }
+            };
+        }])
+
         .controller('EditorController', ['c6State','$scope','MiniReelService','cinema6',
                                          'ConfirmDialogService','c6Debounce','$log',
         function                        ( c6State , $scope , MiniReelService , cinema6 ,
@@ -17,24 +41,16 @@
                 saveAfterTenSeconds = c6Debounce(function() {
                     $log.info('Autosaving MiniReel');
                     self.save();
-                }, 10000),
-                cancelAutosave = $scope.$watch(function() {
-                    return self.model;
-                }, function(minireel, prevMinireel) {
-                    if (minireel.status === 'active') {
-                        $log.warn('MiniReel is published. Will not autosave.');
-                        return cancelAutosave();
-                    }
-                    if (minireel === prevMinireel) { return; }
-
-                    saveAfterTenSeconds();
-                }, true);
+                }, 10000);
 
             $log = $log.context('EditorController');
 
             this.pageObject = { page : 'editor', title : 'Editor' };
             this.preview = false;
             this.editTitle = false;
+            this.isDirty = false;
+            this.inFlight = false;
+            this.dismissDirtyWarning = false;
 
             Object.defineProperties(this, {
                 prettyMode: {
@@ -169,9 +185,16 @@
             };
 
             this.save = function() {
+                this.inFlight = true;
+
                 MiniReelService.save()
                     .then(function log(minireel) {
                         $log.info('MiniReel save success!', minireel);
+
+                        ['isDirty', 'inFlight', 'dismissDirtyWarning']
+                            .forEach(function setFalse(prop) {
+                                self[prop] = false;
+                            });
                     });
             };
 
@@ -181,6 +204,19 @@
                 if(newMode === oldMode) { return; }
                 $scope.$broadcast('mrPreview:updateMode', self.model);
             });
+
+            $scope.$watch(function() { return self.model; }, function(minireel, prevMinireel) {
+                if (minireel === prevMinireel) { return; }
+
+                self.isDirty = true;
+
+                if (minireel.status === 'active') {
+                    $log.warn('MiniReel is published. Will not autosave.');
+                    return;
+                }
+
+                saveAfterTenSeconds();
+            }, true);
 
             $scope.$on('addCard', function(event, card, index) {
                 self.model.data.deck.splice(index, 0, card);
@@ -257,8 +293,35 @@
         }])
 
         .controller('EditCardController', ['$scope','c6Computed','c6State','VideoService',
-        function                          ( $scope , c6Computed , c6State , VideoService ) {
-            var c = c6Computed($scope);
+                                           'MiniReelService','cinema6',
+        function                          ( $scope , c6Computed , c6State , VideoService ,
+                                            MiniReelService , cinema6 ) {
+            var self = this,
+                c = c6Computed($scope),
+                EditorCtrl = $scope.EditorCtrl;
+
+            this.limits = {
+                copy: Infinity
+            };
+            cinema6.getAppData()
+                .then(function setLimits(data) {
+                    var mode = MiniReelService.modeDataOf(
+                        EditorCtrl.model,
+                        data.experience.data.modes
+                    );
+
+                    forEach(self.limits, function(limit, prop) {
+                        self.limits[prop] = mode.limits[prop] || Infinity;
+                    });
+                });
+
+            Object.defineProperties(this, {
+                canSave: {
+                    get: function() {
+                        return (this.model.note || '').length <= this.limits.copy;
+                    }
+                }
+            });
 
             VideoService.createVideoUrl(c, this, 'EditCardCtrl');
 

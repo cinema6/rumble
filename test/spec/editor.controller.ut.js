@@ -93,6 +93,24 @@
                     });
                 });
 
+                describe('isDirty', function() {
+                    it('should be false', function() {
+                        expect(EditorCtrl.isDirty).toBe(false);
+                    });
+                });
+
+                describe('inFlight', function() {
+                    it('should be false', function() {
+                        expect(EditorCtrl.inFlight).toBe(false);
+                    });
+                });
+
+                describe('dismissDirtyWarning', function() {
+                    it('should be false', function() {
+                        expect(EditorCtrl.dismissDirtyWarning).toBe(false);
+                    });
+                });
+
                 describe('prettyMode', function() {
                     describe('if the AppCtrl has no config', function() {
                         it('should be null', function() {
@@ -437,15 +455,40 @@
 
                 describe('save()', function() {
                     beforeEach(function() {
+                        EditorCtrl.isDirty = true;
+                        EditorCtrl.dismissDirtyWarning = true;
                         spyOn(MiniReelService, 'save').and.returnValue($q.when({}));
+
+                        EditorCtrl.save();
                     });
 
                     it('should call MiniReelService.save()', function() {
-                        EditorCtrl.save();
                         expect(MiniReelService.save).toHaveBeenCalled();
 
                         EditorCtrl.save();
                         expect(MiniReelService.save.calls.count()).toBe(2);
+                    });
+
+                    it('should set inFlight to true', function() {
+                        expect(EditorCtrl.inFlight).toBe(true);
+                    });
+
+                    describe('when the save completes', function() {
+                        beforeEach(function() {
+                            $rootScope.$digest();
+                        });
+
+                        it('should set isDirty to false', function() {
+                            expect(EditorCtrl.isDirty).toBe(false);
+                        });
+
+                        it('should set inFlight to false', function() {
+                            expect(EditorCtrl.inFlight).toBe(false);
+                        });
+
+                        it('should set dismissDirtyWarning to false', function() {
+                            expect(EditorCtrl.dismissDirtyWarning).toBe(false);
+                        });
                     });
                 });
             });
@@ -556,6 +599,22 @@
                 describe('model', function() {
                     beforeEach(function() {
                         spyOn(EditorCtrl, 'save');
+                    });
+
+                    it('should set isDirty to true when it is changed', function() {
+                        cModel.status = 'active';
+
+                        $scope.$apply(function() {
+                            cModel.data.deck[0].title = 'hey';
+                        });
+                        expect(EditorCtrl.isDirty).toBe(true);
+
+                        EditorCtrl.isDirty = false;
+
+                        $scope.$apply(function() {
+                            cModel.title = 'New Title!';
+                        });
+                        expect(EditorCtrl.isDirty).toBe(true);
                     });
 
                     it('should save the minireel (debounced) every time it is changed', function() {

@@ -556,6 +556,20 @@
                 return result;
             };
 
+            this.modeDataOf = function(minireel, categories) {
+                var result;
+
+                forEach(categories, function(category) {
+                    forEach(category.modes, function(mode) {
+                        if (mode.value === minireel.mode) {
+                            result = mode;
+                        }
+                    });
+                });
+
+                return result;
+            };
+
             this.findCard = function(deck, id) {
                 return deck.filter(function(card) {
                     return card.id === id;
