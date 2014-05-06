@@ -370,7 +370,7 @@
                             controllerAs: 'EditorSplashCtrl',
                             templateUrl: assets('views/editor/splash.html'),
                             model:  [function() {
-                                return this.cParent.cModel;
+                                return copy(this.cParent.cModel);
                             }]
                         },
                         setMode: {

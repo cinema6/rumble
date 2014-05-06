@@ -191,8 +191,11 @@
         }])
 
         .controller('EditorSplashController', ['$scope','FileService','CollateralService',
-        function                              ( $scope , FileService , CollateralService ) {
-            var self = this;
+                                               'c6State',
+        function                              ( $scope , FileService , CollateralService ,
+                                                c6State ) {
+            var self = this,
+                EditorCtrl = $scope.EditorCtrl;
 
             this.splash = null;
             this.currentUpload = null;
@@ -209,6 +212,12 @@
                 upload.finally(function() {
                     self.currentUpload = null;
                 });
+            };
+
+            this.save = function() {
+                copy(this.model.data.collateral, EditorCtrl.model.data.collateral);
+
+                c6State.goTo('editor');
             };
 
             $scope.$on('$destroy', function() {

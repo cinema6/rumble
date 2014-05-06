@@ -27,11 +27,22 @@
 
             describe('model()', function() {
                 beforeEach(function() {
-                    EditorState.cModel = {};
+                    EditorState.cModel = {
+                        data: {
+                            deck: [
+                                {},
+                                {}
+                            ]
+                        },
+                        name: 'foo'
+                    };
                 });
 
-                it('should return a reference to its parent\'s model', function() {
-                    expect($injector.invoke(EditorSplashState.model, EditorSplashState)).toBe(EditorState.cModel);
+                it('should return a copy of its parent\'s model', function() {
+                    var model = $injector.invoke(EditorSplashState.model, EditorSplashState);
+
+                    expect(model).toEqual(EditorState.cModel);
+                    expect(model).not.toBe(EditorState.cModel);
                 });
             });
         });

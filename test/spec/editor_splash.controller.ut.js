@@ -7,14 +7,23 @@
                 $scope,
                 $controller,
                 $q,
+                c6State,
                 FileService,
                 CollateralService,
                 EditorSplashCtrl;
 
+            var EditorCtrl;
+
             var minireel;
 
             beforeEach(function() {
-                minireel = {};
+                minireel = {
+                    data: {
+                        collateral: {
+                            splash: 'foo.jpg'
+                        }
+                    }
+                };
 
                 module('c6.mrmaker');
 
@@ -23,11 +32,21 @@
                     $controller = $injector.get('$controller');
                     $q = $injector.get('$q');
                     CollateralService = $injector.get('CollateralService');
+                    c6State = $injector.get('c6State');
 
                     FileService = $injector.get('FileService');
                     spyOn(FileService, 'open').and.callThrough();
 
                     $scope = $rootScope.$new();
+                    $scope.EditorCtrl = EditorCtrl = {
+                        model: {
+                            data: {
+                                collateral: {
+                                    splash: null
+                                }
+                            }
+                        }
+                    };
                     $scope.$apply(function() {
                         EditorSplashCtrl = $controller('EditorSplashController', { $scope: $scope });
                         EditorSplashCtrl.model = minireel;
@@ -100,6 +119,26 @@
                         it('should null-out the currentUpload property', function() {
                             expect(EditorSplashCtrl.currentUpload).toBeNull();
                         });
+                    });
+                });
+
+                describe('save', function() {
+                    var originalData;
+
+                    beforeEach(function() {
+                        spyOn(c6State, 'goTo');
+
+                        originalData = EditorCtrl.model.data;
+                        EditorSplashCtrl.save();
+                    });
+
+                    it('should copy the collateral hash of its model to the EditorCtrl\'s model', function() {
+                        expect(EditorCtrl.model.data.collateral).toEqual(minireel.data.collateral);
+                        expect(EditorCtrl.model.data).toBe(originalData);
+                    });
+
+                    it('should transition back to the editor', function() {
+                        expect(c6State.goTo).toHaveBeenCalledWith('editor');
                     });
                 });
             });
