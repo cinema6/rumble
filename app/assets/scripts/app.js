@@ -41,7 +41,6 @@
                     'SteppedEase',
                     'Strong'
                 ],
-                googleAnalytics: 'ga',
                 crypto: 'CryptoJS',
                 youtube: 'YT'
             };
@@ -674,8 +673,10 @@
 
         .controller('GenericController', noop)
 
-        .controller('AppController', ['$scope','$log','cinema6','gsap','c6State',
-        function                     ( $scope , $log , cinema6 , gsap , c6State ) {
+        .controller('AppController', [  '$scope','$log','cinema6','gsap',
+                                        'c6State', 'c6Defines', 'tracker',
+        function                     (  $scope , $log , cinema6 , gsap ,
+                                        c6State, c6Defines, tracker ) {
             var self = this;
 
             $log.info('AppCtlr loaded.');
@@ -694,13 +695,54 @@
             });
 
             c6State.on('stateChangeSuccess', function(state) {
+                self.trackStateChange(state);
                 cinema6.getSession()
                     .then(function pingSession(session) {
                         session.ping('stateChange', { name: state.name });
                     });
             });
 
+            self.trackStateChange = function(state){
+                $log.info('trackChange:',state.name);
+                if ((self.config === null) || (!state.templateUrl)){
+                    return;
+                }
+                tracker.pageview(
+                    state.templateUrl.replace(/.*views/, '/' + self.config.uri),
+                    self.config.title + ' - ' + state.name
+                );
+            };
+
+            self.sendPageEvent = function() {
+                if (self.config === null){
+                    $log.error('Unable to send pageEvent for %1, config is null.',
+                        arguments[0]);
+                    return;
+                }
+                var args  = Array.prototype.slice.call(arguments,0),
+                    pageObj = args.pop();
+                pageObj.page  = '/' + self.config.uri + '/' + pageObj.page;
+                pageObj.title = self.config.title + ' - ' + pageObj.title;
+                args.push(pageObj);
+                tracker.event.apply(tracker,args);
+            };
+
+            self.sendPageView = function(pageObject) {
+                if (self.config === null){
+                    $log.error('Unable to send pageView for %1, config is null.',
+                        pageObject.page);
+                    return;
+                }
+
+                tracker.pageview('/' + self.config.uri + '/' + pageObject.page,
+                    self.config.title + ' - ' + pageObject.title);
+            };
+
+            $log.info('Initialize tracker with:',c6Defines.kTracker);
+            tracker.create(c6Defines.kTracker.accountId,c6Defines.kTracker.config);
+
             $scope.AppCtrl = this;
+
         }])
 
         .directive('embedCode', ['c6UrlMaker',

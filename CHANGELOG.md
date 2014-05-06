@@ -75,3 +75,6 @@
   * [FEATURE]: User can now upload custom splash images
   * [FIX]: Added states for "Publish Changes" button : 'alert', 'waiting', 'confirm', and 'disabled'
   * [FIX]: Added special alert area at top of page to show special messages
+  * [FIX]: Updated cache-control times when uploading to s3.
+  * [FEATURE]: Added initial GA support.
+* *[/Beta1.rc15]*
