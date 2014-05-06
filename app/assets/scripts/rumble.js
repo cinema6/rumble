@@ -270,7 +270,7 @@
         CommentsService.init(id);
 
         $scope.deviceProfile    = appData.profile;
-        $scope.title            = appData.experience.title;
+        $scope.title            = appData.experience.data.title;
 
         $scope.controls         = ControlsService.init();
 
@@ -516,7 +516,7 @@
         };
 
         this.getVirtualPage = function(){
-            var titleRoot = (appData.experience.title || 'Mini Reel: ' +
+            var titleRoot = (appData.experience.data.title || 'Mini Reel: ' +
                     appData.experience.id) ;
             if (!$scope.currentCard){
                 return {

@@ -109,7 +109,7 @@
 
             describe('providing responsive styles', function() {
                 beforeEach(function() {
-                    appData.experience.mode = 'full';
+                    appData.experience.data.mode = 'full';
                 });
 
                 it('should ping cinema6 with responsive styles based on mode', inject(function(c6AppData) {
@@ -128,7 +128,7 @@
                 it('should send an empty object if there are no styles', inject(function(c6AppData) {
                     /* jshint unused:false */
 
-                    appData.experience.mode = 'foo';
+                    appData.experience.data.mode = 'foo';
 
                     $httpBackend.flush();
                     $rootScope.$apply(function() {
@@ -167,7 +167,7 @@
                 function c6AppData(mode) {
                     var svc;
 
-                    appData.experience.mode = mode;
+                    appData.experience.data.mode = mode;
 
                     $httpBackend.whenGET('assets/config/responsive.json')
                         .respond(200, {});
@@ -234,7 +234,7 @@
 
                     beforeEach(function() {
                         appData.profile.device = 'phone';
-                        appData.experience.mode = 'full';
+                        appData.experience.data.mode = 'full';
 
                         inject(function($injector) {
                             c6AppData = $injector.get('c6AppData');
@@ -272,7 +272,7 @@
                     var c6AppData;
 
                     beforeEach(function() {
-                        appData.experience.mode = 'light';
+                        appData.experience.data.mode = 'light';
 
                         inject(function($injector) {
                             c6AppData = $injector.get('c6AppData');

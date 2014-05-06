@@ -43,6 +43,7 @@
             c6UrlMakerProvider.location(c6Defines.kCollateralUrl,'collateral');
             c6UrlMakerProvider.location(c6Defines.kApiUrl,'api');
             c6UrlMakerProvider.location(c6Defines.kProtocol + '/', 'protocol');
+            c6UrlMakerProvider.location(c6Defines.kEnvUrlRoot,'envroot');
         }])
         .config(['VASTServiceProvider', 'VPAIDServiceProvider',
         function( VASTServiceProvider, VPAIDServiceProvider ) {
@@ -71,6 +72,12 @@
                 return Math.round(isNaN(input) ? 0 : (input * 100)) + '%';
             };
         })
+        .filter('envroot', ['c6UrlMaker',
+        function              ( c6UrlMaker ) {
+            return function(url) {
+                return url && c6UrlMaker(url.replace(/^\//,''), 'envroot');
+            };
+        }])
         .filter('collateral', ['c6UrlMaker',
         function              ( c6UrlMaker ) {
             return function(url) {
@@ -272,7 +279,7 @@
 
             function setMode(obj, data) {
                 var device = data.profile.device,
-                    mode = data.experience.mode;
+                    mode = data.experience.data.mode;
 
                 obj.mode = (device === 'phone') ? 'mobile' : (mode || 'full');
             }

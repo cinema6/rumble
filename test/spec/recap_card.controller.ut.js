@@ -17,6 +17,7 @@
                 experience: {
                     title: 'Test Title',
                     data: {
+                        title: 'Test Title',
                         deck: [
                             {
                                 id: '1',
@@ -147,7 +148,7 @@
                     it('should broadcast resize event if mode is lightbox', function() {
                         spyOn($rootScope, '$broadcast');
                         $scope.$apply(function() {
-                            c6AppData.experience.mode = 'lightbox';
+                            c6AppData.experience.data.mode = 'lightbox';
                             $scope.active = true;
                         });
                         expect($rootScope.$broadcast).toHaveBeenCalled();

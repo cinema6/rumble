@@ -66,10 +66,10 @@
                 if(isActive) {
                     self.deck = [];
                     _deck = setupDeck(MiniReelService.createDeck(c6AppData.experience.data));
-                    self.title = c6AppData.experience.title;
+                    self.title = c6AppData.experience.data.title;
                 }
 
-                if(c6AppData.experience.mode === 'lightbox') {
+                if(c6AppData.experience.data.mode === 'lightbox') {
                     $rootScope.$broadcast('resize');
                 }
             });

@@ -148,7 +148,6 @@ module.exports = function(grunt) {
      *********************************************************************************************/
 
     grunt.registerTask('publish:collateral', 'upload collateral assets to s3', function(target) {
-        grunt.task.run('versionator:dist');
         grunt.task.run('s3:collateral-' + target);
     });
 
