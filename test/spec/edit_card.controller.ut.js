@@ -289,6 +289,18 @@
                         });
                     });
                 });
+
+                describe('saveText', function() {
+                    it('should default to Save but change to Done when published', function() {
+                        expect(EditCardCtrl.saveText).toBe('Save');
+
+                        $scope.$apply(function() {
+                            EditorCtrl.model.status = 'active';
+                        });
+
+                        expect(EditCardCtrl.saveText).toBe('Done');
+                    });
+                });
             });
         });
     });
