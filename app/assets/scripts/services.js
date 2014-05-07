@@ -333,7 +333,13 @@
                             return url.pathname.replace(/^\//, '');
                         },
                         dailymotion: function(url) {
-                            return (url.pathname
+                            var pathname = url.pathname;
+
+                            if (pathname.search(/^\/video\//) < 0) {
+                                return null;
+                            }
+
+                            return (pathname
                                 .replace(/\/video\//, '')
                                 .match(/[a-zA-Z0-9]+/) || [])[0];
                         }

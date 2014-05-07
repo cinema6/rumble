@@ -110,3 +110,5 @@
 * *[Beta1.rc19]*
   * [FIX]: Markers change correctly when going from DailyMotion videos
     to YouTube/Vimeo and vice versa
+  * [FIX]: Fix an issue where manually entering a DailyMotion URL would
+    autocomplete "/video" in the path

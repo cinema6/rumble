@@ -290,6 +290,11 @@
                                 });
                             }).not.toThrow();
                             expect(model.data.service).toBeNull();
+
+                            $scope.$apply(function() {
+                                EditCardCtrl.videoUrl = 'http://www.dailymotion.com/v';
+                            });
+                            expect(EditCardCtrl.videoUrl).toBe('http://www.dailymotion.com/v');
                         });
                     });
                 });
