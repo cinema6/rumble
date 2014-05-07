@@ -103,3 +103,5 @@
   * [FIX]: Unused CSS references removed
   * [FIX]: Fixed an issue that prevented adding a collateral asset to a
     MiniReel in Safari
+  * [FIX]: Changed page url sent to ga to remove .htlm - could help with organizing
+    drill downs
