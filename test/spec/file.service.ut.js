@@ -2,6 +2,7 @@
     'use strict';
 
     define(['services'], function() {
+        /* global angular:true */
         var noop = angular.noop;
 
         describe('FileService', function() {
@@ -144,7 +145,6 @@
 
                     it('should send the form via XHR', function() {
                         expect(xhr.open).toHaveBeenCalledWith('POST', '/api/collateral');
-                        expect(xhr.responseType).toBe('json');
                         expect(xhr.send).toHaveBeenCalledWith(formData);
                     });
 
@@ -153,14 +153,14 @@
                             beforeEach(function() {
                                 xhr.status = 399;
                                 xhr.statusText = '399 OK';
-                                xhr.response = { foo: { value: 'bar' } };
+                                xhr.response = JSON.stringify({ foo: { value: 'bar' } });
 
                                 simulateComplete();
                             });
 
                             it('should resolve the promise', function() {
                                 expect(success).toHaveBeenCalledWith({
-                                    data: xhr.response,
+                                    data: JSON.parse(xhr.response),
                                     status: xhr.status,
                                     statusText: xhr.statusText
                                 });

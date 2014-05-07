@@ -7,7 +7,8 @@
         isUndefined = angular.isUndefined,
         isDefined = angular.isDefined,
         extend = angular.extend,
-        isFunction = angular.isFunction;
+        isFunction = angular.isFunction,
+        fromJson = angular.fromJson;
 
     angular.module('c6.mrmaker')
         .service('CollateralService', ['FileService',
@@ -81,15 +82,21 @@
 
                 xhr.open('POST', url);
 
-                xhr.responseType = 'json';
-
                 xhr.onreadystatechange = function() {
                     if (xhr.readyState < 4) { return; }
 
                     $rootScope.$apply(function() {
+                        var data;
+
+                        try {
+                            data = fromJson(xhr.response);
+                        } catch(e) {
+                            data = xhr.response;
+                        }
+
                         deferred[ xhr.status < 400 ?
                             'resolve' : 'reject']({
-                                data: xhr.response,
+                                data: data,
                                 status: xhr.status,
                                 statusText: xhr.statusText
                             });

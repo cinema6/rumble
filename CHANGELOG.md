@@ -101,3 +101,5 @@
 * *[Beta1.rc18]*
   * [FIX]: alert dialogs redesigned to accomodate headlines and copy text
   * [FIX]: Unused CSS references removed
+  * [FIX]: Fixed an issue that prevented adding a collateral asset to a
+    MiniReel in Safari
