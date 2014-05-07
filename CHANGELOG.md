@@ -52,7 +52,9 @@
 * *[/Beta3.rc10]*
 * *[Beta3.rc11]*
   * [FEATURE]: Show splash image as recap card thumbnail
+* *[/Beta3.rc11]*
 * *[Beta3.rc12]*
   * [FEATURE]: Thumb paginator: Don't fill the remaining width of the slider with
     the buttons if all of the thumbnails fit on one page
   * [FIX]: Firefox issue with hostname when sending to ga
+* *[/Beta3.rc12]*
