@@ -106,3 +106,4 @@
   * [FIX]: Changed page url sent to ga to remove .htlm - could help with organizing
     drill downs
   * [FIX]: Adds optional message property and onDismiss method to dialog service
+* *[/Beta1.rc18]*
