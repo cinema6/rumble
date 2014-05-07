@@ -58,3 +58,5 @@
     the buttons if all of the thumbnails fit on one page
   * [FIX]: Firefox issue with hostname when sending to ga
 * *[/Beta3.rc12]*
+* *[Beta3.rc13]*
+  * [FIX]: Moved branding collateral to branding directory on s3.

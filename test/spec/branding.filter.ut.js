@@ -71,18 +71,18 @@
                 });
 
                 it('should load assets for the configured mode', function() {
-                    expect(branding('directives/test.html', 'assets')).toBe(c6UrlMaker('orgs/elitedaily/assets/full/directives/test.html', 'collateral'));
-                    expect(branding('minireel.css', 'styles')).toBe(c6UrlMaker('orgs/elitedaily/styles/full/minireel.css', 'collateral'));
+                    expect(branding('directives/test.html', 'assets')).toBe(c6UrlMaker('branding/elitedaily/assets/full/directives/test.html', 'collateral'));
+                    expect(branding('minireel.css', 'styles')).toBe(c6UrlMaker('branding/elitedaily/styles/full/minireel.css', 'collateral'));
 
                     c6AppData.mode = 'light';
                     c6AppData.experience.data.branding = 'urbantimes';
-                    expect(branding('directives/test.html', 'assets')).toBe(c6UrlMaker('orgs/urbantimes/assets/light/directives/test.html', 'collateral'));
-                    expect(branding('minireel.css', 'styles')).toBe(c6UrlMaker('orgs/urbantimes/styles/light/minireel.css', 'collateral'));
+                    expect(branding('directives/test.html', 'assets')).toBe(c6UrlMaker('branding/urbantimes/assets/light/directives/test.html', 'collateral'));
+                    expect(branding('minireel.css', 'styles')).toBe(c6UrlMaker('branding/urbantimes/styles/light/minireel.css', 'collateral'));
 
                     c6AppData.mode = 'foo';
                     c6AppData.experience.data.branding = 'upworthy';
-                    expect(branding('directives/test.html', 'assets')).toBe(c6UrlMaker('orgs/upworthy/assets/foo/directives/test.html', 'collateral'));
-                    expect(branding('minireel.css', 'styles')).toBe(c6UrlMaker('orgs/upworthy/styles/foo/minireel.css', 'collateral'));
+                    expect(branding('directives/test.html', 'assets')).toBe(c6UrlMaker('branding/upworthy/assets/foo/directives/test.html', 'collateral'));
+                    expect(branding('minireel.css', 'styles')).toBe(c6UrlMaker('branding/upworthy/styles/foo/minireel.css', 'collateral'));
                 });
             });
         });

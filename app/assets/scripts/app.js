@@ -265,7 +265,7 @@
 
                 return mode && branding &&
                     c6UrlMaker(
-                        'orgs/' + branding + '/' + base + '/' + mode + '/' + url,
+                        'branding/' + branding + '/' + base + '/' + mode + '/' + url,
                         'collateral'
                     );
             };
