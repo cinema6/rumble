@@ -2,11 +2,15 @@
     <div class="ui__modal ui__modal--confirmation">
         <c6-alias model="model.dialog" as="dialog">
             <h1 class="modal__title">{{dialog.prompt}}</h1>
+            <div class="modal__message">
+                Are you sure you want to do this? You can't ever go back once you press that button. It will make stars explode.
+            </div>
             <footer class="modal__btnFooter modal__btnFooter--confirmation">
                 <button class="modal__btn toolbar__confirm" ng-click="dialog.onAffirm()" title="{{dialog.affirm}}">{{dialog.affirm}}</button>
                 <button class="modal__btn toolbar__neutral" ng-click="dialog.onCancel()" title="{{dialog.cancel}}">{{dialog.cancel}}</button>
             </footer>
         </c6-alias>
+        <button class="modal__closeBtn sprite--alpha"><span class="ir">Close</span></button>
     </div>
     <div class="ui__overlay">&nbsp;</div>
 </div>
