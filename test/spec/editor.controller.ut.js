@@ -493,6 +493,17 @@
                 });
 
                 describe('backToDashboard()', function() {
+                    function assertDialogPresented() {
+                        expect(ConfirmDialogService.display).toHaveBeenCalledWith({
+                            prompt: jasmine.any(String),
+                            message: jasmine.any(String),
+                            affirm: jasmine.any(String),
+                            cancel: jasmine.any(String),
+                            onAffirm: jasmine.any(Function),
+                            onCancel: jasmine.any(Function)
+                        });
+                    }
+
                     beforeEach(function() {
                         spyOn(c6State, 'goTo');
                         spyOn(EditorCtrl,'save');

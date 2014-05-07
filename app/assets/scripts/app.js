@@ -570,6 +570,7 @@
 
             this.display = function(dialogModel) {
                 dialog = dialogModel;
+                dialog.onDismiss = dialog.onDismiss || this.close;
             };
 
             this.close = function() {

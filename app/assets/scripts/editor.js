@@ -217,8 +217,9 @@
             this.backToDashboard = function() {
                 if (this.model.status === 'active' && this.isDirty) {
                     ConfirmDialogService.display({
-                        prompt: 'You have unpublished changes. ' +
-                            'Are you sure you want to leave this screen? All changes will be lost.',
+                        prompt: 'You have unpublished changes.',
+                        message: 'Are you sure you want to leave this screen? ' +
+                            'All changes will be lost.',
                         affirm: 'Yes, lose changes',
                         cancel: 'No, publish my changes first',
                         onCancel: function() {
