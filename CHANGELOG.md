@@ -56,3 +56,4 @@
 * *[/Beta3.rc10]*
 * *[Beta3.rc11]*
   * [FEATURE]: Show splash image as recap card thumbnail
+* *[/Beta3.rc11]*
