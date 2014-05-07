@@ -114,12 +114,16 @@
                     $timeout = $injector.get('$timeout');
                     $controller = $injector.get('$controller');
                     c6EventEmitter = $injector.get('c6EventEmitter');
-                    $window = $injector.get('$window');
                     c6AppData = $injector.get('c6AppData');
                     c6Defines = $injector.get('c6Defines');
                     $httpBackend = $injector.get('$httpBackend');
                     $httpBackend.whenGET('assets/config/responsive.json').respond({});
 
+                    $window = {
+                        location : {
+                            reload : angular.noop
+                        }
+                    };
                     c6AppData.experience = {
                         id : 'exp1',
                         title: 'Test Minireel'
@@ -139,6 +143,7 @@
                     $log.context = function() { return $log; };
 
                     AppCtrl = $controller('AppController', {
+                        $window: $window,
                         $scope: $scope,
                         $log: $log,
                         c6Defines : c6Defines
@@ -225,6 +230,7 @@
 
                 it('will use initAnalytics cb to init ga',function(){
                     var cb = session.on.calls[0].args[1];
+                    $window.location.hostname = 'test';
                     cb({
                         accountId : 'abc',
                         clientId  : '123'
@@ -242,14 +248,53 @@
 
                     expect($window.c6MrGa.calls[1].args[0]).toEqual('c6mr.set');
                     expect($window.c6MrGa.calls[1].args[1]).toEqual('checkProtocolTask');
-                    /*
+                });
+
+                it('will use parent.hostname if window.hostname is blank',function(){
+                    $window.location.hostname = '';
+                    $window.parent = {
+                        location : {
+                            hostname : 'parent.host'
+                         }
+                    };
+                    var cb = session.on.calls[0].args[1];
+                    cb({
+                        accountId : 'abc',
+                        clientId  : '123'
+                    });
+                    expect($window.c6MrGa.callCount).toEqual(3);
                     expect($window.c6MrGa.calls[2].args)
-                        .toEqual(['c6mr.set','appName','testAppName']);
-                    expect($window.c6MrGa.calls[3].args)
-                        .toEqual(['c6mr.set','appId','testAppID']);
-                    expect($window.c6MrGa.calls[4].args)
-                        .toEqual(['c6mr.set','appVersion','testAppVersion']);
-                    */
+                        .toEqual(['c6mr.set','hostname','parent.host']);
+                });
+                
+                it('will use parent.hostname if window.hostname is null',function(){
+                    $window.location.hostname = null;
+                    $window.parent = {
+                        location : {
+                            hostname : 'parent.host'
+                         }
+                    };
+                    var cb = session.on.calls[0].args[1];
+                    cb({
+                        accountId : 'abc',
+                        clientId  : '123'
+                    });
+                    expect($window.c6MrGa.callCount).toEqual(3);
+                    expect($window.c6MrGa.calls[2].args)
+                        .toEqual(['c6mr.set','hostname','parent.host']);
+                });
+                
+                it('will work if win.hostname is null + win.parent is undefined',function(){
+                    $window.location.hostname = null;
+                    delete $window.parent;
+                    var cb = session.on.calls[0].args[1];
+                    cb({
+                        accountId : 'abc',
+                        clientId  : '123'
+                    });
+                    expect($window.c6MrGa.callCount).toEqual(2);
+                    expect($window.c6MrGa.calls[1].args[0]).toEqual('c6mr.set');
+                    expect($window.c6MrGa.calls[1].args[1]).toEqual('checkProtocolTask');
                 });
             });
 

@@ -374,12 +374,15 @@
                     'cookieDomain'  : 'none'
                 });
                 $window.c6MrGa('c6mr.set', 'checkProtocolTask', function(){});
-                /*
-                 * For some reason adding these breaks some of the ga reporting???
-                $window.c6MrGa('c6mr.set', 'appName', c6Defines.kAppName);
-                $window.c6MrGa('c6mr.set', 'appId', c6Defines.kAppId);
-                $window.c6MrGa('c6mr.set', 'appVersion', c6Defines.kAppVersion);
-                */
+                if (!$window.location.hostname){
+                    try {
+                        $window.c6MrGa('c6mr.set', 'hostname',
+                            $window.parent.location.hostname);
+                    }
+                    catch (e){
+                        $log.info('Failed ot set hostname to parent:',e);
+                    }
+                }
                 $scope.$broadcast('analyticsReady');
             });
 
