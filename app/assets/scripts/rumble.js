@@ -67,8 +67,10 @@
             }
         };
     }])
-    .service('MiniReelService', ['InflectorService','CommentsService','VideoThumbService','c6ImagePreloader',
-    function                    ( InflectorService , CommentsService , VideoThumbService , c6ImagePreloader ) {
+    .service('MiniReelService', ['InflectorService','CommentsService','VideoThumbService',
+                                 'c6ImagePreloader','envrootFilter',
+    function                    ( InflectorService , CommentsService , VideoThumbService ,
+                                  c6ImagePreloader , envrootFilter ) {
         this.createDeck = function(data) {
             var playlist = angular.copy(data.deck);
 
@@ -117,11 +119,27 @@
             function fetchThumb(card) {
                 card.thumbs = null;
 
-                VideoThumbService.getThumbs(card.type, card.data.videoid)
-                    .then(function(thumbs) {
-                        card.thumbs = thumbs;
-                        c6ImagePreloader.load([thumbs.small]);
-                    });
+                switch (card.type) {
+                case 'recap':
+                    (function() {
+                        var splash = (data.collateral || {}).splash ?
+                            envrootFilter(data.collateral.splash) :
+                            null;
+
+                        card.thumbs = splash ? {
+                            small: splash,
+                            large: splash
+                        } : null;
+                    }());
+                    break;
+                default:
+                    VideoThumbService.getThumbs(card.type, card.data.videoid)
+                        .then(function(thumbs) {
+                            card.thumbs = thumbs;
+                            c6ImagePreloader.load([thumbs.small]);
+                        });
+                    break;
+                }
             }
 
             angular.forEach(playlist, function(video) {

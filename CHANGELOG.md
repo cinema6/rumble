@@ -54,3 +54,5 @@
   * [FIX]: Updated cache times
   * [FIX]: Updated to pull all mr fields from data
 * *[/Beta3.rc10]*
+* *[Beta3.rc11]*
+  * [FEATURE]: Show splash image as recap card thumbnail

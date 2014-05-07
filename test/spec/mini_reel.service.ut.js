@@ -2,6 +2,10 @@
     'use strict';
 
     define(['rumble'], function() {
+        /* global angular:true */
+        var copy = angular.copy,
+            noop = angular.noop;
+
         describe('MiniReelService', function() {
             var CommentsService,
                 MiniReelService,
@@ -11,11 +15,7 @@
             var VideoThumbService,
                 c6ImagePreloader;
 
-            var copy;
-
             beforeEach(function() {
-                copy = angular.copy.bind(angular);
-
                 module('c6.ui', function($provide) {
                     $provide.value('c6ImagePreloader', {
                         load: jasmine.createSpy('c6ImagePreloader.load()')
@@ -24,7 +24,7 @@
 
                 module('c6.rumble', function($provide) {
                     $provide.value('rumbleVotes', {
-                        mockReturnsData: angular.noop
+                        mockReturnsData: noop
                     });
 
                     $provide.value('VideoThumbService', {
@@ -59,7 +59,6 @@
 
                         beforeEach(function() {
                             mrData = {
-                                id: 'r-738c2403d83ddc',
                                 ballots: [
                                     {
                                         id: 'rb-01eb03bc062c15',
@@ -186,6 +185,13 @@
                                         },
                                         ballotId: 'rb-dddd8635eb6db3',
                                         commentGroupId: 'rc-90db37d7af97a7'
+                                    },
+                                    {
+                                        id: 'rc-df011e0f447867',
+                                        type: 'recap',
+                                        title: 'Recap',
+                                        note: null,
+                                        data: {}
                                     }
                                 ]
                             };
@@ -285,6 +291,8 @@
 
                             it('should get a thumbnail for every video', function() {
                                 result.forEach(function(card) {
+                                    if (card.type === 'recap') { return; }
+
                                     expect(VideoThumbService.getThumbs).toHaveBeenCalledWith(card.type, card.data.videoid);
                                 });
                             });
@@ -320,6 +328,31 @@
                                 expect(c6ImagePreloader.load).toHaveBeenCalledWith(['http://s2.dmcdn.net/Dm9Np/x120-6Xz.jpg']);
                                 expect(c6ImagePreloader.load).toHaveBeenCalledWith(['http://b.vimeocdn.com/ts/462/944/462944068_100.jpg']);
                                 expect(c6ImagePreloader.load).toHaveBeenCalledWith(['http://img.youtube.com/vi/Cn9yJrrm2tk/2.jpg']);
+                            });
+
+                            describe('for the recap card', function() {
+                                describe('if there are no collateral assets', function() {
+                                    it('should be null', function() {
+                                        expect(result[5].thumbs).toBeNull();
+                                    });
+                                });
+
+                                describe('if there is a splash image', function() {
+                                    beforeEach(function() {
+                                        mrData.collateral = {
+                                            splash: '/collateral/mysplash.jpg'
+                                        };
+
+                                        result = MiniReelService.createDeck(mrData);
+                                    });
+
+                                    it('should make both thumbnails the fully-resolved splash image', function() {
+                                        expect(result[5].thumbs).toEqual({
+                                            small: 'http://foo.cinema6.com/collateral/mysplash.jpg',
+                                            large: 'http://foo.cinema6.com/collateral/mysplash.jpg'
+                                        });
+                                    });
+                                });
                             });
                         });
                     });
