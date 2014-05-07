@@ -708,7 +708,8 @@
                     return;
                 }
                 tracker.pageview(
-                    state.templateUrl.replace(/.*views/, '/' + self.config.uri),
+                    state.templateUrl.replace(/.*views\/(.*).html$/,
+                        '/' + self.config.uri + '/$1'),
                     self.config.title + ' - ' + state.name
                 );
             };

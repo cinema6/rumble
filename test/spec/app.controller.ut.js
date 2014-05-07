@@ -235,9 +235,17 @@
                             templateUrl : 'assets/views/manager.html' ,
                             name        : 'manager'
                         });
-                        expect(tracker.pageview)
-                            .toHaveBeenCalledWith('/mini-reel-maker/manager.html',
-                                'Some Title - manager');
+                        expect(tracker.pageview.calls.mostRecent().args)
+                            .toEqual(['/mini-reel-maker/manager',
+                                'Some Title - manager']);
+                       
+                        AppCtrl.trackStateChange({
+                            templateUrl : 'assets/views/manager/experience.html' ,
+                            name        : 'experience'
+                        });
+                        expect(tracker.pageview.calls.mostRecent().args)
+                            .toEqual(['/mini-reel-maker/manager/experience',
+                                'Some Title - experience']);
                     });
 
                 });
