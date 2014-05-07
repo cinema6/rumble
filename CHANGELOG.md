@@ -100,3 +100,4 @@
 * *[/Beta1.rc17]*
 * *[Beta1.rc18]*
   * [FIX]: alert dialogs redesigned to accomodate headlines and copy text
+  * [FIX]: Unused CSS references removed
