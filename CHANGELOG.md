@@ -107,3 +107,6 @@
     drill downs
   * [FIX]: Adds optional message property and onDismiss method to dialog service
 * *[/Beta1.rc18]*
+* *[Beta1.rc19]*
+  * [FIX]: Markers change correctly when going from DailyMotion videos
+    to YouTube/Vimeo and vice versa

@@ -21,7 +21,9 @@
                     note: null,
                     data: {
                         service: 'youtube',
-                        videoid: 'gy1B3agGNxw'
+                        videoid: 'gy1B3agGNxw',
+                        start: 10,
+                        end: 20
                     }
                 };
 
@@ -301,6 +303,55 @@
                         });
 
                         expect(EditCardCtrl.saveText).toBe('Done');
+                    });
+                });
+            });
+
+            describe('$watchers', function() {
+                describe('this.model.data.service', function() {
+                    describe('when changing to dailymotion', function() {
+                        beforeEach(function() {
+                            expect(model.data.start).toBe(10);
+                            expect(model.data.end).toBe(20);
+
+                            $scope.$apply(function() {
+                                model.data.service = 'dailymotion';
+                            });
+                        });
+
+                        it('should set the start/end to undefined', function() {
+                            expect(model.data.start).toBeUndefined();
+                            expect(model.data.end).toBeUndefined();
+                        });
+                    });
+
+                    describe('when changing from DailyMotion', function() {
+                        beforeEach(function() {
+                            $scope.$apply(function() {
+                                model.data.service = 'dailymotion';
+                            });
+                            $scope.$apply(function() {
+                                model.data.service = 'youtube';
+                            });
+                        });
+
+                        it('should set the start/end to null', function() {
+                            expect(model.data.start).toBeNull();
+                            expect(model.data.end).toBeNull();
+                        });
+                    });
+
+                    describe('when changing from something other than dailymotion', function() {
+                        beforeEach(function() {
+                            $scope.$apply(function() {
+                                model.data.service = 'vimeo';
+                            });
+                        });
+
+                        it('should preserve the start/end', function() {
+                            expect(model.data.start).toBe(10);
+                            expect(model.data.end).toBe(20);
+                        });
                     });
                 });
             });

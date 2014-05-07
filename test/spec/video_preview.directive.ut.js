@@ -41,7 +41,8 @@
             });
 
             describe('when the chosen player has an interface', function() {
-                var video;
+                var video,
+                    $player;
 
                 function VideoInterface() {
                     var ready = false;
@@ -71,7 +72,7 @@
                 }
 
                 beforeEach(function() {
-                    var $player = $('<mock-player></mock-player>');
+                    $player = $('<mock-player></mock-player>');
 
                     video = new VideoInterface();
                     $player.data('video', video);
@@ -84,6 +85,20 @@
 
                     expect($preview.isolateScope().video).not.toBeDefined();
                     video.emit('ready');
+                });
+
+                describe('when switching to a video without an interface', function() {
+                    beforeEach(function() {
+                        $scope.$apply(function() {
+                            $scope.videoid = '853779789';
+                        });
+                        $player.replaceWith('<mock-player></mock-player>');
+                        $timeout.flush();
+                    });
+
+                    it('should remove the interface from the scope', function() {
+                        expect($preview.isolateScope().video).toBeUndefined();
+                    });
                 });
 
                 it('should put the video on the scope', function() {
