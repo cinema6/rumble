@@ -224,8 +224,10 @@
                             $scope.$apply(function() {
                                 publishDeferred.resolve({});
                             });
+                            $timeout.flush();
 
                             expect(cModel.status).toBe('active');
+                            expect(EditorCtrl.isDirty).toBe(false);
                         });
 
                         it('should close the dialog', function() {
@@ -524,7 +526,7 @@
                                 expect(EditorCtrl.save).toHaveBeenCalled();
                                 expect(c6State.goTo).toHaveBeenCalledWith('manager');
                                 expect(ConfirmDialogService.close).toHaveBeenCalled();
-                            })
+                            });
                         });
 
                         describe('when confirmed', function() {
@@ -533,7 +535,7 @@
                                 expect(EditorCtrl.save).not.toHaveBeenCalled();
                                 expect(c6State.goTo).toHaveBeenCalledWith('manager');
                                 expect(ConfirmDialogService.close).toHaveBeenCalled();
-                            })
+                            });
                         });
                     });
 

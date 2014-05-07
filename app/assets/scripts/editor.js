@@ -5,7 +5,8 @@
         equals = angular.equals,
         copy = angular.copy,
         forEach = angular.forEach,
-        isDefined = angular.isDefined;
+        isDefined = angular.isDefined,
+        noop = angular.noop;
 
     angular.module('c6.mrmaker')
         .animation('.toolbar__publish', ['$timeout',
@@ -33,9 +34,9 @@
         }])
 
         .controller('EditorController', ['c6State','$scope','MiniReelService','cinema6',
-                                         'ConfirmDialogService','c6Debounce','$log',
+                                         'ConfirmDialogService','c6Debounce','$log','$timeout',
         function                        ( c6State , $scope , MiniReelService , cinema6 ,
-                                          ConfirmDialogService , c6Debounce , $log ) {
+                                          ConfirmDialogService , c6Debounce , $log , $timeout ) {
             var self = this,
                 AppCtrl = $scope.AppCtrl,
                 saveAfterTenSeconds = c6Debounce(function() {
@@ -86,6 +87,11 @@
                         MiniReelService.publish(self.model.id)
                             .then(function setActive() {
                                 self.model.status = 'active';
+
+                                return $timeout(noop);
+                            })
+                            .then(function() {
+                                self.isDirty = false;
                             });
                     },
                     onCancel: function() {

@@ -112,3 +112,5 @@
     to YouTube/Vimeo and vice versa
   * [FIX]: Fix an issue where manually entering a DailyMotion URL would
     autocomplete "/video" in the path
+  * [FIX]: Editor no longer shows dirty-state warning when publishing a
+    MiniReel
