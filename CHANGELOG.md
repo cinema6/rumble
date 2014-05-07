@@ -1,9 +1,5 @@
 # MiniReel Player
 
-* *[Beta4.rc1]*
-  * [FEATURE]: Thumb paginator: Don't fill the remaining width of the slider with
-    the buttons if all of the thumbnails fit on one page
-
 ## Beta3 (April 29, 2014)
 * Add a Changelog.
 * [FIX]: Use kMode query param for loading player
@@ -60,4 +56,3 @@
   * [FEATURE]: Thumb paginator: Don't fill the remaining width of the slider with
     the buttons if all of the thumbnails fit on one page
   * [FIX]: Firefox issue with hostname when sending to ga
-
