@@ -19,7 +19,7 @@
     c6.kHasKarma = true;
     c6.kLogFormats = true;
     c6.kLogLevels = ['error','warn','log','info'];
-    c6.envUrlRoot = (c6.envUrlRoot || 'http://foo.cinema6.com');
+    c6.kEnvUrlRoot = (c6.kEnvUrlRoot || 'http://foo.cinema6.com');
     c6.kCollateralUrl = (c6.kCollateralUrl || (c6.envUrlRoot + '/collateral'));
     c6.kApiUrl = '/api';
     c6.kModDeps = ['c6.rumble.services', 'c6.ui', 'c6.log'];
