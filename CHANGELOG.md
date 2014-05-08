@@ -116,3 +116,4 @@
     MiniReel
   * [FIX]: dialog buttons stacking in firefox fixed
   * [FIX]: publish button disabled state class improperly stacking fixed
+  * [FEATURE]: Allow a card to be dragged directly into first position

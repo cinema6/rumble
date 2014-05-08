@@ -402,7 +402,7 @@
                 function addCard(card) {
                     function reorder(zone) {
                         var deck = $scope.deck,
-                            afterId = zone.id.match(/rc-\w+/)[0],
+                            afterId = (zone.id.match(/rc-\w+/) || [])[0],
                             afterCard = null,
                             myCard = null,
                             myIndex = -1;
