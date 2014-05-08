@@ -122,3 +122,6 @@
   * [FIX]: When setting mode/autoplay settings, changes are not written
     to the MiniReel until the "Done!" button is clicked
 * *[/Beta1.rc19]*
+* *[Beta1.rc20]*
+  * [FIX]: Fix regression where card table would expand vertically while
+    dragging a card
