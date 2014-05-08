@@ -61,8 +61,6 @@
             };
 
             $scope.$watch('active', function(isActive, wasActive) {
-                if(isActive === wasActive) { return; }
-                
                 if(isActive) {
                     self.deck = [];
                     _deck = setupDeck(MiniReelService.createDeck(c6AppData.experience.data));
