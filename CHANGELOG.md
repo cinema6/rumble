@@ -116,5 +116,7 @@
     MiniReel
   * [FIX]: dialog buttons stacking in firefox fixed
   * [FIX]: publish button disabled state class improperly stacking fixed
+  * [FIX]: Video trimming knobs cannot move past the boundaries of the
+    timeline
   * [FIX]: When setting mode/autoplay settings, changes are not written
     to the MiniReel until the "Done!" button is clicked
