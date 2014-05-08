@@ -116,3 +116,5 @@
     MiniReel
   * [FIX]: dialog buttons stacking in firefox fixed
   * [FIX]: publish button disabled state class improperly stacking fixed
+  * [FIX]: Video trimming knobs cannot move past the boundaries of the
+    timeline
