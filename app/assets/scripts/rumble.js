@@ -574,21 +574,22 @@
 
             $scope.atHead         = $scope.currentIndex === 0;
             $scope.atTail         = ($scope.currentIndex === ($scope.deck.length - 1));
-           
+
             if (i >= 0) {
                 this.reportPageView(this.getVirtualPage());
             }
 
+            if ($scope.atHead) {
+                $scope.$emit('reelStart');
+            }
             if ($scope.atTail) {
                 $scope.$emit('reelEnd');
-            } else if ($scope.atHead) {
-                $scope.$emit('reelStart');
-            } else if (i < 0) {
+            }
+            if (i < 0) {
                 $scope.$emit('reelReset');
-            } else {
+            } else if(!$scope.atHead && !$scope.atTail){
                 $scope.$emit('reelMove');
             }
-        
         };
 
         this.jumpTo = function(card) {
@@ -596,14 +597,12 @@
         };
 
         this.start = function() {
-            if($scope.deck.length > 1) {
-                this.goForward();
-                $window.c6MrGa('c6mr.send', 'event', 'Navigation', 'Start', 'Start',
-                    this.getVirtualPage());
+            this.goForward();
+            $window.c6MrGa('c6mr.send', 'event', 'Navigation', 'Start', 'Start',
+                this.getVirtualPage());
 
-                if (appData.behaviors.fullscreen) {
-                    cinema6.fullscreen(true);
-                }
+            if (appData.behaviors.fullscreen) {
+                cinema6.fullscreen(true);
             }
         };
 

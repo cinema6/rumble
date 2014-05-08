@@ -784,7 +784,7 @@
                 });
 
                 describe('if the deck is empty except for a recap card', function() {
-                    it('should not start', function() {
+                    it('should start and end at the same time', function() {
                         spyOn($scope, '$emit');
                         $scope.$apply(function() {
                             $scope.deck = [{ id: 'foo', type: 'recap' }];
@@ -792,7 +792,8 @@
 
                         RumbleCtrl.start();
 
-                        expect($scope.$emit).not.toHaveBeenCalledWith('reelStart');
+                        expect($scope.$emit).toHaveBeenCalledWith('reelStart');
+                        expect($scope.$emit).toHaveBeenCalledWith('reelEnd');
                     });
                 });
             });
