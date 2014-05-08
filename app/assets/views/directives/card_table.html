@@ -11,6 +11,7 @@
                     <h1 class="card__title"><span class="card__titleText">Create A New Card</span></h1>
                 </div>
             </div><!--
+            --><div id="drop-zone-0" c6-drag-zone class="card__drop-zone">&nbsp;</div><!--
             --><div class="new__container" ng-hide="DragCtrl.currentDrags.length" ng-style="{ visibility: $index === (deck.length - 1) ? 'hidden' : '' }">
                 <button ng-click="addCard({ index: 0, evtSrc: $event })" class="new__button ui__add sprite--alpha"><span class="ir">Add Here</span></button>
             </div>

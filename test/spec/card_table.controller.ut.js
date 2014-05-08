@@ -106,7 +106,7 @@
 
             describe('when a card should be reordered', function() {
                 var card1, card2, card3, card4, card5,
-                    zone1, zone2, zone3, zone4, zone5,
+                    zone0, zone1, zone2, zone3, zone4, zone5,
                     model1, model2, model3, model4, model5,
                     watchDeck;
 
@@ -127,6 +127,7 @@
                     card4 = new Draggable('rc-8c658546dc5c5f');
                     card5 = new Draggable('rc-bc717117888f80');
 
+                    zone0 = new Zone('drop-zone-0');
                     zone1 = new Zone('drop-zone-rc-7bc713f331ae68');
                     zone2 = new Zone('drop-zone-rc-b56ea317bbd92b');
                     zone3 = new Zone('drop-zone-rc-8b25c1792c6ba1');
@@ -135,6 +136,7 @@
 
                     DragCtrl.addZone(new Zone('scroll-left'));
                     DragCtrl.addZone(new Zone('scroll-right'));
+                    DragCtrl.addZone(zone0);
                     DragCtrl.addDraggable(card1);
                     DragCtrl.addZone(zone1);
                     DragCtrl.addDraggable(card2);
@@ -165,7 +167,10 @@
                     card2.emit('reorder', zone5);
                     expect($scope.deck).toEqual([model3, model4, model5, model2, model1]);
 
-                    expect(watchDeck.calls.count()).toBe(3);
+                    card5.emit('reorder', zone0);
+                    expect($scope.deck).toEqual([model5, model3, model4, model2, model1]);
+
+                    expect(watchDeck.calls.count()).toBe(4);
                 });
 
                 it('should work on "new" cards', function() {
