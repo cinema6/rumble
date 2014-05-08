@@ -126,5 +126,7 @@
   * [FIX]: Fix regression where card table would expand vertically while
     dragging a card
   * [FIX]: Include appUri when creating new MiniReels
+  * [FIX]: Fix an issue where a published MiniReel could still be
+    auto-saved
   * [FIX]: Make it impossible for an election to be deleted off of a
     MiniReel

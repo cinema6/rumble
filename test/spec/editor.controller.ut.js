@@ -727,14 +727,15 @@
                             EditorCtrl.save.calls.reset();
 
                             $scope.$apply(function() {
+                                cModel.data.title = 'Hey!';
+                            });
+                            $scope.$apply(function() {
                                 cModel.status = 'active';
                             });
                         });
 
                         it('should not autosave', function() {
-                            expect(function() {
-                                $timeout.flush();
-                            }).toThrow();
+                            $timeout.flush();
                             expect(EditorCtrl.save).not.toHaveBeenCalled();
 
                             $scope.$apply(function() {
