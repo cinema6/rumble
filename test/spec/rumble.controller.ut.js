@@ -782,6 +782,19 @@
                         expect($scope.$emit).toHaveBeenCalledWith('reelStart');
                     });
                 });
+
+                describe('if the deck is empty except for a recap card', function() {
+                    it('should not start', function() {
+                        spyOn($scope, '$emit');
+                        $scope.$apply(function() {
+                            $scope.deck = [{ id: 'foo', type: 'recap' }];
+                        });
+
+                        RumbleCtrl.start();
+
+                        expect($scope.$emit).not.toHaveBeenCalledWith('reelStart');
+                    });
+                });
             });
 
             describe('findCardByVideo',function(){

@@ -596,12 +596,14 @@
         };
 
         this.start = function() {
-            this.goForward();
-            $window.c6MrGa('c6mr.send', 'event', 'Navigation', 'Start', 'Start',
-                this.getVirtualPage());
+            if($scope.deck.length > 1) {
+                this.goForward();
+                $window.c6MrGa('c6mr.send', 'event', 'Navigation', 'Start', 'Start',
+                    this.getVirtualPage());
 
-            if (appData.behaviors.fullscreen) {
-                cinema6.fullscreen(true);
+                if (appData.behaviors.fullscreen) {
+                    cinema6.fullscreen(true);
+                }
             }
         };
 
