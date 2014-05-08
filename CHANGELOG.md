@@ -121,3 +121,4 @@
     timeline
   * [FIX]: When setting mode/autoplay settings, changes are not written
     to the MiniReel until the "Done!" button is clicked
+* *[/Beta1.rc19]*
