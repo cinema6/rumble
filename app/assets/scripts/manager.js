@@ -111,44 +111,37 @@
                 });
         }])
 
-        .controller('NewCategoryController', ['$scope',
-        function                             ( $scope ) {
-            var NewCtrl = $scope.NewCtrl,
-                self = this;
+        .controller('NewController', ['$scope','cModel','MiniReelService',
+        function                     ( $scope , cModel , MiniReelService ) {
+            var self = this;
+
+            this.mode = MiniReelService.modeDataOf(
+                cModel.minireel,
+                cModel.modes
+            );
+            this.category = MiniReelService.modeCategoryOf(
+                cModel.minireel,
+                cModel.modes
+            );
+            this.autoplay = cModel.minireel.data.autoplay;
+
+            this.save = function() {
+                var data = this.model.minireel.data;
+
+                data.autoplay = this.autoplay;
+                data.mode = this.mode.value;
+            };
+
+            $scope.$watch(function() { return self.category; }, function(category, prevCategory) {
+                if (category === prevCategory) { return; }
+
+                self.mode = self.category.modes[0];
+            });
 
             $scope.$watch(function() { return self.mode; }, function(mode) {
-                NewCtrl.category = mode;
-            });
-        }])
+                var minireel = self.model.minireel;
 
-        .controller('NewModeController', ['$scope','c6State',
-        function                         ( $scope , c6State ) {
-            var NewCtrl = $scope.NewCtrl;
-
-            this.setMode = function() {
-                var minireel = this.model.minireel,
-                    mode = this.mode;
-
-                minireel.data.mode = mode.value;
-                minireel.data.autoplay = mode.autoplayable;
-
-                c6State.goTo(NewCtrl.baseState + '.autoplay');
-            };
-        }])
-
-        .controller('NewAutoplayController', ['$scope','MiniReelService',
-        function                             ( $scope , MiniReelService ) {
-            var NewCtrl = $scope.NewCtrl;
-
-            Object.defineProperties(this, {
-                modeData: {
-                    get: function() {
-                        return MiniReelService.modeDataOf(
-                            this.model,
-                            NewCtrl.model.modes
-                        );
-                    }
-                }
+                self.autoplay = mode.autoplayable && minireel.data.autoplay;
             });
         }]);
 }());

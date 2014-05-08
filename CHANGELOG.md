@@ -116,3 +116,5 @@
     MiniReel
   * [FIX]: dialog buttons stacking in firefox fixed
   * [FIX]: publish button disabled state class improperly stacking fixed
+  * [FIX]: When setting mode/autoplay settings, changes are not written
+    to the MiniReel until the "Done!" button is clicked

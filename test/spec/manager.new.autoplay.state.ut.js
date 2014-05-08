@@ -23,22 +23,6 @@
             it('should exist', function() {
                 expect(NewAutoplayState).toEqual(jasmine.any(Object));
             });
-
-            describe('model()', function() {
-                var result;
-
-                beforeEach(function() {
-                    ManagerNewState.cModel = {
-                        minireel: {}
-                    };
-
-                    result = $injector.invoke(NewAutoplayState.model, NewAutoplayState);
-                });
-
-                it('should return the parent\'s minireel', function() {
-                    expect(result).toBe(ManagerNewState.cModel.minireel);
-                });
-            });
         });
     });
 }());
