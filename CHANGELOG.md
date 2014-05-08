@@ -61,3 +61,5 @@
 * *[Beta3.rc13]*
   * [FIX]: Moved branding collateral to branding directory on s3.
   * [FIX]: Update recap card to load data whenever it's active
+  * [FIX]: Lightbox: Increase width of prev/next buttons at large screen
+    size so text isn't cut off
