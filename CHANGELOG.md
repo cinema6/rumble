@@ -64,3 +64,4 @@
   * [FIX]: Lightbox: Increase width of prev/next buttons at large screen
     size so text isn't cut off
   * [FIX]: Makes sure Rumble controller emits all appropriate reel events when setting a new position
+* *[/Beta3.rc13]*
