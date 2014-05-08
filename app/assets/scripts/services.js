@@ -852,6 +852,7 @@
                         {
                             type: 'minireel',
                             org: user.org,
+                            appUri: 'rumble',
                             data: {
                                 title: 'Untitled',
                                 mode: 'lightbox',
