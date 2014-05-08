@@ -114,3 +114,5 @@
     autocomplete "/video" in the path
   * [FIX]: Editor no longer shows dirty-state warning when publishing a
     MiniReel
+  * [FIX]: dialog buttons stacking in firefox fixed
+  * [FIX]: publish button disabled state class improperly stacking fixed
