@@ -1,6 +1,6 @@
 <h1 class="modal__title modal__title--lightboxWizard">Choose the MiniReel Type</h1>
 <ul class="wizard__group">
-    <li ng-repeat="$this in NewModeCtrl.model.modes" 
+    <li ng-repeat="$this in NewCtrl.category.modes" 
         class="wizard__choice"
         ng-class="{'wizard__choice--disabled': $this.disabled}">
         <div class="wizard__disabler" ng-if="$this.disabled">
@@ -9,7 +9,7 @@
         <input id="mode-{{$this.value}}" type="radio" 
             ng-disabled="$this.disabled"
             name="minireel-mode" ng-value="$this"
-            class="modal__radioBtn" ng-model="NewModeCtrl.mode"/>
+            class="modal__radioBtn" ng-model="NewCtrl.mode"/>
         <label class="wizard__hitarea" for="mode-{{$this.value}}"><span class="ir">{{$this.name}}</span></label>
         <div class="wizard__diagram sprite--fff diagram__{{$this.value}}">&nbsp;</div>
         <div class="wizard__copy">
@@ -21,5 +21,5 @@
 <p>* These changes only affect desktop experiences.</p>
 <footer class="modal__btnFooter">
     <button class="modal__btn toolbar__delete" c6-sref="{{NewCtrl.returnState}}" title="Cancel">Cancel</button>
-    <button ng-click="NewModeCtrl.setMode()" class="modal__btn" type="button" title="Create MiniReel">Next Step</button>
+    <button c6-sref="{{NewCtrl.baseState}}.autoplay" class="modal__btn" type="button" title="Create MiniReel">Next Step</button>
 </footer>
