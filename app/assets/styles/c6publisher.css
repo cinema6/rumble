@@ -1114,6 +1114,7 @@
         .card__list-item {
             display: inline-block;
             position:relative;
+            vertical-align: top;
         }
             .card__type {
                 color:#646464; font-size:0.75em; font-weight:100; text-align: center;
