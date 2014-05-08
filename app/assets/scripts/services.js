@@ -637,10 +637,11 @@
 
             this.save = function() {
                 var opened = this.opened,
-                    playerMR = opened.player;
+                    playerMR = opened.player,
+                    election = playerMR.data.election;
 
                 function handleElection() {
-                    if (playerMR.data.election) {
+                    if (election) {
                         return VoteService.update(playerMR);
                     }
 
@@ -648,6 +649,7 @@
                 }
 
                 this.convertForPlayer(opened.editor, playerMR);
+                playerMR.data.election = election;
 
                 return handleElection()
                     .then(function save() {
