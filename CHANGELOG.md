@@ -130,3 +130,4 @@
     auto-saved
   * [FIX]: Make it impossible for an election to be deleted off of a
     MiniReel
+* *[/Beta1.rc20]*
