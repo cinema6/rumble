@@ -40,9 +40,15 @@
             var self = this,
                 AppCtrl = $scope.AppCtrl,
                 saveAfterTenSeconds = c6Debounce(function() {
+                    if (!shouldAutoSave()) { return; }
+
                     $log.info('Autosaving MiniReel');
                     self.save();
                 }, 10000);
+
+            function shouldAutoSave() {
+                return self.model.status !== 'active';
+            }
 
             $log = $log.context('EditorController');
 
@@ -255,7 +261,7 @@
 
                 self.isDirty = true;
 
-                if (minireel.status === 'active') {
+                if (!shouldAutoSave()) {
                     $log.warn('MiniReel is published. Will not autosave.');
                     return;
                 }
