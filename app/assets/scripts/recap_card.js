@@ -60,7 +60,7 @@
                 $scope.$emit('<recap-card>:jumpTo', getIndex(card));
             };
 
-            $scope.$watch('active', function(isActive, wasActive) {
+            $scope.$watch('active', function(isActive) {
                 if(isActive) {
                     self.deck = [];
                     _deck = setupDeck(MiniReelService.createDeck(c6AppData.experience.data));
