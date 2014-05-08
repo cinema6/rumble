@@ -63,3 +63,4 @@
   * [FIX]: Update recap card to load data whenever it's active
   * [FIX]: Lightbox: Increase width of prev/next buttons at large screen
     size so text isn't cut off
+  * [FIX]: Makes sure Rumble controller emits all appropriate reel events when setting a new position

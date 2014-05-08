@@ -574,21 +574,22 @@
 
             $scope.atHead         = $scope.currentIndex === 0;
             $scope.atTail         = ($scope.currentIndex === ($scope.deck.length - 1));
-           
+
             if (i >= 0) {
                 this.reportPageView(this.getVirtualPage());
             }
 
+            if ($scope.atHead) {
+                $scope.$emit('reelStart');
+            }
             if ($scope.atTail) {
                 $scope.$emit('reelEnd');
-            } else if ($scope.atHead) {
-                $scope.$emit('reelStart');
-            } else if (i < 0) {
+            }
+            if (i < 0) {
                 $scope.$emit('reelReset');
-            } else {
+            } else if(!$scope.atHead && !$scope.atTail){
                 $scope.$emit('reelMove');
             }
-        
         };
 
         this.jumpTo = function(card) {
