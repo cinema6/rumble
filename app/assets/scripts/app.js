@@ -242,58 +242,13 @@
 
             var newSubstates = {
                 category: {
-                    controller: 'NewCategoryController',
-                    controllerAs: 'NewCategoryCtrl',
-                    templateUrl: assets('views/manager/new/category.html'),
-                    model:  [function() {
-                        return this.cParent.cModel.modes;
-                    }],
-                    updateControllerModel: ['controller','model','MiniReelService',
-                    function               ( controller , model , MiniReelService ) {
-                        var minireel = this.cParent.cModel.minireel;
-
-                        controller.model = model;
-                        controller.mode = MiniReelService.modeCategoryOf(
-                            minireel,
-                            model
-                        ).value || model[0].value;
-                    }]
+                    templateUrl: assets('views/manager/new/category.html')
                 },
                 mode: {
-                    controller: 'NewModeController',
-                    controllerAs: 'NewModeCtrl',
-                    templateUrl: assets('views/manager/new/mode.html'),
-                    model:  ['c6StateParams',
-                    function( c6StateParams ) {
-                        var parentModel = this.cParent.cModel;
-
-                        return {
-                            minireel: parentModel.minireel,
-                            modes: parentModel.modes.filter(function(mode) {
-                                return mode.value === c6StateParams.newModeValue;
-                            })[0].modes
-                        };
-                    }],
-                    updateControllerModel: ['controller','model',
-                    function               ( controller , model ) {
-                        var minireel = model.minireel,
-                            modes = model.modes,
-                            minireelModeData = modes.filter(function(mode) {
-                                return mode.value === minireel.data.mode;
-                            })[0];
-
-
-                        controller.model = model;
-                        controller.mode = minireelModeData || modes[0];
-                    }]
+                    templateUrl: assets('views/manager/new/mode.html')
                 },
                 autoplay: {
-                    controller: 'NewAutoplayController',
-                    controllerAs: 'NewAutoplayCtrl',
-                    templateUrl: assets('views/manager/new/autoplay.html'),
-                    model:  [function() {
-                        return this.cParent.cModel.minireel;
-                    }]
+                    templateUrl: assets('views/manager/new/autoplay.html')
                 }
             };
 
@@ -325,7 +280,7 @@
                             }]
                         },
                         new: {
-                            controller: 'GenericController',
+                            controller: 'NewController',
                             controllerAs: 'NewCtrl',
                             templateUrl: assets('views/manager/new.html'),
                             model:  ['cinema6','MiniReelService','$q',
@@ -373,7 +328,7 @@
                             }]
                         },
                         setMode: {
-                            controller: 'GenericController',
+                            controller: 'NewController',
                             controllerAs: 'NewCtrl',
                             templateUrl: assets('views/manager/new.html'),
                             model:  ['cinema6','$q',
