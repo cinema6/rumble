@@ -600,6 +600,7 @@
                             spyOn(cinema6.db, 'find').and.returnValue($q.when(minireel));
                             spyOn(MiniReelService, 'open').and.callThrough();
                             spyOn(MiniReelService, 'convertForPlayer').and.callThrough();
+                            spyOn(VoteService, 'update').and.returnValue($q.when({}));
 
                             MiniReelService.opened.player = minireel;
                             editorMR = MiniReelService.opened.editor = {
@@ -618,6 +619,10 @@
 
                         it('should update the player-formatted model', function() {
                             expect(MiniReelService.convertForPlayer).toHaveBeenCalledWith(editorMR, minireel);
+                        });
+
+                        it('should not allow the election to be wiped-out', function() {
+                            expect(minireel.data.election).toBe('el-76506623bf22d9');
                         });
 
                         it('should save the minireel', function() {
@@ -645,7 +650,7 @@
 
                                 updateDeferred = $q.defer();
 
-                                spyOn(VoteService, 'update').and.returnValue(updateDeferred.promise);
+                                VoteService.update.and.returnValue(updateDeferred.promise);
 
                                 $rootScope.$apply(function() {
                                     MiniReelService.save().then(success);
