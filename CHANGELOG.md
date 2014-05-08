@@ -108,6 +108,12 @@
   * [FIX]: Adds optional message property and onDismiss method to dialog service
 * *[/Beta1.rc18]*
 * *[Beta1.rc19]*
+  * [FIX]: Markers change correctly when going from DailyMotion videos
+    to YouTube/Vimeo and vice versa
+  * [FIX]: Fix an issue where manually entering a DailyMotion URL would
+    autocomplete "/video" in the path
+  * [FIX]: Editor no longer shows dirty-state warning when publishing a
+    MiniReel
   * [FIX]: dialog buttons stacking in firefox fixed
   * [FIX]: publish button disabled state class improperly stacking fixed
   * [FIX]: When setting mode/autoplay settings, changes are not written

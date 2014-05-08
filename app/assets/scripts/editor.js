@@ -5,7 +5,8 @@
         equals = angular.equals,
         copy = angular.copy,
         forEach = angular.forEach,
-        isDefined = angular.isDefined;
+        isDefined = angular.isDefined,
+        noop = angular.noop;
 
     angular.module('c6.mrmaker')
         .animation('.toolbar__publish', ['$timeout',
@@ -33,9 +34,9 @@
         }])
 
         .controller('EditorController', ['c6State','$scope','MiniReelService','cinema6',
-                                         'ConfirmDialogService','c6Debounce','$log',
+                                         'ConfirmDialogService','c6Debounce','$log','$timeout',
         function                        ( c6State , $scope , MiniReelService , cinema6 ,
-                                          ConfirmDialogService , c6Debounce , $log ) {
+                                          ConfirmDialogService , c6Debounce , $log , $timeout ) {
             var self = this,
                 AppCtrl = $scope.AppCtrl,
                 saveAfterTenSeconds = c6Debounce(function() {
@@ -86,6 +87,11 @@
                         MiniReelService.publish(self.model.id)
                             .then(function setActive() {
                                 self.model.status = 'active';
+
+                                return $timeout(noop);
+                            })
+                            .then(function() {
+                                self.isDirty = false;
                             });
                     },
                     onCancel: function() {
@@ -389,6 +395,23 @@
 
                 c6State.goTo('editor');
             };
+
+            $scope.$watch(
+                function() { return self.model.data.service; },
+                function(service, prevService) {
+                    var data = self.model.data;
+
+                    if (service === 'dailymotion') {
+                        data.start = undefined;
+                        data.end = undefined;
+                    }
+
+                    if (prevService === 'dailymotion') {
+                        data.start = null;
+                        data.end = null;
+                    }
+                }
+            );
         }])
 
         .controller('NewCardController', ['$scope','c6State','c6StateParams','MiniReelService',
@@ -817,6 +840,8 @@
 
                             startScanTime = null;
                         }
+
+                        scope.video = undefined;
 
                         if (!video) { return; }
 
