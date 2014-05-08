@@ -711,6 +711,7 @@
                                 theme: 'ed-videos',
                                 status: 'pending',
                                 _type: 'experience',
+                                _erased: false,
                                 data: jasmine.any(Object)
                             });
                         });
