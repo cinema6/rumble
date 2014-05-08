@@ -107,3 +107,6 @@
     drill downs
   * [FIX]: Adds optional message property and onDismiss method to dialog service
 * *[/Beta1.rc18]*
+* *[Beta1.rc19]*
+  * [FIX]: dialog buttons stacking in firefox fixed
+  * [FIX]: publish button disabled state class improperly stacking fixed
