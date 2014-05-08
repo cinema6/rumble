@@ -45,8 +45,8 @@
         libUrl('cryptojs/v3.1.2/sha1.js'),
         libUrl('angular/v1.2.14-0-g729fb13/angular.js'),
         libUrl('angular/v1.2.14-0-g729fb13/angular-animate.js'),
-        libUrl('c6ui/v2.6.3-0-g59ffde7/c6uilib.js'),
-        libUrl('c6ui/v2.6.3-0-g59ffde7/c6log.js')
+        libUrl('c6ui/v2.6.4-0-g0df471c/c6uilib.js'),
+        libUrl('c6ui/v2.6.4-0-g0df471c/c6log.js')
     ] :
     [
         '//www.youtube.com/iframe_api',
@@ -57,8 +57,8 @@
         libUrl('cryptojs/v3.1.2/sha1.js'),
         libUrl('angular/v1.2.14-0-g729fb13/angular.min.js'),
         libUrl('angular/v1.2.14-0-g729fb13/angular-animate.min.js'),
-        libUrl('c6ui/v2.6.3-0-g59ffde7/c6uilib.min.js'),
-        libUrl('c6ui/v2.6.3-0-g59ffde7/c6log.min.js')
+        libUrl('c6ui/v2.6.4-0-g0df471c/c6uilib.min.js'),
+        libUrl('c6ui/v2.6.4-0-g0df471c/c6log.min.js')
     ];
 
     function loadScriptsInOrder(scriptsList, done) {
