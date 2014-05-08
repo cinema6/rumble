@@ -228,7 +228,6 @@
 
                     describe('with a start time', function() {
                         it('should be positioned on the part of the timeline that corresponds to the start time', function() {
-
                             expect(start.display.left).toBe(timeline.display.left);
 
                             $scope.$apply(function() {
@@ -248,6 +247,16 @@
                             });
                             start.refresh();
                             expect(start.display.left).toBe(absTimelinePx(0.75));
+                        });
+
+                        it('should not be able to move past the end marker', function() {
+                            $scope.$apply(function() {
+                                $scope.end = 80;
+                                $scope.start = 70;
+                            });
+                            start.refresh();
+
+                            expect(start.display.left).toBe(absTimelinePx(1));
                         });
                     });
 
@@ -412,9 +421,11 @@
                     });
 
                     describe('with an end time', function() {
-                        it('should be positioned on the part of the timeline that corresponds to the end time', function() {
+                        beforeEach(function() {
                             end.refresh();
+                        });
 
+                        it('should be positioned on the part of the timeline that corresponds to the end time', function() {
                             expect(end.display.right).toBe(timeline.display.right);
 
                             $scope.$apply(function() {
@@ -434,6 +445,14 @@
                             });
                             end.refresh();
                             expect(end.display.right).toBe(absTimelinePx(0.25));
+                        });
+
+                        it('should not be able to be set past the duration', function() {
+                            $scope.$apply(function() {
+                                $scope.end = 75;
+                            });
+                            end.refresh();
+                            expect(end.display.right).toBe(absTimelinePx(1));
                         });
                     });
 

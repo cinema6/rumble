@@ -616,11 +616,12 @@
                         }, 250);
 
                     function start() {
-                        return scope.start || 0;
+                        return Math.min((scope.start || 0), end());
                     }
 
                     function end() {
-                        return isNumber(scope.end) ? scope.end : scope.duration;
+                        return isNumber(scope.end) ?
+                            Math.min(scope.end, scope.duration) : scope.duration;
                     }
 
                     function duration() {
@@ -710,7 +711,7 @@
                     }
 
                     function absStartMarkerPos() {
-                        return ((scope.start * seekBar.display.width) /
+                        return ((start() * seekBar.display.width) /
                             duration()) + 'px';
                     }
 
