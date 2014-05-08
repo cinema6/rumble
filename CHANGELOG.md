@@ -61,4 +61,4 @@
 * *[Beta3.rc13]*
   * [FIX]: Moved branding collateral to branding directory on s3.
   * [FIX]: Update recap card to load data whenever it's active
-  * [FIX]: Only start experience if there's a more than just a recap card
+  * [FIX]: Makes sure Rumble controller emits all appropriate reel events when setting a new position
