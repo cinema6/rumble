@@ -68,3 +68,4 @@
 * *[Beta3.rc14]*
   * [FIX]: MiniReel Lightbox, no Ads : titles are bigger and responsive.
   * [FIX]: Mobile : Title of MiniReel added above card
+  * [FIX]: Mobile : added dynamic experience title to video embed card

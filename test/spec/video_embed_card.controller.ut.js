@@ -40,7 +40,8 @@
                         },
                         experience: {
                             data: {
-                                autoplay: true
+                                autoplay: true,
+                                title: 'Foo'
                             }
                         },
                         behaviors: {
@@ -591,6 +592,12 @@
 
             describe('@public', function() {
                 describe('properties', function() {
+                    describe('experienceTitle', function() {
+                        it('should come from the c6AppData experience', function() {
+                            expect(VideoEmbedCardCtrl.experienceTitle).toBe('Foo');
+                        });
+                    });
+
                     describe('videoUrl', function() {
                         it('should be initialized as null', function() {
                             expect(VideoEmbedCardCtrl.videoUrl).toBeNull();
