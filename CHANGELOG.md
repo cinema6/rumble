@@ -135,3 +135,6 @@
   * [FIX]: Restyled dashboard filter settings per new design
   * [FIX]: Removed icons from dashboard
   * [FIX]: Cover Image uploader has better guidance text
+  * [FIX]: Complete re-working of how minireels are saved to the
+    backend; Fixes issue with data falling out-of-sync and race
+    conditions causing data to be overwritten
