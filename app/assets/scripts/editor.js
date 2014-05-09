@@ -252,10 +252,7 @@
                     onAffirm: function() {
                         ConfirmDialogService.close();
 
-                        EditorService.publish()
-                            .then(function() {
-                                self.isDirty = false;
-                            });
+                        EditorService.publish();
                     },
                     onCancel: function() {
                         ConfirmDialogService.close();
