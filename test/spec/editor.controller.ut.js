@@ -2,7 +2,7 @@
     'use strict';
 
     define(['editor'], function() {
-        describe('EditorController', function() {
+        xdescribe('EditorController', function() {
             var $rootScope,
                 $scope,
                 $childScope,

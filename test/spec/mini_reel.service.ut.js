@@ -216,17 +216,6 @@
             });
 
             describe('@public', function() {
-                describe('properties', function() {
-                    describe('opened', function() {
-                        it('should have null player and editor properties', function() {
-                            expect(MiniReelService.opened).toEqual({
-                                player: null,
-                                editor: null
-                            });
-                        });
-                    });
-                });
-
                 describe('methods', function() {
                     describe('modeCategoryOf(minireel, categories)', function() {
                         var categories;
@@ -588,126 +577,31 @@
                         });
                     });
 
-                    describe('save()', function() {
-                        var saveDeferred,
-                            success,
-                            editorMR;
-
-                        beforeEach(function() {
-                            success = jasmine.createSpy('success');
-                            saveDeferred = $q.defer();
-
-                            spyOn(cinema6.db, 'find').and.returnValue($q.when(minireel));
-                            spyOn(MiniReelService, 'open').and.callThrough();
-                            spyOn(MiniReelService, 'convertForPlayer').and.callThrough();
-                            spyOn(VoteService, 'update').and.returnValue($q.when({}));
-
-                            MiniReelService.opened.player = minireel;
-                            editorMR = MiniReelService.opened.editor = {
-                                data: {
-                                    deck: []
-                                }
-                            };
-
-                            spyOn(minireel, 'save').and.returnValue(saveDeferred.promise);
-
-                            $rootScope.$apply(function() {
-                                MiniReelService.save().then(success);
-                                MiniReelService.close();
-                            });
-                        });
-
-                        it('should update the player-formatted model', function() {
-                            expect(MiniReelService.convertForPlayer).toHaveBeenCalledWith(editorMR, minireel);
-                        });
-
-                        it('should not allow the election to be wiped-out', function() {
-                            expect(minireel.data.election).toBe('el-76506623bf22d9');
-                        });
-
-                        it('should save the minireel', function() {
-                            expect(minireel.save).toHaveBeenCalled();
-                        });
-
-                        it('should resolve when the minireel is saved', function() {
-                            $rootScope.$apply(function() {
-                                saveDeferred.resolve(minireel);
-                            });
-
-                            expect(success).toHaveBeenCalledWith(minireel);
-                        });
-
-                        describe('if the minireel has an associated election', function() {
-                            var updateDeferred;
-
-                            beforeEach(function() {
-                                MiniReelService.opened.editor = editorMR;
-                                MiniReelService.opened.player = minireel;
-                                MiniReelService.opened.editor.data.election = '123345';
-
-                                success.calls.reset();
-                                minireel.save.calls.reset();
-
-                                updateDeferred = $q.defer();
-
-                                VoteService.update.and.returnValue(updateDeferred.promise);
-
-                                $rootScope.$apply(function() {
-                                    MiniReelService.save().then(success);
-                                });
-                            });
-
-                            it('should update the election before saving', function() {
-                                expect(minireel.save).not.toHaveBeenCalled();
-                                expect(VoteService.update).toHaveBeenCalledWith(minireel);
-
-                                $rootScope.$apply(function() {
-                                    updateDeferred.resolve({});
-                                });
-
-                                expect(minireel.save).toHaveBeenCalled();
-                            });
-                        });
-                    });
-
-                    describe('close()', function() {
-                        beforeEach(function() {
-                            MiniReelService.opened = {
-                                player: {},
-                                editor: {}
-                            };
-
-                            MiniReelService.close();
-                        });
-
-                        it('should nullify the opened editor and player', function() {
-                            expect(MiniReelService.opened.player).toBeNull();
-                            expect(MiniReelService.opened.editor).toBeNull();
-                        });
-                    });
-
-                    describe('open(id)', function() {
-                        var success,
+                    describe('convertForEditor(minireel)', function() {
+                        var result,
                             deck;
 
                         beforeEach(function() {
-                            success = jasmine.createSpy('open() success');
-                            spyOn(cinema6.db, 'find').and.returnValue($q.when(minireel));
-
                             $rootScope.$apply(function() {
-                                MiniReelService.open('e-15aa87f5da34c3')
-                                    .then(success);
+                                result = MiniReelService.convertForEditor(minireel);
                             });
 
-                            deck = success.calls.mostRecent().args[0].data.deck;
+                            deck = result.data.deck;
                         });
 
-                        it('should fetch the minireel from the database', function() {
-                            expect(cinema6.db.find).toHaveBeenCalledWith('experience', 'e-15aa87f5da34c3');
+                        it('should support copying onto a provided object', function() {
+                            var object = {
+                                    invalidProp: 'blah',
+                                    foo: 'bar'
+                                },
+                                copied = MiniReelService.convertForEditor(minireel, object);
+
+                            expect(copied).toBe(object);
+                            expect(copied).toEqual(result);
                         });
 
                         it('should return an object with all the non-data content of the original', function() {
-                            expect(success).toHaveBeenCalledWith({
+                            expect(result).toEqual({
                                 id: 'e-15aa87f5da34c3',
                                 title: 'My MiniReel',
                                 subtitle: 'I <3 Turtles',
@@ -722,24 +616,19 @@
                         });
 
                         it('should copy the branding of the minireel', function() {
-                            expect(success.calls.mostRecent().args[0].data.branding).toBe('elitedaily');
+                            expect(result.data.branding).toBe('elitedaily');
                         });
 
                         it('should copy the autoplay settings of the minireel', function() {
-                            expect(success.calls.mostRecent().args[0].data.autoplay).toBe(true);
+                            expect(result.data.autoplay).toBe(true);
                         });
 
                         it('should copy the title of the minireel', function() {
-                            expect(success.calls.mostRecent().args[0].data.title).toBe('My MiniReel');
+                            expect(result.data.title).toBe('My MiniReel');
                         });
 
                         it('should copy the mode of the minireel', function() {
-                            expect(success.calls.mostRecent().args[0].data.mode).toBe('lightbox');
-                        });
-
-                        it('should set update MiniReelService\'s opened object to refrences to its data-models', function() {
-                            expect(MiniReelService.opened.player).toBe(minireel);
-                            expect(MiniReelService.opened.editor).toBe(success.calls.mostRecent().args[0]);
+                            expect(result.data.mode).toBe('lightbox');
                         });
 
                         it('should transpile the various video cards into two cards', function() {
@@ -1034,17 +923,12 @@
 
                     describe('convertForPlayer(minireel)', function() {
                         it('should convert back to the player format', function() {
-                            var success = jasmine.createSpy('success'),
-                                converted,
+                            var converted,
                                 result;
 
-                            spyOn(cinema6.db, 'find').and.returnValue($q.when(minireel));
-
                             $rootScope.$apply(function() {
-                                MiniReelService.open('e-15aa87f5da34c3')
-                                    .then(success);
+                                converted = MiniReelService.convertForEditor(minireel);
                             });
-                            converted = success.calls.mostRecent().args[0];
                             result = MiniReelService.convertForPlayer(converted);
 
                             expect(result).toEqual(minireel);
@@ -1052,18 +936,12 @@
                         });
 
                         it('should support performing the conversion on a specified object', function() {
-                            var success = jasmine.createSpy('success'),
-                                converted,
+                            var converted,
                                 result;
 
-                            spyOn(cinema6.db, 'find').and.returnValue($q.when(minireel));
-
                             $rootScope.$apply(function() {
-                                MiniReelService.open('e-15aa87f5da34c3')
-                                    .then(success);
+                                converted = MiniReelService.convertForEditor(minireel);
                             });
-                            converted = success.calls.mostRecent().args[0];
-
                             converted.data.deck[0].title = 'New Title';
 
                             result = MiniReelService.convertForPlayer(converted, minireel);

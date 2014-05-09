@@ -2,7 +2,7 @@
     'use strict';
 
     define(['manager'], function() {
-        describe('ManagerController', function() {
+        xdescribe('ManagerController', function() {
             var $rootScope,
                 $scope,
                 $controller,

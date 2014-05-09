@@ -33,6 +33,148 @@
             };
         }])
 
+        .service('EditorService', ['MiniReelService','$q','c6AsyncQueue',
+        function                  ( MiniReelService , $q , c6AsyncQueue ) {
+            var _private = {},
+                queue = c6AsyncQueue();
+
+            function readOnly(source, key, target) {
+                Object.defineProperty(target, key, {
+                    enumerable: true,
+                    configurable: true,
+                    get: function() {
+                        return source[key];
+                    }
+                });
+            }
+
+            _private.minireel = null;
+            _private.editorMinireel = null;
+            _private.proxy = null;
+
+            _private.syncToMinireel = function(minireel, editorMinireel, proxy) {
+                copy(proxy.data, editorMinireel.data);
+                MiniReelService.convertForPlayer(editorMinireel, minireel);
+
+                return minireel;
+            };
+
+            _private.syncToProxy = function(proxy, editorMinireel, minireel) {
+                MiniReelService.convertForEditor(minireel, editorMinireel);
+
+                forEach(editorMinireel, function(value, key) {
+                    if (proxy.hasOwnProperty(key)) { return; }
+
+                    return readOnly(editorMinireel, key, proxy);
+                });
+                forEach(proxy, function(value, key) {
+                    if (editorMinireel.hasOwnProperty(key)) { return; }
+
+                    delete proxy[key];
+                });
+
+                return proxy;
+            };
+
+            this.open = function(minireel) {
+                var editorMinireel = MiniReelService.convertForEditor(minireel),
+                    proxy = {},
+                    data = copy(editorMinireel.data);
+
+                forEach(editorMinireel, function(value, key) {
+                    if (key === 'data') {
+                        Object.defineProperty(proxy, key, {
+                            enumerable: true,
+                            get: function() {
+                                return data;
+                            }
+                        });
+                        return;
+                    }
+
+                    return readOnly(editorMinireel, key, proxy);
+                });
+
+                _private.minireel = minireel;
+                _private.editorMinireel = editorMinireel;
+                _private.proxy = proxy;
+
+                return proxy;
+            };
+
+            this.close = function() {
+                ['minireel', 'editorMinireel', 'proxy']
+                    .forEach(function(prop) {
+                        _private[prop] = null;
+                    });
+            };
+
+            this.sync = queue.wrap(function() {
+                var minireel = _private.minireel,
+                    editorMinireel = _private.editorMinireel,
+                    proxy = _private.proxy;
+
+                if (!minireel) {
+                    return $q.reject('Cannot sync. There is no open MiniReel.');
+                }
+
+                return _private.syncToMinireel(minireel, editorMinireel, proxy).save()
+                    .then(function syncToProxy(minireel) {
+                        return _private.syncToProxy(proxy, editorMinireel, minireel);
+                    });
+            }, this);
+
+            this.publish = queue.wrap(function() {
+                var minireel = _private.minireel,
+                    editorMinireel = _private.editorMinireel,
+                    proxy = _private.proxy;
+
+                if (!minireel) {
+                    return $q.reject('Cannot sync. There is no open MiniReel.');
+                }
+
+                return MiniReelService.publish(
+                    _private.syncToMinireel(minireel, editorMinireel, proxy)
+                ).then(function syncToProxy(minireel) {
+                    _private.syncToProxy(proxy, editorMinireel, minireel);
+
+                    // Because the proxy is the source of truth for the data object, we need to
+                    // make sure it gets updated with the election.
+                    proxy.data.election = editorMinireel.data.election;
+
+                    return proxy;
+                });
+            }, this);
+
+            this.unpublish = queue.wrap(function() {
+                var minireel = _private.minireel,
+                    editorMinireel = _private.editorMinireel,
+                    proxy = _private.proxy;
+
+                if (!minireel) {
+                    return $q.reject('Cannot sync. There is no open MiniReel.');
+                }
+
+                return MiniReelService.unpublish(
+                    _private.syncToMinireel(minireel, editorMinireel, proxy)
+                ).then(function syncToProxy(minireel) {
+                    return _private.syncToProxy(proxy, editorMinireel, minireel);
+                });
+            }, this);
+
+            this.erase = queue.wrap(function() {
+                var minireel = _private.minireel;
+
+                if (!minireel) {
+                    return $q.reject('Cannot sync. There is no open MiniReel.');
+                }
+
+                return MiniReelService.erase(minireel);
+            }, this);
+
+            if (window.c6.kHasKarma) { this._private = _private; }
+        }])
+
         .controller('EditorController', ['c6State','$scope','MiniReelService','cinema6',
                                          'ConfirmDialogService','c6Debounce','$log','$timeout',
         function                        ( c6State , $scope , MiniReelService , cinema6 ,
