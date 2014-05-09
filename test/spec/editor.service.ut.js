@@ -246,6 +246,64 @@
             });
 
             describe('@public', function() {
+                describe('properties', function() {
+                    describe('state', function() {
+                        var state;
+
+                        beforeEach(function() {
+                            state = EditorService.state;
+                        });
+
+                        describe('dirty', function() {
+                            describe('if there is no open minireel', function() {
+                                it('should be null', function() {
+                                    expect(EditorService.state.dirty).toBeNull();
+                                });
+                            });
+
+                            describe('if there is an open minireel', function() {
+                                var proxy, editorMinireel;
+
+                                beforeEach(function() {
+                                    proxy = EditorService.open(minireel);
+                                    editorMinireel = _private.editorMinireel;
+                                });
+
+                                it('should be true if the editorMinireel and proxy are not the same', function() {
+                                    expect(state.dirty).toBe(false);
+
+                                    proxy.data.title = 'Foo';
+                                    expect(state.dirty).toBe(true);
+
+                                    proxy.data.deck.splice(0, 1);
+                                    expect(state.dirty).toBe(true);
+
+                                    _private.syncToMinireel(minireel, editorMinireel, proxy);
+                                    expect(state.dirty).toBe(false);
+
+                                    proxy.data.mode = 'full';
+                                    expect(state.dirty).toBe(true);
+                                });
+                            });
+                        });
+
+                        describe('inFlight', function() {
+                            it('should be true if there is more than one async task in the queue', function() {
+                                expect(state.inFlight).toBe(false);
+
+                                queue.queue.push({});
+                                expect(state.inFlight).toBe(true);
+
+                                queue.queue.push({});
+                                expect(state.inFlight).toBe(true);
+
+                                queue.queue.length = 0;
+                                expect(state.inFlight).toBe(false);
+                            });
+                        });
+                    });
+                });
+
                 describe('methods', function() {
                     describe('open(minireel)', function() {
                         var proxy;

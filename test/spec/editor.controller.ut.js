@@ -46,6 +46,10 @@
                     c6State = $injector.get('c6State');
                     $q = $injector.get('$q');
                     EditorService = $injector.get('EditorService');
+                    EditorService.state = {
+                        dirty: false,
+                        inFlight: false
+                    };
                     ConfirmDialogService = $injector.get('ConfirmDialogService');
                     $timeout = $injector.get('$timeout');
                     cinema6 = $injector.get('cinema6');
@@ -81,6 +85,12 @@
             });
 */
             describe('properties', function() {
+                describe('minireelState', function() {
+                    it('should be a reference to the EditorService\'s state', function() {
+                        expect(EditorCtrl.minireelState).toBe(EditorService.state);
+                    });
+                });
+
                 describe('preview', function() {
                     it('should be false', function() {
                         expect(EditorCtrl.preview).toBe(false);
@@ -90,18 +100,6 @@
                 describe('editTitle', function() {
                     it('should be false', function() {
                         expect(EditorCtrl.editTitle).toBe(false);
-                    });
-                });
-
-                describe('isDirty', function() {
-                    it('should be false', function() {
-                        expect(EditorCtrl.isDirty).toBe(false);
-                    });
-                });
-
-                describe('inFlight', function() {
-                    it('should be false', function() {
-                        expect(EditorCtrl.inFlight).toBe(false);
                     });
                 });
 
@@ -438,12 +436,17 @@
                 });
 
                 describe('save()', function() {
-                    beforeEach(function() {
-                        EditorCtrl.isDirty = true;
-                        EditorCtrl.dismissDirtyWarning = true;
-                        spyOn(EditorService, 'sync').and.returnValue($q.when({}));
+                    var success;
 
-                        EditorCtrl.save();
+                    beforeEach(function() {
+                        success = jasmine.createSpy('EditorCtrl.save() success');
+
+                        EditorCtrl.dismissDirtyWarning = true;
+                        spyOn(EditorService, 'sync').and.returnValue($q.when(cModel));
+
+                        $scope.$apply(function() {
+                            EditorCtrl.save().then(success);
+                        });
                     });
 
                     it('should call MiniReelService.save()', function() {
@@ -453,25 +456,17 @@
                         expect(EditorService.sync.calls.count()).toBe(2);
                     });
 
-                    it('should set inFlight to true', function() {
-                        expect(EditorCtrl.inFlight).toBe(true);
-                    });
-
                     describe('when the save completes', function() {
                         beforeEach(function() {
                             $rootScope.$digest();
                         });
 
-                        it('should set isDirty to false', function() {
-                            expect(EditorCtrl.isDirty).toBe(false);
-                        });
-
-                        it('should set inFlight to false', function() {
-                            expect(EditorCtrl.inFlight).toBe(false);
-                        });
-
                         it('should set dismissDirtyWarning to false', function() {
                             expect(EditorCtrl.dismissDirtyWarning).toBe(false);
+                        });
+
+                        it('should resolve the promise', function() {
+                            expect(success).toHaveBeenCalledWith(cModel);
                         });
                     });
                 });
@@ -493,9 +488,9 @@
                         spyOn(EditorCtrl,'save');
                     });
 
-                    describe('when status is active and isDirty', function() {
+                    describe('when status is active and the minireel is dirty', function() {
                         beforeEach(function() {
-                            EditorCtrl.isDirty = true;
+                            EditorCtrl.minireelState.dirty = true;
                             EditorCtrl.model.status = 'active';
                             EditorCtrl.backToDashboard();
                         });
@@ -523,13 +518,13 @@
 
                     describe('when status is pending or not dirty', function() {
                         it('should goTo manager state', function() {
-                            EditorCtrl.isDirty = false;
+                            EditorCtrl.minireelState.dirty = false;
                             EditorCtrl.model.status = 'active';
                             EditorCtrl.backToDashboard();
 
                             expect(c6State.goTo).toHaveBeenCalledWith('manager');
 
-                            EditorCtrl.isDirty = true;
+                            EditorCtrl.minireelState.dirty = true;
                             EditorCtrl.model.status = 'pending';
                             EditorCtrl.backToDashboard();
 
@@ -607,19 +602,35 @@
                 });
 
                 describe('$destroy', function() {
-                    beforeEach(function() {
-                        spyOn(EditorService, 'close').and.callThrough();
-                        spyOn(EditorCtrl, 'save').and.callThrough();
+                    var saveDeferred;
 
-                        $scope.$emit('$destroy');
+                    beforeEach(function() {
+                        saveDeferred = $q.defer();
+
+                        spyOn(EditorService, 'close').and.callThrough();
+                        spyOn(EditorCtrl, 'save').and.returnValue(saveDeferred.promise);
+
+                        $scope.$apply(function() {
+                            $scope.$emit('$destroy');
+                        });
                     });
 
                     it('should save the minireel', function() {
                         expect(EditorCtrl.save).toHaveBeenCalled();
                     });
 
-                    it('should close the current MiniReel', function() {
-                        expect(EditorService.close).toHaveBeenCalled();
+                    describe('after the save finishes', function() {
+                        beforeEach(function() {
+                            expect(EditorService.close).not.toHaveBeenCalled();
+
+                            $scope.$apply(function() {
+                                saveDeferred.resolve(cModel);
+                            });
+                        });
+
+                        it('should close the current MiniReel', function() {
+                            expect(EditorService.close).toHaveBeenCalled();
+                        });
                     });
 
                     describe('if the minireel is active', function() {
@@ -628,11 +639,17 @@
 
                             cModel.status = 'active';
 
-                            $scope.$emit('$destroy');
+                            $scope.$apply(function() {
+                                $scope.$emit('$destroy');
+                            });
                         });
 
                         it('should not save the minireel', function() {
                             expect(EditorCtrl.save).not.toHaveBeenCalled();
+                        });
+
+                        it('should still close the minireel', function() {
+                            expect(EditorService.close).toHaveBeenCalled();
                         });
                     });
                 });
@@ -657,36 +674,27 @@
                     });
                 });
 
-                describe('model', function() {
+                describe('this.minireelState.dirty', function() {
                     beforeEach(function() {
                         spyOn(EditorCtrl, 'save');
                     });
 
-                    it('should set isDirty to true when it is changed', function() {
-                        cModel.status = 'active';
-
+                    it('should save the minireel (debounced) every time it is true', function() {
                         $scope.$apply(function() {
-                            cModel.data.deck[0].title = 'hey';
-                        });
-                        expect(EditorCtrl.isDirty).toBe(true);
-
-                        EditorCtrl.isDirty = false;
-
-                        $scope.$apply(function() {
-                            cModel.data.title = 'New Title!';
-                        });
-                        expect(EditorCtrl.isDirty).toBe(true);
-                    });
-
-                    it('should save the minireel (debounced) every time it is changed', function() {
-                        $scope.$apply(function() {
-                            cModel.data.title = 'Foo!';
+                            EditorCtrl.minireelState.dirty = true;
                         });
                         $timeout.flush();
                         expect(EditorCtrl.save).toHaveBeenCalled();
 
                         $scope.$apply(function() {
-                            cModel.data.deck[0].videoid = '4fh3944f';
+                            EditorCtrl.minireelState.dirty = false;
+                        });
+                        expect(function() {
+                            $timeout.flush();
+                        }).toThrow();
+
+                        $scope.$apply(function() {
+                            EditorCtrl.minireelState.dirty = true;
                         });
                         $timeout.flush();
                         expect(EditorCtrl.save.calls.count()).toBe(2);
@@ -697,11 +705,9 @@
                             EditorCtrl.save.calls.reset();
 
                             $scope.$apply(function() {
-                                cModel.data.title = 'Hey!';
+                                EditorCtrl.minireelState.dirty = true;
                             });
-                            $scope.$apply(function() {
-                                cModel.status = 'active';
-                            });
+                            cModel.status = 'active';
                         });
 
                         it('should not autosave', function() {
@@ -709,7 +715,10 @@
                             expect(EditorCtrl.save).not.toHaveBeenCalled();
 
                             $scope.$apply(function() {
-                                cModel.data.deck[1].title = 'Bar';
+                                EditorCtrl.minireelState.dirty = false;
+                            });
+                            $scope.$apply(function() {
+                                EditorCtrl.minireelState.dirty = true;
                             });
                             expect(function() {
                                 $timeout.flush();

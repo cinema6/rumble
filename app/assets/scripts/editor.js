@@ -5,8 +5,7 @@
         equals = angular.equals,
         copy = angular.copy,
         forEach = angular.forEach,
-        isDefined = angular.isDefined,
-        noop = angular.noop;
+        isDefined = angular.isDefined;
 
     angular.module('c6.mrmaker')
         .animation('.toolbar__publish', ['$timeout',
@@ -75,6 +74,23 @@
 
                 return proxy;
             };
+
+            this.state = {};
+            Object.defineProperties(this.state, {
+                dirty: {
+                    get: function() {
+                        var proxy = _private.proxy,
+                            editorMinireel = _private.editorMinireel;
+
+                        return (proxy || null) && !equals(proxy, editorMinireel);
+                    }
+                },
+                inFlight: {
+                    get: function() {
+                        return !!queue.queue.length;
+                    }
+                }
+            });
 
             this.open = function(minireel) {
                 var editorMinireel = MiniReelService.convertForEditor(minireel),
@@ -176,9 +192,9 @@
         }])
 
         .controller('EditorController', ['c6State','$scope','EditorService','cinema6',
-                                         'ConfirmDialogService','c6Debounce','$log','$timeout',
+                                         'ConfirmDialogService','c6Debounce','$q','$log',
         function                        ( c6State , $scope , EditorService , cinema6 ,
-                                          ConfirmDialogService , c6Debounce , $log , $timeout ) {
+                                          ConfirmDialogService , c6Debounce , $q , $log ) {
             var self = this,
                 AppCtrl = $scope.AppCtrl,
                 saveAfterTenSeconds = c6Debounce(function() {
@@ -197,9 +213,8 @@
 //            this.pageObject = { page : 'editor', title : 'Editor' };
             this.preview = false;
             this.editTitle = false;
-            this.isDirty = false;
-            this.inFlight = false;
             this.dismissDirtyWarning = false;
+            this.minireelState = EditorService.state;
 
             Object.defineProperties(this, {
                 prettyMode: {
@@ -233,11 +248,6 @@
                         ConfirmDialogService.close();
 
                         EditorService.publish()
-                            .then(function setActive() {
-                                self.model.status = 'active';
-
-                                return $timeout(noop);
-                            })
                             .then(function() {
                                 self.isDirty = false;
                             });
@@ -256,10 +266,7 @@
                     onAffirm: function() {
                         ConfirmDialogService.close();
 
-                        EditorService.unpublish()
-                            .then(function setActive() {
-                                self.model.status = 'pending';
-                            });
+                        EditorService.unpublish();
                     },
                     onCancel: function() {
                         ConfirmDialogService.close();
@@ -339,16 +346,13 @@
             };
 
             this.save = function() {
-                this.inFlight = true;
-
-                EditorService.sync()
+                return EditorService.sync()
                     .then(function log(minireel) {
                         $log.info('MiniReel save success!', minireel);
 
-                        ['isDirty', 'inFlight', 'dismissDirtyWarning']
-                            .forEach(function setFalse(prop) {
-                                self[prop] = false;
-                            });
+                        self.dismissDirtyWarning = false;
+
+                        return minireel;
                     });
             };
 
@@ -369,7 +373,7 @@
             };
 
             this.backToDashboard = function() {
-                if (this.model.status === 'active' && this.isDirty) {
+                if (this.model.status === 'active' && this.minireelState.dirty) {
                     ConfirmDialogService.display({
                         prompt: 'You have unpublished changes.',
                         message: 'Are you sure you want to leave this screen? ' +
@@ -398,10 +402,8 @@
                 $scope.$broadcast('mrPreview:updateMode', self.model);
             });
 
-            $scope.$watch(function() { return self.model; }, function(minireel, prevMinireel) {
-                if (minireel === prevMinireel) { return; }
-
-                self.isDirty = true;
+            $scope.$watch(function() { return self.minireelState.dirty; }, function(isDirty) {
+                if (!isDirty) { return; }
 
                 if (!shouldAutoSave()) {
                     $log.warn('MiniReel is published. Will not autosave.');
@@ -409,7 +411,7 @@
                 }
 
                 saveAfterTenSeconds();
-            }, true);
+            });
 
             $scope.$on('addCard', function(event, card, index) {
                 self.model.data.deck.splice(index, 0, card);
@@ -424,11 +426,18 @@
             });
 
             $scope.$on('$destroy', function() {
-                if (self.model.status !== 'active') {
-                    self.save();
+                function save() {
+                    if (shouldAutoSave()) {
+                        return self.save();
+                    }
+
+                    return $q.when(self.model);
                 }
 
-                EditorService.close();
+                save()
+                    .then(function close() {
+                        EditorService.close();
+                    });
             });
 
         //    AppCtrl.sendPageView(this.pageObject);
