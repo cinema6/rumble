@@ -319,24 +319,6 @@
                 position:absolute;
                 background:#ccc url('../img/default_square.jpg') 50% 50% / cover no-repeat;
             }
-                .coverUploader__imgCropMarks {
-                    position:absolute; top:0; left:0;
-                    border:2px dashed rgba(0,255,0,0.5);
-                    -webkit-box-sizing: border-box;
-                    -moz-box-sizing: border-box;
-                    box-sizing: border-box;
-                }
-                    .coverUploader__imgCropMarks--landscape {
-                        width:300px; height:200px;
-                        margin:50px 0;
-                        border-left:0; border-right:0;
-                    }
-                    .coverUploader__imgCropMarks--portrait {
-                        width:200px; height:300px;
-                        margin:0 50px;
-                        border-bottom:0; border-top:0;
-                        border-color:rgba(0,0,255,0.5);
-                    }
             .coverUploader__copy {
                 margin-left:324px;
             }
@@ -720,25 +702,29 @@
     /*  filters__list
     ========================================================================== */
         .filters__list {
-            margin:0.375em 0 1em 0; padding:0; list-style:none;
+            margin:0 0 1em 0; padding:0; 
+            background:#eee; list-style:none;
+            border-radius:3px; 
         }
             .filters__item {
                 display:inline;
             }
             .filters__btn {
-                border:0; border-radius:3px; padding:0.25em 0.5em 0.1875em 0.5em; margin:0;
-                font-size:1em; font-weight:700; 
+                border:0; border-radius:3px; 
+                margin:0; padding:0.6875rem 0.5em 0.625rem 0.5em; 
+                font-size:0.875em; font-weight:700; 
                 text-align: center; line-height: 1;
                 background:transparent;
                 cursor:pointer;
-                -webkit-transition: background 0.5s, color 0.5s; transition: background 0.5s, color 0.5s;
+                -webkit-transition: background 0.5s, color 0.5s; 
+                transition: background 0.5s, color 0.5s;
             }
                 .filtersBtn__showAll {
-                    color:#b0b0b0;
+                    color:#4a9cd1;
                 }
                     .filtersBtn__showAll--active, 
                     .filtersBtn__showAll:hover {
-                        background:#b0b0b0;
+                        background:#4a9cd1;
                         color:#fff;
                     }
                 .filtersBtn__published {
@@ -938,27 +924,14 @@
                 font-size:0.75em; color:#b0b0b0; margin:0 0 0.4375rem 0;
                 position:relative;
             }
-                .ui__statusIcon {
-                    width:1em; height:0.8125em; display:block;
-                    position:absolute; top:0.0625em; right:0;
-                }
                 .miniReel__status--pending .statusText {
                     color:#646464;
-                }
-                .miniReel__status--pending .ui__statusIcon {
-                    background-position:-3.1875em -2.8125em;
                 }
                 .miniReel__status--active .statusText {
                     color:#72ad25;
                 }
-                .miniReel__status--active .ui__statusIcon {
-                    background-position:-2.125em -2.8125em;
-                }
                 .miniReel__status--deleted .statusText {
                     color:#d61212;
-                }
-                .miniReel__status--deleted .ui__statusIcon {
-                    background-position:-4.25em -2.8125em;
                 }
 
         .miniReel__quickActions {
