@@ -471,7 +471,7 @@
                         });
                     });
 
-                    describe('publish(minireelId)', function() {
+                    describe('publish(minireel)', function() {
                         var result,
                             success,
                             saveDeferred;
@@ -481,15 +481,10 @@
                             success = jasmine.createSpy('success');
 
                             spyOn(minireel, 'save').and.returnValue(saveDeferred.promise);
-                            spyOn(cinema6.db, 'find').and.returnValue($q.when(minireel));
 
                             $rootScope.$apply(function() {
-                                result = MiniReelService.publish(minireel.id).then(success);
+                                result = MiniReelService.publish(minireel).then(success);
                             });
-                        });
-
-                        it('should get the minireel from cinema6.db', function() {
-                            expect(cinema6.db.find).toHaveBeenCalledWith('experience', minireel.id);
                         });
 
                         it('should set the minireel\'s status to "active"', function() {
@@ -522,7 +517,7 @@
                                 delete minireel.data.election;
 
                                 $rootScope.$apply(function() {
-                                    MiniReelService.publish(minireel.id).then(success);
+                                    MiniReelService.publish(minireel).then(success);
                                 });
                             });
 
@@ -549,15 +544,10 @@
                             success = jasmine.createSpy('success');
 
                             spyOn(minireel, 'save').and.returnValue(saveDeferred.promise);
-                            spyOn(cinema6.db, 'find').and.returnValue($q.when(minireel));
 
                             $rootScope.$apply(function() {
-                                result = MiniReelService.unpublish(minireel.id).then(success);
+                                result = MiniReelService.unpublish(minireel).then(success);
                             });
-                        });
-
-                        it('should get the minireel from cinema6.db', function() {
-                            expect(cinema6.db.find).toHaveBeenCalledWith('experience', minireel.id);
                         });
 
                         it('should set the minireel\'s status to "pending"', function() {
@@ -761,7 +751,7 @@
                         });
                     });
 
-                    describe('create(minireelId)', function() {
+                    describe('create(minireel)', function() {
                         var result,
                             success,
                             newModel,
@@ -797,15 +787,9 @@
 
                         describe('with a template', function() {
                             beforeEach(function() {
-                                spyOn(cinema6.db, 'find').and.returnValue($q.when(minireel));
-
                                 $rootScope.$apply(function() {
-                                    result = MiniReelService.create(minireel.id).then(success);
+                                    result = MiniReelService.create(minireel).then(success);
                                 });
-                            });
-
-                            it('should get the minireel to copy from cinema6.db', function() {
-                                expect(cinema6.db.find).toHaveBeenCalledWith('experience', minireel.id);
                             });
 
                             it('should create a new minireel experience based off of the old one', function() {
@@ -888,7 +872,7 @@
                         });
                     });
 
-                    describe('erase(minireelId)', function() {
+                    describe('erase(minireel)', function() {
                         var success,
                             eraseDeferred;
 
@@ -896,16 +880,11 @@
                             success = jasmine.createSpy('success');
                             eraseDeferred = $q.defer();
 
-                            spyOn(cinema6.db, 'find').and.returnValue($q.when(minireel));
                             spyOn(minireel, 'erase').and.returnValue(eraseDeferred.promise);
 
                             $rootScope.$apply(function() {
-                                MiniReelService.erase(minireel.id).then(success);
+                                MiniReelService.erase(minireel).then(success);
                             });
-                        });
-
-                        it('should fetch the minireel from cinema6.db', function() {
-                            expect(cinema6.db.find).toHaveBeenCalledWith('experience', minireel.id);
                         });
 
                         it('should erase the minireel', function() {

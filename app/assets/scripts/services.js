@@ -630,16 +630,17 @@
                 });
             };
 
-            this.publish = function(minireelId) {
-                return cinema6.db.find('experience', minireelId)
-                    .then(function initializeElection(minireel) {
-                        if (minireel.data.election) { return minireel; }
+            this.publish = function(minireel) {
+                function initializeElection(minireel) {
+                    if (minireel.data.election) { return minireel; }
 
-                        return VoteService.initialize(minireel)
-                            .then(function returnMiniReel() {
-                                return minireel;
-                            });
-                    })
+                    return VoteService.initialize(minireel)
+                        .then(function returnMiniReel() {
+                            return minireel;
+                        });
+                }
+
+                return $q.when(initializeElection(minireel))
                     .then(function setActive(minireel) {
                         minireel.status = 'active';
 
@@ -650,23 +651,14 @@
                     });
             };
 
-            this.unpublish = function(minireelId) {
-                return cinema6.db.find('experience', minireelId)
-                    .then(function setActive(minireel) {
-                        minireel.status = 'pending';
+            this.unpublish = function(minireel) {
+                minireel.status = 'pending';
 
-                        return minireel;
-                    })
-                    .then(function save(minireel) {
-                        return minireel.save();
-                    });
+                return minireel.save();
             };
 
-            this.erase = function(minireelId) {
-                return cinema6.db.find('experience', minireelId)
-                    .then(function erase(minireel) {
-                        return minireel.erase();
-                    });
+            this.erase = function(minireel) {
+                return minireel.erase();
             };
 
             this.convertForEditor = function(minireel, target) {
@@ -829,15 +821,11 @@
                 return newCard;
             };
 
-            this.create = function(toCopyId) {
+            this.create = function(toCopy) {
                 function fetchTemplate(appData) {
                     var user = appData.user;
 
-                    return $q.when(toCopyId ?
-                        cinema6.db.find('experience', toCopyId)
-                            .then(function returnPojo(minireel) {
-                                return minireel.pojoify();
-                            }) :
+                    return $q.when(toCopy ? toCopy.pojoify() :
                         {
                             type: 'minireel',
                             org: user.org,
@@ -857,7 +845,7 @@
                     var minireel = cinema6.db.create('experience', template);
 
                     delete minireel.id;
-                    minireel.data.title += toCopyId ? ' (copy)' : '';
+                    minireel.data.title += toCopy ? ' (copy)' : '';
                     minireel.status = 'pending';
 
                     return minireel;
