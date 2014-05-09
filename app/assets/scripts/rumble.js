@@ -752,6 +752,8 @@
 
         this.videoUrl = null;
 
+        this.experienceTitle = c6AppData.experience.data.title;
+
         this.hasModule = ModuleService.hasModule.bind(ModuleService, config.modules);
 
         this.playVideo = function() {
