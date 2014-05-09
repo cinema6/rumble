@@ -47,6 +47,22 @@
                 });
             }
 
+            function rejectNothingOpen() {
+                return $q.reject('Cannot sync. There is no open MiniReel.');
+            }
+
+            function syncToProxy(minireel) {
+                return _private.syncToProxy(_private.proxy, _private.editorMinireel, minireel);
+            }
+
+            function syncToMinireel() {
+                return _private.syncToMinireel(
+                    _private.minireel,
+                    _private.editorMinireel,
+                    _private.proxy
+                );
+            }
+
             _private.minireel = null;
             _private.editorMinireel = null;
             _private.proxy = null;
@@ -126,63 +142,52 @@
             };
 
             this.sync = queue.wrap(function() {
-                var minireel = _private.minireel,
-                    editorMinireel = _private.editorMinireel,
-                    proxy = _private.proxy;
+                var minireel = _private.minireel;
 
                 if (!minireel) {
-                    return $q.reject('Cannot sync. There is no open MiniReel.');
+                    return rejectNothingOpen();
                 }
 
-                return _private.syncToMinireel(minireel, editorMinireel, proxy).save()
-                    .then(function syncToProxy(minireel) {
-                        return _private.syncToProxy(proxy, editorMinireel, minireel);
-                    });
+                return syncToMinireel()
+                    .save()
+                    .then(syncToProxy);
             }, this);
 
             this.publish = queue.wrap(function() {
                 var minireel = _private.minireel,
-                    editorMinireel = _private.editorMinireel,
-                    proxy = _private.proxy;
+                    editorMinireel = _private.editorMinireel;
 
                 if (!minireel) {
-                    return $q.reject('Cannot sync. There is no open MiniReel.');
+                    return rejectNothingOpen();
                 }
 
-                return MiniReelService.publish(
-                    _private.syncToMinireel(minireel, editorMinireel, proxy)
-                ).then(function syncToProxy(minireel) {
-                    _private.syncToProxy(proxy, editorMinireel, minireel);
+                return MiniReelService.publish(syncToMinireel())
+                    .then(syncToProxy)
+                    .then(function updateElection(proxy) {
+                        // Because the proxy is the source of truth for the data object, we need to
+                        // make sure it gets updated with the election.
+                        proxy.data.election = editorMinireel.data.election;
 
-                    // Because the proxy is the source of truth for the data object, we need to
-                    // make sure it gets updated with the election.
-                    proxy.data.election = editorMinireel.data.election;
-
-                    return proxy;
-                });
+                        return proxy;
+                    });
             }, this);
 
             this.unpublish = queue.wrap(function() {
-                var minireel = _private.minireel,
-                    editorMinireel = _private.editorMinireel,
-                    proxy = _private.proxy;
+                var minireel = _private.minireel;
 
                 if (!minireel) {
-                    return $q.reject('Cannot sync. There is no open MiniReel.');
+                    return rejectNothingOpen();
                 }
 
-                return MiniReelService.unpublish(
-                    _private.syncToMinireel(minireel, editorMinireel, proxy)
-                ).then(function syncToProxy(minireel) {
-                    return _private.syncToProxy(proxy, editorMinireel, minireel);
-                });
+                return MiniReelService.unpublish(syncToMinireel())
+                    .then(syncToProxy);
             }, this);
 
             this.erase = queue.wrap(function() {
                 var minireel = _private.minireel;
 
                 if (!minireel) {
-                    return $q.reject('Cannot sync. There is no open MiniReel.');
+                    return rejectNothingOpen();
                 }
 
                 return MiniReelService.erase(minireel);
