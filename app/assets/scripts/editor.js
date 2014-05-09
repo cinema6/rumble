@@ -175,9 +175,9 @@
             if (window.c6.kHasKarma) { this._private = _private; }
         }])
 
-        .controller('EditorController', ['c6State','$scope','MiniReelService','cinema6',
+        .controller('EditorController', ['c6State','$scope','EditorService','cinema6',
                                          'ConfirmDialogService','c6Debounce','$log','$timeout',
-        function                        ( c6State , $scope , MiniReelService , cinema6 ,
+        function                        ( c6State , $scope , EditorService , cinema6 ,
                                           ConfirmDialogService , c6Debounce , $log , $timeout ) {
             var self = this,
                 AppCtrl = $scope.AppCtrl,
@@ -232,7 +232,7 @@
                     onAffirm: function() {
                         ConfirmDialogService.close();
 
-                        MiniReelService.publish(self.model.id)
+                        EditorService.publish()
                             .then(function setActive() {
                                 self.model.status = 'active';
 
@@ -256,7 +256,7 @@
                     onAffirm: function() {
                         ConfirmDialogService.close();
 
-                        MiniReelService.unpublish(self.model.id)
+                        EditorService.unpublish()
                             .then(function setActive() {
                                 self.model.status = 'pending';
                             });
@@ -328,7 +328,7 @@
                         ConfirmDialogService.close();
                     },
                     onAffirm: function() {
-                        MiniReelService.erase(self.model.id)
+                        EditorService.erase()
                             .then(function backToManager() {
                                 c6State.goTo('manager');
                             });
@@ -341,7 +341,7 @@
             this.save = function() {
                 this.inFlight = true;
 
-                MiniReelService.save()
+                EditorService.sync()
                     .then(function log(minireel) {
                         $log.info('MiniReel save success!', minireel);
 
@@ -428,7 +428,7 @@
                     self.save();
                 }
 
-                MiniReelService.close();
+                EditorService.close();
             });
 
         //    AppCtrl.sendPageView(this.pageObject);

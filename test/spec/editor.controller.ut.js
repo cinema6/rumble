@@ -2,7 +2,7 @@
     'use strict';
 
     define(['editor'], function() {
-        xdescribe('EditorController', function() {
+        describe('EditorController', function() {
             var $rootScope,
                 $scope,
                 $childScope,
@@ -12,7 +12,7 @@
                 $log,
                 c6State,
                 cinema6,
-                MiniReelService,
+                EditorService,
                 ConfirmDialogService,
                 AppCtrl,
                 EditorCtrl;
@@ -45,7 +45,7 @@
                     $controller = $injector.get('$controller');
                     c6State = $injector.get('c6State');
                     $q = $injector.get('$q');
-                    MiniReelService = $injector.get('MiniReelService');
+                    EditorService = $injector.get('EditorService');
                     ConfirmDialogService = $injector.get('ConfirmDialogService');
                     $timeout = $injector.get('$timeout');
                     cinema6 = $injector.get('cinema6');
@@ -189,14 +189,14 @@
                     beforeEach(function() {
                         publishDeferred = $q.defer();
 
-                        spyOn(MiniReelService, 'publish')
+                        spyOn(EditorService, 'publish')
                             .and.returnValue(publishDeferred.promise);
 
                         EditorCtrl.publish();
                     });
 
                     it('should not publish the minireel', function() {
-                        expect(MiniReelService.publish).not.toHaveBeenCalled();
+                        expect(EditorService.publish).not.toHaveBeenCalled();
                     });
 
                     it('should display a confirmation dialog', assertDialogPresented);
@@ -217,17 +217,7 @@
                         });
 
                         it('should publish the minireel', function() {
-                            expect(MiniReelService.publish).toHaveBeenCalledWith(cModel.id);
-                        });
-
-                        it('should set the model\'s status to active after publishing', function() {
-                            $scope.$apply(function() {
-                                publishDeferred.resolve({});
-                            });
-                            $timeout.flush();
-
-                            expect(cModel.status).toBe('active');
-                            expect(EditorCtrl.isDirty).toBe(false);
+                            expect(EditorService.publish).toHaveBeenCalled();
                         });
 
                         it('should close the dialog', function() {
@@ -242,14 +232,14 @@
                     beforeEach(function() {
                         unpublishDeferred = $q.defer();
 
-                        spyOn(MiniReelService, 'unpublish')
+                        spyOn(EditorService, 'unpublish')
                             .and.returnValue(unpublishDeferred.promise);
 
                         EditorCtrl.makePrivate();
                     });
 
                     it('should not unpublish the minireel', function() {
-                        expect(MiniReelService.unpublish).not.toHaveBeenCalled();
+                        expect(EditorService.unpublish).not.toHaveBeenCalled();
                     });
 
                     it('should display a confirmation dialog', assertDialogPresented);
@@ -273,16 +263,8 @@
                             expect(ConfirmDialogService.close).toHaveBeenCalled();
                         });
 
-                        it('should set the model\'s status to pending after unpublishing', function() {
-                            $scope.$apply(function() {
-                                unpublishDeferred.resolve({});
-                            });
-
-                            expect(cModel.status).toBe('pending');
-                        });
-
                         it('should unpublish the minireel', function() {
-                            expect(MiniReelService.unpublish).toHaveBeenCalledWith(cModel.id);
+                            expect(EditorService.unpublish).toHaveBeenCalled();
                         });
                     });
                 });
@@ -377,13 +359,13 @@
                             eraseDeferred = $q.defer();
 
                             spyOn(c6State, 'goTo');
-                            spyOn(MiniReelService, 'erase').and.returnValue(eraseDeferred.promise);
+                            spyOn(EditorService, 'erase').and.returnValue(eraseDeferred.promise);
 
                             dialog().onAffirm();
                         });
 
                         it('should erase the minireel', function() {
-                            expect(MiniReelService.erase).toHaveBeenCalledWith(cModel.id);
+                            expect(EditorService.erase).toHaveBeenCalled();
                         });
 
                         it('should close the confirmation', function() {
@@ -459,16 +441,16 @@
                     beforeEach(function() {
                         EditorCtrl.isDirty = true;
                         EditorCtrl.dismissDirtyWarning = true;
-                        spyOn(MiniReelService, 'save').and.returnValue($q.when({}));
+                        spyOn(EditorService, 'sync').and.returnValue($q.when({}));
 
                         EditorCtrl.save();
                     });
 
                     it('should call MiniReelService.save()', function() {
-                        expect(MiniReelService.save).toHaveBeenCalled();
+                        expect(EditorService.sync).toHaveBeenCalled();
 
                         EditorCtrl.save();
-                        expect(MiniReelService.save.calls.count()).toBe(2);
+                        expect(EditorService.sync.calls.count()).toBe(2);
                     });
 
                     it('should set inFlight to true', function() {
@@ -626,17 +608,7 @@
 
                 describe('$destroy', function() {
                     beforeEach(function() {
-                        MiniReelService.opened.player = {};
-                        MiniReelService.opened.editor = {};
-
-                        spyOn(MiniReelService, 'close').and.callThrough();
-                        spyOn(MiniReelService, 'save').and.callFake(function() {
-                            if (!MiniReelService.opened.player || !MiniReelService.opened.editor) {
-                                throw new Error('Can\'t save if there\'s nothing open.');
-                            }
-
-                            return $q.when({});
-                        });
+                        spyOn(EditorService, 'close').and.callThrough();
                         spyOn(EditorCtrl, 'save').and.callThrough();
 
                         $scope.$emit('$destroy');
@@ -647,13 +619,11 @@
                     });
 
                     it('should close the current MiniReel', function() {
-                        expect(MiniReelService.close).toHaveBeenCalled();
+                        expect(EditorService.close).toHaveBeenCalled();
                     });
 
                     describe('if the minireel is active', function() {
                         beforeEach(function() {
-                            MiniReelService.opened.player = {};
-                            MiniReelService.opened.editor = {};
                             EditorCtrl.save.calls.reset();
 
                             cModel.status = 'active';
