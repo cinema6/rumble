@@ -131,3 +131,7 @@
   * [FIX]: Make it impossible for an election to be deleted off of a
     MiniReel
 * *[/Beta1.rc20]*
+* *[Beta1.rc21]*
+  * [FIX]: Restyled dashboard filter settings per new design
+  * [FIX]: Removed icons from dashboard
+  * [FIX]: Cover Image uploader has better guidance text

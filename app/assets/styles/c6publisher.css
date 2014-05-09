@@ -96,7 +96,7 @@
         visibility: hidden;
     }
     .sprite--alpha {
-        background:url('../img/sprite--alpha@2x.png') 0 0 / 25rem 25rem no-repeat;
+        background:url('../img/sprite--alpha@2x.png') 0 0 / 12.5rem 6.25rem no-repeat;
         border:0; margin:0; padding:0; overflow: hidden;
         font-size:1rem; line-height: 1;
     }
@@ -121,11 +121,11 @@
         padding-bottom:2em;
     }
     .ui__gear {
-        background-position:0 -2.8125em; display:block;
+        background-position:0 0; display:block;
         width:1.5em; height:1.5em;
     }
     .ui__edit {
-        background-position:-9.9375em -2.8125em; display: block;
+        background-position:-9.9375em 0; display: block;
         width:1em; height:1em;
     }
     .ui__editToolTip {
@@ -138,31 +138,31 @@
         opacity:0;
     }
     .ui__plus {
-        background-position:-1.5625em -2.8125em; display:block;
+        background-position:-1.5625em 0; display:block;
         width:0.5em; height:0.5em;
     }
     .ui__x {
-        background-position:-1.5625em -3.6875em;
+        background-position:-1.5625em -0.875em;
         width:1.125em; height:1.125em; display: block;
     }
         .ui__x--red {
-            background-position:-2.6875em -3.6875em;
+            background-position:-2.6875em -0.875em;
         }
         .ui__x--white {
-            background-position:-3.8125em -3.6875em;
+            background-position:-3.8125em -0.875em;
         }
     .ui__xSmall {
-        background-position:-3.625em -5.125em;
+        background-position:-3.625em -2.3125em;
         width:0.75em; height:0.75em; display: block;
     }
         .ui__xSmall--red {
-            background-position:-4.4375em -5.125em;
+            background-position:-4.4375em -2.3125em;
         }
         .ui__xSmall--white {
-            background-position:-5.25em -5.125em;
+            background-position:-5.25em -2.3125em;
         }
     .ui__add {
-        background-position:-5.3125em -2.8125em; display: block;
+        background-position:-5.3125em 0; display: block;
         width:2.25em; height:2.25em;
     }
     .ui__divider--border {
@@ -210,12 +210,12 @@
             }
         .modal__closeBtn {
             width:1.125em; height:1.125em;
-            background-position:-1.5625em -3.6875em;
+            background-position:-1.5625em -0.875em;
             position:absolute; top:1.25em; right:1.25em;
             cursor:pointer;
         }
             .modal__closeBtn:hover {
-                background-position:-2.6875em -3.6875em;
+                background-position:-2.6875em -0.875em;
             }
         .modal__radioBtn {
             cursor:pointer;
@@ -228,11 +228,11 @@
             width:1.75rem; height:1.75rem;
             margin:-0.625rem 0 0 -0.625rem;
             vertical-align:middle;
-            background:url('../img/sprite--alpha@2x.png') 0 -4.8125rem / 25rem 25rem no-repeat;
+            background:url('../img/sprite--alpha@2x.png') 0 -2rem / 12.5rem 6.25rem no-repeat;
             cursor:pointer;
         }
         .modal__radioBtn:checked:before {
-            background:url('../img/sprite--alpha@2x.png') -1.8125rem -4.8125rem / 25rem 25rem no-repeat;
+            background:url('../img/sprite--alpha@2x.png') -1.8125rem -2rem / 12.5rem 6.25rem no-repeat;
             cursor:pointer;
         }
         .modal__btnFooter {
@@ -319,24 +319,6 @@
                 position:absolute;
                 background:#ccc url('../img/default_square.jpg') 50% 50% / cover no-repeat;
             }
-                .coverUploader__imgCropMarks {
-                    position:absolute; top:0; left:0;
-                    border:2px dashed rgba(0,255,0,0.5);
-                    -webkit-box-sizing: border-box;
-                    -moz-box-sizing: border-box;
-                    box-sizing: border-box;
-                }
-                    .coverUploader__imgCropMarks--landscape {
-                        width:300px; height:200px;
-                        margin:50px 0;
-                        border-left:0; border-right:0;
-                    }
-                    .coverUploader__imgCropMarks--portrait {
-                        width:200px; height:300px;
-                        margin:0 50px;
-                        border-bottom:0; border-top:0;
-                        border-color:rgba(0,0,255,0.5);
-                    }
             .coverUploader__copy {
                 margin-left:324px;
             }
@@ -604,14 +586,14 @@
             top:0.75em; right:0.75em;
         }
             .pageAlert__group .modal__closeBtn:hover {
-                background-position:-1.5625em -3.6875em;
+                background-position:-1.5625em -0.875em;
             }
 
         .pageAlert__group .ui__alert {
             width:1.5rem; height:1.5rem;
             display:block; margin:-5px 0 0 0;
             position:absolute; top:0.75em; left:0.75em;
-            background-position:-123px -82px;
+            background-position:-7.6875rem -2.3125rem;
         }
 
 /*  ==========================================================================
@@ -720,25 +702,29 @@
     /*  filters__list
     ========================================================================== */
         .filters__list {
-            margin:0.375em 0 1em 0; padding:0; list-style:none;
+            margin:0 0 1em 0; padding:0; 
+            background:#eee; list-style:none;
+            border-radius:3px; 
         }
             .filters__item {
                 display:inline;
             }
             .filters__btn {
-                border:0; border-radius:3px; padding:0.25em 0.5em 0.1875em 0.5em; margin:0;
-                font-size:1em; font-weight:700; 
+                border:0; border-radius:3px; 
+                margin:0; padding:0.6875rem 0.5em 0.625rem 0.5em; 
+                font-size:0.875em; font-weight:700; 
                 text-align: center; line-height: 1;
                 background:transparent;
                 cursor:pointer;
-                -webkit-transition: background 0.5s, color 0.5s; transition: background 0.5s, color 0.5s;
+                -webkit-transition: background 0.5s, color 0.5s; 
+                transition: background 0.5s, color 0.5s;
             }
                 .filtersBtn__showAll {
-                    color:#b0b0b0;
+                    color:#4a9cd1;
                 }
                     .filtersBtn__showAll--active, 
                     .filtersBtn__showAll:hover {
-                        background:#b0b0b0;
+                        background:#4a9cd1;
                         color:#fff;
                     }
                 .filtersBtn__published {
@@ -844,11 +830,11 @@
                     position:absolute;
                 }
                     .toolbar__publish--alert .pubState {
-                        background-position:-123px -82px;
+                        background-position:-7.6875rem -2.3125rem;
                     }
                     .toolbar__publish--disabled .pubState,
                     .toolbar__publish--confirm .pubState {
-                        background-position:-148px -82px;
+                        background-position:-9.25rem -2.3125rem;
                     }
                     .toolbar__publish--waiting .pubState {
                         background:url('../img/ui__inProgress@2x.gif') 50% 50% / 1.5rem 1.5rem no-repeat;
@@ -938,27 +924,14 @@
                 font-size:0.75em; color:#b0b0b0; margin:0 0 0.4375rem 0;
                 position:relative;
             }
-                .ui__statusIcon {
-                    width:1em; height:0.8125em; display:block;
-                    position:absolute; top:0.0625em; right:0;
-                }
                 .miniReel__status--pending .statusText {
                     color:#646464;
-                }
-                .miniReel__status--pending .ui__statusIcon {
-                    background-position:-3.1875em -2.8125em;
                 }
                 .miniReel__status--active .statusText {
                     color:#72ad25;
                 }
-                .miniReel__status--active .ui__statusIcon {
-                    background-position:-2.125em -2.8125em;
-                }
                 .miniReel__status--deleted .statusText {
                     color:#d61212;
-                }
-                .miniReel__status--deleted .ui__statusIcon {
-                    background-position:-4.25em -2.8125em;
                 }
 
         .miniReel__quickActions {
@@ -1070,9 +1043,9 @@
                 cursor: pointer;
             }
             .card--createNew .ui__add {
-                width:72px; height:72px;
-                background-size:800px 800px;
-                background-position:-244px -90px;
+                width:4.5rem; height:4.5rem;
+                background-size:25rem 12.5rem;
+                background-position:-15.25rem 0;
                 margin:0 auto; opacity:0.25;
                 -webkit-transition: opacity 0.4s; transition: opacity 0.3s;
             }
@@ -1223,7 +1196,7 @@
             cursor:pointer;
         }
             .new__button:hover {
-                background-position:-7.625em -2.8125em;
+                background-position:-7.625em 0;
             }
     /*  recap card
     ========================================================================== */
@@ -1272,13 +1245,13 @@
         }
             .ui__startMarker,
             .ui__endMarker {
-                background-position:-6.0625em -5.125em;
+                background-position:-6.0625em -2.3125em;
                 width: 0.75em; height: 1.125em;
                 display: block;
                 position: absolute; bottom:0; left:0;
             }
             .ui__endMarker {
-                background-position:-6.875em -5.125em;
+                background-position:-6.875em -2.3125em;
                 left:auto; right:0; bottom:auto; top:0;
             }
             .video-trimmer__timestamp {

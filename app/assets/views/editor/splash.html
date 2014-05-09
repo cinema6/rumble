@@ -4,8 +4,6 @@
     <form class="coverUploader__group">
         <div class="coverUploader__imgBox" c6-bg-img="{{(EditorSplashCtrl.splash | image) || minireel.data.collateral.splash}}">
             <!--<input class="coverUploader__fileDrop" type="file">-->
-            <div class="coverUploader__imgCropMarks coverUploader__imgCropMarks--landscape">&nbsp;</div>
-            <div class="coverUploader__imgCropMarks coverUploader__imgCropMarks--portrait">&nbsp;</div>
         </div>
         <div class="coverUploader__copy">
             <!--<p>Upload your image or drag and drop it into the image space on the left.</p>-->
@@ -26,8 +24,8 @@
 
             <ul class="coverUploader__helpTips">
                 <li>Images should be 600 pixels by 600 pixels.</li>
-                <li><span class="crop__landscape">Green</span> crop marks indicate safe area for landscape display modes. </li>
-                <li><span class="crop__portrait">Blue</span> crop marks indicate safe area for portrait display modes.</li>
+                <li>Images should be less than {{EditorSplashCtrl.maxFileSize / 1024}} kb in filesize.</li>
+                <li>Keep in mind that in some situations, the edges of the image may get cut off.</li>
             </ul>
         </div>
     </form>
