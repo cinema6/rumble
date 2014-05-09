@@ -89,48 +89,56 @@
     .mr-experience {
         position:absolute; z-index:1; top:50%; left:50%;
         width:39.625em; /*634*/
-        margin:-10.375em 0 0 -19.8125em; /* 166 0 0 317*/
+        margin:-9.375em 0 0 -19.8125em; /* 150 0 0 317*/
     }
         @media screen and (min-width:50rem) and (max-width:59.9375rem) {
             /*800px - 959px*/
             .mr-experience {
                 width:48em; /*768*/
-                margin:-13.5625em 0 0 -24em; /* 217 0 0 384*/
+                margin:-12.5em 0 0 -24em; /* 200 0 0 384*/
             }
         }
         @media screen and (min-width:60rem) and (max-width:64.9375rem) {
             /*960px - 1039px*/
             .mr-experience {
                 width:58em; /*928*/
-                margin:-16.5625em 0 0 -29em; /* 265 0 0 464*/
+                margin:-15.625em 0 0 -29em; /* 250 0 0 464*/
             }
         }
         @media screen and (min-width:65rem) and (max-width:75.9375rem) {
             /*1040px - 1215px*/
             .mr-experience {
                 width:62em; /*992*/
-                margin:-17.8125em 0 0 -31em; /* 285 0 0 496*/
+                margin:-16.875em 0 0 -31em; /* 270 0 0 496*/
             }
         }
         @media screen and (min-width:76rem) and (max-width:88.6875rem) {
             /*1216px - 1419px*/
             .mr-experience {
                 width:68em; /*1088 x 654*/
-                margin:-19.5em 0 0 -34em; /* 312 0 0 544*/
+                margin:-19.25em 0 0 -34em; /* 308 0 0 544*/
             }
         }
         @media screen and (min-width:88.75rem) {
             /*1420px +*/
             .mr-experience {
                 width:78em; /*1248 x 760*/
-                margin:-23.125em 0 0 -39em; /* 370 0 0 624*/
+                margin:-22.75em 0 0 -39em; /* 364 0 0 624*/
             }
         }
         .mr-title {
-            font-size:1em; font-weight:normal; color:#fff; line-height:1; text-align: center;
+            font-size:1.5em; font-weight:normal; color:#fff; line-height:1; text-align: center;
             margin:0; width:100%;
             position:absolute; top:-1.5em;
+            white-space: nowrap;
+            overflow: hidden; text-overflow:ellipsis;
         }
+            @media screen and (max-width:60rem) {
+                /*960px*/
+                .mr-title {
+                    font-size:1.25em;
+                }
+            }
         .mr-ui__close {
             padding:6px; border-radius:50% 50%; border:3px solid white;
             background:black;
