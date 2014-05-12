@@ -11,7 +11,7 @@
 
             this.filter = 'all';
 
-            this.copy = function(minireelId) {
+            this.copy = function(minireel) {
                 ConfirmDialogService.display({
                     prompt: 'Are you sure you want to copy this MiniReel?',
                     affirm: 'Yes',
@@ -19,10 +19,7 @@
                     onAffirm: function() {
                         ConfirmDialogService.close();
 
-                        return MiniReelService.create(minireelId)
-                            .then(function open(minireel) {
-                                return MiniReelService.open(minireel.id);
-                            })
+                        return MiniReelService.create(minireel)
                             .then(function editCopy(minireel) {
                                 c6State.goTo(
                                     'editor.setMode.category',
@@ -48,7 +45,7 @@
                     onAffirm: function() {
                         ConfirmDialogService.close();
 
-                        MiniReelService.publish(minireel.id);
+                        MiniReelService.publish(minireel);
                     },
                     onCancel: function() {
                         ConfirmDialogService.close();
@@ -64,7 +61,7 @@
                     onAffirm: function() {
                         ConfirmDialogService.close();
 
-                        MiniReelService.unpublish(minireel.id);
+                        MiniReelService.unpublish(minireel);
                     },
                     onCancel: function() {
                         ConfirmDialogService.close();
@@ -81,7 +78,7 @@
                         ConfirmDialogService.close();
                     },
                     onAffirm: function() {
-                        MiniReelService.erase(minireel.id)
+                        MiniReelService.erase(minireel)
                             .then(function removeFromModel() {
                                 var minireels = self.model;
 

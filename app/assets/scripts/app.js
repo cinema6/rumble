@@ -313,10 +313,13 @@
                     controller: 'EditorController',
                     controllerAs: 'EditorCtrl',
                     templateUrl: assets('views/editor.html'),
-                    model:  ['cinema6','c6StateParams','MiniReelService',
-                    function( cinema6 , c6StateParams , MiniReelService ) {
-                        return MiniReelService.opened.editor ||
-                            MiniReelService.open(c6StateParams.minireelId);
+                    model:  ['cinema6','c6StateParams','EditorService',
+                    function( cinema6 , c6StateParams , EditorService ) {
+                        return this.cModel ||
+                            cinema6.db.find('experience', c6StateParams.minireelId)
+                                .then(function open(minireel) {
+                                    return EditorService.open(minireel);
+                                });
                     }],
                     children: {
                         splash: {

@@ -124,7 +124,7 @@
                     return ConfirmDialogService.display.calls.mostRecent().args[0];
                 }
 
-                describe('copy(minireelId)', function() {
+                describe('copy(minireel)', function() {
                     var minireel,
                         newMiniReel,
                         newMiniReelDeferred;
@@ -136,11 +136,10 @@
                         };
                         newMiniReelDeferred = $q.defer();
 
-                        spyOn(MiniReelService, 'open').and.returnValue($q.when(newMiniReel));
                         spyOn(MiniReelService, 'create').and.returnValue(newMiniReelDeferred.promise);
 
                         $scope.$apply(function() {
-                            ManagerCtrl.copy('e-abc');
+                            ManagerCtrl.copy(minireel);
                         });
                     });
 
@@ -168,7 +167,7 @@
                         });
 
                         it('should create a new minireel, passing in the minireelId', function() {
-                            expect(MiniReelService.create).toHaveBeenCalledWith('e-abc');
+                            expect(MiniReelService.create).toHaveBeenCalledWith(minireel);
                         });
 
                         describe('after the minireel is created', function() {
@@ -176,10 +175,6 @@
                                 $scope.$apply(function() {
                                     newMiniReelDeferred.resolve(newMiniReel);
                                 });
-                            });
-
-                            it('should open the new minireel for editing', function() {
-                                expect(MiniReelService.open).toHaveBeenCalledWith('e-a48e32a8c1a87f');
                             });
 
                             it('should transition to the editor.setMode.category state', function() {
@@ -277,7 +272,7 @@
                         });
 
                         it('should publish the minireel', function() {
-                            expect(MiniReelService.publish).toHaveBeenCalledWith(minireel.id);
+                            expect(MiniReelService.publish).toHaveBeenCalledWith(minireel);
                         });
 
                         it('should close the dialog', function() {
@@ -325,7 +320,7 @@
                         });
 
                         it('should unpublish the minireel', function() {
-                            expect(MiniReelService.unpublish).toHaveBeenCalledWith(minireel.id);
+                            expect(MiniReelService.unpublish).toHaveBeenCalledWith(minireel);
                         });
                     });
                 });
@@ -377,7 +372,7 @@
                         });
 
                         it('should erase the provided minireel', function() {
-                            expect(MiniReelService.erase).toHaveBeenCalledWith(minireel.id);
+                            expect(MiniReelService.erase).toHaveBeenCalledWith(minireel);
                         });
 
                         it('should close the confirmation', function() {

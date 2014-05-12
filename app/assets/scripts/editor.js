@@ -5,8 +5,7 @@
         equals = angular.equals,
         copy = angular.copy,
         forEach = angular.forEach,
-        isDefined = angular.isDefined,
-        noop = angular.noop;
+        isDefined = angular.isDefined;
 
     angular.module('c6.mrmaker')
         .animation('.toolbar__publish', ['$timeout',
@@ -33,10 +32,174 @@
             };
         }])
 
-        .controller('EditorController', ['c6State','$scope','MiniReelService','cinema6',
-                                         'ConfirmDialogService','c6Debounce','$log','$timeout',
-        function                        ( c6State , $scope , MiniReelService , cinema6 ,
-                                          ConfirmDialogService , c6Debounce , $log , $timeout ) {
+        .service('EditorService', ['MiniReelService','$q','c6AsyncQueue',
+        function                  ( MiniReelService , $q , c6AsyncQueue ) {
+            var _private = {},
+                queue = c6AsyncQueue();
+
+            function readOnly(source, key, target) {
+                Object.defineProperty(target, key, {
+                    enumerable: true,
+                    configurable: true,
+                    get: function() {
+                        return source[key];
+                    }
+                });
+            }
+
+            function rejectNothingOpen() {
+                return $q.reject('Cannot sync. There is no open MiniReel.');
+            }
+
+            function syncToProxy(minireel) {
+                return _private.syncToProxy(_private.proxy, _private.editorMinireel, minireel);
+            }
+
+            function syncToMinireel() {
+                return _private.syncToMinireel(
+                    _private.minireel,
+                    _private.editorMinireel,
+                    _private.proxy
+                );
+            }
+
+            _private.minireel = null;
+            _private.editorMinireel = null;
+            _private.proxy = null;
+
+            _private.syncToMinireel = function(minireel, editorMinireel, proxy) {
+                copy(proxy.data, editorMinireel.data);
+                MiniReelService.convertForPlayer(editorMinireel, minireel);
+
+                return minireel;
+            };
+
+            _private.syncToProxy = function(proxy, editorMinireel, minireel) {
+                MiniReelService.convertForEditor(minireel, editorMinireel);
+
+                forEach(editorMinireel, function(value, key) {
+                    if (proxy.hasOwnProperty(key)) { return; }
+
+                    return readOnly(editorMinireel, key, proxy);
+                });
+                forEach(proxy, function(value, key) {
+                    if (editorMinireel.hasOwnProperty(key)) { return; }
+
+                    delete proxy[key];
+                });
+
+                return proxy;
+            };
+
+            this.state = {};
+            Object.defineProperties(this.state, {
+                dirty: {
+                    get: function() {
+                        var proxy = _private.proxy,
+                            editorMinireel = _private.editorMinireel;
+
+                        return (proxy || null) && !equals(proxy, editorMinireel);
+                    }
+                },
+                inFlight: {
+                    get: function() {
+                        return !!queue.queue.length;
+                    }
+                }
+            });
+
+            this.open = function(minireel) {
+                var editorMinireel = MiniReelService.convertForEditor(minireel),
+                    proxy = {},
+                    data = copy(editorMinireel.data);
+
+                forEach(editorMinireel, function(value, key) {
+                    if (key === 'data') {
+                        Object.defineProperty(proxy, key, {
+                            enumerable: true,
+                            get: function() {
+                                return data;
+                            }
+                        });
+                        return;
+                    }
+
+                    return readOnly(editorMinireel, key, proxy);
+                });
+
+                _private.minireel = minireel;
+                _private.editorMinireel = editorMinireel;
+                _private.proxy = proxy;
+
+                return proxy;
+            };
+
+            this.close = function() {
+                ['minireel', 'editorMinireel', 'proxy']
+                    .forEach(function(prop) {
+                        _private[prop] = null;
+                    });
+            };
+
+            this.sync = queue.wrap(function() {
+                var minireel = _private.minireel;
+
+                if (!minireel) {
+                    return rejectNothingOpen();
+                }
+
+                return syncToMinireel()
+                    .save()
+                    .then(syncToProxy);
+            }, this);
+
+            this.publish = queue.wrap(function() {
+                var minireel = _private.minireel,
+                    editorMinireel = _private.editorMinireel;
+
+                if (!minireel) {
+                    return rejectNothingOpen();
+                }
+
+                return MiniReelService.publish(syncToMinireel())
+                    .then(syncToProxy)
+                    .then(function updateElection(proxy) {
+                        // Because the proxy is the source of truth for the data object, we need to
+                        // make sure it gets updated with the election.
+                        proxy.data.election = editorMinireel.data.election;
+
+                        return proxy;
+                    });
+            }, this);
+
+            this.unpublish = queue.wrap(function() {
+                var minireel = _private.minireel;
+
+                if (!minireel) {
+                    return rejectNothingOpen();
+                }
+
+                return MiniReelService.unpublish(syncToMinireel())
+                    .then(syncToProxy);
+            }, this);
+
+            this.erase = queue.wrap(function() {
+                var minireel = _private.minireel;
+
+                if (!minireel) {
+                    return rejectNothingOpen();
+                }
+
+                return MiniReelService.erase(minireel);
+            }, this);
+
+            if (window.c6.kHasKarma) { this._private = _private; }
+        }])
+
+        .controller('EditorController', ['c6State','$scope','EditorService','cinema6',
+                                         'ConfirmDialogService','c6Debounce','$q','$log',
+        function                        ( c6State , $scope , EditorService , cinema6 ,
+                                          ConfirmDialogService , c6Debounce , $q , $log ) {
             var self = this,
                 AppCtrl = $scope.AppCtrl,
                 saveAfterTenSeconds = c6Debounce(function() {
@@ -55,9 +218,8 @@
 //            this.pageObject = { page : 'editor', title : 'Editor' };
             this.preview = false;
             this.editTitle = false;
-            this.isDirty = false;
-            this.inFlight = false;
             this.dismissDirtyWarning = false;
+            this.minireelState = EditorService.state;
 
             Object.defineProperties(this, {
                 prettyMode: {
@@ -90,15 +252,7 @@
                     onAffirm: function() {
                         ConfirmDialogService.close();
 
-                        MiniReelService.publish(self.model.id)
-                            .then(function setActive() {
-                                self.model.status = 'active';
-
-                                return $timeout(noop);
-                            })
-                            .then(function() {
-                                self.isDirty = false;
-                            });
+                        EditorService.publish();
                     },
                     onCancel: function() {
                         ConfirmDialogService.close();
@@ -114,10 +268,7 @@
                     onAffirm: function() {
                         ConfirmDialogService.close();
 
-                        MiniReelService.unpublish(self.model.id)
-                            .then(function setActive() {
-                                self.model.status = 'pending';
-                            });
+                        EditorService.unpublish();
                     },
                     onCancel: function() {
                         ConfirmDialogService.close();
@@ -186,7 +337,7 @@
                         ConfirmDialogService.close();
                     },
                     onAffirm: function() {
-                        MiniReelService.erase(self.model.id)
+                        EditorService.erase()
                             .then(function backToManager() {
                                 c6State.goTo('manager');
                             });
@@ -197,16 +348,13 @@
             };
 
             this.save = function() {
-                this.inFlight = true;
-
-                MiniReelService.save()
+                return EditorService.sync()
                     .then(function log(minireel) {
                         $log.info('MiniReel save success!', minireel);
 
-                        ['isDirty', 'inFlight', 'dismissDirtyWarning']
-                            .forEach(function setFalse(prop) {
-                                self[prop] = false;
-                            });
+                        self.dismissDirtyWarning = false;
+
+                        return minireel;
                     });
             };
 
@@ -227,7 +375,7 @@
             };
 
             this.backToDashboard = function() {
-                if (this.model.status === 'active' && this.isDirty) {
+                if (this.model.status === 'active' && this.minireelState.dirty) {
                     ConfirmDialogService.display({
                         prompt: 'You have unpublished changes.',
                         message: 'Are you sure you want to leave this screen? ' +
@@ -256,10 +404,8 @@
                 $scope.$broadcast('mrPreview:updateMode', self.model);
             });
 
-            $scope.$watch(function() { return self.model; }, function(minireel, prevMinireel) {
-                if (minireel === prevMinireel) { return; }
-
-                self.isDirty = true;
+            $scope.$watch(function() { return self.minireelState.dirty; }, function(isDirty) {
+                if (!isDirty) { return; }
 
                 if (!shouldAutoSave()) {
                     $log.warn('MiniReel is published. Will not autosave.');
@@ -267,7 +413,7 @@
                 }
 
                 saveAfterTenSeconds();
-            }, true);
+            });
 
             $scope.$on('addCard', function(event, card, index) {
                 self.model.data.deck.splice(index, 0, card);
@@ -282,11 +428,18 @@
             });
 
             $scope.$on('$destroy', function() {
-                if (self.model.status !== 'active') {
-                    self.save();
+                function save() {
+                    if (shouldAutoSave()) {
+                        return self.save();
+                    }
+
+                    return $q.when(self.model);
                 }
 
-                MiniReelService.close();
+                save()
+                    .then(function close() {
+                        EditorService.close();
+                    });
             });
 
         //    AppCtrl.sendPageView(this.pageObject);

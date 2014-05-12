@@ -1,5 +1,5 @@
 <c6-alias model="EditorCtrl.model" as="minireel">
-    <div ng-if="minireel.status === 'active'" ng-show="EditorCtrl.isDirty && !EditorCtrl.dismissDirtyWarning" class="pageAlert__group">
+    <div ng-if="minireel.status === 'active'" ng-show="EditorCtrl.minireelState.dirty && !EditorCtrl.dismissDirtyWarning" class="pageAlert__group">
         <div class="ui__alert sprite--alpha"><span class="ir">Warning!</span></div>
         <p class="pageAlert__msg">
             <strong>Warning!</strong> You have unsaved changes. 
@@ -63,11 +63,11 @@
                         <button ng-click="EditorCtrl.confirmSave()" 
                         class="toolbar__confirm toolbar__publish" 
                         ng-class="{
-                            'toolbar__publish--alert': EditorCtrl.isDirty,
-                            'toolbar__publish--waiting': EditorCtrl.inFlight,
-                            'toolbar__publish--disabled': !EditorCtrl.isDirty
+                            'toolbar__publish--alert': EditorCtrl.minireelState.dirty,
+                            'toolbar__publish--waiting': EditorCtrl.minireelState.inFlight,
+                            'toolbar__publish--disabled': !EditorCtrl.minireelState.dirty
                         }"
-                        ng-disabled="!EditorCtrl.isDirty"
+                        ng-disabled="!EditorCtrl.minireelState.dirty"
                         type="button">
                             <span class="pubState sprite--alpha">&nbsp;</span>
                             <span class="pubText">Publish Changes</span>
