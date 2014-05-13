@@ -70,3 +70,5 @@
   * [FIX]: Mobile : Title of MiniReel added above card
   * [FIX]: Mobile : added dynamic experience title to video embed card
 * *[/Beta3.rc14]*
+* *[Beta3.rc15]*
+  * [FIX]: MiniReel Player Media Queries not test for both height and width to best fit player inside browser window.
