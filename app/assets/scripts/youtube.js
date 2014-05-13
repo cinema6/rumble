@@ -289,12 +289,15 @@
             function twerk(wait){
                 var deferred = $q.defer(), waitTimer,
                 playingListener = function(){
-                    $log.info('[%1] - stop twerk',player);
+                    $log.info('[%1] - Got playing event, stop twerk.',player);
                     if (waitTimer){
                         $timeout.cancel(waitTimer);
                     }
+
+                    player.once('paused', function() {
+                        deferred.resolve(playerIface);
+                    });
                     player.pause();
-                    deferred.resolve(playerIface);
                 };
 
                 if (playerIface.twerked) {
@@ -324,18 +327,26 @@
                 player.play();
 
                 deferred.promise
-                    .then(function() {
+                    .then(function setTwerkedTrue() {
+                        $log.info(
+                            '[%1] - Twerk was a success! Playing: %2',
+                            player,
+                            player.isPlaying()
+                        );
                         _playerIface.twerked = true;
+                    }, function logErrors(reason) {
+                        $log.error(
+                            '[%1] - twerk failed (%2). Video is playing: %3',
+                            player,
+                            reason,
+                            player.isPlaying()
+                        );
                     })
                     .finally(function() {
                         pollCurrentTime();
-                        $timeout(function(){
-                            $log.info('[%1] - restoring listeners after twerk.',player);
-                            player.on('playing', playListener);
-                            player.on('paused', pauseListener);
-                        },500); // Timeout allows time for pause to bubble up before
-                        // we go ahead and restore the pause handler.  Would be better to
-                        // replace with something a bit more deterministic.
+                        $log.info('[%1] - restoring listeners after twerk.',player);
+                        player.on('playing', playListener);
+                        player.on('paused', pauseListener);
                     });
 
                 return deferred.promise;
