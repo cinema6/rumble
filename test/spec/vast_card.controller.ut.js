@@ -7,6 +7,7 @@
                 $scope,
                 $controller,
                 $window,
+                $interval,
                 c6EventEmitter,
                 VastCardCtrl;
 
@@ -26,6 +27,9 @@
                     .andCallFake(function() {
                         self.emit('pause', self);
                     });
+
+                this.duration = 31;
+                this.currentTime = 0;
 
                 c6EventEmitter(this);
             }
@@ -66,6 +70,7 @@
                 inject(function($injector) {
                     $rootScope = $injector.get('$rootScope');
                     $controller = $injector.get('$controller');
+                    $interval = $injector.get('$interval');
                     $window = $injector.get('$window');
                     c6EventEmitter = $injector.get('c6EventEmitter');
 
@@ -78,7 +83,8 @@
                     $scope.active = false;
                     $scope.config = {
                         data: {
-                            autoplay: false
+                            autoplay: false,
+                            skip: 11
                         },
                         displayAd: 'http://2.bp.blogspot.com/-TlM_3FT89Y0/UMzLr7kVykI/AAAAAAAACjs/lKrdhgp6OQg/s1600/brad-turner.jpg'
                     };
@@ -496,6 +502,8 @@
 
                             describe('in either case', function() {
                                 beforeEach(function() {
+                                    spyOn($scope, '$emit').andCallThrough();
+
                                     $scope.$apply(function() {
                                         $scope.active = true;
                                     });
@@ -503,6 +511,175 @@
 
                                 it('should bind the interface to the controls', function() {
                                     expect(ControlsService.bindTo).toHaveBeenCalledWith(iface);
+                                });
+
+                                it('should $emit <vast-card>:init', function() {
+                                    expect($scope.$emit).toHaveBeenCalledWith('<vast-card>:init', jasmine.any(Function));
+                                });
+
+                                it('should only $emit <vast-card>:init if the ad has not been played', function() {
+                                    $scope.$apply(function() {
+                                        $scope.active = false;
+                                    });
+                                    iface.emit('play', iface);
+                                    $scope.$apply(function() {
+                                        $scope.active = true;
+                                    });
+
+                                    expect($scope.$emit.callCount).toBe(1);
+                                });
+
+                                describe('when the rumble controller yields control of the navigation', function() {
+                                    var control,
+                                        navController;
+
+                                    function timeupdate(time) {
+                                        iface.currentTime = time;
+                                        iface.emit('timeupdate', iface);
+                                    }
+
+                                    beforeEach(function() {
+                                        control = $scope.$emit.mostRecentCall.args[1];
+
+                                        navController = {
+                                            enabled: jasmine.createSpy('navController.enabled()')
+                                                .andCallFake(function() { return navController; }),
+                                            tick: jasmine.createSpy('navController.tick()')
+                                                .andCallFake(function() { return navController; })
+                                        };
+                                    });
+
+                                    describe('if the ad is skippable', function() {
+                                        beforeEach(function() {
+                                            $scope.config.data.skip = true;
+
+                                            $scope.$apply(function() {
+                                                control(navController);
+                                            });
+                                        });
+
+                                        it('should do nothing', function() {
+                                            expect(navController.enabled).not.toHaveBeenCalledWith(false);
+                                        });
+                                    });
+
+                                    describe('if the ad is not skippable', function() {
+                                        beforeEach(function() {
+                                            $scope.config.data.skip = false;
+
+                                            $scope.$apply(function() {
+                                                control(navController);
+                                            });
+                                        });
+
+                                        it('should disable the navigation', function() {
+                                            expect(navController.enabled).toHaveBeenCalledWith(false);
+                                        });
+
+                                        it('should tick the navigation with the duration of the video', function() {
+                                            expect(navController.tick).toHaveBeenCalledWith(iface.duration);
+                                        });
+
+                                        it('should tick the navigation on every timeupdate with the remaining time in the video', function() {
+                                            [1, 2.5, 5.278, 9, 10, 12.3].forEach(function(time) {
+                                                timeupdate(time);
+                                                expect(navController.tick).toHaveBeenCalledWith(iface.duration - time);
+                                            });
+                                        });
+
+                                        it('should re-enable the navigation when the ad ends', function() {
+                                            iface.emit('ended', iface);
+                                            expect(navController.enabled).toHaveBeenCalledWith(true);
+
+                                            iface.emit('timeupdate');
+                                            expect(navController.tick.callCount).toBe(1);
+                                        });
+                                    });
+
+                                    describe('if the ad is skippable after a pre-configured time', function() {
+                                        var wait;
+
+                                        beforeEach(function() {
+                                            wait = $scope.config.data.skip;
+                                        });
+
+                                        describe('if the ad does not autoplay', function() {
+                                            beforeEach(function() {
+                                                $scope.$apply(function() {
+                                                    control(navController);
+                                                });
+                                            });
+
+                                            it('should disable the navigation', function() {
+                                                expect(navController.enabled).toHaveBeenCalledWith(false);
+                                            });
+
+                                            it('should tick the navigation with the skip wait length', function() {
+                                                expect(navController.tick).toHaveBeenCalledWith($scope.config.data.skip);
+                                            });
+
+                                            it('should tick the navigation once every second with the remaining wait time', function() {
+                                                var elapsed = 0;
+
+                                                function tick() {
+                                                    elapsed++;
+                                                    $interval.flush(1000);
+                                                }
+
+                                                for (var count = 0; count < 7; count++) {
+                                                    tick();
+                                                    expect(navController.tick).toHaveBeenCalledWith(wait - elapsed);
+                                                }
+                                            });
+
+                                            it('should enabled the navigation when the countdown completes', function() {
+                                                $interval.flush(11000);
+                                                expect(navController.enabled).toHaveBeenCalledWith(true);
+
+                                                $interval.flush(1000);
+                                                expect(navController.tick.callCount).toBe(12);
+                                            });
+                                        });
+
+                                        describe('if the ad autoplays', function() {
+                                            beforeEach(function() {
+                                                $scope.config.data.autoplay = true;
+
+                                                $scope.$apply(function() {
+                                                    control(navController);
+                                                });
+                                            });
+
+                                            it('should disable the navigation', function() {
+                                                expect(navController.enabled).toHaveBeenCalledWith(false);
+                                            });
+
+                                            it('should tick the navigation with the skip wait length', function() {
+                                                expect(navController.tick).toHaveBeenCalledWith($scope.config.data.skip);
+                                            });
+
+                                            it('should tick the navigation with the remaining wait time, synced with the video', function() {
+                                                [0.1, 3, 4.45, 7, 10].forEach(function(time) {
+                                                    timeupdate(time);
+                                                    expect(navController.tick).toHaveBeenCalledWith(wait - time);
+                                                });
+                                            });
+
+                                            it('should not tick the navigation below 0', function() {
+                                                timeupdate(11.25);
+
+                                                expect(navController.tick.mostRecentCall.args[0]).not.toBeLessThan(0);
+                                            });
+
+                                            it('should enable the navigation when the wait time is finished', function() {
+                                                timeupdate(12.2);
+                                                expect(navController.enabled).toHaveBeenCalledWith(true);
+
+                                                timeupdate(13);
+                                                expect(navController.tick.callCount).toBe(2);
+                                            });
+                                        });
+                                    });
                                 });
                             });
                         });

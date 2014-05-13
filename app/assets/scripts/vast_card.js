@@ -2,8 +2,8 @@
     'use strict';
 
     angular.module('c6.rumble')
-        .controller('VastCardController', ['$scope','$window', 'VASTService','ControlsService','EventService','ModuleService',
-        function                          ( $scope , $window ,  VASTService , ControlsService , EventService , ModuleService ) {
+        .controller('VastCardController', ['$scope','$window', 'VASTService','ControlsService','EventService','ModuleService','$interval',
+        function                          ( $scope , $window ,  VASTService , ControlsService , EventService , ModuleService , $interval ) {
             var self = this,
                 config = $scope.config,
                 _data = config._data = config._data || {
@@ -77,6 +77,54 @@
             });
 
             $scope.$on('playerAdd', function(event, iface) {
+                function controlNavigation(controller) {
+                    var autoplay = data.autoplay,
+                        mustWatchEntireAd = data.skip === false,
+                        canSkipAnyTime = data.skip === true,
+                        waitTime = mustWatchEntireAd ? iface.duration : data.skip;
+
+                    function cleanup() {
+                        controller.enabled(true);
+                        iface.removeListener('timeupdate', tickNav);
+                    }
+
+                    function tickNav() {
+                        var remaining = Math.max((waitTime - iface.currentTime), 0);
+
+                        controller.tick(remaining);
+
+                        if (!remaining) {
+                            cleanup();
+                        }
+                    }
+
+                    if (canSkipAnyTime) { return; }
+
+                    controller
+                        .enabled(false)
+                        .tick(waitTime);
+
+                    if (mustWatchEntireAd) {
+                        iface
+                            .on('timeupdate', tickNav)
+                            .once('ended', cleanup);
+
+                        return;
+                    }
+
+                    if (autoplay) {
+                        return iface.on('timeupdate', tickNav);
+                    }
+
+                    $interval(function() {
+                        controller.tick(--waitTime);
+
+                        if (!waitTime) {
+                            controller.enabled(true);
+                        }
+                    }, 1000, waitTime);
+                }
+
                 player = iface;
 
                 _data.playerEvents = EventService.trackEvents(iface, ['play', 'pause']);
@@ -128,8 +176,12 @@
                     if (active) {
                         ControlsService.bindTo(iface);
 
-                        if (data.autoplay && _data.playerEvents.play.emitCount < 1) {
-                            iface.play();
+                        if (_data.playerEvents.play.emitCount < 1) {
+                            $scope.$emit('<vast-card>:init', controlNavigation);
+
+                            if (data.autoplay) {
+                                iface.play();
+                            }
                         }
                     } else {
                         iface.pause();
