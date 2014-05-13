@@ -83,7 +83,8 @@
                         "displayAd"
                     ],
                     "data": {
-                        "autoplay": true
+                        "autoplay": true,
+                        "skip": 6
                     },
                     "displayAd": "http://2.bp.blogspot.com/-TlM_3FT89Y0/UMzLr7kVykI/AAAAAAAACjs/lKrdhgp6OQg/s1600/brad-turner.jpg"
                 },

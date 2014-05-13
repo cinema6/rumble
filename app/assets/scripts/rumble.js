@@ -269,7 +269,6 @@
     function                       ( $log , $scope , $timeout , $window , BallotService ,
                                      c6Computed , cinema6 , MiniReelService , CommentsService ,
                                      ControlsService ){
-        $log = $log.context('RumbleCtrl');
         var self    = this, readyTimeout,
             appData = $scope.app.data,
             id = appData.experience.id,
@@ -277,9 +276,39 @@
             c = c6Computed($scope),
             pageViewTimer = null;
 
+        function NavController(nav) {
+            this.tick = function(time) {
+                nav.wait = Math.round(time);
+
+                return this;
+            };
+
+            this.enabled = function(bool) {
+                nav.enabled = bool;
+
+                if (!nav.enabled) {
+                    nav.wait = null;
+                }
+
+                return this;
+            };
+        }
+
         function isAd(card) {
             return (card || null) && (card.ad && !card.sponsored);
         }
+
+        function handleAdEnd(event, card) {
+            if ($scope.currentCard === card) {
+                self.goForward();
+            }
+        }
+
+        function handleAdInit(event, provideNavController) {
+            provideNavController(new NavController($scope.nav));
+        }
+
+        $log = $log.context('RumbleCtrl');
 
         if (election) {
             BallotService.init(election);
@@ -355,7 +384,11 @@
                     return true;
             }
         }, ['currentCard.type']);
-        
+        $scope.nav = {
+            enabled: true,
+            wait: null
+        };
+
         $scope.$on('<ballot-vote-module>:vote', function(/*event,vote*/){
             $window.c6MrGa('c6mr.send', 'event', 'video', 'vote',
                 self.getVirtualPage());
@@ -406,17 +439,10 @@
             });
         });
 
-        $scope.$on('<vast-card>:contentEnd', function(event, card) {
-            if ($scope.currentCard === card) {
-                self.goForward();
-            }
-        });
+        $scope.$on('<vast-card>:contentEnd', handleAdEnd);
+        $scope.$on('<vpaid-card>:contentEnd', handleAdEnd);
 
-        $scope.$on('<vpaid-card>:contentEnd', function(event, card) {
-            if($scope.currentCard === card) {
-                self.goForward();
-            }
-        });
+        $scope.$on('<vast-card>:init', handleAdInit);
 
         $scope.$on('<recap-card>:jumpTo', function(event, index) {
             self.setPosition(index);
