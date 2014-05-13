@@ -22,6 +22,15 @@
                     get: function() {
                         return $scope.active && !_data.modules.displayAd.active;
                     }
+                },
+                showPlay: {
+                    get: function() {
+                        if(_data.playerEvents.play && _data.playerEvents.play.emitCount < 1) {
+                            return !!player && player.isReady();
+                        } else {
+                            return !!player && player.paused;
+                        }
+                    }
                 }
             });
 
@@ -33,7 +42,14 @@
                 player.play();
             };
 
+            this.playVideo = function() {
+                player.play();
+            };
+
             this.hasModule = ModuleService.hasModule.bind(ModuleService, config.modules);
+
+            this.enablePlayButton = !$scope.profile.touch &&
+                !config.data.autoplay;
 
             $scope.$watch('onDeck', function(onDeck) {
                 if(onDeck) {
@@ -45,7 +61,7 @@
                 player = iface;
 
                 _data.playerEvents = EventService.trackEvents(iface, ['play', 'pause']);
-                
+
                 iface.on('ended', function() {
                     if(_data.modules.displayAd.src) {
                         _data.modules.displayAd.active = true;
@@ -63,7 +79,6 @@
                         _data.modules.displayAd.active = true;
                     }
                 });
-                
 
                 iface.on('getCompanions', function(_player) {
                     // this doesn't work yet
@@ -73,10 +88,20 @@
                 $scope.$watch('active', function(active, wasActive) {
                     if(active === wasActive) { return; }
 
-                    if(active && _data.playerEvents.play.emitCount < 1) {
-                        iface.play();
+                    if(active) {
+                        if(config.data.autoplay && _data.playerEvents.play.emitCount < 1) {
+                            // currently, if you navigate away from an ad card it calls pause()
+                            // if autoplay is false then, when you return to the card, the display ad
+                            // will be showing because nothing is triggering it to hide
+                            // we need to check if autoplay is false && play count is
+                            iface.play();
+                        } else if (_data.playerEvents.play.emitCount < 1) {
+                            _data.modules.displayAd.active = false;
+                        }
                     } else {
-                        iface.pause();
+                        if(config.data.autoplay) {
+                            iface.pause();
+                        }
                         _data.modules.displayAd.active = true;
                     }
                 });

@@ -71,6 +71,9 @@
                     $scope.config = {
                         data: {}
                     };
+                    $scope.profile = {
+                        touch: false
+                    };
                     $log.context = function() { return $log; };
                 });
             });

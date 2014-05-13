@@ -24,6 +24,8 @@
                         self.emit('pause', self);
                     });
                 this.loadAd = jasmine.createSpy('iface.loadAd()');
+                this.isReady = jasmine.createSpy('iface.isReady()');
+                this.paused = false;
 
                 c6EventEmitter(this);
             }
@@ -50,6 +52,9 @@
                         data: {
                             autoplay: true
                         }
+                    };
+                    $scope.profile = {
+                        touch: false
                     };
                     $scope.$apply(function() {
                         VpaidCardController = $controller('VpaidCardController', { $scope: $scope });
@@ -102,6 +107,63 @@
 
                         $scope.config._data.modules.displayAd.active = true;
                         expect(VpaidCardController.showVideo).toBe(false);
+                    });
+                });
+
+                describe('showPlay', function() {
+                    var iface;
+
+                    beforeEach(function() {
+                        iface = new IFace();
+
+                        $scope.$apply(function() {
+                            // $scope.$emit('playerAdd', iface);
+                            // $scope.config._data.playerEvents.play.emitCount = 0;
+                        });
+                    });
+
+                    it('should be false by default', function() {
+                        expect(VpaidCardController.showPlay).toBe(false);
+                    });
+
+                    it('should be true if not played yet and player is ready', function() {
+                        iface.isReady.andReturn(true);
+
+                        $scope.$apply(function() {
+                            $scope.$emit('playerAdd', iface);
+                        });
+
+                        expect(VpaidCardController.showPlay).toBe(true);
+                    });
+
+                    it('should be false if not played yet but player is not ready', function() {
+                        iface.isReady.andReturn(false);
+
+                        $scope.$apply(function() {
+                            $scope.$emit('playerAdd', iface);
+                        });
+
+                        expect(VpaidCardController.showPlay).toBe(false);
+                    });
+
+                    it('should be true if it has played but is paused', function() {
+                        $scope.$apply(function() {
+                            $scope.$emit('playerAdd', iface);
+                            $scope.config._data.playerEvents.play.emitCount = 1;
+                            iface.paused = true;
+                        });
+
+                        expect(VpaidCardController.showPlay).toBe(true);
+                    });
+
+                    it('should be false if it is playing', function() {
+                        $scope.$apply(function() {
+                            $scope.$emit('playerAdd', iface);
+                            $scope.config._data.playerEvents.play.emitCount = 1;
+                            iface.paused = false;
+                        });
+
+                        expect(VpaidCardController.showPlay).toBe(false);
                     });
                 });
             });
