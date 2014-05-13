@@ -2,8 +2,8 @@
     'use strict';
 
     angular.module('c6.rumble')
-        .controller('VpaidCardController', ['$scope', '$log', 'ModuleService', 'EventService',
-        function                            ($scope ,  $log ,  ModuleService ,  EventService ) {
+        .controller('VpaidCardController', ['$scope', '$log', 'ModuleService', 'EventService', '$interval',
+        function                            ($scope ,  $log ,  ModuleService ,  EventService ,  $interval) {
             $log = $log.context('VpaidCardController');
             var self = this,
                 config = $scope.config,
@@ -15,6 +15,7 @@
                         }
                     }
                 },
+                data = config.data,
                 player;
 
             Object.defineProperties(this, {
@@ -54,6 +55,43 @@
             });
 
             $scope.$on('playerAdd', function(event, iface) {
+                function controlNavigation(controller) {
+                    var mustWatchEntireAd = data.skip === false,
+                        canSkipAnyTime = data.skip === true,
+                        waitTime;
+
+                    function getWaitTime() {
+                        return mustWatchEntireAd ?
+                            (iface.duration || 0) : data.skip;
+                    }
+
+                    function cleanup() {
+                        controller.enabled(true);
+                    }
+
+                    function clickToPlayInterval() {
+                        $interval(function() {
+                            --waitTime;
+
+                            if (!waitTime) {
+                                controller.enabled(true);
+                            }
+                        }, 1000, waitTime);
+                    }
+
+                    if (canSkipAnyTime) { return; }
+
+                    waitTime = getWaitTime();
+                    controller.enabled(false);
+
+                    if (mustWatchEntireAd) {
+                        iface.once('ended', cleanup);
+                        return;
+                    }
+
+                    iface.once('play', clickToPlayInterval);
+                }
+
                 player = iface;
 
                 _data.playerEvents = EventService.trackEvents(iface, ['play', 'pause']);
@@ -85,10 +123,11 @@
                     if (active === wasActive) { return; }
 
                     if (active) {
-                        if (config.data.autoplay && _data.playerEvents.play.emitCount < 1) {
-                            iface.play();
-                        } else if (_data.playerEvents.play.emitCount < 1) {
-                            _data.modules.displayAd.active = false;
+                        if (_data.playerEvents.play.emitCount < 1) {
+                            $scope.$emit('<vpaid-card>:init', controlNavigation);
+                            if (data.autoplay) {
+                                iface.play();
+                            }
                         }
                     } else {
                         if (!iface.paused) {

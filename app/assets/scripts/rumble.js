@@ -443,6 +443,7 @@
         $scope.$on('<vpaid-card>:contentEnd', handleAdEnd);
 
         $scope.$on('<vast-card>:init', handleAdInit);
+        $scope.$on('<vpaid-card>:init', handleAdInit);
 
         $scope.$on('<recap-card>:jumpTo', function(event, index) {
             self.setPosition(index);
@@ -695,6 +696,7 @@
                 index: '=',
                 currentIndex: '=',
                 card: '=',
+                disableWhen: '=',
                 onSelect: '&'
             },
             link: function(scope) {
