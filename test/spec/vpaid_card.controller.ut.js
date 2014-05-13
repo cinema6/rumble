@@ -25,7 +25,7 @@
                     });
                 this.loadAd = jasmine.createSpy('iface.loadAd()');
                 this.isReady = jasmine.createSpy('iface.isReady()');
-                this.paused = false;
+                this.paused = true;
 
                 c6EventEmitter(this);
             }
@@ -115,42 +115,24 @@
 
                     beforeEach(function() {
                         iface = new IFace();
-
-                        $scope.$apply(function() {
-                            // $scope.$emit('playerAdd', iface);
-                            // $scope.config._data.playerEvents.play.emitCount = 0;
-                        });
                     });
 
-                    it('should be false by default', function() {
+                    it('should be false by default and if player hasn\'t been added', function() {
                         expect(VpaidCardController.showPlay).toBe(false);
                     });
 
                     it('should be true if not played yet and player is ready', function() {
-                        iface.isReady.andReturn(true);
-
                         $scope.$apply(function() {
                             $scope.$emit('playerAdd', iface);
+                            $scope.config._data.modules.displayAd.active = false;
                         });
 
                         expect(VpaidCardController.showPlay).toBe(true);
                     });
 
-                    it('should be false if not played yet but player is not ready', function() {
-                        iface.isReady.andReturn(false);
-
+                    it('should be true if player has been added', function() {
                         $scope.$apply(function() {
                             $scope.$emit('playerAdd', iface);
-                        });
-
-                        expect(VpaidCardController.showPlay).toBe(false);
-                    });
-
-                    it('should be true if it has played but is paused', function() {
-                        $scope.$apply(function() {
-                            $scope.$emit('playerAdd', iface);
-                            $scope.config._data.playerEvents.play.emitCount = 1;
-                            iface.paused = true;
                         });
 
                         expect(VpaidCardController.showPlay).toBe(true);
@@ -178,20 +160,20 @@
 
                 describe('reset()', function() {
                     var iface;
-                    
+
                     beforeEach(function() {
                         iface = new IFace();
 
                         $scope.$apply(function() {
                             $scope.$emit('playerAdd', iface);
                         });
-                        
+
                         $scope.config._data.modules.displayAd.active = true;
                         iface.paused = true;
 
                         VpaidCardController.reset();
                     });
-                    
+
                     it('should hide the displayAd', function() {
                         expect($scope.config._data.modules.displayAd.active).toBe(false);
                     });
@@ -222,7 +204,7 @@
 
                             iface.emit('ended', iface);
                         });
-                        
+
                         it('should not $emit the contentEnd event', function() {
                             expect($scope.$emit).not.toHaveBeenCalledWith('<vpaid-card>:contentEnd', $scope.config);
                         });
@@ -278,9 +260,10 @@
                     });
 
                     describe('when false', function() {
-                        it('should pause the ad', function() {
+                        it('should pause the ad if ad is playing', function() {
                             $scope.$apply(function() {
                                 $scope.active = false;
+                                iface.paused = false;
                             });
                             expect(iface.pause).toHaveBeenCalled();
                             expect($scope.config._data.modules.displayAd.active).toBe(true);
@@ -303,12 +286,12 @@
                         it('to the url from config', function() {
                             $scope.onDeck = false;
                             $scope.$digest();
-                            
+
                             $scope.$apply(function() {
                                 $scope.config.displayAd = 'htpp://test.com/image.jpg';
                                 $scope.onDeck = true;
-                            });     
-                            
+                            });
+
                             expect($scope.config._data.modules.displayAd.src).toBe('htpp://test.com/image.jpg');
                         });
                     });

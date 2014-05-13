@@ -25,11 +25,7 @@
                 },
                 showPlay: {
                     get: function() {
-                        if(_data.playerEvents.play && _data.playerEvents.play.emitCount < 1) {
-                            return !!player && player.isReady();
-                        } else {
-                            return !!player && player.paused;
-                        }
+                        return !!player && player.paused && !_data.modules.displayAd.active;
                     }
                 }
             });
@@ -63,7 +59,7 @@
                 _data.playerEvents = EventService.trackEvents(iface, ['play', 'pause']);
 
                 iface.on('ended', function() {
-                    if(_data.modules.displayAd.src) {
+                    if (_data.modules.displayAd.src) {
                         _data.modules.displayAd.active = true;
                     } else {
                         $scope.$emit('<vpaid-card>:contentEnd', config);
@@ -86,20 +82,16 @@
                 });
 
                 $scope.$watch('active', function(active, wasActive) {
-                    if(active === wasActive) { return; }
+                    if (active === wasActive) { return; }
 
-                    if(active) {
-                        if(config.data.autoplay && _data.playerEvents.play.emitCount < 1) {
-                            // currently, if you navigate away from an ad card it calls pause()
-                            // if autoplay is false then, when you return to the card, the display ad
-                            // will be showing because nothing is triggering it to hide
-                            // we need to check if autoplay is false && play count is
+                    if (active) {
+                        if (config.data.autoplay && _data.playerEvents.play.emitCount < 1) {
                             iface.play();
                         } else if (_data.playerEvents.play.emitCount < 1) {
                             _data.modules.displayAd.active = false;
                         }
                     } else {
-                        if(config.data.autoplay) {
+                        if (!iface.paused) {
                             iface.pause();
                         }
                         _data.modules.displayAd.active = true;
@@ -119,7 +111,7 @@
                 link: function(scope, $element, $attr) {
                     var iface = playerInterface(),
                         _iface = {
-                            paused: false,
+                            paused: true,
                             ended: false,
                             duration: NaN
                         },
@@ -127,6 +119,7 @@
                         adIsReady = false,
                         adIsLoaded = false,
                         shouldPause = false,
+                        hasStarted = false,
                         player;
 
                     Object.defineProperties(iface, {
@@ -167,10 +160,11 @@
 
                     iface.play = function() {
                         if(playerIsReady && adIsReady) {
-                            if(_iface.paused) {
+                            if(hasStarted) {
                                 player.resumeAd();
                             } else {
                                 player.loadAd();
+                                hasStarted = true;
                             }
                         }
                     };
