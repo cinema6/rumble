@@ -790,6 +790,13 @@
                         mockPlayers[0]._once.playing[0]({},mockPlayers[0]);
                         $scope.$digest();
 
+                        expect(mockPlayers[0].pause).toHaveBeenCalled();
+
+                        expect(resolveSpy).not.toHaveBeenCalled();
+                        expect(rejectSpy).not.toHaveBeenCalled();
+
+                        mockPlayers[0]._once.paused[0]({}, mockPlayers[0]);
+                        $scope.$digest();
                         expect(resolveSpy).toHaveBeenCalled();
                         expect(rejectSpy).not.toHaveBeenCalled();
                         expect(iface.twerked).toBe(true);
@@ -833,8 +840,9 @@
                         mockPlayers[0]._on.ready[0]({},mockPlayers[0]);
                         $timeout.flush();
                         iface.twerk().then(resolveSpy,rejectSpy);
-                        
+
                         mockPlayers[0]._once.playing[0]({},mockPlayers[0]);
+                        mockPlayers[0]._once.paused[0]({},mockPlayers[0]);
                         $scope.$digest();
 
                         $scope.$apply(function() {
@@ -877,13 +885,11 @@
                         });
 
                         it('will set up the "play" listener again', function() {
-                            $timeout.flush();
                             player._on.playing[1](player);
                             expect(iface.emit).toHaveBeenCalledWith('play', iface);
                         });
 
                         it('will set up the "paused" listener again', function() {
-                            $timeout.flush();
                             player._on.paused[1](player);
                             expect(iface.emit).toHaveBeenCalledWith('pause', iface);
                         });
@@ -898,6 +904,7 @@
                             $timeout.flush();
                             iface.twerk();
                             mockPlayers[0]._once.playing[0]({},mockPlayers[0]);
+                            mockPlayers[0]._once.paused[0]({},mockPlayers[0]);
                             $scope.$digest();
 
                             player = mockPlayers[0];
@@ -910,13 +917,11 @@
                         });
 
                         it('will set up the "play" listener again', function() {
-                            $timeout.flush();
                             player._on.playing[1](player);
                             expect(iface.emit).toHaveBeenCalledWith('play', iface);
                         });
 
                         it('will set up the "paused" listener again', function() {
-                            $timeout.flush();
                             player._on.paused[1](player);
                             expect(iface.emit).toHaveBeenCalledWith('pause', iface);
                         });
