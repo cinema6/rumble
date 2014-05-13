@@ -28,7 +28,7 @@
                         self.emit('pause', self);
                     });
 
-                this.duration = 31;
+                this.duration = NaN;
                 this.currentTime = 0;
 
                 c6EventEmitter(this);
@@ -453,6 +453,9 @@
                             $scope.$apply(function() {
                                 $scope.$emit('playerAdd', iface);
                             });
+                            $scope.$apply(function() {
+                                iface.emit('ready', iface);
+                            });
                         });
 
                         describe('when initialized', function() {
@@ -576,12 +579,19 @@
                                             expect(navController.enabled).toHaveBeenCalledWith(false);
                                         });
 
-                                        it('should tick the navigation with the duration of the video', function() {
-                                            expect(navController.tick).toHaveBeenCalledWith(iface.duration);
+                                        it('should not tick the navigation with the duration of the video', function() {
+                                            expect(navController.tick).not.toHaveBeenCalled();
                                         });
 
                                         it('should tick the navigation on every timeupdate with the remaining time in the video', function() {
-                                            [1, 2.5, 5.278, 9, 10, 12.3].forEach(function(time) {
+                                            [1, 2.5].forEach(function(time) {
+                                                timeupdate(time);
+                                                expect(navController.tick).not.toHaveBeenCalled();
+                                            });
+
+                                            iface.duration = 31;
+
+                                            [5.278, 9, 10, 12.3].forEach(function(time) {
                                                 timeupdate(time);
                                                 expect(navController.tick).toHaveBeenCalledWith(iface.duration - time);
                                             });
@@ -592,7 +602,7 @@
                                             expect(navController.enabled).toHaveBeenCalledWith(true);
 
                                             iface.emit('timeupdate');
-                                            expect(navController.tick.callCount).toBe(1);
+                                            expect(navController.tick).not.toHaveBeenCalled();
                                         });
                                     });
 

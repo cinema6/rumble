@@ -81,7 +81,12 @@
                     var autoplay = data.autoplay,
                         mustWatchEntireAd = data.skip === false,
                         canSkipAnyTime = data.skip === true,
-                        waitTime = mustWatchEntireAd ? iface.duration : data.skip;
+                        waitTime;
+
+                    function getWaitTime() {
+                        return mustWatchEntireAd ?
+                            (iface.duration || 0) : data.skip;
+                    }
 
                     function cleanup() {
                         controller.enabled(true);
@@ -89,7 +94,15 @@
                     }
 
                     function tickNav() {
-                        var remaining = Math.max((waitTime - iface.currentTime), 0);
+                        var remaining;
+
+                        if (!waitTime) {
+                            if (!(waitTime = getWaitTime())) {
+                                return;
+                            }
+                        }
+
+                        remaining = Math.max((waitTime - iface.currentTime), 0);
 
                         controller.tick(remaining);
 
@@ -100,9 +113,12 @@
 
                     if (canSkipAnyTime) { return; }
 
-                    controller
-                        .enabled(false)
-                        .tick(waitTime);
+                    waitTime = getWaitTime();
+                    controller.enabled(false);
+
+                    if (waitTime) {
+                        controller.tick(waitTime);
+                    }
 
                     if (mustWatchEntireAd) {
                         iface
