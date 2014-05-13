@@ -173,7 +173,7 @@
                     BallotService = $injector.get('BallotService');
                     CommentsService = $injector.get('CommentsService');
                     ControlsService = $injector.get('ControlsService');
-                    
+
                     $window.c6MrGa = jasmine.createSpy('$window.c6MrGa');
 
                     $scope      = $rootScope.$new();
@@ -210,6 +210,10 @@
                     expect($scope.atHead).toBeNull();
                     expect($scope.atTail).toBeNull();
                     expect($scope.ready).toEqual(false);
+                    expect($scope.nav).toEqual({
+                        enabled: true,
+                        wait: null
+                    });
                 });
 
                 it('should initialize BallotService with the id', function() {
@@ -816,6 +820,7 @@
                     mockPlayer.getVideoId.andReturn('vid2video');
                     mockPlayer.isReady.andReturn(false);
                 });
+
                 describe('playerAdd',function(){
                     it('adds new player to deck item',function(){
                         expect($scope.deck[2].player).toBeNull();
@@ -823,6 +828,89 @@
                         expect($scope.deck[2].player).toBe(mockPlayer);
                         expect(mockPlayer.on.callCount).toEqual(4);
                         expect(mockPlayer.on.argsForCall[0][0]).toEqual('ready');
+                    });
+                });
+
+                describe('<vast-card>:init', function() {
+                    var provideController;
+
+                    beforeEach(function() {
+                        provideController = jasmine.createSpy('provideController()');
+
+                        $scope.$apply(function() {
+                            $scope.$emit('<vast-card>:init', provideController);
+                        });
+                    });
+
+                    it('should call the provided function, passing in a controller object', function() {
+                        expect(provideController).toHaveBeenCalledWith(jasmine.any(Object));
+                    });
+
+                    describe('the NavController', function() {
+                        var navController;
+
+                        beforeEach(function() {
+                            navController = provideController.mostRecentCall.args[0];
+                        });
+
+                        describe('methods', function() {
+                            describe('enabled(bool)', function() {
+                                it('should be chainable', function() {
+                                    expect(navController.enabled()).toBe(navController);
+                                });
+
+                                describe('when true is passed in', function() {
+                                    beforeEach(function() {
+                                        $scope.$apply(function() {
+                                            navController.enabled(true);
+                                        });
+                                    });
+
+                                    it('should set $scope.nav.enabled to true', function() {
+                                        expect($scope.nav.enabled).toBe(true);
+                                    });
+                                });
+
+                                describe('when false is passed in', function() {
+                                    beforeEach(function() {
+                                        $scope.nav.enabled = true;
+                                        $scope.nav.wait = 2;
+
+                                        $scope.$apply(function() {
+                                            navController.enabled(false);
+                                        });
+                                    });
+
+                                    it('should set $scope.nav.enabled to false', function() {
+                                        expect($scope.nav.enabled).toBe(false);
+                                    });
+
+                                    it('should set $scope.nav.wait to null', function() {
+                                        expect($scope.nav.wait).toBeNull();
+                                    });
+                                });
+                            });
+
+                            describe('tick(time)', function() {
+                                it('should be chainable', function() {
+                                    expect(navController.tick()).toBe(navController);
+                                });
+
+                                it('should set $scope.nav.wait to the provided time', function() {
+                                    [2, 12, 14, 11, 16, 8].forEach(function(time) {
+                                        navController.tick(time);
+                                        expect($scope.nav.wait).toBe(time);
+                                    });
+                                });
+
+                                it('should round everything', function() {
+                                    [2.7, 3.2, 5.5, 6.7].forEach(function(time) {
+                                        navController.tick(time);
+                                        expect($scope.nav.wait).toBe(Math.round(time));
+                                    });
+                                });
+                            });
+                        });
                     });
                 });
 
