@@ -1,5 +1,11 @@
 # MiniReel Player
 
+## Beta4 (May 13, 2014)
+* *[Beta4.rc1]*
+  * [FEATURE]: The VAST card (used for mobile ads) now reads a configuration that conditionally allows it to be skipped at certian times (or not at all)
+  * [FIX]: Removed some hacks from the YouTube player twerk to make it more deterministic
+* *[/Beta4.rc1]*
+
 ## Beta3 (April 29, 2014)
 * Add a Changelog.
 * [FIX]: Use kMode query param for loading player
