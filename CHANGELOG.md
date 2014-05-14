@@ -1,5 +1,8 @@
 # MiniReel Player
 
+* *[Beta5.rc1]*
+  * [FIX]: First! MiniReel Player Media Queries not test for both height and width to best fit player inside browser window.
+
 ## Beta4 (May 13, 2014)
 * *[Beta4.rc1]*
   * [FEATURE]: The VAST card (used for mobile ads) now reads a configuration that conditionally allows it to be skipped at certian times (or not at all)
@@ -76,5 +79,3 @@
   * [FIX]: Mobile : Title of MiniReel added above card
   * [FIX]: Mobile : added dynamic experience title to video embed card
 * *[/Beta3.rc14]*
-* *[Beta3.rc15]*
-  * [FIX]: MiniReel Player Media Queries not test for both height and width to best fit player inside browser window.
