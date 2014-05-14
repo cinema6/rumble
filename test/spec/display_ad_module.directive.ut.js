@@ -30,27 +30,35 @@
 
                 beforeEach(function() {
                     $scope.$apply(function() {
-                        adModule = $compile('<display-ad-module ad-object="adObject"></display-ad-module>')($scope);
+                        adModule = $compile('<display-ad-module companion="companion"></display-ad-module>')($scope);
                     });
 
                     scope = adModule.children().scope();
                 });
 
-                describe('when an adObject is loaded', function() {
-                    beforeEach(function() {
+                describe('when it\'s a VAST call and we have an object with an adType is loaded', function() {
+                    it('should set the adType and fileURI props', function() {
                         $scope.$apply(function() {
-                            $scope.adObject = {
+                            $scope.companion = {
                                 adType: 'iframe',
                                 fileURI: '//ads.adap.tv/c/companion?cck=cck&creativeId=110497&melaveId=42657&key=tribal360llc&adSourceId=208567&bidId=&afppId=159224&exSId=639284&cb=9874983758324475&pageUrl=http%3A%2F%2Fcinema6.com&eov=eov'
                             };
                         });
-                    });
-
-                    it('should set the adType and fileURI props', function() {
                         expect(scope.adType).toBe('iframe');
                         expect(scope.fileURI).toBe('//ads.adap.tv/c/companion?cck=cck&creativeId=110497&melaveId=42657&key=tribal360llc&adSourceId=208567&bidId=&afppId=159224&exSId=639284&cb=9874983758324475&pageUrl=http%3A%2F%2Fcinema6.com&eov=eov');
                     });
+                });
 
+                describe('when it\'s a VPAID call and we have an object with sourceCode', function() {
+                    it('should set the adType to "html" and pass in the sourceCode', function() {
+                        $scope.$apply(function() {
+                            $scope.companion = {
+                                sourceCode: '<div></div>'
+                            };
+                        });
+                        expect(scope.adType).toBe('html');
+                        expect(scope.fileURI).toBe('<div></div>');
+                    });
                 });
             });
         });

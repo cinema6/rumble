@@ -11,6 +11,21 @@
                     adSrc: '@',
                     companion: '&',
                     active: '='
+                },
+                link: function(scope) {
+                    scope.$watch(function() {
+                        return scope.companion();
+                    }, function(curr) {
+                        if(curr) {
+                            if (curr.adType) {
+                                scope.adType = curr.adType;
+                                scope.fileURI = curr.fileURI;
+                            } else if (curr.sourceCode) {
+                                scope.adType = 'html';
+                                scope.fileURI = curr.sourceCode;
+                            }
+                        }
+                    });
                 }
             };
         }]);

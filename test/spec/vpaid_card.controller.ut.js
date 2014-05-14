@@ -235,6 +235,25 @@
                         expect($scope.config._data.modules.displayAd.active).toBe(false);
                     });
                 });
+
+                describe('getCompanions', function() {
+                    it('should get the companions from the player that is $emitted', function() {
+                        var companionObject = {
+                                    sourceCode: '<div></div>',
+                                    width: 300,
+                                    height: 250
+                                },
+                            player = {
+                                getDisplayBanners: function() {
+                                    return [companionObject];
+                                }
+                            };
+
+                        iface.emit('getCompanions', player);
+
+                        expect(VpaidCardController.companion).toBe(companionObject);
+                    });
+                });
             });
 
             describe('$watchers', function() {
