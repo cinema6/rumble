@@ -2,8 +2,8 @@
     'use strict';
 
     angular.module('c6.rumble')
-        .controller('VpaidCardController', ['$scope', '$log', 'ModuleService', 'EventService',
-        function                            ($scope ,  $log ,  ModuleService ,  EventService ) {
+        .controller('VpaidCardController', ['$scope', '$log', 'ModuleService', 'EventService', '$interval',
+        function                            ($scope ,  $log ,  ModuleService ,  EventService ,  $interval) {
             $log = $log.context('VpaidCardController');
             var self = this,
                 config = $scope.config,
@@ -15,12 +15,18 @@
                         }
                     }
                 },
+                data = config.data,
                 player;
 
             Object.defineProperties(this, {
                 showVideo: {
                     get: function() {
                         return $scope.active && !_data.modules.displayAd.active;
+                    }
+                },
+                showPlay: {
+                    get: function() {
+                        return !!player && player.paused && !_data.modules.displayAd.active;
                     }
                 }
             });
@@ -33,7 +39,14 @@
                 player.play();
             };
 
+            this.playVideo = function() {
+                player.play();
+            };
+
             this.hasModule = ModuleService.hasModule.bind(ModuleService, config.modules);
+
+            this.enablePlayButton = !$scope.profile.touch &&
+                !config.data.autoplay;
 
             $scope.$watch('onDeck', function(onDeck) {
                 if(onDeck) {
@@ -42,12 +55,84 @@
             });
 
             $scope.$on('playerAdd', function(event, iface) {
+                function controlNavigation(controller) {
+                    var autoplay = data.autoplay,
+                        mustWatchEntireAd = data.skip === false,
+                        canSkipAnyTime = data.skip === true,
+                        waitTime, timer;
+
+                    function getWaitTime() {
+                        return mustWatchEntireAd ?
+                            (iface.duration || 0) : data.skip;
+                    }
+
+                    function cleanup() {
+                        controller.enabled(true);
+                        $interval.cancel(timer);
+                    }
+
+                    function tickNav() {
+                        var remaining;
+
+                        if (!waitTime) {
+                            if (!(waitTime = getWaitTime())) {
+                                return;
+                            }
+                        }
+
+                        remaining = Math.max((waitTime - iface.currentTime), 0);
+
+                        controller.tick(remaining);
+
+                        if (!remaining) {
+                            cleanup();
+                        }
+                    }
+
+                    function doTimeUpdates() {
+                        timer = $interval(function() {
+                            if (iface.currentTime) {
+                                tickNav();
+                            }
+                        }, 500);
+                    }
+
+                    if (canSkipAnyTime) { return; }
+
+                    waitTime = getWaitTime();
+                    controller.enabled(false);
+
+                    if (waitTime) {
+                        controller.tick(waitTime);
+                    }
+
+                    if (mustWatchEntireAd) {
+                        doTimeUpdates();
+
+                        iface.once('ended', cleanup);
+
+                        return;
+                    }
+
+                    if (autoplay) {
+                        return doTimeUpdates();
+                    }
+
+                    $interval(function() {
+                        controller.tick(--waitTime);
+
+                        if (!waitTime) {
+                            controller.enabled(true);
+                        }
+                    }, 1000, waitTime);
+                }
+
                 player = iface;
 
                 _data.playerEvents = EventService.trackEvents(iface, ['play', 'pause']);
-                
+
                 iface.on('ended', function() {
-                    if(_data.modules.displayAd.src) {
+                    if (_data.modules.displayAd.src) {
                         _data.modules.displayAd.active = true;
                     } else {
                         $scope.$emit('<vpaid-card>:contentEnd', config);
@@ -63,7 +148,6 @@
                         _data.modules.displayAd.active = true;
                     }
                 });
-                
 
                 iface.on('getCompanions', function(_player) {
                     // this doesn't work yet
@@ -71,12 +155,19 @@
                 });
 
                 $scope.$watch('active', function(active, wasActive) {
-                    if(active === wasActive) { return; }
+                    if (active === wasActive) { return; }
 
-                    if(active && _data.playerEvents.play.emitCount < 1) {
-                        iface.play();
+                    if (active) {
+                        if (_data.playerEvents.play.emitCount < 1) {
+                            $scope.$emit('<vpaid-card>:init', controlNavigation);
+                            if (data.autoplay) {
+                                iface.play();
+                            }
+                        }
                     } else {
-                        iface.pause();
+                        if (!iface.paused) {
+                            iface.pause();
+                        }
                         _data.modules.displayAd.active = true;
                     }
                 });
@@ -94,7 +185,7 @@
                 link: function(scope, $element, $attr) {
                     var iface = playerInterface(),
                         _iface = {
-                            paused: false,
+                            paused: true,
                             ended: false,
                             duration: NaN
                         },
@@ -102,6 +193,7 @@
                         adIsReady = false,
                         adIsLoaded = false,
                         shouldPause = false,
+                        hasStarted = false,
                         player;
 
                     Object.defineProperties(iface, {
@@ -142,10 +234,11 @@
 
                     iface.play = function() {
                         if(playerIsReady && adIsReady) {
-                            if(_iface.paused) {
+                            if(hasStarted) {
                                 player.resumeAd();
                             } else {
                                 player.loadAd();
+                                hasStarted = true;
                             }
                         }
                     };

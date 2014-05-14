@@ -71,6 +71,9 @@
                     $scope.config = {
                         data: {}
                     };
+                    $scope.profile = {
+                        touch: false
+                    };
                     $log.context = function() { return $log; };
                 });
             });
@@ -88,13 +91,13 @@
 
                 it('should create the player', function() {
                     var _player = VPAIDService.createPlayer();
-                    
+
                     spyOn(VPAIDService, 'createPlayer').andReturn(_player);
-                    
+
                     $scope.$apply(function() {
                         $compile('<vpaid-card></vpaid-card>')($scope);
                     });
-                    
+
                     expect(VPAIDService.createPlayer).toHaveBeenCalled();
                     expect(_player.insertHTML).toHaveBeenCalled();
                 });
@@ -284,10 +287,8 @@
 
                 describe('paused', function() {
                     describe('getting', function() {
-                        describe('if the player is not ready', function() {
-                            it('should return false', function() {
-                                expect(iface.paused).toBe(false);
-                            });
+                        it('should be true by default', function() {
+                            expect(iface.paused).toBe(true);
                         });
 
                         describe('if the player is ready and an ad has been paused', function() {
@@ -385,6 +386,7 @@
                     it('should call resumeAd() if the player is paused', function() {
                         _player.emit('ready', _player);
                         _player.emit('adReady', _player);
+                        iface.play();
                         _player.emit('pause', _player);
                         iface.play();
                         expect(_player.resumeAd).toHaveBeenCalled();
@@ -395,7 +397,7 @@
                     it('should only call pause() if player is ready and ad is loaded', function() {
                         iface.pause();
                         expect(_player.pause).not.toHaveBeenCalled();
-                        
+
                         _player.emit('ready', _player);
                         iface.pause();
                         expect(_player.pause).not.toHaveBeenCalled();
