@@ -1,7 +1,7 @@
 # MiniReel Player
 
-## Beta5 (May 14, 2014)
 * *[Beta5.rc1]*
+  * [FIX]: First! MiniReel Player Media Queries not test for both height and width to best fit player inside browser window.
   * [FEATURE]: Show the poster of a click-to-play MiniReel before the
     user clicks to play it.
 
