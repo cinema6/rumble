@@ -762,7 +762,9 @@
                             /* If we have a ballot:  If the ballot is being show.   If the results are a modal and they're being shown. */
                     return (this.hasModule('ballot') && (ballot.ballotActive || (ballot.resultsActive && !behaviors.inlineVoteResults))) ||
                         /* If there is a separate view for text, and if that mode is active: */
-                        (behaviors.separateTextView && _data.textMode);
+                        (behaviors.separateTextView && _data.textMode) ||
+                        /* If this is a click-to-play minireel, it hasn't been played yet and the play button is enabled */
+                        (!c6AppData.experience.data.autoplay && !(_data.playerEvents.play || {}).emitCount && this.enablePlayButton);
                 }
             },
             showPlay: {
