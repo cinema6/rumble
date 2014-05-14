@@ -90,42 +90,56 @@
         position:absolute; z-index:1; top:50%; left:50%;
         width:39.625em; /*634*/
         margin:-9.375em 0 0 -19.8125em; /* 150 0 0 317*/
-    }
-        @media screen and (min-width:50rem) and (max-width:59.9375rem) {
-            /*800px - 959px*/
-            .mr-experience {
-                width:48em; /*768*/
-                margin:-12.5em 0 0 -24em; /* 200 0 0 384*/
-            }
-        }
-        @media screen and (min-width:60rem) and (max-width:64.9375rem) {
-            /*960px - 1039px*/
-            .mr-experience {
-                width:58em; /*928*/
-                margin:-15.625em 0 0 -29em; /* 250 0 0 464*/
-            }
-        }
-        @media screen and (min-width:65rem) and (max-width:75.9375rem) {
-            /*1040px - 1215px*/
-            .mr-experience {
-                width:62em; /*992*/
-                margin:-16.875em 0 0 -31em; /* 270 0 0 496*/
-            }
-        }
-        @media screen and (min-width:76rem) and (max-width:88.6875rem) {
-            /*1216px - 1419px*/
-            .mr-experience {
-                width:68em; /*1088 x 654*/
-                margin:-19.25em 0 0 -34em; /* 308 0 0 544*/
-            }
-        }
-        @media screen and (min-width:88.75rem) {
-            /*1420px +*/
+    }   
+        @media screen and (min-width:88.75rem), screen and (min-height:49.4375rem) {
+            /*  w: 1420px +
+                h: 791px + */
             .mr-experience {
                 width:78em; /*1248 x 760*/
                 margin:-22.75em 0 0 -39em; /* 364 0 0 624*/
             }
         }
+        @media screen and (min-width:76rem) and (max-width:88.6875rem), screen and (min-height:43.125rem) and (max-height:49.375rem) {
+            /*  w: 1216px - 1419px
+                h: 690px - 790px */
+            .mr-experience {
+                width:68em; /*1088 x 654*/
+                margin:-19.25em 0 0 -34em; /* 308 0 0 544*/
+            }
+        }
+        @media screen and (min-width:65rem) and (max-width:75.9375rem), screen and (min-height:37.5rem) and (max-height:43.0625rem) {
+            /*  w: 1040px - 1215px
+                h: 600px - 689px */
+            .mr-experience {
+                width:62em; /*992*/
+                margin:-16.875em 0 0 -31em; /* 270 0 0 496*/
+            }
+        }
+        @media screen and (min-width:60rem) and (max-width:64.9375rem), screen and (min-height:35.4375rem) and (max-height:37.4375rem) {
+            /*  w: 960px - 1039px 
+                h: 567px - 599px */
+            .mr-experience {
+                width:58em; /*928*/
+                margin:-15.625em 0 0 -29em; /* 250 0 0 464*/
+            }
+        }
+        @media screen and (min-width:50rem) and (max-width:59.9375rem), screen and (min-height:28.75rem) and (max-height:35.375rem) {
+            /*  w: 800px - 959px
+                h: 460px - 570px */
+            .mr-experience {
+                width:48em; /*768*/
+                margin:-12.5em 0 0 -24em; /* 200 0 0 384*/
+            }
+        }
+        @media screen and (max-width:49.9375rem), screen and (max-height:28.6875rem) {
+            /*  w: - 799px
+                h: - 459px */
+            .mr-experience {
+                width:39.625em; /*634*/
+                margin:-9.375em 0 0 -19.8125em; /* 150 0 0 317*/
+            }
+        }
+
         .mr-title {
             font-size:1.5em; font-weight:normal; color:#fff; line-height:1; text-align: center;
             margin:0; width:100%;
