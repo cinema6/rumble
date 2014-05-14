@@ -66,8 +66,13 @@
                 
 
                 iface.on('getCompanions', function(_player) {
-                    // this doesn't work yet
-                    self.companions = _player.getDisplayBanners();
+                    var _companions = _player.getDisplayBanners();
+                    
+                    angular.forEach(_companions, function(val) {
+                        if(parseInt(val.width) === 300 && parseInt(val.height) === 250) {
+                            self.companion = val;
+                        }
+                    });
                 });
 
                 $scope.$watch('active', function(active, wasActive) {
