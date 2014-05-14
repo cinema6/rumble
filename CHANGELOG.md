@@ -6,6 +6,8 @@
     user clicks to play it.
   * [FEATURE]: The VPAID card now reads a configuration that conditionally allows it to be skipped at certain time (or not at all)
   * [FIX]: The VPAID card now responds to autoplay configuration
+  * [FIX]: The navigation is no longer disable-able on a device that
+    does not support inline video
 
 ## Beta4 (May 13, 2014)
 * *[Beta4.rc1]*

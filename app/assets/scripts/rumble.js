@@ -284,6 +284,10 @@
             };
 
             this.enabled = function(bool) {
+                if (!appData.profile.inlineVideo) {
+                    return this;
+                }
+
                 nav.enabled = bool;
 
                 if (!nav.enabled) {
