@@ -696,7 +696,7 @@
                 index: '=',
                 currentIndex: '=',
                 card: '=',
-                disableWhen: '=',
+                disableWhen: '&',
                 onSelect: '&'
             },
             link: function(scope) {

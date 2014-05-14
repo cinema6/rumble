@@ -7,9 +7,11 @@
         <ng-include src="'deck.html' | asset:'views'"></ng-include>
         
         <button ng-click="RumbleCtrl.goBack('nav')"
+            ng-class="{'mr-nav__btn--disabled': !nav.enabled}"
             class="mr-nav__btn mr-nav__prev"
             type="button"
             title="Previous Page"
+            ng-disabled="!nav.enabled"
             ng-hide="currentCard.type === 'recap'">
             <svg class="mr-nav__icon mr-nav__icon-prev" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
              viewBox="0 0 27.213 45.941" enable-background="new 0 0 27.213 45.941" xml:space="preserve">
@@ -19,8 +21,8 @@
             <span class="ir">Previous Page</span>
         </button>
         <button ng-click="RumbleCtrl.goForward('nav')"
-            ng-class="{'mr-nav__btn--disabled': atTail, 'mr-nav__next--display-ad': currentCard.type === 'ad'}"
-            ng-disabled="atTail"
+            ng-class="{'mr-nav__btn--disabled': (atTail || !nav.enabled), 'mr-nav__next--display-ad': currentCard.type === 'ad'}"
+            ng-disabled="atTail || !nav.enabled"
             class="mr-nav__btn mr-nav__next"
             type="button"
             title="Next Page"
