@@ -56,9 +56,10 @@
 
             $scope.$on('playerAdd', function(event, iface) {
                 function controlNavigation(controller) {
-                    var mustWatchEntireAd = data.skip === false,
+                    var autoplay = data.autoplay,
+                        mustWatchEntireAd = data.skip === false,
                         canSkipAnyTime = data.skip === true,
-                        waitTime;
+                        waitTime, timer;
 
                     function getWaitTime() {
                         return mustWatchEntireAd ?
@@ -67,16 +68,33 @@
 
                     function cleanup() {
                         controller.enabled(true);
+                        $interval.cancel(timer);
                     }
 
-                    function clickToPlayInterval() {
-                        $interval(function() {
-                            --waitTime;
+                    function tickNav() {
+                        var remaining;
 
-                            if (!waitTime) {
-                                controller.enabled(true);
+                        if (!waitTime) {
+                            if (!(waitTime = getWaitTime())) {
+                                return;
                             }
-                        }, 1000, waitTime);
+                        }
+
+                        remaining = Math.max((waitTime - iface.currentTime), 0);
+
+                        controller.tick(remaining);
+
+                        if (!remaining) {
+                            cleanup();
+                        }
+                    }
+
+                    function doTimeUpdates() {
+                        timer = $interval(function() {
+                            if (iface.currentTime) {
+                                tickNav();
+                            }
+                        }, 500);
                     }
 
                     if (canSkipAnyTime) { return; }
@@ -84,12 +102,29 @@
                     waitTime = getWaitTime();
                     controller.enabled(false);
 
+                    if (waitTime) {
+                        controller.tick(waitTime);
+                    }
+
                     if (mustWatchEntireAd) {
+                        doTimeUpdates();
+
                         iface.once('ended', cleanup);
+
                         return;
                     }
 
-                    iface.once('play', clickToPlayInterval);
+                    if (autoplay) {
+                        return doTimeUpdates();
+                    }
+
+                    $interval(function() {
+                        controller.tick(--waitTime);
+
+                        if (!waitTime) {
+                            controller.enabled(true);
+                        }
+                    }, 1000, waitTime);
                 }
 
                 player = iface;
