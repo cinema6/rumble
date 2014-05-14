@@ -4,6 +4,8 @@
 * *[Beta5.rc1]*
   * [FEATURE]: Show the poster of a click-to-play MiniReel before the
     user clicks to play it.
+  * [FEATURE]: The VPAID card now reads a configuration that conditionally allows it to be skipped at certain time (or not at all)
+  * [FIX]: The VPAID card now responds to autoplay configuration
 
 ## Beta4 (May 13, 2014)
 * *[Beta4.rc1]*
