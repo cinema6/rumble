@@ -776,6 +776,40 @@
                                 expect(VideoEmbedCardCtrl.flyAway).toBe(false);
                             });
                         });
+
+                        describe('if the experience is click to play', function() {
+                            beforeEach(function() {
+                                spyOn(VideoEmbedCardCtrl, 'hasModule').andReturn(false);
+                                c6AppData.experience.data.autoplay = false;
+
+                                $scope.active = true;
+                                VideoEmbedCardCtrl.enablePlayButton = true;
+                            });
+
+                            it('should be false if this.enablePlayButton is false', function() {
+                                VideoEmbedCardCtrl.enablePlayButton = false;
+
+                                expect(VideoEmbedCardCtrl.flyAway).toBe(false);
+                            });
+
+                            describe('if the video has not played yet', function() {
+                                it('should be true', function() {
+                                    expect(VideoEmbedCardCtrl.flyAway).toBe(true);
+                                });
+                            });
+
+                            describe('after the video plays', function() {
+                                beforeEach(function() {
+                                    $rootScope.config._data.playerEvents.play = {
+                                        emitCount: 1
+                                    };
+                                });
+
+                                it('should be false', function() {
+                                    expect(VideoEmbedCardCtrl.flyAway).toBe(false);
+                                });
+                            });
+                        });
                     });
                 });
 
