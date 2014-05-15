@@ -1,9 +1,11 @@
 # MiniReel Player
 
+## Beta6 (May 15, 2014)
 * *[Beta6.rc1]*
   * [FIX]: The navigation is no longer disable-able on a device that
     does not support inline video
   * [FEATURE]: Added VPAID and VAST companion ad support
+* *[/Beta6.rc1]*
 
 ## Beta5 (May 14, 2014)
 * *[Beta5.rc1]*
