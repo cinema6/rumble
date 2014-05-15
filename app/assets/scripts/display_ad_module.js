@@ -13,9 +13,7 @@
                     active: '='
                 },
                 link: function(scope) {
-                    scope.$watch(function() {
-                        return scope.companion();
-                    }, function(curr) {
+                    scope.$watch('companion()', function(curr) {
                         if(curr) {
                             if (curr.adType) {
                                 scope.adType = curr.adType;

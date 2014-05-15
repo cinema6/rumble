@@ -263,9 +263,12 @@
                         spyOn($scope, '$emit').andCallThrough();
                     });
 
-                    describe('if there is a displayAd', function() {
+                    describe('if there is a companion', function() {
                         beforeEach(function() {
-                            $scope.config._data.modules.displayAd.src = 'foo.jpg';
+                            VastCardCtrl.companion = {
+                                adType: 'iframe',
+                                fileURI: '//adap.tv/foo'
+                            };
 
                             iface.emit('ended', iface);
                         });
@@ -275,7 +278,7 @@
                         });
                     });
 
-                    describe('if there is no displayAd', function() {
+                    describe('if there is no companion', function() {
                         beforeEach(function() {
                             iface.emit('ended', iface);
                         });
