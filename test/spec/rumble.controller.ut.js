@@ -132,7 +132,8 @@
 
                 appData = {
                     profile: {
-                        device: 'desktop'
+                        device: 'desktop',
+                        inlineVideo: true
                     },
                     experience: {
                         id: 'e-722bd3c4942331',
@@ -194,7 +195,7 @@
                         $scope  : $scope,
                         $log    : $log
                     });
-                    
+
                     $scope.$emit('analyticsReady');
                     $timeout.flush(1000);
                 });
@@ -542,7 +543,7 @@
                         title : 'my title'
                     });
                 });
-                
+
                 it('returns current card url if $scope.currentCard is set',function(){
                     $scope.currentCard = deck[0];
                     expect(RumbleCtrl.getVirtualPage()).toEqual({
@@ -666,7 +667,7 @@
                         page : '/mr/e-722bd3c4942331/ad1', title : 'my title - ad1'
                     }]); 
                 });
-                
+
                 it('sends ga event if moving backward from control', function(){
                     $scope.currentIndex = 2;
                     $scope.currentCard  = $scope.deck[2];
@@ -694,9 +695,9 @@
                     expect($window.c6MrGa.callCount).toEqual(1);
                     expect($window.c6MrGa.calls[0].args).toEqual(['c6mr.send','pageview',{
                         page : '/mr/e-722bd3c4942331/vid2', title : 'my title - vid2'
-                    }]); 
+                    }]);
                 });
-                
+
                 it('sends ga event if going to from control', function(){
                     $scope.currentIndex = 0;
                     $scope.currentCard  = $scope.deck[0];
@@ -855,6 +856,17 @@
 
                         describe('methods', function() {
                             describe('enabled(bool)', function() {
+                                describe('on a device that does not allow inline video', function() {
+                                    beforeEach(function() {
+                                        appData.profile.inlineVideo = false;
+                                    });
+
+                                    it('should not do anything', function() {
+                                        expect(navController.enabled(false)).toBe(navController);
+                                        expect($scope.nav.enabled).toBe(true);
+                                    });
+                                });
+
                                 it('should be chainable', function() {
                                     expect(navController.enabled()).toBe(navController);
                                 });

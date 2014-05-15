@@ -1,5 +1,9 @@
 # MiniReel Player
 
+* *[Beta6.rc1]*
+  * [FIX]: The navigation is no longer disable-able on a device that
+    does not support inline video
+
 ## Beta5 (May 14, 2014)
 * *[Beta5.rc1]*
   * [FIX]: First! MiniReel Player Media Queries not test for both height and width to best fit player inside browser window.
