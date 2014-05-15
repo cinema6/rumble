@@ -4,6 +4,7 @@
   * [FIX]: The navigation is no longer disable-able on a device that
     does not support inline video
   * [FEATURE]: Added VPAID and VAST companion ad support
+  * [FEATURE]: Added 'Skip This Ad in...' countdown text for timer skippable ads
 
 ## Beta5 (May 14, 2014)
 * *[Beta5.rc1]*
