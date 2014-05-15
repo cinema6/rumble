@@ -10,7 +10,8 @@
     <section>
         <display-ad-module ng-if="Ctrl.hasModule('displayAd')"
             active="config._data.modules.displayAd.active"
-            ad-src="{{config.displayAd}}">
+            ad-src="{{config.displayAd}}"
+            companion="Ctrl.companion">
         </display-ad-module>
     </section>
     <p class="mr-vast__watch-again tk--hdr"

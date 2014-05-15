@@ -146,7 +146,7 @@
                 _data.playerEvents = EventService.trackEvents(iface, ['play', 'pause']);
 
                 iface.on('ended', function() {
-                        if (!_data.modules.displayAd.src) {
+                        if (!self.companion) {
                             $scope.$emit('<vast-card>:contentEnd', config);
                         }
                         firePixels('complete');

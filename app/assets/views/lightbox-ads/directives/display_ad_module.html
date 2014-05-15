@@ -1,4 +1,10 @@
 <div ng-show="active" class="mr-display-ad__group">
     <span class="mr-ad__label">advertisement</span>
-    <img class="mr-display-ad__thumbnail" ng-src="{{adSrc}}">
+    <!-- <img class="mr-display-ad__thumbnail" ng-src="{{adSrc}}"> -->
+    <div ng-switch="adType" ng-show="active">
+        <div ng-switch-when="iframe"><iframe ng-src="{{fileURI}}"></iframe></div>
+        <div ng-switch-when="image"><img ng-src="{{fileURI}}" /></div>
+        <div ng-hide="companion()"><img ng-src="{{adSrc}}" /></div>
+        <div ng-switch-when="html" ng-bind-html="fileURI"></div>
+    </div>
 </div>
