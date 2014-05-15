@@ -163,11 +163,11 @@
                             background:no-repeat 50% 50% / 102%;
                         }
                             .mr-pages__page--active .mr-pages__preview-img {
-                                -webkit-transform: scale(1.12);
-                                -moz-transform: scale(1.12);
-                                -o-transform: scale(1.12);
-                                -ms-transform: scale(1.12);
-                                transform: scale(1.12);
+                                -webkit-transform: scale(1.25);
+                                -moz-transform: scale(1.25);
+                                -o-transform: scale(1.25);
+                                -ms-transform: scale(1.25);
+                                transform: scale(1.25);
                             }
                         .mr-pages__label {
                             display: block; width:100%;

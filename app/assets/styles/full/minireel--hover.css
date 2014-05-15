@@ -74,13 +74,6 @@
         -ms-transform: scale(1.25);
         transform: scale(1.25);
     }
-    .mr-pages__page--active:hover .mr-pages__preview-img {
-        -webkit-transform: scale(1.12);
-        -moz-transform: scale(1.12);
-        -o-transform: scale(1.12);
-        -ms-transform: scale(1.12);
-        transform: scale(1.12);
-    }
 
 /*  ==========================================================================
     .ui-navbar classes
