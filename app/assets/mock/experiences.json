@@ -85,8 +85,7 @@
                     "data": {
                         "autoplay": true,
                         "skip": 6
-                    },
-                    "displayAd": "http://2.bp.blogspot.com/-TlM_3FT89Y0/UMzLr7kVykI/AAAAAAAACjs/lKrdhgp6OQg/s1600/brad-turner.jpg"
+                    }
                 },
                 {
                     "id": "rc-4770a2d7f85ce0",
@@ -362,9 +361,9 @@
                         "displayAd"
                     ],
                     "data": {
-                        "autoplay": true
-                    },
-                    "displayAd": "http://2.bp.blogspot.com/-TlM_3FT89Y0/UMzLr7kVykI/AAAAAAAACjs/lKrdhgp6OQg/s1600/brad-turner.jpg"
+                        "autoplay": true,
+                        "skip": 6
+                    }
                 },
                 {
                     "id": "rc-77d0ea2794cc6b",
@@ -743,9 +742,9 @@
                         "displayAd"
                     ],
                     "data": {
-                        "autoplay": true
-                    },
-                    "displayAd": "http://2.bp.blogspot.com/-TlM_3FT89Y0/UMzLr7kVykI/AAAAAAAACjs/lKrdhgp6OQg/s1600/brad-turner.jpg"
+                        "autoplay": true,
+                        "skip": true
+                    }
                 },
                 {
                     "id": "rc-77d0ea2794cc6b",
@@ -1144,9 +1143,9 @@
                         "displayAd"
                     ],
                     "data": {
-                        "autoplay": true
-                    },
-                    "displayAd": "http://2.bp.blogspot.com/-TlM_3FT89Y0/UMzLr7kVykI/AAAAAAAACjs/lKrdhgp6OQg/s1600/brad-turner.jpg"
+                        "autoplay": true,
+                        "skip": false
+                    }
                 },
                 {
                     "id": "rc-77d0ea2794cc6b",
@@ -1507,7 +1506,8 @@
                     "ad": true,
                     "modules": [],
                     "data": {
-                        "autoplay": true
+                        "autoplay": true,
+                        "skip": false
                     }
                 },
                 {
@@ -1739,7 +1739,8 @@
                     "ad": true,
                     "modules": [],
                     "data": {
-                        "autoplay": true
+                        "autoplay": true,
+                        "skip": 6
                     }
                 },
                 {
@@ -1971,7 +1972,8 @@
                     "ad": true,
                     "modules": [],
                     "data": {
-                        "autoplay": true
+                        "autoplay": true,
+                        "skip": false
                     }
                 },
                 {
@@ -2161,7 +2163,8 @@
                         "displayAd"
                     ],
                     "data": {
-                        "autoplay": true
+                        "autoplay": true,
+                        "skip": true
                     }
                 },
                 {
