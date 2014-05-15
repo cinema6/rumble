@@ -200,11 +200,7 @@
         width:100%; height:100%;
         box-sizing:border-box;
         padding-top:1.1875rem;
-        display: none;
     }
-        .adSkip__group--enabled {
-            display: block;
-        }
 
 
 

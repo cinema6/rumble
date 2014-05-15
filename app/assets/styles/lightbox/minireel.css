@@ -336,11 +336,7 @@
         width:100%; height:100%;
         box-sizing:border-box;
         padding-top:1em;
-        display: none;
     }
-        .adSkip__group--enabled {
-            display: block;
-        }
 
     @media screen and (min-width:76rem) {
         /*1216px + */
