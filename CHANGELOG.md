@@ -1,13 +1,17 @@
 # MiniReel Player
 
+* *[Beta6.rc1]*
+  * [FIX]: The navigation is no longer disable-able on a device that
+    does not support inline video
+
+## Beta5 (May 14, 2014)
 * *[Beta5.rc1]*
   * [FIX]: First! MiniReel Player Media Queries not test for both height and width to best fit player inside browser window.
   * [FEATURE]: Show the poster of a click-to-play MiniReel before the
     user clicks to play it.
   * [FEATURE]: The VPAID card now reads a configuration that conditionally allows it to be skipped at certain time (or not at all)
   * [FIX]: The VPAID card now responds to autoplay configuration
-  * [FIX]: The navigation is no longer disable-able on a device that
-    does not support inline video
+* *[/Beta5.rc1]*
 
 ## Beta4 (May 13, 2014)
 * *[Beta4.rc1]*
