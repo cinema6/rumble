@@ -14,7 +14,8 @@
                     onNext: '&',
                     onPrev: '&',
                     disableNextWhen: '&',
-                    disablePrevWhen: '&'
+                    disablePrevWhen: '&',
+                    countdown: '&'
                 },
                 link: function(scope, element, attr, controller) {
                     var $$window = jqLite($window),

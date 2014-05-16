@@ -78,6 +78,20 @@
     }
 
 /*  ==========================================================================
+    .ng-animate classes
+    ========================================================================== */
+    .c6-fade {
+        -webkit-transition:0.5s linear opacity;
+        transition:0.5s linear opacity;
+    }
+    .c6-fade.ng-hide-add, .c6-fade.ng-hide-remove {
+        display:block !important;
+    }
+    .c6-fade.ng-hide {
+        opacity: 0;
+    }
+
+/*  ==========================================================================
     .mr-experience classes
     ========================================================================== */
     .mr-experience {
