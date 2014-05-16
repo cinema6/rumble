@@ -12,7 +12,7 @@
     "lightbox" : {
         "minWidth"      : "18.75em",
         "minHeight"     : "19.625em",
-        "padding"       : "8.125em 0 63% 0"
+        "padding"       : "0 0 75% 0"
     },
     "lightbox-ads" : {
         "minWidth"      : "18.75em",
