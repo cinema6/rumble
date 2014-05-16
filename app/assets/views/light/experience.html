@@ -9,7 +9,8 @@
         disable-prev-when="!nav.enabled"
         disable-next-when="atTail || !nav.enabled"
         on-prev="RumbleCtrl.goBack('thumb')"
-        on-next="RumbleCtrl.goForward('thumb')">
+        on-next="RumbleCtrl.goForward('thumb')"
+        countdown="nav.wait">
         <ul class="mr-pages__list">
             <li thumb-paginator-item ng-repeat="this in tocCards" class="mr-pages__item">
                 <navbar-button index="$index"

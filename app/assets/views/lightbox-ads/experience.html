@@ -7,11 +7,10 @@
         <ng-include src="'deck.html' | asset:'views'"></ng-include>
         
         <button ng-click="RumbleCtrl.goBack('nav')"
-            ng-class="{'mr-nav__btn--disabled': !nav.enabled}"
-            class="mr-nav__btn mr-nav__prev"
+            ng-show="nav.enabled"
+            class="mr-nav__btn mr-nav__prev c6-fade"
             type="button"
             title="Previous Page"
-            ng-disabled="!nav.enabled"
             ng-hide="currentCard.type === 'recap'">
             <svg class="mr-nav__icon mr-nav__icon-prev" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
              viewBox="0 0 27.213 45.941" enable-background="new 0 0 27.213 45.941" xml:space="preserve">
@@ -21,9 +20,9 @@
             <span class="ir">Previous Page</span>
         </button>
         <button ng-click="RumbleCtrl.goForward('nav')"
-            ng-class="{'mr-nav__btn--disabled': (atTail || !nav.enabled)}"
-            ng-disabled="atTail || !nav.enabled"
-            class="mr-nav__btn mr-nav__next"
+            ng-show="nav.enabled"
+            ng-hide="atTail"
+            class="mr-nav__btn mr-nav__next c6-fade"
             type="button"
             title="Next Page"
             ng-hide="currentCard.type === 'recap'">
@@ -41,7 +40,8 @@
             disable-prev-when="!nav.enabled"
             disable-next-when="atTail || !nav.enabled"
             on-prev="RumbleCtrl.goBack('thumb')"
-            on-next="RumbleCtrl.goForward('thumb')">
+            on-next="RumbleCtrl.goForward('thumb')"
+            countdown="nav.wait">
             <ul class="mr-pages__list">
                 <li thumb-paginator-item ng-repeat="this in tocCards" class="mr-pages__item">
                     <navbar-button index="$index"
