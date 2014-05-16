@@ -1,11 +1,19 @@
 # MiniReel Player
 
+* *[Beta7.rc1]*
+  * [FEATURE]: Added 'Skip This Ad in...' countdown text for timer skippable ads
+  * [FIX]: In Lightox with Ads, added height based media queries
+
+## Beta6 (May 15, 2014)
+* *[Beta6.rc2]*
+  * [FIX]: VPAID card will no longer auto-advance to the next card if it
+    has a companion ad to display
+* *[/Beta6.rc2]*
 * *[Beta6.rc1]*
   * [FIX]: The navigation is no longer disable-able on a device that
     does not support inline video
   * [FEATURE]: Added VPAID and VAST companion ad support
-  * [FEATURE]: Added 'Skip This Ad in...' countdown text for timer skippable ads
-  * [FIX]: In Lightox with Ads, added height based media queries
+* *[/Beta6.rc1]*
 
 ## Beta5 (May 14, 2014)
 * *[Beta5.rc1]*
