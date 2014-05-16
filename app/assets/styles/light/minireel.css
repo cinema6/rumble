@@ -163,11 +163,11 @@
                             background:no-repeat 50% 50% / 102%;
                         }
                             .mr-pages__page--active .mr-pages__preview-img {
-                                -webkit-transform: scale(1.12);
-                                -moz-transform: scale(1.12);
-                                -o-transform: scale(1.12);
-                                -ms-transform: scale(1.12);
-                                transform: scale(1.12);
+                                -webkit-transform: scale(1.25);
+                                -moz-transform: scale(1.25);
+                                -o-transform: scale(1.25);
+                                -ms-transform: scale(1.25);
+                                transform: scale(1.25);
                             }
                         .mr-pages__label {
                             display: block; width:100%;
@@ -191,6 +191,16 @@
                             .mr-pages__page--active .mr-pages__current-indicator {
                                 opacity:1;
                             }
+    /* ad skip styles */
+    .adSkip__group {
+        background:#000; background:rgba(0,0,0,0.75);
+        text-transform: uppercase; text-align: center; 
+        font-weight:bold; font-size:0.875em; color:#fff;
+        position:absolute; z-index: 4;
+        width:100%; height:100%;
+        box-sizing:border-box;
+        padding-top:1.1875rem;
+    }
 
 
 /*  ==========================================================================
