@@ -205,7 +205,7 @@
                 describe('ended', function() {
                     describe('if there is a displayAd', function() {
                         beforeEach(function() {
-                            $scope.config._data.modules.displayAd.src = 'foo.jpg';
+                            VpaidCardController.companion = {};
 
                             iface.emit('ended', iface);
                         });
