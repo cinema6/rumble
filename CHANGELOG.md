@@ -3,6 +3,7 @@
 * *[Beta7.rc1]*
   * [FEATURE]: Added 'Skip This Ad in...' countdown text for timer skippable ads
   * [FIX]: In Lightox with Ads, added height based media queries
+  * [FEATURE]: Added new styles for urban times splash page
 
 ## Beta6 (May 15, 2014)
 * *[Beta6.rc2]*
