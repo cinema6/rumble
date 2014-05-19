@@ -1,5 +1,9 @@
 # MiniReel Player
 
+* *[Beta8.rc1]*
+  * [FEATURE]: User is now show an ad if they try to skip to the card
+    after an ad (if they haven't viewed the ad already)
+
 ## Beta7 (May 16, 2014)
 * *[Beta7.rc1]*
   * [FEATURE]: Added 'Skip This Ad in...' countdown text for timer skippable ads

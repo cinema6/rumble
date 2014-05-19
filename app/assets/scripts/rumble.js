@@ -594,6 +594,15 @@
         };
 
         this.setPosition = function(i){
+            var currentIndex = $scope.currentIndex,
+                isSkipping = Math.abs(currentIndex - i) > 1,
+                isGoingForward = (i - currentIndex) > 0,
+                cardBeforeThis = $scope.deck[i + (isGoingForward ? -1 : 1)];
+
+            if (isSkipping && cardBeforeThis.ad && !cardBeforeThis.visited) {
+                return this.jumpTo(cardBeforeThis);
+            }
+
             $log.info('setPosition: %1',i);
             $scope.currentReturns = null;
             $scope.currentIndex   = i;
