@@ -3,6 +3,7 @@
 * *[Beta8.rc1]*
   * [FEATURE]: User is now show an ad if they try to skip to the card
     after an ad (if they haven't viewed the ad already)
+  * [FIX]: In Lightbox mode, fixed bug where titles were getting cut off.
 
 ## Beta7 (May 16, 2014)
 * *[Beta7.rc1]*
