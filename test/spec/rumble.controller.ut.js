@@ -127,6 +127,19 @@
                         "data"   : {
                             "videoid" : "vid3video"
                         }
+                    },
+                    {
+                        "id"     : "vid4",
+                        "type"   : "youtube",
+                        "caption": "vid4 caption",
+                        "note"   : "vid4 note",
+                        "thumbs" : {
+                            "small": "vid4.jpg",
+                            "large": "vid4--large.jpg"
+                        },
+                        "data"   : {
+                            "videoid" : "vid4video"
+                        }
                     }
                 ];
 
@@ -283,7 +296,7 @@
 
             describe('$scope.nextThumb', function() {
                 beforeEach(function() {
-                    $scope.currentIndex = 4;
+                    $scope.currentIndex = 5;
                 });
 
                 it('should be null if there is no next card', function() {
@@ -603,6 +616,70 @@
                     spyOn($scope, '$emit');
                 });
 
+                describe('showing ads', function() {
+                    beforeEach(function() {
+                        $scope.deck = [
+                            {},
+                            {},
+                            {
+                                ad: true
+                            },
+                            {},
+                            {},
+                            {}
+                        ];
+
+                        spyOn(RumbleCtrl, 'setPosition').andCallThrough();
+                    });
+
+                    describe('going forward', function() {
+                        it('should show an ad if the user is skipping to the card after an ad', function() {
+                            RumbleCtrl.setPosition(1);
+                            expect(RumbleCtrl.setPosition.callCount).toBe(1);
+
+                            RumbleCtrl.setPosition(3);
+                            expect(RumbleCtrl.setPosition).toHaveBeenCalledWith(2);
+                            expect($scope.currentIndex).toBe(2);
+                            expect($scope.currentCard).toBe($scope.deck[2]);
+                        });
+
+                        it('should not show the ad if it has already been viewed', function() {
+                            RumbleCtrl.setPosition(2);
+                            RumbleCtrl.setPosition(-1);
+                            RumbleCtrl.setPosition(3);
+
+                            expect($scope.currentIndex).toBe(3);
+                            expect($scope.currentCard).toBe($scope.deck[3]);
+                        });
+                    });
+
+                    describe('going backward', function() {
+                        beforeEach(function() {
+                            RumbleCtrl.setPosition(5);
+                            RumbleCtrl.setPosition.callCount = 0;
+                        });
+
+                        it('should show an ad if the user is skipping to the card before an ad', function() {
+                            RumbleCtrl.setPosition(3);
+                            expect(RumbleCtrl.setPosition.callCount).toBe(1);
+
+                            RumbleCtrl.setPosition(1);
+                            expect(RumbleCtrl.setPosition).toHaveBeenCalledWith(2);
+                            expect($scope.currentIndex).toBe(2);
+                            expect($scope.currentCard).toBe($scope.deck[2]);
+                        });
+
+                        it('should not show the ad if it has already been viewed', function() {
+                            RumbleCtrl.setPosition(2);
+                            RumbleCtrl.setPosition(5);
+                            RumbleCtrl.setPosition(1);
+
+                            expect($scope.currentIndex).toBe(1);
+                            expect($scope.currentCard).toBe($scope.deck[1]);
+                        });
+                    });
+                });
+
                 it('updates elements based on index with setPosition',function(){
                     RumbleCtrl.setPosition(1);
                     expect($scope.currentIndex).toEqual(1);
@@ -681,6 +758,10 @@
                 });
 
                 it('handles goTo', function(){
+                    $scope.deck.forEach(function(card) {
+                        if (card.ad) { card.visited = true; }
+                    });
+
                     $scope.currentIndex = 0;
                     $scope.currentCard  = $scope.deck[0];
                     RumbleCtrl.goTo(2);
@@ -699,6 +780,10 @@
                 });
 
                 it('sends ga event if going to from control', function(){
+                    $scope.deck.forEach(function(card) {
+                        if (card.ad) { card.visited = true; }
+                    });
+
                     $scope.currentIndex = 0;
                     $scope.currentCard  = $scope.deck[0];
                     RumbleCtrl.goTo(2,'test');
@@ -713,30 +798,30 @@
                 it('sends ga event if navigates to tail',function(){
                     $scope.currentIndex = 0;
                     $scope.currentCard  = $scope.deck[0];
-                    RumbleCtrl.goTo(4,'test');
+                    RumbleCtrl.goTo(5,'test');
                     $timeout.flush();
                     $scope.$digest();
                     expect($scope.atTail).toEqual(true);
-                    expect($scope.currentIndex).toEqual(4);
-                    expect($scope.currentCard).toBe($scope.deck[4]);
+                    expect($scope.currentIndex).toEqual(5);
+                    expect($scope.currentCard).toBe($scope.deck[5]);
                     expect($window.c6MrGa.callCount).toEqual(2);
-                    expect($window.c6MrGa.calls[0].args).toEqual(['c6mr.send','event','Navigation','End','Skip', 1, { page : '/mr/e-722bd3c4942331/vid3', title : 'my title - vid3' } ]); 
+                    expect($window.c6MrGa.calls[0].args).toEqual(['c6mr.send','event','Navigation','End','Skip', 1, { page : '/mr/e-722bd3c4942331/vid4', title : 'my title - vid4' } ]); 
                 });
 
                 it('sends ga event with value===1 if ends with all cards visited',function(){
                     angular.forEach($scope.deck,function(card){
                         card.visited = true;
                     });
-                    $scope.currentIndex = 3;
-                    $scope.currentCard  = $scope.deck[3];
+                    $scope.currentIndex = 4;
+                    $scope.currentCard  = $scope.deck[4];
                     RumbleCtrl.goForward('test');
                     $timeout.flush();
                     $scope.$digest();
                     expect($scope.atTail).toEqual(true);
-                    expect($scope.currentIndex).toEqual(4);
-                    expect($scope.currentCard).toBe($scope.deck[4]);
+                    expect($scope.currentIndex).toEqual(5);
+                    expect($scope.currentCard).toBe($scope.deck[5]);
                     expect($window.c6MrGa.callCount).toEqual(2);
-                    expect($window.c6MrGa.calls[0].args).toEqual(['c6mr.send','event','Navigation','End','Next', 5, { page : '/mr/e-722bd3c4942331/vid3', title : 'my title - vid3' } ]); 
+                    expect($window.c6MrGa.calls[0].args).toEqual(['c6mr.send','event','Navigation','End','Next', 6, { page : '/mr/e-722bd3c4942331/vid4', title : 'my title - vid4' } ]); 
                 });
 
 
