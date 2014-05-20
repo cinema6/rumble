@@ -2,6 +2,7 @@
 
 * *[Beta8.rc1]*
   * [FIX]: In Lightbox mode, fixed bug where titles were getting cut off.
+  * [FEATURE]: Splash Templates Added
 
 ## Beta7 (May 16, 2014)
 * *[Beta7.rc1]*
