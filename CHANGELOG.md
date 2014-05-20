@@ -1,8 +1,14 @@
 # MiniReel Player
 
+* *[Beta8.rc1]*
+  * [FIX]: In Lightbox mode, fixed bug where titles were getting cut off.
+
+## Beta7 (May 16, 2014)
 * *[Beta7.rc1]*
   * [FEATURE]: Added 'Skip This Ad in...' countdown text for timer skippable ads
   * [FIX]: In Lightox with Ads, added height based media queries
+  * [FEATURE]: Added new styles for urban times splash page
+* *[/Beta7.rc1]*
 
 ## Beta6 (May 15, 2014)
 * *[Beta6.rc2]*
