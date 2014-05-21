@@ -34,8 +34,6 @@
             this.reset = function() {
                 // this is basically just a resumeAd() call
                 // in order to play another ad we need to re-initialize the whole player
-                // _data.modules.displayAd.active = false;
-
                 player.play();
             };
 

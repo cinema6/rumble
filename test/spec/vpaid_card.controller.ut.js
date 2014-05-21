@@ -56,7 +56,8 @@
                         data: {
                             autoplay: true,
                             skip: 6
-                        }
+                        },
+                        modules: ['displayAd']
                     };
                     $scope.profile = {
                         touch: false
@@ -179,10 +180,6 @@
                         VpaidCardController.reset();
                     });
 
-                    it('should hide the displayAd', function() {
-                        expect($scope.config._data.modules.displayAd.active).toBe(false);
-                    });
-
                     it('should restart the video from the beginning', function() {
                         expect(iface.play).toHaveBeenCalled();
                     });
@@ -233,6 +230,15 @@
                         iface.emit('play', iface);
 
                         expect($scope.config._data.modules.displayAd.active).toBe(false);
+                    });
+                });
+
+                describe('pause', function() {
+                    it('should activate the displayAd', function() {
+                        ModuleService.hasModule.andReturn(true);
+                        iface.emit('pause', iface);
+
+                        expect($scope.config._data.modules.displayAd.active).toBe(true);
                     });
                 });
 
@@ -488,8 +494,13 @@
 
                 describe('onDeck', function() {
                     describe('when true should set the displayAd src', function() {
+                        var iface;
+
                         beforeEach(function() {
+                            iface = new IFace();
+
                             $scope.$apply(function() {
+                                $scope.$emit('playerAdd', iface);
                                 $scope.onDeck = true;
                             });
                         });
@@ -508,6 +519,10 @@
                             });
 
                             expect($scope.config._data.modules.displayAd.src).toBe('htpp://test.com/image.jpg');
+                        });
+
+                        it('should load an ad', function() {
+                            expect(iface.loadAd).toHaveBeenCalled();
                         });
                     });
                 });
