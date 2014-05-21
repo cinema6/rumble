@@ -384,6 +384,13 @@
                         $log.info('Failed ot set hostname to parent:',e);
                     }
                 }
+                
+                $log.info('Init mixpanel analytics with accountId: %1, clientId: %2',
+                    cfg.mxpnlAccountId, cfg.mxpnlClientId);
+                $window.mixpanel.init(cfg.mxpnlAccountId, {
+                    'disable_cookie' : false
+                } );
+                $window.mixpanel.identify(cfg.mxpnlClientId);
                 $scope.$broadcast('analyticsReady');
             });
 

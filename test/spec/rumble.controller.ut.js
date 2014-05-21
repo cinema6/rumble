@@ -176,6 +176,10 @@
                     ControlsService = $injector.get('ControlsService');
 
                     $window.c6MrGa = jasmine.createSpy('$window.c6MrGa');
+                    $window.mixpanel = {
+                        register : jasmine.createSpy('mixpanel.register'),
+                        track    : jasmine.createSpy('mixpanel.track')
+                    };
 
                     $scope      = $rootScope.$new();
 

@@ -122,6 +122,12 @@
                     $window = {
                         location : {
                             reload : angular.noop
+                        },
+                        mixpanel : {
+                            init     : jasmine.createSpy('mixpanel.init'),
+                            identify : jasmine.createSpy('mixpanel.identify'),
+                            register : jasmine.createSpy('mixpanel.register'),
+                            track    : jasmine.createSpy('mixpanel.track')
                         }
                     };
                     c6AppData.experience = {

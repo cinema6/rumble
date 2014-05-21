@@ -396,6 +396,7 @@
         $scope.$on('<ballot-vote-module>:vote', function(/*event,vote*/){
             $window.c6MrGa('c6mr.send', 'event', 'video', 'vote',
                 self.getVirtualPage());
+            self.mxEvent('Vote');
         });
 
         $scope.$on('playerAdd',function(event,player){
@@ -421,6 +422,10 @@
                     $window.c6MrGa('c6mr.send', 'event', 'video', 'play',
                         player.webHref,
                         self.getVirtualPage());
+                    self.mxEvent('Video Play',{
+                        video    : player.webHref,
+                        duration : player.duration
+                    });
                 }
             });
             
@@ -430,6 +435,10 @@
                     $window.c6MrGa('c6mr.send', 'event', 'video', 'pause',
                         player.webHref,
                         self.getVirtualPage());
+                    self.mxEvent('Video Pause',{
+                        video    : player.webHref,
+                        duration : player.duration
+                    });
                 }
             });
             
@@ -439,6 +448,10 @@
                     $window.c6MrGa('c6mr.send', 'event', 'video', 'ended',
                         player.webHref,
                         self.getVirtualPage());
+                    self.mxEvent('Video Ended',{
+                        video    : player.webHref,
+                        duration : player.duration
+                    });
                 }
             });
         });
@@ -564,6 +577,19 @@
             }
         };
 
+        this.mxEvent = function(eventName,data){
+            if (!data){
+                data = {};
+            }
+            data.slideIndex  = $scope.currentIndex;
+            if ($scope.currentCard){
+                data.slideId      = $scope.currentCard.id;
+                data.slideTitle   = $scope.currentCard.title;
+                data.slideSource  = $scope.currentCard.source;
+            }
+            $window.mixpanel.track(eventName,data);
+        };
+
         this.getVirtualPage = function(){
             var titleRoot = (appData.experience.data.title || 'Mini Reel: ' +
                     appData.experience.id) ;
@@ -631,6 +657,8 @@
             this.goForward();
             $window.c6MrGa('c6mr.send', 'event', 'Navigation', 'Start', 'Start',
                 this.getVirtualPage());
+            
+            this.mxEvent('Clicked Start');
 
             if (appData.behaviors.fullscreen) {
                 cinema6.fullscreen(true);
@@ -647,6 +675,8 @@
                 });
                 $window.c6MrGa('c6mr.send', 'event', 'Navigation', 'End', 'Skip',
                     visited, this.getVirtualPage());
+            
+                this.mxEvent('Clicked Skip');
             } else
             if (src){
                 $window.c6MrGa('c6mr.send', 'event', 'Navigation', 'Move',
@@ -659,6 +689,7 @@
             if (src){
                 $window.c6MrGa('c6mr.send', 'event', 'Navigation', 'Move',
                     'Previous', this.getVirtualPage());
+                this.mxEvent('Clicked Prev');
             }
         };
 
@@ -672,10 +703,12 @@
                 });
                 $window.c6MrGa('c6mr.send', 'event', 'Navigation', 'End', 'Next',
                     visited, this.getVirtualPage());
+                this.mxEvent('Clicked Next', { visited : visited});
             } else
             if (src){
                 $window.c6MrGa('c6mr.send', 'event', 'Navigation', 'Move',
                     'Next', this.getVirtualPage());
+                this.mxEvent('Clicked Next');
             }
         };
 
@@ -689,6 +722,11 @@
         $scope.$on('analyticsReady',function(){
             $window.c6MrGa('c6mr.set','dimension1',appData.mode);
             self.reportPageView(self.getVirtualPage(),0);
+            $window.mixpanel.register({
+                expId       : appData.experience.id,
+                expTitle    : appData.experience.data.title,
+                expMode     : appData.mode
+            });
         });
     }])
     .directive('navbarButton', ['assetFilter','c6Computed',
