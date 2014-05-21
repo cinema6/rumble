@@ -386,7 +386,8 @@
                             },
                             currentTime : {
                                 get: function() {
-                                    return self.player.getAdProperties().adCurrentTime;
+                                    return self.player.getAdProperties ?
+                                        self.player.getAdProperties().adCurrentTime : 0;
                                 }
                             }
                         });
@@ -397,6 +398,10 @@
 
                         self.loadAd = function() {
                             self.player.loadAd();
+                        };
+
+                        self.startAd = function() {
+                            self.player.startAd();
                         };
 
                         self.pause = function() {
@@ -457,8 +462,15 @@
                                 $log.info('EVENT: ', data.__vpaid__.type);
 
                                 switch(data.__vpaid__.type) {
+                                    case 'onAdResponse':
+                                        {
+                                            // we have the Adap swf but no ad
+                                            self.emit('adPlayerReady', self);
+                                            break;
+                                        }
                                     case 'AdLoaded':
                                         {
+                                            // we have the actual ad
                                             self.emit('adLoaded', self);
                                             break;
                                         }
@@ -472,19 +484,17 @@
                                             self.emit('pause', self);
                                             break;
                                         }
-                                    case 'AdVideoComplete':
-                                        {
-                                            self.emit('ended', self);
-                                            break;
-                                        }
-                                    case 'onAdResponse':
-                                        {
-                                            self.emit('adReady', self);
-                                            break;
-                                        }
                                     case 'displayBanners':
                                         {
                                             self.emit('companionsReady', self);
+                                            break;
+                                        }
+                                    case 'AdError':
+                                    case 'AdStopped':
+                                    case 'AdVideoComplete':
+                                    case 'onAllAdsCompleted':
+                                        {
+                                            self.emit('ended', self);
                                             break;
                                         }
                                 }
