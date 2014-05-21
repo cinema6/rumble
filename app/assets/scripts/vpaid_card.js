@@ -34,7 +34,7 @@
             this.reset = function() {
                 // this is basically just a resumeAd() call
                 // in order to play another ad we need to re-initialize the whole player
-                _data.modules.displayAd.active = false;
+                // _data.modules.displayAd.active = false;
 
                 player.play();
             };
@@ -197,13 +197,11 @@
                             duration: NaN
                         },
                         playerReady = false,
-                        adPlayerReady = false,
-                        adReady = false,
-                        adShouldPause = false,
-                        adShouldPlay = false,
-                        adShouldLoad = false,
                         hasStarted = false,
                         player;
+
+                    var adPlayerDeferred = $q.defer(),
+                        adDeferred = $q.defer();
 
                     Object.defineProperties(iface, {
                         currentTime: {
@@ -242,32 +240,22 @@
                     };
 
                     iface.loadAd = function() {
-                        if (adPlayerReady) {
-                            player.loadAd();
-                        } else {
-                            adShouldLoad = true;
-                        }
+                        return adPlayerDeferred.promise.then(player.loadAd);
                     };
 
                     iface.play = function() {
-                        if (adReady) {
+                        return adDeferred.promise.then(function() {
                             if (hasStarted) {
                                 player.resumeAd();
                             } else {
                                 player.startAd();
                                 hasStarted = true;
                             }
-                        } else {
-                            adShouldPlay = true;
-                        }
+                        });
                     };
 
                     iface.pause = function() {
-                        if (adReady) {
-                            player.pause();
-                        } else {
-                            adShouldPause = true;
-                        }
+                        return adDeferred.promise.then(player.pause);
                     };
 
                     iface.destroy = function() {
@@ -295,24 +283,9 @@
 
                             iface.emit('ready', iface);
 
-                            player.on('adLoaded', function() {
-                                if (adShouldPause) {
-                                    player.pause();
-                                    adShouldPause = false;
-                                } else if (adShouldPlay) {
-                                    player.startAd();
-                                    adShouldPlay = false;
-                                }
-                                adReady = true;
-                            });
+                            player.on('adLoaded', adDeferred.resolve);
 
-                            player.on('adPlayerReady', function() {
-                                if (adShouldLoad) {
-                                    player.loadAd();
-                                }
-                                adPlayerReady = true;
-                                adShouldLoad = false;
-                            });
+                            player.on('adPlayerReady', adPlayerDeferred.resolve);
 
                             player.on('ended', function() {
                                 _iface.ended = true;

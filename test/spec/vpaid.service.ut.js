@@ -20,6 +20,7 @@
                 c6EventEmitter(this);
 
                 this.loadAd = jasmine.createSpy('player.loadAd()');
+                this.startAd = jasmine.createSpy('player.startAd()');
                 this.pauseAd = jasmine.createSpy('player.pause()');
                 this.getDisplayBanners = jasmine.createSpy('player.getDisplayBanners()');
                 this.setVolume = jasmine.createSpy('player.setVolume()');
@@ -148,11 +149,11 @@
                                 it('should insert HTML into the player element', function() {
                                     $httpBackend.expectGET('/views/vpaid_object_embed.html')
                                         .respond(200, '<object></object>');
-                                    
+
                                     player.insertHTML();
-                                    
+
                                     $httpBackend.flush();
-                                    
+
                                     expect(playerElementMock.prepend).toHaveBeenCalledWith('<object></object>');
                                 });
                             });
@@ -161,6 +162,13 @@
                                 it('should call loadAd() on the flash object', function() {
                                     player.loadAd();
                                     expect(mockFlashPlayer.loadAd).toHaveBeenCalled();
+                                });
+                            });
+
+                            describe('startAd()', function() {
+                                it('should call loadAd() on the flash object', function() {
+                                    player.startAd();
+                                    expect(mockFlashPlayer.startAd).toHaveBeenCalled();
                                 });
                             });
 

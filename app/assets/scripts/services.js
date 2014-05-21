@@ -443,7 +443,7 @@
                         self.destroy = function() {
                             // TO DO: graceful way to destroy and rebuild
                             // this will depend on whether we actually want to re-initialize a new vpaid ad
-                            
+
                             // self.player.stopAd();
                             // element$[0].removeChild(element$[0].childNodes[0]);
                             // self.insertHTML();
@@ -475,6 +475,7 @@
                                             break;
                                         }
                                     case 'AdStarted':
+                                    case 'AdPlaying':
                                         {
                                             self.emit('play', self);
                                             break;
