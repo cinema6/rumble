@@ -37,6 +37,7 @@
                             }]
                         }),
                         c6Sandbox({
+                            gaAccountId : 'UA-44457821-2',
                             landingContentDir: grunt.template.process('<%= settings.collateralDir %>'),
                             experiences: grunt.config.process(
                                 grunt.file.readJSON(
