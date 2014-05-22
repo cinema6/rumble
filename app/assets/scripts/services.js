@@ -78,7 +78,7 @@
                 var encode = encodeURIComponent;
 
                 return (tag || '')
-                    .replace(/{cachebreaker}/g, encode(Date.now()))
+                    .replace(/{cachebreaker}/g, encode($window.Date.now()))
                     .replace(/{pageUrl}/g, encode(url));
             };
         }])
