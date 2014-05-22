@@ -20,7 +20,11 @@
                                 href: 'http://www.urbantimes.com/minireels/bestvideos'
                             }
                         },
-                        addEventListener: noop
+                        addEventListener: noop,
+                        Date: {
+                            now: jasmine.createSpy('Date.now()')
+                                .andReturn(Date.now())
+                        }
                     });
                 });
 
@@ -38,7 +42,7 @@
             });
 
             it('should compile an ad tag with the url of the page and a cachebuster', function() {
-                var now = Date.now();
+                var now = $window.Date.now();
 
                 expect(compileAdTag(tag)).toBe('http://u-ads.adap.tv/a/h/jSmRYUB6OAinZ1YEc6FP2eOeZCYQ_JsM?cb=' + now + '&pageUrl=' + encodeURIComponent($window.parent.location.href) + '&eov=eov');
             });

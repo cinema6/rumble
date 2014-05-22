@@ -53,6 +53,7 @@
                 inject(function($injector) {
                     $rootScope = $injector.get('$rootScope');
                     $window = $injector.get('$window');
+                    spyOn($window.Date, 'now').andReturn(Date.now());
                     $log = $injector.get('$log');
                     $log.context = function() { return $log; };
                     $httpBackend = $injector.get('$httpBackend');

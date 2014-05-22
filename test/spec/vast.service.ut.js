@@ -189,6 +189,7 @@
                     $q = $injector.get('$q');
                     $httpBackend = $injector.get('$httpBackend');
                     $window = $injector.get('$window');
+                    spyOn($window.Date, 'now').andReturn(Date.now());
                     c6ImagePreloader = $injector.get('c6ImagePreloader');
                     compileAdTag = $injector.get('compileAdTag');
 
