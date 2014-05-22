@@ -20,6 +20,7 @@
                 c6EventEmitter(this);
 
                 this.loadAd = jasmine.createSpy('player.loadAd()');
+                this.startAd = jasmine.createSpy('player.startAd()');
                 this.pauseAd = jasmine.createSpy('player.pause()');
                 this.getDisplayBanners = jasmine.createSpy('player.getDisplayBanners()');
                 this.setVolume = jasmine.createSpy('player.setVolume()');
@@ -148,11 +149,11 @@
                                 it('should insert HTML into the player element', function() {
                                     $httpBackend.expectGET('/views/vpaid_object_embed.html')
                                         .respond(200, '<object></object>');
-                                    
+
                                     player.insertHTML();
-                                    
+
                                     $httpBackend.flush();
-                                    
+
                                     expect(playerElementMock.prepend).toHaveBeenCalledWith('<object></object>');
                                 });
                             });
@@ -161,6 +162,13 @@
                                 it('should call loadAd() on the flash object', function() {
                                     player.loadAd();
                                     expect(mockFlashPlayer.loadAd).toHaveBeenCalled();
+                                });
+                            });
+
+                            describe('startAd()', function() {
+                                it('should call loadAd() on the flash object', function() {
+                                    player.startAd();
+                                    expect(mockFlashPlayer.startAd).toHaveBeenCalled();
                                 });
                             });
 
@@ -311,6 +319,16 @@
                                     expect(player.emit).toHaveBeenCalledWith('play', player);
                                 });
 
+                                it('should emit when AdPlaying is postMessaged', function() {
+                                    var message = {
+                                        data: '{ "__vpaid__" : { "type" : "AdPlaying", "id" : "testId" } }',
+                                    };
+
+                                    messageHandler(message);
+
+                                    expect(player.emit).toHaveBeenCalledWith('play', player);
+                                });
+
                                 it('should not emit when id doesn\'t match', function() {
                                     var message = {
                                         data: '{ "__vpaid__" : { "type" : "AdStarted", "id" : "wrongId" } }',
@@ -347,7 +365,7 @@
                             });
 
                             describe('pause', function() {
-                                it('should emit when AdStarted is postMessaged', function() {
+                                it('should emit when AdPaused is postMessaged', function() {
                                     var message = {
                                         data: '{ "__vpaid__" : { "type" : "AdPaused", "id" : "testId" } }',
                                     };
@@ -393,14 +411,25 @@
                             });
 
                             describe('ended', function() {
-                                it('should emit when AdStarted is postMessaged', function() {
-                                    var message = {
+                                [
+                                    {
+                                        data: '{ "__vpaid__" : { "type" : "AdError", "id" : "testId" } }',
+                                    },
+                                    {
+                                        data: '{ "__vpaid__" : { "type" : "AdStopped", "id" : "testId" } }',
+                                    },
+                                    {
                                         data: '{ "__vpaid__" : { "type" : "AdVideoComplete", "id" : "testId" } }',
-                                    };
+                                    },
+                                    {
+                                        data: '{ "__vpaid__" : { "type" : "onAllAdsCompleted", "id" : "testId" } }',
+                                    }
+                                ].forEach(function(message) {
+                                    it('should emit when AdEnded/AdStopped/AdVideoComplete/onAllAdsComplete is postMessaged', function() {
+                                        messageHandler(message);
 
-                                    messageHandler(message);
-
-                                    expect(player.emit).toHaveBeenCalledWith('ended', player);
+                                        expect(player.emit).toHaveBeenCalledWith('ended', player);
+                                    });
                                 });
 
                                 it('should not emit when id doesn\'t match', function() {
@@ -427,11 +456,6 @@
                                     expect(player.emit).not.toHaveBeenCalledWith('ended', player);
 
                                     message.data = '{ "__vpaid__" : { "type" : "SomethingRandom", "id" : "testId" } }';
-                                    messageHandler(message);
-
-                                    expect(player.emit).not.toHaveBeenCalledWith('ended', player);
-
-                                    message.data = '{ "__vpaid__" : { "type" : "AdError", "id" : "testId" } }';
                                     messageHandler(message);
 
                                     expect(player.emit).not.toHaveBeenCalledWith('ended', player);
