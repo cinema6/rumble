@@ -128,6 +128,9 @@
                 },
                 thumb_paginator: {
                     deps: ['app']
+                },
+                tracker: {
+                    deps: ['app']
                 }
             },
 
