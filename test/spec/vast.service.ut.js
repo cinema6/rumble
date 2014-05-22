@@ -8,7 +8,8 @@
                 $rootScope,
                 $q,
                 $window,
-                c6ImagePreloader;
+                c6ImagePreloader,
+                compileAdTag;
 
             var $httpBackend;
 
@@ -174,7 +175,7 @@
                     '</VAST>'
                 ].join('\n');
 
-                module('c6.ui');
+                module('c6.rumble');
 
                 module('c6.rumble.services', function($injector) {
                     VASTServiceProvider = $injector.get('VASTServiceProvider');
@@ -189,6 +190,7 @@
                     $httpBackend = $injector.get('$httpBackend');
                     $window = $injector.get('$window');
                     c6ImagePreloader = $injector.get('c6ImagePreloader');
+                    compileAdTag = $injector.get('compileAdTag');
 
                     _service = VASTService._private;
                 });
@@ -205,13 +207,22 @@
 
                 describe('@public', function() {
                     describe('methods', function() {
-                        describe('adServerUrl(url)', function() {
+                        describe('adTags(tags)', function() {
+                            var tags;
+
                             beforeEach(function() {
-                                VASTServiceProvider.adServerUrl('http://www.foo.com/test');
+                                tags = {
+                                    cinema6: 'http://u-ads.adap.tv/a/h/jSmRYUB6OAj1k0TZythPvTfWmlP8j6NQ7PLXxjjb3_8=?cb={cachebreaker}&pageUrl={pageUrl}&eov=eov',
+                                    publisher: 'http://u-ads.adap.tv/a/h/jSmRYUB6OAinZ1YEc6FP2ey+WPdagwFmCGZaBkvRjnc=?cb={cachebreaker}&pageUrl={pageUrl}&eov=eov',
+                                    'cinema6-publisher': 'http://u-ads.adap.tv/a/h/jSmRYUB6OAj1k0TZythPvadnVgRzoU_Z7L5Y91qDAWYqO9LOfrpuqQ==?cb={cachebreaker}&pageUrl={pageUrl}&eov=eov',
+                                    'publisher-cinema6': 'http://u-ads.adap.tv/a/h/jSmRYUB6OAinZ1YEc6FP2fCQPSbU6FwIZz5J5C0Fsw2tnkCzhk2yTw==?cb={cachebreaker}&pageUrl={pageUrl}&eov=eov'
+                                };
+
+                                VASTServiceProvider.adTags(tags);
                             });
 
                             it('should set _private.serverUrl to the provided URL', function() {
-                                expect(_provider.serverUrl).toBe('http://www.foo.com/test');
+                                expect(_provider.adTags).toBe(tags);
                             });
                         });
                     });
@@ -229,7 +240,7 @@
 
                 describe('@public', function() {
                     describe('methods', function() {
-                        describe('getVAST()', function() {
+                        describe('getVAST(key)', function() {
                             var result,
                                 vast;
 
@@ -242,19 +253,22 @@
                                 spyOn(_service, 'getXML').andCallThrough();
                                 spyOn(_service, 'VAST').andReturn(vast);
 
-                                _provider.serverUrl = 'http://ads.adap.tv/a/t/integration_test';
+                                _provider.adTags = {
+                                    cinema6: 'http://u-ads.adap.tv/a/h/jSmRYUB6OAinZ1YEc6FP2ey+WPdagwFmCGZaBkvRjnc=?cb={cachebreaker}&pageUrl={pageUrl}&eov=eov',
+                                    'publisher-cinema6': 'http://u-ads.adap.tv/a/h/jSmRYUB6OAinZ1YEc6FP2fCQPSbU6FwIZz5J5C0Fsw2tnkCzhk2yTw==?cb={cachebreaker}&pageUrl={pageUrl}&eov=eov'
+                                };
                             });
 
                             describe('if a wrapper is returned', function() {
                                 beforeEach(function() {
                                     spyOn(VASTService, 'getVAST').andCallThrough();
 
-                                    $httpBackend.expectGET('http://ads.adap.tv/a/t/integration_test')
+                                    $httpBackend.expectGET(compileAdTag('http://u-ads.adap.tv/a/h/jSmRYUB6OAinZ1YEc6FP2ey+WPdagwFmCGZaBkvRjnc=?cb={cachebreaker}&pageUrl={pageUrl}&eov=eov'))
                                         .respond(200, wrapperXML);
                                     $httpBackend.expectGET('http://u-ads.adap.tv/a/h/CbyYsMcIh10+XoGWvwRuGArwmci9atPoj0IzNiHGphs=?cb=88104981&pageUrl=http%3A%2F%2Ftest.com&eov=eov')
                                         .respond(200, XML);
 
-                                    result = VASTService.getVAST();
+                                    result = VASTService.getVAST('cinema6');
                                 });
 
                                 it('should call itself with the new URI', function() {
@@ -271,53 +285,13 @@
 
                             describe('if a url is provided', function() {
                                 beforeEach(function() {
-                                    $httpBackend.expectGET('http://u-ads.adap.tv/a/h/CbyYsMcIh10+XoGWvwRuGArwmci9atPoj0IzNiHGphs=?cb=88104981&pageUrl=http%3A%2F%2Ftest.com&eov=eov')
+                                    $httpBackend.expectGET(compileAdTag('http://u-ads.adap.tv/a/h/jSmRYUB6OAinZ1YEc6FP2fCQPSbU6FwIZz5J5C0Fsw2tnkCzhk2yTw==?cb={cachebreaker}&pageUrl={pageUrl}&eov=eov'))
                                         .respond(200, XML);
 
-                                    result = VASTService.getVAST('http://u-ads.adap.tv/a/h/CbyYsMcIh10+XoGWvwRuGArwmci9atPoj0IzNiHGphs=?cb=88104981&pageUrl=http%3A%2F%2Ftest.com&eov=eov');
+                                    result = VASTService.getVAST('publisher-cinema6');
                                 });
 
                                 it('should make a request to the provided url', function() {
-                                    $httpBackend.flush();
-                                });
-
-                                it('should convert the response to an XML DOM', function() {
-                                    $httpBackend.flush();
-
-                                    expect(_service.getXML).toHaveBeenCalledWith(XML, jasmine.any(Function));
-                                });
-
-                                it('should return a promise', function() {
-                                    expect(result.then).toEqual(jasmine.any(Function));
-                                });
-
-                                describe('when the promise resolves', function() {
-                                    var promiseSpy;
-
-                                    beforeEach(function() {
-                                        promiseSpy = jasmine.createSpy();
-
-                                        result.then(promiseSpy);
-
-                                        $httpBackend.flush();
-                                    });
-
-                                    it('should resolve to a VAST object', function() {
-                                        expect(_service.VAST).toHaveBeenCalled();
-                                        expect(promiseSpy).toHaveBeenCalledWith(vast);
-                                    });
-                                });
-                            });
-
-                            describe('if no url is provided', function() {
-                                beforeEach(function() {
-                                    $httpBackend.expectGET('http://ads.adap.tv/a/t/integration_test')
-                                        .respond(200, XML);
-
-                                    result = VASTService.getVAST();
-                                });
-
-                                it('should make a request to the ad server', function() {
                                     $httpBackend.flush();
                                 });
 

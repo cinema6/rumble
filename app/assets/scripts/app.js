@@ -47,9 +47,18 @@
         }])
         .config(['VASTServiceProvider', 'VPAIDServiceProvider',
         function( VASTServiceProvider, VPAIDServiceProvider ) {
-            // VASTServiceProvider.adServerUrl('http://u-ads.adap.tv/a/h/CbyYsMcIh10+XoGWvwRuGArwmci9atPoLiGQaGjtyrT4ht6z4qOJpQ==?cb=%5BCACHE_BREAKER%5D&pageUrl=http%3A%2F%2Ftest.com&eov=eov');
-            VASTServiceProvider.adServerUrl('http://u-ads.adap.tv/a/h/5+_0LDFk+KwoWa_HApVt0qDrdJaixbMD?cb=9874983758324475&pageUrl=http%3A%2F%2Fcinema6.com&eov=eov');
-            VPAIDServiceProvider.adServerUrl('http://u-ads.adap.tv/a/h/AiVnje_CA3BJsRMP0_gPXAtRyCRFRZSd?cb=[CACHE_BREAKER]&pageUrl=http%3A%2F%2Ftribal360.com&description=[params.videoDesc]&duration=[params.videoDuration]&id=[params.videoId]&keywords=[params.keywords]&title=[params.videoTitle]&url=VIDEO_URL&eov=eov');
+            VASTServiceProvider.adTags({
+                cinema6: 'http://u-ads.adap.tv/a/h/jSmRYUB6OAj1k0TZythPvTfWmlP8j6NQ7PLXxjjb3_8=?cb={cachebreaker}&pageUrl={pageUrl}&eov=eov',
+                publisher: 'http://u-ads.adap.tv/a/h/jSmRYUB6OAinZ1YEc6FP2ey+WPdagwFmCGZaBkvRjnc=?cb={cachebreaker}&pageUrl={pageUrl}&eov=eov',
+                'cinema6-publisher': 'http://u-ads.adap.tv/a/h/jSmRYUB6OAj1k0TZythPvadnVgRzoU_Z7L5Y91qDAWYqO9LOfrpuqQ==?cb={cachebreaker}&pageUrl={pageUrl}&eov=eov',
+                'publisher-cinema6': 'http://u-ads.adap.tv/a/h/jSmRYUB6OAinZ1YEc6FP2fCQPSbU6FwIZz5J5C0Fsw2tnkCzhk2yTw==?cb={cachebreaker}&pageUrl={pageUrl}&eov=eov'
+            });
+            VPAIDServiceProvider.adTags({
+                cinema6: 'http://u-ads.adap.tv/a/h/jSmRYUB6OAj1k0TZythPvYyD60pQS_90Geh1rmQXJf8=?cb={cachebreaker}&pageUrl={pageUrl}&eov=eov',
+                publisher: 'http://u-ads.adap.tv/a/h/jSmRYUB6OAinZ1YEc6FP2eOeZCYQ_JsM?cb={cachebreaker}&pageUrl={pageUrl}&eov=eov',
+                'cinema6-publisher': 'http://u-ads.adap.tv/a/h/jSmRYUB6OAj1k0TZythPvadnVgRzoU_ZPrm0eqz83CjPXEF4pAnE3w==?cb={cachebreaker}&pageUrl={pageUrl}&eov=eov',
+                'publisher-cinema6': 'http://u-ads.adap.tv/a/h/jSmRYUB6OAinZ1YEc6FP2fCQPSbU6FwIdK4EW3jlLza+WaaKRuPC_g==?cb={cachebreaker}&pageUrl={pageUrl}&eov=eov'
+            });
         }])
         .run(   ['cinema6',
         function( cinema6 ) {

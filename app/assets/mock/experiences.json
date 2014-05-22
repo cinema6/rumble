@@ -84,7 +84,8 @@
                     ],
                     "data": {
                         "autoplay": true,
-                        "skip": 6
+                        "skip": 6,
+                        "source": "cinema6"
                     }
                 },
                 {
@@ -362,7 +363,8 @@
                     ],
                     "data": {
                         "autoplay": true,
-                        "skip": 6
+                        "skip": 6,
+                        "source": "cinema6"
                     }
                 },
                 {
@@ -743,7 +745,8 @@
                     ],
                     "data": {
                         "autoplay": true,
-                        "skip": true
+                        "skip": true,
+                        "source": "cinema6-publisher"
                     }
                 },
                 {
@@ -1144,7 +1147,8 @@
                     ],
                     "data": {
                         "autoplay": true,
-                        "skip": false
+                        "skip": false,
+                        "source": "publisher"
                     }
                 },
                 {
@@ -1507,7 +1511,8 @@
                     "modules": [],
                     "data": {
                         "autoplay": true,
-                        "skip": false
+                        "skip": false,
+                        "source": "publisher-cinema6"
                     }
                 },
                 {
@@ -1740,7 +1745,8 @@
                     "modules": [],
                     "data": {
                         "autoplay": true,
-                        "skip": 6
+                        "skip": 6,
+                        "source": "cinema6"
                     }
                 },
                 {
@@ -1973,7 +1979,8 @@
                     "modules": [],
                     "data": {
                         "autoplay": true,
-                        "skip": false
+                        "skip": false,
+                        "source": "cinema6"
                     }
                 },
                 {
@@ -2164,7 +2171,8 @@
                     ],
                     "data": {
                         "autoplay": true,
-                        "skip": true
+                        "skip": true,
+                        "source": "cinema6-publisher"
                     }
                 },
                 {

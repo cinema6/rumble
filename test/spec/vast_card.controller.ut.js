@@ -54,7 +54,7 @@
                             };
                         };
 
-                        this.adServerUrl = angular.noop;
+                        this.adTags = angular.noop;
                     });
 
                     $provide.value('ModuleService', {
@@ -84,7 +84,8 @@
                     $scope.config = {
                         data: {
                             autoplay: false,
-                            skip: 11
+                            skip: 11,
+                            source: 'publisher-cinema6'
                         },
                         displayAd: 'http://2.bp.blogspot.com/-TlM_3FT89Y0/UMzLr7kVykI/AAAAAAAACjs/lKrdhgp6OQg/s1600/brad-turner.jpg'
                     };
@@ -723,7 +724,7 @@
                         });
 
                         it('should call getVAST on the vast service', function() {
-                            expect(VASTService.getVAST).toHaveBeenCalled();
+                            expect(VASTService.getVAST).toHaveBeenCalledWith($scope.config.data.source);
                         });
 
                         // TODO: Fetch displayAd from the ad server

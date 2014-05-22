@@ -9,7 +9,8 @@
                 $window,
                 $log,
                 $httpBackend,
-                c6EventEmitter;
+                c6EventEmitter,
+                compileAdTag;
 
             var _provider,
                 _service;
@@ -42,10 +43,11 @@
             beforeEach(function() {
                 module('c6.ui');
 
-                module('c6.rumble.services', function($injector) {
+                module('c6.rumble.services', function($provide, $injector) {
                     VPAIDServiceProvider = $injector.get('VPAIDServiceProvider');
 
                     _provider = VPAIDServiceProvider._private;
+                    $provide.value('c6Defines', window.c6);
                 });
 
                 inject(function($injector) {
@@ -54,6 +56,7 @@
                     $log = $injector.get('$log');
                     $log.context = function() { return $log; };
                     $httpBackend = $injector.get('$httpBackend');
+                    compileAdTag = $injector.get('compileAdTag');
 
                     VPAIDService = $injector.get('VPAIDService');
                     c6EventEmitter = $injector.get('c6EventEmitter');
@@ -73,11 +76,18 @@
                 });
 
                 describe('@public methods', function() {
-                    describe('adServerUrl(url)', function() {
-                        it('should set _private.serverUrl to the provided URL', function() {
-                            VPAIDServiceProvider.adServerUrl('http://www.foo.com/test');
+                    describe('adTags(tags)', function() {
+                        it('should save the tags', function() {
+                            var tags = {
+                                cinema6: 'http://u-ads.adap.tv/a/h/jSmRYUB6OAj1k0TZythPvYyD60pQS_90Geh1rmQXJf8=?cb={cachebreaker}&pageUrl={pageUrl}&eov=eov',
+                                publisher: 'http://u-ads.adap.tv/a/h/jSmRYUB6OAinZ1YEc6FP2eOeZCYQ_JsM?cb={cachebreaker}&pageUrl={pageUrl}&eov=eov',
+                                'cinema6-publisher': 'http://u-ads.adap.tv/a/h/jSmRYUB6OAj1k0TZythPvadnVgRzoU_ZPrm0eqz83CjPXEF4pAnE3w==?cb={cachebreaker}&pageUrl={pageUrl}&eov=eov',
+                                'publisher-cinema6': 'http://u-ads.adap.tv/a/h/jSmRYUB6OAinZ1YEc6FP2fCQPSbU6FwIdK4EW3jlLza+WaaKRuPC_g==?cb={cachebreaker}&pageUrl={pageUrl}&eov=eov'
+                            };
 
-                            expect(_provider.serverUrl).toBe('http://www.foo.com/test');
+                            expect(VPAIDServiceProvider.adTags(tags)).toBe(VPAIDServiceProvider);
+
+                            expect(_provider.adTags).toBe(tags);
                         });
                     });
                 });
@@ -137,8 +147,13 @@
                             var player;
 
                             beforeEach(function() {
-                                VPAIDServiceProvider.adServerUrl('http://www.foo.com/test');
-                                player = VPAIDService.createPlayer('testId',{},parentElementMock);
+                                VPAIDServiceProvider.adTags({
+                                    cinema6: 'http://u-ads.adap.tv/a/h/jSmRYUB6OAj1k0TZythPvYyD60pQS_90Geh1rmQXJf8=?cb={cachebreaker}&pageUrl={pageUrl}&eov=eov',
+                                    publisher: 'http://u-ads.adap.tv/a/h/jSmRYUB6OAinZ1YEc6FP2eOeZCYQ_JsM?cb={cachebreaker}&pageUrl={pageUrl}&eov=eov',
+                                    'cinema6-publisher': 'http://u-ads.adap.tv/a/h/jSmRYUB6OAj1k0TZythPvadnVgRzoU_ZPrm0eqz83CjPXEF4pAnE3w==?cb={cachebreaker}&pageUrl={pageUrl}&eov=eov',
+                                    'publisher-cinema6': 'http://u-ads.adap.tv/a/h/jSmRYUB6OAinZ1YEc6FP2fCQPSbU6FwIdK4EW3jlLza+WaaKRuPC_g==?cb={cachebreaker}&pageUrl={pageUrl}&eov=eov'
+                                });
+                                player = VPAIDService.createPlayer('testId',{ data: { source: 'cinema6-publisher' } },parentElementMock);
                             });
 
                             describe('insertHTML()', function() {
@@ -148,13 +163,13 @@
 
                                 it('should insert HTML into the player element', function() {
                                     $httpBackend.expectGET('/views/vpaid_object_embed.html')
-                                        .respond(200, '<object></object>');
+                                        .respond(200, '<object swf="__SWF__" vars="__FLASHVARS__"></object>');
 
                                     player.insertHTML();
 
                                     $httpBackend.flush();
 
-                                    expect(playerElementMock.prepend).toHaveBeenCalledWith('<object></object>');
+                                    expect(playerElementMock.prepend).toHaveBeenCalledWith('<object swf="/swf/player.swf" vars="adXmlUrl=' + encodeURIComponent(compileAdTag('http://u-ads.adap.tv/a/h/jSmRYUB6OAj1k0TZythPvadnVgRzoU_ZPrm0eqz83CjPXEF4pAnE3w==?cb={cachebreaker}&pageUrl={pageUrl}&eov=eov')) + '&playerId=testId"></object>');
                                 });
                             });
 
