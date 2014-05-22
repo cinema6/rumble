@@ -66,7 +66,7 @@
 
             $scope.$watch('onDeck', function(onDeck) {
                 if(onDeck) {
-                    VASTService.getVAST().then(function(vast) {
+                    VASTService.getVAST(data.source).then(function(vast) {
                         _data.vastData = vast;
                         self.videoSrc = vast.getVideoSrc('video/mp4');
                         self.companion = vast.getCompanion();

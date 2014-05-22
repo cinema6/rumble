@@ -62,15 +62,36 @@
             if (window.c6.kHasKarma) { this._private = _private; }
         }])
 
+        .factory('compileAdTag', ['$window','c6Defines',
+        function                 ( $window , c6Defines ) {
+            var url = c6Defines.kDevMode ?
+                'http://www.mutantplayground.com' :
+                (function() {
+                    try {
+                        return $window.parent.location.href;
+                    } catch(e) {
+                        return $window.location.href;
+                    }
+                }());
+
+            return function(tag) {
+                var encode = encodeURIComponent;
+
+                return (tag || '')
+                    .replace(/{cachebreaker}/g, encode(Date.now()))
+                    .replace(/{pageUrl}/g, encode(url));
+            };
+        }])
+
         .provider('VASTService', [function() {
             var _provider = {};
 
-            this.adServerUrl = function(url) {
-                _provider.serverUrl = url;
+            this.adTags = function(tags) {
+                _provider.adTags = tags;
             };
 
-            this.$get = ['$log', '$http','$window', 'c6ImagePreloader',
-            function    ( $log ,  $http , $window ,  c6ImagePreloader ) {
+            this.$get = ['$log','$http','$window','c6ImagePreloader','compileAdTag',
+            function    ( $log , $http , $window , c6ImagePreloader , compileAdTag ) {
                 var service = {},
                     _service = {};
 
@@ -236,10 +257,11 @@
                     return parser.parseFromString(string.replace(/\n/g, '').replace(/>\s+</g, '><'), 'text/xml');
                 };
 
-                service.getVAST = function(url) {
+                service.getVAST = function(source) {
                     // make an xml container for all the vast responses, including wrappers
                     var parser = new $window.DOMParser(),
-                        combinedVast = parser.parseFromString('<?xml version="1.0" encoding="UTF-8"?><container></container>', 'text/xml');
+                        combinedVast = parser.parseFromString('<?xml version="1.0" encoding="UTF-8"?><container></container>', 'text/xml'),
+                        url = compileAdTag(_provider.adTags[source]);
 
                     function fetchVAST(url) {
                         function recurse(response) {
@@ -270,7 +292,7 @@
                         return new _service.VAST(vast);
                     }
 
-                    return fetchVAST((url || _provider.serverUrl)).then(createVast);
+                    return fetchVAST(url).then(createVast);
                 };
 
                 if (window.c6.kHasKarma) { service._private = _service; }
@@ -284,12 +306,14 @@
         .provider('VPAIDService', [function() {
             var _provider = {};
 
-            this.adServerUrl = function(url) {
-                _provider.serverUrl = url;
+            this.adTags = function(tags) {
+                _provider.adTags = tags;
+
+                return this;
             };
 
-            this.$get = ['$log', '$http', '$q', '$window', '$interval', '$templateCache', 'c6EventEmitter', 'c6UrlMaker',
-            function    ( $log ,  $http ,  $q ,  $window ,  $interval ,  $templateCache ,  c6EventEmitter ,  c6UrlMaker ) {
+            this.$get = ['$log','$http','$q','$window','$interval','$templateCache','c6EventEmitter','c6UrlMaker','compileAdTag',
+            function    ( $log , $http , $q , $window , $interval , $templateCache , c6EventEmitter , c6UrlMaker , compileAdTag ) {
                 var service = {},
                     _service = {};
 
@@ -344,12 +368,11 @@
 
                         function setup(template) {
                             var html,
-                                flashvars;
+                                flashvars = '';
 
                             html = template.data.replace(/__SWF__/g, c6UrlMaker('swf/player.swf'));
 
-                            flashvars = '';
-                            flashvars += 'adXmlUrl=' + encodeURIComponent(_provider.serverUrl);
+                            flashvars += 'adXmlUrl=' + encodeURIComponent(compileAdTag(_provider.adTags[config.data.source]));
                             flashvars += '&playerId=' + encodeURIComponent(playerId);
 
                             html = html.replace(/__FLASHVARS__/g, flashvars);
