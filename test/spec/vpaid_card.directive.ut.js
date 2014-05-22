@@ -28,6 +28,7 @@
                 this.play = jasmine.createSpy('player.play()');
                 this.pause = jasmine.createSpy('player.pause()');
                 this.loadAd = jasmine.createSpy('player.loadAd()');
+                this.startAd = jasmine.createSpy('player.startAd()');
                 this.insertHTML = jasmine.createSpy('player.insertHTML()')
                     .andReturn(deferred.promise);
                 this.getCurrentTime = function() { return 2; };
@@ -129,32 +130,6 @@
                     expect(iface.emit).toHaveBeenCalledWith('ready', iface);
                 });
 
-                describe('and when the player fires "adLoaded"', function() {
-                    beforeEach(function() {
-                        spyOn(_player, 'getDuration').andCallThrough();
-                    });
-
-                    it('should pause if a pause was queued', function() {
-                        iface.pause();
-                        _player.emit('adLoaded', _player);
-
-                        expect(_player.pause).toHaveBeenCalled();
-                    });
-
-                    it('should allow a pause', function() {
-                        _player.emit('adLoaded', _player);
-                        iface.pause();
-
-                        expect(_player.pause).toHaveBeenCalled();
-                    });
-
-                    it('should not allow pause if not fired', function() {
-                        iface.pause();
-
-                        expect(_player.pause).not.toHaveBeenCalled();
-                    });
-                });
-
                 describe('and when the player fires "play"', function() {
                     beforeEach(function() {
                         spyOn(_player, 'getDuration').andCallThrough();
@@ -220,6 +195,7 @@
                     _player = VPAIDService.createPlayer();
 
                     spyOn(VPAIDService, 'createPlayer').andReturn(_player);
+                    spyOn(_player, 'on').andCallThrough();
 
                     $scope.$on('playerAdd', function(event, playerInterface) {
                         iface = playerInterface;
@@ -363,55 +339,65 @@
                 });
 
                 describe('play', function() {
-                    // this is the exact same function as loadAd(),
-                    // I just liked to keep loadAd() cuz it matches the player method
-                    it('should not call loadAd() on the player if player isn\'t ready', function() {
+                    beforeEach(function() {
+                        _player.emit('ready', _player);
                         iface.play();
-                        expect(_player.loadAd).not.toHaveBeenCalled();
                     });
 
-                    it('should not call loadAd() on the player if adReady hasn\'t fired', function() {
-                        iface.play();
-                        _player.emit('ready', _player);
-                        expect(_player.loadAd).not.toHaveBeenCalled();
+                    it('should not call startAd() if the adLoaded promise has not resolved', function() {
+                        expect(_player.startAd).not.toHaveBeenCalled();
                     });
 
-                    it('should call loadAd() on the player if it\'s ready', function() {
-                        _player.emit('ready', _player);
-                        _player.emit('adReady', _player);
-                        iface.play();
-                        expect(_player.loadAd).toHaveBeenCalled();
+                    it('should call startAd() on the player when promise is resolved', function() {
+                        $scope.$apply(function() {
+                            _player.emit('adLoaded', _player);
+                        });
+                        expect(_player.startAd).toHaveBeenCalled();
                     });
 
                     it('should call resumeAd() if the player is paused', function() {
-                        _player.emit('ready', _player);
-                        _player.emit('adReady', _player);
-                        iface.play();
-                        _player.emit('pause', _player);
-                        iface.play();
+                        $scope.$apply(function() {
+                            _player.emit('adLoaded', _player);
+                            iface.pause();
+                            iface.play();
+                        });
                         expect(_player.resumeAd).toHaveBeenCalled();
                     });
                 });
 
                 describe('pause', function() {
-                    it('should only call pause() if player is ready and ad is loaded', function() {
-                        iface.pause();
-                        expect(_player.pause).not.toHaveBeenCalled();
-
+                    beforeEach(function() {
                         _player.emit('ready', _player);
                         iface.pause();
-                        expect(_player.pause).not.toHaveBeenCalled();
-
-                        _player.emit('adLoaded', _player);
-                        iface.pause();
-                        expect(_player.pause).toHaveBeenCalled();
                     });
 
-                    it('should defer pause() if called before ad is loaded', function() {
-                        iface.pause();
-                        _player.emit('ready', _player);
-                        _player.emit('adLoaded', _player);
+                    it('should not call pause() if ad is not loaded', function() {
+                        expect(_player.pause).not.toHaveBeenCalled();
+                    });
+
+                    it('should call pause() if ad is loaded', function() {
+                        $scope.$apply(function() {
+                            _player.emit('adLoaded', _player);
+                        });
                         expect(_player.pause).toHaveBeenCalled();
+                    });
+                });
+
+                describe('loadAd', function() {
+                    beforeEach(function() {
+                        _player.emit('ready', _player);
+                        iface.loadAd();
+                    });
+
+                    it('should not call loadAd() if player is not ready', function() {
+                        expect(_player.pause).not.toHaveBeenCalled();
+                    });
+
+                    it('should call loadAd() if player is ready', function() {
+                        $scope.$apply(function() {
+                            _player.emit('adPlayerReady', _player);
+                        });
+                        expect(_player.loadAd).toHaveBeenCalled();
                     });
                 });
 

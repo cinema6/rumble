@@ -34,8 +34,6 @@
             this.reset = function() {
                 // this is basically just a resumeAd() call
                 // in order to play another ad we need to re-initialize the whole player
-                _data.modules.displayAd.active = false;
-
                 player.play();
             };
 
@@ -49,8 +47,10 @@
                 !config.data.autoplay;
 
             $scope.$watch('onDeck', function(onDeck) {
-                if(onDeck) {
+                if (onDeck) {
                     _data.modules.displayAd.src = config.displayAd;
+
+                    player.loadAd();
                 }
             });
 
@@ -153,7 +153,7 @@
                     var _companions = _player.getDisplayBanners();
 
                     angular.forEach(_companions, function(val) {
-                        if(parseInt(val.width) === 300 && parseInt(val.height) === 250) {
+                        if (parseInt(val.width) === 300 && parseInt(val.height) === 250) {
                             self.companion = val;
                         }
                     });
@@ -194,17 +194,17 @@
                             ended: false,
                             duration: NaN
                         },
-                        playerIsReady = false,
-                        adIsReady = false,
-                        adIsLoaded = false,
-                        shouldPause = false,
+                        playerReady = false,
                         hasStarted = false,
                         player;
+
+                    var adPlayerDeferred = $q.defer(),
+                        adDeferred = $q.defer();
 
                     Object.defineProperties(iface, {
                         currentTime: {
                             get: function() {
-                                return playerIsReady ? player.currentTime : 0;
+                                return playerReady ? player.currentTime : 0;
                             }
                         },
                         duration: {
@@ -234,30 +234,30 @@
                     };
 
                     iface.isReady = function() {
-                        return playerIsReady;
+                        return playerReady;
+                    };
+
+                    iface.loadAd = function() {
+                        return adPlayerDeferred.promise.then(player.loadAd);
                     };
 
                     iface.play = function() {
-                        if(playerIsReady && adIsReady) {
-                            if(hasStarted) {
+                        return adDeferred.promise.then(function() {
+                            if (hasStarted) {
                                 player.resumeAd();
                             } else {
-                                player.loadAd();
+                                player.startAd();
                                 hasStarted = true;
                             }
-                        }
+                        });
                     };
 
                     iface.pause = function() {
-                        if (playerIsReady && adIsLoaded) {
-                            player.pause();
-                        } else {
-                            shouldPause = true;
-                        }
+                        return adDeferred.promise.then(player.pause);
                     };
 
                     iface.destroy = function() {
-                        if(playerIsReady) {
+                        if (playerReady) {
                             player.destroy();
                         }
                     };
@@ -277,21 +277,13 @@
 
                         player.on('ready', function() {
                             // this fires when the flash object exists and responds to isCinema6player()
-                            playerIsReady = true;
+                            playerReady = true;
 
                             iface.emit('ready', iface);
 
-                            player.on('adLoaded', function() {
-                                if(shouldPause) {
-                                    player.pause();
-                                }
-                                adIsLoaded = true;
-                                shouldPause = false;
-                            });
+                            player.on('adLoaded', adDeferred.resolve);
 
-                            player.on('adReady', function() {
-                                adIsReady = true;
-                            });
+                            player.on('adPlayerReady', adPlayerDeferred.resolve);
 
                             player.on('ended', function() {
                                 _iface.ended = true;

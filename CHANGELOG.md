@@ -1,5 +1,10 @@
 # MiniReel Player
 
+* *[Beta9.rc1]*
+  * [FEATURE]: Prefetch VPAID ad when card is onDeck (updates VPAID swf file)
+  * [FIX]: Advance to next card if VPAID ad fires any of these events: adError, adStopped, onAllAdsCompleted
+  * [FIX]: Make sure VPAID ad is loaded before getting currentTime, otherwise errors are thrown
+
 ## Beta8 (May 20, 2014)
 * *[Beta8.rc1]*
   * [FEATURE]: User is now show an ad if they try to skip to the card
