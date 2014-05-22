@@ -15,16 +15,16 @@
                     $window = { };
 
                     $provide.value('$window',$window);
-                    trackerProvider = $injector.get('trackerProvider');
+                    trackerProvider = $injector.get('trackerServiceProvider');
                 });
     
                 inject(function($injector) {
-                    tracker  = $injector.get('tracker');
+                    tracker  = $injector.get('trackerService');
                 });
 
             });
 
-            describe('trackerProvider',function(){
+            describe('trackerSerivceProvider',function(){
                 describe('api',function(){
                     it('defaults to ga',function(){
                         expect(trackerProvider.api()).toEqual('ga');
@@ -91,6 +91,25 @@
                             tracker.alias('a1',null);
                             expect(tracker.alias('a1')).toEqual('a1');
                             expect(tracker.alias('a2')).toEqual('b2');
+                        });
+
+                        it('can take a hash of name,vals',function(){
+                            tracker.alias({
+                                a1 : 'b1',
+                                a2 : 'b2',
+                                a3 : 'b3'
+                            });
+                            expect(tracker.alias('a1')).toEqual('b1');
+                            expect(tracker.alias('a2')).toEqual('b2');
+                            expect(tracker.alias('a3')).toEqual('b3');
+                            tracker.alias({
+                                a1 : 'c1',
+                                a2 : null,
+                                a3 : 'c3'
+                            });
+                            expect(tracker.alias('a1')).toEqual('c1');
+                            expect(tracker.alias('a2')).toEqual('a2');
+                            expect(tracker.alias('a3')).toEqual('c3');
                         });
                     });
 

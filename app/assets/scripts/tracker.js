@@ -2,7 +2,7 @@
     'use strict';
 
     angular.module('c6.rumble.services')
-    .provider('tracker',[ function(){
+    .provider('trackerService',[ function(){
 
         var api = 'ga';
 
@@ -22,15 +22,26 @@
                 this.aliases = {};
             }
 
-            TrackerContext.prototype.alias = function(name,val){
-                if (val === null){
-                    delete this.aliases[name];
-                } else
-                if (val !== undefined){
-                    this.aliases[name] = val;
+            TrackerContext.prototype.alias = function(){
+                var self = this, args = Array.prototype.slice.call(arguments,0), key;
+                function setAlias(name,val){
+                    if (val === null){
+                        delete self.aliases[name];
+                    } else
+                    if (val !== undefined){
+                        self.aliases[name] = val;
+                    }
+                
+                    return self.aliases[name] || name;
                 }
 
-                return this.aliases[name] || name;
+                if (angular.isObject(args[0])){
+                    for (key in args[0]){
+                        setAlias(key,args[0][key]);
+                    }
+                    return this;
+                }
+                return setAlias(args[0],args[1]);
             };
 
             TrackerContext.prototype.methodContext = function(method){

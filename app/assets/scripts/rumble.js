@@ -263,18 +263,18 @@
             }).then(process);
         };
     }])
-    .controller('RumbleController',['$log','$scope','$timeout','$window','BallotService',
+    .controller('RumbleController',['$log','$scope','$timeout','BallotService',
                                     'c6Computed','cinema6','MiniReelService','CommentsService',
-                                    'ControlsService',
-    function                       ( $log , $scope , $timeout , $window , BallotService ,
+                                    'ControlsService','trackerService',
+    function                       ( $log , $scope , $timeout , BallotService ,
                                      c6Computed , cinema6 , MiniReelService , CommentsService ,
-                                     ControlsService ){
+                                     ControlsService, trackerService ){
         var self    = this, readyTimeout,
             appData = $scope.app.data,
             id = appData.experience.id,
             election = appData.experience.data.election,
             c = c6Computed($scope),
-            pageViewTimer = null;
+            tracker = trackerService('c6mr');
 
         function NavController(nav) {
             this.tick = function(time) {
@@ -394,8 +394,10 @@
         };
 
         $scope.$on('<ballot-vote-module>:vote', function(/*event,vote*/){
-            $window.c6MrGa('c6mr.send', 'event', 'video', 'vote',
-                self.getVirtualPage());
+            tracker.trackEvent(this.getTrackingData({
+                category : 'Video',
+                action   : 'Vote'
+            }));
         });
 
         $scope.$on('playerAdd',function(event,player){
@@ -418,27 +420,39 @@
             player.on('play', function(){
                 if (($scope.currentCard) &&
                         (player.getVideoId() === $scope.currentCard.data.videoid)){
-                    $window.c6MrGa('c6mr.send', 'event', 'video', 'play',
-                        player.webHref,
-                        self.getVirtualPage());
+                    tracker.trackEvent(this.getTrackingData({
+                        category : 'Video',
+                        action   : 'Play',
+                        label    : player.webHref,
+                        videoSource : player.type,
+                        videoDuration : player.duration
+                    }));
                 }
             });
             
             player.on('pause', function(){
                 if (($scope.currentCard) &&
                         (player.getVideoId() === $scope.currentCard.data.videoid)){
-                    $window.c6MrGa('c6mr.send', 'event', 'video', 'pause',
-                        player.webHref,
-                        self.getVirtualPage());
+                    tracker.trackEvent(this.getTrackingData({
+                        category : 'Video',
+                        action   : 'Pause',
+                        label    : player.webHref,
+                        videoSource : player.type,
+                        videoDuration : player.duration
+                    }));
                 }
             });
             
             player.on('ended', function(){
                 if (($scope.currentCard) &&
                         (player.getVideoId() === $scope.currentCard.data.videoid)){
-                    $window.c6MrGa('c6mr.send', 'event', 'video', 'ended',
-                        player.webHref,
-                        self.getVirtualPage());
+                    tracker.trackEvent(this.getTrackingData({
+                        category : 'Video',
+                        action   : 'End',
+                        label    : player.webHref,
+                        videoSource : player.type,
+                        videoDuration : player.duration
+                    }));
                 }
             });
         });
@@ -563,34 +577,24 @@
                 $timeout.cancel(readyTimeout);
             }
         };
-
-        this.getVirtualPage = function(){
-            var titleRoot = (appData.experience.data.title || 'Mini Reel: ' +
-                    appData.experience.id) ;
-            if (!$scope.currentCard){
-                return {
-                    page : '/mr/' + appData.experience.id,
-                    title : titleRoot
-                };
-            }
-            
-            return {
-                page : '/mr/' + appData.experience.id + '/' + $scope.currentCard.id,
-                title : titleRoot + ' - ' + ($scope.currentCard.title || $scope.currentCard.id)
-            };
-        };
-
-        this.reportPageView = function(page,delay){
-            delay = delay || 1000;
-            if (pageViewTimer !== null){
-                $timeout.cancel(pageViewTimer);
-                pageViewTimer = null;
+        
+        this.getTrackingData = function(params){
+            params = params || {};
+            params.page  = '/mr/' + appData.experience.id + '/';
+            params.title = appData.experience.data.title;
+           
+            params.slideIndex = $scope.currentIndex;
+            if ($scope.currentCard){
+                params.page  += $scope.currentCard.id;
+                params.title += ' - ' + $scope.currentCard.title;
+                params.slideId = $scope.currentCard.id;
+                params.slideTitle = $scope.currentCard.title;
+            } else {
+                params.slideId = 'null';
+                params.slideTitle = 'null';
             }
 
-            pageViewTimer = $timeout(function(){
-                $window.c6MrGa('c6mr.send', 'pageview', page);
-                pageViewTimer = null;
-            },delay);
+            return params;
         };
 
         this.setPosition = function(i){
@@ -616,7 +620,7 @@
             $scope.atTail         = ($scope.currentIndex === ($scope.deck.length - 1));
 
             if (i >= 0) {
-                this.reportPageView(this.getVirtualPage());
+                tracker.trackPage(this.getTrackingData());
             }
 
             if ($scope.atHead) {
@@ -638,8 +642,11 @@
 
         this.start = function() {
             this.goForward();
-            $window.c6MrGa('c6mr.send', 'event', 'Navigation', 'Start', 'Start',
-                this.getVirtualPage());
+            tracker.trackEvent(this.getTrackingData({
+                category : 'Navigation',
+                action   : 'Start',
+                label    : 'Start'
+            }));
 
             if (appData.behaviors.fullscreen) {
                 cinema6.fullscreen(true);
@@ -654,37 +661,54 @@
                 angular.forEach($scope.deck,function(card){
                     visited += (card.visited) ? 1 : 0;
                 });
-                $window.c6MrGa('c6mr.send', 'event', 'Navigation', 'End', 'Skip',
-                    visited, this.getVirtualPage());
+                tracker.trackEvent(this.getTrackingData({
+                    category : 'Navigation',
+                    action   : 'End',
+                    label    : 'Skip'
+                }));
             } else
             if (src){
-                $window.c6MrGa('c6mr.send', 'event', 'Navigation', 'Move',
-                    'Skip', this.getVirtualPage());
+                tracker.trackEvent(this.getTrackingData({
+                    category : 'Navigation',
+                    action   : 'Move',
+                    label    : 'Skip'
+                }));
             }
         };
 
         this.goBack = function(src){
             self.setPosition($scope.currentIndex - 1);
             if (src){
-                $window.c6MrGa('c6mr.send', 'event', 'Navigation', 'Move',
-                    'Previous', this.getVirtualPage());
+                tracker.trackEvent(this.getTrackingData({
+                    category : 'Navigation',
+                    action   : 'Move',
+                    label    : 'Previous'
+                }));
             }
         };
 
         this.goForward = function(src){
-            var visited;
+//            var visited;
             self.setPosition($scope.currentIndex + 1);
             if ($scope.atTail){
+                /*
                 visited = 0;
                 angular.forEach($scope.deck,function(card){
                     visited += (card.visited) ? 1 : 0;
                 });
-                $window.c6MrGa('c6mr.send', 'event', 'Navigation', 'End', 'Next',
-                    visited, this.getVirtualPage());
+                */
+                tracker.trackEvent(this.getTrackingData({
+                    category : 'Navigation',
+                    action   : 'End',
+                    label    : 'Next'
+                }));
             } else
             if (src){
-                $window.c6MrGa('c6mr.send', 'event', 'Navigation', 'Move',
-                    'Next', this.getVirtualPage());
+                tracker.trackEvent(this.getTrackingData({
+                    category : 'Navigation',
+                    action   : 'Move',
+                    label    : 'Next'
+                }));
             }
         };
 
@@ -696,8 +720,27 @@
         $log.log('Rumble Controller is initialized!');
    
         $scope.$on('analyticsReady',function(){
-            $window.c6MrGa('c6mr.set','dimension1',appData.mode);
-            self.reportPageView(self.getVirtualPage(),0);
+            tracker.alias({
+                'category'      : 'eventCategory',
+                'action'        : 'eventAction',
+                'label'         : 'eventLabel',
+                'expMode'       : 'dimension1',
+                'expId'         : 'dimension2',
+                'expTitle'      : 'dimension3',
+                'slideCount'    : 'dimension4',
+                'slideId'       : 'dimension5',
+                'slideTitle'    : 'dimension6',
+                'slideIndex'    : 'dimension7',
+                'videoDuration' : 'dimension8',
+                'videoSource'   : 'dimension9'
+            });
+            tracker.set({
+                'expMode'    : appData.mode,
+                'expId'      : appData.experience.id,
+                'expTitle'   : appData.experience.data.title,
+                'slideCount' : $scope.deck.length
+            });
+            tracker.trackPage(self.getTrackingData());
         });
     }])
     .directive('navbarButton', ['assetFilter','c6Computed',

@@ -4,7 +4,6 @@
         describe('RumbleController', function() {
             var $rootScope,
                 $scope,
-                $window,
                 $timeout,
                 $q,
                 $log,
@@ -20,9 +19,19 @@
                 cinema6,
                 sessionDeferred,
                 MiniReelService,
-                ControlsService;
+                ControlsService,
+                trackerServiceSpy,
+                trackerSpy;
 
             beforeEach(function() {
+                trackerSpy = {
+                    alias       : jasmine.createSpy('tracker.alias'),
+                    set         : jasmine.createSpy('tracker.set'),
+                    trackPage   : jasmine.createSpy('tracker.trackPage'),
+                    trackEvent  : jasmine.createSpy('tracker.trackEvent')
+                };
+                trackerServiceSpy = jasmine.createSpy('trackerService').andReturn(trackerSpy);
+
                 MiniReelService = {
                     createDeck: jasmine.createSpy('MiniReelService.createDeck()')
                         .andCallFake(function(data) {
@@ -67,7 +76,7 @@
                     {
                         "id"     : "vid1",
                         "type"   : "youtube",
-                        "caption": "vid1 caption",
+                        "title": "vid1 caption",
                         "note"   : "vid1 note",
                         "thumbs" : {
                             "small": "vid1.jpg",
@@ -80,6 +89,7 @@
                     },
                     {
                         "id"     : "ad1",
+                        "title"  : "ad",
                         "type"   : "vast",
                         "voting" : [ 100, 50, 10 ],
                         "ad"     : true,
@@ -88,7 +98,7 @@
                     {
                         "id"     : "vid2",
                         "type"   : "vimeo",
-                        "caption": "vid2 caption",
+                        "title": "vid2 caption",
                         "note"   : "vid2 note",
                         "thumbs" : {
                             "small": "vid2.jpg",
@@ -104,7 +114,7 @@
                         "type"   : "vimeo",
                         "ad"     : true,
                         "sponsored": true,
-                        "caption": "ad2 caption",
+                        "title": "ad2 caption",
                         "note"   : "ad2 note",
                         "thumbs" : {
                             "small": "ad2.jpg",
@@ -117,7 +127,7 @@
                     {
                         "id"     : "vid3",
                         "type"   : "dailymotion",
-                        "caption": "vid3 caption",
+                        "title": "vid3 caption",
                         "note"   : "vid3 note",
                         "thumbs" : {
                             "small": "vid3.jpg",
@@ -131,7 +141,7 @@
                     {
                         "id"     : "vid4",
                         "type"   : "youtube",
-                        "caption": "vid4 caption",
+                        "title": "vid4 caption",
                         "note"   : "vid4 note",
                         "thumbs" : {
                             "small": "vid4.jpg",
@@ -165,7 +175,7 @@
                 module('c6.ui', function($provide) {
                     $provide.value('cinema6', cinema6);
                 });
-
+                
                 module('c6.rumble', function($provide) {
                     $provide.value('MiniReelService', MiniReelService);
                     $provide.value('ControlsService', {
@@ -181,14 +191,11 @@
                     $log        = $injector.get('$log');
                     $controller = $injector.get('$controller');
                     $log.context = function() { return $log; };
-                    $window     = $injector.get('$window');
                     c6UserAgent = $injector.get('c6UserAgent');
                     c6EventEmitter = $injector.get('c6EventEmitter');
                     BallotService = $injector.get('BallotService');
                     CommentsService = $injector.get('CommentsService');
                     ControlsService = $injector.get('ControlsService');
-
-                    $window.c6MrGa = jasmine.createSpy('$window.c6MrGa');
 
                     $scope      = $rootScope.$new();
 
@@ -206,7 +213,8 @@
                     spyOn(BallotService, 'getElection');
                     RumbleCtrl = $controller('RumbleController', {
                         $scope  : $scope,
-                        $log    : $log
+                        $log    : $log,
+                        trackerService : trackerServiceSpy
                     });
 
                     $scope.$emit('analyticsReady');
@@ -256,12 +264,33 @@
                 });
 
                 it('should initialize the google analytics', function(){
-                    expect($window.c6MrGa.calls[0].args).toEqual(['c6mr.set','dimension1',
-                        'testMode']);
-                    expect($window.c6MrGa.calls[1].args).toEqual(['c6mr.send','pageview',{
-                        page : '/mr/e-722bd3c4942331',
-                        title : 'my title'
-                    }]);
+                    expect(trackerSpy.alias).toHaveBeenCalledWith({
+                        'category'      : 'eventCategory',
+                        'action'        : 'eventAction',
+                        'label'         : 'eventLabel',
+                        'expMode'       : 'dimension1',
+                        'expId'         : 'dimension2',
+                        'expTitle'      : 'dimension3',
+                        'slideCount'    : 'dimension4',
+                        'slideId'       : 'dimension5',
+                        'slideTitle'    : 'dimension6',
+                        'slideIndex'    : 'dimension7',
+                        'videoDuration' : 'dimension8',
+                        'videoSource'   : 'dimension9'
+                    });
+                    expect(trackerSpy.set).toHaveBeenCalledWith({
+                        'expMode'  : 'testMode',
+                        'expId'    : 'e-722bd3c4942331',
+                        'expTitle' : 'my title',
+                        'slideCount' : 6
+                    });
+                    expect(trackerSpy.trackPage).toHaveBeenCalledWith({
+                        page : '/mr/e-722bd3c4942331/',
+                        title : 'my title',
+                        slideIndex : -1,
+                        slideId : 'null',
+                        slideTitle : 'null'
+                    });
                 });
             });
 
@@ -548,62 +577,33 @@
                 });
             });
 
-            describe('getVirtualPage', function(){
+            describe('getTrackingData', function(){
                 it('returns base experience page if $scope.currentCard not set',function(){
                     $scope.currentCard = null;
-                    expect(RumbleCtrl.getVirtualPage()).toEqual({
-                        page :  '/mr/e-722bd3c4942331',
-                        title : 'my title'
+                    expect(RumbleCtrl.getTrackingData()).toEqual({
+                        page :  '/mr/e-722bd3c4942331/',
+                        title : 'my title',
+                        slideIndex : -1,
+                        slideId : 'null',
+                        slideTitle : 'null'
                     });
                 });
 
                 it('returns current card url if $scope.currentCard is set',function(){
-                    $scope.currentCard = deck[0];
-                    expect(RumbleCtrl.getVirtualPage()).toEqual({
+                    $scope.currentIndex = 0;
+                    $scope.currentCard  = deck[0];
+                    expect(RumbleCtrl.getTrackingData()).toEqual({
                         page :  '/mr/e-722bd3c4942331/vid1',
-                        title : 'my title - vid1'
+                        title : 'my title - vid1 caption',
+                        slideIndex : 0,
+                        slideId : 'vid1',
+                        slideTitle : 'vid1 caption'
                     });
-                });
-            });
-
-            describe('reportPageView', function(){
-                beforeEach(function(){
-                    $window.c6MrGa = jasmine.createSpy('$window.c6MrGa-reportPageView');
-                });
-
-                it('reports a pageview when default time of 1000ms expires', function(){
-                    RumbleCtrl.reportPageView({ page : 'foo' });
-                    expect($window.c6MrGa.callCount).toEqual(0);
-                    $timeout.flush(500);
-                    expect($window.c6MrGa.callCount).toEqual(0);
-                    $timeout.flush(600);
-                    expect($window.c6MrGa.callCount).toEqual(1);
-                    expect($window.c6MrGa.mostRecentCall.args)
-                        .toEqual(['c6mr.send','pageview', { page : 'foo'}  ]); 
-                });
-
-                it('reports a pageview when override timeout expires', function(){
-                    RumbleCtrl.reportPageView({ page : 'foo' }, 100);
-                    expect($window.c6MrGa.callCount).toEqual(0);
-                    $timeout.flush(101);
-                    expect($window.c6MrGa.callCount).toEqual(1);
-                    expect($window.c6MrGa.mostRecentCall.args)
-                        .toEqual(['c6mr.send','pageview', { page : 'foo'}  ]); 
-                });
-
-                it('overwrites a pageview if new one comes in before delay', function(){
-                    RumbleCtrl.reportPageView({ page : 'foo' });
-                    RumbleCtrl.reportPageView({ page : 'bar' });
-                    $timeout.flush();
-                    expect($window.c6MrGa.callCount).toEqual(1);
-                    expect($window.c6MrGa.mostRecentCall.args)
-                        .toEqual(['c6mr.send','pageview', { page : 'bar'}  ]); 
                 });
             });
 
             describe('navigation',function(){
                 beforeEach(function(){
-                    $window.c6MrGa = jasmine.createSpy('$window.c6MrGa');
                     $scope.deviceProfile = { multiPlayer : true };
                     $scope.deck.forEach(function(item,index){
                         item.player = {
@@ -699,6 +699,7 @@
                 });
 
                 it('handles moving forward',function(){
+                    trackerSpy.trackPage.reset();
                     $scope.currentIndex = 0;
                     $scope.currentCard  = $scope.deck[0];
                     RumbleCtrl.goForward();
@@ -709,25 +710,50 @@
                     expect($scope.atTail).toEqual(false);
                     expect($scope.$emit).toHaveBeenCalledWith('reelMove');
                     expect($scope.$emit.callCount).toBe(1);
-                    expect($window.c6MrGa.callCount).toEqual(1);
-                    expect($window.c6MrGa.calls[0].args).toEqual(['c6mr.send','pageview',{
-                        page : '/mr/e-722bd3c4942331/ad1', title : 'my title - ad1'
-                    }]); 
+                    expect(trackerSpy.trackPage.callCount).toEqual(1);
+                    expect(trackerSpy.trackPage).toHaveBeenCalledWith({
+                        page : '/mr/e-722bd3c4942331/ad1',
+                        title : 'my title - ad',
+                        slideIndex : 1, 
+                        slideId : 'ad1', 
+                        slideTitle : 'ad'
+                    }); 
                 });
 
                 it('sends ga event if moving forward from control', function(){
+                    trackerSpy.trackPage.reset();
+                    trackerSpy.trackEvent.reset();
                     $scope.currentIndex = 0;
                     $scope.currentCard  = $scope.deck[0];
                     RumbleCtrl.goForward('test');
                     $timeout.flush();
                     expect($scope.currentIndex).toEqual(1);
                     expect($scope.currentCard).toBe($scope.deck[1]);
-                    expect($window.c6MrGa.callCount).toEqual(2);
-                    expect($window.c6MrGa.calls[0].args).toEqual(['c6mr.send','event','Navigation','Move','Next', { page : '/mr/e-722bd3c4942331/ad1', title : 'my title - ad1' }  ]); 
+                    expect(trackerSpy.trackPage.callCount).toEqual(1);
+                    expect(trackerSpy.trackEvent.callCount).toEqual(1);
+                    expect(trackerSpy.trackPage).toHaveBeenCalledWith({
+                        page : '/mr/e-722bd3c4942331/ad1',
+                        title : 'my title - ad',
+                        slideIndex : 1,
+                        slideId : 'ad1',
+                        slideTitle : 'ad'
+                    }); 
+                    expect(trackerSpy.trackEvent).toHaveBeenCalledWith({
+                        category : 'Navigation',
+                        action   : 'Move',
+                        label    : 'Next',
+                        page     : '/mr/e-722bd3c4942331/ad1', 
+                        title    : 'my title - ad',
+                        slideIndex : 1,
+                        slideId: 'ad1',
+                        slideTitle : 'ad'
+                    }); 
                 });
 
 
                 it('handles moving backward',function(){
+                    trackerSpy.trackPage.reset();
+                    trackerSpy.trackEvent.reset();
                     $scope.currentIndex = 2;
                     $scope.currentCard  = $scope.deck[2];
                     RumbleCtrl.goBack();
@@ -739,13 +765,20 @@
                     expect($scope.atTail).toEqual(false);
                     expect($scope.$emit).toHaveBeenCalledWith('reelMove');
                     expect($scope.$emit.callCount).toBe(1);
-                    expect($window.c6MrGa.callCount).toEqual(1);
-                    expect($window.c6MrGa.calls[0].args).toEqual(['c6mr.send','pageview',{
-                        page : '/mr/e-722bd3c4942331/ad1', title : 'my title - ad1'
-                    }]); 
+                    expect(trackerSpy.trackPage.callCount).toEqual(1);
+                    expect(trackerSpy.trackEvent.callCount).toEqual(0);
+                    expect(trackerSpy.trackPage).toHaveBeenCalledWith({
+                        page : '/mr/e-722bd3c4942331/ad1',
+                        title : 'my title - ad',
+                        slideIndex : 1,
+                        slideId : 'ad1',
+                        slideTitle : 'ad'
+                    }); 
                 });
 
                 it('sends ga event if moving backward from control', function(){
+                    trackerSpy.trackPage.reset();
+                    trackerSpy.trackEvent.reset();
                     $scope.currentIndex = 2;
                     $scope.currentCard  = $scope.deck[2];
                     RumbleCtrl.goBack('test');
@@ -753,11 +786,30 @@
                     $scope.$digest();
                     expect($scope.currentIndex).toEqual(1);
                     expect($scope.currentCard).toBe($scope.deck[1]);
-                    expect($window.c6MrGa.callCount).toEqual(2);
-                    expect($window.c6MrGa.calls[0].args).toEqual(['c6mr.send','event','Navigation','Move','Previous', { page : '/mr/e-722bd3c4942331/ad1', title : 'my title - ad1' } ]); 
+                    expect(trackerSpy.trackPage.callCount).toEqual(1);
+                    expect(trackerSpy.trackEvent.callCount).toEqual(1);
+                    expect(trackerSpy.trackPage).toHaveBeenCalledWith({
+                        page : '/mr/e-722bd3c4942331/ad1',
+                        title : 'my title - ad',
+                        slideIndex : 1,
+                        slideId : 'ad1',
+                        slideTitle : 'ad'
+                    }); 
+                    expect(trackerSpy.trackEvent).toHaveBeenCalledWith({
+                        category : 'Navigation',
+                        action   : 'Move',
+                        label    : 'Previous',
+                        page     : '/mr/e-722bd3c4942331/ad1', 
+                        title    : 'my title - ad',
+                        slideIndex : 1,
+                        slideId: 'ad1',
+                        slideTitle : 'ad'
+                    }); 
                 });
 
                 it('handles goTo', function(){
+                    trackerSpy.trackPage.reset();
+                    trackerSpy.trackEvent.reset();
                     $scope.deck.forEach(function(card) {
                         if (card.ad) { card.visited = true; }
                     });
@@ -773,13 +825,20 @@
                     expect($scope.atTail).toEqual(false);
                     expect($scope.$emit).toHaveBeenCalledWith('reelMove');
                     expect($scope.$emit.callCount).toBe(1);
-                    expect($window.c6MrGa.callCount).toEqual(1);
-                    expect($window.c6MrGa.calls[0].args).toEqual(['c6mr.send','pageview',{
-                        page : '/mr/e-722bd3c4942331/vid2', title : 'my title - vid2'
-                    }]);
+                    expect(trackerSpy.trackPage.callCount).toEqual(1);
+                    expect(trackerSpy.trackEvent.callCount).toEqual(0);
+                    expect(trackerSpy.trackPage).toHaveBeenCalledWith({
+                        page : '/mr/e-722bd3c4942331/vid2',
+                        title : 'my title - vid2 caption',
+                        slideIndex : 2,
+                        slideId : 'vid2',
+                        slideTitle : 'vid2 caption'
+                    }); 
                 });
 
                 it('sends ga event if going to from control', function(){
+                    trackerSpy.trackPage.reset();
+                    trackerSpy.trackEvent.reset();
                     $scope.deck.forEach(function(card) {
                         if (card.ad) { card.visited = true; }
                     });
@@ -791,11 +850,30 @@
                     $scope.$digest();
                     expect($scope.currentIndex).toEqual(2);
                     expect($scope.currentCard).toBe($scope.deck[2]);
-                    expect($window.c6MrGa.callCount).toEqual(2);
-                    expect($window.c6MrGa.calls[0].args).toEqual(['c6mr.send','event','Navigation','Move','Skip', { page : '/mr/e-722bd3c4942331/vid2', title : 'my title - vid2' } ]); 
+                    expect(trackerSpy.trackPage.callCount).toEqual(1);
+                    expect(trackerSpy.trackEvent.callCount).toEqual(1);
+                    expect(trackerSpy.trackPage).toHaveBeenCalledWith({
+                        page : '/mr/e-722bd3c4942331/vid2',
+                        title : 'my title - vid2 caption',
+                        slideIndex : 2,
+                        slideId : 'vid2',
+                        slideTitle : 'vid2 caption'
+                    }); 
+                    expect(trackerSpy.trackEvent).toHaveBeenCalledWith({
+                        category : 'Navigation',
+                        action   : 'Move',
+                        label    : 'Skip',
+                        page     : '/mr/e-722bd3c4942331/vid2', 
+                        title    : 'my title - vid2 caption',
+                        slideIndex : 2,
+                        slideId: 'vid2',
+                        slideTitle : 'vid2 caption'
+                    }); 
                 });
 
                 it('sends ga event if navigates to tail',function(){
+                    trackerSpy.trackPage.reset();
+                    trackerSpy.trackEvent.reset();
                     $scope.currentIndex = 0;
                     $scope.currentCard  = $scope.deck[0];
                     RumbleCtrl.goTo(5,'test');
@@ -804,11 +882,28 @@
                     expect($scope.atTail).toEqual(true);
                     expect($scope.currentIndex).toEqual(5);
                     expect($scope.currentCard).toBe($scope.deck[5]);
-                    expect($window.c6MrGa.callCount).toEqual(2);
-                    expect($window.c6MrGa.calls[0].args).toEqual(['c6mr.send','event','Navigation','End','Skip', 1, { page : '/mr/e-722bd3c4942331/vid4', title : 'my title - vid4' } ]); 
+                    expect(trackerSpy.trackPage).toHaveBeenCalledWith({
+                        page : '/mr/e-722bd3c4942331/vid4',
+                        title : 'my title - vid4 caption',
+                        slideIndex : 5,
+                        slideId : 'vid4',
+                        slideTitle : 'vid4 caption'
+                    }); 
+                    expect(trackerSpy.trackEvent).toHaveBeenCalledWith({
+                        category : 'Navigation',
+                        action   : 'End',
+                        label    : 'Skip',
+                        page     : '/mr/e-722bd3c4942331/vid4', 
+                        title    : 'my title - vid4 caption',
+                        slideIndex : 5,
+                        slideId: 'vid4',
+                        slideTitle : 'vid4 caption'
+                    }); 
                 });
-
+/*
                 it('sends ga event with value===1 if ends with all cards visited',function(){
+                    trackerSpy.trackPage.reset();
+                    trackerSpy.trackEvent.reset();
                     angular.forEach($scope.deck,function(card){
                         card.visited = true;
                     });
@@ -820,22 +915,41 @@
                     expect($scope.atTail).toEqual(true);
                     expect($scope.currentIndex).toEqual(5);
                     expect($scope.currentCard).toBe($scope.deck[5]);
-                    expect($window.c6MrGa.callCount).toEqual(2);
-                    expect($window.c6MrGa.calls[0].args).toEqual(['c6mr.send','event','Navigation','End','Next', 6, { page : '/mr/e-722bd3c4942331/vid4', title : 'my title - vid4' } ]); 
+                    expect(trackerSpy.trackEvent).toHaveBeenCalledWith({
+                        category : 'Navigation',
+                        action   : 'End',
+                        label    : 'Next',
+                        page     : '/mr/e-722bd3c4942331/vid4',
+                        value    : 1,
+                        title    : 'my title - vid4 caption',
+                        slideIndex : 5,
+                        slideId: 'vid4',
+                        slideTitle : 'vid4 caption'
+                    }); 
                 });
-
+*/
 
             });
 
             describe('starting the mini reel', function() {
                 describe('google analytics',function(){
                     beforeEach(function(){
+                        trackerSpy.trackPage.reset();
+                        trackerSpy.trackEvent.reset();
                         spyOn($scope, '$emit');
                         RumbleCtrl.start();
                     });
                     it('sends an event for the launch',function(){
-                        expect($window.c6MrGa.calls[2].args).toEqual([
-                            'c6mr.send', 'event', 'Navigation', 'Start', 'Start', { page : '/mr/e-722bd3c4942331/vid1', title : 'my title - vid1' }]);
+                        expect(trackerSpy.trackEvent).toHaveBeenCalledWith({
+                            category : 'Navigation',
+                            action   : 'Start',
+                            label    : 'Start',
+                            page     : '/mr/e-722bd3c4942331/vid1',
+                            title    : 'my title - vid1 caption',
+                            slideIndex : 0,
+                            slideId : 'vid1',
+                            slideTitle : 'vid1 caption'
+                        });
                     });
                 });
 
