@@ -263,18 +263,19 @@
             }).then(process);
         };
     }])
-    .controller('RumbleController',['$log','$scope','$timeout','$window','BallotService',
+    .controller('RumbleController',['$log','$scope','$timeout','$interval','BallotService',
                                     'c6Computed','cinema6','MiniReelService','CommentsService',
-                                    'ControlsService',
-    function                       ( $log , $scope , $timeout , $window , BallotService ,
+                                    'ControlsService','trackerService',
+    function                       ( $log , $scope , $timeout , $interval, BallotService ,
                                      c6Computed , cinema6 , MiniReelService , CommentsService ,
-                                     ControlsService ){
+                                     ControlsService, trackerService ){
         var self    = this, readyTimeout,
             appData = $scope.app.data,
             id = appData.experience.id,
             election = appData.experience.data.election,
             c = c6Computed($scope),
-            pageViewTimer = null;
+            tracker = trackerService('c6mr'),
+            cancelTrackVideo = null;
 
         function NavController(nav) {
             this.tick = function(time) {
@@ -393,9 +394,14 @@
             wait: null
         };
 
-        $scope.$on('<ballot-vote-module>:vote', function(/*event,vote*/){
-            $window.c6MrGa('c6mr.send', 'event', 'video', 'vote',
-                self.getVirtualPage());
+        $scope.$on('<ballot-vote-module>:vote', function(event,vote){
+            var label;
+            if ($scope.currentCard) {
+                if (($scope.currentCard.ballot) && ($scope.currentCard.ballot.choices)){
+                    label = $scope.currentCard.ballot.choices[vote];
+                }
+                self.trackVideoEvent($scope.currentCard.player,'Vote',label);
+            }
         });
 
         $scope.$on('playerAdd',function(event,player){
@@ -416,30 +422,18 @@
             });
 
             player.on('play', function(){
-                if (($scope.currentCard) &&
-                        (player.getVideoId() === $scope.currentCard.data.videoid)){
-                    $window.c6MrGa('c6mr.send', 'event', 'video', 'play',
-                        player.webHref,
-                        self.getVirtualPage());
-                }
+                self.startVideoTracking();
+                self.trackVideoEvent(player,'Play');
             });
             
             player.on('pause', function(){
-                if (($scope.currentCard) &&
-                        (player.getVideoId() === $scope.currentCard.data.videoid)){
-                    $window.c6MrGa('c6mr.send', 'event', 'video', 'pause',
-                        player.webHref,
-                        self.getVirtualPage());
-                }
+                self.stopVideoTracking();
+                self.trackVideoEvent(player,'Pause');
             });
             
             player.on('ended', function(){
-                if (($scope.currentCard) &&
-                        (player.getVideoId() === $scope.currentCard.data.videoid)){
-                    $window.c6MrGa('c6mr.send', 'event', 'video', 'ended',
-                        player.webHref,
-                        self.getVirtualPage());
-                }
+                self.stopVideoTracking();
+                self.trackVideoEvent(player,'End');
             });
         });
 
@@ -564,33 +558,124 @@
             }
         };
 
-        this.getVirtualPage = function(){
-            var titleRoot = (appData.experience.data.title || 'Mini Reel: ' +
-                    appData.experience.id) ;
-            if (!$scope.currentCard){
-                return {
-                    page : '/mr/' + appData.experience.id,
-                    title : titleRoot
-                };
+        this.startVideoTracking = function(){
+            if (cancelTrackVideo === null) {
+                $log.info('Start video tracking');
+                cancelTrackVideo = $interval(function(){
+                    self.trackVideoProgress();
+                }, 1000);
             }
-            
-            return {
-                page : '/mr/' + appData.experience.id + '/' + $scope.currentCard.id,
-                title : titleRoot + ' - ' + ($scope.currentCard.title || $scope.currentCard.id)
-            };
         };
 
-        this.reportPageView = function(page,delay){
-            delay = delay || 1000;
-            if (pageViewTimer !== null){
-                $timeout.cancel(pageViewTimer);
-                pageViewTimer = null;
+        this.stopVideoTracking = function(){
+            if (cancelTrackVideo !== null){
+                $log.info('Stop video tracking');
+                $interval.cancel(cancelTrackVideo);
+                cancelTrackVideo = null;
+            }
+        };
+
+        this.trackNavEvent = function(action,label){
+            tracker.trackEvent(this.getTrackingData({
+                category : 'Navigation',
+                action   : action,
+                label    : label
+            }));
+        };
+
+        this.trackVideoEvent = function(player,eventName,eventLabel){
+            var currentCard = $scope.currentCard;
+            if ((!currentCard) || (!currentCard.player)){
+                return;
             }
 
-            pageViewTimer = $timeout(function(){
-                $window.c6MrGa('c6mr.send', 'pageview', page);
-                pageViewTimer = null;
-            },delay);
+            if (player !== currentCard.player){
+                return;
+            }
+
+            if (currentCard.type === 'ad'){
+                tracker.trackEvent(this.getTrackingData({
+                    category        : 'Ad',
+                    action          : eventName,
+                    label           : eventLabel || 'ad',
+                    videoSource     : 'ad',
+                    videoDuration   : player.duration
+                }));
+                return;
+            }
+
+            tracker.trackEvent(this.getTrackingData({
+                category        : 'Video',
+                action          : eventName,
+                label           : eventLabel || player.webHref,
+                videoSource     : player.source || player.type,
+                videoDuration   : player.duration
+            }));
+        };
+
+        this.trackVideoProgress = function(){
+            var currentCard = $scope.currentCard, playedPct, currentTime, duration, quartile;
+            if ((!currentCard) || (!currentCard.player)){
+                return;
+            }
+
+            if (!currentCard.tracking){
+                currentCard.tracking = {
+                    quartiles : [ false, false, false, false ]
+                };
+            }
+
+            currentTime = currentCard.player.currentTime;
+            duration    = currentCard.player.duration;
+
+            if (currentTime >= duration){
+                playedPct = 1;
+            } else
+            if (!duration){
+                playedPct = 0;
+            } else {
+                playedPct = (Math.round(( currentTime / duration) * 100) / 100);
+            }
+
+            quartile = (function(pct){
+                if (pct >= 0.95) {
+                    return 3;
+                } else
+                if (pct >= 0.75){
+                    return 2;
+                } else
+                if (pct >= 0.5){
+                    return 1;
+                } else
+                if (pct >= 0.25){
+                    return 0;
+                }
+                return -1;
+            }(playedPct));
+
+            if ((quartile >= 0) && (!currentCard.tracking.quartiles[quartile])) {
+                this.trackVideoEvent( currentCard.player,'Quartile ' + (quartile + 1));
+                currentCard.tracking.quartiles[quartile] = true;
+            }
+        };
+        
+        this.getTrackingData = function(params){
+            params = params || {};
+            params.page  = '/mr/' + appData.experience.id + '/';
+            params.title = appData.experience.data.title;
+           
+            params.slideIndex = $scope.currentIndex;
+            if ($scope.currentCard){
+                params.page  += $scope.currentCard.id;
+                params.title += ' - ' + $scope.currentCard.title;
+                params.slideId = $scope.currentCard.id;
+                params.slideTitle = $scope.currentCard.title;
+            } else {
+                params.slideId = 'null';
+                params.slideTitle = 'null';
+            }
+
+            return params;
         };
 
         this.setPosition = function(i){
@@ -608,6 +693,7 @@
             $scope.currentIndex   = i;
             $scope.currentCard    = $scope.deck[$scope.currentIndex] || null;
 
+            $log.info('Now on card:',$scope.currentCard);
             if ($scope.currentCard){
                 $scope.currentCard.visited = true;
             }
@@ -616,7 +702,7 @@
             $scope.atTail         = ($scope.currentIndex === ($scope.deck.length - 1));
 
             if (i >= 0) {
-                this.reportPageView(this.getVirtualPage());
+                tracker.trackPage(this.getTrackingData());
             }
 
             if ($scope.atHead) {
@@ -638,54 +724,25 @@
 
         this.start = function() {
             this.goForward();
-            $window.c6MrGa('c6mr.send', 'event', 'Navigation', 'Start', 'Start',
-                this.getVirtualPage());
-
+            this.trackNavEvent('Start','Start');
             if (appData.behaviors.fullscreen) {
                 cinema6.fullscreen(true);
             }
         };
 
         this.goTo   = function(idx,src){
-            var visited;
             self.setPosition(idx);
-            if ($scope.atTail){
-                visited = 0;
-                angular.forEach($scope.deck,function(card){
-                    visited += (card.visited) ? 1 : 0;
-                });
-                $window.c6MrGa('c6mr.send', 'event', 'Navigation', 'End', 'Skip',
-                    visited, this.getVirtualPage());
-            } else
-            if (src){
-                $window.c6MrGa('c6mr.send', 'event', 'Navigation', 'Move',
-                    'Skip', this.getVirtualPage());
-            }
+            this.trackNavEvent('Skip',src || 'auto');
         };
 
         this.goBack = function(src){
             self.setPosition($scope.currentIndex - 1);
-            if (src){
-                $window.c6MrGa('c6mr.send', 'event', 'Navigation', 'Move',
-                    'Previous', this.getVirtualPage());
-            }
+            this.trackNavEvent('Previous',src || 'auto');
         };
 
         this.goForward = function(src){
-            var visited;
             self.setPosition($scope.currentIndex + 1);
-            if ($scope.atTail){
-                visited = 0;
-                angular.forEach($scope.deck,function(card){
-                    visited += (card.visited) ? 1 : 0;
-                });
-                $window.c6MrGa('c6mr.send', 'event', 'Navigation', 'End', 'Next',
-                    visited, this.getVirtualPage());
-            } else
-            if (src){
-                $window.c6MrGa('c6mr.send', 'event', 'Navigation', 'Move',
-                    'Next', this.getVirtualPage());
-            }
+            this.trackNavEvent('Next',src || 'auto');
         };
 
         readyTimeout = $timeout(function(){
@@ -693,12 +750,38 @@
             $scope.ready = true;
         }, 3000);
 
+        $scope.$on('$destroy',function(){
+            $log.info('I am slain!');
+            self.stopVideoTracking();
+        });
+
+        $scope.$on('analyticsReady',function(){
+            $log.info('Analytics are ready, finish tracker setup.');
+            tracker.alias({
+                'category'      : 'eventCategory',
+                'action'        : 'eventAction',
+                'label'         : 'eventLabel',
+                'expMode'       : 'dimension1',
+                'expId'         : 'dimension2',
+                'expTitle'      : 'dimension3',
+                'slideCount'    : 'dimension4',
+                'slideId'       : 'dimension5',
+                'slideTitle'    : 'dimension6',
+                'slideIndex'    : 'dimension7',
+                'videoDuration' : 'dimension8',
+                'videoSource'   : 'dimension9'
+            });
+            tracker.set({
+                'expMode'    : appData.mode,
+                'expId'      : appData.experience.id,
+                'expTitle'   : appData.experience.data.title,
+                'slideCount' : $scope.deck.length
+            });
+            tracker.trackPage(self.getTrackingData());
+        });
+        
         $log.log('Rumble Controller is initialized!');
    
-        $scope.$on('analyticsReady',function(){
-            $window.c6MrGa('c6mr.set','dimension1',appData.mode);
-            self.reportPageView(self.getVirtualPage(),0);
-        });
     }])
     .directive('navbarButton', ['assetFilter','c6Computed',
     function                   ( assetFilter , c6Computed ) {

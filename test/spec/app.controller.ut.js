@@ -19,53 +19,23 @@
                 $httpBackend;
 
             var cinema6,
-                c6ImagePreloader,
-                gsap,
-                googleAnalytics,
-                $stateProvider,
-                $state,
                 $animate,
                 $document,
                 myFrame$,
-                siteSession,
-                session;
+                session,
+                trackerServiceSpy,
+                trackerSpy;
 
             beforeEach(function() {
-                c6ImagePreloader = {
-                    load: jasmine.createSpy('c6ImagePreloader.load()').andCallFake(function() {
-                        return c6ImagePreloader._.loadResult;
-                    }),
-                    _: {
-                        loadResult: {}
-                    }
-                };
-
-                gsap = {
-                    TweenLite: {
-                        ticker: {
-                            useRAF: jasmine.createSpy('gsap.TweenLite.ticker.useRAF()')
-                        }
-                    }
-                };
-
-                googleAnalytics = jasmine.createSpy('googleAnalytics');
-
-                $stateProvider = {
-                    state: jasmine.createSpy('$stateProvider.state()').andCallFake(function() {
-                        return $stateProvider;
-                    }),
-                    $get: function() {
-                        return $state;
-                    }
-                };
-
-                $state = {
-                    go: jasmine.createSpy('$state.go()')
-                };
-                
                 session = {
                     on : jasmine.createSpy('session.on')
                 };
+
+                trackerSpy = {
+                    create  : jasmine.createSpy('tracker.create'),
+                    set     : jasmine.createSpy('tracker.set')
+                };
+                trackerServiceSpy = jasmine.createSpy('trackerService').andReturn(trackerSpy);
 
                 module('ng', function($provide) {
                     $provide.value('$document', {
@@ -95,12 +65,9 @@
 
                         return cinema6;
                     });
-                    $provide.value('c6ImagePreloader', c6ImagePreloader);
                 });
 
                 module('c6.rumble', function($provide) {
-                    $provide.value('gsap', gsap);
-                    $provide.value('googleAnalytics', googleAnalytics);
                     $provide.value('myFrame$', {
                         height: jasmine.createSpy('myFrame$.height()')
                     });
@@ -146,10 +113,9 @@
                         $window: $window,
                         $scope: $scope,
                         $log: $log,
-                        c6Defines : c6Defines
+                        c6Defines : c6Defines,
+                        trackerService : trackerServiceSpy
                     });
-
-                    siteSession = c6EventEmitter({});
                 });
             });
 
@@ -219,10 +185,6 @@
             });
 
             describe('google analytics initialization',function(){
-                beforeEach(function(){
-                    $window.c6MrGa = jasmine.createSpy('$window.c6MrGa');
-                });
-
                 it('app will look for initAnalytics',function(){
                     expect(cinema6.init).toHaveBeenCalled();
                     expect(session.on.calls[0].args[0]).toEqual('initAnalytics');
@@ -235,19 +197,17 @@
                         accountId : 'abc',
                         clientId  : '123'
                     });
-                    expect($window.c6MrGa.callCount).toEqual(2);
                     
-                    expect($window.c6MrGa.calls[0].args[0]).toEqual('create');
-                    expect($window.c6MrGa.calls[0].args[1]).toEqual('abc');
-                    expect($window.c6MrGa.calls[0].args[2]).toEqual({
+                    expect(trackerSpy.create).toHaveBeenCalledWith('abc',{
                         'name'          : 'c6mr',
                         'clientId'      : '123',
                         'storage'       : 'none',
                         'cookieDomain'  : 'none'
                     });
 
-                    expect($window.c6MrGa.calls[1].args[0]).toEqual('c6mr.set');
-                    expect($window.c6MrGa.calls[1].args[1]).toEqual('checkProtocolTask');
+                    expect(trackerSpy.set).toHaveBeenCalledWith({
+                        'checkProtocolTask': angular.noop
+                    });
                 });
 
                 it('will use parent.hostname if window.hostname is blank',function(){
@@ -262,9 +222,10 @@
                         accountId : 'abc',
                         clientId  : '123'
                     });
-                    expect($window.c6MrGa.callCount).toEqual(3);
-                    expect($window.c6MrGa.calls[2].args)
-                        .toEqual(['c6mr.set','hostname','parent.host']);
+                    expect(trackerSpy.set).toHaveBeenCalledWith({
+                        'checkProtocolTask' : angular.noop,
+                        'hostname'          : 'parent.host'
+                    });
                 });
                 
                 it('will use parent.hostname if window.hostname is null',function(){
@@ -279,9 +240,11 @@
                         accountId : 'abc',
                         clientId  : '123'
                     });
-                    expect($window.c6MrGa.callCount).toEqual(3);
-                    expect($window.c6MrGa.calls[2].args)
-                        .toEqual(['c6mr.set','hostname','parent.host']);
+                
+                    expect(trackerSpy.set).toHaveBeenCalledWith({
+                        'checkProtocolTask' : angular.noop,
+                        'hostname'          : 'parent.host'
+                    });
                 });
                 
                 it('will work if win.hostname is null + win.parent is undefined',function(){
@@ -292,9 +255,9 @@
                         accountId : 'abc',
                         clientId  : '123'
                     });
-                    expect($window.c6MrGa.callCount).toEqual(2);
-                    expect($window.c6MrGa.calls[1].args[0]).toEqual('c6mr.set');
-                    expect($window.c6MrGa.calls[1].args[1]).toEqual('checkProtocolTask');
+                    expect(trackerSpy.set).toHaveBeenCalledWith({
+                        'checkProtocolTask': angular.noop
+                    });
                 });
             });
 

@@ -35,6 +35,7 @@
                 return [
                     'scripts/app',
                     'scripts/services',
+                    'scripts/tracker',
                     'scripts/dailymotion',
                     'scripts/iframe',
                     'scripts/rumble',

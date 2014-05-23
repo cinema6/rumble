@@ -33,6 +33,9 @@
                 return $delegate;
             }]);
         }])
+        .config(['trackerServiceProvider', function(trackerServiceProvider){
+            trackerServiceProvider.api('c6Tracker');
+        }])
         .config(['$sceProvider',
         function( $sceProvider ) {
             $sceProvider.enabled(false);
@@ -332,8 +335,8 @@
 
             return c6AppData;
         }])
-        .controller('AppController', ['$scope','$log','cinema6','c6UrlMaker','$timeout','$document','$window','c6Debounce','$animate','c6AppData', /*'c6Defines',*/
-        function                     ( $scope , $log , cinema6 , c6UrlMaker , $timeout , $document , $window , c6Debounce , $animate , c6AppData /*, c6Defines*/ ) {
+        .controller('AppController', ['$scope','$log','cinema6','c6UrlMaker','$timeout','$document','$window','c6Debounce','$animate','c6AppData', 'trackerService',
+        function                     ( $scope , $log , cinema6 , c6UrlMaker , $timeout , $document , $window , c6Debounce , $animate , c6AppData , trackerService ) {
             $log = $log.context('AppCtrl');
             $log.info('Location:',$window.location);
             var _app = {
@@ -342,7 +345,8 @@
                 app = {
                     data: c6AppData
                 },
-                session;
+                session,
+                tracker = trackerService('c6mr');
 
             $animate.enabled(false);
 
@@ -377,22 +381,24 @@
             session.on('initAnalytics',function(cfg){
                 $log.info('Init analytics with accountId: %1, clientId: %2',
                     cfg.accountId, cfg.clientId);
-                $window.c6MrGa('create', cfg.accountId, {
+                var trackerProps = {
+                    'checkProtocolTask' : angular.noop
+                };
+                tracker.create(cfg.accountId, {
                     'name'          : 'c6mr',
                     'clientId'      : cfg.clientId,
                     'storage'       : 'none',
                     'cookieDomain'  : 'none'
                 });
-                $window.c6MrGa('c6mr.set', 'checkProtocolTask', function(){});
                 if (!$window.location.hostname){
                     try {
-                        $window.c6MrGa('c6mr.set', 'hostname',
-                            $window.parent.location.hostname);
+                        trackerProps.hostname = $window.parent.location.hostname;
                     }
                     catch (e){
-                        $log.info('Failed ot set hostname to parent:',e);
+                        $log.info('Failed to set hostname to parent:',e);
                     }
                 }
+                tracker.set(trackerProps);
                 $scope.$broadcast('analyticsReady');
             });
 
