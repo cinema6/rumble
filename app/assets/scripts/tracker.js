@@ -53,7 +53,7 @@
 
             TrackerContext.prototype.create = function(){
                 var args = Array.prototype.slice.call(arguments,0);
-                args.unshift(this.methodContext('create'));
+                args.unshift('create');
                 $window[api].apply(null,args);
                 this.created = true;
                 return this;

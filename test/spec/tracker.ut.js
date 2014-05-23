@@ -118,7 +118,7 @@
                             var tc = new TrackerContext('tt');
                             tc.create('param1','param2');
                             expect($window._c6_)
-                                .toHaveBeenCalledWith('tt.create','param1','param2');
+                                .toHaveBeenCalledWith('create','param1','param2');
                         });
 
                         it('sets the created property when called',function(){

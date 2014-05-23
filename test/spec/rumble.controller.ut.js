@@ -602,6 +602,241 @@
                 });
             });
 
+            describe('trackVideoEvent',function(){
+                var player;
+                beforeEach(function(){
+                    player = {
+                        duration : 33,
+                        webHref : 'www.hotsauce.com/xyz',
+                        source : 'Hot Sauce',
+                        type   : 'hotsauce'
+                    };
+                    $scope.currentCard = {
+                        type : 'video',
+                        player : player
+                    };
+                    spyOn(RumbleCtrl,'getTrackingData');
+                });
+
+                it('does nothing if there is no currentCard',function(){
+                    $scope.currentCard = null;
+                    RumbleCtrl.trackVideoEvent({},'Play');
+                    expect(trackerSpy.trackEvent).not.toHaveBeenCalled();
+                });
+
+                it('does nothing if the currentCard has no player',function(){
+                    $scope.currentCard = { player : {} };
+                    RumbleCtrl.trackVideoEvent({},'Play');
+                    expect(trackerSpy.trackEvent).not.toHaveBeenCalled();
+                });
+
+                it('does nothing if the currentCard player is not player passed',function(){
+                    var player1 = { }, player2 = {};
+                    $scope.currentCard = { player : player1 };
+                    RumbleCtrl.trackVideoEvent(player2,'Play');
+                    expect(trackerSpy.trackEvent).not.toHaveBeenCalled();
+                });
+
+                it('tracks as ad if player is playing an ad', function(){
+                    player = {
+                        duration : 22
+                    };
+
+                    $scope.currentCard = {
+                        type : 'ad',
+                        player : player
+                    };
+                    
+                    RumbleCtrl.trackVideoEvent(player,'Play');
+                    expect(trackerSpy.trackEvent).toHaveBeenCalled();
+                    expect(RumbleCtrl.getTrackingData).toHaveBeenCalledWith({
+                        category : 'Ad',
+                        action   : 'Play',
+                        label    : 'ad',
+                        videoSource : 'ad',
+                        videoDuration : 22
+                    });
+                });
+
+                it('tracks as ad if player is playing an ad with eventLabel', function(){
+                    player = {
+                        duration : 22
+                    };
+
+                    $scope.currentCard = {
+                        type : 'ad',
+                        player : player
+                    };
+                    
+                    RumbleCtrl.trackVideoEvent(player,'Play','fooey');
+                    expect(trackerSpy.trackEvent).toHaveBeenCalled();
+                    expect(RumbleCtrl.getTrackingData).toHaveBeenCalledWith({
+                        category : 'Ad',
+                        action   : 'Play',
+                        label    : 'fooey',
+                        videoSource : 'ad',
+                        videoDuration : 22
+                    });
+                });
+
+                it('tracks as video if player is playing a video', function(){
+                    RumbleCtrl.trackVideoEvent(player,'Play');
+                    expect(trackerSpy.trackEvent).toHaveBeenCalled();
+                    expect(RumbleCtrl.getTrackingData).toHaveBeenCalledWith({
+                        category : 'Video',
+                        action   : 'Play',
+                        label    : 'www.hotsauce.com/xyz',
+                        videoSource : 'Hot Sauce',
+                        videoDuration : 33
+                    });
+                });
+                
+                it('tracks as video if player is playing a video with label', function(){
+                    RumbleCtrl.trackVideoEvent(player,'Play','booger');
+                    expect(trackerSpy.trackEvent).toHaveBeenCalled();
+                    expect(RumbleCtrl.getTrackingData).toHaveBeenCalledWith({
+                        category : 'Video',
+                        action   : 'Play',
+                        label    : 'booger',
+                        videoSource : 'Hot Sauce',
+                        videoDuration : 33
+                    });
+                });
+
+                it('tracks as video if player is playing a video no source', function(){
+                    delete player.source;
+                    RumbleCtrl.trackVideoEvent(player,'Play','booger');
+                    expect(trackerSpy.trackEvent).toHaveBeenCalled();
+                    expect(RumbleCtrl.getTrackingData).toHaveBeenCalledWith({
+                        category : 'Video',
+                        action   : 'Play',
+                        label    : 'booger',
+                        videoSource : 'hotsauce',
+                        videoDuration : 33
+                    });
+                });
+            });
+
+            describe('trackVideoProgress',function(){
+                var player;
+                beforeEach(function(){
+                    player = {
+                        duration : 100,
+                        webHref : 'www.hotsauce.com/xyz',
+                        source : 'Hot Sauce',
+                        type   : 'hotsauce'
+                    };
+                    $scope.currentCard = {
+                        type : 'video',
+                        player : player
+                    };
+                    spyOn(RumbleCtrl,'trackVideoEvent');
+                });
+
+                it('does nothing if there is no currentCard',function(){
+                    $scope.currentCard = null;
+                    RumbleCtrl.trackVideoProgress();
+                    expect(RumbleCtrl.trackVideoEvent).not.toHaveBeenCalled();
+                });
+
+                it('does nothing if the currentCard has no player',function(){
+                    $scope.currentCard = { player : null };
+                    RumbleCtrl.trackVideoProgress();
+                    expect(RumbleCtrl.trackVideoEvent).not.toHaveBeenCalled();
+                });
+
+                it('does nothing if the player duration is 0',function(){
+                    player.duration = 0;
+                    RumbleCtrl.trackVideoProgress();
+                    expect(RumbleCtrl.trackVideoEvent).not.toHaveBeenCalled();
+                });
+                
+                it('does nothing if the player currentTime is 0',function(){
+                    player.currentTime = 0;
+                    RumbleCtrl.trackVideoProgress();
+                    expect(RumbleCtrl.trackVideoEvent).not.toHaveBeenCalled();
+                });
+
+                it('adds tracking data to currentCard',function(){
+                    player.currentTime = 0;
+                    delete $scope.currentCard.tracking;
+                    RumbleCtrl.trackVideoProgress();
+                    expect($scope.currentCard.tracking.quartiles)
+                        .toEqual([false,false,false,false]);
+                });
+
+                it('does nothing if the player currentTime is < 25%',function(){
+                    player.currentTime = 20;
+                    RumbleCtrl.trackVideoProgress();
+                    expect(RumbleCtrl.trackVideoEvent).not.toHaveBeenCalled();
+                });
+
+                it('sends Quartile 1 if player currentTime == 25%',function(){
+                    player.currentTime = 25;
+                    RumbleCtrl.trackVideoProgress();
+                    expect(RumbleCtrl.trackVideoEvent)
+                        .toHaveBeenCalledWith( player,'Quartile 1' );
+                });
+                
+                it('sends Quartile 1 if player currentTime > 25% < 50%',function(){
+                    player.currentTime = 35;
+                    RumbleCtrl.trackVideoProgress();
+                    expect(RumbleCtrl.trackVideoEvent)
+                        .toHaveBeenCalledWith( player,'Quartile 1' );
+                });
+
+                it('sends Quartile 2 if player currentTime == 50%',function(){
+                    player.currentTime = 50;
+                    RumbleCtrl.trackVideoProgress();
+                    expect(RumbleCtrl.trackVideoEvent)
+                        .toHaveBeenCalledWith( player,'Quartile 2' );
+                });
+                
+                it('sends Quartile 2 if player currentTime > 50% < 75%',function(){
+                    player.currentTime = 65;
+                    RumbleCtrl.trackVideoProgress();
+                    expect(RumbleCtrl.trackVideoEvent)
+                        .toHaveBeenCalledWith( player,'Quartile 2' );
+                });
+
+                it('sends Quartile 3 if player currentTime == 75%',function(){
+                    player.currentTime = 75;
+                    RumbleCtrl.trackVideoProgress();
+                    expect(RumbleCtrl.trackVideoEvent)
+                        .toHaveBeenCalledWith( player,'Quartile 3' );
+                });
+                
+                it('sends Quartile 3 if player currentTime > 75% < 95%',function(){
+                    player.currentTime = 85;
+                    RumbleCtrl.trackVideoProgress();
+                    expect(RumbleCtrl.trackVideoEvent)
+                        .toHaveBeenCalledWith( player,'Quartile 3' );
+                });
+
+                it('sends Quartile 4 if player currentTime >= 95%',function(){
+                    player.currentTime = 95;
+                    RumbleCtrl.trackVideoProgress();
+                    expect(RumbleCtrl.trackVideoEvent)
+                        .toHaveBeenCalledWith( player,'Quartile 4' );
+                });
+
+                it('sends Quartile 4 if player currentTime > 100%',function(){
+                    player.currentTime = 200;
+                    RumbleCtrl.trackVideoProgress();
+                    expect(RumbleCtrl.trackVideoEvent)
+                        .toHaveBeenCalledWith( player,'Quartile 4' );
+                });
+
+                it('does nothing if quartile has already been tracked',function(){
+                    player.currentTime = 30;
+                    $scope.currentCard.tracking = {
+                        quartiles : [true,true,true,true]
+                    };
+                    RumbleCtrl.trackVideoProgress();
+                    expect(RumbleCtrl.trackVideoEvent).not.toHaveBeenCalled();
+                });
+            });
+
             describe('navigation',function(){
                 beforeEach(function(){
                     $scope.deviceProfile = { multiPlayer : true };

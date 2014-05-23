@@ -263,10 +263,10 @@
             }).then(process);
         };
     }])
-    .controller('RumbleController',['$log','$scope','$timeout','BallotService',
+    .controller('RumbleController',['$log','$scope','$timeout','$interval','BallotService',
                                     'c6Computed','cinema6','MiniReelService','CommentsService',
                                     'ControlsService','trackerService',
-    function                       ( $log , $scope , $timeout , BallotService ,
+    function                       ( $log , $scope , $timeout , $interval, BallotService ,
                                      c6Computed , cinema6 , MiniReelService , CommentsService ,
                                      ControlsService, trackerService ){
         var self    = this, readyTimeout,
@@ -274,7 +274,8 @@
             id = appData.experience.id,
             election = appData.experience.data.election,
             c = c6Computed($scope),
-            tracker = trackerService('c6mr');
+            tracker = trackerService('c6mr'),
+            cancelTrackVideo = null;
 
         function NavController(nav) {
             this.tick = function(time) {
@@ -394,7 +395,7 @@
         };
 
         $scope.$on('<ballot-vote-module>:vote', function(/*event,vote*/){
-            tracker.trackEvent(this.getTrackingData({
+            tracker.trackEvent(self.getTrackingData({
                 category : 'Video',
                 action   : 'Vote'
             }));
@@ -418,42 +419,18 @@
             });
 
             player.on('play', function(){
-                if (($scope.currentCard) &&
-                        (player.getVideoId() === $scope.currentCard.data.videoid)){
-                    tracker.trackEvent(this.getTrackingData({
-                        category : 'Video',
-                        action   : 'Play',
-                        label    : player.webHref,
-                        videoSource : player.type,
-                        videoDuration : player.duration
-                    }));
-                }
+                self.startVideoTracking();
+                self.trackVideoEvent(player,'Play');
             });
             
             player.on('pause', function(){
-                if (($scope.currentCard) &&
-                        (player.getVideoId() === $scope.currentCard.data.videoid)){
-                    tracker.trackEvent(this.getTrackingData({
-                        category : 'Video',
-                        action   : 'Pause',
-                        label    : player.webHref,
-                        videoSource : player.type,
-                        videoDuration : player.duration
-                    }));
-                }
+                self.stopVideoTracking();
+                self.trackVideoEvent(player,'Pause');
             });
             
             player.on('ended', function(){
-                if (($scope.currentCard) &&
-                        (player.getVideoId() === $scope.currentCard.data.videoid)){
-                    tracker.trackEvent(this.getTrackingData({
-                        category : 'Video',
-                        action   : 'End',
-                        label    : player.webHref,
-                        videoSource : player.type,
-                        videoDuration : player.duration
-                    }));
-                }
+                self.stopVideoTracking();
+                self.trackVideoEvent(player,'End');
             });
         });
 
@@ -577,6 +554,99 @@
                 $timeout.cancel(readyTimeout);
             }
         };
+
+        this.startVideoTracking = function(){
+            if (cancelTrackVideo === null) {
+                $log.info('Start video tracking');
+                cancelTrackVideo = $interval(function(){
+                    self.trackVideoProgress();
+                }, 1000);
+            }
+        };
+
+        this.stopVideoTracking = function(){
+            if (cancelTrackVideo !== null){
+                $log.info('Stop video tracking');
+                $interval.cancel(cancelTrackVideo);
+                cancelTrackVideo = null;
+            }
+        };
+
+        this.trackVideoEvent = function(player,eventName,eventLabel){
+            var currentCard = $scope.currentCard;
+            if ((!currentCard) || (!currentCard.player)){
+                return;
+            }
+
+            if (player !== currentCard.player){
+                return;
+            }
+
+            if (currentCard.type === 'ad'){
+                tracker.trackEvent(this.getTrackingData({
+                    category        : 'Ad',
+                    action          : eventName,
+                    label           : eventLabel || 'ad',
+                    videoSource     : 'ad',
+                    videoDuration   : player.duration
+                }));
+                return;
+            }
+
+            tracker.trackEvent(this.getTrackingData({
+                category        : 'Video',
+                action          : eventName,
+                label           : eventLabel || player.webHref,
+                videoSource     : player.source || player.type,
+                videoDuration   : player.duration
+            }));
+        };
+
+        this.trackVideoProgress = function(){
+            var currentCard = $scope.currentCard, playedPct, currentTime, duration, quartile;
+            if ((!currentCard) || (!currentCard.player)){
+                return;
+            }
+
+            if (!currentCard.tracking){
+                currentCard.tracking = {
+                    quartiles : [ false, false, false, false ]
+                };
+            }
+
+            currentTime = currentCard.player.currentTime;
+            duration    = currentCard.player.duration;
+
+            if (currentTime >= duration){
+                playedPct = 1;
+            } else
+            if (!duration){
+                playedPct = 0;
+            } else {
+                playedPct = (Math.round(( currentTime / duration) * 100) / 100);
+            }
+
+            quartile = (function(pct){
+                if (pct >= 0.95) {
+                    return 3;
+                } else
+                if (pct >= 0.75){
+                    return 2;
+                } else
+                if (pct >= 0.5){
+                    return 1;
+                } else
+                if (pct >= 0.25){
+                    return 0;
+                }
+                return -1;
+            }(playedPct));
+
+            if ((quartile >= 0) && (!currentCard.tracking.quartiles[quartile])) {
+                this.trackVideoEvent( currentCard.player,'Quartile ' + (quartile + 1));
+                currentCard.tracking.quartiles[quartile] = true;
+            }
+        };
         
         this.getTrackingData = function(params){
             params = params || {};
@@ -612,6 +682,7 @@
             $scope.currentIndex   = i;
             $scope.currentCard    = $scope.deck[$scope.currentIndex] || null;
 
+            $log.info('Now on card:',$scope.currentCard);
             if ($scope.currentCard){
                 $scope.currentCard.visited = true;
             }
@@ -688,15 +759,8 @@
         };
 
         this.goForward = function(src){
-//            var visited;
             self.setPosition($scope.currentIndex + 1);
             if ($scope.atTail){
-                /*
-                visited = 0;
-                angular.forEach($scope.deck,function(card){
-                    visited += (card.visited) ? 1 : 0;
-                });
-                */
                 tracker.trackEvent(this.getTrackingData({
                     category : 'Navigation',
                     action   : 'End',
@@ -717,9 +781,13 @@
             $scope.ready = true;
         }, 3000);
 
-        $log.log('Rumble Controller is initialized!');
-   
+        $scope.$on('$destroy',function(){
+            $log.info('I am slain!');
+            self.stopVideoTracking();
+        });
+
         $scope.$on('analyticsReady',function(){
+            $log.info('Analytics are ready, finish tracker setup.');
             tracker.alias({
                 'category'      : 'eventCategory',
                 'action'        : 'eventAction',
@@ -742,6 +810,9 @@
             });
             tracker.trackPage(self.getTrackingData());
         });
+        
+        $log.log('Rumble Controller is initialized!');
+   
     }])
     .directive('navbarButton', ['assetFilter','c6Computed',
     function                   ( assetFilter , c6Computed ) {
