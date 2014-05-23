@@ -394,11 +394,14 @@
             wait: null
         };
 
-        $scope.$on('<ballot-vote-module>:vote', function(/*event,vote*/){
-            tracker.trackEvent(self.getTrackingData({
-                category : 'Video',
-                action   : 'Vote'
-            }));
+        $scope.$on('<ballot-vote-module>:vote', function(event,vote){
+            var label;
+            if ($scope.currentCard) {
+                if (($scope.currentCard.ballot) && ($scope.currentCard.ballot.choices)){
+                    label = $scope.currentCard.ballot.choices[vote];
+                }
+                self.trackVideoEvent($scope.currentCard.player,'Vote',label);
+            }
         });
 
         $scope.$on('playerAdd',function(event,player){
@@ -572,6 +575,14 @@
             }
         };
 
+        this.trackNavEvent = function(action,label){
+            tracker.trackEvent(this.getTrackingData({
+                category : 'Navigation',
+                action   : action,
+                label    : label
+            }));
+        };
+
         this.trackVideoEvent = function(player,eventName,eventLabel){
             var currentCard = $scope.currentCard;
             if ((!currentCard) || (!currentCard.player)){
@@ -713,67 +724,25 @@
 
         this.start = function() {
             this.goForward();
-            tracker.trackEvent(this.getTrackingData({
-                category : 'Navigation',
-                action   : 'Start',
-                label    : 'Start'
-            }));
-
+            this.trackNavEvent('Start','Start');
             if (appData.behaviors.fullscreen) {
                 cinema6.fullscreen(true);
             }
         };
 
         this.goTo   = function(idx,src){
-            var visited;
             self.setPosition(idx);
-            if ($scope.atTail){
-                visited = 0;
-                angular.forEach($scope.deck,function(card){
-                    visited += (card.visited) ? 1 : 0;
-                });
-                tracker.trackEvent(this.getTrackingData({
-                    category : 'Navigation',
-                    action   : 'End',
-                    label    : 'Skip'
-                }));
-            } else
-            if (src){
-                tracker.trackEvent(this.getTrackingData({
-                    category : 'Navigation',
-                    action   : 'Move',
-                    label    : 'Skip'
-                }));
-            }
+            this.trackNavEvent('Skip',src || 'auto');
         };
 
         this.goBack = function(src){
             self.setPosition($scope.currentIndex - 1);
-            if (src){
-                tracker.trackEvent(this.getTrackingData({
-                    category : 'Navigation',
-                    action   : 'Move',
-                    label    : 'Previous'
-                }));
-            }
+            this.trackNavEvent('Previous',src || 'auto');
         };
 
         this.goForward = function(src){
             self.setPosition($scope.currentIndex + 1);
-            if ($scope.atTail){
-                tracker.trackEvent(this.getTrackingData({
-                    category : 'Navigation',
-                    action   : 'End',
-                    label    : 'Next'
-                }));
-            } else
-            if (src){
-                tracker.trackEvent(this.getTrackingData({
-                    category : 'Navigation',
-                    action   : 'Move',
-                    label    : 'Next'
-                }));
-            }
+            this.trackNavEvent('Next',src || 'auto');
         };
 
         readyTimeout = $timeout(function(){

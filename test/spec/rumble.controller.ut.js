@@ -602,6 +602,23 @@
                 });
             });
 
+            describe('trackNavEvent',function(){
+                beforeEach(function(){
+                    spyOn(RumbleCtrl,'getTrackingData');
+                });
+
+                it('tracks actions and labels',function(){
+                    RumbleCtrl.trackNavEvent('a1','b2');
+                    expect(RumbleCtrl.getTrackingData)
+                        .toHaveBeenCalledWith({
+                            category : 'Navigation',
+                            action   : 'a1',
+                            label    : 'b2'
+                        });
+                });
+
+            });
+
             describe('trackVideoEvent',function(){
                 var player;
                 beforeEach(function(){
@@ -975,8 +992,8 @@
                     }); 
                     expect(trackerSpy.trackEvent).toHaveBeenCalledWith({
                         category : 'Navigation',
-                        action   : 'Move',
-                        label    : 'Next',
+                        action   : 'Next',
+                        label    : 'test',
                         page     : '/mr/e-722bd3c4942331/ad1', 
                         title    : 'my title - ad',
                         slideIndex : 1,
@@ -1001,12 +1018,22 @@
                     expect($scope.$emit).toHaveBeenCalledWith('reelMove');
                     expect($scope.$emit.callCount).toBe(1);
                     expect(trackerSpy.trackPage.callCount).toEqual(1);
-                    expect(trackerSpy.trackEvent.callCount).toEqual(0);
+                    expect(trackerSpy.trackEvent.callCount).toEqual(1);
                     expect(trackerSpy.trackPage).toHaveBeenCalledWith({
                         page : '/mr/e-722bd3c4942331/ad1',
                         title : 'my title - ad',
                         slideIndex : 1,
                         slideId : 'ad1',
+                        slideTitle : 'ad'
+                    }); 
+                    expect(trackerSpy.trackEvent).toHaveBeenCalledWith({
+                        category : 'Navigation',
+                        action   : 'Previous',
+                        label    : 'auto',
+                        page     : '/mr/e-722bd3c4942331/ad1', 
+                        title    : 'my title - ad',
+                        slideIndex : 1,
+                        slideId: 'ad1',
                         slideTitle : 'ad'
                     }); 
                 });
@@ -1032,8 +1059,8 @@
                     }); 
                     expect(trackerSpy.trackEvent).toHaveBeenCalledWith({
                         category : 'Navigation',
-                        action   : 'Move',
-                        label    : 'Previous',
+                        action   : 'Previous',
+                        label    : 'test',
                         page     : '/mr/e-722bd3c4942331/ad1', 
                         title    : 'my title - ad',
                         slideIndex : 1,
@@ -1061,12 +1088,22 @@
                     expect($scope.$emit).toHaveBeenCalledWith('reelMove');
                     expect($scope.$emit.callCount).toBe(1);
                     expect(trackerSpy.trackPage.callCount).toEqual(1);
-                    expect(trackerSpy.trackEvent.callCount).toEqual(0);
+                    expect(trackerSpy.trackEvent.callCount).toEqual(1);
                     expect(trackerSpy.trackPage).toHaveBeenCalledWith({
                         page : '/mr/e-722bd3c4942331/vid2',
                         title : 'my title - vid2 caption',
                         slideIndex : 2,
                         slideId : 'vid2',
+                        slideTitle : 'vid2 caption'
+                    }); 
+                    expect(trackerSpy.trackEvent).toHaveBeenCalledWith({
+                        category : 'Navigation',
+                        action   : 'Skip',
+                        label    : 'auto',
+                        page     : '/mr/e-722bd3c4942331/vid2', 
+                        title    : 'my title - vid2 caption',
+                        slideIndex : 2,
+                        slideId: 'vid2',
                         slideTitle : 'vid2 caption'
                     }); 
                 });
@@ -1096,8 +1133,8 @@
                     }); 
                     expect(trackerSpy.trackEvent).toHaveBeenCalledWith({
                         category : 'Navigation',
-                        action   : 'Move',
-                        label    : 'Skip',
+                        action   : 'Skip',
+                        label    : 'test',
                         page     : '/mr/e-722bd3c4942331/vid2', 
                         title    : 'my title - vid2 caption',
                         slideIndex : 2,
@@ -1105,65 +1142,6 @@
                         slideTitle : 'vid2 caption'
                     }); 
                 });
-
-                it('sends ga event if navigates to tail',function(){
-                    trackerSpy.trackPage.reset();
-                    trackerSpy.trackEvent.reset();
-                    $scope.currentIndex = 0;
-                    $scope.currentCard  = $scope.deck[0];
-                    RumbleCtrl.goTo(5,'test');
-                    $timeout.flush();
-                    $scope.$digest();
-                    expect($scope.atTail).toEqual(true);
-                    expect($scope.currentIndex).toEqual(5);
-                    expect($scope.currentCard).toBe($scope.deck[5]);
-                    expect(trackerSpy.trackPage).toHaveBeenCalledWith({
-                        page : '/mr/e-722bd3c4942331/vid4',
-                        title : 'my title - vid4 caption',
-                        slideIndex : 5,
-                        slideId : 'vid4',
-                        slideTitle : 'vid4 caption'
-                    }); 
-                    expect(trackerSpy.trackEvent).toHaveBeenCalledWith({
-                        category : 'Navigation',
-                        action   : 'End',
-                        label    : 'Skip',
-                        page     : '/mr/e-722bd3c4942331/vid4', 
-                        title    : 'my title - vid4 caption',
-                        slideIndex : 5,
-                        slideId: 'vid4',
-                        slideTitle : 'vid4 caption'
-                    }); 
-                });
-/*
-                it('sends ga event with value===1 if ends with all cards visited',function(){
-                    trackerSpy.trackPage.reset();
-                    trackerSpy.trackEvent.reset();
-                    angular.forEach($scope.deck,function(card){
-                        card.visited = true;
-                    });
-                    $scope.currentIndex = 4;
-                    $scope.currentCard  = $scope.deck[4];
-                    RumbleCtrl.goForward('test');
-                    $timeout.flush();
-                    $scope.$digest();
-                    expect($scope.atTail).toEqual(true);
-                    expect($scope.currentIndex).toEqual(5);
-                    expect($scope.currentCard).toBe($scope.deck[5]);
-                    expect(trackerSpy.trackEvent).toHaveBeenCalledWith({
-                        category : 'Navigation',
-                        action   : 'End',
-                        label    : 'Next',
-                        page     : '/mr/e-722bd3c4942331/vid4',
-                        value    : 1,
-                        title    : 'my title - vid4 caption',
-                        slideIndex : 5,
-                        slideId: 'vid4',
-                        slideTitle : 'vid4 caption'
-                    }); 
-                });
-*/
-
             });
 
             describe('starting the mini reel', function() {
