@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script>
+            var jasmine = window.parent.jasmine,
+                compile = window._tbCompile = jasmine.createSpy('compile()');
+
+            window.params = {
+                exp: 'e-29104e490ebb7d'
+            };
+            window.console = window.parent.console;
+
+            window.tb = {
+                parse: jasmine.createSpy('tb.parse()')
+                    .andReturn(compile)
+            };
+        </script>
+    </head>
+    <body>
+        <div id="loader" style="display: none;"></div>
+        <div id="start"></div>
+        <script src="/base/c6Content/splash/communicate.js"></script>
+    </body>
+</html>

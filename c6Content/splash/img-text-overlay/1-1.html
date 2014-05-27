@@ -9,6 +9,8 @@
 <title>MiniReel</title>
 <meta name="description" content="">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="http://lib.cinema6.com/twobits.js/v0.0.0-0-gdf10bf2/twobits.min.js"></script>
+<script src="../params.js?__inline=true"></script>
 <style>
     body {
         margin:0; font: 16px normal 'Arial', 'Helvetica', sans-serif;
@@ -44,14 +46,15 @@
 </head>
 <body>
 <div class="mr-splash__group">
-    <button type="button"
+    <button id="start" type="button"
         class="mr-splash__start"
         style="background-image:url('http://farm6.staticflickr.com/5533/14006384980_7d70c9cd63_b.jpg');">
         <span class="mr-splash__copy">
-            <h1 class="mr-title">The Title of the MiniReel Gets Dropped Into This Space</h1>
+            <h1 class="mr-title">{{title}}</h1>
         </span>
     </button>
 </div>
 
+<script src="../communicate.js?__inline=true"></script>
 </body>
 </html>

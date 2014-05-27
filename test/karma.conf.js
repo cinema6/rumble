@@ -16,7 +16,8 @@ module.exports = function(config) {
             { pattern: 'settings.json', included: false },
             { pattern:  settings.appDir + '/assets/scripts/**/*.js', included: false },
             { pattern: '.tmp/templates.js', included: false },
-            { pattern: 'test/spec/*.js', included: false },
+            { pattern: 'test/spec/**/*.{js,html}', included: false },
+            { pattern: settings.collateralDir + '/splash/**/*.js', included: false },
             'test/test-main.js'
         ],
 
@@ -60,6 +61,8 @@ module.exports = function(config) {
 
         // Continuous Integration mode
         // if true, it capture browsers, run tests and exit
-        singleRun: true
+        singleRun: true,
+
+        preprocessors: {}
     });
 };

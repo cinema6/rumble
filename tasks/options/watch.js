@@ -18,6 +18,7 @@
         unit: {
             files: [
                 '<%= settings.appDir %>/assets/scripts/**/*.js',
+                '<%= settings.collateralDir %>/**/*.js',
                 '<%= settings.appDir %>/assets/views/**/*.html',
                 'test/spec/**/*.js'
             ],
