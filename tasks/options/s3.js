@@ -42,8 +42,8 @@
             },
             upload: [
                 {
-                    src: '<%= settings.collateralDir %>/**',
-                    rel: '<%= settings.collateralDir %>/',
+                    src: '.tmp/collateral/**',
+                    rel: '.tmp/collateral/',
                     dest: '<%= settings.s3.test.collateral %>',
                     options: {
                         CacheControl: 'max-age=60'
@@ -86,8 +86,8 @@
             },
             upload: [
                 {
-                    src: '<%= settings.collateralDir %>/**',
-                    rel: '<%= settings.collateralDir %>/',
+                    src: '.tmp/collateral/**',
+                    rel: '.tmp/collateral/',
                     dest: '<%= settings.s3.production.collateral %>',
                     options: {
                         CacheControl: 'max-age=300'
