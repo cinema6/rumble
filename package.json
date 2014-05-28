@@ -9,6 +9,8 @@
   "devDependencies": {
     "aws-sdk": "~2.0.0-rc3",
     "c6-sandbox": "git+ssh://git@github.com:cinema6/sandbox",
+    "chai": "^1.9.1",
+    "chai-webdriver": "^0.9.0",
     "connect-livereload": "~0.3.0",
     "escape-regexp": "0.0.1",
     "grunt": "^0.4.4",
@@ -42,7 +44,6 @@
     "load-grunt-config": "git://github.com/firstandthird/load-grunt-config",
     "mongodb": "^1.3.23",
     "prompt": "~0.2.12",
-    "protractor": "~0.14.0",
     "q": "~0.9.7",
     "request": "^2.34.0",
     "requirejs": "~2.1.9",
