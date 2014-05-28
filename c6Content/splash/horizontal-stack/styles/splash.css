@@ -1,0 +1,44 @@
+body {
+    font: 16px normal 'Arial', 'Helvetica', sans-serif;
+    margin:0;
+}
+.ir {
+    background-color: transparent;
+    border: 0; width:0; height:0;
+    overflow: hidden; display: block; position:absolute;
+}
+.clearfix:before,
+.clearfix:after {
+    content: ' ';
+    display: table;
+}
+.clearfix:after {
+    clear: both;
+}
+a {
+    color:#000; text-decoration:none;
+}
+
+
+.mr-splash__start {
+	height:5em;
+    padding:0; border:0; margin:0 0.75em 0.75em 0;
+    background:url('../../../../app/assets/img/default_square.jpg') 50% 50% / cover no-repeat;
+    position:relative;
+    cursor:pointer;
+    float:left;
+    font-size:1em;
+}
+.mr-splash__img {
+    position:absolute; top:0; left:0;
+    width:100%; height:100%;
+    background:50% 50% / cover no-repeat;
+    display:block;
+}
+.mr-splash__copy {
+    padding:0; color:#000;
+}
+.mr-title {
+    font-size:1.125em; line-height:1.5; font-weight:normal;
+    margin:0; 
+}

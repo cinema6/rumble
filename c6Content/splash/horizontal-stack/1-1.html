@@ -9,65 +9,32 @@
 <title>MiniReel</title>
 <meta name="description" content="">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<style>
-    body {
-        margin:0;
-        font: 16px normal 'Arial', 'Helvetica', sans-serif;
-    }
-    .ir {
-        background-color: transparent;
-        border: 0; width:0; height:0;
-        overflow: hidden; display: block; position:absolute;
-    }
-    .clearfix:before,
-    .clearfix:after {
-        content: ' ';
-        display: table;
-    }
-    .clearfix:after {
-        clear: both;
-    }
-    a {
-        color:#000; text-decoration:none;
-    }
-    .mr-splash__start {
-        width:5em; height:5em;
-        padding:0; border:0; margin:0 0.75em 0.75em 0;
-        background:url('/__dirname/app/assets/img/default_square.jpg') 50% 50% / cover no-repeat;
-        position:relative;
-        cursor:pointer;
-        float:left;
-        font-size:1em;
-    }
-    .mr-splash__img {
-        position:absolute; top:0; left:0;
-        width:100%; height:100%;
-        background:50% 50% / cover no-repeat;
-        display:block;
-    }
-    .mr-splash__copy {
-        padding:0; color:#000;
-    }
-    .mr-title {
-        font-size:1.125em; line-height:1.5; font-weight:normal;
-        margin:0; 
-    }
-</style>
-
-<!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+<link rel="stylesheet" type="text/css" href="styles/splash.css?__inline=true">
+<link rel="stylesheet" type="text/css" href="styles/1-1.css?__inline=true">
+<link rel="stylesheet" type="text/css" href="styles/preloader.css?__inline=true">
 </head>
 <body>
 <div class="mr-splash__group clearfix">
     <button type="button"
         class="mr-splash__start">
-        <span class="mr-splash__img" style="background-image:url('http://farm6.staticflickr.com/5533/14006384980_7d70c9cd63_b.jpg');">
+        <div class="preloader__group" id="c6preloader">
+            <div class="preloader">
+                <div class="preloader__ring">
+                    <div class="preloader__orbit">
+                        <div class="preloader__ball">&nbsp;
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <span class="mr-splash__img" style="background-image:url('{{splash}}');">
             <span class="ir">
-                <img src="http://farm6.staticflickr.com/5533/14006384980_7d70c9cd63_b.jpg" alt="Title of MiniReel Goes Here">
+                <img src="{{splash}}" alt="{{title}}">
             </span>
         </span>
     </button>
     <div class="mr-splash__copy">
-        <h1 class="mr-title"><a href="#" title="The Title of the MiniReel Gets Dropped Into This Space">The Title of the MiniReel Gets Dropped Into This Space</a></h1>
+        <h1 class="mr-title"><a href="#" title="{{title}}">{{title}}</a></h1>
     </div>
 </div>
 </body>
