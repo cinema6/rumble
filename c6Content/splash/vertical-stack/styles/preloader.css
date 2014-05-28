@@ -4,6 +4,7 @@
     background:rgba(0,0,0,0.5);
     -webkit-transition:opacity 0.5s; transition:opacity 0.5s;
     -webkit-transition-delay:0.25s; transition-delay:0.25s;
+    display:none;
     opacity:0;
 }
     .preloader__group--start {
