@@ -9,47 +9,27 @@
 <title>MiniReel</title>
 <meta name="description" content="">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<style>
-    body {
-        margin:0;
-        font: 16px normal 'Arial', 'Helvetica', sans-serif;
-    }
-    .ir {
-        background-color: transparent;
-        border: 0; width:0; height:0;
-        overflow: hidden; display: block; position:absolute;
-    }
-    .mr-splash__group {
-        width:100%; height:0;
-        padding:0 0 56.25% 0;
-        background:url('/__dirname/app/assets/img/default_square.jpg') 50% 50% / cover no-repeat;
-        position:relative;
-    }
-    .mr-splash__start {
-        position:absolute;
-        width:100%; height:100%;
-        background:50% 50% / cover no-repeat;
-        cursor:pointer;
-        border:0; padding:0; margin:0;
-    }
-    .mr-splash__copy {
-        position:absolute; bottom:0; left:0; right:0;
-        padding:12px 6px; color:#fff;
-        background:#000; background:rgba(0,0,0,0.55);
-    }
-    .mr-title {
-        font-size:1.125em; line-height:1.5; font-weight:normal;
-        margin:0;
-    }
-</style>
+<link rel="stylesheet" type="text/css" href="styles/splash.css?__inline=true">
+<link rel="stylesheet" type="text/css" href="styles/16-9.css?__inline=true">
+<link rel="stylesheet" type="text/css" href="styles/preloader.css?__inline=true">
 </head>
 <body>
 <div class="mr-splash__group">
-    <button type="button"
+    <button type="button" id="start"
         class="mr-splash__start"
-        style="background-image:url('http://farm6.staticflickr.com/5533/14006384980_7d70c9cd63_b.jpg');">
+        style="background-image:url('{{splash}}');">
+        <div class="preloader__group" id="loader">
+            <div class="preloader">
+                <div class="preloader__ring">
+                    <div class="preloader__orbit">
+                        <div class="preloader__ball">&nbsp;
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <span class="mr-splash__copy">
-            <h1 class="mr-title">The Title of the MiniReel Gets Dropped Into This Space</h1>
+            <h1 class="mr-title">{{title}}</h1>
         </span>
     </button>
 </div>
