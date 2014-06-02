@@ -23,7 +23,7 @@ a {
 .mr-splash__start {
 	height:5em;
     padding:0; border:0; margin:0 0.75em 0.75em 0;
-    background:url('../../../../app/assets/img/default_square.jpg') 50% 50% / cover no-repeat;
+    background:url('../img/default_square.jpg') 50% 50% / cover no-repeat;
     position:relative;
     cursor:pointer;
     float:left;
