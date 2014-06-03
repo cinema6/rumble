@@ -162,7 +162,7 @@
             electionId = null,
             electionCache = $cacheFactory('BallotService:elections');
 
-        function processBallot(ballot) {
+        function processLegacyBallot(ballot) {
             var totalItems = Object.keys(ballot).length,
                 choices = [],
                 isBlank = (function() {
@@ -175,13 +175,32 @@
                     return empty;
                 }());
 
-            angular.forEach(ballot, function(votes, name) {
-                choices.push({
-                    name: name,
-                    votes: isBlank ? (1 / totalItems) : votes
-                });
+            angular.forEach(ballot, function(votes) {
+                choices.push(isBlank ? (Math.round((1 / totalItems)  * 100)/100) : votes);
             });
 
+            return choices;
+        }
+
+        function processBallot(ballot){
+            var totalItems = ballot.length ? ballot.length : 2,
+                choices = [],
+                i,
+                isBlank = (function() {
+                var t = 0;
+                angular.forEach(ballot, function(votes){
+                    t += votes;
+                });
+                return (Math.round(t * 100) / 100) !== 1;
+            }());
+
+            if (isBlank){
+                for (i = 0; i < totalItems; i++){
+                    choices.push(Math.round((1 / totalItems)  * 100)/100);
+                }
+            }  else {
+                choices = ballot;
+            }
             return choices;
         }
 
@@ -194,13 +213,26 @@
         };
 
         this.getElection = function() {
+            var self = this;
             function process(response) {
                 var data = response.data.ballot,
                     election = {};
 
                 angular.forEach(data, function(ballot, id) {
-                    election[id] = processBallot(ballot);
+                    if (ballot === null){
+                        election[id] = processBallot([]);
+                    } else
+                    if (angular.isArray(ballot)){
+                        election[id] = processBallot(ballot);
+                    } else {
+                        self._legacy = true;
+                        election[id] = processLegacyBallot(ballot);
+                    }
                 });
+
+                if (self._legacy){
+                    electionCache.put(electionId + '-legacy', response.data);
+                }
 
                 return election;
             }
@@ -247,7 +279,7 @@
                 .then(getBallot);
         };
 
-        this.vote = function(id, name) {
+        this.vote = function(id, choiceIndex) {
             function process() {
                 return true;
             }
@@ -256,10 +288,19 @@
                 return fail();
             }
 
+            if (this._legacy){
+                (function(){
+                    var data =  electionCache.get(electionId + '-legacy');
+                    if (data.ballot[id]){
+                        choiceIndex = Object.keys(data.ballot[id])[choiceIndex];
+                    }
+                }());
+            }
+
             return $http.post(c6UrlMaker('public/vote', 'api'), {
                 election: electionId,
                 ballotItem: id,
-                vote: name
+                vote: choiceIndex
             }).then(process);
         };
     }])
