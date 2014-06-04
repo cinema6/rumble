@@ -10,16 +10,15 @@
 <meta name="description" content="">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" type="text/css" href="styles/splash.css?__inline=true">
-<link rel="stylesheet" type="text/css" href="styles/3-2.css?__inline=true">
+<link rel="stylesheet" type="text/css" href="styles/6-5.css?__inline=true">
 <link rel="stylesheet" type="text/css" href="styles/preloader.css?__inline=true">
 <script src="http://lib.cinema6.com/twobits.js/v0.0.0-0-gdf10bf2/twobits.min.js"></script>
 <script src="../params.js?__inline=true"></script>
 </head>
 <body>
-<div class="mr-splash__group">
-    <button type="button"
-        class="mr-splash__start" id="start"
-        style="background-image:url('{{splash}}');">
+<div class="mr-splash__group clearfix">
+    <button type="button" id="start"
+        class="mr-splash__start">
         <div class="preloader__group" id="loader">
             <div class="preloader">
                 <div class="preloader__ring">
@@ -30,10 +29,15 @@
                 </div>
             </div>
         </div>
-        <span class="mr-splash__copy">
-            <h1 class="mr-title">{{title}}</h1>
+        <span class="mr-splash__img" style="background-image:url('{{splash}}');">
+            <span class="ir">
+                <img src="{{splash}}" alt="{{title}}">
+            </span>
         </span>
     </button>
+    <div class="mr-splash__copy">
+        <h1 class="mr-title"><a href="#" title="{{title}}">{{title}}</a></h1>
+    </div>
 </div>
 
 <script src="../communicate.js?__inline=true"></script>
