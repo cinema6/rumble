@@ -94,7 +94,7 @@
                         it('should persist the vote', function() {
                             BallotVoteModuleCtrl.vote(1);
 
-                            expect(BallotService.vote).toHaveBeenCalledWith($scope.cardId, 'Lame');
+                            expect(BallotService.vote).toHaveBeenCalledWith($scope.cardId, 1);
                         });
                     });
 

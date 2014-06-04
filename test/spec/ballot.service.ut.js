@@ -9,9 +9,18 @@
 
             var $httpBackend;
 
-            var elData, elDataOld, oneThird = Math.round((1/3) * 100) / 100;
+            var elData, elDataOld, ballotMap, oneThird = Math.round((1/3) * 100) / 100 ;
 
             beforeEach(function() {
+                ballotMap = {
+                    'rc-22119a8cf9f755': [ 'Catchy','Painful' ],
+                    'rc-4770a2d7f85ce0': [ 'Funny', 'Lame' ],
+                    'rc-e489d1c6359fb3': [ 'Cute','Ugly' ],
+                    'rc-e2947c9bec017e': [ 'Cool','Geeky' ],
+                    'rc-99b87ea709d7ac': [ 'Funny','Gross','Strange'],
+                    'rc-2c8875ab60d386': [ 'Hot','Not' ]
+                };
+
                 elDataOld = {
                     id: 'e-80fcd03196b3d2',
                     ballot: {
@@ -100,7 +109,7 @@
                                 $httpBackend.expectGET('/api/public/election/' + elDataOld.id)
                                     .respond(200, elDataOld);
 
-                                BallotService.init(elDataOld.id);
+                                BallotService.init(elDataOld.id,ballotMap);
                                 BallotService.getElection().then(success, failure);
                             });
 
@@ -117,11 +126,17 @@
                                 $httpBackend.flush();
 
                                 expect(success).toHaveBeenCalledWith({
-                                    'rc-22119a8cf9f755': [ 0.5, 0.5 ],
-                                    'rc-4770a2d7f85ce0': [ 0, 1 ],
-                                    'rc-e489d1c6359fb3': [ 0.5, 0.5 ],
-                                    'rc-e2947c9bec017e': [ 0.5, 0.5 ],
-                                    'rc-99b87ea709d7ac': [ oneThird, oneThird, oneThird ]
+                                    'rc-22119a8cf9f755': [ { name : 'Catchy', votes : 0.5}, 
+                                                           { name : 'Painful', votes : 0.5 } ],
+                                    'rc-4770a2d7f85ce0': [ { name : 'Funny', votes : 0 },
+                                                           { name : 'Lame', votes : 1 }],
+                                    'rc-e489d1c6359fb3': [ { name : 'Cute', votes: 0.5},
+                                                           { name : 'Ugly', votes: 0.5} ],
+                                    'rc-e2947c9bec017e': [ { name : 'Cool', votes: 0.5},
+                                                           { name : 'Geeky', votes: 0.5} ],
+                                    'rc-99b87ea709d7ac': [ { name : 'Funny', votes: oneThird}, 
+                                                           { name : 'Gross', votes: oneThird},
+                                                           { name : 'Strange', votes: oneThird} ]
                                 });
                             });
 
@@ -137,7 +152,10 @@
                                     });
                                 }).not.toThrow();
 
-                                expect(success).toHaveBeenCalledWith([0,1]);
+                                expect(success).toHaveBeenCalledWith(
+                                    [ { name : 'Funny', votes : 0 },
+                                      { name : 'Lame', votes : 1 }]
+                                );
                             });
                         });
 
@@ -146,7 +164,7 @@
                                 $httpBackend.expectGET('/api/public/election/' + elData.id)
                                     .respond(200, elData);
 
-                                BallotService.init(elData.id);
+                                BallotService.init(elData.id,ballotMap);
                                 BallotService.getElection().then(success, failure);
                             });
 
@@ -161,14 +179,20 @@
 
                             it('should resolve with the processed results of the election', function() {
                                 $httpBackend.flush();
-
                                 expect(success).toHaveBeenCalledWith({
-                                    'rc-22119a8cf9f755': [ 0.5, 0.5 ],
-                                    'rc-4770a2d7f85ce0': [ 0, 1 ],
-                                    'rc-e489d1c6359fb3': [ 0.5, 0.5 ],
-                                    'rc-e2947c9bec017e': [ 0.5, 0.5 ],
-                                    'rc-99b87ea709d7ac': [ oneThird, oneThird, oneThird ],
-                                    'rc-2c8875ab60d386': [ 0.5, 0.5]
+                                    'rc-22119a8cf9f755': [ { name : 'Catchy', votes : 0.5}, 
+                                                           { name : 'Painful', votes : 0.5 } ],
+                                    'rc-4770a2d7f85ce0': [ { name : 'Funny', votes : 0 },
+                                                           { name : 'Lame', votes : 1 }],
+                                    'rc-e489d1c6359fb3': [ { name : 'Cute', votes: 0.5},
+                                                           { name : 'Ugly', votes: 0.5} ],
+                                    'rc-e2947c9bec017e': [ { name : 'Cool', votes: 0.5},
+                                                           { name : 'Geeky', votes: 0.5} ],
+                                    'rc-99b87ea709d7ac': [ { name : 'Funny', votes: oneThird}, 
+                                                           { name : 'Gross', votes: oneThird},
+                                                           { name : 'Strange', votes: oneThird} ],
+                                    'rc-2c8875ab60d386': [ { name : 'Hot', votes: 0.5},
+                                                           { name : 'Not', votes: 0.5} ],
                                 });
                             });
 
@@ -184,7 +208,10 @@
                                     });
                                 }).not.toThrow();
 
-                                expect(success).toHaveBeenCalledWith([0,1]);
+                                expect(success).toHaveBeenCalledWith(
+                                    [ { name : 'Funny', votes : 0 },
+                                      { name : 'Lame', votes : 1 }]
+                                );
                             });
                         });
                         
@@ -200,7 +227,7 @@
 
                         describe('legacy election data',function(){
                             beforeEach(function() {
-                                BallotService.init(elDataOld.id);
+                                BallotService.init(elDataOld.id,ballotMap);
 
                                 $httpBackend.expectGET('/api/public/election/' + elDataOld.id)
                                     .respond(200, elDataOld);
@@ -212,7 +239,10 @@
                             });
 
                             it('should return an object with the requested data', function() {
-                                expect(success).toHaveBeenCalledWith([0,1]);
+                                expect(success).toHaveBeenCalledWith(
+                                    [ { name : 'Funny', votes : 0 },
+                                      { name : 'Lame', votes : 1 }]
+                                );
                             });
 
                             it('should split the votes evenly if the vote percentages are 0',
@@ -225,20 +255,28 @@
                                         .then(success, failure);
                                 });
 
-                                expect(success).toHaveBeenCalledWith([ 0.5, 0.5]);
+                                expect(success).toHaveBeenCalledWith([ 
+                                    { name : 'Cute', votes: 0.5},
+                                    { name : 'Ugly', votes: 0.5} 
+                                ]);
+                                success.reset();
 
                                 $rootScope.$apply(function() {
                                     BallotService.getBallot('rc-99b87ea709d7ac')
                                         .then(success, failure);
                                 });
 
-                                expect(success).toHaveBeenCalledWith([oneThird,oneThird,oneThird]);
+                                expect(success).toHaveBeenCalledWith([
+                                    { name : 'Funny', votes: oneThird}, 
+                                    { name : 'Gross', votes: oneThird},
+                                    { name : 'Strange', votes: oneThird} 
+                                ]);
                             });
                         });
                         
                         describe('election data',function(){
                             beforeEach(function() {
-                                BallotService.init(elData.id);
+                                BallotService.init(elData.id,ballotMap);
 
                                 $httpBackend.expectGET('/api/public/election/' + elData.id)
                                     .respond(200, elData);
@@ -250,7 +288,10 @@
                             });
 
                             it('should return an object with the requested data', function() {
-                                expect(success).toHaveBeenCalledWith([0,1]);
+                                expect(success).toHaveBeenCalledWith(
+                                    [ { name : 'Funny', votes : 0 },
+                                      { name : 'Lame', votes : 1 }]
+                                );
                             });
 
                             it('should split the votes evenly if the vote percentages are 0',
@@ -263,14 +304,22 @@
                                         .then(success, failure);
                                 });
 
-                                expect(success).toHaveBeenCalledWith([ 0.5, 0.5]);
+                                expect(success).toHaveBeenCalledWith([ 
+                                    { name : 'Cute', votes: 0.5},
+                                    { name : 'Ugly', votes: 0.5} 
+                                ]);
 
+                                success.reset();
                                 $rootScope.$apply(function() {
                                     BallotService.getBallot('rc-99b87ea709d7ac')
                                         .then(success, failure);
                                 });
 
-                                expect(success).toHaveBeenCalledWith([oneThird,oneThird,oneThird]);
+                                expect(success).toHaveBeenCalledWith([
+                                    { name : 'Funny', votes: oneThird}, 
+                                    { name : 'Gross', votes: oneThird},
+                                    { name : 'Strange', votes: oneThird} 
+                                ]);
                             });
                         });
                     });
@@ -288,7 +337,7 @@
                                 $httpBackend.expectGET('/api/public/election/' + elDataOld.id)
                                     .respond(200, elDataOld);
 
-                                BallotService.init(elDataOld.id);
+                                BallotService.init(elDataOld.id,ballotMap);
                                 BallotService.getElection();
                                 $httpBackend.flush();
                                 
@@ -317,7 +366,7 @@
                                 $httpBackend.expectGET('/api/public/election/' + elData.id)
                                     .respond(200, elData);
 
-                                BallotService.init(elData.id);
+                                BallotService.init(elData.id,ballotMap);
                                 BallotService.getElection();
                                 $httpBackend.flush();
                                 

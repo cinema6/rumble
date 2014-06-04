@@ -52,12 +52,10 @@
             $log = $log.context('BallotVoteModuleController');
 
             this.vote = function(index) {
-                var voteName = $scope.ballot.choices[index];
-
                 $scope.vote = index;
 
-                $log.info('Submitting vote for card %1: %2', $scope.cardId, voteName);
-                BallotService.vote($scope.cardId, voteName)
+                $log.info('Submitting vote for card %1: %2', $scope.cardId, $scope.ballot.choices[index]);
+                BallotService.vote($scope.cardId, $scope.vote)
                     .catch(function(error) {
                         $log.error(error);
                     });
