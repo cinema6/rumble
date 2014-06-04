@@ -160,37 +160,53 @@
     function                  ( $http , $cacheFactory , $q , c6UrlMaker ) {
         var service = this,
             electionId = null,
+            ballotMap  = null,
+            legacyBallotMap,
             electionCache = $cacheFactory('BallotService:elections');
 
-        function processBallot(ballot) {
-            var totalItems = Object.keys(ballot).length,
+        function processBallot(ballot,id){
+            var choiceNames = ballotMap[id],
                 choices = [],
                 isBlank = (function() {
-                    var empty = true;
-
-                    angular.forEach(ballot, function(votes) {
-                        if (votes > 0) { empty = false; }
+                    var t = 0;
+                    angular.forEach(ballot, function(votes){
+                        t += votes;
                     });
-
-                    return empty;
+                    return (Math.round(t * 100) / 100) !== 1;
                 }());
 
-            angular.forEach(ballot, function(votes, name) {
+            angular.forEach(choiceNames, function(name,index) {
                 choices.push({
-                    name: name,
-                    votes: isBlank ? (1 / totalItems) : votes
+                    'name'  : name,
+                    'votes' : isBlank ?
+                        (Math.round((1 / choiceNames.length)  * 100)/100) : ballot[index]
                 });
             });
-
             return choices;
+        }
+
+        function processLegacyBallot(ballot,id) {
+            var newBallot = [], expectedLength = ballotMap[id].length;
+            if (!legacyBallotMap){
+                legacyBallotMap = {};
+            }
+            legacyBallotMap[id] = [];
+            angular.forEach(ballot, function(votes,name) {
+                if (legacyBallotMap[id].length < expectedLength){
+                    legacyBallotMap[id].push(name);
+                    newBallot.push(votes ? votes : 0);
+                }
+            });
+            return processBallot(newBallot,id);
         }
 
         function fail() {
             return $q.reject('The BallotService has not been initialized with an election id.');
         }
 
-        this.init = function(id) {
+        this.init = function(id,bMap) {
             electionId = id;
+            ballotMap = bMap;
         };
 
         this.getElection = function() {
@@ -199,7 +215,19 @@
                     election = {};
 
                 angular.forEach(data, function(ballot, id) {
-                    election[id] = processBallot(ballot);
+                    if (!ballotMap[id]){
+                        return;
+                    }
+
+                    if (ballot === null){
+                        ballot = [];
+                    }
+
+                    if (angular.isArray(ballot)){
+                        election[id] = processBallot(ballot,id);
+                    } else {
+                        election[id] = processLegacyBallot(ballot,id);
+                    }
                 });
 
                 return election;
@@ -247,7 +275,7 @@
                 .then(getBallot);
         };
 
-        this.vote = function(id, name) {
+        this.vote = function(id, choiceIndex) {
             function process() {
                 return true;
             }
@@ -256,10 +284,19 @@
                 return fail();
             }
 
+            if (legacyBallotMap){
+                // need to convert numeric vote index to name
+                (function(){
+                    if (legacyBallotMap[id]){
+                        choiceIndex = legacyBallotMap[id][choiceIndex];
+                    }
+                }());
+            }
+
             return $http.post(c6UrlMaker('public/vote', 'api'), {
                 election: electionId,
                 ballotItem: id,
-                vote: name
+                vote: choiceIndex
             }).then(process);
         };
     }])
@@ -275,7 +312,8 @@
             election = appData.experience.data.election,
             c = c6Computed($scope),
             tracker = trackerService('c6mr'),
-            cancelTrackVideo = null;
+            cancelTrackVideo = null,
+            ballotMap = {};
 
         function NavController(nav) {
             this.tick = function(time) {
@@ -315,10 +353,6 @@
 
         $log = $log.context('RumbleCtrl');
 
-        if (election) {
-            BallotService.init(election);
-        }
-
         CommentsService.init(id);
 
         $scope.deviceProfile    = appData.profile;
@@ -327,6 +361,16 @@
         $scope.controls         = ControlsService.init();
 
         $scope.deck             = MiniReelService.createDeck(appData.experience.data);
+
+        if (election) {
+            angular.forEach($scope.deck,function(card){
+                if ((card.ballot) && (card.ballot.choices)){
+                    ballotMap[card.id] = card.ballot.choices.concat();
+                }
+            });
+            BallotService.init(election,ballotMap);
+        }
+
         c($scope, 'players', function() {
             return this.deck.slice(0, (this.currentIndex + 3));
         }, ['currentIndex', 'deck']);

@@ -239,7 +239,7 @@
                 });
 
                 it('should initialize BallotService with the id', function() {
-                    expect(BallotService.init).toHaveBeenCalledWith(appData.experience.data.election);
+                    expect(BallotService.init).toHaveBeenCalledWith(appData.experience.data.election,{});
                 });
 
                 it('should not initialize the BallotService if there is no election', function() {
