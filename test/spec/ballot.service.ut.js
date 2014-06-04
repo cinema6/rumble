@@ -108,21 +108,11 @@
                             beforeEach(function() {
                                 $httpBackend.expectGET('/api/public/election/' + elDataOld.id)
                                     .respond(200, elDataOld);
-
-                                BallotService.init(elDataOld.id,ballotMap);
-                                BallotService.getElection().then(success, failure);
-                            });
-
-                            it('should make a request to the vote service', function() {
-                                $httpBackend.flush();
-                            });
-
-                            it('should set the _legacy flag', function(){
-                                $httpBackend.flush();
-                                expect(BallotService._legacy).toEqual(true); 
                             });
 
                             it('should resolve with the processed results of the election', function() {
+                                BallotService.init(elDataOld.id,ballotMap);
+                                BallotService.getElection().then(success, failure);
                                 $httpBackend.flush();
 
                                 expect(success).toHaveBeenCalledWith({
@@ -142,7 +132,33 @@
 
                             it('should cache the election for the getBallot() method', function() {
                                 success = jasmine.createSpy('getBallot() success');
+                                BallotService.init(elDataOld.id,ballotMap);
+                                BallotService.getElection().then(success, failure);
+                                $httpBackend.flush();
 
+                                expect(function() {
+                                    $rootScope.$apply(function() {
+                                        BallotService.getBallot('rc-4770a2d7f85ce0')
+                                            .then(success);
+                                    });
+                                }).not.toThrow();
+
+                                expect(success).toHaveBeenCalledWith(
+                                    [ { name : 'Funny', votes : 0 },
+                                      { name : 'Lame', votes : 1 }]
+                                );
+                            });
+                            
+                            it('should work when choice labels have changed', function() {
+                                success = jasmine.createSpy('getBallot() success');
+
+                                elDataOld.ballot['rc-4770a2d7f85ce0']= {
+                                    'Funny': 0,
+                                    'Corny': 1
+                                };
+                                
+                                BallotService.init(elDataOld.id,ballotMap);
+                                BallotService.getElection().then(success, failure);
                                 $httpBackend.flush();
 
                                 expect(function() {
@@ -227,18 +243,18 @@
 
                         describe('legacy election data',function(){
                             beforeEach(function() {
-                                BallotService.init(elDataOld.id,ballotMap);
-
                                 $httpBackend.expectGET('/api/public/election/' + elDataOld.id)
                                     .respond(200, elDataOld);
+
+                            });
+
+                            it('should return an object with the requested data', function() {
+                                BallotService.init(elDataOld.id,ballotMap);
 
                                 BallotService.getBallot('rc-4770a2d7f85ce0')
                                     .then(success, failure);
 
                                 $httpBackend.flush();
-                            });
-
-                            it('should return an object with the requested data', function() {
                                 expect(success).toHaveBeenCalledWith(
                                     [ { name : 'Funny', votes : 0 },
                                       { name : 'Lame', votes : 1 }]
@@ -247,6 +263,12 @@
 
                             it('should split the votes evenly if the vote percentages are 0',
                                 function() {
+                                BallotService.init(elDataOld.id,ballotMap);
+
+                                BallotService.getBallot('rc-4770a2d7f85ce0')
+                                    .then(success, failure);
+
+                                $httpBackend.flush();
                                 $httpBackend.expectGET('/api/public/election/' + elDataOld.id)
                                     .respond(200, elDataOld);
 
@@ -271,6 +293,27 @@
                                     { name : 'Gross', votes: oneThird},
                                     { name : 'Strange', votes: oneThird} 
                                 ]);
+                            });
+
+                            it('should split votes if election data doesnt add up',function(){
+                                elDataOld.ballot['rc-4770a2d7f85ce0']= {
+                                    'Funny': 0.10,
+                                    'Corny': 0.10,
+                                    'Weird': 0.80 
+                                };
+                                
+                                BallotService.init(elDataOld.id,ballotMap);
+
+                                BallotService.getBallot('rc-4770a2d7f85ce0')
+                                    .then(success, failure);
+
+                                $httpBackend.flush();
+                                expect(success).toHaveBeenCalledWith(
+                                    [ { name : 'Funny', votes : 0.5 },
+                                      { name : 'Lame', votes : 0.5 }]
+                                );
+                            
+
                             });
                         });
                         
@@ -336,7 +379,9 @@
                             beforeEach(function() {
                                 $httpBackend.expectGET('/api/public/election/' + elDataOld.id)
                                     .respond(200, elDataOld);
+                            });
 
+                            it('should resolve with "true"', function() {
                                 BallotService.init(elDataOld.id,ballotMap);
                                 BallotService.getElection();
                                 $httpBackend.flush();
@@ -349,13 +394,24 @@
                                 
                                 BallotService.vote('rc-22119a8cf9f755', 1)
                                     .then(success, failure);
-                            });
-
-                            it('should post the vote to the api', function() {
                                 $httpBackend.flush();
+                                expect(success).toHaveBeenCalledWith(true);
                             });
-
-                            it('should resolve with "true"', function() {
+                            
+                            it('should work when ballotMap and election data have different labels', function() {
+                                ballotMap['rc-22119a8cf9f755'] = [ 'Catchy','Crappy' ];
+                                BallotService.init(elDataOld.id,ballotMap);
+                                BallotService.getElection();
+                                $httpBackend.flush();
+                                
+                                $httpBackend.expectPOST('/api/public/vote', {
+                                    election: elDataOld.id,
+                                    ballotItem: 'rc-22119a8cf9f755',
+                                    vote: 'Painful'
+                                }).respond(200, 'OK');
+                                
+                                BallotService.vote('rc-22119a8cf9f755', 1)
+                                    .then(success, failure);
                                 $httpBackend.flush();
                                 expect(success).toHaveBeenCalledWith(true);
                             });

@@ -161,34 +161,8 @@
         var service = this,
             electionId = null,
             ballotMap  = null,
+            legacyBallotMap,
             electionCache = $cacheFactory('BallotService:elections');
-
-        function processLegacyBallot(ballot,id) {
-            var choiceNames = [],
-                choices     = [],
-                isBlank     = (function() {
-                    var empty = true;
-
-                    angular.forEach(ballot, function(votes,name) {
-                        choiceNames.push(name);
-                        if (votes > 0) { empty = false; }
-                    });
-
-                    return empty;
-                }());
-
-            angular.forEach(ballot, function(votes,name) {
-                choices.push({
-                    'name'  : name,
-                    'votes' : isBlank ?
-                        (Math.round((1 / choiceNames.length)  * 100)/100) : votes
-                });
-            });
-
-            ballotMap[id] = choiceNames;
-
-            return choices;
-        }
 
         function processBallot(ballot,id){
             var choiceNames = ballotMap[id],
@@ -211,6 +185,21 @@
             return choices;
         }
 
+        function processLegacyBallot(ballot,id) {
+            var newBallot = [], expectedLength = ballotMap[id].length;
+            if (!legacyBallotMap){
+                legacyBallotMap = {};
+            }
+            legacyBallotMap[id] = [];
+            angular.forEach(ballot, function(votes,name) {
+                if (legacyBallotMap[id].length < expectedLength){
+                    legacyBallotMap[id].push(name);
+                    newBallot.push(votes ? votes : 0);
+                }
+            });
+            return processBallot(newBallot,id);
+        }
+
         function fail() {
             return $q.reject('The BallotService has not been initialized with an election id.');
         }
@@ -221,12 +210,15 @@
         };
 
         this.getElection = function() {
-            var self = this;
             function process(response) {
                 var data = response.data.ballot,
                     election = {};
 
                 angular.forEach(data, function(ballot, id) {
+                    if (!ballotMap[id]){
+                        return;
+                    }
+
                     if (ballot === null){
                         ballot = [];
                     }
@@ -234,7 +226,6 @@
                     if (angular.isArray(ballot)){
                         election[id] = processBallot(ballot,id);
                     } else {
-                        self._legacy = true;
                         election[id] = processLegacyBallot(ballot,id);
                     }
                 });
@@ -293,11 +284,11 @@
                 return fail();
             }
 
-            if (this._legacy){
+            if (legacyBallotMap){
                 // need to convert numeric vote index to name
                 (function(){
-                    if (ballotMap[id]){
-                        choiceIndex = ballotMap[id][choiceIndex];
+                    if (legacyBallotMap[id]){
+                        choiceIndex = legacyBallotMap[id][choiceIndex];
                     }
                 }());
             }
