@@ -869,8 +869,8 @@
             }
         };
     }])
-    .controller('VideoEmbedCardController', ['$scope','ModuleService','ControlsService','EventService','c6AppData','c6ImagePreloader',
-    function                                ( $scope , ModuleService , ControlsService , EventService , c6AppData , c6ImagePreloader ) {
+    .controller('VideoEmbedCardController', ['$scope','ModuleService','ControlsService','EventService','c6AppData','c6ImagePreloader', 'AdTechService',
+    function                                ( $scope , ModuleService , ControlsService , EventService , c6AppData , c6ImagePreloader ,  AdTechService ) {
         var self = this,
             config = $scope.config,
             profile = $scope.profile,
@@ -1008,6 +1008,9 @@
 
                     self.dismissBallot();
                     self.dismissBallotResults();
+
+                    AdTechService.loadAd(config.id);
+
                 } else {
                     if (_data.modules.ballot.ballotActive) {
                         _data.modules.ballot.vote = -1;

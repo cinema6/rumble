@@ -4,7 +4,7 @@
     <div ng-switch="adType" ng-show="active">
         <div ng-switch-when="iframe"><iframe ng-src="{{fileURI}}"></iframe></div>
         <div ng-switch-when="image"><img ng-src="{{fileURI}}" /></div>
-        <div ng-hide="companion()"><img ng-src="{{adSrc}}" /></div>
+        <div ng-hide="companion()" id="{{adContainerId}}"></div>
         <div ng-switch-when="html" ng-bind-html="fileURI"></div>
     </div>
 </div>

@@ -10,15 +10,18 @@
                 scope: {
                     adSrc: '@',
                     companion: '&',
-                    active: '='
+                    active: '=',
+                    adContainerId: '@'
                 },
                 link: function(scope) {
                     scope.$watch('companion()', function(curr) {
                         if(curr) {
                             if (curr.adType) {
+                                // we have a VAST companion
                                 scope.adType = curr.adType;
                                 scope.fileURI = curr.fileURI;
                             } else if (curr.sourceCode) {
+                                // we have a VPAID companion
                                 scope.adType = 'html';
                                 scope.fileURI = curr.sourceCode;
                             }

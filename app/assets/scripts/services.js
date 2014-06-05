@@ -543,6 +543,19 @@
 
         }])
 
+        .service('AdTechService', ['$window', 'c6Defines',
+        function                  ( $window ,  c6Defines ) {
+            this.loadAd = function(container) {
+                $window.ADTECH.loadAd({
+                    network: '5072',
+                    server: 'adserver.adtechus.com',
+                    placement: c6Defines.kAdTechId,
+                    adContainerId: container,
+                    debugMode: c6Defines.kDevMode
+                });
+            };
+        }])
+
         .service('ControlsService', ['$timeout',
         function                    ( $timeout ) {
             var _private = {};

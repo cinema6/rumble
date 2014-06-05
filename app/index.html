@@ -57,6 +57,18 @@
                 s.setAttribute('src', '//lib.cinema6.com/require/2.1.5/require.min.js');
                 document.getElementsByTagName('body')[0].appendChild(s);
             }((window.c6 = (window.c6 || {})),'assets',location.search));
+
+            (function(w,h,t){
+                w.c6AdTechPlacementLoaded = function(id) {
+                    c6.kAdTechId = id;
+                };
+                h = window.location.host.indexOf('localhost')>-1 ? 'elitedaily'
+                    : window.location.host.split('.').filter(function(v,i,a){return i===a.length-1})[0];
+
+                t = document.createElement('script');
+                t.setAttribute('src', '//adserver.adtechus.com/addyn/3.0/5072/3214274/0/-1/ADTECH;grp=286;kvweburl='+h+';misc='+(new Date()).getTime());
+                document.getElementsByTagName('body')[0].appendChild(t);
+            }(window));
         </script>
     </body>
 </html>

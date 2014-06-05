@@ -65,7 +65,8 @@
                     libUrl('angular/v1.2.12-0-g5cc5cc1/angular-sanitize.min.js'),
                     libUrl('c6ui/v2.5.0-0-gc58e712/c6uilib.min.js'),
                     libUrl('c6ui/v2.5.0-0-gc58e712/c6log.min.js'),
-                    protocol + '//www.youtube.com/iframe_api'
+                    protocol + '//www.youtube.com/iframe_api',
+                    protocol + '//aka-cdn.adtechus.com/dt/common/DAC.js'
                 ];
             } else {
                 return [
@@ -76,7 +77,8 @@
                     libUrl('angular/v1.2.12-0-g5cc5cc1/angular-sanitize.js'),
                     libUrl('c6ui/v2.5.0-0-gc58e712/c6uilib.js'),
                     libUrl('c6ui/v2.5.0-0-gc58e712/c6log.js'),
-                    protocol + '//www.youtube.com/iframe_api'
+                    protocol + '//www.youtube.com/iframe_api',
+                    protocol + '//aka-cdn.adtechus.com/dt/common/DAC.js'
                 ];
             }
         }());
