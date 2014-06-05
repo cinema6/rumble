@@ -1,6 +1,6 @@
 # MiniReel Player
 
-* *[Beta10.rc1]*
+* *[Beta10.rc1] (June 5, 2014)
   * [FIX]: Splash templates separated into css and html files.
   * [FIX]: Preloader added into Splash for display while MiniReel loads.
   * [FIX]: Rumble player can handle election fixes (#370)
