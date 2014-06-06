@@ -302,10 +302,10 @@
     }])
     .controller('RumbleController',['$log','$scope','$timeout','$interval','BallotService',
                                     'c6Computed','cinema6','MiniReelService','CommentsService',
-                                    'ControlsService','trackerService', 'AdTechService',
+                                    'ControlsService','trackerService',
     function                       ( $log , $scope , $timeout , $interval, BallotService ,
                                      c6Computed , cinema6 , MiniReelService , CommentsService ,
-                                     ControlsService,  trackerService  , AdTechService  ){
+                                     ControlsService,  trackerService ){
         var self    = this, readyTimeout,
             appData = $scope.app.data,
             id = appData.experience.id,
@@ -354,7 +354,6 @@
         $log = $log.context('RumbleCtrl');
 
         CommentsService.init(id);
-        AdTechService.init();
 
         $scope.deviceProfile    = appData.profile;
         $scope.title            = appData.experience.data.title;
@@ -1011,7 +1010,9 @@
                     self.dismissBallotResults();
 
                     if(self.hasModule('displayAd')) {
-                        AdTechService.loadAd(config.id);
+                        // TODO: need to replace 'waterfall' with 1 of the 8 ad modes,
+                        // ie. C6 w/ publisher fallback, Publisher only, etc.
+                        AdTechService.loadAd(config.id, 'waterfall');
                     }
 
                 } else {
