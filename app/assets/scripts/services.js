@@ -545,7 +545,9 @@
 
         .service('AdTechService', ['$window', 'c6Defines', '$q',
         function                  ( $window ,  c6Defines ,  $q ) {
-            var deferred = $q.defer();
+            var deferred = $q.defer(),
+                domain = (window.location.host.indexOf('localhost') > -1) ? 'localhost'
+                    : window.location.host.split('.').filter(function(v,i,a){return i===a.length-2;})[0];
 
             function getPlacementId() {
                 return deferred.promise;
@@ -569,7 +571,7 @@
                     server: 'adserver.adtechus.com',
                     placement: 3214274,
                     adContainerId: 'adtechPlacement',
-                    kv: { weburl: 'elitedaily' },
+                    kv: { weburl: domain },
                     complete: function() {
                         deferred.resolve($window.c6AdtechPlacementId);
                     }
