@@ -543,8 +543,8 @@
 
         }])
 
-        .service('AdTechService', ['$window', '$q', '$log',
-        function                  ( $window ,  $q ,  $log ) {
+        .service('AdTechService', ['$window', '$q',
+        function                  ( $window ,  $q ) {
             var deferred = $q.defer(),
                 domain, windowCount = 0;
 
@@ -579,7 +579,7 @@
                         placement: id,
                         adContainerId: container,
                         debugMode: (domain === 'localhost'),
-                        kv: { mode: waterfall }
+                        kv: { mode: waterfall },
                         complete: function() {
                             adLoadComplete.resolve();
                         }
