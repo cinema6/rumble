@@ -8,15 +8,15 @@ describe('splash.js', function() {
     beforeEach(function() {
         splash = document.createElement('div');
         splash.innerHTML = [
-            '<div id="loader">',
+            '<div class="c6js-loader">',
                 'loader',
             '</div>',
-            '<button id="start">',
+            '<button class="c6js-start">',
                 'Start',
             '</button>'
         ].join('\n');
-        loader = splash.querySelectorAll('#loader')[0];
-        start = splash.querySelectorAll('#start')[0];
+        loader = splash.querySelectorAll('.c6js-loader')[0];
+        start = splash.querySelectorAll('.c6js-start')[0];
 
         c6 = {
             loadExperience: jasmine.createSpy('c6.loadExperience(settings)')
