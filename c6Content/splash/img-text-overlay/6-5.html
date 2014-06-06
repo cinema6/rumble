@@ -2,22 +2,23 @@
 <link rel="stylesheet" type="text/css" href="styles/6-5.css?__inline=true">
 <link rel="stylesheet" type="text/css" href="styles/preloader.css?__inline=true">
 
-<div class="mr-splash__group">
-    <button type="button" id="start"
-        class="mr-splash__start"
+<div class="c6mr-splashTextOnly__group">
+    <button id="start" type="button"
+        class="c6mr-splashTextOnly__start c6mr-splashTextOnly__start--6-5
+            c6js-start"
         style="background-image:url('{{splash}}');">
-        <div class="preloader__group" id="loader">
-            <div class="preloader">
-                <div class="preloader__ring">
-                    <div class="preloader__orbit">
-                        <div class="preloader__ball">&nbsp;
+        <div class="c6mr-preloader__group c6js-loader" style="display:none;">
+            <div class="c6mr-preloader">
+                <div class="c6mr-preloader__ring">
+                    <div class="c6mr-preloader__orbit">
+                        <div class="c6mr-preloader__ball">&nbsp;
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <span class="mr-splash__copy">
-            <h1 class="mr-title">{{title}}</h1>
+        <span class="c6mr-splashTextOnly__copy">
+            <h1 class="c6mr-title">{{title}}</h1>
         </span>
     </button>
 </div>
