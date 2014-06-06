@@ -149,7 +149,7 @@ module.exports = function(grunt) {
 
     grunt.registerTask('publish:collateral', 'upload collateral assets to s3', function(target) {
         grunt.task.run('copy:collateral');
-        grunt.task.run('inline:collateral');
+//        grunt.task.run('inline:collateral'); TODO: Uncomment this line
         grunt.task.run('htmlmin:collateral');
         grunt.task.run('jsify:splash');
         grunt.task.run('s3:collateral-' + target);
