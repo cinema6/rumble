@@ -727,23 +727,23 @@
         overflow:hidden;
         background:black url('../../img/default_square.jpg') 50% 50% / cover no-repeat;
     }
-        .mr-splash__start, .mr-splash__loading {
-            position:absolute; width:100%; height:100%; top:0; left: 0; min-height: 20.625rem;/*350px*/
-            background: 50% 50% / cover no-repeat;
-            border:0; margin:0; padding:0; cursor:pointer;
+        .mr-splash__start, .mr-splash__img {
+            position:absolute; width:100%; height:100%; top:0; left: 0;
+            background: transparent 50% 50% / cover no-repeat;
+            border:0; margin:0; padding:0; 
         }
-        .mr-splash__copy {
+            .mr-splash__start {
+                cursor:pointer;
+            }
+        .mr-splash__copy, .mr-splash__loading {
             display:block; width: 100%; height: 0; padding: 0 0 13.5%;
             position:absolute; top: 50%; margin-top: -7%; z-index:2;
             border-top: #fff 4px solid; border-bottom: #fff 4px solid;
+            background: #252626 url('../../img/click-to-start.svg') 50% 50% / 55% auto no-repeat;
         }
-            .mr-splash__copy {
-                background:#252626 url('../../img/click-to-start.svg') 50% 50% / 55% auto no-repeat;
-            }
-
-    .mr-splash__loading {
-        background:#fff url('../../img/spinner-dots.gif') 50% 50% / 2rem auto no-repeat;
-    }
+        .mr-splash__loading {
+            background: #fff url('../../img/spinner-dots.gif') 50% 50% / 2rem auto no-repeat;
+        }
 
     @media screen and (max-width: 20rem) { /*320px*/
         .mr-splash__group {
