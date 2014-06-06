@@ -21,6 +21,12 @@
                     dest: '<%= _modeDir %>/scripts/main.js'
                 }
             ]
+        },
+        collateral: {
+            cwd: '.tmp/collateral',
+            src: ['**/*.js'],
+            expand: true,
+            dest: '.tmp/collateral/'
         }
     };
 }());
