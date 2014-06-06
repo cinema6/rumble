@@ -543,8 +543,8 @@
 
         }])
 
-        .service('AdTechService', ['$window', 'c6Defines', '$q',
-        function                  ( $window ,  c6Defines ,  $q ) {
+        .service('AdTechService', ['$window', '$q',
+        function                  ( $window ,  $q ) {
             var deferred = $q.defer(),
                 domain = ($window.location.host.indexOf('localhost') > -1) ? 'localhost'
                     : ($window.location.host.split('.').filter(function(v,i,a){return i===a.length-2;})[0]);
@@ -560,7 +560,7 @@
                         server: 'adserver.adtechus.com',
                         placement: id,
                         adContainerId: container,
-                        debugMode: c6Defines.kDevMode
+                        debugMode: (domain === 'localhost')
                     });
                 });
             };
