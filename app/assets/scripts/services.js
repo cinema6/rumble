@@ -543,15 +543,36 @@
 
         }])
 
-        .service('AdTechService', ['$window', 'c6Defines',
-        function                  ( $window ,  c6Defines ) {
+        .service('AdTechService', ['$window', 'c6Defines', '$q',
+        function                  ( $window ,  c6Defines ,  $q ) {
+            var deferred = $q.defer();
+
+            function getPlacementId() {
+                return deferred.promise;
+            }
+
             this.loadAd = function(container) {
+                getPlacementId().then(function(id) {
+                    $window.ADTECH.loadAd({
+                        network: '5072',
+                        server: 'adserver.adtechus.com',
+                        placement: id,
+                        adContainerId: container,
+                        debugMode: c6Defines.kDevMode
+                    });
+                });
+            };
+
+            this.init = function() {
                 $window.ADTECH.loadAd({
                     network: '5072',
                     server: 'adserver.adtechus.com',
-                    placement: c6Defines.kAdTechId,
-                    adContainerId: container,
-                    debugMode: c6Defines.kDevMode
+                    placement: 3214274,
+                    adContainerId: 'adtechPlacement',
+                    kv: { weburl: 'elitedaily' },
+                    complete: function() {
+                        deferred.resolve($window.c6AdtechPlacementId);
+                    }
                 });
             };
         }])

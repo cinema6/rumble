@@ -302,10 +302,10 @@
     }])
     .controller('RumbleController',['$log','$scope','$timeout','$interval','BallotService',
                                     'c6Computed','cinema6','MiniReelService','CommentsService',
-                                    'ControlsService','trackerService',
+                                    'ControlsService','trackerService', 'AdTechService',
     function                       ( $log , $scope , $timeout , $interval, BallotService ,
                                      c6Computed , cinema6 , MiniReelService , CommentsService ,
-                                     ControlsService, trackerService ){
+                                     ControlsService,  trackerService  , AdTechService  ){
         var self    = this, readyTimeout,
             appData = $scope.app.data,
             id = appData.experience.id,
@@ -354,6 +354,7 @@
         $log = $log.context('RumbleCtrl');
 
         CommentsService.init(id);
+        AdTechService.init();
 
         $scope.deviceProfile    = appData.profile;
         $scope.title            = appData.experience.data.title;
