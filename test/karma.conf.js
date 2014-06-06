@@ -9,17 +9,23 @@ module.exports = function(config) {
         // base path, that will be used to resolve files and exclude
         basePath: '..',
     
-        frameworks: ['requirejs', 'jasmine'],
+        frameworks: ['requirejs', 'jasmine', 'commonjs'],
 
         // list of files / patterns to load in the browser
         files: [
             { pattern: 'settings.json', included: false },
             { pattern:  settings.appDir + '/assets/scripts/**/*.js', included: false },
             { pattern: '.tmp/templates.js', included: false },
+            { pattern: 'test/spec/splash/**/*.js', included: true },
             { pattern: 'test/spec/**/*.{js,html}', included: false },
-            { pattern: settings.collateralDir + '/splash/**/*.js', included: false },
+            { pattern: settings.collateralDir + '/splash/**/*.js', included: true },
             'test/test-main.js'
         ],
+
+        preprocessors: {
+            'c6Content/splash/*.js': ['commonjs'],
+            'test/spec/splash/**/*.js': ['commonjs']
+        },
 
         // list of files to exclude
         exclude: [
@@ -61,8 +67,6 @@ module.exports = function(config) {
 
         // Continuous Integration mode
         // if true, it capture browsers, run tests and exit
-        singleRun: true,
-
-        preprocessors: {}
+        singleRun: true
     });
 };
