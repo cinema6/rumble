@@ -5,7 +5,7 @@
 }
 .c6mr-splashTextOnly__group {
     width:100%; height:0;
-    background:#ccc url('//portal.cinema6.com/collateral/default_square.jpg') 50% 50% / cover no-repeat;
+    background:#ccc url('//portal.cinema6.com/collateral/splash/img-text-overlay/img/default_square.jpg') 50% 50% / cover no-repeat;
     position:relative;
     font-size: 16px;
 }
