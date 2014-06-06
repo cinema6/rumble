@@ -1010,7 +1010,9 @@
                     self.dismissBallot();
                     self.dismissBallotResults();
 
-                    AdTechService.loadAd(config.id);
+                    if(self.hasModule('displayAd')) {
+                        AdTechService.loadAd(config.id);
+                    }
 
                 } else {
                     if (_data.modules.ballot.ballotActive) {

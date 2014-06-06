@@ -9,9 +9,9 @@
                 templateUrl: assetFilter('directives/display_ad_module.html', 'views'),
                 scope: {
                     adSrc: '@',
+                    adContainerId: '@'
                     companion: '&',
                     active: '=',
-                    adContainerId: '@'
                 },
                 link: function(scope) {
                     scope.$watch('companion()', function(curr) {

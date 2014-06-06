@@ -543,26 +543,50 @@
 
         }])
 
-        .service('AdTechService', ['$window', '$q',
-        function                  ( $window ,  $q ) {
+        .service('AdTechService', ['$window', '$q', '$log',
+        function                  ( $window ,  $q ,  $log ) {
             var deferred = $q.defer(),
-                domain = ($window.location.host.indexOf('localhost') > -1) ? 'localhost'
-                    : ($window.location.host.split('.').filter(function(v,i,a){return i===a.length-2;})[0]);
+                domain, windowCount = 0;
+
+            (function getDomain(w) {
+                windowCount++;
+                domain = w.location.hostname;
+
+                if(!domain && windowCount < 10) {
+                    try {
+                        domain = w.parent.location.hostname;
+                    }
+                    catch (e){
+                        getDomain(w.parent);
+                    }
+                } else if(domain) {
+                    domain = (domain.indexOf('localhost') > -1) ? 'localhost'
+                        : (domain.split('.').filter(function(v,i,a){return i===a.length-2;})[0]);
+                }
+            }($window));
 
             function getPlacementId() {
                 return deferred.promise;
             }
 
-            this.loadAd = function(container) {
+            this.loadAd = function(container, waterfall) {
+                var adLoadComplete = $q.defer();
+
                 getPlacementId().then(function(id) {
                     $window.ADTECH.loadAd({
                         network: '5072',
                         server: 'adserver.adtechus.com',
                         placement: id,
                         adContainerId: container,
-                        debugMode: (domain === 'localhost')
+                        debugMode: (domain === 'localhost'),
+                        kv: { mode: waterfall }
+                        complete: function() {
+                            adLoadComplete.resolve();
+                        }
                     });
                 });
+
+                return adLoadComplete.promise;
             };
 
             this.init = function() {
