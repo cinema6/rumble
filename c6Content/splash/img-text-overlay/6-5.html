@@ -1,41 +1,24 @@
-<!DOCTYPE html>
-<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
-<head>
-<meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<title>MiniReel</title>
-<meta name="description" content="">
-<meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" type="text/css" href="styles/splash.css?__inline=true">
 <link rel="stylesheet" type="text/css" href="styles/6-5.css?__inline=true">
 <link rel="stylesheet" type="text/css" href="styles/preloader.css?__inline=true">
-<script src="http://lib.cinema6.com/twobits.js/v0.0.0-0-gdf10bf2/twobits.min.js"></script>
-<script src="../params.js?__inline=true"></script>
-</head>
-<body>
-<div class="mr-splash__group">
-    <button type="button" id="start"
-        class="mr-splash__start"
+
+<div class="c6mr-splashTextOnly__group">
+    <button id="start" type="button"
+        class="c6mr-splashTextOnly__start c6mr-splashTextOnly__start--6-5
+            c6js-start"
         style="background-image:url('{{splash}}');">
-        <div class="preloader__group" id="loader">
-            <div class="preloader">
-                <div class="preloader__ring">
-                    <div class="preloader__orbit">
-                        <div class="preloader__ball">&nbsp;
+        <div class="c6mr-preloader__group c6js-loader" style="display:none;">
+            <div class="c6mr-preloader">
+                <div class="c6mr-preloader__ring">
+                    <div class="c6mr-preloader__orbit">
+                        <div class="c6mr-preloader__ball">&nbsp;
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <span class="mr-splash__copy">
-            <h1 class="mr-title">{{title}}</h1>
+        <span class="c6mr-splashTextOnly__copy">
+            <h1 class="c6mr-title">{{title}}</h1>
         </span>
     </button>
 </div>
-
-<script src="../communicate.js?__inline=true"></script>
-</body>
-</html>
