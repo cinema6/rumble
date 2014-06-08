@@ -27,10 +27,6 @@
                 trackerSpy;
 
             beforeEach(function() {
-                session = {
-                    on : jasmine.createSpy('session.on')
-                };
-
                 trackerSpy = {
                     create  : jasmine.createSpy('tracker.create'),
                     set     : jasmine.createSpy('tracker.set')
@@ -47,7 +43,9 @@
                 module('c6.ui', function($provide) {
                     $provide.factory('cinema6', function($q) {
                         cinema6 = {
-                            init: jasmine.createSpy('cinema6.init()').andReturn(session),
+                            init: jasmine.createSpy('cinema6.init()').andCallFake(function() {
+                                return session;
+                            }),
                             getSession: jasmine.createSpy('cinema6.getSiteSession()').andCallFake(function() {
                                 return cinema6._.getSessionResult.promise;
                             }),
@@ -85,6 +83,12 @@
                     c6Defines = $injector.get('c6Defines');
                     $httpBackend = $injector.get('$httpBackend');
                     $httpBackend.whenGET('assets/config/responsive.json').respond({});
+
+                    session = c6EventEmitter({
+                        ping: jasmine.createSpy('session.ping()')
+                    });
+                    spyOn(session, 'on').andCallThrough();
+
 
                     $window = {
                         location : {
@@ -129,7 +133,46 @@
 
             describe('site integration', function() {
                 it('should initialize a session with the site', function() {
-                    expect(cinema6.init).toHaveBeenCalled();
+                    expect(cinema6.init).toHaveBeenCalledWith({
+                        setup: jasmine.any(Function)
+                    });
+                });
+
+                describe('events', function() {
+                    describe('show', function() {
+                        beforeEach(function() {
+                            spyOn($scope, '$broadcast');
+                            session.emit('show');
+                        });
+
+                        it('should $emit shouldStart', function() {
+                            expect($scope.$broadcast).toHaveBeenCalledWith('shouldStart');
+                        });
+                    });
+                });
+
+                describe('setup()', function() {
+                    var success;
+
+                    beforeEach(function() {
+                        var setup = cinema6.init.mostRecentCall.args[0].setup;
+
+                        success = jasmine.createSpy('setup() success');
+
+                        $scope.$apply(function() {
+                            setup(c6AppData).then(success);
+                        });
+                    });
+
+                    it('should return a promise that resolves when the players are ready', function() {
+                        expect(success).not.toHaveBeenCalled();
+
+                        $scope.$apply(function() {
+                            $scope.$emit('ready');
+                        });
+
+                        expect(success).toHaveBeenCalled();
+                    });
                 });
             });
 
@@ -166,6 +209,10 @@
                     it('should change to the "deck" state', function() {
                         expect($scope.app.state).toBe('deck');
                     });
+
+                    it('should ping cinema6 with "open"', function() {
+                        expect(session.ping).toHaveBeenCalledWith('open');
+                    });
                 });
 
                 describe('reelReset', function() {
@@ -180,6 +227,10 @@
 
                     it('should exit fullscreen mode', function() {
                         expect(cinema6.fullscreen).toHaveBeenCalledWith(false);
+                    });
+
+                    it('should ping cinema6 with "close"', function() {
+                        expect(session.ping).toHaveBeenCalledWith('close');
                     });
                 });
             });
