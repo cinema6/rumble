@@ -335,8 +335,12 @@
 
             return c6AppData;
         }])
-        .controller('AppController', ['$scope','$log','cinema6','c6UrlMaker','$timeout','$document','$window','c6Debounce','$animate','c6AppData', 'trackerService',
-        function                     ( $scope , $log , cinema6 , c6UrlMaker , $timeout , $document , $window , c6Debounce , $animate , c6AppData , trackerService ) {
+        .controller('AppController', ['$scope','$log','cinema6','c6UrlMaker','$timeout',
+                                      '$document','$window','c6Debounce','$animate','c6AppData',
+                                      'trackerService','$q',
+        function                     ( $scope , $log , cinema6 , c6UrlMaker , $timeout ,
+                                       $document , $window , c6Debounce , $animate , c6AppData ,
+                                       trackerService , $q ) {
             $log = $log.context('AppCtrl');
             $log.info('Location:',$window.location);
             var _app = {
@@ -345,8 +349,25 @@
                 app = {
                     data: c6AppData
                 },
+                readyDeferred = $q.defer(),
                 session,
                 tracker = trackerService('c6mr');
+
+            function gotoDeck() {
+                $animate.enabled(true);
+                _app.state = 'deck';
+                session.ping('open');
+            }
+
+            function gotoSplash() {
+                cinema6.fullscreen(false);
+                _app.state = 'splash';
+                session.ping('close');
+            }
+
+            function waitForReady() {
+                return readyDeferred.promise;
+            }
 
             $animate.enabled(false);
 
@@ -358,25 +379,22 @@
                 }
             });
 
-            function gotoDeck() {
-                $animate.enabled(true);
-                _app.state = 'deck';
-            }
-
-            function gotoSplash() {
-                cinema6.fullscreen(false);
-                _app.state = 'splash';
-            }
-
             $scope.$on('reelStart', gotoDeck);
             $scope.$on('reelReset', gotoSplash);
 
+            $scope.$on('ready', function() {
+                readyDeferred.resolve(true);
+            });
 
             $log.info('loaded.');
 
             $scope.app = app;
 
-            session = cinema6.init();
+            session = cinema6.init({
+                setup: function() {
+                    return waitForReady();
+                }
+            });
 
             session.on('initAnalytics',function(cfg){
                 $log.info('Init analytics with accountId: %1, clientId: %2',
@@ -404,6 +422,10 @@
 
             session.on('mrPreview:updateMode', function() {
                 $window.location.reload();
+            });
+
+            session.on('show', function() {
+                $scope.$broadcast('shouldStart');
             });
         }]);
 }(window));
