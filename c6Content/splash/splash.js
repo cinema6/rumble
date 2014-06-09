@@ -5,13 +5,15 @@ module.exports = function(c6, settings, splash) {
         start = splash.querySelectorAll('.c6js-start')[0];
 
     start.addEventListener('click', function() {
-        loader.style.display = '';
+        if (loader) {
+            loader.style.display = '';
+        }
         c6.loadExperience(settings);
     }, false);
 
     return {
-        didHide: function() {
+        didHide: loader ? function() {
             loader.style.display = 'none';
-        }
+        } : function() {}
     };
 };

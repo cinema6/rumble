@@ -59,6 +59,24 @@ describe('splash.js', function() {
             it('should load the experience', function() {
                 expect(c6.loadExperience).toHaveBeenCalledWith(settings);
             });
+
+            describe('if there is no loader', function() {
+                beforeEach(function() {
+                    var event = document.createEvent('MouseEvents');
+                    event.initMouseEvent('click');
+
+                    splash.removeChild(loader);
+
+                    delegate = splashJS(c6, settings, splash);
+
+
+                    start.dispatchEvent(event);
+                });
+
+                it('should still work', function() {
+                    expect(c6.loadExperience).toHaveBeenCalledWith(settings);
+                });
+            });
         });
 
         describe('the delegate', function() {
@@ -74,6 +92,21 @@ describe('splash.js', function() {
 
                     it('should hide the loader', function() {
                         expect(loader.style.display).toBe('none');
+                    });
+
+                    describe('if there is no loader', function() {
+                        beforeEach(function() {
+                            splash.removeChild(loader);
+
+                            delegate = splashJS(c6, settings, splash);
+
+                        });
+
+                        it('should not throw errors', function() {
+                            expect(function() {
+                                delegate.didHide();
+                            }).not.toThrow();
+                        });
                     });
                 });
             });
