@@ -546,23 +546,24 @@
         .service('AdTechService', ['$window', '$q',
         function                  ( $window ,  $q ) {
             var self = this,
-                domain = $window.location.hostname,
-                placementId;
-
-            if (!domain){
-                try {
-                    domain = $window.parent.location.hostname;
-                }
-                catch (e){}
-            }
-
-            if (domain) {
-                domain = (domain.indexOf('localhost') > -1) ? 'localhost'
-                    : (domain.split('.').filter(function(v,i,a){return i===a.length-2;})[0]);
-            }
+                domain, placementId;
 
             function init() {
                 var placementDeferred = $q.defer();
+
+                domain = $window.location.hostname;
+
+                if (!domain){
+                    try {
+                        domain = $window.parent.location.hostname;
+                    }
+                    catch (e){}
+                }
+
+                if (domain) {
+                    domain = (domain.indexOf('localhost') > -1) ? 'localhost'
+                        : (domain.split('.').filter(function(v,i,a){return i===a.length-2;})[0]);
+                }
 
                 $window.ADTECH.loadAd({
                     network: '5072',
