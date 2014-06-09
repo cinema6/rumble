@@ -46,7 +46,7 @@
 
                         beforeEach(function() {
                             adLoadThenSpy = jasmine.createSpy('adLoadThenSpy()');
-                            adLoadPromise = AdTechService.loadAd('container', 'waterfall');
+                            adLoadPromise = AdTechService.loadAd({id: 'container', displayAdSource: 'waterfall'});
                             adLoadPromise.then(adLoadThenSpy);
                         });
 
@@ -103,7 +103,7 @@
 
                     describe('when AdTech id is defined', function() {
                         beforeEach(function() {
-                            AdTechService.loadAd('container', 'waterfall');
+                            AdTechService.loadAd({id: 'container', displayAdSource: 'waterfall'});
                             $window.c6AdtechPlacementId = 123456;
                             $window.ADTECH.loadAd.calls[0].args[0].complete();
                             $rootScope.$digest();
@@ -112,7 +112,9 @@
                         it('should call ADTECH.loadAd() immediately', function() {
                             var loadAdCallCount = $window.ADTECH.loadAd.calls.length;
 
-                            AdTechService.loadAd('container2', 'waterfall2');
+                            AdTechService.loadAd({id: 'container2', displayAdSource: 'waterfall2'});
+
+                            $rootScope.$digest();
 
                             expect($window.ADTECH.loadAd.calls.length).toBe(loadAdCallCount + 1);
 
@@ -133,7 +135,7 @@
                             $window.location.hostname = '';
                             $window.parent.location.hostname = 'parent.com';
 
-                            AdTechService.loadAd('container', 'waterfall');
+                            AdTechService.loadAd({id: 'container', displayAdSource: 'waterfall'});
 
                             expect($window.ADTECH.loadAd).toHaveBeenCalledWith({
                                 network: '5072',

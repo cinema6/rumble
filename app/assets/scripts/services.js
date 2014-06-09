@@ -545,65 +545,59 @@
 
         .service('AdTechService', ['$window', '$q',
         function                  ( $window ,  $q ) {
-            var self = this,
+            var placementDeferred = $q.defer(),
                 domain, placementId;
 
-            function init() {
-                var placementDeferred = $q.defer();
-
-                domain = $window.location.hostname;
-
-                if (!domain){
-                    try {
-                        domain = $window.parent.location.hostname;
-                    }
-                    catch (e){}
-                }
-
-                if (domain) {
-                    domain = (domain.indexOf('localhost') > -1) ? 'localhost'
-                        : (domain.split('.').filter(function(v,i,a){return i===a.length-2;})[0]);
-                }
-
-                $window.ADTECH.loadAd({
-                    network: '5072',
-                    server: 'adserver.adtechus.com',
-                    placement: 3214274,
-                    adContainerId: 'adtechPlacement',
-                    kv: { weburl: domain },
-                    complete: function() {
-                        placementDeferred.resolve($window.c6AdtechPlacementId);
-                    }
-                });
-
-                return placementDeferred.promise;
-            }
-
-            this.loadAd = function(container, waterfall) {
-                var adLoadDeferred;
-
+            function getPlacementId() {
                 if(!placementId) {
-                    return init().then(function(id) {
-                        placementId = id;
-                        return self.loadAd(container, waterfall);
-                    });
-                } else {
-                    adLoadDeferred = $q.defer();
+                    domain = $window.location.hostname;
+
+                    if (!domain){
+                        try {
+                            domain = $window.parent.location.hostname;
+                        }
+                        catch (e){}
+                    }
+
+                    if (domain) {
+                        domain = (domain.indexOf('localhost') > -1) ? 'localhost'
+                            : (domain.split('.').filter(function(v,i,a){return i===a.length-2;})[0]);
+                    }
 
                     $window.ADTECH.loadAd({
                         network: '5072',
                         server: 'adserver.adtechus.com',
-                        placement: placementId,
-                        adContainerId: container,
+                        placement: 3214274,
+                        adContainerId: 'adtechPlacement',
+                        kv: { weburl: domain },
+                        complete: function() {
+                            placementId = $window.c6AdtechPlacementId;
+                            placementDeferred.resolve(placementId);
+                        }
+                    });
+                }
+
+                return placementDeferred.promise;
+            }
+
+            this.loadAd = function(config) {
+                var adLoadDeferred = $q.defer();
+
+                getPlacementId().then(function(id) {
+                    $window.ADTECH.loadAd({
+                        network: '5072',
+                        server: 'adserver.adtechus.com',
+                        placement: id,
+                        adContainerId: config.id,
                         debugMode: (domain === 'localhost'),
-                        kv: { mode: waterfall },
+                        kv: { mode: (config.displayAdSource || 'default') },
                         complete: function() {
                             adLoadDeferred.resolve();
                         }
                     });
+                });
 
-                    return adLoadDeferred.promise;
-                }
+                return adLoadDeferred.promise;
             };
         }])
 

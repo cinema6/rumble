@@ -1022,7 +1022,7 @@
                     if(self.hasModule('displayAd')) {
                         // TODO: need to replace 'waterfall' with 1 of the 8 ad modes,
                         // ie. C6 w/ publisher fallback, Publisher only, etc.
-                        AdTechService.loadAd(config.id, 'waterfall');
+                        AdTechService.loadAd(config);
                     }
 
                 } else {
