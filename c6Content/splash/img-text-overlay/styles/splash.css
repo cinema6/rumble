@@ -1,30 +1,27 @@
-body {
-    margin:0;
-    font: 16px normal 'Arial', 'Helvetica', sans-serif;
-}
-.ir {
+.c6mr-ir {
     background-color: transparent;
     border: 0; width:0; height:0;
     overflow: hidden; display: block; position:absolute;
 }
-.mr-splash__group {
+.c6mr-splashTextOnly__group {
     width:100%; height:0;
-    background:url('../../../../app/assets/img/default_square.jpg') 50% 50% / cover no-repeat;
+    background:#ccc url('//portal.cinema6.com/collateral/splash/img-text-overlay/img/default_square.jpg') 50% 50% / cover no-repeat;
     position:relative;
+    font-size: 16px;
 }
-.mr-splash__start {
+.c6mr-splashTextOnly__start {
     position:absolute;
     width:100%; height:100%;
     background:50% 50% / cover no-repeat;
     cursor:pointer;
     border:0; padding:0; margin:0;
 }
-.mr-splash__copy {
+.c6mr-splashTextOnly__copy {
     position:absolute; bottom:0; left:0; right:0;
     padding:12px 6px; color:#fff;
     background:#000; background:rgba(0,0,0,0.55);
 }
-.mr-title {
-    font-size:1.125em; line-height:1.5; font-weight:normal;
-    margin:0;
-}
+    .c6mr-splashTextOnly__copy .c6mr-title {
+        font-size:1.125em; line-height:1.5; font-weight:normal;
+        margin:0;
+    }

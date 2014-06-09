@@ -961,7 +961,7 @@
                     expect($scope.atHead).toEqual(false);
                     expect($scope.atTail).toEqual(false);
                     expect($scope.$emit).toHaveBeenCalledWith('reelMove');
-                    expect($scope.$emit.callCount).toBe(1);
+                    expect($scope.$emit.callCount).toBe(2);
                     expect(trackerSpy.trackPage.callCount).toEqual(1);
                     expect(trackerSpy.trackPage).toHaveBeenCalledWith({
                         page : '/mr/e-722bd3c4942331/ad1',
@@ -1016,7 +1016,7 @@
                     expect($scope.atHead).toEqual(false);
                     expect($scope.atTail).toEqual(false);
                     expect($scope.$emit).toHaveBeenCalledWith('reelMove');
-                    expect($scope.$emit.callCount).toBe(1);
+                    expect($scope.$emit.callCount).toBe(2);
                     expect(trackerSpy.trackPage.callCount).toEqual(1);
                     expect(trackerSpy.trackEvent.callCount).toEqual(1);
                     expect(trackerSpy.trackPage).toHaveBeenCalledWith({
@@ -1086,7 +1086,7 @@
                     expect($scope.atHead).toEqual(false);
                     expect($scope.atTail).toEqual(false);
                     expect($scope.$emit).toHaveBeenCalledWith('reelMove');
-                    expect($scope.$emit.callCount).toBe(1);
+                    expect($scope.$emit.callCount).toBe(2);
                     expect(trackerSpy.trackPage.callCount).toEqual(1);
                     expect(trackerSpy.trackEvent.callCount).toEqual(1);
                     expect(trackerSpy.trackPage).toHaveBeenCalledWith({
@@ -1234,6 +1234,18 @@
                     mockPlayer.isReady.andReturn(false);
                 });
 
+                describe('shouldStart', function() {
+                    beforeEach(function() {
+                        spyOn(RumbleCtrl, 'start');
+                    });
+
+                    it('should start the minireel when emitted', function() {
+                        $scope.$emit('shouldStart');
+
+                        expect(RumbleCtrl.start).toHaveBeenCalled();
+                    });
+                });
+
                 describe('playerAdd',function(){
                     it('adds new player to deck item',function(){
                         expect($scope.deck[2].player).toBeNull();
@@ -1358,6 +1370,10 @@
                 });
 
                 describe('ready',function(){
+                    beforeEach(function() {
+                        spyOn($scope, '$emit').andCallThrough();
+                    });
+
                     it('runs a ready check when a player becomes ready',function(){
                         spyOn(RumbleCtrl,'checkReady').andCallThrough();
                         
@@ -1389,14 +1405,20 @@
 
                         $scope.deck[0].player.isReady.andReturn(true);
                         $scope.deck[2].player.isReady.andReturn(true);
-                        $scope.$emit('playerAdd',mockPlayer);
+                        $scope.$apply(function() {
+                            $scope.$emit('playerAdd',mockPlayer);
+                        });
                         expect($scope.ready).toEqual(false);
+                        expect($scope.$emit).not.toHaveBeenCalledWith('ready');
                         mockPlayer.isReady.andReturn(true);
-                        mockPlayer._on.ready[0](mockPlayer);
+                        $scope.$apply(function() {
+                            mockPlayer._on.ready[0](mockPlayer);
+                        });
                         expect(RumbleCtrl.checkReady).toHaveBeenCalled();
                         expect($scope.deck[0].player.isReady).toHaveBeenCalled();
                         expect($scope.deck[1].player.isReady).toHaveBeenCalled();
                         expect($scope.deck[2].player.isReady).toHaveBeenCalled();
+                        expect($scope.$emit).toHaveBeenCalledWith('ready');
                         expect($scope.ready).toEqual(true);
                     });
                 });

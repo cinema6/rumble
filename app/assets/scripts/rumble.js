@@ -313,7 +313,13 @@
             c = c6Computed($scope),
             tracker = trackerService('c6mr'),
             cancelTrackVideo = null,
-            ballotMap = {};
+            ballotMap = {},
+            readyWatch = $scope.$watch('ready', function(ready) {
+                if (ready) {
+                    $scope.$emit('ready');
+                    readyWatch();
+                }
+            });
 
         function NavController(nav) {
             this.tick = function(time) {
@@ -823,9 +829,13 @@
             });
             tracker.trackPage(self.getTrackingData());
         });
-        
+
+        $scope.$on('shouldStart', function() {
+            self.start();
+        });
+
         $log.log('Rumble Controller is initialized!');
-   
+
     }])
     .directive('navbarButton', ['assetFilter','c6Computed',
     function                   ( assetFilter , c6Computed ) {
