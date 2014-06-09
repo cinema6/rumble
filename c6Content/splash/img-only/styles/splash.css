@@ -5,14 +5,15 @@
 }
 
 .c6mr-splashImgOnly__group {
-    width:100%; height:0;
+    width:100%; height:auto;
     background:#ccc url('http://portal.cinema6.com/collateral/splash/img-only/img/default_square.jpg') 50% 50% / cover no-repeat;
     position:relative;
 }
 .c6mr-splashImgOnly__start {
     position:absolute;
-    width:100%; height:100%;
+    width:100%; height:0;
     background:50% 50% / cover no-repeat;
     cursor:pointer;
     border:0; padding:0; margin:0;
+    display:block;
 }

@@ -4,6 +4,7 @@
   * [FIX]: changed splash page templates so that they are no longer stand alone html files; using snippets instead.
   * [FIX]: splash template : horizontal stack : preloader hidden by default
   * [FIX]: splash template : text only : created separate template snippets for all sizes to preserve convention
+  * [FIX]: splash template : updates for content flow vertical sizing
 
 
 * *[Beta10.rc1]* (June 5, 2014)

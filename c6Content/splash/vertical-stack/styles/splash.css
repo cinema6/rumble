@@ -12,6 +12,7 @@
     border:0; margin:0;
     background:url('http://portal.cinema6.com/collateral/splash/vertical-stack/img/default_square.jpg') 50% 50% / cover no-repeat;
     position:relative;
+    display: block;
 }
 .c6mr-splashVerticalStack__img {
     position:absolute;
