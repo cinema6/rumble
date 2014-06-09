@@ -1,13 +1,14 @@
 # MiniReel Player
 
+## Beta11 (June 9, 2014)
 * *[Beta11.rc1]*
   * [FIX]: changed splash page templates so that they are no longer stand alone html files; using snippets instead.
   * [FIX]: splash template : horizontal stack : preloader hidden by default
   * [FIX]: splash template : text only : created separate template snippets for all sizes to preserve convention
   * [FIX]: splash template : updates for content flow vertical sizing
-  * [FIX]: splash template : start class added to text elements so as to trigger the minireel on click
+* *[/Beta11.rc1]*
 
-
+## Beta10 (June 6, 2014)
 * *[Beta10.rc1]* (June 5, 2014)
   * [FIX]: Splash templates separated into css and html files.
   * [FIX]: Preloader added into Splash for display while MiniReel loads.

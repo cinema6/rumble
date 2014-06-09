@@ -831,7 +831,9 @@
         });
 
         $scope.$on('shouldStart', function() {
-            self.start();
+            if ($scope.currentIndex < 0) {
+                self.start();
+            }
         });
 
         $log.log('Rumble Controller is initialized!');
