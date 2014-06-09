@@ -10,7 +10,7 @@
 .c6mr-splashVerticalStack__start {
     width:100%; height:0;
     border:0; margin:0;
-    background:url('//portal.cinema6.com/collateral/splash/vertical-stack/img/default_square.jpg') 50% 50% / cover no-repeat;
+    background:url('http://portal.cinema6.com/collateral/splash/vertical-stack/img/default_square.jpg') 50% 50% / cover no-repeat;
     position:relative;
 }
 .c6mr-splashVerticalStack__img {

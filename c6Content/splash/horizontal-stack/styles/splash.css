@@ -19,7 +19,7 @@
 .c6mr-splashHorizontalStack__start {
 	height:5em;
     padding:0; border:0; margin:0 0.75em 0.75em 0;
-    background:#ccc url('//portal.cinema6.com/collateral/splash/horizontal-stack/img/default_square.jpg') 50% 50% / cover no-repeat;
+    background:#ccc url('http://portal.cinema6.com/collateral/splash/horizontal-stack/img/default_square.jpg') 50% 50% / cover no-repeat;
     position:relative;
     cursor:pointer;
     float:left;
