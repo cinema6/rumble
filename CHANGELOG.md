@@ -2,6 +2,7 @@
 
 * *[Beta11.rc1]*
   * [FIX]: changed splash page templates so that they are no longer stand alone html files; using snippets instead.
+  * [FEATURE]: Add AdTechService for loading display ads on Video Embed cards in lightbox-ads mode
 
 
 * *[Beta10.rc1]* (June 5, 2014)
