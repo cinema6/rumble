@@ -5,6 +5,7 @@
   * [FIX]: splash template : horizontal stack : preloader hidden by default
   * [FIX]: splash template : text only : created separate template snippets for all sizes to preserve convention
   * [FIX]: splash template : updates for content flow vertical sizing
+  * [FIX]: splash template : start class added to text elements so as to trigger the minireel on click
 
 
 * *[Beta10.rc1]* (June 5, 2014)
