@@ -305,7 +305,7 @@
                                     'ControlsService','trackerService',
     function                       ( $log , $scope , $timeout , $interval, BallotService ,
                                      c6Computed , cinema6 , MiniReelService , CommentsService ,
-                                     ControlsService,  trackerService ){
+                                     ControlsService, trackerService ){
         var self    = this, readyTimeout,
             appData = $scope.app.data,
             id = appData.experience.id,
