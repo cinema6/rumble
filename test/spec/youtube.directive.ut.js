@@ -30,6 +30,9 @@
                             data: {
                                 autoplay: true
                             }
+                        },
+                        profile: {
+                            touch: true
                         }
                     });
 
