@@ -12,6 +12,7 @@
                         '<%= settings.appDir %>/assets/scripts/app.js',
                         '<%= settings.appDir %>/assets/scripts/**/*.js',
                         '.tmp/templates-<%= buildMode %>.js',
+                        '.tmp/config/**/*.js',
                         '!<%= settings.appDir %>/assets/scripts/main.js'
                     ],
                     dest: '<%= _modeDir %>/scripts/c6app.min.js'
