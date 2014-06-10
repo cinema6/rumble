@@ -1,6 +1,10 @@
 # MiniReel Player
 
 ## Beta11 (June 9, 2014)
+* *[Beta11.rc4]*
+  * [FIX]: Account for fact that $http cache may not be created yet
+* *[/Beta11.rc4]*
+
 * *[Beta11.rc3]*
   * [FIX]: Fix typo "runs" to "run"
 * *[/Beta11.rc3]*
