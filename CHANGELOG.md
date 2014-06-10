@@ -7,6 +7,7 @@
   * Responsive.json is now included in the build (it will not be fetched
     via AJAX)
   * [FIX]: removed splash fade in animation
+  * [FIX]: $broadcast a thumbnail resize event when recap card is $destroyed so thumbnails don't get cut off in lightbox mode
 
 * *[Beta11.rc1]*
   * [FIX]: changed splash page templates so that they are no longer stand alone html files; using snippets instead.
