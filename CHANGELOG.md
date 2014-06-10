@@ -1,11 +1,13 @@
 # MiniReel Player
 
-* *[Beta12.rc1]*
-  * [FIX]: add c6touch play handler to click-to-play mobile video embed thumbnails
   * [FIX]: changed splash template hierarchy so that ratio styles always take priority over base styles
   * [FIX]: Splash play button added
 
 ## Beta11 (June 9, 2014)
+* *[Beta11.rc5]*
+  * [FIX]: add c6touch play handler to click-to-play mobile video embed thumbnails
+* *[/Beta11.rc5]*
+
 * *[Beta11.rc4]*
   * [FIX]: Account for fact that $http cache may not be created yet
 * *[/Beta11.rc4]*
