@@ -18,6 +18,7 @@
                     title: 'Test Title',
                     data: {
                         title: 'Test Title',
+                        mode: 'light',
                         deck: [
                             {
                                 id: '1',
@@ -150,6 +151,21 @@
                         $scope.$apply(function() {
                             c6AppData.experience.data.mode = 'lightbox';
                             $scope.active = true;
+                        });
+                        expect($rootScope.$broadcast).toHaveBeenCalled();
+                    });
+                });
+            });
+
+            describe('events', function() {
+                describe('$on destroy', function() {
+                    it('should emit broadcast resize event if mode is lightbox', function() {
+                        spyOn($rootScope, '$broadcast');
+                        c6AppData.experience.data.mode = 'full';
+
+                        $scope.$apply(function() {
+                            c6AppData.experience.data.mode = 'lightbox';
+                            $scope.$emit('$destroy');
                         });
                         expect($rootScope.$broadcast).toHaveBeenCalled();
                     });
