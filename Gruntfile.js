@@ -127,6 +127,7 @@ module.exports = function(grunt) {
             grunt.task.run('git_describe_tags');
             grunt.task.run('copy:dist');
             grunt.task.run('ngtemplates:dist');
+            grunt.task.run('jsify:dist');
             grunt.task.run('htmlmin:dist');
             grunt.task.run('sed:main');
             grunt.task.run('sed:html');

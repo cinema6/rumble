@@ -22,7 +22,8 @@ module.exports = function(grunt) {
                     .replace(/'/g, "\\'")
                     .replace(/\r\n|\r|\n/g, "\\n") +
                     /* jshint quotmark:single */
-                    '\''
+                    '\'',
+                    map.src
                 )
             );
         });
