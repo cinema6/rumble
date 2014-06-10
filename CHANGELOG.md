@@ -6,7 +6,7 @@
     the old embed
   * Responsive.json is now included in the build (it will not be fetched
     via AJAX)
-* *[/Beta11.rc2]*
+  * [FIX]: removed splash fade in animation
 
 * *[Beta11.rc1]*
   * [FIX]: changed splash page templates so that they are no longer stand alone html files; using snippets instead.

@@ -2,13 +2,6 @@
     'use strict';
 
     angular.module('c6.rumble')
-    .animation('.splash-screen',[function(){
-        return {
-            leave: function(element,className,done){
-                element.fadeOut(500, done);
-            }
-        };
-    }])
     .animation('.mr-cards__item',['$log', function($log){
         $log = $log.context('.mr-cards__item');
         return {
