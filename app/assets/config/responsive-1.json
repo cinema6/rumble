@@ -1,0 +1,14 @@
+{
+    "full" : {
+        "minWidth"      : "18.75em",
+        "padding"       : "8.125em 0 63% 0",
+        "height"        : "0px",
+        "overflow"      : "hidden"
+    },
+    "light" : {
+        "minWidth"      : "18.75em",
+        "padding"       : "8.125em 0 63% 0",
+        "height"        : "0px",
+        "overflow"      : "hidden"
+    }
+}

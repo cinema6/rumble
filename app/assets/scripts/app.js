@@ -285,9 +285,18 @@
         .factory('c6AppData', ['cinema6','$http','c6UrlMaker','$q',
         function              ( cinema6 , $http , c6UrlMaker , $q ) {
             var c6AppData = {
-                    mode: null
-                },
-                getResponsiveStyles = $http.get(c6UrlMaker('config/responsive.json'));
+                mode: null
+            };
+
+            function getResponsiveStyles(version) {
+                if (!version) {
+                    version = 0;
+                }
+
+                return $http.get(c6UrlMaker('config/responsive-' + version + '.json'), {
+                    cache: true
+                });
+            }
 
             function setMode(obj, data) {
                 var device = data.profile.device,
@@ -322,12 +331,12 @@
                     setMode(c6AppData, appData);
                     setBehaviors(c6AppData, c6AppData.mode);
 
-                    return $q.all([getResponsiveStyles, cinema6.getSession()]);
+                    return $q.all([getResponsiveStyles(appData.version), cinema6.getSession()]);
                 }).then(function(promises) {
                     var styles = promises[0].data,
                         session = promises[1];
 
-                    session.ping('responsiveStyles', styles[c6AppData.mode] || {});
+                    session.ping('responsiveStyles', styles[c6AppData.mode] || null);
                     session.on('mrPreview:updateExperience', function(experience) {
                         c6AppData.experience = experience;
                     });

@@ -1,6 +1,13 @@
 # MiniReel Player
 
 ## Beta11 (June 9, 2014)
+* *[Beta11.rc2]*
+  * There are now two responsive.json. One for the new embed and one for
+    the old embed
+  * Responsive.json is now included in the build (it will not be fetched
+    via AJAX)
+  * [FIX]: removed splash fade in animation
+
 * *[Beta11.rc1]*
   * [FIX]: changed splash page templates so that they are no longer stand alone html files; using snippets instead.
   * [FIX]: splash template : horizontal stack : preloader hidden by default
