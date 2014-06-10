@@ -1,6 +1,14 @@
 # MiniReel Player
 
 ## Beta11 (June 9, 2014)
+* *[Beta11.rc4]*
+  * [FIX]: Account for fact that $http cache may not be created yet
+* *[/Beta11.rc4]*
+
+* *[Beta11.rc3]*
+  * [FIX]: Fix typo "runs" to "run"
+* *[/Beta11.rc3]*
+
 * *[Beta11.rc2]*
   * There are now two responsive.json. One for the new embed and one for
     the old embed
@@ -8,6 +16,7 @@
     via AJAX)
   * [FIX]: removed splash fade in animation
   * [FIX]: $broadcast a thumbnail resize event when recap card is $destroyed so thumbnails don't get cut off in lightbox mode
+* *[/Beta11.rc2]*
 
 * *[Beta11.rc1]*
   * [FIX]: changed splash page templates so that they are no longer stand alone html files; using snippets instead.
