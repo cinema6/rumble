@@ -1,6 +1,10 @@
 # MiniReel Player
 
 ## Beta11 (June 9, 2014)
+* *[Beta11.rc3]*
+  * [FIX]: Fix typo "runs" to "run"
+* *[/Beta11.rc3]*
+
 * *[Beta11.rc2]*
   * There are now two responsive.json. One for the new embed and one for
     the old embed
