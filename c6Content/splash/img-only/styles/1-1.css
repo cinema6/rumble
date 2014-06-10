@@ -1,3 +1,6 @@
-.c6mr-splashImgOnly__start--1-1 {
+.c6mr-splashImgOnly__group .c6mr-splashImgOnly__start--1-1 {
     padding:0 0 100% 0;
+}
+.c6mr-splashImgOnly__start--1-1 .c6mr-playBtn {
+    top:32%; left:32%; right:32%; bottom:32%;
 }
