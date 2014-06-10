@@ -1,6 +1,8 @@
 (function() {
     'use strict';
 
+    var grunt = require('grunt');
+
     module.exports = {
         splash: {
             options: {
@@ -18,7 +20,7 @@
         dist: {
             options: {
                 transform: function(orig, srcs) {
-                    var src = srcs[0].replace(/^app\//, '');
+                    var src = srcs[0].replace(/^app\/assets/, grunt.config.process('<%= _version %>/<%= buildMode %>'));
 
                     return '(' + function(orig, src) {
                         angular.module('c6.rumble')
@@ -28,7 +30,7 @@
 
                                 $httpCache.put(src, [200, orig, {}]);
                             }]);
-                    }.toString() + '(' + orig + ', \'' + src + '\');';
+                    }.toString() + '(' + orig + ', \'' + src + '\'));';
                 }
             },
             expand: true,
