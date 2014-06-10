@@ -24,8 +24,8 @@
 
                     return '(' + function(orig, src) {
                         angular.module('c6.rumble')
-                            .run   (['$cacheFactory',
-                            function( $cacheFactory ) {
+                            .run   (['$http','$cacheFactory',
+                            function( $http , $cacheFactory ) {
                                 var $httpCache = $cacheFactory.get('$http');
 
                                 $httpCache.put(src, [200, orig, {}]);
