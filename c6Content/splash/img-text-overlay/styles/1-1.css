@@ -1,3 +1,6 @@
-.c6mr-splashTextOnly__start--1-1 {
+.c6mr-splashTextOverlay__group .c6mr-splashTextOverlay__start--1-1 {
     padding:0 0 100% 0;
+}
+.c6mr-splashTextOverlay__start--1-1 .c6mr-playBtn {
+    top:27%; left:32%; right:32%; bottom:37%;
 }
