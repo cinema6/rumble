@@ -60,6 +60,12 @@
                 $scope.$emit('<recap-card>:jumpTo', getIndex(card));
             };
 
+            $scope.$on('$destroy',function(){
+                if(c6AppData.experience.data.mode === 'lightbox') {
+                    $rootScope.$broadcast('resize');
+                }
+            });
+
             $scope.$watch('active', function(isActive) {
                 if(isActive) {
                     self.deck = [];

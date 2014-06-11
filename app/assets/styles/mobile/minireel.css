@@ -633,6 +633,7 @@
         }
     .mr-player__thumbnail {
         background:50% 50% / cover no-repeat;
+        cursor: pointer;
     }
     .mr-display-ad__group {
         text-align: center;

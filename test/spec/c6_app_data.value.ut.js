@@ -3,14 +3,15 @@
 
     define(['app'], function() {
         describe('c6AppData', function() {
-            var $rootScope,
+            var $injector,
+                $rootScope,
                 c6AppDataProvider;
 
             var cinema6,
                 $httpBackend,
                 appData,
                 deferreds,
-                responsive,
+                responsive, responsive1,
                 session;
 
             beforeEach(function() {
@@ -27,6 +28,18 @@
                     light: {
                         minHeight: '75%',
                         padding: '200px'
+                    }
+                };
+
+                responsive1 = {
+                    full: {
+                        'padding-top': '50%',
+                        height: '100px',
+                        overflow: 'hidden'
+                    },
+                    light: {
+                        'padding-top': '60%',
+                        height: '20px'
                     }
                 };
 
@@ -79,14 +92,16 @@
                     c6AppDataProvider = $injector.get('c6AppDataProvider');
                 });
 
-                inject(function($injector) {
+                inject(function(_$injector_) {
+                    $injector = _$injector_;
+
                     $rootScope = $injector.get('$rootScope');
                     $httpBackend = $injector.get('$httpBackend');
 
                     cinema6 = $injector.get('cinema6');
                 });
 
-                $httpBackend.expectGET('assets/config/responsive.json')
+                $httpBackend.expectGET('assets/config/responsive-0.json')
                     .respond(200, responsive);
             });
 
@@ -114,10 +129,10 @@
 
                 it('should ping cinema6 with responsive styles based on mode', inject(function(c6AppData) {
                     /* jshint unused:false */
-                    $httpBackend.flush();
                     $rootScope.$apply(function() {
                         deferreds.getAppData.resolve(appData);
                     });
+                    $httpBackend.flush();
                     $rootScope.$apply(function() {
                         deferreds.getSession.resolve(session);
                     });
@@ -130,26 +145,50 @@
 
                     appData.experience.data.mode = 'foo';
 
-                    $httpBackend.flush();
                     $rootScope.$apply(function() {
                         deferreds.getAppData.resolve(appData);
                     });
+                    $httpBackend.flush();
                     $rootScope.$apply(function() {
                         deferreds.getSession.resolve(session);
                     });
 
-                    expect(session.ping).toHaveBeenCalledWith('responsiveStyles', {});
+                    expect(session.ping).toHaveBeenCalledWith('responsiveStyles', null);
                 }));
+
+                describe('if an api version is provided', function() {
+                    beforeEach(function() {
+                        appData.version = 1;
+
+                        $httpBackend.resetExpectations();
+                        $httpBackend.expectGET('assets/config/responsive-1.json')
+                            .respond(200, responsive1);
+
+                        $injector.get('c6AppData');
+
+                        $rootScope.$apply(function() {
+                            deferreds.getAppData.resolve(appData);
+                        });
+                        $httpBackend.flush();
+                        $rootScope.$apply(function() {
+                            deferreds.getSession.resolve(session);
+                        });
+                    });
+
+                    it('should ping cinema6 with responsive styles based on the mode', function() {
+                        expect(session.ping).toHaveBeenCalledWith('responsiveStyles', responsive1.full);
+                    });
+                });
             });
 
             describe('updating the experience', function() {
                 it('should change the c6AppData.experience', inject(function(c6AppData) {
                     var callback;
 
-                    $httpBackend.flush();
                     $rootScope.$apply(function() {
                         deferreds.getAppData.resolve(appData);
                     });
+                    $httpBackend.flush();
                     $rootScope.$apply(function() {
                         deferreds.getSession.resolve(session);
                     });
@@ -169,7 +208,7 @@
 
                     appData.experience.data.mode = mode;
 
-                    $httpBackend.whenGET('assets/config/responsive.json')
+                    $httpBackend.whenGET('assets/config/responsive-0.json')
                         .respond(200, {});
 
                     inject(function($injector) {

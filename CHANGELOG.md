@@ -1,10 +1,39 @@
 # MiniReel Player
 
+  * [FIX]: changed splash template hierarchy so that ratio styles always take priority over base styles
+  * [FIX]: Splash play button added
+
+## Beta11 (June 9, 2014)
+* *[Beta11.rc5]*
+  * [FEATURE]: Add AdTechService for loading display ads on Video Embed cards in lightbox-ads mode
+  * [FIX]: add c6touch play handler to click-to-play mobile video embed thumbnails
+* *[/Beta11.rc5]*
+
+* *[Beta11.rc4]*
+  * [FIX]: Account for fact that $http cache may not be created yet
+* *[/Beta11.rc4]*
+
+* *[Beta11.rc3]*
+  * [FIX]: Fix typo "runs" to "run"
+* *[/Beta11.rc3]*
+
+* *[Beta11.rc2]*
+  * There are now two responsive.json. One for the new embed and one for
+    the old embed
+  * Responsive.json is now included in the build (it will not be fetched
+    via AJAX)
+  * [FIX]: removed splash fade in animation
+  * [FIX]: $broadcast a thumbnail resize event when recap card is $destroyed so thumbnails don't get cut off in lightbox mode
+* *[/Beta11.rc2]*
+
 * *[Beta11.rc1]*
   * [FIX]: changed splash page templates so that they are no longer stand alone html files; using snippets instead.
-  * [FEATURE]: Add AdTechService for loading display ads on Video Embed cards in lightbox-ads mode
+  * [FIX]: splash template : horizontal stack : preloader hidden by default
+  * [FIX]: splash template : text only : created separate template snippets for all sizes to preserve convention
+  * [FIX]: splash template : updates for content flow vertical sizing
+* *[/Beta11.rc1]*
 
-
+## Beta10 (June 6, 2014)
 * *[Beta10.rc1]* (June 5, 2014)
   * [FIX]: Splash templates separated into css and html files.
   * [FIX]: Preloader added into Splash for display while MiniReel loads.

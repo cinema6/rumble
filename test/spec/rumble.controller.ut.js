@@ -1237,12 +1237,27 @@
                 describe('shouldStart', function() {
                     beforeEach(function() {
                         spyOn(RumbleCtrl, 'start');
+
+                        $scope.currentIndex = -1;
+                        $scope.$emit('shouldStart');
                     });
 
                     it('should start the minireel when emitted', function() {
-                        $scope.$emit('shouldStart');
-
                         expect(RumbleCtrl.start).toHaveBeenCalled();
+                    });
+
+                    describe('if the minireel is already started', function() {
+                        beforeEach(function() {
+                            RumbleCtrl.start = jasmine.createSpy('RumbleCtrl.start()');
+
+                            $scope.currentIndex = 0;
+
+                            $scope.$emit('shouldStart');
+                        });
+
+                        it('should not start', function() {
+                            expect(RumbleCtrl.start).not.toHaveBeenCalled();
+                        });
                     });
                 });
 
