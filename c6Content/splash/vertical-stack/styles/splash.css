@@ -32,7 +32,7 @@
     background:rgba(74,156,209,0.75) 
         url('https://portal.cinema6.com/collateral/splash/vertical-stack/img/play.png') 58% 50% 
         / 40% auto no-repeat;
-    position: absolute;
+    position: absolute; z-index:100;
     border-radius:50%; border:3px solid #fff;
     box-sizing:border-box;
     display:block;
