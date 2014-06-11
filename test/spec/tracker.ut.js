@@ -117,8 +117,10 @@
                         it('proxies call to underlying api create',function(){
                             var tc = new TrackerContext('tt');
                             tc.create('param1','param2');
-                            expect($window._c6_)
-                                .toHaveBeenCalledWith('create','param1','param2');
+                            expect($window._c6_.argsForCall[0])
+                                .toEqual(['create','param1','param2']);
+                            expect($window._c6_.argsForCall[1])
+                                .toEqual(['tt.require','displayfeatures']);
                         });
 
                         it('sets the created property when called',function(){
