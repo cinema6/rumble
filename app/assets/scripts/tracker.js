@@ -55,6 +55,7 @@
                 var args = Array.prototype.slice.call(arguments,0);
                 args.unshift('create');
                 $window[api].apply(null,args);
+                $window[api].apply(null,[this.methodContext('require'),'displayfeatures']);
                 this.created = true;
                 return this;
             };
