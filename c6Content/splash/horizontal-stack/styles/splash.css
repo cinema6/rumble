@@ -30,7 +30,7 @@
         url('https://portal.cinema6.com/collateral/splash/horizontal-stack/img/play.png') 60% 50% 
         / 50% auto no-repeat;
     width:2.25em; height:2.25em; margin:-1.125em 0 0 -1.125em;
-    position: absolute; top:50%; left:50%; z-index:100;
+    position: absolute; top:50%; left:50%;
     border-radius:50%; border:2px solid #fff;
     box-sizing:border-box;
     display:block;
