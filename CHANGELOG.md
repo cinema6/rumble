@@ -1,12 +1,13 @@
 # MiniReel Player
 
-  * [FIX]: changed splash template hierarchy so that ratio styles always take priority over base styles
-  * [FIX]: Splash play button added
+* *[Beta12.rc1]*
+  * [FEATURE]: Add AdTechService for loading display ads on Video Embed cards in lightbox-ads mode
 
 ## Beta11 (June 9, 2014)
 * *[Beta11.rc5]*
-  * [FEATURE]: Add AdTechService for loading display ads on Video Embed cards in lightbox-ads mode
   * [FIX]: add c6touch play handler to click-to-play mobile video embed thumbnails
+  * [FIX]: changed splash template hierarchy so that ratio styles always take priority over base styles
+  * [FIX]: Splash play button added
 * *[/Beta11.rc5]*
 
 * *[Beta11.rc4]*
