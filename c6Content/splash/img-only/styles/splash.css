@@ -6,7 +6,7 @@
 
 .c6mr-splashImgOnly__group {
     width:100%; height:auto;
-    background:#ccc url('http://portal.cinema6.com/collateral/splash/img-only/img/default_square.jpg') 50% 50% / cover no-repeat;
+    background:#ccc url('https://portal.cinema6.com/collateral/splash/img-only/img/default_square.jpg') 50% 50% / cover no-repeat;
     position:relative;
 }
 .c6mr-splashImgOnly__start {
@@ -19,7 +19,7 @@
 }
 .c6mr-splashImgOnly__start .c6mr-playBtn {
     background:rgba(74,156,209,0.75) 
-        url('http://portal.cinema6.com/collateral/splash/img-only/img/play.png') 58% 50% 
+        url('https://portal.cinema6.com/collateral/splash/img-only/img/play.png') 58% 50% 
         / 40% auto no-repeat;
     position: absolute;
     border-radius:50%; border:3px solid #fff;

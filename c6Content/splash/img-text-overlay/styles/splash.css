@@ -5,7 +5,7 @@
 }
 .c6mr-splashTextOverlay__group {
     width:100%; height:auto;
-    background:#ccc url('../img/default_square.jpg') 50% 50% / cover no-repeat;
+    background:#ccc url('https://portal.cinema6.com/collateral/splash/img-text-overlay/img/default_square.jpg') 50% 50% / cover no-repeat;
     position:relative;
     font-size: 16px;
 }
@@ -28,7 +28,7 @@
     }
 .c6mr-splashTextOverlay__start .c6mr-playBtn {
     background:rgba(74,156,209,0.75) 
-        url('../img/play.png') 58% 50% 
+        url('https://portal.cinema6.com/collateral/splash/img-text-overlay/img/play.png') 58% 50% 
         / 40% auto no-repeat;
     position: absolute;
     border-radius:50%; border:3px solid #fff;
