@@ -874,8 +874,8 @@
             }
         };
     }])
-    .controller('VideoEmbedCardController', ['$scope','ModuleService','ControlsService','EventService','c6AppData','c6ImagePreloader',
-    function                                ( $scope , ModuleService , ControlsService , EventService , c6AppData , c6ImagePreloader ) {
+    .controller('VideoEmbedCardController', ['$scope','ModuleService','ControlsService','EventService','c6AppData','c6ImagePreloader', 'AdTechService',
+    function                                ( $scope , ModuleService , ControlsService , EventService , c6AppData , c6ImagePreloader ,  AdTechService ) {
         var self = this,
             config = $scope.config,
             profile = $scope.profile,
@@ -1013,6 +1013,13 @@
 
                     self.dismissBallot();
                     self.dismissBallotResults();
+
+                    if(self.hasModule('displayAd')) {
+                        // TODO: need to replace 'waterfall' with 1 of the 8 ad modes,
+                        // ie. C6 w/ publisher fallback, Publisher only, etc.
+                        AdTechService.loadAd(config);
+                    }
+
                 } else {
                     if (_data.modules.ballot.ballotActive) {
                         _data.modules.ballot.vote = -1;
