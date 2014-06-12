@@ -543,8 +543,8 @@
 
         }])
 
-        .service('AdTechService', ['$window', '$q',
-        function                  ( $window ,  $q ) {
+        .service('AdTechService', ['$window', '$q', '$rootScope',
+        function                  ( $window ,  $q ,  $rootScope ) {
             var domain, placementId;
 
             function getPlacementId() {
@@ -574,7 +574,9 @@
                     adContainerId: 'adtechPlacement',
                     kv: { weburl: domain },
                     complete: function() {
-                        placementId.resolve($window.c6AdtechPlacementId);
+                        $rootScope.$apply(function() {
+                            placementId.resolve($window.c6AdtechPlacementId);
+                        });
                     }
                 });
 
@@ -593,7 +595,9 @@
                         debugMode: (domain === 'localhost'),
                         kv: { mode: (config.displayAdSource || 'default') },
                         complete: function() {
-                            adLoadDeferred.resolve();
+                            $rootScope.$apply(function() {
+                                adLoadDeferred.resolve();
+                            });
                         }
                     });
                 });
