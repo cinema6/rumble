@@ -3,8 +3,7 @@
 
     define(['services'], function() {
         describe('AdTechService', function() {
-            var $rootScope,
-                $window,
+            var $window,
                 $q,
                 AdTechService;
 
@@ -23,7 +22,6 @@
                 });
 
                 inject(function($injector) {
-                    $rootScope = $injector.get('$rootScope');
                     $window = $injector.get('$window');
                     $window.ADTECH = {
                         loadAd: jasmine.createSpy('window.ADTECH.loadAd()')
@@ -73,8 +71,6 @@
                             beforeEach(function() {
                                 $window.c6AdtechPlacementId = 123456;
                                 $window.ADTECH.loadAd.calls[0].args[0].complete();
-
-                                $rootScope.$digest();
                             });
 
                             it('should resolve the init() promise and call ADTECH.loadAd() again', function() {
@@ -94,8 +90,6 @@
                             it('should resolve the loadAd() promise', function() {
                                 $window.ADTECH.loadAd.mostRecentCall.args[0].complete();
 
-                                $rootScope.$digest();
-
                                 expect(adLoadThenSpy).toHaveBeenCalled();
                             });
                         });
@@ -106,7 +100,6 @@
                             AdTechService.loadAd({id: 'container', displayAdSource: 'waterfall'});
                             $window.c6AdtechPlacementId = 123456;
                             $window.ADTECH.loadAd.calls[0].args[0].complete();
-                            $rootScope.$digest();
                         });
 
                         it('should call ADTECH.loadAd() immediately', function() {
@@ -114,7 +107,7 @@
 
                             AdTechService.loadAd({id: 'container2', displayAdSource: 'waterfall2'});
 
-                            $rootScope.$digest();
+                            $window.ADTECH.loadAd.mostRecentCall.args[0].complete();
 
                             expect($window.ADTECH.loadAd.calls.length).toBe(loadAdCallCount + 1);
 
