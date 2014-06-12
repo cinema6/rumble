@@ -3,6 +3,7 @@
 * *[Beta12.rc1]*
   * [FEATURE]: Add AdTechService for loading display ads on Video Embed cards in lightbox-ads mode
   * [FEATURE]: Added ga displayfeatures
+  * [FIX]: Add $rootScope.$apply in Adtech callback
 
 ## Beta11 (June 9, 2014)
 * *[Beta11.rc5]*
