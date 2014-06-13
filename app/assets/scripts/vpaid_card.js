@@ -46,8 +46,8 @@
             this.enablePlayButton = !$scope.profile.touch &&
                 !config.data.autoplay;
 
-            $scope.$watch('onDeck', function(onDeck) {
-                if (onDeck) {
+            $scope.$watch('onDeck || active', function(shouldLoad) {
+                if (shouldLoad) {
                     _data.modules.displayAd.src = config.displayAd;
 
                     player.loadAd();

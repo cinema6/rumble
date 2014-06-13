@@ -1,6 +1,10 @@
 # MiniReel Player
 
 ## Beta12 (June 11, 2014)
+* *[Beta12.rc2]*
+  * [FIX]: VPAID ads are loaded when the ad card is onDeck and also if
+    it is jumped-to
+
 * *[Beta12.rc1]*
   * [FEATURE]: Add AdTechService for loading display ads on Video Embed cards in lightbox-ads mode
   * [FEATURE]: Added ga displayfeatures
