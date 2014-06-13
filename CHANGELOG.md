@@ -1,6 +1,11 @@
 # MiniReel Player
 
 ## Beta12 (June 11, 2014)
+* *[Beta12.rc3]*
+  * [FIX]: prev/next min-width units fixed to rem from em
+  * [FIX]: lightbox display ad properly shows next to video ad
+* *[/Beta12.rc3]*
+
 * *[Beta12.rc2]*
   * [FIX]: VPAID ads are loaded when the ad card is onDeck and also if
     it is jumped-to
