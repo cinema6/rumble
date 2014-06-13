@@ -294,7 +294,7 @@
                         });
 
                         it('should $emit <vpaid-card>:init', function() {
-                            expect($scope.$emit).toHaveBeenCalledWith('<vpaid-card>:init', jasmine.any(Function))
+                            expect($scope.$emit).toHaveBeenCalledWith('<vpaid-card>:init', jasmine.any(Function));
                         });
 
                         it('should only $emit <vpaid-card>:init if it has not played yet', function() {
@@ -492,37 +492,39 @@
                     });
                 });
 
-                describe('onDeck', function() {
-                    describe('when true should set the displayAd src', function() {
-                        var iface;
+                ['onDeck', 'active'].forEach(function(prop) {
+                    describe(prop, function() {
+                        describe('when true should set the displayAd src', function() {
+                            var iface;
 
-                        beforeEach(function() {
-                            iface = new IFace();
+                            beforeEach(function() {
+                                iface = new IFace();
 
-                            $scope.$apply(function() {
-                                $scope.$emit('playerAdd', iface);
-                                $scope.onDeck = true;
-                            });
-                        });
-
-                        it('to undefined if there is no display ad', function() {
-                            expect($scope.config._data.modules.displayAd.src).toBe(undefined);
-                        });
-
-                        it('to the url from config', function() {
-                            $scope.onDeck = false;
-                            $scope.$digest();
-
-                            $scope.$apply(function() {
-                                $scope.config.displayAd = 'htpp://test.com/image.jpg';
-                                $scope.onDeck = true;
+                                $scope.$apply(function() {
+                                    $scope.$emit('playerAdd', iface);
+                                    $scope[prop] = true;
+                                });
                             });
 
-                            expect($scope.config._data.modules.displayAd.src).toBe('htpp://test.com/image.jpg');
-                        });
+                            it('to undefined if there is no display ad', function() {
+                                expect($scope.config._data.modules.displayAd.src).toBe(undefined);
+                            });
 
-                        it('should load an ad', function() {
-                            expect(iface.loadAd).toHaveBeenCalled();
+                            it('to the url from config', function() {
+                                $scope[prop] = false;
+                                $scope.$digest();
+
+                                $scope.$apply(function() {
+                                    $scope.config.displayAd = 'htpp://test.com/image.jpg';
+                                    $scope[prop] = true;
+                                });
+
+                                expect($scope.config._data.modules.displayAd.src).toBe('htpp://test.com/image.jpg');
+                            });
+
+                            it('should load an ad', function() {
+                                expect(iface.loadAd).toHaveBeenCalled();
+                            });
                         });
                     });
                 });
