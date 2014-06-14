@@ -6,6 +6,7 @@
             var $rootScope,
                 $scope,
                 $controller,
+                AdTechService,
                 RecapCardCtrl;
 
             var MiniReelService,
@@ -103,6 +104,8 @@
                 inject(function($injector) {
                     $rootScope = $injector.get('$rootScope');
                     $controller = $injector.get('$controller');
+                    AdTechService = $injector.get('AdTechService');
+                    spyOn(AdTechService, 'loadAd');
 
                     MiniReelService = $injector.get('MiniReelService');
                     BallotService = $injector.get('BallotService');
@@ -112,7 +115,7 @@
                     $scope.config = {
                         modules: ['displayAd'],
                         displayAd: 'http://test.com/ad.jpg'
-                    }
+                    };
                     RecapCardCtrl = $controller('RecapCardController', { $scope: $scope });
                 });
 
@@ -153,6 +156,35 @@
                             $scope.active = true;
                         });
                         expect($rootScope.$broadcast).toHaveBeenCalled();
+                    });
+
+                    describe('if there is no displayAd', function() {
+                        beforeEach(function() {
+                            $scope.config.modules.length = 0;
+                            AdTechService.loadAd = jasmine.createSpy('AdTechService.loadAd()');
+
+                            $scope.$apply(function() {
+                                $scope.active = true;
+                            });
+                        });
+
+                        it('should not load a displayAd', function() {
+                            expect(AdTechService.loadAd).not.toHaveBeenCalled();
+                        });
+                    });
+
+                    describe('if there is a displayAd', function() {
+                        beforeEach(function() {
+                            $scope.config.modules = ['displayAd'];
+
+                            $scope.$apply(function() {
+                                $scope.active = true;
+                            });
+                        });
+
+                        it('should load a displayAd', function() {
+                            expect(AdTechService.loadAd).toHaveBeenCalledWith($scope.config);
+                        });
                     });
                 });
             });

@@ -331,6 +331,8 @@
                     setMode(c6AppData, appData);
                     setBehaviors(c6AppData, c6AppData.mode);
 
+                    c6AppData.version = appData.version || 0;
+
                     return $q.all([getResponsiveStyles(appData.version), cinema6.getSession()]);
                 }).then(function(promises) {
                     var styles = promises[0].data,

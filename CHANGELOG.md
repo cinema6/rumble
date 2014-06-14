@@ -1,6 +1,13 @@
 # MiniReel Player
 
 ## Beta12 (June 11, 2014)
+* *[Beta12.rc5]*
+  * [FIX]: Splash screens are now hidden when the embed version is
+    greater than 0
+  * [FIX]: Recap card in Lightbox w/ Display Ad view mode now shows a
+    display ad
+* *[/Beta12.rc5]*
+
 * *[Beta12.rc4]*
   * [FIX]: Mobile: "via" is no longer shown for recap card in the ToC
   * [FIX]: It is now impossible for the controls to be stuck in a
