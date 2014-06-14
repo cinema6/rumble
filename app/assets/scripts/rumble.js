@@ -307,6 +307,7 @@
             tracker = trackerService('c6mr'),
             cancelTrackVideo = null,
             ballotMap = {},
+            navController = null,
             readyWatch = $scope.$watch('ready', function(ready) {
                 if (ready) {
                     $scope.$emit('ready');
@@ -347,7 +348,7 @@
         }
 
         function handleAdInit(event, provideNavController) {
-            provideNavController(new NavController($scope.nav));
+            provideNavController(navController = new NavController($scope.nav));
         }
 
         $log = $log.context('RumbleCtrl');
@@ -726,6 +727,10 @@
                 isSkipping = Math.abs(currentIndex - i) > 1,
                 isGoingForward = (i - currentIndex) > 0,
                 cardBeforeThis = $scope.deck[i + (isGoingForward ? -1 : 1)];
+
+            if (navController) {
+                navController.enabled(true);
+            }
 
             if (isSkipping && cardBeforeThis.ad && !cardBeforeThis.visited) {
                 return this.jumpTo(cardBeforeThis);

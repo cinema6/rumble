@@ -3,6 +3,9 @@
 ## Beta12 (June 11, 2014)
 * *[Beta12.rc4]*
   * [FIX]: Mobile: "via" is no longer shown for recap card in the ToC
+  * [FIX]: It is now impossible for the controls to be stuck in a
+    "disabled" state
+* *[/Beta12.rc4]*
 
 * *[Beta12.rc3]*
   * [FIX]: prev/next min-width units fixed to rem from em
