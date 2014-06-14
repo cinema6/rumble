@@ -1,6 +1,9 @@
 # MiniReel Player
 
 ## Beta12 (June 11, 2014)
+* *[Beta12.rc4]*
+  * [FIX]: Mobile: "via" is no longer shown for recap card in the ToC
+
 * *[Beta12.rc3]*
   * [FIX]: prev/next min-width units fixed to rem from em
   * [FIX]: lightbox display ad properly shows next to video ad

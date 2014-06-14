@@ -7,7 +7,7 @@
             </div>
             <div class="mr-toc-item__details">
                 <h1 class="mr-toc-item__title tk--hdr">{{this.title}}</h1>
-                <p class="mr-toc-item__attributes">via {{this.source}}</p>
+                <p ng-show="!!this.source" class="mr-toc-item__attributes">via {{this.source}}</p>
             </div>
         </li>
     </ul>
