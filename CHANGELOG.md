@@ -4,6 +4,8 @@
 * *[Beta12.rc5]*
   * [FIX]: Splash screens are now hidden when the embed version is
     greater than 0
+  * [FIX]: Recap card in Lightbox w/ Display Ad view mode now shows a
+    display ad
 * *[/Beta12.rc5]*
 
 * *[Beta12.rc4]*
