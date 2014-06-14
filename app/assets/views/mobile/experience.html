@@ -92,7 +92,7 @@
     <ng-include src="'deck.html' | asset:'views'"></ng-include>
     <ng-switch on="app.state">
         <div class="splash-screen" ng-switch-when="splash">
-            <ng-include src="'splash.html' | asset:'views'"></ng-include>
+            <ng-include ng-if="app.data.version < 1" src="'splash.html' | asset:'views'"></ng-include>
         </div>
     </ng-switch>
     <table-of-contents ng-show="showTOC"
