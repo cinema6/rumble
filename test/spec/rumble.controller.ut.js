@@ -865,7 +865,7 @@
                         };
                         item.player.isReady.andReturn(true);
                     });
-                    spyOn($scope, '$emit');
+                    spyOn($scope, '$emit').andCallThrough();
                 });
 
                 describe('showing ads', function() {
@@ -1141,6 +1141,22 @@
                         slideId: 'vid2',
                         slideTitle : 'vid2 caption'
                     }); 
+                });
+
+                it('will call enable() on a NavController if there is one', function() {
+                    ['<vast-card>:init', '<vpaid-card>:init'].forEach(function(event) {
+                        var provideNavController = jasmine.createSpy('provideNavController()'),
+                            navController;
+
+                        $scope.$apply(function() {
+                            $scope.$emit(event, provideNavController);
+                        });
+                        navController = provideNavController.mostRecentCall.args[0];
+                        spyOn(navController, 'enabled');
+
+                        RumbleCtrl.setPosition(1);
+                        expect(navController.enabled).toHaveBeenCalledWith(true);
+                    });
                 });
             });
 
