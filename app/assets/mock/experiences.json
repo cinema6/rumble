@@ -179,6 +179,7 @@
                     "id": "rc-235d41cde02032",
                     "type": "recap",
                     "title": "Recap of Rumble Video",
+                    "modules": [],
                     "data": {}
                 }
             ]
@@ -547,6 +548,7 @@
                 {
                     "id": "rc-ee5f1c11d8d42f",
                     "type": "recap",
+                    "modules": [],
                     "data": {}
                 }
             ]
@@ -1585,6 +1587,7 @@
                 {
                     "id": "rc-1a327c199e4387",
                     "type": "recap",
+                    "modules": [],
                     "data": {}
                 }
             ]
@@ -2053,6 +2056,7 @@
                 {
                     "id": "rc-1a327c199e4387",
                     "type": "recap",
+                    "modules": [],
                     "data": {}
                 }
             ]
@@ -2245,6 +2249,7 @@
                 {
                     "id": "rc-b4b209132e2674",
                     "type": "recap",
+                    "modules": [],
                     "data": {}
                 }
             ]
