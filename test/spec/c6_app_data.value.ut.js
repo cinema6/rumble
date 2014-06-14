@@ -122,6 +122,28 @@
                 expect(c6AppData).toEqual(jasmine.objectContaining(appData));
             }));
 
+            it('should set the version to 0 if there is none', inject(function(c6AppData) {
+                $rootScope.$apply(function() {
+                    deferreds.getAppData.resolve(appData);
+                });
+
+                expect(c6AppData.version).toBe(0);
+            }));
+
+            it('should not overwrite a version if there is one', inject(function(c6AppData) {
+                appData.version = 1;
+
+                $httpBackend.resetExpectations();
+                $httpBackend.expectGET('assets/config/responsive-1.json')
+                    .respond(200, responsive1);
+
+                $rootScope.$apply(function() {
+                    deferreds.getAppData.resolve(appData);
+                });
+
+                expect(c6AppData.version).toBe(1);
+            }));
+
             describe('providing responsive styles', function() {
                 beforeEach(function() {
                     appData.experience.data.mode = 'full';
