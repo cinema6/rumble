@@ -1,5 +1,8 @@
 # MiniReel Player
 
+* *[Beta12.rc6]*
+  * [FIX]: Lightbox, no-ad player styles updated
+
 ## Beta12 (June 11, 2014)
 * *[Beta12.rc5]*
   * [FIX]: Splash screens are now hidden when the embed version is
