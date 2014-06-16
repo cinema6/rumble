@@ -767,6 +767,9 @@
             font-size:0.625em; color:#929292; text-align: center; 
             display: block; width:100%; margin:0;
         }
+        .mr-display-ad__group .mr-display-ad__thumbnail a {
+            border:0;
+        }
         .mr-display-ad__thumbnail {
             width: 18.75rem;/*300px*/ height: 15.625rem;/*250px*/ display:block;
         }

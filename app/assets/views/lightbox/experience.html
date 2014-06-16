@@ -3,7 +3,7 @@
         <span class="sprite mr-icons__close"><span class="ir">Close</span></span>
     </button>
     <h1 class="mr-title tk--hdr">{{app.data.experience.data.title}}</h1>
-    <div class="mr-card__container">
+    <div class="mr-card__container" ng-class="{'mr-card__container--ad': currentCard.type === 'ad'}">
         <ng-include src="'deck.html' | asset:'views'"></ng-include>
         
         <button ng-click="RumbleCtrl.goBack('nav')"
@@ -38,7 +38,10 @@
         <thumb-paginator active="tocIndex"
             ng-if="currentIndex > -1"
             class="mr-pager__group"
-            ng-class="{'mr-pager__group--fullWidth' : currentCard.type === 'recap' || currentCard.type === 'ad'}"
+            ng-class="{
+                'mr-pager__group--fullWidth' : currentCard.type === 'recap',
+                'mr-pager__group--adWidth' : currentCard.type === 'ad'
+            }"
             disable-prev-when="!nav.enabled"
             disable-next-when="atTail || !nav.enabled"
             on-prev="RumbleCtrl.goBack('thumb')"

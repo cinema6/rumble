@@ -1,19 +1,11 @@
-<div class="mr-card__group">
-    <div ng-style="{visibility: Ctrl.showVideo ? 'visible' : 'hidden'}" class="mr-vast__player">
-        <div ng-style="{visibility: Ctrl.showVideo ? 'visible' : 'hidden'}" class="mr-player mr-vast__player">
-        </div>
-    <h1 class="mr-vast__title-h1 tk--hdr">Advertisement</h1>
-    <button style="z-index:2;" ng-if="Ctrl.enablePlayButton" ng-show="Ctrl.showPlay" ng-click="Ctrl.playVideo()" class="mr-player__play-btn">
-        <div class="mr-player__play-icon">
-            <span class="ir">Play Video</span>
-        </div>
-    </button>
+<div class="mr-ad__group">
+    <div class="mr-adVideo__group">
+        <div ng-style="{visibility: Ctrl.showVideo ? 'visible' : 'hidden'}" class="mr-player"></div>
+        <p class="mr-adVideo__label tk--hdr">Advertisement</p>
     </div>
-    <section>
-        <display-ad-module ng-if="Ctrl.hasModule('displayAd')"
-            active="config._data.modules.displayAd.active"
-            ad-src="{{config.displayAd}}"
-            companion="Ctrl.companion">
-        </display-ad-module>
-    </section>
 </div>
+<display-ad-module ng-if="Ctrl.hasModule('displayAd')"
+    active="true"
+    ad-src="{{config.displayAd}}"
+    companion="Ctrl.companion">
+</display-ad-module>
