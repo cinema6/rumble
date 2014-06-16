@@ -226,6 +226,9 @@
         .mr-pager__group--fullWidth {
             width:100%;
         }
+        .mr-pager__group--adWidth {
+            right:18.75rem;
+        }
     .mr-pager__btn {
         min-width:4rem;/*64px*/ height:3rem;/*48px*/ position:absolute;
         background:#d94040 no-repeat 50% 50%; border:0; padding:0; margin:0;
@@ -369,6 +372,9 @@
         background:#fff; padding:0 12.75rem 3rem 0; /*0 204px 48px 0*/
         position:relative; overflow:hidden;
     }
+        .mr-card__container--ad {
+            background:#1c1c1c;
+        }
         @media screen and (min-width:76rem) {
             /*1216px +*/
             .mr-card__container {
@@ -713,61 +719,56 @@
         }
     }
 
-
-
-
 /*  ==========================================================================
-    VAST Ad styles
+    Ad styles
     ========================================================================== */
-    .mr-vast__group { 
+    .mr-ad__group { 
         margin:0 6rem 0 0; height:100%;
         position:relative;
     }
-    .mr-vast__player {
-        width:100%; height:0; position:absolute;
-        padding:0 12.75em 66.67% 0; z-index: 2;
+
+    /*  Video Ad styles
+    ====================================================== */
+    .mr-adVideo__group {
+        width:100%; height:100%; 
+        position:absolute; z-index: 2;
+        background: #000;
     }
-        .mr-vast__title-h1 {
+        .mr-adVideo__label {
             font-size: 0.875em; color: #929292; text-align: center; width:8em;
             position: absolute; top:0; left: 50%; z-index:5;
             margin:0 0 0 -4em;
+            background:rgba(0,0,0,0.6);
         }
-        .mr-vast__video {
-            width:100%; height:100%; position:absolute;
+        .mr-adVideo__videoHolder {
+            position:relative;
+            padding-bottom:73.4%;
+            text-align: center;
         }
-        .mr-vast__watch-again {
-            font-size: 1em; position: absolute; z-index: 1;
-            top: 50%; left: 50%; margin:0 0 0 -3.6875em;
-        }
-/*  ==========================================================================
-    Display ad styles
-    ========================================================================== */
-    .mr-display-ad__group { 
+            .mr-adVideo__video {
+                width:100%; height:100%;
+                position:absolute;
+            }
+
+    /*  Display Ad styles
+    ====================================================== */
+    .mr-adDisplay__group {
+        width: 18.75rem;
+        position:absolute; right:-12.75rem; top:0;
         text-align: center;
     }
-        .mr-vast__group .mr-ad__med-rect {
-            top:0; bottom:auto; right:-18.75rem;
+        .mr-adDisplay__view {
+            width:18.75rem; height:15.625rem;
+            border:0;
         }
-        .mr-display-ad__title-h1 {
-            display: none;
+            .mr-adDisplay__view iframe {
+                border:0; margin:0;
+                width:100%; height:100%;
+            }
+        .mr-adDisplay__label {
+            font-size:0.6875em; color:#929292; text-align: center; 
+            display: block; width:100%; margin:2px 0 0 0;
         }
-        .mr-ad__label {
-            position:absolute; bottom:-1rem;
-            font-size:0.625em; color:#929292; text-align: center; 
-            display: block; width:100%; margin:0;
-        }
-        .mr-display-ad__thumbnail {
-            width: 18.75rem;/*300px*/ height: 15.625rem;/*250px*/ display:block;
-        }
-    @media screen and (max-width: 500px) {
-        /*500px*/
-        .mr-display-ad__title-h1 {
-            margin: 0 0 0.2857em; position: static; 
-        }
-        .mr-display-ad__thumbnail {
-            position: static; margin: 0 auto;
-        }
-    }
 
 /*  ==========================================================================
     More Reels card classes

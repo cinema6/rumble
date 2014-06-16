@@ -1,42 +1,16 @@
-<div class="mr-card__group mr-vast__group c6-height-limiter">
-    <div class="mr-switch__group">
-        <button class="mr-switch__btn mr-switch__btn-video clearfix"
-            ng-click="Ctrl.reset()"
-            ng-class="{'mr-switch__btn--active': !config._data.modules.displayAd.active}">
-            <span class="ir">Show Reader</span>
-        </button>
-        <button ng-show="Ctrl.hasModule('displayAd')"
-            ng-click="Ctrl.showDisplayAd()"
-            class="mr-switch__btn mr-switch__btn-img clearfix"
-            ng-class="{'mr-switch__btn--active': config._data.modules.displayAd.active}">
-            <span class="ir">Show Video</span>
-        </button>
-        <h1 class="mr-vast__title-h1 tk--hdr clearfix">Advertisement</h1>
+<div class="mr-card__group mr-ad__group">
+    <div class="mr-adVideo__group" ng-style="{visibility: Ctrl.showVideo ? 'visible' : 'hidden'}">
+        <p class="mr-adVideo__label tk--hdr">Advertisement</p>
+        <div class="mr-adVideo__videoHolder">
+            <video class="mr-adVideo__video" ng-click="Ctrl.clickThrough()"
+                c6-video id="{{config.id}}" c6-src="Ctrl.videoSrc">
+            </video>
+        </div> 
     </div>
 
-    <div ng-style="{visibility: Ctrl.showVideo ? 'visible' : 'hidden'}" class="mr-vast__player">
-        <video class="mr-vast__video c6-height-limiter" ng-click="Ctrl.clickThrough()"
-            c6-video id="{{config.id}}" c6-src="Ctrl.videoSrc"></video>
-    </div>
-    <section>
-        <ballot-module ng-if="Ctrl.hasModule('ballot')"
-            active="config._data.modules.ballot.active"
-            fetch-results-when="onDeck || active"
-            card-id="{{config.id}}"
-            ballot="config.ballot"
-            vote="config._data.modules.ballot.vote">
-        </ballot-module>
-        <comments-module ng-if="Ctrl.hasModule('comments')"
-            card-id="{{config.id}}"
-            fetch-comments-when="onDeck || active">
-        </comments-module>
-        <display-ad-module ng-if="Ctrl.hasModule('displayAd')"
-            active="config._data.modules.displayAd.active"
-            ad-src="{{config.displayAd}}"
-            companion="Ctrl.companion">
-        </display-ad-module>
-    </section>
-    <p class="mr-vast__watch-again tk--hdr">
-        <a ng-click="Ctrl.reset()" href="" title="Watch the Video">Watch the Video</a>
-    </p>
+    <display-ad-module ng-if="Ctrl.hasModule('displayAd')"
+        active="config._data.modules.displayAd.active"
+        ad-src="{{config.displayAd}}"
+        companion="Ctrl.companion">
+    </display-ad-module>
 </div>

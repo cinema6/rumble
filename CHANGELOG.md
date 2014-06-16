@@ -3,6 +3,7 @@
 ## Beta12.1 (June 16, 2014)
 * *[Beta12.1.rc2]*
   * [FIX]: Clean up ad view in lightbox without display ads
+  * [FIX]: Rewrite DOM for ad modules
   * [FIX]: Added adtech secure property to ad calls
 * *[/Beta12.1.rc2]*
 

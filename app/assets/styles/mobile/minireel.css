@@ -635,7 +635,10 @@
         background:50% 50% / cover no-repeat;
         cursor: pointer;
     }
-    .mr-display-ad__group {
+/*  ==========================================================================
+    Ad styles
+    ========================================================================== */
+    .mr-adDisplay__group {
         text-align: center;
     }
         .mr-display-ad__title-h1 {
@@ -653,6 +656,13 @@
                 .mr-vast-video__container--disabled .mr-vast-video {
                     position:absolute; right:-200%;
                 }
+        .mr-adDisplay__view {
+            width:18.75rem; height:15.625rem;
+            border:0; margin:0 auto;
+        }
+            .mr-adDisplay__view iframe {
+                border:0; margin:0;
+            }
 
     @media screen and (orientation:landscape) {
         .mr-card {
