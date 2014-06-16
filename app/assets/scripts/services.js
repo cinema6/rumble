@@ -543,8 +543,8 @@
 
         }])
 
-        .service('AdTechService', ['$window', '$q', '$rootScope',
-        function                  ( $window ,  $q ,  $rootScope ) {
+        .service('AdTechService', ['$window', '$q', '$rootScope', 'c6Defines',
+        function                  ( $window ,  $q ,  $rootScope, c6Defines ) {
             var domain, placementId;
 
             function getPlacementId() {
@@ -568,6 +568,7 @@
                 }
 
                 $window.ADTECH.loadAd({
+                    secure: (c6Defines.kProtocol === 'https:'),
                     network: '5072',
                     server: 'adserver.adtechus.com',
                     placement: 3214274,
@@ -588,6 +589,7 @@
 
                 getPlacementId().then(function(id) {
                     $window.ADTECH.loadAd({
+                        secure: (c6Defines.kProtocol === 'https:'),
                         network: '5072',
                         server: 'adserver.adtechus.com',
                         placement: id,
