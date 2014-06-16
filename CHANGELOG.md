@@ -1,7 +1,9 @@
 # MiniReel Player
 
-* *[Beta12.rc6]*
+## Beta12.1 (June 16, 2014)
+* *[Beta12.1.rc1]*
   * [FIX]: Lightbox, no-ad player styles updated
+* *[/Beta12.1.rc1]*
 
 ## Beta12 (June 11, 2014)
 * *[Beta12.rc5]*
