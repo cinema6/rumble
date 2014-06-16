@@ -390,7 +390,7 @@
     @media screen and (max-width: 33.125rem) {
         /*530px*/
         .mr-card__preview {
-            width: 26%; float: left; padding: 0  0.625rem 0 0;
+            width: 26%; float: left; margin: 0 0.625rem 0.625rem 0;
         }
             .mr-preview__button {
                 width: 3.125rem;/*50px*/ height: 2.625rem;/*42px*/
@@ -640,35 +640,43 @@
     Ad styles
     ========================================================================== */
     .mr-ad__group { 
-        height:100%; width: 100%;
+        width: 100%; height:0;
+        padding:0 0 64%; margin:2.5625em 0 0 0;
         position:relative;
     }
     /*  Video Ad styles
     ====================================================== */
     .mr-adVideo__label {
         font-size: 0.875em; color: #929292; text-align: center;
-        margin:0.625rem 0;
+        margin:-1.875rem 0 0 0; width:100%;
+        position: absolute; top:0;
     }
     .mr-adVideo__videoHolder {
         position:relative;
         width:100%; height:0;
-        padding-bottom:64%;
+        padding:0 0 64%;
         text-align: center;
     }
+        .mr-adVideo__video {
+            width:100%; height:100%;
+            position:absolute;
+        }
     /*  Display Ad styles
     ====================================================== */
     .mr-adDisplay__group {
         width: 18.75rem;
-        position:absolute; top:0; left:0;
         text-align: center;
+        position:absolute; top:50%; left:50%;
+        margin:-9rem 0 0 -9.375rem;
     }
         .mr-adDisplay__view {
             width:18.75rem; height:15.625rem;
+            border:0;
         }
-        .mr-adDisplay__label {
-            font-size:0.6875em; color:#929292; text-align: center; 
-            display: block; width:100%; margin:2px 0 0 0;
-        }
+            .mr-adDisplay__view iframe {
+                border:0; margin:0;
+                width:100%; height:100%;
+            }
 
 
 /*  ==========================================================================

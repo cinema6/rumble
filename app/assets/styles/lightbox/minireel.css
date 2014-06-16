@@ -719,9 +719,6 @@
         }
     }
 
-
-
-
 /*  ==========================================================================
     Ad styles
     ========================================================================== */
@@ -741,12 +738,17 @@
             font-size: 0.875em; color: #929292; text-align: center; width:8em;
             position: absolute; top:0; left: 50%; z-index:5;
             margin:0 0 0 -4em;
+            background:rgba(0,0,0,0.6);
         }
         .mr-adVideo__videoHolder {
             position:relative;
             padding-bottom:73.4%;
             text-align: center;
         }
+            .mr-adVideo__video {
+                width:100%; height:100%;
+                position:absolute;
+            }
 
     /*  Display Ad styles
     ====================================================== */
@@ -757,7 +759,12 @@
     }
         .mr-adDisplay__view {
             width:18.75rem; height:15.625rem;
+            border:0;
         }
+            .mr-adDisplay__view iframe {
+                border:0; margin:0;
+                width:100%; height:100%;
+            }
         .mr-adDisplay__label {
             font-size:0.6875em; color:#929292; text-align: center; 
             display: block; width:100%; margin:2px 0 0 0;

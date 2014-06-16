@@ -1,11 +1,11 @@
-<div class="mr-card__group mr-ad__group c6-height-limiter">
-    <div class="mr-adVideo__group">
+<div class="mr-card__group mr-ad__group">
+    <div class="mr-adVideo__group" ng-style="{visibility: Ctrl.showVideo ? 'visible' : 'hidden'}">
         <p class="mr-adVideo__label tk--hdr">Advertisement</p>
-        <div ng-style="{visibility: Ctrl.showVideo ? 'visible' : 'hidden'}" class="mr-player"></div>
+        <div class="mr-player"></div>
     </div>
 
     <display-ad-module ng-if="Ctrl.hasModule('displayAd')"
-        active="true"
+        active="config._data.modules.displayAd.active"
         ad-src="{{config.displayAd}}"
         companion="Ctrl.companion">
     </display-ad-module>

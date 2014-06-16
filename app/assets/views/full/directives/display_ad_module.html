@@ -1,7 +1,7 @@
 <div ng-show="active" class="mr-adDisplay__group">
-    <h1 class="mr-adDisplay__label tk--hdr">Advertisement</h1>
+    <h1 class="mr-adVideo__label tk--hdr">Advertisement</h1>
     <div ng-switch="adType" ng-show="active">
-        <div class="mr-adDisplay__view" ng-switch-when="iframe"><iframe ng-src="{{fileURI}}"></iframe></div>
+        <div class="mr-adDisplay__view" ng-switch-when="iframe"><iframe ng-src="{{fileURI}}" scrolling="no"></iframe></div>
         <div class="mr-adDisplay__view" ng-switch-when="image"><img ng-src="{{fileURI}}" /></div>
         <div class="mr-adDisplay__view" ng-hide="companion()"><img ng-src="{{adSrc}}" /></div>
         <div class="mr-adDisplay__view" ng-switch-when="html" ng-bind-html="fileURI"></div>
