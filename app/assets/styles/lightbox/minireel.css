@@ -725,11 +725,12 @@
     }
     .mr-vast__player {
         width:100%; height:0; position:absolute;
-        padding:0 0 66.67% 0; z-index: 2;
+        padding:0 12.75em 66.67% 0; z-index: 2;
     }
         .mr-vast__title-h1 {
             font-size: 0.875em; color: #929292; text-align: center; width:8em;
-            position: absolute; top:0; left: 50%; margin:0 0 0 -4em;
+            position: absolute; top:0; left: 50%; z-index:5;
+            margin:0 0 0 -4em;
         }
         .mr-vast__video {
             width:100%; height:100%; position:absolute;

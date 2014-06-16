@@ -1,8 +1,8 @@
-<div class="mr-card__group mr-vast__group">
-    <div ng-style="{visibility: Ctrl.showVideo ? 'visible' : 'hidden'}" class="mr-vast__player">
-        <div ng-style="{visibility: Ctrl.showVideo ? 'visible' : 'hidden'}" class="mr-player mr-vast__player">
-        </div>
-    <h1 class="mr-vast__title-h1 tk--hdr">Advertisement</h1>
+<div class="mr-card mr-card-shadow">
+    <h2 class="mr-card__type">Advertisement</h2>
+    <div ng-style="{visibility: Ctrl.showVideo ? 'visible' : 'hidden'}" class="mr-vast-video__container">
+        <!--<div ng-style="{visibility: Ctrl.showVideo ? 'visible' : 'hidden'}" class="mr-player mr-vast__player">
+        </div>-->
     <button style="z-index:2;" ng-if="Ctrl.enablePlayButton" ng-show="Ctrl.showPlay" ng-click="Ctrl.playVideo()" class="mr-player__play-btn">
         <div class="mr-player__play-icon">
             <span class="ir">Play Video</span>
