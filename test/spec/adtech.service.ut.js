@@ -58,9 +58,9 @@
                         it('should first call ADTECH.loadAd() with the master placement id', function() {
                             expect($window.ADTECH.loadAd).toHaveBeenCalledWith({
                                 secure: false,
-                                network: '5072',
+                                network: '5473.1',
                                 server: 'adserver.adtechus.com',
-                                placement: 3214274,
+                                placement: 3220577,
                                 adContainerId: 'adtechPlacement',
                                 kv: { weburl: 'localhost' },
                                 complete: jasmine.any(Function)
@@ -80,7 +80,7 @@
                             it('should resolve the init() promise and call ADTECH.loadAd() again', function() {
                                 expect($window.ADTECH.loadAd).toHaveBeenCalledWith({
                                     secure: false,
-                                    network: '5072',
+                                    network: '5473.1',
                                     server: 'adserver.adtechus.com',
                                     placement: 123456,
                                     adContainerId: 'container',
@@ -118,7 +118,7 @@
 
                             expect($window.ADTECH.loadAd.mostRecentCall.args[0]).toEqual({
                                 secure: false,
-                                network: '5072',
+                                network: '5473.1',
                                 server: 'adserver.adtechus.com',
                                 placement: 123456,
                                 adContainerId: 'container2',
@@ -138,9 +138,9 @@
 
                             expect($window.ADTECH.loadAd).toHaveBeenCalledWith({
                                 secure: false,
-                                network: '5072',
+                                network: '5473.1',
                                 server: 'adserver.adtechus.com',
-                                placement: 3214274,
+                                placement: 3220577,
                                 adContainerId: 'adtechPlacement',
                                 kv: { weburl: 'parent' },
                                 complete: jasmine.any(Function)
@@ -158,9 +158,9 @@
 
                             expect($window.ADTECH.loadAd).toHaveBeenCalledWith({
                                 secure: true,
-                                network: '5072',
+                                network: '5473.1',
                                 server: 'adserver.adtechus.com',
-                                placement: 3214274,
+                                placement: 3220577,
                                 adContainerId: 'adtechPlacement',
                                 kv: { weburl: 'parent' },
                                 complete: jasmine.any(Function)

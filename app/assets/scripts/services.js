@@ -569,9 +569,9 @@
 
                 $window.ADTECH.loadAd({
                     secure: (c6Defines.kProtocol === 'https:'),
-                    network: '5072',
+                    network: '5473.1',
                     server: 'adserver.adtechus.com',
-                    placement: 3214274,
+                    placement: 3220577,
                     adContainerId: 'adtechPlacement',
                     kv: { weburl: domain },
                     complete: function() {
@@ -590,7 +590,7 @@
                 getPlacementId().then(function(id) {
                     $window.ADTECH.loadAd({
                         secure: (c6Defines.kProtocol === 'https:'),
-                        network: '5072',
+                        network: '5473.1',
                         server: 'adserver.adtechus.com',
                         placement: id,
                         adContainerId: config.id,
