@@ -4,6 +4,8 @@
 * *[Beta12.1.rc2]*
   * [FIX]: Clean up ad view in lightbox without display ads
   * [FIX]: Rewrite DOM for ad modules
+  * [FIX]: Added adtech secure property to ad calls
+* *[/Beta12.1.rc2]*
 
 * *[Beta12.1.rc1]*
   * [FIX]: Lightbox, no-ad player styles updated
