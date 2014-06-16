@@ -5,10 +5,13 @@
         describe('AdTechService', function() {
             var $window,
                 $q,
+                c6Defines,
                 AdTechService;
 
             beforeEach(function() {
+                c6Defines = {};
                 module('c6.rumble.services', function($provide) {
+                    $provide.value('c6Defines',c6Defines);
                     $provide.value('$window', {
                         location: {
                             hostname: 'localhost'
@@ -54,6 +57,7 @@
 
                         it('should first call ADTECH.loadAd() with the master placement id', function() {
                             expect($window.ADTECH.loadAd).toHaveBeenCalledWith({
+                                secure: false,
                                 network: '5072',
                                 server: 'adserver.adtechus.com',
                                 placement: 3214274,
@@ -75,6 +79,7 @@
 
                             it('should resolve the init() promise and call ADTECH.loadAd() again', function() {
                                 expect($window.ADTECH.loadAd).toHaveBeenCalledWith({
+                                    secure: false,
                                     network: '5072',
                                     server: 'adserver.adtechus.com',
                                     placement: 123456,
@@ -112,6 +117,7 @@
                             expect($window.ADTECH.loadAd.calls.length).toBe(loadAdCallCount + 1);
 
                             expect($window.ADTECH.loadAd.mostRecentCall.args[0]).toEqual({
+                                secure: false,
                                 network: '5072',
                                 server: 'adserver.adtechus.com',
                                 placement: 123456,
@@ -131,6 +137,27 @@
                             AdTechService.loadAd({id: 'container', displayAdSource: 'waterfall'});
 
                             expect($window.ADTECH.loadAd).toHaveBeenCalledWith({
+                                secure: false,
+                                network: '5072',
+                                server: 'adserver.adtechus.com',
+                                placement: 3214274,
+                                adContainerId: 'adtechPlacement',
+                                kv: { weburl: 'parent' },
+                                complete: jasmine.any(Function)
+                            });
+                        });
+                    });
+                    
+                    describe('when protocol is https', function() {
+                        it('should set the secure property to true', function() {
+                            c6Defines.kProtocol = 'https:';
+                            $window.location.hostname = '';
+                            $window.parent.location.hostname = 'parent.com';
+
+                            AdTechService.loadAd({id: 'container', displayAdSource: 'waterfall'});
+
+                            expect($window.ADTECH.loadAd).toHaveBeenCalledWith({
+                                secure: true,
                                 network: '5072',
                                 server: 'adserver.adtechus.com',
                                 placement: 3214274,
