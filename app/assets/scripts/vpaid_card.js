@@ -2,8 +2,10 @@
     'use strict';
 
     angular.module('c6.rumble')
-        .controller('VpaidCardController', ['$scope', '$log', 'ModuleService', 'EventService', '$interval',
-        function                            ($scope ,  $log ,  ModuleService ,  EventService ,  $interval) {
+        .controller('VpaidCardController', ['$scope','$log','ModuleService','EventService',
+                                            '$interval','c6AppData','$rootScope',
+        function                            ($scope , $log , ModuleService , EventService ,
+                                             $interval , c6AppData , $rootScope ) {
             $log = $log.context('VpaidCardController');
             var self = this,
                 config = $scope.config,
@@ -162,6 +164,10 @@
                 $scope.$watch('active', function(active, wasActive) {
                     if (active === wasActive) { return; }
 
+                    if (c6AppData.experience.data.mode === 'lightbox') {
+                        $rootScope.$broadcast('resize');
+                    }
+
                     if (active) {
                         if (_data.playerEvents.play.emitCount < 1) {
                             $scope.$emit('<vpaid-card>:init', controlNavigation);
@@ -176,6 +182,12 @@
                         _data.modules.displayAd.active = true;
                     }
                 });
+            });
+
+            $scope.$on('$destroy', function() {
+                if (c6AppData.experience.data.mode === 'lightbox') {
+                    $rootScope.$broadcast('resize');
+                }
             });
         }])
 

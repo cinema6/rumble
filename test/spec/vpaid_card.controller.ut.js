@@ -11,7 +11,8 @@
                 VpaidCardController,
                 c6EventEmitter;
 
-            var ModuleService;
+            var ModuleService,
+                c6AppData;
 
             function IFace() {
                 var self = this;
@@ -40,7 +41,15 @@
                     });
                 });
 
-                module('c6.rumble');
+                module('c6.rumble', function($provide) {
+                    $provide.value('c6AppData', {
+                        experience: {
+                            data: {
+                                mode: 'light'
+                            }
+                        }
+                    });
+                });
 
                 inject(function($injector) {
                     $rootScope = $injector.get('$rootScope');
@@ -49,6 +58,7 @@
                     $log = $injector.get('$log');
                     c6EventEmitter = $injector.get('c6EventEmitter');
                     ModuleService = $injector.get('ModuleService');
+                    c6AppData = $injector.get('c6AppData');
 
                     $log.context = function() { return $log; };
                     $scope = $rootScope.$new();
@@ -92,6 +102,40 @@
                                     active: false
                                 }
                             }
+                        });
+                    });
+                });
+            });
+
+            describe('when the scope is $destroyed', function() {
+                beforeEach(function() {
+                    spyOn($rootScope, '$broadcast').andCallThrough();
+                });
+
+                describe('if the mode is "lightbox"', function() {
+                    beforeEach(function() {
+                        c6AppData.experience.data.mode = 'lightbox';
+                        $scope.$apply(function() {
+                            $scope.$destroy();
+                        });
+                    });
+
+                    it('should $broadcast the resize event', function() {
+                        expect($rootScope.$broadcast).toHaveBeenCalledWith('resize');
+                    });
+                });
+
+                ['lightbox-ads', 'full', 'light'].forEach(function(mode) {
+                    describe('if the mode is "' + mode + '"', function() {
+                        beforeEach(function() {
+                            c6AppData.experience.data.mode = mode;
+                            $scope.$apply(function() {
+                                $scope.$destroy();
+                            });
+                        });
+
+                        it('should not $broadcast the resize event', function() {
+                            expect($rootScope.$broadcast).not.toHaveBeenCalledWith('resize');
                         });
                     });
                 });
@@ -277,6 +321,51 @@
                     describe('when initialized', function() {
                         it('should not call loadAd', function() {
                             expect(iface.play).not.toHaveBeenCalled();
+                        });
+                    });
+
+                    describe('when the mode is "lightbox"', function() {
+                        beforeEach(function() {
+                            c6AppData.experience.data.mode = 'lightbox';
+
+                            spyOn($rootScope, '$broadcast').andCallThrough();
+                        });
+
+                        [true, false].forEach(function(bool) {
+                            describe('when ' + bool, function() {
+                                beforeEach(function() {
+                                    $scope.$apply(function() {
+                                        $scope.active = bool;
+                                    });
+                                });
+
+                                it('should $broadcast resize on the $rootScope', function() {
+                                    expect($rootScope.$broadcast).toHaveBeenCalledWith('resize');
+                                });
+                            });
+                        });
+                    });
+
+                    ['lightbox-ads', 'full', 'light'].forEach(function(mode) {
+                        describe('when the mode is "' + mode + '"', function() {
+                            beforeEach(function() {
+                                c6AppData.experience.data.mode = mode;
+                                spyOn($rootScope, '$broadcast').andCallThrough();
+                            });
+
+                            [true, false].forEach(function(bool) {
+                                describe('when ' + bool, function() {
+                                    beforeEach(function() {
+                                        $scope.$apply(function() {
+                                            $scope.active = bool;
+                                        });
+                                    });
+
+                                    it('should not $broadcast resize on the $rootScope', function() {
+                                        expect($rootScope.$broadcast).not.toHaveBeenCalledWith('resize');
+                                    });
+                                });
+                            });
                         });
                     });
 
