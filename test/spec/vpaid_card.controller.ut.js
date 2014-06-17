@@ -162,7 +162,7 @@
                     });
                 });
 
-                describe('showPlay', function() {
+                ddescribe('showPlay', function() {
                     var iface;
 
                     beforeEach(function() {
@@ -173,8 +173,10 @@
                         expect(VpaidCardController.showPlay).toBe(false);
                     });
 
-                    it('should be true if not played yet and player is ready', function() {
+                    it('should be true if not played yet and player is ready and player is click-to-play', function() {
                         $scope.$apply(function() {
+                            $scope.config.data.autoplay = false;
+                            VpaidCardController = $controller('VpaidCardController', { $scope: $scope });
                             $scope.$emit('playerAdd', iface);
                             $scope.config._data.modules.displayAd.active = false;
                         });
@@ -182,8 +184,10 @@
                         expect(VpaidCardController.showPlay).toBe(true);
                     });
 
-                    it('should be true if player has been added', function() {
+                    it('should be true if player has been added and is click-to-play', function() {
                         $scope.$apply(function() {
+                            $scope.config.data.autoplay = false;
+                            VpaidCardController = $controller('VpaidCardController', { $scope: $scope });
                             $scope.$emit('playerAdd', iface);
                         });
 
@@ -195,6 +199,16 @@
                             $scope.$emit('playerAdd', iface);
                             $scope.config._data.playerEvents.play.emitCount = 1;
                             iface.paused = false;
+                        });
+
+                        expect(VpaidCardController.showPlay).toBe(false);
+                    });
+
+                    it('should be false if player is autoplay', function() {
+                        $scope.$apply(function() {
+                            $scope.config.data.autoplay = true;
+                            VpaidCardController = $controller('VpaidCardController', { $scope: $scope });
+                            $scope.$emit('playerAdd', iface);
                         });
 
                         expect(VpaidCardController.showPlay).toBe(false);

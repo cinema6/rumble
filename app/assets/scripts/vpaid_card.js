@@ -18,6 +18,7 @@
                     }
                 },
                 data = config.data,
+                hasStarted = !data.autoplay,
                 player;
 
             Object.defineProperties(this, {
@@ -28,7 +29,7 @@
                 },
                 showPlay: {
                     get: function() {
-                        return !!player && player.paused && !_data.modules.displayAd.active;
+                        return !!player && player.paused && !_data.modules.displayAd.active && hasStarted;
                     }
                 },
                 enableDisplayAd: {
@@ -146,6 +147,7 @@
                 });
 
                 iface.on('play', function() {
+                    hasStarted = true;
                     _data.modules.displayAd.active = false;
                 });
 
