@@ -1511,7 +1511,9 @@
                     "id": "rc-392f3546f0cfc3",
                     "type": "ad",
                     "ad": true,
-                    "modules": [],
+                    "modules": [
+                        "displayAd"
+                    ],
                     "data": {
                         "autoplay": true,
                         "skip": false,
@@ -1982,7 +1984,9 @@
                     "id": "rc-392f3546f0cfc3",
                     "type": "ad",
                     "ad": true,
-                    "modules": [],
+                    "modules": [
+                        "displayAd"
+                    ],
                     "data": {
                         "autoplay": true,
                         "skip": false,

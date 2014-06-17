@@ -629,8 +629,9 @@
                             c6Video.trigger('ended');
                         });
 
-                        it('should emit "ended" when the video emits "ended"', function() {
+                        it('should emit "ended" and "pause" when the video emits "ended"', function() {
                             expect(iface.emit).toHaveBeenCalledWith('ended', iface);
+                            expect(iface.emit).toHaveBeenCalledWith('pause', iface);
                         });
 
                         it('should un-fullscreen the player when the video is done', function() {

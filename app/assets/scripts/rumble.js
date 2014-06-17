@@ -726,20 +726,28 @@
             var currentIndex = $scope.currentIndex,
                 isSkipping = Math.abs(currentIndex - i) > 1,
                 isGoingForward = (i - currentIndex) > 0,
-                cardBeforeThis = $scope.deck[i + (isGoingForward ? -1 : 1)];
+                cardBeforeThis = $scope.deck[i + (isGoingForward ? -1 : 1)],
+                toCard = $scope.deck[i] || null;
 
             if (navController) {
                 navController.enabled(true);
             }
 
-            if (isSkipping && cardBeforeThis.ad && !cardBeforeThis.visited) {
+            if (isSkipping && cardBeforeThis && cardBeforeThis.ad && !cardBeforeThis.visited) {
                 return this.jumpTo(cardBeforeThis);
+            }
+
+            if (toCard &&
+                toCard.ad &&
+                toCard.visited &&
+                appData.behaviors.showsCompanionWithVideoAd) {
+                return this.setPosition(i + (isGoingForward ? 1 : -1));
             }
 
             $log.info('setPosition: %1',i);
             $scope.currentReturns = null;
             $scope.currentIndex   = i;
-            $scope.currentCard    = $scope.deck[$scope.currentIndex] || null;
+            $scope.currentCard    = toCard;
 
             $log.info('Now on card:',$scope.currentCard);
             if ($scope.currentCard){
