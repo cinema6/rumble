@@ -283,6 +283,17 @@
                         expect(c6AppData('lightbox-ads').behaviors.fullscreen).toBe(true);
                     });
                 });
+
+                describe('showsCompanionWithVideoAd', function() {
+                    it('should be set based on the mode', function() {
+                        ['full', 'mobile', 'light'].forEach(function(mode) {
+                            expect(c6AppData(mode).behaviors.showsCompanionWithVideoAd).toBe(false);
+                        });
+                        ['lightbox', 'lightbox-ads'].forEach(function(mode) {
+                            expect(c6AppData(mode).behaviors.showsCompanionWithVideoAd).toBe(true);
+                        });
+                    });
+                });
             });
 
             describe('mode', function() {
