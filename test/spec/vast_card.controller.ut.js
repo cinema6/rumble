@@ -30,6 +30,7 @@
 
                 this.duration = NaN;
                 this.currentTime = 0;
+                this.ended = false;
 
                 c6EventEmitter(this);
             }
@@ -81,6 +82,9 @@
                     $scope = $rootScope.$new();
                     $scope.onDeck = false;
                     $scope.active = false;
+                    $scope.profile = {
+                        inlineVideo: true
+                    };
                     $scope.config = {
                         data: {
                             autoplay: false,
@@ -163,6 +167,56 @@
 
                         $scope.config._data.modules.displayAd.active = true;
                         expect(VastCardCtrl.showVideo).toBe(false);
+                    });
+                });
+
+                describe('enableDisplayAd', function() {
+                    var iface;
+
+                    beforeEach(function() {
+                        iface = new IFace();
+                    });
+
+                    describe('when inlineVideo is not available', function() {
+                        it('should always be true', function() {
+                            $scope.$apply(function() {
+                                $scope.profile.inlineVideo = false;
+                            });
+                            expect(VastCardCtrl.enableDisplayAd).toBe(true);
+                        });
+                    });
+
+                    describe('when inlineVideo is available', function() {
+                        beforeEach(function() {
+                            $scope.$apply(function() {
+                                $scope.profile.inlineVideo = true;
+                            });
+                        })
+
+                        it('should be false be default', function() {
+                            expect(VastCardCtrl.enableDisplayAd).toBe(false);
+                        });
+
+                        describe('and player has not ended', function() {
+                            it('should be false', function() {
+                                $scope.$apply(function() {
+                                    $scope.$emit('playerAdd', iface);
+                                    iface.ended = false;
+                                });
+
+                                expect(VastCardCtrl.enableDisplayAd).toBe(false);
+                            });
+                        });
+
+                        describe('when player has ended', function() {
+                            it('should be true', function() {
+                                $scope.$apply(function() {
+                                    $scope.$emit('playerAdd', iface);
+                                    iface.ended = true;
+                                });
+                                expect(VastCardCtrl.enableDisplayAd).toBe(true);
+                            });
+                        });
                     });
                 });
             });
@@ -304,36 +358,62 @@
                 });
 
                 describe('pause', function() {
-                    describe('if the displayAd module is present', function() {
-                        beforeEach(function() {
-                            spyOn(VastCardCtrl, 'hasModule')
-                                .andCallFake(function(module) {
-                                    if (module === 'displayAd') { return true; }
+                    beforeEach(function() {
+                        spyOn(VastCardCtrl, 'hasModule');
+                    });
 
-                                    return false;
-                                });
+                    describe('if the ad has finished and the displayAd module is present', function() {
+                        it('should activate the displayAd', function() {
+                            VastCardCtrl.hasModule.andReturn(true);
+
+                            $scope.$apply(function() {
+                                iface.ended = true;
+                            });
 
                             iface.emit('pause', iface);
-                        });
 
-                        it('should activate the displayAd', function() {
                             expect($scope.config._data.modules.displayAd.active).toBe(true);
                         });
                     });
 
-                    describe('if the displayAd module is not present', function() {
-                        beforeEach(function() {
-                            spyOn(VastCardCtrl, 'hasModule')
-                                .andCallFake(function(module) {
-                                    if (module === 'displayAd') { return false; }
+                    describe('if the ad has finished but the displayAd module is not present', function() {
+                        it('should not activate the displayAd', function() {
+                            VastCardCtrl.hasModule.andReturn(false);
 
-                                    return true;
-                                });
+                            $scope.$apply(function() {
+                                iface.ended = true;
+                            });
 
                             iface.emit('pause', iface);
-                        });
 
+                            expect($scope.config._data.modules.displayAd.active).not.toBe(true);
+                        });
+                    });
+
+                    describe('if the ad has not finished and the displayAd module is present', function() {
                         it('should not activate the displayAd', function() {
+                            VastCardCtrl.hasModule.andReturn(true);
+
+                            $scope.$apply(function() {
+                                iface.ended = false;
+                            });
+
+                            iface.emit('pause', iface);
+
+                            expect($scope.config._data.modules.displayAd.active).not.toBe(true);
+                        });
+                    });
+
+                    describe('if the ad has not finished and the displayAd module is not present', function() {
+                        it('should not activate the displayAd', function() {
+                            VastCardCtrl.hasModule.andReturn(false);
+
+                            $scope.$apply(function() {
+                                iface.ended = false;
+                            });
+
+                            iface.emit('pause', iface);
+
                             expect($scope.config._data.modules.displayAd.active).not.toBe(true);
                         });
                     });

@@ -30,6 +30,11 @@
                     get: function() {
                         return !!player && player.paused && !_data.modules.displayAd.active;
                     }
+                },
+                enableDisplayAd: {
+                    get: function() {
+                        return (!!player && player.ended) || !$scope.profile.inlineVideo;
+                    }
                 }
             });
 
@@ -45,8 +50,7 @@
 
             this.hasModule = ModuleService.hasModule.bind(ModuleService, config.modules);
 
-            this.enablePlayButton = !$scope.profile.touch &&
-                !config.data.autoplay;
+            this.enablePlayButton = !$scope.profile.touch;
 
             $scope.$watch('onDeck || active', function(shouldLoad) {
                 if (shouldLoad) {
@@ -146,7 +150,7 @@
                 });
 
                 iface.on('pause', function() {
-                    if (self.hasModule('displayAd')) {
+                    if (self.hasModule('displayAd') && self.enableDisplayAd) {
                         _data.modules.displayAd.active = true;
                     }
                 });

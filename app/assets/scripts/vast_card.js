@@ -2,8 +2,10 @@
     'use strict';
 
     angular.module('c6.rumble')
-        .controller('VastCardController', ['$scope','$window', 'VASTService','ControlsService','EventService','ModuleService','$interval',
-        function                          ( $scope , $window ,  VASTService , ControlsService , EventService , ModuleService , $interval ) {
+        .controller('VastCardController', ['$scope','$window', 'VASTService','ControlsService',
+                                           'EventService','ModuleService','$interval',
+        function                          ( $scope , $window ,  VASTService , ControlsService ,
+                                            EventService , ModuleService , $interval ) {
             var self = this,
                 config = $scope.config,
                 _data = config._data = config._data || {
@@ -36,6 +38,11 @@
                 showVideo: {
                     get: function() {
                         return $scope.active && !_data.modules.displayAd.active;
+                    }
+                },
+                enableDisplayAd: {
+                    get: function() {
+                        return (!!player && player.ended) || !$scope.profile.inlineVideo;
                     }
                 }
             });
@@ -152,7 +159,7 @@
                         firePixels('complete');
                     })
                     .on('pause', function() {
-                        if (self.hasModule('displayAd')) {
+                        if (self.hasModule('displayAd') && self.enableDisplayAd) {
                             _data.modules.displayAd.active = true;
                         }
                         firePixels('pause');
