@@ -342,6 +342,7 @@
 
                         video.on('ended', function() {
                             iface.emit('ended', iface);
+                            iface.emit('pause', iface);
                             video.fullscreen(false);
                         });
 

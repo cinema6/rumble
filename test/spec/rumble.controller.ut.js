@@ -868,6 +868,63 @@
                     spyOn($scope, '$emit').andCallThrough();
                 });
 
+                describe('splicing ads', function() {
+                    beforeEach(function() {
+                        $scope.deck = [
+                            {},
+                            {},
+                            {
+                                ad: true
+                            },
+                            {}
+                        ];
+                    });
+
+                    describe('when leaving an ad card', function() {
+                        var ad;
+
+                        beforeEach(function() {
+                            ad = $scope.deck[2];
+                        });
+
+                        describe('if the companion and video ad are not shown together', function() {
+                            beforeEach(function() {
+                                appData.behaviors.showsCompanionWithVideoAd = false;
+
+                                RumbleCtrl.setPosition(2);
+                                RumbleCtrl.setPosition(4);
+                                RumbleCtrl.setPosition(2);
+                            });
+
+                            it('should not skip the ad card', function() {
+                                expect($scope.currentIndex).toBe(2);
+                                expect($scope.currentCard).toBe($scope.deck[2]);
+                            });
+                        });
+
+                        describe('if the companion and video ad are show together', function() {
+                            beforeEach(function() {
+                                appData.behaviors.showsCompanionWithVideoAd = true;
+
+                                RumbleCtrl.setPosition(2);
+                                expect($scope.currentCard).toBe($scope.deck[2]);
+                                RumbleCtrl.setPosition(4);
+                                RumbleCtrl.setPosition(2);
+                            });
+
+                            it('should remove the ad card from the deck', function() {
+                                expect($scope.currentIndex).toBe(1);
+                                expect($scope.currentCard).toBe($scope.deck[1]);
+
+                                RumbleCtrl.setPosition(2);
+
+                                expect($scope.currentIndex).toBe(3);
+                                expect($scope.currentCard).toBe($scope.deck[3]);
+                            });
+                        });
+                    });
+                });
+
                 describe('showing ads', function() {
                     beforeEach(function() {
                         $scope.deck = [

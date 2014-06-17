@@ -320,7 +320,8 @@
                     canAutoplay: isMode('light', 'lightbox', 'lightbox-ads'),
                     inlineVoteResults: isMode('full', 'mobile'),
                     separateTextView: isMode('full'),
-                    fullscreen: isMode('mobile', 'lightbox', 'lightbox-ads')
+                    fullscreen: isMode('mobile', 'lightbox', 'lightbox-ads'),
+                    showsCompanionWithVideoAd: isMode('lightbox', 'lightbox-ads')
                 };
             }
 
