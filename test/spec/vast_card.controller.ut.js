@@ -31,6 +31,7 @@
                 this.duration = NaN;
                 this.currentTime = 0;
                 this.ended = false;
+                this.paused = true;
 
                 c6EventEmitter(this);
             }
@@ -83,7 +84,8 @@
                     $scope.onDeck = false;
                     $scope.active = false;
                     $scope.profile = {
-                        inlineVideo: true
+                        inlineVideo: true,
+                        touch: false
                     };
                     $scope.config = {
                         data: {
@@ -91,6 +93,7 @@
                             skip: 11,
                             source: 'publisher-cinema6'
                         },
+                        modules: ['displayAd'],
                         displayAd: 'http://2.bp.blogspot.com/-TlM_3FT89Y0/UMzLr7kVykI/AAAAAAAACjs/lKrdhgp6OQg/s1600/brad-turner.jpg'
                     };
 
@@ -167,6 +170,59 @@
 
                         $scope.config._data.modules.displayAd.active = true;
                         expect(VastCardCtrl.showVideo).toBe(false);
+                    });
+                });
+
+                describe('showPlay', function() {
+                    var iface;
+
+                    beforeEach(function() {
+                        iface = new IFace();
+                    });
+
+                    it('should be false by default and if player hasn\'t been added', function() {
+                        expect(VastCardCtrl.showPlay).toBe(false);
+                    });
+
+                    it('should be true if not played yet and player is ready and player is click-to-play', function() {
+                        $scope.$apply(function() {
+                            $scope.config.data.autoplay = false;
+                            VastCardCtrl = $controller('VastCardController', { $scope: $scope });
+                            $scope.$emit('playerAdd', iface);
+                            $scope.config._data.modules.displayAd.active = false;
+                        });
+
+                        expect(VastCardCtrl.showPlay).toBe(true);
+                    });
+
+                    it('should be true if player has been added and is click-to-play', function() {
+                        $scope.$apply(function() {
+                            $scope.config.data.autoplay = false;
+                            VastCardCtrl = $controller('VastCardController', { $scope: $scope });
+                            $scope.$emit('playerAdd', iface);
+                        });
+
+                        expect(VastCardCtrl.showPlay).toBe(true);
+                    });
+
+                    it('should be false if it is playing', function() {
+                        $scope.$apply(function() {
+                            $scope.$emit('playerAdd', iface);
+                            $scope.config._data.playerEvents.play.emitCount = 1;
+                            iface.paused = false;
+                        });
+
+                        expect(VastCardCtrl.showPlay).toBe(false);
+                    });
+
+                    it('should be false if player is autoplay', function() {
+                        $scope.$apply(function() {
+                            $scope.config.data.autoplay = true;
+                            VastCardCtrl = $controller('VastCardController', { $scope: $scope });
+                            $scope.$emit('playerAdd', iface);
+                        });
+
+                        expect(VastCardCtrl.showPlay).toBe(false);
                     });
                 });
 
@@ -279,6 +335,8 @@
 
                         spyOn($window, 'open').andReturn(true);
 
+                        iface.paused = false;
+
                         VastCardCtrl.clickThrough();
                     });
 
@@ -298,6 +356,13 @@
 
                     it('should fire the click event pixel', function() {
                         expect(vast.firePixels).toHaveBeenCalledWith('videoClickTracking');
+                    });
+                });
+
+                describe('playVideo()', function() {
+                    it('should call play on the iface', function() {
+                        VastCardCtrl.playVideo();
+                        expect(iface.play).toHaveBeenCalled();
                     });
                 });
             });

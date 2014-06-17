@@ -5,7 +5,12 @@
             <video class="mr-adVideo__video" ng-click="Ctrl.clickThrough()"
                 c6-video id="{{config.id}}" c6-src="Ctrl.videoSrc">
             </video>
-        </div> 
+        </div>
+        <button style="z-index:2;" ng-if="Ctrl.enablePlayButton" ng-show="Ctrl.showPlay" ng-click="Ctrl.playVideo()" class="mr-player__play-btn">
+            <div class="mr-player__play-icon">
+                <span class="ir">Play Video</span>
+            </div>
+        </button>
     </div>
     <section class="mr-ad__med-rect">
         <display-ad-module ng-if="Ctrl.hasModule('displayAd')"

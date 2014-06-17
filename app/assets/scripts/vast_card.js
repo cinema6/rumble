@@ -23,6 +23,7 @@
                     }
                 },
                 data = config.data,
+                hasStarted = !data.autoplay,
                 player = null;
 
             this.videoSrc = null;
@@ -40,6 +41,11 @@
                         return $scope.active && !_data.modules.displayAd.active;
                     }
                 },
+                showPlay: {
+                    get: function() {
+                        return !!player && player.paused && !_data.modules.displayAd.active && hasStarted;
+                    }
+                },
                 enableDisplayAd: {
                     get: function() {
                         return (!!player && player.ended) || !$scope.profile.inlineVideo;
@@ -48,6 +54,8 @@
             });
 
             this.hasModule = ModuleService.hasModule.bind(ModuleService, config.modules);
+
+            this.enablePlayButton = !$scope.profile.touch;
 
             this.reset = function() {
                 _data.modules.displayAd.active = false;
@@ -69,6 +77,10 @@
                     $window.open(_data.vastData.clickThrough[0]);
                     firePixels('videoClickTracking');
                 }
+            };
+
+            this.playVideo = function() {
+                player.play();
             };
 
             $scope.$watch('onDeck', function(onDeck) {
@@ -165,6 +177,7 @@
                         firePixels('pause');
                     })
                     .on('play', function() {
+                        hasStarted = true;
                         _data.modules.displayAd.active = false;
 
                         if(_data.playerEvents.play.emitCount === 1) {

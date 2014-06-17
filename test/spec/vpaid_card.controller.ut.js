@@ -162,7 +162,7 @@
                     });
                 });
 
-                ddescribe('showPlay', function() {
+                describe('showPlay', function() {
                     var iface;
 
                     beforeEach(function() {
