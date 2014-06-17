@@ -81,6 +81,9 @@
                     };
 
                     $scope = $rootScope.$new();
+                    $scope.profile = {
+                        touch: false
+                    };
                     $log.context = function() { return $log; };
                 });
             });

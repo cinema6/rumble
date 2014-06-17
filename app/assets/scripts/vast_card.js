@@ -2,8 +2,10 @@
     'use strict';
 
     angular.module('c6.rumble')
-        .controller('VastCardController', ['$scope','$window', 'VASTService','ControlsService','EventService','ModuleService','$interval',
-        function                          ( $scope , $window ,  VASTService , ControlsService , EventService , ModuleService , $interval ) {
+        .controller('VastCardController', ['$scope','$window', 'VASTService','ControlsService',
+                                           'EventService','ModuleService','$interval',
+        function                          ( $scope , $window ,  VASTService , ControlsService ,
+                                            EventService , ModuleService , $interval ) {
             var self = this,
                 config = $scope.config,
                 _data = config._data = config._data || {
@@ -21,6 +23,7 @@
                     }
                 },
                 data = config.data,
+                hasStarted = !data.autoplay,
                 player = null;
 
             this.videoSrc = null;
@@ -37,10 +40,22 @@
                     get: function() {
                         return $scope.active && !_data.modules.displayAd.active;
                     }
+                },
+                showPlay: {
+                    get: function() {
+                        return !!player && player.paused && !_data.modules.displayAd.active && hasStarted;
+                    }
+                },
+                enableDisplayAd: {
+                    get: function() {
+                        return (!!player && player.ended) || !$scope.profile.inlineVideo;
+                    }
                 }
             });
 
             this.hasModule = ModuleService.hasModule.bind(ModuleService, config.modules);
+
+            this.enablePlayButton = !$scope.profile.touch;
 
             this.reset = function() {
                 _data.modules.displayAd.active = false;
@@ -62,6 +77,10 @@
                     $window.open(_data.vastData.clickThrough[0]);
                     firePixels('videoClickTracking');
                 }
+            };
+
+            this.playVideo = function() {
+                player.play();
             };
 
             $scope.$watch('onDeck', function(onDeck) {
@@ -152,12 +171,13 @@
                         firePixels('complete');
                     })
                     .on('pause', function() {
-                        if (self.hasModule('displayAd')) {
+                        if (self.hasModule('displayAd') && self.enableDisplayAd) {
                             _data.modules.displayAd.active = true;
                         }
                         firePixels('pause');
                     })
                     .on('play', function() {
+                        hasStarted = true;
                         _data.modules.displayAd.active = false;
 
                         if(_data.playerEvents.play.emitCount === 1) {

@@ -18,6 +18,7 @@
                     }
                 },
                 data = config.data,
+                hasStarted = !data.autoplay,
                 player;
 
             Object.defineProperties(this, {
@@ -28,7 +29,12 @@
                 },
                 showPlay: {
                     get: function() {
-                        return !!player && player.paused && !_data.modules.displayAd.active;
+                        return !!player && player.paused && !_data.modules.displayAd.active && hasStarted;
+                    }
+                },
+                enableDisplayAd: {
+                    get: function() {
+                        return (!!player && player.ended) || !$scope.profile.inlineVideo;
                     }
                 }
             });
@@ -45,8 +51,7 @@
 
             this.hasModule = ModuleService.hasModule.bind(ModuleService, config.modules);
 
-            this.enablePlayButton = !$scope.profile.touch &&
-                !config.data.autoplay;
+            this.enablePlayButton = !$scope.profile.touch;
 
             $scope.$watch('onDeck || active', function(shouldLoad) {
                 if (shouldLoad) {
@@ -142,11 +147,12 @@
                 });
 
                 iface.on('play', function() {
+                    hasStarted = true;
                     _data.modules.displayAd.active = false;
                 });
 
                 iface.on('pause', function() {
-                    if (self.hasModule('displayAd')) {
+                    if (self.hasModule('displayAd') && self.enableDisplayAd) {
                         _data.modules.displayAd.active = true;
                     }
                 });

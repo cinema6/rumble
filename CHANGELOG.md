@@ -4,7 +4,10 @@
 * *[Beta12.1.rc3]*
   * If a companion is shown at the same time as a video ad, and the ad
     has already been viewed, the ad card is skipped
-  * [FIX]: Fixes positioning bug in vast cards for chrome browser 
+  * [FIX]: Fixes positioning bug in vast cards for chrome browser
+  * [FIX]: Added play buttons to all ad cards (vast and vpaid)
+  * [FIX]: Change when display ads are shown, based on availability of inline video and if ad has ended
+* *[/Beta12.1.rc3]*
 
 * *[Beta12.1.rc2]*
   * [FIX]: Clean up ad view in lightbox without display ads

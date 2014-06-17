@@ -30,6 +30,8 @@
 
                 this.duration = NaN;
                 this.currentTime = 0;
+                this.ended = false;
+                this.paused = true;
 
                 c6EventEmitter(this);
             }
@@ -81,12 +83,17 @@
                     $scope = $rootScope.$new();
                     $scope.onDeck = false;
                     $scope.active = false;
+                    $scope.profile = {
+                        inlineVideo: true,
+                        touch: false
+                    };
                     $scope.config = {
                         data: {
                             autoplay: false,
                             skip: 11,
                             source: 'publisher-cinema6'
                         },
+                        modules: ['displayAd'],
                         displayAd: 'http://2.bp.blogspot.com/-TlM_3FT89Y0/UMzLr7kVykI/AAAAAAAACjs/lKrdhgp6OQg/s1600/brad-turner.jpg'
                     };
 
@@ -165,6 +172,109 @@
                         expect(VastCardCtrl.showVideo).toBe(false);
                     });
                 });
+
+                describe('showPlay', function() {
+                    var iface;
+
+                    beforeEach(function() {
+                        iface = new IFace();
+                    });
+
+                    it('should be false by default and if player hasn\'t been added', function() {
+                        expect(VastCardCtrl.showPlay).toBe(false);
+                    });
+
+                    it('should be true if not played yet and player is ready and player is click-to-play', function() {
+                        $scope.$apply(function() {
+                            $scope.config.data.autoplay = false;
+                            VastCardCtrl = $controller('VastCardController', { $scope: $scope });
+                            $scope.$emit('playerAdd', iface);
+                            $scope.config._data.modules.displayAd.active = false;
+                        });
+
+                        expect(VastCardCtrl.showPlay).toBe(true);
+                    });
+
+                    it('should be true if player has been added and is click-to-play', function() {
+                        $scope.$apply(function() {
+                            $scope.config.data.autoplay = false;
+                            VastCardCtrl = $controller('VastCardController', { $scope: $scope });
+                            $scope.$emit('playerAdd', iface);
+                        });
+
+                        expect(VastCardCtrl.showPlay).toBe(true);
+                    });
+
+                    it('should be false if it is playing', function() {
+                        $scope.$apply(function() {
+                            $scope.$emit('playerAdd', iface);
+                            $scope.config._data.playerEvents.play.emitCount = 1;
+                            iface.paused = false;
+                        });
+
+                        expect(VastCardCtrl.showPlay).toBe(false);
+                    });
+
+                    it('should be false if player is autoplay', function() {
+                        $scope.$apply(function() {
+                            $scope.config.data.autoplay = true;
+                            VastCardCtrl = $controller('VastCardController', { $scope: $scope });
+                            $scope.$emit('playerAdd', iface);
+                        });
+
+                        expect(VastCardCtrl.showPlay).toBe(false);
+                    });
+                });
+
+                describe('enableDisplayAd', function() {
+                    var iface;
+
+                    beforeEach(function() {
+                        iface = new IFace();
+                    });
+
+                    describe('when inlineVideo is not available', function() {
+                        it('should always be true', function() {
+                            $scope.$apply(function() {
+                                $scope.profile.inlineVideo = false;
+                            });
+                            expect(VastCardCtrl.enableDisplayAd).toBe(true);
+                        });
+                    });
+
+                    describe('when inlineVideo is available', function() {
+                        beforeEach(function() {
+                            $scope.$apply(function() {
+                                $scope.profile.inlineVideo = true;
+                            });
+                        })
+
+                        it('should be false be default', function() {
+                            expect(VastCardCtrl.enableDisplayAd).toBe(false);
+                        });
+
+                        describe('and player has not ended', function() {
+                            it('should be false', function() {
+                                $scope.$apply(function() {
+                                    $scope.$emit('playerAdd', iface);
+                                    iface.ended = false;
+                                });
+
+                                expect(VastCardCtrl.enableDisplayAd).toBe(false);
+                            });
+                        });
+
+                        describe('when player has ended', function() {
+                            it('should be true', function() {
+                                $scope.$apply(function() {
+                                    $scope.$emit('playerAdd', iface);
+                                    iface.ended = true;
+                                });
+                                expect(VastCardCtrl.enableDisplayAd).toBe(true);
+                            });
+                        });
+                    });
+                });
             });
 
             describe('@methods', function() {
@@ -225,6 +335,8 @@
 
                         spyOn($window, 'open').andReturn(true);
 
+                        iface.paused = false;
+
                         VastCardCtrl.clickThrough();
                     });
 
@@ -244,6 +356,13 @@
 
                     it('should fire the click event pixel', function() {
                         expect(vast.firePixels).toHaveBeenCalledWith('videoClickTracking');
+                    });
+                });
+
+                describe('playVideo()', function() {
+                    it('should call play on the iface', function() {
+                        VastCardCtrl.playVideo();
+                        expect(iface.play).toHaveBeenCalled();
                     });
                 });
             });
@@ -304,36 +423,62 @@
                 });
 
                 describe('pause', function() {
-                    describe('if the displayAd module is present', function() {
-                        beforeEach(function() {
-                            spyOn(VastCardCtrl, 'hasModule')
-                                .andCallFake(function(module) {
-                                    if (module === 'displayAd') { return true; }
+                    beforeEach(function() {
+                        spyOn(VastCardCtrl, 'hasModule');
+                    });
 
-                                    return false;
-                                });
+                    describe('if the ad has finished and the displayAd module is present', function() {
+                        it('should activate the displayAd', function() {
+                            VastCardCtrl.hasModule.andReturn(true);
+
+                            $scope.$apply(function() {
+                                iface.ended = true;
+                            });
 
                             iface.emit('pause', iface);
-                        });
 
-                        it('should activate the displayAd', function() {
                             expect($scope.config._data.modules.displayAd.active).toBe(true);
                         });
                     });
 
-                    describe('if the displayAd module is not present', function() {
-                        beforeEach(function() {
-                            spyOn(VastCardCtrl, 'hasModule')
-                                .andCallFake(function(module) {
-                                    if (module === 'displayAd') { return false; }
+                    describe('if the ad has finished but the displayAd module is not present', function() {
+                        it('should not activate the displayAd', function() {
+                            VastCardCtrl.hasModule.andReturn(false);
 
-                                    return true;
-                                });
+                            $scope.$apply(function() {
+                                iface.ended = true;
+                            });
 
                             iface.emit('pause', iface);
-                        });
 
+                            expect($scope.config._data.modules.displayAd.active).not.toBe(true);
+                        });
+                    });
+
+                    describe('if the ad has not finished and the displayAd module is present', function() {
                         it('should not activate the displayAd', function() {
+                            VastCardCtrl.hasModule.andReturn(true);
+
+                            $scope.$apply(function() {
+                                iface.ended = false;
+                            });
+
+                            iface.emit('pause', iface);
+
+                            expect($scope.config._data.modules.displayAd.active).not.toBe(true);
+                        });
+                    });
+
+                    describe('if the ad has not finished and the displayAd module is not present', function() {
+                        it('should not activate the displayAd', function() {
+                            VastCardCtrl.hasModule.andReturn(false);
+
+                            $scope.$apply(function() {
+                                iface.ended = false;
+                            });
+
+                            iface.emit('pause', iface);
+
                             expect($scope.config._data.modules.displayAd.active).not.toBe(true);
                         });
                     });

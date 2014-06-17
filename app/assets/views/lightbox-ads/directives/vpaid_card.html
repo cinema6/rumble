@@ -2,6 +2,11 @@
     <div ng-style="{visibility: Ctrl.showVideo ? 'visible' : 'hidden'}" class="mr-adVideo__group">
         <h1 class="mr-adVideo__label tk--hdr">Advertisement</h1>
         <div class="mr-player"></div>
+        <button style="z-index:2;" ng-if="Ctrl.enablePlayButton" ng-show="Ctrl.showPlay" ng-click="Ctrl.playVideo()" class="mr-player__play-btn">
+            <div class="mr-player__play-icon">
+                <span class="ir">Play Video</span>
+            </div>
+        </button>
     </div>
     <section class="mr-ad__med-rect">
         <display-ad-module ng-if="Ctrl.hasModule('displayAd')"
