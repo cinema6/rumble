@@ -308,6 +308,8 @@
             cancelTrackVideo = null,
             ballotMap = {},
             navController = null,
+            previewingCard = false,
+            mrSession,
             readyWatch = $scope.$watch('ready', function(ready) {
                 if (ready) {
                     $scope.$emit('ready');
@@ -508,6 +510,8 @@
             // looking at something but wanted to change the mode,
             // which does require a reload
 
+            mrSession = session;
+
             function getCard(card) {
                 return $scope.deck.filter(function(c) {
                     return c.id === card.id;
@@ -525,6 +529,8 @@
                 // so if we're at the splash page then emit reelStart
                 // otherwise, just jump to the card
 
+                previewingCard = true;
+
                 if($scope.currentIndex === -1) {
                     $scope.$emit('reelStart');
                 }
@@ -540,6 +546,8 @@
                 // we're being told to reset the MR player
                 // so we set the position to -1
                 // which will load the splash page
+                previewingCard = false;
+
                 self.setPosition(-1);
             });
 
@@ -550,6 +558,8 @@
                     // we'll have a card when a user
                     // was previewing a specific card
                     // and chose to change the mode,
+
+                    previewingCard = true;
 
                     if($scope.currentIndex === -1) {
                         $scope.$emit('reelStart');
@@ -791,6 +801,15 @@
         this.goForward = function(src){
             self.setPosition($scope.currentIndex + 1);
             this.trackNavEvent('Next',src || 'auto');
+        };
+
+        this.closeLightbox = function() {
+            self.setPosition(-1);
+            console.log(previewingCard);
+            if(previewingCard) {
+                // broadcast something to MRinator
+                mrSession.ping('mrPreview:closePreview');
+            }
         };
 
         readyTimeout = $timeout(function(){
