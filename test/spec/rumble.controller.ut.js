@@ -160,6 +160,7 @@
                     },
                     experience: {
                         id: 'e-722bd3c4942331',
+                        versionId: 'xyz',
                         title: 'my title',
                         data : {
                             title : 'my title',
@@ -271,6 +272,7 @@
                         'expMode'       : 'dimension1',
                         'expId'         : 'dimension2',
                         'expTitle'      : 'dimension3',
+                        'expVersion'    : 'dimension10',
                         'slideCount'    : 'dimension4',
                         'slideId'       : 'dimension5',
                         'slideTitle'    : 'dimension6',
@@ -281,6 +283,7 @@
                     expect(trackerSpy.set).toHaveBeenCalledWith({
                         'expMode'  : 'testMode',
                         'expId'    : 'e-722bd3c4942331',
+                        'expVersion' : 'xyz',
                         'expTitle' : 'my title',
                         'slideCount' : 6
                     });
