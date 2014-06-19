@@ -54,10 +54,22 @@
             this.enablePlayButton = !$scope.profile.touch;
 
             $scope.$watch('onDeck || active', function(shouldLoad) {
+
+                $log.info('ONDECK/ACTIVE WATCHER -> SHOULDLOAD:',shouldLoad,'ACTIVE:',$scope.active);
+
                 if (shouldLoad) {
                     _data.modules.displayAd.src = config.displayAd;
 
+                    $log.info('PLAYER.LOADAD()');
+
                     player.loadAd();
+
+                    if($scope.active) {
+
+                        $log.info('PLAYER.PLAY()');
+
+                        player.play();
+                    }
                 }
             });
 
@@ -178,6 +190,9 @@
                         if (_data.playerEvents.play.emitCount < 1) {
                             $scope.$emit('<vpaid-card>:init', controlNavigation);
                             if (data.autoplay) {
+
+                                $log.info('IFACE.PLAY()');
+
                                 iface.play();
                             }
                         }
