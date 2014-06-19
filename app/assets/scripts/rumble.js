@@ -820,6 +820,7 @@
                 'expMode'       : 'dimension1',
                 'expId'         : 'dimension2',
                 'expTitle'      : 'dimension3',
+                'expVersion'    : 'dimension10',
                 'slideCount'    : 'dimension4',
                 'slideId'       : 'dimension5',
                 'slideTitle'    : 'dimension6',
@@ -830,6 +831,7 @@
             tracker.set({
                 'expMode'    : appData.mode,
                 'expId'      : appData.experience.id,
+                'expVersion' : appData.experience.versionId,
                 'expTitle'   : appData.experience.data.title,
                 'slideCount' : $scope.deck.length
             });
