@@ -24,6 +24,7 @@
                 },
                 data = config.data,
                 hasStarted = !data.autoplay,
+                shouldGoForward = false,
                 player = null;
 
             this.videoSrc = null;
@@ -83,12 +84,18 @@
                 player.play();
             };
 
-            $scope.$watch('onDeck', function(onDeck) {
+            $scope.$watch('onDeck || active', function(onDeck) {
                 if(onDeck) {
                     VASTService.getVAST(data.source).then(function(vast) {
                         _data.vastData = vast;
                         self.videoSrc = vast.getVideoSrc('video/mp4');
                         self.companion = vast.getCompanion();
+                    }, function() {
+                        if ($scope.active) {
+                            $scope.$emit('<vpaid-card>:contentEnd', config);
+                        } else {
+                            shouldGoForward = true;
+                        }
                     });
 
                     _data.modules.displayAd.src = config.displayAd;
@@ -207,16 +214,20 @@
                     });
 
                 $scope.$watch('active', function(active, wasActive) {
-                    if (active === wasActive) { return; }
+                    if (!active && !wasActive) { return; }
 
                     if (active) {
-                        ControlsService.bindTo(iface);
+                        if(shouldGoForward) {
+                            $scope.$emit('<vast-card>:contentEnd', config);
+                        } else {
+                            ControlsService.bindTo(iface);
 
-                        if (_data.playerEvents.play.emitCount < 1) {
-                            $scope.$emit('<vast-card>:init', controlNavigation);
+                            if (_data.playerEvents.play.emitCount < 1) {
+                                $scope.$emit('<vast-card>:init', controlNavigation);
 
-                            if (data.autoplay) {
-                                iface.play();
+                                if (data.autoplay) {
+                                    iface.play();
+                                }
                             }
                         }
                     } else {

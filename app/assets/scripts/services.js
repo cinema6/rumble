@@ -90,8 +90,8 @@
                 _provider.adTags = tags;
             };
 
-            this.$get = ['$log','$http','$window','c6ImagePreloader','compileAdTag',
-            function    ( $log , $http , $window , c6ImagePreloader , compileAdTag ) {
+            this.$get = ['$log','$http','$window','c6ImagePreloader','compileAdTag', '$q',
+            function    ( $log , $http , $window , c6ImagePreloader , compileAdTag ,  $q) {
                 var service = {},
                     _service = {};
 
@@ -273,6 +273,10 @@
 
                             if (uriNodes.length > 0) {
                                 return fetchVAST(uriNodes[0].firstChild.nodeValue);
+                            }
+
+                            if(!combinedVast.querySelectorAll('MediaFiles').length) {
+                                return $q.reject('No video ad!');
                             }
 
                             // after we've recursed through all the wrappers return

@@ -19,6 +19,7 @@
                 },
                 data = config.data,
                 hasStarted = !data.autoplay,
+                shouldGoForward = false,
                 player;
 
             Object.defineProperties(this, {
@@ -142,7 +143,11 @@
                     if (self.companion) {
                         _data.modules.displayAd.active = true;
                     } else {
-                        $scope.$emit('<vpaid-card>:contentEnd', config);
+                        if($scope.active) {
+                            $scope.$emit('<vpaid-card>:contentEnd', config);
+                        } else {
+                            shouldGoForward = true;
+                        }
                     }
                 });
 
@@ -175,7 +180,9 @@
                     }
 
                     if (active) {
-                        if (_data.playerEvents.play.emitCount < 1) {
+                        if(shouldGoForward) {
+                            $scope.$emit('<vpaid-card>:contentEnd', config);
+                        } else if (_data.playerEvents.play.emitCount < 1) {
                             $scope.$emit('<vpaid-card>:init', controlNavigation);
                             if (data.autoplay) {
                                 iface.play();
