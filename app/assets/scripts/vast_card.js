@@ -92,7 +92,7 @@
                         self.companion = vast.getCompanion();
                     }, function() {
                         if ($scope.active) {
-                            $scope.$emit('<vpaid-card>:contentEnd', config);
+                            $scope.$emit('<vast-card>:contentEnd', config);
                         } else {
                             shouldGoForward = true;
                         }

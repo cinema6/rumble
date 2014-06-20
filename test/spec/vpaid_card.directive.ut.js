@@ -341,6 +341,7 @@
                 describe('play', function() {
                     beforeEach(function() {
                         _player.emit('ready', _player);
+                        spyOn(iface, 'loadAd').andCallThrough();
                         iface.play();
                     });
 
@@ -362,6 +363,17 @@
                             iface.play();
                         });
                         expect(_player.resumeAd).toHaveBeenCalled();
+                    });
+
+                    it('should call loadAd if it has not been called yet', function() {
+                        expect(iface.loadAd).toHaveBeenCalled();
+                    });
+
+                    it('should not call loadAd if it has already been called', function() {
+                        iface.play();
+                        iface.play();
+                        iface.play();
+                        expect(iface.loadAd.callCount).toBe(1);
                     });
                 });
 

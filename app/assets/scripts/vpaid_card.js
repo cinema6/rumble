@@ -143,7 +143,7 @@
                     if (self.companion) {
                         _data.modules.displayAd.active = true;
                     } else {
-                        if($scope.active) {
+                        if ($scope.active) {
                             $scope.$emit('<vpaid-card>:contentEnd', config);
                         } else {
                             shouldGoForward = true;
@@ -180,7 +180,7 @@
                     }
 
                     if (active) {
-                        if(shouldGoForward) {
+                        if (shouldGoForward) {
                             $scope.$emit('<vpaid-card>:contentEnd', config);
                         } else if (_data.playerEvents.play.emitCount < 1) {
                             $scope.$emit('<vpaid-card>:init', controlNavigation);
