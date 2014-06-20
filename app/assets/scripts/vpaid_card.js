@@ -53,23 +53,11 @@
 
             this.enablePlayButton = !$scope.profile.touch;
 
-            $scope.$watch('onDeck || active', function(shouldLoad) {
-
-                $log.info('ONDECK/ACTIVE WATCHER -> SHOULDLOAD:',shouldLoad,'ACTIVE:',$scope.active);
-
+            $scope.$watch('onDeck', function(shouldLoad) {
                 if (shouldLoad) {
                     _data.modules.displayAd.src = config.displayAd;
 
-                    $log.info('PLAYER.LOADAD()');
-
                     player.loadAd();
-
-                    if($scope.active) {
-
-                        $log.info('PLAYER.PLAY()');
-
-                        player.play();
-                    }
                 }
             });
 
@@ -180,7 +168,7 @@
                 });
 
                 $scope.$watch('active', function(active, wasActive) {
-                    if (active === wasActive) { return; }
+                    if (!active && !wasActive) { return; }
 
                     if (c6AppData.experience.data.mode === 'lightbox') {
                         $rootScope.$broadcast('resize');
@@ -190,9 +178,6 @@
                         if (_data.playerEvents.play.emitCount < 1) {
                             $scope.$emit('<vpaid-card>:init', controlNavigation);
                             if (data.autoplay) {
-
-                                $log.info('IFACE.PLAY()');
-
                                 iface.play();
                             }
                         }
@@ -228,6 +213,7 @@
                             duration: NaN
                         },
                         playerReady = false,
+                        hasLoadAdBeenCalled = false,
                         hasStarted = false,
                         player;
 
@@ -271,16 +257,21 @@
                     };
 
                     iface.loadAd = function() {
+                        hasLoadAdBeenCalled = true;
                         return adPlayerDeferred.promise.then(player.loadAd);
                     };
 
                     iface.play = function() {
+                        if (!hasLoadAdBeenCalled) {
+                            iface.loadAd();
+                        }
+
                         return adDeferred.promise.then(function() {
                             if (hasStarted) {
                                 player.resumeAd();
                             } else {
-                                player.startAd();
                                 hasStarted = true;
+                                player.startAd();
                             }
                         });
                     };
