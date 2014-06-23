@@ -9,7 +9,8 @@
                 $window,
                 $interval,
                 c6EventEmitter,
-                VastCardCtrl;
+                VastCardCtrl,
+                $q;
 
             var VASTService,
                 ControlsService,
@@ -75,6 +76,7 @@
                     $interval = $injector.get('$interval');
                     $window = $injector.get('$window');
                     c6EventEmitter = $injector.get('c6EventEmitter');
+                    $q = $injector.get('$q');
 
                     VASTService = $injector.get('VASTService');
                     ControlsService = $injector.get('ControlsService');
@@ -614,6 +616,44 @@
                         });
 
                         describe('when true', function() {
+                            it('should call the VASTService', function() {
+                                $scope.$apply(function() {
+                                    $scope.active = true;
+                                });
+
+                                expect(VASTService.getVAST).toHaveBeenCalled();
+                            });
+
+                            describe('if we do not have an ad', function() {
+                                it('should emit <vast-card>:contentEnd if we tried to get an ad while onDeck', function() {
+                                    VASTService.getVAST.andReturn($q.reject('No ad'));
+                                    spyOn($scope, '$emit');
+
+                                    $scope.$apply(function() {
+                                        $scope.onDeck = true;
+                                    });
+
+                                    expect($scope.$emit).not.toHaveBeenCalled();
+
+                                    $scope.$apply(function() {
+                                        $scope.active = true;
+                                    });
+
+                                    expect($scope.$emit.mostRecentCall.args[0]).toBe('<vast-card>:contentEnd');
+                                });
+
+                                it('should emit <vast-card>:contentEnd if onDeck was skipped and we are active', function() {
+                                    VASTService.getVAST.andReturn($q.reject('No ad'));
+                                    spyOn($scope, '$emit');
+
+                                    $scope.$apply(function() {
+                                        $scope.active = true;
+                                    });
+
+                                    expect($scope.$emit.mostRecentCall.args[0]).toBe('<vast-card>:contentEnd');
+                                });
+                            });
+
                             describe('if autoplay is false', function() {
                                 beforeEach(function() {
                                     $scope.$apply(function() {

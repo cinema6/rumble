@@ -19,6 +19,7 @@
                 },
                 data = config.data,
                 hasStarted = !data.autoplay,
+                shouldGoForward = false,
                 player;
 
             Object.defineProperties(this, {
@@ -53,7 +54,7 @@
 
             this.enablePlayButton = !$scope.profile.touch;
 
-            $scope.$watch('onDeck || active', function(shouldLoad) {
+            $scope.$watch('onDeck', function(shouldLoad) {
                 if (shouldLoad) {
                     _data.modules.displayAd.src = config.displayAd;
 
@@ -142,7 +143,11 @@
                     if (self.companion) {
                         _data.modules.displayAd.active = true;
                     } else {
-                        $scope.$emit('<vpaid-card>:contentEnd', config);
+                        if ($scope.active) {
+                            $scope.$emit('<vpaid-card>:contentEnd', config);
+                        } else {
+                            shouldGoForward = true;
+                        }
                     }
                 });
 
@@ -168,14 +173,16 @@
                 });
 
                 $scope.$watch('active', function(active, wasActive) {
-                    if (active === wasActive) { return; }
+                    if (!active && !wasActive) { return; }
 
                     if (c6AppData.experience.data.mode === 'lightbox') {
                         $rootScope.$broadcast('resize');
                     }
 
                     if (active) {
-                        if (_data.playerEvents.play.emitCount < 1) {
+                        if (shouldGoForward) {
+                            $scope.$emit('<vpaid-card>:contentEnd', config);
+                        } else if (_data.playerEvents.play.emitCount < 1) {
                             $scope.$emit('<vpaid-card>:init', controlNavigation);
                             if (data.autoplay) {
                                 iface.play();
@@ -213,6 +220,7 @@
                             duration: NaN
                         },
                         playerReady = false,
+                        hasLoadAdBeenCalled = false,
                         hasStarted = false,
                         player;
 
@@ -256,16 +264,21 @@
                     };
 
                     iface.loadAd = function() {
+                        hasLoadAdBeenCalled = true;
                         return adPlayerDeferred.promise.then(player.loadAd);
                     };
 
                     iface.play = function() {
+                        if (!hasLoadAdBeenCalled) {
+                            iface.loadAd();
+                        }
+
                         return adDeferred.promise.then(function() {
                             if (hasStarted) {
                                 player.resumeAd();
                             } else {
-                                player.startAd();
                                 hasStarted = true;
+                                player.startAd();
                             }
                         });
                     };

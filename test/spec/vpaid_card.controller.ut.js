@@ -317,20 +317,27 @@
                             iface.emit('ended', iface);
                         });
 
-                        it('should not $emit the contentEnd event', function() {
-                            expect($scope.$emit).not.toHaveBeenCalledWith('<vpaid-card>:contentEnd', $scope.config);
-                        });
-
                         it('should activate the display ad', function() {
                             expect($scope.config._data.modules.displayAd.active).toBe(true);
+                        });
+
+                        it('should not $emit the contentEnd event', function() {
+                            expect($scope.$emit).not.toHaveBeenCalledWith('<vpaid-card>:contentEnd', $scope.config);
                         });
                     });
 
                     describe('if there is no displayAd', function() {
-                        it('should emit the contentEnd event', function() {
+                        it('should emit the contentEnd event if $scope.active is true', function() {
+                            $scope.active = true;
                             iface.emit('ended', iface);
 
                             expect($scope.$emit).toHaveBeenCalledWith('<vpaid-card>:contentEnd', $scope.config);
+                        });
+
+                        it('should not emit the contentEnd if $scope is not active', function() {
+                            iface.emit('ended', iface);
+
+                            expect($scope.$emit).not.toHaveBeenCalledWith('<vpaid-card>:contentEnd', $scope.config);
                         });
                     });
                 });
@@ -450,6 +457,9 @@
                             describe('when ' + bool, function() {
                                 beforeEach(function() {
                                     $scope.$apply(function() {
+                                        $scope.active = !bool;
+                                    });
+                                    $scope.$apply(function() {
                                         $scope.active = bool;
                                     });
                                 });
@@ -490,6 +500,22 @@
 
                             $scope.$apply(function() {
                                 $scope.active = true;
+                            });
+                        });
+
+                        describe('when there was a problem with the ad and "ended" was emitted before the card was active', function() {
+                            it('should $emit <vpaid-card>:contentEnd', function() {
+                                $scope.$apply(function() {
+                                    $scope.active = false;
+                                });
+
+                                iface.emit('ended');
+
+                                $scope.$apply(function() {
+                                    $scope.active = true;
+                                });
+
+                                expect($scope.$emit.mostRecentCall.args[0]).toBe('<vpaid-card>:contentEnd');
                             });
                         });
 
@@ -687,6 +713,9 @@
                     describe('when false', function() {
                         it('should pause the ad if ad is playing', function() {
                             $scope.$apply(function() {
+                                $scope.active = true;
+                            });
+                            $scope.$apply(function() {
                                 $scope.active = false;
                                 iface.paused = false;
                             });
@@ -696,39 +725,37 @@
                     });
                 });
 
-                ['onDeck', 'active'].forEach(function(prop) {
-                    describe(prop, function() {
-                        describe('when true should set the displayAd src', function() {
-                            var iface;
+                describe('onDeck', function() {
+                    describe('when true should set the displayAd src', function() {
+                        var iface;
 
-                            beforeEach(function() {
-                                iface = new IFace();
+                        beforeEach(function() {
+                            iface = new IFace();
 
-                                $scope.$apply(function() {
-                                    $scope.$emit('playerAdd', iface);
-                                    $scope[prop] = true;
-                                });
+                            $scope.$apply(function() {
+                                $scope.$emit('playerAdd', iface);
+                                $scope.onDeck = true;
+                            });
+                        });
+
+                        it('to undefined if there is no display ad', function() {
+                            expect($scope.config._data.modules.displayAd.src).toBe(undefined);
+                        });
+
+                        it('to the url from config', function() {
+                            $scope.onDeck = false;
+                            $scope.$digest();
+
+                            $scope.$apply(function() {
+                                $scope.config.displayAd = 'htpp://test.com/image.jpg';
+                                $scope.onDeck = true;
                             });
 
-                            it('to undefined if there is no display ad', function() {
-                                expect($scope.config._data.modules.displayAd.src).toBe(undefined);
-                            });
+                            expect($scope.config._data.modules.displayAd.src).toBe('htpp://test.com/image.jpg');
+                        });
 
-                            it('to the url from config', function() {
-                                $scope[prop] = false;
-                                $scope.$digest();
-
-                                $scope.$apply(function() {
-                                    $scope.config.displayAd = 'htpp://test.com/image.jpg';
-                                    $scope[prop] = true;
-                                });
-
-                                expect($scope.config._data.modules.displayAd.src).toBe('htpp://test.com/image.jpg');
-                            });
-
-                            it('should load an ad', function() {
-                                expect(iface.loadAd).toHaveBeenCalled();
-                            });
+                        it('should load an ad', function() {
+                            expect(iface.loadAd).toHaveBeenCalled();
                         });
                     });
                 });
