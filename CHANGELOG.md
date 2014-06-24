@@ -1,8 +1,10 @@
 # MiniReel Player
 
-* *[Beta12.1.rc4]*
+## Beta13 (June 24, 2014)
+* *[Beta13.rc1]*
   * [FIX]: VPAID and VAST ads are now loaded when onDeck and/or when jumped to directly
   * [FIX]: VPAID and VAST cards will advance to the next card if there is no ad returned
+* *[/Beta13.rc1]*
 
 ## Beta12.1 (June 16, 2014)
 * *[Beta12.1.rc3]*
