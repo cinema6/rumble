@@ -51,7 +51,8 @@
                     'scripts/comments_module',
                     'scripts/display_ad_module',
                     'scripts/paginator',
-                    'scripts/thumb_paginator'
+                    'scripts/thumb_paginator',
+                    'scripts/lightbox-ads/animations'
                 ];
             }
         }()),
@@ -77,6 +78,7 @@
                     libUrl('angular/v1.2.12-0-g5cc5cc1/angular-sanitize.js'),
                     libUrl('c6ui/v2.5.0-0-gc58e712/c6uilib.js'),
                     libUrl('c6ui/v2.5.0-0-gc58e712/c6log.js'),
+                    libUrl('gsap/1.11.2-0-g79f8c87/TweenMax.min.js'),
                     protocol + '//www.youtube.com/iframe_api',
                     protocol + '//aka-cdn.adtechus.com/dt/common/DAC.js'
                 ];
