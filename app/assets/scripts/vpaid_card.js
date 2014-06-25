@@ -20,6 +20,7 @@
                 data = config.data,
                 hasStarted = !data.autoplay,
                 shouldGoForward = false,
+                adHasBeenCalledFor = false,
                 player;
 
             Object.defineProperties(this, {
@@ -58,7 +59,10 @@
                 if (shouldLoad) {
                     _data.modules.displayAd.src = config.displayAd;
 
-                    player.loadAd();
+                    if (!adHasBeenCalledFor) {
+                        player.loadAd();
+                        adHasBeenCalledFor = true;
+                    }
                 }
             });
 
@@ -140,15 +144,15 @@
                 _data.playerEvents = EventService.trackEvents(iface, ['play', 'pause']);
 
                 iface.on('ended', function() {
-                    if (self.companion) {
-                        _data.modules.displayAd.active = true;
+                    // if (self.companion) {
+                    //     _data.modules.displayAd.active = true;
+                    // } else {
+                    if ($scope.active) {
+                        $scope.$emit('<vpaid-card>:contentEnd', config);
                     } else {
-                        if ($scope.active) {
-                            $scope.$emit('<vpaid-card>:contentEnd', config);
-                        } else {
-                            shouldGoForward = true;
-                        }
+                        shouldGoForward = true;
                     }
+                    // }
                 });
 
                 iface.on('play', function() {
@@ -192,7 +196,7 @@
                         if (!iface.paused) {
                             iface.pause();
                         }
-                        _data.modules.displayAd.active = true;
+                        // _data.modules.displayAd.active = true;
                     }
                 });
             });
