@@ -25,6 +25,7 @@
                 data = config.data,
                 hasStarted = !data.autoplay,
                 shouldGoForward = false,
+                adHasBeenCalledFor = false,
                 player = null;
 
             this.videoSrc = null;
@@ -86,17 +87,20 @@
 
             $scope.$watch('onDeck || active', function(onDeck) {
                 if(onDeck) {
-                    VASTService.getVAST(data.source).then(function(vast) {
-                        _data.vastData = vast;
-                        self.videoSrc = vast.getVideoSrc('video/mp4');
-                        self.companion = vast.getCompanion();
-                    }, function() {
-                        if ($scope.active) {
-                            $scope.$emit('<vast-card>:contentEnd', config);
-                        } else {
-                            shouldGoForward = true;
-                        }
-                    });
+                    if(!adHasBeenCalledFor) {
+                        VASTService.getVAST(data.source).then(function(vast) {
+                            _data.vastData = vast;
+                            self.videoSrc = vast.getVideoSrc('video/mp4');
+                            self.companion = vast.getCompanion();
+                        }, function() {
+                            if ($scope.active) {
+                                $scope.$emit('<vast-card>:contentEnd', config);
+                            } else {
+                                shouldGoForward = true;
+                            }
+                        });
+                        adHasBeenCalledFor = true;
+                    }
 
                     _data.modules.displayAd.src = config.displayAd;
                 }

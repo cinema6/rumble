@@ -890,7 +890,19 @@
                             ad = $scope.deck[2];
                         });
 
-                        describe('if the companion and video ad are not shown together', function() {
+                        it('should skip the ad card from then on', function() {
+                            RumbleCtrl.setPosition(2);
+                            expect($scope.currentCard.visited).toBe(true);
+                            expect($scope.currentCard.ad).toBe(true);
+
+                            RumbleCtrl.setPosition(4);
+
+                            RumbleCtrl.setPosition(2);
+                            expect($scope.currentIndex).toBe(1);
+                            expect($scope.currentCard).toBe($scope.deck[1]);
+                        });
+
+                        xdescribe('if the companion and video ad are not shown together', function() {
                             beforeEach(function() {
                                 appData.behaviors.showsCompanionWithVideoAd = false;
 
@@ -905,7 +917,7 @@
                             });
                         });
 
-                        describe('if the companion and video ad are show together', function() {
+                        xdescribe('if the companion and video ad are show together', function() {
                             beforeEach(function() {
                                 appData.behaviors.showsCompanionWithVideoAd = true;
 
