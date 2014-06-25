@@ -1,5 +1,9 @@
 # MiniReel Player
 
+* *[Beta14.rc1]*
+  * [FIX]: Always advance VPAID card when ad ends
+  * [FIX]: Only load an ad the first time a VPAID card is onDeck
+
 ## Beta13 (June 24, 2014)
 * *[Beta13.rc1]*
   * [FIX]: VPAID and VAST ads are now loaded when onDeck and/or when jumped to directly
