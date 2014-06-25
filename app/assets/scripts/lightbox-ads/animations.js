@@ -35,11 +35,11 @@
                     done();
                 },
                 removeClass: function(element,className,done) {
-                    var introEnd    = function() {
-                        isFirstSlide    = false;
-                        done();
-                    };
-                    aniIntro        = new TimelineMax({paused:true, onComplete:introEnd()});
+                    aniIntro        = new TimelineMax({paused:true, onComplete:function(){
+                            isFirstSlide    = false;
+                            done();
+                        }
+                    });
                     
                     //define animation
                     aniIntro.add(TweenMax.to(mrOverlay, 0.3, {
@@ -65,60 +65,59 @@
         }])
         .animation('.mr-cards__item',['$log', function($log){
             $log = $log.context('.mr-cards__item');
+            var mrPlayerGroup,
+                playerWidth;
             return {
                 beforeAddClass: function(element,className,done) {
-                    //element.css({ 'opacity' : 1, 'visibility' : 'visible' });
                     if(isFirstSlide === true) {
-                        TweenMax.set(element, {
+                        TweenMax.set(mrPlayerGroup, {
+                            marginLeft: 0,
                             opacity: 1
                         });
                         done();
                     } else {
                         $log.log('addClass setup:',className);
-                        TweenMax.set(element, {
-                            opacity: 1
+
+                        mrPlayerGroup   = $('.mr-player__group');
+                        playerWidth     = mrPlayerGroup.width();
+                        TweenMax.set(mrPlayerGroup, {
+                            marginLeft: -playerWidth,
+                            opacity: 0
                         });
                         $log.info('addClass start',className);
-                        TweenMax.to(element, 0.3 , {
-                            opacity: 0
+                        TweenMax.to(mrPlayerGroup, 0.5, {
+                            marginLeft: 0,
+                            opacity: 1,
+                            ease:Cubic.easeInOut
                         });
                         done();
                     }
-                    
-                    /*element.animate({
-                        opacity: 0
-                    }, 1, function() {
-                        $log.info('addClass end',className);
-                        element.css({'visibility' : 'hidden'});
-                        done();
-                    });*/
                 },
                 removeClass: function(element,className,done) {
                     
-                    //element.css({ 'opacity' : 0, 'visibility' : 'visible' });
                     if(isFirstSlide === true) {
-                        TweenMax.set(element, {
+                        TweenMax.set(mrPlayerGroup, {
+                            marginLeft: 0,
                             opacity: 1
                         });
                         done();
                     } else {
                         $log.log('removeClass setup:',className);
-                        TweenMax.set(element, {
+
+                        mrPlayerGroup   = $('.mr-player__group');
+                        playerWidth     = mrPlayerGroup.width();
+                        TweenMax.set(mrPlayerGroup, {
+                            marginLeft: playerWidth,
                             opacity: 0
                         });
                         $log.info('removeClass start',className);
-                        TweenMax.to(element, 0.3 , {
-                            opacity: 1
+                        TweenMax.to(mrPlayerGroup, 0.5, {
+                            marginLeft: 0,
+                            opacity: 1,
+                            ease:Cubic.easeInOut
                         });
                         done();
                     }
-                        
-                    /*element.delay(50).animate({
-                        opacity: 1
-                    }, 400, function() {
-                        $log.info('removeClass end',className);
-                        done();
-                    });*/
                 }
             };
         }])
