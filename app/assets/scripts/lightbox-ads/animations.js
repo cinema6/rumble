@@ -66,9 +66,30 @@
         .animation('.mr-cards__item',['$log', function($log){
             $log = $log.context('.mr-cards__item');
             var mrPlayerGroup,
+                //activeElement,
                 playerWidth;
             return {
+                /*enter: function(element,done) {
+                    done();
+                    activeElement   = $(element).not('.inactive');
+                    mrPlayerGroup   = activeElement.find('.mr-player__group');
+                    playerWidth     = mrPlayerGroup.width();
+                    $log.log('enter setup:');
+                    TweenMax.set(mrPlayerGroup, {
+                        marginLeft: playerWidth,
+                        opacity: 0
+                    });
+                    $log.info('enter start');
+                    TweenMax.to(mrPlayerGroup, 0.5, {
+                        marginLeft: 0,
+                        opacity: 1,
+                        ease:Cubic.easeInOut
+                    });
+                },*/
                 beforeAddClass: function(element,className,done) {
+                    mrPlayerGroup   = $('.mr-player__group');
+                    playerWidth     = mrPlayerGroup.width();
+
                     if(isFirstSlide === true) {
                         TweenMax.set(mrPlayerGroup, {
                             marginLeft: 0,
@@ -77,9 +98,6 @@
                         done();
                     } else {
                         $log.log('addClass setup:',className);
-
-                        mrPlayerGroup   = $('.mr-player__group');
-                        playerWidth     = mrPlayerGroup.width();
                         TweenMax.set(mrPlayerGroup, {
                             marginLeft: -playerWidth,
                             opacity: 0
@@ -94,7 +112,9 @@
                     }
                 },
                 removeClass: function(element,className,done) {
-                    
+                    mrPlayerGroup   = $('.mr-player__group');
+                    playerWidth     = mrPlayerGroup.width();
+
                     if(isFirstSlide === true) {
                         TweenMax.set(mrPlayerGroup, {
                             marginLeft: 0,
@@ -103,9 +123,6 @@
                         done();
                     } else {
                         $log.log('removeClass setup:',className);
-
-                        mrPlayerGroup   = $('.mr-player__group');
-                        playerWidth     = mrPlayerGroup.width();
                         TweenMax.set(mrPlayerGroup, {
                             marginLeft: playerWidth,
                             opacity: 0
