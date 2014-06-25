@@ -1,5 +1,15 @@
 # MiniReel Player
 
+## Beta14 (June 25, 2014)
+* *[Beta14.rc2]*
+  * [FIX]: Always advance ad cards when ad ends
+  * [FIX]: Only load an ad the first time an ad card is onDeck or active
+* *[/Beta14.rc2]*
+
+* *[Beta14.rc1]*
+  * Preloading of videos has been disabled to improve stability
+* *[/Beta14.rc1]*
+
 ## Beta13 (June 24, 2014)
 * *[Beta13.rc1]*
   * [FIX]: VPAID and VAST ads are now loaded when onDeck and/or when jumped to directly
