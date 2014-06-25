@@ -739,8 +739,8 @@
 
             if (toCard &&
                 toCard.ad &&
-                toCard.visited &&
-                appData.behaviors.showsCompanionWithVideoAd) {
+                toCard.visited /*&&
+                appData.behaviors.showsCompanionWithVideoAd*/) {
                 return this.setPosition(i + (isGoingForward ? 1 : -1));
             }
 

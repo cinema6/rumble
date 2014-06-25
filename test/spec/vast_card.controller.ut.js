@@ -624,6 +624,26 @@
                                 expect(VASTService.getVAST).toHaveBeenCalled();
                             });
 
+                            it('should only call the VASTService once even if active again', function() {
+                                $scope.$apply(function() {
+                                    $scope.active = true;
+                                });
+                                $scope.$apply(function() {
+                                    $scope.active = false;
+                                });
+                                $scope.$apply(function() {
+                                    $scope.active = true;
+                                });
+                                $scope.$apply(function() {
+                                    $scope.active = false;
+                                });
+                                $scope.$apply(function() {
+                                    $scope.active = true;
+                                });
+
+                                expect(VASTService.getVAST.callCount).toBe(1);
+                            });
+
                             describe('if we do not have an ad', function() {
                                 it('should emit <vast-card>:contentEnd if we tried to get an ad while onDeck', function() {
                                     VASTService.getVAST.andReturn($q.reject('No ad'));
@@ -910,6 +930,22 @@
 
                         it('should call getVAST on the vast service', function() {
                             expect(VASTService.getVAST).toHaveBeenCalledWith($scope.config.data.source);
+                        });
+
+                        it('should only call getVAST once even if onDeck again', function() {
+                            $scope.$apply(function() {
+                                $scope.onDeck = false;
+                            });
+                            $scope.$apply(function() {
+                                $scope.onDeck = true;
+                            });
+                            $scope.$apply(function() {
+                                $scope.onDeck = false;
+                            });
+                            $scope.$apply(function() {
+                                $scope.onDeck = true;
+                            });
+                            expect(VASTService.getVAST.callCount).toBe(1);
                         });
 
                         // TODO: Fetch displayAd from the ad server

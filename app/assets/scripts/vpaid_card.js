@@ -190,6 +190,7 @@
                             $scope.$emit('<vpaid-card>:init', controlNavigation);
                             if (data.autoplay) {
                                 iface.play();
+                                adHasBeenCalledFor = true;
                             }
                         }
                     } else {
