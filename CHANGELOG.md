@@ -1,7 +1,9 @@
 # MiniReel Player
 
+## Beta14 (June 25, 2014)
 * *[Beta14.rc1]*
   * Preloading of videos has been disabled to improve stability
+* *[/Beta14.rc1]*
 
 ## Beta13 (June 24, 2014)
 * *[Beta13.rc1]*
