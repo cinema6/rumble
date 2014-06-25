@@ -1,6 +1,6 @@
 # MiniReel Player
 
-* *[Beta15.rc1]*
+* *[Beta14.rc2]*
   * [FIX]: Always advance ad cards when ad ends
   * [FIX]: Only load an ad the first time an ad card is onDeck or active
 
