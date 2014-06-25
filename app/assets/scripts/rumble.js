@@ -598,6 +598,7 @@
             $scope.ready = result;
 
             if ($scope.ready){
+                $log.info('MiniReel Player is ready!');
                 $timeout.cancel(readyTimeout);
             }
         };
@@ -1069,7 +1070,7 @@
     function            ( $log , $compile , $window , c6UserAgent , InflectorService ){
         $log = $log.context('<mr-card>');
         function fnLink(scope,$element){
-            var canTwerk = (function() {
+            var canTwerk = false,/*(function() {
                     if ((c6UserAgent.app.name !== 'chrome') &&
                         (c6UserAgent.app.name !== 'firefox') &&
                         (c6UserAgent.app.name !== 'safari')) {
@@ -1084,7 +1085,7 @@
                     }
 
                     return true;
-                }()),
+                }()),*/
                 type = scope.config.type,
                 data = scope.config.data;
 
