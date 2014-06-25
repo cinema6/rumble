@@ -1,5 +1,8 @@
 # MiniReel Player
 
+* *[Beta14.rc1]*
+  * Preloading of videos has been disabled to improve stability
+
 ## Beta13 (June 24, 2014)
 * *[Beta13.rc1]*
   * [FIX]: VPAID and VAST ads are now loaded when onDeck and/or when jumped to directly
