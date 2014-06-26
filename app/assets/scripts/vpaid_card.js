@@ -3,9 +3,9 @@
 
     angular.module('c6.rumble')
         .controller('VpaidCardController', ['$scope','$log','ModuleService','EventService',
-                                            '$interval','c6AppData','$rootScope',
+                                            '$interval','c6AppData','$rootScope','$timeout',
         function                            ($scope , $log , ModuleService , EventService ,
-                                             $interval , c6AppData , $rootScope ) {
+                                             $interval , c6AppData , $rootScope , $timeout ) {
             $log = $log.context('VpaidCardController');
             var self = this,
                 config = $scope.config,
@@ -21,6 +21,7 @@
                 hasStarted = !data.autoplay,
                 shouldGoForward = false,
                 adHasBeenCalledFor = false,
+                hasRealAd = false,
                 player;
 
             Object.defineProperties(this, {
@@ -41,6 +42,14 @@
                 }
             });
 
+            function initAdTimer() {
+                $timeout(function() {
+                    if(!hasRealAd && $scope.active) {
+                        $scope.$emit('<vpaid-card>:contentEnd', config);
+                    }
+                }, 3000);
+            }
+
             this.reset = function() {
                 // this is basically just a resumeAd() call
                 // in order to play another ad we need to re-initialize the whole player
@@ -48,7 +57,7 @@
             };
 
             this.playVideo = function() {
-                player.play();
+                player.play().then(initAdTimer);
             };
 
             this.hasModule = ModuleService.hasModule.bind(ModuleService, config.modules);
@@ -176,6 +185,10 @@
                     });
                 });
 
+                iface.on('hasRealAd', function() {
+                    hasRealAd = true;
+                });
+
                 $scope.$watch('active', function(active, wasActive) {
                     if (!active && !wasActive) { return; }
 
@@ -189,7 +202,7 @@
                         } else if (_data.playerEvents.play.emitCount < 1) {
                             $scope.$emit('<vpaid-card>:init', controlNavigation);
                             if (data.autoplay) {
-                                iface.play();
+                                iface.play().then(initAdTimer);
                                 adHasBeenCalledFor = true;
                             }
                         }
@@ -209,8 +222,8 @@
             });
         }])
 
-        .directive('vpaidCard', ['$log', 'assetFilter', 'VPAIDService', 'playerInterface', '$q',
-        function                ( $log ,  assetFilter ,  VPAIDService ,  playerInterface ,  $q ) {
+        .directive('vpaidCard', ['$log', 'assetFilter', 'VPAIDService', 'playerInterface', '$q', '$timeout',
+        function                ( $log ,  assetFilter ,  VPAIDService ,  playerInterface ,  $q ,  $timeout ) {
             $log = $log.context('<vpaid-card>');
             return {
                 restrict: 'E',
@@ -320,6 +333,13 @@
                             player.on('adLoaded', adDeferred.resolve);
 
                             player.on('adPlayerReady', adPlayerDeferred.resolve);
+
+                            player.on('hasRealAd', function() {
+                                $timeout(function() {
+                                    // this timeout is just for testing purposes
+                                    iface.emit('hasRealAd', iface);
+                                }, 3000);
+                            });
 
                             player.on('ended', function() {
                                 _iface.ended = true;

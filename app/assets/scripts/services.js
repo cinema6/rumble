@@ -502,6 +502,9 @@
                                             break;
                                         }
                                     case 'AdStarted':
+                                        {
+                                            self.emit('hasRealAd', self);
+                                        }
                                     case 'AdPlaying':
                                         {
                                             self.emit('play', self);
