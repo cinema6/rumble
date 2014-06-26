@@ -1,7 +1,6 @@
 /*global TweenMax, TimelineMax, $, Cubic */
 (function(){
     'use strict';
-    var isFirstSlide        = true;
     angular.module('c6.rumble')
         .animation('.mr-overlay', [function() {
             var aniIntro,
@@ -11,7 +10,6 @@
                 mrPagesScroller;
             return {
                 beforeRemoveClass : function(element,className,done) {
-                    isFirstSlide    = true;
                     mrOverlay       = $('.mr-overlay');
                     mrExperience    = $('.mr-experience');
                     mrPagerGroup    = $('.mr-pager__group');
@@ -36,7 +34,6 @@
                 },
                 removeClass: function(element,className,done) {
                     aniIntro        = new TimelineMax({paused:true, onComplete:function(){
-                            isFirstSlide    = false;
                             done();
                         }
                     });
