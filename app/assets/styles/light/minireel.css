@@ -95,21 +95,23 @@
     .mr-experience classes
     ========================================================================== */
     .mr-experience {
-        padding: 8.125rem 0.625em 63% 0.625rem;/*10px*/ position:relative;
+        padding: 10.375rem 0 58.71% 0; position:relative;
         height: 0; min-width:18.75rem;/*300px*/ min-height: 19.625rem;/*314px*/
         box-sizing: border-box; -moz-box-sizing: border-box;
-        background:#252626;
+        background:#1b1b1b;
     }
 
 /*  ==========================================================================
     .mr-pager__group classes
     ========================================================================== */
     .mr-pager__group {
-        height:3.75rem;/*60px*/ position: absolute; z-index: 1;
-        margin:0; display: block; left: 0.625em; right: 0.625em; bottom: 0.625em;/*10px*/
+        height:2.875rem;/*46px*/
+        margin:0; display: block; 
+        position: absolute; z-index: 1;
+        left:0.375em; right:0.375em; bottom:0.375em;/*6px*/
     }
     .mr-pager__btn {
-        min-width:5rem;/*80px*/ height:3.75rem;/*60px*/ position:absolute;
+        min-width:5rem;/*80px*/ height:2.875rem;/*46px*/ position:absolute;
         background:#d94040 no-repeat 50% 50%; border:0; padding:0; margin:0;
         cursor:pointer;
     }
@@ -117,16 +119,28 @@
             opacity:0.25; cursor:default;
         }
             .mr-pager__btn--disabled .mr-pager__label {
-                color:#252626;
+                color:#1b1b1b;
             }
             .mr-pager__btn--disabled .mr-pager__icon-path {
-                fill: #252626;
+                fill: #1b1b1b;
             }
         .mr-pager__prev {
             left:0;
         }
         .mr-pager__next {
             right:0;
+        }
+    .mr-pager__border {
+        width:2px;
+        display: block;
+        position: absolute; top:0; bottom:0;
+        background:#1b1b1b;
+    }
+        .mr-pager__prev .mr-pager__border {
+            right:0;
+        }
+        .mr-pager__next .mr-pager__border {
+            left:0;
         }
     .mr-pager__icon {
         display:block; width:0.75rem;/*12px*/ height:100%;
@@ -140,8 +154,8 @@
         }
     .mr-pager__label {
         font-weight:bold; color:#fff; line-height:1; font-size:0.875rem;
-        display: block;
-        position:absolute; z-index: 1; top:1.4375rem; left:40%;
+        display: block; text-transform: uppercase;
+        position:absolute; z-index: 1; top:1rem; left:40%;
     }
         .mr-pager__next .mr-pager__label {
             right:40%; left:auto;
@@ -149,7 +163,7 @@
     /* pages styles */
     .mr-pages__group {
         position:absolute; left:1.5625rem;/*25px*/ right:1.5625rem;/*25px*/
-        height:100%; overflow: hidden; margin: 0 2px;
+        height:100%; overflow: hidden; margin:0;
     }
         .mr-pages__scroller {
             position: relative; left: 0;
@@ -159,30 +173,29 @@
         }
             .mr-pages__list {
                 margin:0; padding:0; list-style: none;
-                width:12000%; background:green;
+                width:12000%;
             }
                 .mr-pages__item {
-                    float:left; margin:0 0.125rem 0 0;
+                    float:left;
+                    width:5.625rem;/*90px*/ height:2.875rem;/*46px*/
+                    margin:0; padding:0; border:0;
+                    position:relative; overflow: hidden;
                 }
+                    .mr-pages__navBtn,
                     .mr-pages__page {
-                        width:5.625rem;/*90px*/ height:3.75rem;/*60px*/
-                        margin:0; padding:0; border:0;
-                        position:relative; overflow: hidden;
+                        display: block;
+                        width:100%; height:100%;
+                        margin:0; border:0; padding:0;
+                    }
+                    .mr-pages__page {
                         cursor: pointer;
                         background:black url('../../img/default_square.jpg') 50% 50% / cover no-repeat;
                     }
                         .mr-pages__preview-img {
                             position:absolute; top:0;
                             width:100%; height:100%; display: block;
-                            background:no-repeat 50% 50% / 102%;
+                            background:no-repeat 50% 50% / 100%;
                         }
-                            .mr-pages__page--active .mr-pages__preview-img {
-                                -webkit-transform: scale(1.25);
-                                -moz-transform: scale(1.25);
-                                -o-transform: scale(1.25);
-                                -ms-transform: scale(1.25);
-                                transform: scale(1.25);
-                            }
                         .mr-pages__label {
                             display: block; width:100%;
                             position: absolute; top:-0.875rem; left:0;
@@ -198,9 +211,11 @@
                                 opacity:0;
                             }
                         .mr-pages__current-indicator {
-                            opacity:0; display: block; width:100%; height:100%;
-                            position: absolute; top:0; left:0; z-index: 2;
-                            background:url('../../img/mr-pages__current-indicator--light.png') 0 0 / 100% 100% no-repeat;
+                            opacity:0; display: block; 
+                            width:100%; height:0.25rem;
+                            position: absolute; bottom:0; left:0; z-index: 2;
+                            background:#d94040;
+                            overflow: hidden;
                         }
                             .mr-pages__page--active .mr-pages__current-indicator {
                                 opacity:1;
@@ -221,8 +236,8 @@
     Mini Reel Cards classes
     ========================================================================== */
     .mr-card__container {
-        position: absolute; z-index: 2; padding: 0 0.625rem;/*10px*/
-        left: 0; right: 0; top: 0.625rem;/*10px*/ bottom: 4.375rem;/*70px*/
+        position: absolute; z-index: 2;
+        left: 0; right: 0; top: 0; bottom: 10.375rem;/*166px*/
     }
     .mr-cards__list, .mr-cards__item {
         margin:0; padding:0; list-style:none;
@@ -231,7 +246,8 @@
             width:100%;
         }
         .mr-cards__item {
-            position:absolute; left: 0.625rem; right: 0.625rem;
+            position:absolute; left:0; right:0;
+            height:100%;
         }
             .mr-cards__item.squished {
                 height:0; overflow:hidden;
@@ -241,10 +257,16 @@
             }
 
             .mr-player__group {
-                padding:0 0 64%; margin:0;
+                margin:0; padding:0 0 58.71%;
                 width:100%; height:0; position:relative;
                 background:black url('../../img/default_square.jpg') 50% 50% / cover no-repeat;
             }
+                .mr-charCount--low .mr-player__group {
+                    padding:0 0 66% 0;
+                }
+                .mr-charCount--med .mr-player__group {
+                    padding:0 0 62% 0;
+                }
                 .mr-player__play-btn {
                     width: 6.375rem;/*68px*/ height: 5.4375rem;/*58px*/
                     padding: 0; margin: -3.875rem 0 0 -3.1875rem; border: 0; 
@@ -266,57 +288,45 @@
                         left:-500%; height:0; width:0;
                     }
                 .mr-player__thumbnail {
-                    background:50% 50% / cover no-repeat;
+                    background:50% 50% / 112% auto no-repeat;
                 }
-        .mr-card__copy {
-            position: relative; width:100%; background: #252626; margin: 0;
-            height: 2.875rem;/*46px*/ overflow: hidden;
-            -webkit-transition: height 0.3s ease-out; -moz-transition: height 0.3s ease-out; 
-            -o-transition: height 0.3s ease-out; transition: height 0.3s ease-out; 
-            -webkit-transition-delay: 0.25s; -moz-transition-delay: 0.25s; 
-            -o-transition-delay: 0.25s; transition-delay: 0.25s; 
+        .mr-card__copy { 
+            margin: 0 0.625em;
         }
-            .mr-card__copy--expanded {
-                height: 7.5rem;/*121px*/
-            }
             .mr-card__title {
-                margin:0; 
+                font-size:1.25rem;/*20px*/ color:#fff; font-weight:normal; 
+                padding:0; margin:0.4em 0; line-height: 1.2;
+                overflow:hidden; text-overflow: ellipsis; white-space:nowrap;
             }
-                .mr-card__title-h1 {
-                    font-size:1.125rem;/*18px*/ color:#fff; font-weight:normal; 
-                    padding: 0.8125rem 2.25rem 1rem 0; margin:0; line-height: 1;
-                    overflow:hidden; text-overflow: ellipsis; white-space:nowrap;
-                }
-                .mr-card__attributes {
-                    color:#999999; font-size:0.75em;/*12px*/ margin:0.16em 0 1em 0;
-                }
-                .mr-card__btn {
-                    height: 1.5rem;/*24px*/ width: 1.5rem;/*24px*/ right: 0; top: 0.75rem;/*12px*/
-                    position: absolute; padding: 0; border: 0; background: #d94040;
-                    cursor: pointer;
-                }
-                    .mr-card__icon {
-                        height: 0.4375rem;/*7px*/ width: 0.3125rem;/*5px*/ display:block;
-                        background: url('../../img/dropdown-arrow.png') no-repeat 0 0; margin: 0 auto;
-                        -webkit-transition: -webkit-transform 0.3s; transition: transform 0.3s; 
-                    }
-                    .mr-card__icon--active {
-                        transform: rotate(180deg);
-                        -ms-transform: rotate(180deg);
-                        -webkit-transform: rotate(180deg);
-                    }
-     
+            .mr-card__attributes {
+                color:#999; font-size:0.75em;/*12px*/
+            }
             .mr-card__desc {
-                margin: -0.5em 0 0 0;/*8px*/ font-size:0.8125rem;/*13px*/ 
-                color:#c2c2c2; line-height:1.69; height: 3.5rem;/*56px*/
-            }  
+                margin:0; font-size:0.875rem;/*14px*/ 
+                color:#999; line-height:1.4286;
+            }
+            @media screen and (min-width:25.0625rem) and (max-width:35.625rem) {
+                /*401px - 570px*/
+                .mr-charCount--high .mr-card__desc {
+                    font-size:0.8125rem;/*13px*/
+                }
+            }
+            @media screen and (max-width:25rem) {
+                /*max 400px*/
+                .mr-charCount--high .mr-player__group {
+                    padding:0 0 54% 0;
+                }
+                .mr-charCount--high .mr-card__desc {
+                    font-size:0.75rem;/*12px*/
+                }
+            }
 
 
 /*  ==========================================================================
     .mr-ballot__module styles
     ========================================================================== */
     .mr-ballot-module {
-        position: absolute; width:100%; height: 0; padding: 0 0 64%;
+        position: absolute; width:100%; height: 100%;
         z-index: 2; left:0; top:0;
     }
     .mr-ballot__group {
@@ -400,7 +410,7 @@
     .mr-results__group
     ========================================================================== */
     .mr-results-module {
-        position: absolute; width:100%; height: 0; padding: 0 0 64%;
+        position: absolute; width:100%; height: 100%;
         z-index: 2; left:0; top:0; opacity: 1;
         -ms-transition: opacity 1s 0.15s;
         -moz-transition: opacity 1s 0.15s;
@@ -414,7 +424,7 @@
             display: block !important;
         }
     .mr-results__group {
-        position: absolute; height: 0; padding: 0 10% 64%;
+        position: absolute; height: 100%; padding: 0 10% 0;
         z-index: 2; left:0; right: 0; top:0; background-color: rgba(0,0,0,0.8);
     }
         .mr-results__title {
@@ -492,92 +502,6 @@
 
 
 /*  ==========================================================================
-    .mr-comments
-    ========================================================================== */
-    .mr-comments__title {
-        color:#747474; font-weight:700; font-size:1em; margin:1.0625em 0 0.3125em 0;
-    }
-    .mr-comments__body {
-        -webkit-border-radius: 3px; border-radius: 3px; overflow: hidden;
-        margin:0 0 0.875em 0;
-    }
-        .mr-comments__hdr-bar {
-            background:#747474; color:#f2f2f2;
-            border-bottom:1px solid #5e5e5e;
-        }
-            .mr-comments__hdr-label {
-                margin:3px 0 2px 8px; font-weight:700; font-size:14px;
-            }
-        .mr-comments__textbox {
-            background:#fff;
-        }
-            .mr-comments__textarea {
-                width:80%; margin:3px 0 3px 8px; font-size:1em; font-weight:300; color:#999999; float:left; display: block;
-                border:0;
-            }
-            .mr-comments__post-btn {
-                border-radius:3px; font-size:0.75em; font-weight:700; color:#fff; text-align:center;
-                border:0; margin:0.67em 0.67em 1em 0; padding:0;
-                float:right; width:12%; height:3.83em;
-            }
-    .mr-comments__select {
-        width:100%; border-radius:3px; border:0; height:2.25em;/*36px*/
-    }
-
-    .mr-comments__list {
-        margin:0; padding:1.125em 0 0 0; list-style:none; 
-        background:url('../../img/border__ccc@2x.png') 17px 0 repeat-y; background-size:1px 1px;
-    }
-        .mr-comments__comment {
-            margin:0 0 0.75em 0;
-        }
-            .mr-comments__userpic {
-                border-radius:5px; overflow: hidden; background:#fff; padding:2px;
-                width:1.75em; height:1.75em; /*28px*/ float:left; margin:0 0.875em 0 0;
-            }
-                .mr-comments__userpic-img {
-                    display:block; width:1.75em; height:1.75em; /*28px*/
-                    border-radius:3px; overflow: hidden;
-                }
-            .mr-comments__comment--friend .mr-comments__userpic, .mr-comments__comment--friend .mr-comments__meta {
-                background:#e2f7ff;
-            }
-        .mr-comments__comment .mr-comments__body {
-            background:#fff; margin:0;
-        }
-            .mr-comments__meta {
-                background:#f2f2f2; padding:0.3125em 0.5em 0.1875em 0.5em; border-bottom:1px solid #eeeeee;
-            }
-                .mr-comments__comment--friend .mr-comments__meta {
-                    border-bottom:1px solid #daf5ff;
-                }
-                .mr-comm-meta__username {
-                    float:left; color:#747474; font-weight:700; font-size:0.875em; /*14px*/
-                    width:68%; margin:0;
-                }
-                    .mr-comments__comment--friend .mr-comm-meta__username {
-                        color:#0086b9;
-                    }
-                .mr-comm-meta__timestamp {
-                    float:right; color:#999999; font-weight:300; font-size:0.75em; /*12px*/ text-align: right;
-                    width:32%; margin:0.167em 0 0 0;
-                }
-            .mr-comments__copy {
-                padding:0.4167em 0.667em 0.583em 0.667em; color:#747474; font-size:0.75em;/*12px*/ 
-            }
-            .mr-comments__breaker {
-                display:block; width:2.25em; height:0.375em; margin:0 auto 0.75em auto;
-                background-position:-2.5em -12.5em; opacity:0.1;
-            }
-        .mr-comments__terminator-outer {
-            background:#ddd;
-        }
-            .mr-comments__terminator {
-                width:0.375em;/*6px*/ height:0.375em;/*6px*/ background-position:-2.5em -12.5em;
-                display:block; margin:1em 0 0 0.9375em; opacity:0.3;
-            }
-
-/*  ==========================================================================
     Ad styles
     ========================================================================== */
     .mr-ad__group { 
@@ -627,7 +551,7 @@
     ========================================================================== */
     .mr-more-reels__intro {
         font-size:0.875rem; color:#929292; font-weight:300; text-align: center;
-        background: #252626; margin:0; padding: 0.125rem 0 0.4375rem 0;
+        background: #1b1b1b; margin:0; padding: 0.125rem 0 0.4375rem 0;
     }
         .mr-more-reels__preview {
             background:url('../../img/more-reels__preview.jpg') 50% 50% / cover no-repeat; 
@@ -719,7 +643,8 @@
     Splash Screen classes
     ========================================================================== */
     .mr-splash__group {
-        width:100%; height:8.125rem;/*130px*/ padding:0 0 63% 0;
+        width:100%; height:10.375rem;/*166px*/ 
+        padding: 0 0 58.71% 0;
         position: absolute; top:0; z-index:5; min-width:18.75rem;/*300px*/ 
         overflow:hidden;
         background:black url('../../img/default_square.jpg') 50% 50% / cover no-repeat;
@@ -736,7 +661,7 @@
             display:block; width: 100%; height: 0; padding: 0 0 13.5%;
             position:absolute; top: 50%; margin-top: -7%; z-index:2;
             border-top: #fff 4px solid; border-bottom: #fff 4px solid;
-            background: #252626 url('../../img/click-to-start.svg') 50% 50% / 55% auto no-repeat;
+            background: #1b1b1b url('../../img/click-to-start.svg') 50% 50% / 55% auto no-repeat;
         }
         .mr-splash__loading {
             background: #fff url('../../img/spinner-dots.gif') 50% 50% / 2rem auto no-repeat;
