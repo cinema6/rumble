@@ -1,8 +1,8 @@
 # MiniReel Player
 
-## Beta15
 * *[Beta15.rc1]*
   * [FIX]: Updates to google analytics video duration, adding href custom dimension
+  * [FIX]: (Mobile): Ad cards are not included in the progress indicator
 
 ## Beta14 (June 25, 2014)
 * *[Beta14.rc2]*
