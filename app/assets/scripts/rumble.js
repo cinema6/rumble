@@ -295,10 +295,10 @@
     }])
     .controller('RumbleController',['$log','$scope','$timeout','$interval','BallotService',
                                     'c6Computed','cinema6','MiniReelService','CommentsService',
-                                    'ControlsService','trackerService',
+                                    'ControlsService','trackerService','c6Defines',
     function                       ( $log , $scope , $timeout , $interval, BallotService ,
                                      c6Computed , cinema6 , MiniReelService , CommentsService ,
-                                     ControlsService, trackerService ){
+                                     ControlsService, trackerService,c6Defines ){
         var self    = this, readyTimeout,
             appData = $scope.app.data,
             id = appData.experience.id,
@@ -644,7 +644,7 @@
                     action          : eventName,
                     label           : eventLabel || 'ad',
                     videoSource     : 'ad',
-                    videoDuration   : player.duration
+                    videoDuration   : Math.round(player.duration)
                 }));
                 return;
             }
@@ -654,7 +654,7 @@
                 action          : eventName,
                 label           : eventLabel || player.webHref,
                 videoSource     : player.source || player.type,
-                videoDuration   : player.duration
+                videoDuration   : Math.round(player.duration)
             }));
         };
 
@@ -822,6 +822,7 @@
                 'expId'         : 'dimension2',
                 'expTitle'      : 'dimension3',
                 'expVersion'    : 'dimension10',
+                'href'          : 'dimension11',
                 'slideCount'    : 'dimension4',
                 'slideId'       : 'dimension5',
                 'slideTitle'    : 'dimension6',
@@ -834,9 +835,10 @@
                 'expId'      : appData.experience.id,
                 'expVersion' : appData.experience.versionId,
                 'expTitle'   : appData.experience.data.title,
+                'href'       : c6Defines.kHref,
                 'slideCount' : $scope.deck.length
             });
-            tracker.trackPage(self.getTrackingData());
+//            tracker.trackPage(self.getTrackingData());
         });
 
         $scope.$on('shouldStart', function() {

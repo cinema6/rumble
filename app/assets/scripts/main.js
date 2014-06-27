@@ -23,6 +23,15 @@
 
             return parentProtocol;
         }()),
+        href = (function(){
+            try {
+                return  (window.location.protocol.search(/^https?/) > -1) ?
+                    window.location.href : window.parent.location.href;
+            }
+            catch(e){
+                return '';
+            }
+        }()),
         libUrl = function(url) {
             return protocol + '//lib.cinema6.com/' + url;
         },
@@ -109,6 +118,7 @@
     c6.kCollateralUrl = (c6.kCollateralUrl || (c6.kEnvUrlRoot + '/collateral'));
     c6.kApiUrl = (c6.kApiUrl || (c6.kEnvUrlRoot + '/api'));
     c6.kProtocol = protocol;
+    c6.kHref = href;
     c6.kModDeps = [
         'c6.rumble.services', 'ngAnimate', 'ngSanitize', 'c6.ui', 'c6.log', 'c6.http'
     ];
