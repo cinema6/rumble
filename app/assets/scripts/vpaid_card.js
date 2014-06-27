@@ -3,9 +3,9 @@
 
     angular.module('c6.rumble')
         .controller('VpaidCardController', ['$scope','$log','ModuleService','EventService',
-                                            '$interval','c6AppData','$rootScope','$timeout',
+                                            '$interval','c6AppData','$rootScope',
         function                            ($scope , $log , ModuleService , EventService ,
-                                             $interval , c6AppData , $rootScope , $timeout ) {
+                                             $interval , c6AppData , $rootScope ) {
             $log = $log.context('VpaidCardController');
             var self = this,
                 config = $scope.config,
@@ -21,7 +21,6 @@
                 hasStarted = !data.autoplay,
                 shouldGoForward = false,
                 adHasBeenCalledFor = false,
-                hasRealAd = false,
                 player;
 
             Object.defineProperties(this, {
@@ -42,12 +41,8 @@
                 }
             });
 
-            function initAdTimer() {
-                $timeout(function() {
-                    if(!hasRealAd && $scope.active) {
-                        $scope.$emit('<vpaid-card>:contentEnd', config);
-                    }
-                }, 3000);
+            function goForward() {
+                $scope.$emit('<vpaid-card>:contentEnd', config);
             }
 
             this.reset = function() {
@@ -57,7 +52,7 @@
             };
 
             this.playVideo = function() {
-                player.play().then(initAdTimer);
+                player.play().then(null, goForward);
             };
 
             this.hasModule = ModuleService.hasModule.bind(ModuleService, config.modules);
@@ -69,8 +64,8 @@
                     _data.modules.displayAd.src = config.displayAd;
 
                     if (!adHasBeenCalledFor) {
-                        player.loadAd();
                         adHasBeenCalledFor = true;
+                        player.loadAd();
                     }
                 }
             });
@@ -157,7 +152,7 @@
                     //     _data.modules.displayAd.active = true;
                     // } else {
                     if ($scope.active) {
-                        $scope.$emit('<vpaid-card>:contentEnd', config);
+                        goForward();
                     } else {
                         shouldGoForward = true;
                     }
@@ -185,10 +180,6 @@
                     });
                 });
 
-                iface.on('hasRealAd', function() {
-                    hasRealAd = true;
-                });
-
                 $scope.$watch('active', function(active, wasActive) {
                     if (!active && !wasActive) { return; }
 
@@ -198,12 +189,12 @@
 
                     if (active) {
                         if (shouldGoForward) {
-                            $scope.$emit('<vpaid-card>:contentEnd', config);
+                            goForward();
                         } else if (_data.playerEvents.play.emitCount < 1) {
                             $scope.$emit('<vpaid-card>:init', controlNavigation);
                             if (data.autoplay) {
-                                iface.play().then(initAdTimer);
                                 adHasBeenCalledFor = true;
+                                iface.play().then(null, goForward);
                             }
                         }
                     } else {
@@ -222,8 +213,8 @@
             });
         }])
 
-        .directive('vpaidCard', ['$log', 'assetFilter', 'VPAIDService', 'playerInterface', '$q', '$timeout',
-        function                ( $log ,  assetFilter ,  VPAIDService ,  playerInterface ,  $q ,  $timeout ) {
+        .directive('vpaidCard', ['$log', 'assetFilter', 'VPAIDService', 'playerInterface', '$q',
+        function                ( $log ,  assetFilter ,  VPAIDService ,  playerInterface ,  $q ) {
             $log = $log.context('<vpaid-card>');
             return {
                 restrict: 'E',
@@ -241,9 +232,6 @@
                         hasLoadAdBeenCalled = false,
                         hasStarted = false,
                         player;
-
-                    var adPlayerDeferred = $q.defer(),
-                        adDeferred = $q.defer();
 
                     Object.defineProperties(iface, {
                         currentTime: {
@@ -283,7 +271,7 @@
 
                     iface.loadAd = function() {
                         hasLoadAdBeenCalled = true;
-                        return adPlayerDeferred.promise.then(player.loadAd);
+                        return player.loadAd();
                     };
 
                     iface.play = function() {
@@ -291,18 +279,16 @@
                             iface.loadAd();
                         }
 
-                        return adDeferred.promise.then(function() {
-                            if (hasStarted) {
-                                player.resumeAd();
-                            } else {
-                                hasStarted = true;
-                                player.startAd();
-                            }
-                        });
+                        if (hasStarted) {
+                            return player.resumeAd();
+                        } else {
+                            hasStarted = true;
+                            return player.startAd();
+                        }
                     };
 
                     iface.pause = function() {
-                        return adDeferred.promise.then(player.pause);
+                        return player.pause();
                     };
 
                     iface.destroy = function() {
@@ -330,17 +316,6 @@
 
                             iface.emit('ready', iface);
 
-                            player.on('adLoaded', adDeferred.resolve);
-
-                            player.on('adPlayerReady', adPlayerDeferred.resolve);
-
-                            player.on('hasRealAd', function() {
-                                $timeout(function() {
-                                    // this timeout is just for testing purposes
-                                    iface.emit('hasRealAd', iface);
-                                }, 3000);
-                            });
-
                             player.on('ended', function() {
                                 _iface.ended = true;
                                 iface.emit('ended', iface);
@@ -366,6 +341,7 @@
                             $log.info(result);
                         }, function(error) {
                             $log.error(error);
+                            iface.emit('ended', iface);
                         });
                     }
 
