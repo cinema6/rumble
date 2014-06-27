@@ -615,28 +615,24 @@
     recap card classes
     ========================================================================== */
     .mr-recap__group {
-        overflow:hidden;
+        margin:0 0.375rem;
     }
         .mr-recap__intro {
             font-size:0.875rem; color:#929292; font-weight:300; text-align: left;
-            margin:0; padding: 0.125rem 0.625rem 0.4375rem 0.625rem;
+            margin:0; padding: 0.125rem 0 0.4375rem 0;
         }
             .mr-recap__copy {
-                position: relative; 
-                height: 0; width: 100%; 
-                padding: 0 0 66%; 
                 border-top:1px dotted #565656;
             }
             .mr-recap__list {
-                width:100%; height:100%;
-                position: absolute;
+                width:100%;
+                position: absolute; top:31px; bottom:-104px;
                 overflow-y:auto; overflow-x:hidden;
                 margin:0; padding:0; list-style: none;
             }
                 .mr-recap__item {
                     position:relative;
-                    width:100%; 
-                    padding:0.75em 0; border-bottom:1px dotted #565656;
+                    padding:0.75em 0 0.75em 0; border-bottom:1px dotted #565656;
                     -moz-box-sizing: border-box; box-sizing: border-box; 
                     cursor:pointer;
                 }
