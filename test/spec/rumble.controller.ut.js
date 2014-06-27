@@ -273,6 +273,7 @@
                         'expId'         : 'dimension2',
                         'expTitle'      : 'dimension3',
                         'expVersion'    : 'dimension10',
+                        'href'          : 'dimension11',
                         'slideCount'    : 'dimension4',
                         'slideId'       : 'dimension5',
                         'slideTitle'    : 'dimension6',
@@ -287,6 +288,7 @@
                         'expTitle' : 'my title',
                         'slideCount' : 6
                     });
+                    /*
                     expect(trackerSpy.trackPage).toHaveBeenCalledWith({
                         page : '/mr/e-722bd3c4942331/',
                         title : 'my title',
@@ -294,6 +296,7 @@
                         slideId : 'null',
                         slideTitle : 'null'
                     });
+                    */
                 });
             });
 
