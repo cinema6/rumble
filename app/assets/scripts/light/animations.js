@@ -13,7 +13,6 @@
                     $log.info('enter start');
                     TweenMax.to(element, 0.5, {
                         opacity: 1,
-                        delay:0.6,
                         onComplete: done
                     });
                 },
@@ -25,7 +24,6 @@
                     $log.info('enter start');
                     TweenMax.to(element, 0.5, {
                         opacity: 0,
-                        delay:0.1,
                         onComplete: done
                     });
                 },
@@ -37,7 +35,6 @@
                     $log.info('beforeAddClass start',className);
                     TweenMax.to(element, 0.5, {
                         opacity: 0,
-                        delay:0.1,
                         onComplete: done
                     });
                 },
@@ -49,7 +46,6 @@
                     $log.info('removeClass start',className);
                     TweenMax.to(element, 0.5, {
                         opacity: 1,
-                        delay:0.6,
                         onComplete: done
                     });
                 }
@@ -66,7 +62,6 @@
                     $log.info('beforeAddClass start',className);
                     TweenMax.to(element, 0.5, {
                         opacity: 0,
-                        delay:0.1,
                         onComplete: done
                     });
                 },
@@ -78,7 +73,6 @@
                     $log.info('removeClass start',className);
                     TweenMax.to(element, 0.5, {
                         opacity: 1,
-                        delay:0.6,
                         onComplete: done
                     });
                 }
