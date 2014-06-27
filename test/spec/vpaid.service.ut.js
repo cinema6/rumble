@@ -7,7 +7,9 @@
                 VPAIDServiceProvider,
                 $rootScope,
                 $window,
+                $timeout,
                 $log,
+                // $q,
                 $httpBackend,
                 c6EventEmitter,
                 compileAdTag;
@@ -53,6 +55,8 @@
                 inject(function($injector) {
                     $rootScope = $injector.get('$rootScope');
                     $window = $injector.get('$window');
+                    $timeout = $injector.get('$timeout');
+                    // $q = $injector.get('$q');
                     spyOn($window.Date, 'now').andReturn(Date.now());
                     $log = $injector.get('$log');
                     $log.context = function() { return $log; };
@@ -175,22 +179,134 @@
                             });
 
                             describe('loadAd()', function() {
-                                it('should call loadAd() on the flash object', function() {
+                                it('should not call loadAd() if onAdResponse has not fired', function() {
                                     player.loadAd();
+
+                                    expect(mockFlashPlayer.loadAd).not.toHaveBeenCalled();
+                                });
+
+                                it('should call loadAd() on the flash object after onAdResponse fires', function() {
+                                    player.loadAd();
+
+                                    var message = {
+                                        data: '{ "__vpaid__" : { "type" : "onAdResponse", "id" : "testId" } }',
+                                    };
+
+                                    messageHandler(message);
+
+                                    expect(mockFlashPlayer.loadAd).toHaveBeenCalled();
+                                });
+
+                                it('should call loadAd() immediately if AdStart has already fired', function() {
+                                    var message = {
+                                        data: '{ "__vpaid__" : { "type" : "onAdResponse", "id" : "testId" } }',
+                                    };
+
+                                    messageHandler(message);
+
+                                    player.loadAd();
+
+                                    $rootScope.$digest();
+
                                     expect(mockFlashPlayer.loadAd).toHaveBeenCalled();
                                 });
                             });
 
                             describe('startAd()', function() {
-                                it('should call loadAd() on the flash object', function() {
+                                it('should not call startAd() if AdLoaded has not fired', function() {
                                     player.startAd();
+
+                                    expect(mockFlashPlayer.startAd).not.toHaveBeenCalled();
+                                });
+
+                                it('should call startAd() on the flash object after AdLoaded fires', function() {
+                                    player.startAd();
+
+                                    var message = {
+                                        data: '{ "__vpaid__" : { "type" : "AdLoaded", "id" : "testId" } }',
+                                    };
+
+                                    messageHandler(message);
+
                                     expect(mockFlashPlayer.startAd).toHaveBeenCalled();
+                                });
+
+                                it('should call startAd() immediately if AdStart has already fired', function() {
+                                    var message = {
+                                        data: '{ "__vpaid__" : { "type" : "AdLoaded", "id" : "testId" } }',
+                                    };
+
+                                    messageHandler(message);
+
+                                    player.startAd();
+
+                                    $rootScope.$digest();
+
+                                    expect(mockFlashPlayer.startAd).toHaveBeenCalled();
+                                });
+
+                                describe('the ad timeout timer', function() {
+                                    it('should reject all promises after 3 seconds', function() {
+                                        player.loadAd();
+                                        player.startAd();
+
+                                        $timeout.flush();
+
+                                        var message = {
+                                            data: '{ "__vpaid__" : { "type" : "onAdResponse", "id" : "testId" } }',
+                                        };
+
+                                        messageHandler(message);
+
+                                        var message = {
+                                            data: '{ "__vpaid__" : { "type" : "AdLoaded", "id" : "testId" } }',
+                                        };
+
+                                        messageHandler(message);
+
+                                        var message = {
+                                            data: '{ "__vpaid__" : { "type" : "AdStarted", "id" : "testId" } }',
+                                        };
+
+                                        messageHandler(message);
+
+                                        expect(mockFlashPlayer.loadAd).not.toHaveBeenCalled();
+                                        expect(mockFlashPlayer.startAd).not.toHaveBeenCalled();
+
+                                    });
                                 });
                             });
 
                             describe('pause()', function() {
-                                it('should call pauseAd() on the flash object', function() {
+                                it('should not call pauseAd() if AdStarted has not fired', function() {
                                     player.pause();
+
+                                    expect(mockFlashPlayer.pauseAd).not.toHaveBeenCalled();
+                                });
+
+                                it('should call pauseAd() on the flash object after AdStarted fires', function() {
+                                    player.pause();
+
+                                    var message = {
+                                        data: '{ "__vpaid__" : { "type" : "AdStarted", "id" : "testId" } }',
+                                    };
+
+                                    messageHandler(message);
+
+                                    expect(mockFlashPlayer.pauseAd).toHaveBeenCalled();
+                                });
+
+                                it('should call pauseAd() immediately if AdStart has already fired', function() {
+                                    var message = {
+                                        data: '{ "__vpaid__" : { "type" : "AdStarted", "id" : "testId" } }',
+                                    };
+
+                                    messageHandler(message);
+
+                                    player.pause();
+
+                                    $rootScope.$digest();
+
                                     expect(mockFlashPlayer.pauseAd).toHaveBeenCalled();
                                 });
                             });
@@ -217,8 +333,35 @@
                             });
 
                             describe('resumeAd()', function() {
+                                it('shoudl not call resumeAd() if AdStarted has not fired', function() {
+                                    player.resumeAd();
+
+                                    expect(mockFlashPlayer.resumeAd).not.toHaveBeenCalled();
+                                });
+
                                 it('should call resumeAd() on the flash object', function() {
                                     player.resumeAd();
+
+                                    var message = {
+                                        data: '{ "__vpaid__" : { "type" : "AdStarted", "id" : "testId" } }',
+                                    };
+
+                                    messageHandler(message);
+
+                                    expect(mockFlashPlayer.resumeAd).toHaveBeenCalled();
+                                });
+
+                                it('should call resumeAd() immediately if AdStart has already fired', function() {
+                                    var message = {
+                                        data: '{ "__vpaid__" : { "type" : "AdStarted", "id" : "testId" } }',
+                                    };
+
+                                    messageHandler(message);
+
+                                    player.resumeAd();
+
+                                    $rootScope.$digest();
+
                                     expect(mockFlashPlayer.resumeAd).toHaveBeenCalled();
                                 });
                             });

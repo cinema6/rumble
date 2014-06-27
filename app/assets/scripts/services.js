@@ -90,8 +90,8 @@
                 _provider.adTags = tags;
             };
 
-            this.$get = ['$log','$http','$window','c6ImagePreloader','compileAdTag', '$q',
-            function    ( $log , $http , $window , c6ImagePreloader , compileAdTag ,  $q) {
+            this.$get = ['$log','$http','$window','c6ImagePreloader','compileAdTag','$q','$timeout',
+            function    ( $log , $http , $window , c6ImagePreloader , compileAdTag , $q , $timeout ) {
                 var service = {},
                     _service = {};
 
@@ -316,8 +316,8 @@
                 return this;
             };
 
-            this.$get = ['$log','$http','$q','$window','$interval','$templateCache','c6EventEmitter','c6UrlMaker','compileAdTag', '$timeout',
-            function    ( $log , $http , $q , $window , $interval , $templateCache , c6EventEmitter , c6UrlMaker , compileAdTag ,  $timeout ) {
+            this.$get = ['$log','$http','$q','$window','$interval','$templateCache','c6EventEmitter','c6UrlMaker','compileAdTag','$timeout','$rootScope',
+            function    ( $log , $http , $q , $window , $interval , $templateCache , c6EventEmitter , c6UrlMaker , compileAdTag , $timeout , $rootScope ) {
                 var service = {},
                     _service = {};
 
@@ -514,21 +514,27 @@
                                         {
                                             // we have the Adap swf but no ad
                                             self.emit('adPlayerReady', self);
-                                            adPlayerDeferred.resolve();
+                                            $rootScope.$apply(function() {
+                                                adPlayerDeferred.resolve();
+                                            });
                                             break;
                                         }
                                     case 'AdLoaded':
                                         {
                                             // we SHOULD have the ad, but some people lie
                                             self.emit('adLoaded', self);
-                                            adDeferred.resolve();
+                                            $rootScope.$apply(function() {
+                                                adDeferred.resolve();
+                                            });
                                             break;
                                         }
                                     case 'AdStarted':
                                         {
-                                            // we have an ACTUAL ad
+                                            // we DEFINITELY have an ACTUAL ad
                                             self.emit('play', self);
-                                            actualAdDeferred.resolve();
+                                            $rootScope.$apply(function() {
+                                                actualAdDeferred.resolve();
+                                            });
                                             break;
                                         }
                                     case 'AdPlaying':
