@@ -9,7 +9,6 @@
                 $window,
                 $timeout,
                 $log,
-                // $q,
                 $httpBackend,
                 c6EventEmitter,
                 compileAdTag;
@@ -56,7 +55,6 @@
                     $rootScope = $injector.get('$rootScope');
                     $window = $injector.get('$window');
                     $timeout = $injector.get('$timeout');
-                    // $q = $injector.get('$q');
                     spyOn($window.Date, 'now').andReturn(Date.now());
                     $log = $injector.get('$log');
                     $log.context = function() { return $log; };
