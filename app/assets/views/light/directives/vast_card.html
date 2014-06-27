@@ -1,6 +1,5 @@
 <div class="mr-card__group mr-ad__group">
     <div class="mr-adVideo__group" ng-style="{visibility: Ctrl.showVideo ? 'visible' : 'hidden'}">
-        <p class="mr-adVideo__label tk--hdr">Advertisement</p>
         <div class="mr-adVideo__videoHolder">
             <video class="mr-adVideo__video" ng-click="Ctrl.clickThrough()"
                 c6-video id="{{config.id}}" c6-src="Ctrl.videoSrc">
@@ -19,3 +18,4 @@
         companion="Ctrl.companion">
     </display-ad-module>
 </div>
+<p class="mr-adVideo__label">Advertisement</p>
