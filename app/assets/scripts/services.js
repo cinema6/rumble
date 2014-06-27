@@ -90,8 +90,8 @@
                 _provider.adTags = tags;
             };
 
-            this.$get = ['$log','$http','$window','c6ImagePreloader','compileAdTag','$q','$timeout',
-            function    ( $log , $http , $window , c6ImagePreloader , compileAdTag , $q , $timeout ) {
+            this.$get = ['$log','$http','$window','c6ImagePreloader','compileAdTag','$q',
+            function    ( $log , $http , $window , c6ImagePreloader , compileAdTag , $q ) {
                 var service = {},
                     _service = {};
 
