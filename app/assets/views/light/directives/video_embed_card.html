@@ -1,5 +1,5 @@
-<article class="mr-card__group c6-height-limiter">
-    <ballot-vote-module class="mr-ballot-module css-promote"
+<article class="mr-card__group">
+    <ballot-vote-module class="mr-ballot-module"
         ng-if="Ctrl.hasModule('ballot')"
         active="config._data.modules.ballot.ballotActive && active"
         vote="config._data.modules.ballot.vote"
@@ -8,7 +8,7 @@
         on-dismiss="Ctrl.dismissBallot()">
     </ballot-vote-module>
     <ballot-results-module ng-if="Ctrl.hasModule('ballot')"
-        class="mr-results-module css-promote"
+        class="mr-results-module"
         active="config._data.modules.ballot.resultsActive && active"
         vote="config._data.modules.ballot.vote"
         card-id="{{config.id}}"
