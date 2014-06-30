@@ -270,11 +270,53 @@
             }
                 .mr-charCount--low .mr-player__group,
                 .mr-charCount--low .mr-card__group {
-                    padding:0 0 66% 0;
+                    padding:0 0 70% 0;
                 }
                 .mr-charCount--med .mr-card__group,
                 .mr-charCount--med .mr-player__group {
-                    padding:0 0 62% 0;
+                    padding:0 0 66% 0;
+                }
+                .mr-charCount--high .mr-card__group,
+                .mr-charCount--high .mr-player__group {
+                    padding:0 0 66% 0;
+                }
+                @media screen and (min-width:35.6875rem) and (max-width:40rem) {
+                    /*571px - 640px */
+                    .mr-charCount--low .mr-player__group,
+                    .mr-charCount--low .mr-card__group {
+                        padding:0 0 66% 0;
+                    }
+                    .mr-charCount--med .mr-card__group,
+                    .mr-charCount--med .mr-player__group {
+                        padding:0 0 58% 0;
+                    }
+                    .mr-charCount--high .mr-card__group,
+                    .mr-charCount--high .mr-player__group {
+                        padding:0 0 63% 0;
+                    }
+                    .mr-charCount--max .mr-card__group,
+                    .mr-charCount--max .mr-player__group {
+                        padding:0 0 55% 0;
+                    }
+                }
+                @media screen and (min-width:40.0625rem) and (max-width:44.9375rem) {
+                    /*641px - 719px */
+                    .mr-charCount--low .mr-player__group,
+                    .mr-charCount--low .mr-card__group {
+                        padding:0 0 66% 0;
+                    }
+                    .mr-charCount--med .mr-card__group,
+                    .mr-charCount--med .mr-player__group {
+                        padding:0 0 62% 0;
+                    }
+                    .mr-charCount--high .mr-card__group,
+                    .mr-charCount--high .mr-player__group {
+                        padding:0 0 63% 0;
+                    }
+                    .mr-charCount--max .mr-card__group,
+                    .mr-charCount--max .mr-player__group {
+                        padding:0 0 56% 0;
+                    }
                 }
                 @media screen and (min-width:45rem) and (max-width:60rem) {
                     /*720px - 960px */
@@ -282,12 +324,36 @@
                     .mr-charCount--low .mr-card__group {
                         padding:0 0 64% 0;
                     }
+                    .mr-charCount--med .mr-card__group,
+                    .mr-charCount--med .mr-player__group {
+                        padding:0 0 62% 0;
+                    }
+                    .mr-charCount--high .mr-card__group,
+                    .mr-charCount--high .mr-player__group {
+                        padding:0 0 62% 0;
+                    }
+                    .mr-charCount--max .mr-card__group,
+                    .mr-charCount--max .mr-player__group {
+                        padding:0 0 59% 0;
+                    }
                 }
                 @media screen and (min-width:60.0625rem) {
                     /*961px+ */
                     .mr-charCount--low .mr-player__group,
                     .mr-charCount--low .mr-card__group {
+                        padding:0 0 63% 0;
+                    }
+                    .mr-charCount--med .mr-card__group,
+                    .mr-charCount--med .mr-player__group {
                         padding:0 0 62% 0;
+                    }
+                    .mr-charCount--high .mr-card__group,
+                    .mr-charCount--high .mr-player__group {
+                        padding:0 0 62% 0;
+                    }
+                    .mr-charCount--max .mr-card__group,
+                    .mr-charCount--max .mr-player__group {
+                        padding:0 0 61% 0;
                     }
                 }
                 .mr-player__play-btn {
@@ -317,9 +383,8 @@
             margin: 0 0.625em;
         }
             .mr-card__title {
-                font-size:1.25rem;/*20px*/ color:#fff; font-weight:normal; 
+                font-size:1.25rem;/*20px*/ color:#fff; font-weight:normal;
                 padding:0; margin:0.4em 0; line-height: 1.2;
-                overflow:hidden; text-overflow: ellipsis; white-space:nowrap;
             }
             .mr-card__attributes {
                 color:#999; font-size:0.75em;/*12px*/
@@ -330,12 +395,18 @@
             }
             @media screen and (min-width:25.0625rem) and (max-width:35.625rem) {
                 /*401px - 570px*/
+                .mr-card__title {
+                    font-size:1rem;/*16px*/
+                }
                 .mr-card__desc {
                     font-size:0.8125rem;/*13px*/
                 }
             }
             @media screen and (max-width:25rem) {
                 /*max 400px*/
+                .mr-card__title {
+                    font-size:1rem;/*16px*/
+                }
                 .mr-charCount--low .mr-player__group {
                     padding:0 0 72% 0;
                 }
