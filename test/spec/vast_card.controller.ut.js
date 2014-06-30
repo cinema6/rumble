@@ -8,6 +8,7 @@
                 $controller,
                 $window,
                 $interval,
+                $timeout,
                 c6EventEmitter,
                 VastCardCtrl,
                 $q;
@@ -74,6 +75,7 @@
                     $rootScope = $injector.get('$rootScope');
                     $controller = $injector.get('$controller');
                     $interval = $injector.get('$interval');
+                    $timeout = $injector.get('$timeout');
                     $window = $injector.get('$window');
                     c6EventEmitter = $injector.get('c6EventEmitter');
                     $q = $injector.get('$q');
@@ -642,6 +644,34 @@
                                 });
 
                                 expect(VASTService.getVAST.callCount).toBe(1);
+                            });
+
+                            describe('the ad timer', function() {
+                                var delay;
+
+                                beforeEach(function() {
+                                    delay = $q.defer();
+                                    spyOn($scope, '$emit');
+                                    VASTService.getVAST.andReturn($q.when(delay.promise));
+
+                                    $scope.$apply(function() {
+                                        $scope.active = true;
+                                    });
+                                });
+
+                                it('should advance to the next card if no videoSrc is found after 3 seconds', function() {
+                                    $timeout.flush();
+
+                                    expect($scope.$emit.mostRecentCall.args[0]).toBe('<vast-card>:contentEnd');
+                                });
+
+                                it('should not advance to the next card if a videoSrc is found after 3 seconds', function() {
+                                    delay.resolve(vast);
+
+                                    $timeout.flush();
+
+                                    expect($scope.$emit.mostRecentCall.args[0]).not.toBe('<vast-card>:contentEnd');
+                                });
                             });
 
                             describe('if we do not have an ad', function() {
