@@ -131,7 +131,7 @@
             right:0;
         }
     .mr-pager__border {
-        width:2px;
+        width:1px;
         display: block;
         position: absolute; top:0; bottom:0;
         background:#1b1b1b;
@@ -178,8 +178,12 @@
                 .mr-pages__item {
                     float:left;
                     width:5.625rem;/*90px*/ height:2.875rem;/*46px*/
-                    margin:0; padding:0; border:0;
+                    margin:0; padding:0;
                     position:relative; overflow: hidden;
+                    border:0;
+                    border-left:1px solid #1b1b1b;
+                    border-right:1px solid #1b1b1b;
+                    box-sizing:border-box;
                 }
                     .mr-pages__navBtn,
                     .mr-pages__page {
@@ -646,9 +650,9 @@
                         cursor:pointer;
                     }
                         .mr-recap__imgBox {
-                            width:100%; height:100%; display: block;
-                            position:absolute;
-                            background: 50% 50% / cover no-repeat;
+                            display: block;
+                            position:absolute; top:0; left:0; bottom:0; right:0;
+                            background: 50% 50% / auto 136% no-repeat;
                         }
                     .mr-recap__copyBox {
                         float:right;
@@ -657,6 +661,7 @@
                         .mr-recap__copyBox .mr-card__title-h1 {
                             font-size:1.125em;
                             margin:0.25em 0; padding:0;
+                            color:#fff;
                         }
                         .mr-recap__ballotInfo {
                             color:#999; font-size:0.875em;
