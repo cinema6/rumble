@@ -3,9 +3,9 @@
 
     angular.module('c6.rumble')
         .controller('VastCardController', ['$scope','$window', 'VASTService','ControlsService',
-                                           'EventService','ModuleService','$interval',
+                                           'EventService','ModuleService','$interval','$timeout',
         function                          ( $scope , $window ,  VASTService , ControlsService ,
-                                            EventService , ModuleService , $interval ) {
+                                            EventService , ModuleService , $interval , $timeout ) {
             var self = this,
                 config = $scope.config,
                 _data = config._data = config._data || {
@@ -85,6 +85,18 @@
                 player.play();
             };
 
+            function goForward() {
+                $scope.$emit('<vast-card>:contentEnd', config);
+            }
+
+            function initTimeout() {
+                $timeout(function() {
+                    if (!self.videoSrc) {
+                        goForward();
+                    }
+                }, 3000);
+            }
+
             $scope.$watch('onDeck || active', function(onDeck) {
                 if(onDeck) {
                     if(!adHasBeenCalledFor) {
@@ -94,7 +106,7 @@
                             self.companion = vast.getCompanion();
                         }, function() {
                             if ($scope.active) {
-                                $scope.$emit('<vast-card>:contentEnd', config);
+                                goForward();
                             } else {
                                 shouldGoForward = true;
                             }
@@ -177,7 +189,7 @@
 
                 iface.on('ended', function() {
                         if (!self.companion) {
-                            $scope.$emit('<vast-card>:contentEnd', config);
+                            goForward();
                         }
                         firePixels('complete');
                     })
@@ -222,12 +234,14 @@
 
                     if (active) {
                         if(shouldGoForward) {
-                            $scope.$emit('<vast-card>:contentEnd', config);
+                            goForward();
                         } else {
                             ControlsService.bindTo(iface);
 
                             if (_data.playerEvents.play.emitCount < 1) {
                                 $scope.$emit('<vast-card>:init', controlNavigation);
+
+                                initTimeout();
 
                                 if (data.autoplay) {
                                     iface.play();
