@@ -1,11 +1,13 @@
 # MiniReel Player
 
+## Beta15 (June 25, 2014)
 * *[Beta15.rc1]*
   * [FIX]: Updates to google analytics video duration, adding href custom dimension
   * [FIX]: (Mobile): Ad cards are not included in the progress indicator
   * [FEATURE]: VPAID ad timer will advance to the next card if no ad has started within 3 seconds of the card becoming active
   * [FEATURE]: VAST ad timer will advance to the next card if no videoSrc is found within 3 seconds of the card becoming active
   * [REDESIGN]: Updated light text embedded templates to remove 'hover to reveal text' feature.
+* *[/Beta15.rc1]*
 
 ## Beta14 (June 25, 2014)
 * *[Beta14.rc2]*
