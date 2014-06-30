@@ -1,5 +1,5 @@
-<article class="mr-card__group c6-height-limiter">
-    <ballot-vote-module class="mr-ballot-module css-promote"
+<article class="mr-card__group">
+    <ballot-vote-module class="mr-ballot-module"
         ng-if="Ctrl.hasModule('ballot')"
         active="config._data.modules.ballot.ballotActive && active"
         vote="config._data.modules.ballot.vote"
@@ -8,7 +8,7 @@
         on-dismiss="Ctrl.dismissBallot()">
     </ballot-vote-module>
     <ballot-results-module ng-if="Ctrl.hasModule('ballot')"
-        class="mr-results-module css-promote"
+        class="mr-results-module"
         active="config._data.modules.ballot.resultsActive && active"
         vote="config._data.modules.ballot.vote"
         card-id="{{config.id}}"
@@ -29,12 +29,13 @@
         </div>
     </div>
 
-    <copy-expander title="{{config.title}}"
-        source="{{config.source}}"
-        source-url="{{Ctrl.videoUrl}}"
-        note="{{config.note}}"
-        touch="profile.touch">
-    </copy-expander>
+    <div class="mr-card__copy">
+        <h1 class="mr-card__title tk--hdr">
+            {{config.title}}
+            <span ng-show="!!config.source" class="mr-card__attributes">via <a ng-href="{{Ctrl.videoUrl}}" target="_blank" title="{{config.source}}">{{config.source}}</a></span>
+        </h1>
+        <div class="mr-card__desc" ng-bind-html="config.note"></div>
+    </div>
 
     <!--<comments-module ng-if="Ctrl.hasModule('comments')"
         card-id="{{config.id}}"

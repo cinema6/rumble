@@ -205,8 +205,8 @@
                 {
                     "id": "rc-22119a8cf9f755",
                     "type": "youtube",
-                    "title": "F18 Fighter",
-                    "note": "This guy recorded himself in an F18 fighter jet.",
+                    "title": "F18 Fighter hello world this is some more text to fit in the title F18 Fighter hello world this isto",
+                    "note": "This guy recorded himself in an F18 fighter jet. dsafdk lasd dsfasd whe dsf asd and what happens when we overlfow the content box here? this is going to be more content than we typically have This gu.",
                     "source": "YouTube",
                     "modules": [
                         "ballot"
@@ -227,8 +227,8 @@
                 {
                     "id": "rc-337f092e881524",
                     "type": "youtube",
-                    "title": "Lions",
-                    "note": "If you ever get the chance to hang out with lions, record it.",
+                    "title": "If you ever get the chance to hang out with lions, record it.",
+                    "note": "Medium: Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec odio. Quisque volutpat mattis erost.",
                     "source": "YouTube",
                     "modules": [
                         "ballot"
@@ -249,8 +249,8 @@
                 {
                     "id": "rc-facb167546a4ff",
                     "type": "youtube",
-                    "title": "Vetical Skydive",
-                    "note": "Vertical skydiving looks like a breeze, doesn't it?",
+                    "title": "Vertical skydiving looks like a breeze, doesn't it?",
+                    "note": "Low: Pellentesque odio nisi, euismod in, phatra.",
                     "source": "YouTube",
                     "modules": [
                         "ballot"
@@ -271,8 +271,8 @@
                 {
                     "id": "rc-4b9dc6b9651428",
                     "type": "youtube",
-                    "title": "Canyon Backflip",
-                    "note": "Kelly McGarry flips over a 72-foot-long canyon gap.",
+                    "title": "Kelly McGarry flips over a 72-foot-long canyon gap.",
+                    "note": "High: Donec nec justo eget felis facilisis fermentum. Aliquam porttitor mauris sit amet orci. Aenean dignissim pellentesque felis. Morbi in sem quis dui plae.",
                     "source": "YouTube",
                     "modules": [
                         "ballot"

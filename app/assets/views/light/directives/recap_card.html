@@ -1,30 +1,29 @@
-<article class="mr-card__group mr-recap__group c6-height-limiter">
+<article class="mr-card__group mr-recap__group">
     <h3 class="mr-recap__intro tk--hdr">You just watched : &ldquo;<em>{{Ctrl.title}}</em>&rdquo;</h3>
 
-    <div class="mr-recap__copy">
-        <ul class="mr-recap__list">
-            <li class="mr-recap__item clearfix" ng-repeat="card in Ctrl.deck">
-                <button class="mr-recap__imgBtn" type="button" ng-click="Ctrl.jumpTo(card)">
-                    <span class="mr-recap__imgBox" style="background-image:url({{card.thumbs.large}});">&nbsp;</span>
-                </button>
-                <div class="mr-recap__copyBox">
-                    <h1 class="mr-card__title-h1 tk--hdr" ng-click="Ctrl.jumpTo(card)">{{card.title}}</h1>
-                    <p class="mr-card__attributes">via <a ng-href="{{card.webHref}}" target="_blank" title="{{card.source}}">{{card.source}}</a></p>
-                    <div class="mr-recap__ballotInfo" ng-show="card.hasModule('ballot')">
-                        <h3 class="mr-recap__ballotQuestion">Questionnaire: <strong>{{card.ballot.prompt}}</strong></h3>
-                        <p class="mr-recap__ballotResults">
-                            <span class="mr-recap__ballotA">
-                                {{card.ballot.choices[0]}} <strong>{{card.ballot.results[0].votes | percent}}</strong>
-                            </span> &nbsp;&nbsp;|&nbsp;&nbsp;
-                            <span class="mr-recap__ballotB">
-                                {{card.ballot.choices[1]}} <strong>{{card.ballot.results[1].votes | percent}}</strong>
-                            </span>
-                        </p>
-                    </div>
+    <ul class="mr-recap__list">
+        <li class="mr-recap__item clearfix" ng-repeat="card in Ctrl.deck">
+            <button class="mr-recap__imgBtn" type="button" ng-click="Ctrl.jumpTo(card)">
+                <span class="mr-recap__imgBox" style="background-image:url({{card.thumbs.large}});">&nbsp;</span>
+            </button>
+            <div class="mr-recap__copyBox">
+                <h1 class="mr-card__title-h1 tk--hdr" ng-click="Ctrl.jumpTo(card)">{{card.title}}
+                    <span class="mr-card__attributes">via <a ng-href="{{card.webHref}}" target="_blank" title="{{card.source}}">{{card.source}}</a></span>
+                </h1>
+                <div class="mr-recap__ballotInfo" ng-show="card.hasModule('ballot')">
+                    <h3 class="mr-recap__ballotQuestion">Questionnaire: <strong>{{card.ballot.prompt}}</strong></h3>
+                    <p class="mr-recap__ballotResults">
+                        <span class="mr-recap__ballotA">
+                            {{card.ballot.choices[0]}} <strong>{{card.ballot.results[0].votes | percent}}</strong>
+                        </span> &nbsp;&nbsp;|&nbsp;&nbsp;
+                        <span class="mr-recap__ballotB">
+                            {{card.ballot.choices[1]}} <strong>{{card.ballot.results[1].votes | percent}}</strong>
+                        </span>
+                    </p>
                 </div>
-            </li>
-        </ul>
-    </div>
+            </div>
+        </li>
+    </ul>
 </article>
 
 <!--<article class="mr-card__group mr-more-reels__group c6-height-limiter">
