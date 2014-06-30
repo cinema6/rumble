@@ -3,6 +3,7 @@
 ## Beta15
 * *[Beta15.rc1]*
   * [FIX]: Updates to google analytics video duration, adding href custom dimension
+  * [FEATURE]: VPAID ad timer will advance to the next card if no ad has started within 3 seconds of the card becoming active
 
 ## Beta14 (June 25, 2014)
 * *[Beta14.rc2]*

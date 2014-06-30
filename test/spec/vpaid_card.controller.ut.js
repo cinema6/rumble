@@ -8,11 +8,14 @@
                 $controller,
                 $interval,
                 $log,
+                $q,
                 VpaidCardController,
                 c6EventEmitter;
 
             var ModuleService,
-                c6AppData;
+                c6AppData,
+                loadAdDeferred,
+                startAdDeferred;
 
             function IFace() {
                 var self = this;
@@ -57,6 +60,7 @@
                     $controller = $injector.get('$controller');
                     $interval = $injector.get('$interval');
                     $log = $injector.get('$log');
+                    $q = $injector.get('$q');
                     c6EventEmitter = $injector.get('c6EventEmitter');
                     ModuleService = $injector.get('ModuleService');
                     c6AppData = $injector.get('c6AppData');
@@ -430,10 +434,15 @@
 
             describe('$watchers', function() {
                 describe('active', function() {
-                    var iface;
+                    var iface,
+                        deferred;
 
                     beforeEach(function() {
                         iface = new IFace();
+
+                        deferred = $q.defer();
+
+                        iface.play.andReturn(deferred.promise);
 
                         $scope.$apply(function() {
                             $scope.$emit('playerAdd', iface);
@@ -537,6 +546,13 @@
                             });
 
                             expect($scope.$emit.callCount).toBe(1);
+                        });
+
+                        it('should skip the card if the play promise is rejected', function() {
+                            $scope.$apply(function() {
+                                deferred.reject();
+                            });
+                            expect($scope.$emit.mostRecentCall.args[0]).toBe('<vpaid-card>:contentEnd');
                         });
 
                         describe('when controlling the navigation', function() {

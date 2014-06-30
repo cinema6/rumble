@@ -41,6 +41,10 @@
                 }
             });
 
+            function goForward() {
+                $scope.$emit('<vpaid-card>:contentEnd', config);
+            }
+
             this.reset = function() {
                 // this is basically just a resumeAd() call
                 // in order to play another ad we need to re-initialize the whole player
@@ -48,7 +52,7 @@
             };
 
             this.playVideo = function() {
-                player.play();
+                player.play().then(null, goForward);
             };
 
             this.hasModule = ModuleService.hasModule.bind(ModuleService, config.modules);
@@ -60,8 +64,8 @@
                     _data.modules.displayAd.src = config.displayAd;
 
                     if (!adHasBeenCalledFor) {
-                        player.loadAd();
                         adHasBeenCalledFor = true;
+                        player.loadAd();
                     }
                 }
             });
@@ -148,7 +152,7 @@
                     //     _data.modules.displayAd.active = true;
                     // } else {
                     if ($scope.active) {
-                        $scope.$emit('<vpaid-card>:contentEnd', config);
+                        goForward();
                     } else {
                         shouldGoForward = true;
                     }
@@ -185,12 +189,12 @@
 
                     if (active) {
                         if (shouldGoForward) {
-                            $scope.$emit('<vpaid-card>:contentEnd', config);
+                            goForward();
                         } else if (_data.playerEvents.play.emitCount < 1) {
                             $scope.$emit('<vpaid-card>:init', controlNavigation);
                             if (data.autoplay) {
-                                iface.play();
                                 adHasBeenCalledFor = true;
+                                iface.play().then(null, goForward);
                             }
                         }
                     } else {
@@ -228,9 +232,6 @@
                         hasLoadAdBeenCalled = false,
                         hasStarted = false,
                         player;
-
-                    var adPlayerDeferred = $q.defer(),
-                        adDeferred = $q.defer();
 
                     Object.defineProperties(iface, {
                         currentTime: {
@@ -270,7 +271,7 @@
 
                     iface.loadAd = function() {
                         hasLoadAdBeenCalled = true;
-                        return adPlayerDeferred.promise.then(player.loadAd);
+                        return player.loadAd();
                     };
 
                     iface.play = function() {
@@ -278,18 +279,16 @@
                             iface.loadAd();
                         }
 
-                        return adDeferred.promise.then(function() {
-                            if (hasStarted) {
-                                player.resumeAd();
-                            } else {
-                                hasStarted = true;
-                                player.startAd();
-                            }
-                        });
+                        if (hasStarted) {
+                            return player.resumeAd();
+                        } else {
+                            hasStarted = true;
+                            return player.startAd();
+                        }
                     };
 
                     iface.pause = function() {
-                        return adDeferred.promise.then(player.pause);
+                        return player.pause();
                     };
 
                     iface.destroy = function() {
@@ -317,10 +316,6 @@
 
                             iface.emit('ready', iface);
 
-                            player.on('adLoaded', adDeferred.resolve);
-
-                            player.on('adPlayerReady', adPlayerDeferred.resolve);
-
                             player.on('ended', function() {
                                 _iface.ended = true;
                                 iface.emit('ended', iface);
@@ -346,6 +341,7 @@
                             $log.info(result);
                         }, function(error) {
                             $log.error(error);
+                            iface.emit('ended', iface);
                         });
                     }
 
