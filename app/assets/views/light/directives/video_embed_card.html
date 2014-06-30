@@ -29,12 +29,13 @@
         </div>
     </div>
 
-    <copy-expander title="{{config.title}}"
-        source="{{config.source}}"
-        source-url="{{Ctrl.videoUrl}}"
-        note="{{config.note}}"
-        touch="profile.touch">
-    </copy-expander>
+    <div class="mr-card__copy">
+        <h1 class="mr-card__title tk--hdr">
+            {{config.title}}
+            <span ng-show="!!config.source" class="mr-card__attributes">via <a ng-href="{{Ctrl.videoUrl}}" target="_blank" title="{{config.source}}">{{config.source}}</a></span>
+        </h1>
+        <div class="mr-card__desc" ng-bind-html="config.note"></div>
+    </div>
 
     <!--<comments-module ng-if="Ctrl.hasModule('comments')"
         card-id="{{config.id}}"

@@ -2,9 +2,9 @@
     <li class="mr-cards__item" ng-repeat="item in players"
     ng-class="{ 
         squished : ($index !== currentIndex),
-        'mr-charCount--low': item.note.length <= 70,
-        'mr-charCount--med': item.note.length > 70 && item.note.length <= 140,
-        'mr-charCount--high': item.note.length > 140
+        'mr-charCount--low': item.title.length + item.note.length <= 100,
+        'mr-charCount--med': item.title.length + item.note.length > 70 && item.note.length <= 170,
+        'mr-charCount--high': item.title.length + item.note.length > 170
     }">
         <mr-card
             x-number="{{tocCards.indexOf(item) + 1}}"

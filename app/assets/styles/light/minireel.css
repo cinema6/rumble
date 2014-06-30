@@ -625,14 +625,13 @@
             font-size:0.875rem; color:#929292; font-weight:300; text-align: left;
             margin:0; padding: 0.125rem 0 0.4375rem 0;
         }
-            .mr-recap__copy {
-                border-top:1px dotted #565656;
-            }
             .mr-recap__list {
                 width:100%;
                 position: absolute; top:31px; bottom:-104px;
                 overflow-y:auto; overflow-x:hidden;
                 margin:0; padding:0; list-style: none;
+                border-top:1px dotted #565656;
+                border-bottom:1px dotted #565656;
             }
                 .mr-recap__item {
                     position:relative;
@@ -640,6 +639,9 @@
                     -moz-box-sizing: border-box; box-sizing: border-box; 
                     cursor:pointer;
                 }
+                    .mr-recap__item:last-child {
+                        border-bottom:0;
+                    }
                     .mr-recap__imgBtn {
                         width:27%; height:0; display:block;
                         border:0; margin:0; padding:0 0 18% 0;
