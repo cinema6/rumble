@@ -38,8 +38,8 @@
             <span class="sprite ui-icon__next">&nbsp;</span>
             <span class="ui-control__activator">&nbsp;</span>
         </button>
-        <h2 ng-hide="showTOC" class="ui-nav__counter">
-            {{currentIndex + 1}} of {{deck.length}}
+        <h2 ng-hide="showTOC || tocIndex < 0" class="ui-nav__counter">
+            {{tocIndex + 1}} of {{tocCards.length}}
         </h2>
     </div><!--.ui-nav-right--landscape-->
 
