@@ -345,20 +345,12 @@
                         iface.play();
                     });
 
-                    it('should not call startAd() if the adLoaded promise has not resolved', function() {
-                        expect(_player.startAd).not.toHaveBeenCalled();
-                    });
-
-                    it('should call startAd() on the player when promise is resolved', function() {
-                        $scope.$apply(function() {
-                            _player.emit('adLoaded', _player);
-                        });
+                    it('should call startAd() on the player if it hasn\'t already', function() {
                         expect(_player.startAd).toHaveBeenCalled();
                     });
 
-                    it('should call resumeAd() if the player is paused', function() {
+                    it('should call resumeAd() if the player was already started', function() {
                         $scope.$apply(function() {
-                            _player.emit('adLoaded', _player);
                             iface.pause();
                             iface.play();
                         });
@@ -378,37 +370,17 @@
                 });
 
                 describe('pause', function() {
-                    beforeEach(function() {
+                    it('should call pause()', function() {
                         _player.emit('ready', _player);
                         iface.pause();
-                    });
-
-                    it('should not call pause() if ad is not loaded', function() {
-                        expect(_player.pause).not.toHaveBeenCalled();
-                    });
-
-                    it('should call pause() if ad is loaded', function() {
-                        $scope.$apply(function() {
-                            _player.emit('adLoaded', _player);
-                        });
                         expect(_player.pause).toHaveBeenCalled();
                     });
                 });
 
                 describe('loadAd', function() {
-                    beforeEach(function() {
+                    it('should call loadAd() if player is ready', function() {
                         _player.emit('ready', _player);
                         iface.loadAd();
-                    });
-
-                    it('should not call loadAd() if player is not ready', function() {
-                        expect(_player.pause).not.toHaveBeenCalled();
-                    });
-
-                    it('should call loadAd() if player is ready', function() {
-                        $scope.$apply(function() {
-                            _player.emit('adPlayerReady', _player);
-                        });
                         expect(_player.loadAd).toHaveBeenCalled();
                     });
                 });
