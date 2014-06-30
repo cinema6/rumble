@@ -646,7 +646,7 @@
                                 expect(VASTService.getVAST.callCount).toBe(1);
                             });
 
-                            ddescribe('the ad timer', function() {
+                            describe('the ad timer', function() {
                                 var delay;
 
                                 beforeEach(function() {
