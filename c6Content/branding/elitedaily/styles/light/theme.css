@@ -47,7 +47,8 @@
     .ed-news .mr-pager__btn, 
     .ed-news .mr-card__btn,
     .ed-news .mr-player__play-btn,
-    .ed-news .mr-splash__copy {
+    .ed-news .mr-splash__copy,
+    .ed-news .mr-pages__current-indicator {
         background-color: #2391d7;
     }
 
@@ -61,7 +62,8 @@
     .ed-life .mr-pager__btn,
     .ed-life .mr-card__btn,
     .ed-life .mr-player__play-btn,
-    .ed-life .mr-splash__copy {
+    .ed-life .mr-splash__copy,
+    .ed-life .mr-pages__current-indicator {
         background-color: #c0392b;
     }
 
@@ -75,7 +77,8 @@
     .ed-money .mr-pager__btn,
     .ed-money .mr-card__btn, 
     .ed-money .mr-player__play-btn,
-    .ed-money .mr-splash__copy {
+    .ed-money .mr-splash__copy,
+    .ed-money .mr-pages__current-indicator {
         background-color: #27ae60;
     }
 
@@ -90,7 +93,8 @@
     .ed-sports .mr-pager__btn,
     .ed-sports .mr-card__btn,
     .ed-sports .mr-player__play-btn,
-    .ed-sports .mr-splash__copy {
+    .ed-sports .mr-splash__copy,
+    .ed-sports .mr-pages__current-indicator {
         background-color: #e67e22;
     }
 
@@ -105,7 +109,8 @@
     .ed-dating .mr-pager__btn,
     .ed-dating .mr-card__btn, 
     .ed-dating .mr-player__play-btn,
-    .ed-dating .mr-splash__copy {
+    .ed-dating .mr-splash__copy,
+    .ed-dating .mr-pages__current-indicator {
         background-color: #8e44ad;
     }
 
@@ -120,7 +125,8 @@
     .ed-entertainment .mr-pager__btn, 
     .ed-entertainment .mr-card__btn,
     .ed-entertainment .mr-player__play-btn,
-    .ed-entertainment .mr-splash__copy {
+    .ed-entertainment .mr-splash__copy,
+    .ed-entertainment .mr-pages__current-indicator {
         background-color: #f1c40f;
     }
 
@@ -135,7 +141,8 @@
     .ed-music .mr-pager__btn, 
     .ed-music .mr-card__btn,
     .ed-music .mr-player__play-btn,
-    .ed-music .mr-splash__copy {
+    .ed-music .mr-splash__copy,
+    .ed-music .mr-pages__current-indicator {
         background-color: #2c3e50;
     }
 
@@ -150,7 +157,8 @@
     .ed-women .mr-pager__btn, 
     .ed-women .mr-card__btn,
     .ed-women .mr-player__play-btn,
-    .ed-eomen .mr-splash__copy {
+    .ed-women .mr-splash__copy,
+    .ed-women .mr-pages__current-indicator{
         background-color: #c35d9e;
     }
 
@@ -165,7 +173,8 @@
     .ed-envision .mr-pager__btn, 
     .ed-envision .mr-card__btn,
     .ed-envision .mr-player__play-btn,
-    .ed-envision .mr-splash__copy {
+    .ed-envision .mr-splash__copy,
+    .ed-envision .mr-pages__current-indicator {
         background-color: #b69823;
     }
 
@@ -180,7 +189,8 @@
     .ed-humor .mr-pager__btn, 
     .ed-humor .mr-card__btn,
     .ed-humor .mr-player__play-btn,
-    .ed-humor .mr-splash__copy {
+    .ed-humor .mr-splash__copy,
+    .ed-humor .mr-pages__current-indicator {
         background-color: #16a085;
     }
 
@@ -195,6 +205,7 @@
     .ed-videos .mr-pager__btn, 
     .ed-videos .mr-card__btn,
     .ed-videos .mr-player__play-btn,
-    .ed-videos .mr-splash__copy {
+    .ed-videos .mr-splash__copy,
+    .ed-videos .mr-pages__current-indicator {
         background-color: #d5161d;
     }

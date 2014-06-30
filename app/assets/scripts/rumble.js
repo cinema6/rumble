@@ -878,20 +878,6 @@
             }
         };
     }])
-    .directive('copyExpander', ['assetFilter',
-    function                   ( assetFilter ) {
-        return {
-            restrict: 'E',
-            templateUrl: assetFilter('directives/copy_expander.html', 'views'),
-            scope: {
-                title: '@',
-                source: '@',
-                sourceUrl: '@',
-                note: '@',
-                touch: '&'
-            }
-        };
-    }])
     .controller('VideoEmbedCardController', ['$scope','ModuleService','ControlsService','EventService','c6AppData','c6ImagePreloader', 'AdTechService',
     function                                ( $scope , ModuleService , ControlsService , EventService , c6AppData , c6ImagePreloader ,  AdTechService ) {
         var self = this,
