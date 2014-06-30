@@ -90,8 +90,8 @@
                 _provider.adTags = tags;
             };
 
-            this.$get = ['$log','$http','$window','c6ImagePreloader','compileAdTag', '$q',
-            function    ( $log , $http , $window , c6ImagePreloader , compileAdTag ,  $q) {
+            this.$get = ['$log','$http','$window','c6ImagePreloader','compileAdTag','$q',
+            function    ( $log , $http , $window , c6ImagePreloader , compileAdTag , $q ) {
                 var service = {},
                     _service = {};
 
@@ -316,8 +316,8 @@
                 return this;
             };
 
-            this.$get = ['$log','$http','$q','$window','$interval','$templateCache','c6EventEmitter','c6UrlMaker','compileAdTag',
-            function    ( $log , $http , $q , $window , $interval , $templateCache , c6EventEmitter , c6UrlMaker , compileAdTag ) {
+            this.$get = ['$log','$http','$q','$window','$interval','$templateCache','c6EventEmitter','c6UrlMaker','compileAdTag','$timeout','$rootScope',
+            function    ( $log , $http , $q , $window , $interval , $templateCache , c6EventEmitter , c6UrlMaker , compileAdTag , $timeout , $rootScope ) {
                 var service = {},
                     _service = {};
 
@@ -335,7 +335,10 @@
                     $parentElement.prepend($playerElement);
 
                     _service.VPAIDPlayer = function(element$, playerId, $win) {
-                        var self = this;
+                        var self = this,
+                            adPlayerDeferred = $q.defer(),
+                            adDeferred = $q.defer(),
+                            actualAdDeferred = $q.defer();
 
                         c6EventEmitter(self);
 
@@ -419,20 +422,36 @@
                             }
                         });
 
+                        function initTimer() {
+                            $timeout(function() {
+                                adPlayerDeferred.reject();
+                                adDeferred.reject();
+                                actualAdDeferred.reject();
+                            }, 3000);
+                        }
+
                         self.insertHTML = function() {
                             return getPlayerTemplate().then(setup);
                         };
 
                         self.loadAd = function() {
-                            self.player.loadAd();
+                            return adPlayerDeferred.promise.then(function() {
+                                self.player.loadAd();
+                            });
                         };
 
                         self.startAd = function() {
-                            self.player.startAd();
+                            initTimer();
+
+                            return adDeferred.promise.then(function() {
+                                self.player.startAd();
+                            });
                         };
 
                         self.pause = function() {
-                            self.player.pauseAd();
+                            return actualAdDeferred.promise.then(function() {
+                                self.player.pauseAd();
+                            });
                         };
 
                         self.getAdProperties = function() {
@@ -448,7 +467,9 @@
                         };
 
                         self.resumeAd = function() {
-                            self.player.resumeAd();
+                            return actualAdDeferred.promise.then(function() {
+                                self.player.resumeAd();
+                            });
                         };
 
                         self.stopAd = function() {
@@ -493,15 +514,29 @@
                                         {
                                             // we have the Adap swf but no ad
                                             self.emit('adPlayerReady', self);
+                                            $rootScope.$apply(function() {
+                                                adPlayerDeferred.resolve();
+                                            });
                                             break;
                                         }
                                     case 'AdLoaded':
                                         {
-                                            // we have the actual ad
+                                            // we SHOULD have the ad, but some people lie
                                             self.emit('adLoaded', self);
+                                            $rootScope.$apply(function() {
+                                                adDeferred.resolve();
+                                            });
                                             break;
                                         }
                                     case 'AdStarted':
+                                        {
+                                            // we DEFINITELY have an ACTUAL ad
+                                            self.emit('play', self);
+                                            $rootScope.$apply(function() {
+                                                actualAdDeferred.resolve();
+                                            });
+                                            break;
+                                        }
                                     case 'AdPlaying':
                                         {
                                             self.emit('play', self);
