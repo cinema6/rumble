@@ -387,7 +387,7 @@
                         spyOn($scope, '$emit').andCallThrough();
                     });
 
-                    describe('if there is a companion', function() {
+                    xdescribe('if there is a companion', function() {
                         beforeEach(function() {
                             VastCardCtrl.companion = {
                                 adType: 'iframe',
@@ -402,7 +402,7 @@
                         });
                     });
 
-                    describe('if there is no companion', function() {
+                    xdescribe('if there is no companion', function() {
                         beforeEach(function() {
                             iface.emit('ended', iface);
                         });
@@ -411,6 +411,13 @@
                             expect($scope.$emit).toHaveBeenCalledWith('<vast-card>:contentEnd', $scope.config);
                         });
                     });
+
+                    it('should emit contentEnd event and advance to next card', function() {
+                        iface.emit('ended', iface);
+
+                        expect($scope.$emit).toHaveBeenCalledWith('<vast-card>:contentEnd', $scope.config);
+                    });
+
                     describe('pixel firing', function() {
                         beforeEach(function() {
                             $scope.$apply(function() {

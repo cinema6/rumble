@@ -188,9 +188,9 @@
                 _data.playerEvents = EventService.trackEvents(iface, ['play', 'pause']);
 
                 iface.on('ended', function() {
-                        if (!self.companion) {
-                            goForward();
-                        }
+                        // if (!self.companion) {
+                        goForward();
+                        // }
                         firePixels('complete');
                     })
                     .on('pause', function() {
