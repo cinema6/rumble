@@ -1,5 +1,8 @@
 # MiniReel Player
 
+* *[Beta15.rc2]*
+  * [FIX]: VAST card (mobile) now auto advances when ad is complete
+
 ## Beta15 (June 25, 2014)
 * *[Beta15.rc1]*
   * [FIX]: Updates to google analytics video duration, adding href custom dimension
