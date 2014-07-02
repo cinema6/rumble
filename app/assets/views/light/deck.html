@@ -1,19 +1,21 @@
-<ul class="mr-cards__list">
-    <li class="mr-cards__item" ng-repeat="item in players"
-    ng-class="{ 
-        squished : ($index !== currentIndex),
-        'mr-charCount--low': item.title.length + item.note.length <= 100,
-        'mr-charCount--med': item.title.length + item.note.length > 100 && item.title.length + item.note.length <= 170,
-        'mr-charCount--high': item.title.length + item.note.length > 170 && item.title.length + item.note.length <= 210,
-        'mr-charCount--max': item.title.length + item.note.length > 210
-    }">
-        <mr-card
-            x-number="{{tocCards.indexOf(item) + 1}}"
-            x-total="{{tocCards.length}}"
-            x-config="item"
-            x-profile="deviceProfile"
-            x-active="($index === currentIndex)"
-            x-on-deck="($index === (currentIndex + 1))">
-        </mr-card>
-    </li>
-</ul>
+<div ng-controller="DeckController as DeckCtrl">
+    <ul class="mr-cards__list" ng-repeat="deck in DeckCtrl.decks">
+        <li class="mr-cards__item" ng-repeat="item in deck.cards"
+            ng-class="{ 
+                squished : ($index !== deck.index || !deck.active),
+                'mr-charCount--low': item.title.length + item.note.length <= 100,
+                'mr-charCount--med': item.title.length + item.note.length > 100 && item.title.length + item.note.length <= 170,
+                'mr-charCount--high': item.title.length + item.note.length > 170 && item.title.length + item.note.length <= 210,
+                'mr-charCount--max': item.title.length + item.note.length > 210
+            }">
+            <mr-card
+                x-number="{{tocCards.indexOf(item) + 1}}"
+                x-total="{{tocCards.length}}"
+                x-config="item"
+                x-profile="deviceProfile"
+                x-active="($index === deck.index) && deck.active"
+                x-on-deck="($index === (deck.index + 1))">
+            </mr-card>
+        </li>
+    </ul>
+</div>
