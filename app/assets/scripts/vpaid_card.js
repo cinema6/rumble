@@ -42,7 +42,7 @@
             });
 
             function goForward() {
-                $scope.$emit('<vpaid-card>:contentEnd', config);
+                $scope.$emit('<mr-card>:contentEnd', config.meta || config);
             }
 
             this.reset = function() {

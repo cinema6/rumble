@@ -216,6 +216,17 @@
                                 it('should return undefined for non-ad cards', function() {
                                     expect(item.findCard({ ad: false })).toBeUndefined();
                                 });
+
+                                it('should return undefined if the card is null', function() {
+                                    expect(item.findCard(null)).toBeUndefined();
+                                });
+
+                                it('should put a meta reference to the provided card on the returned one', function() {
+                                    var orig = { ad: true };
+
+                                    expect(item.findCard(orig)).toBe(first);
+                                    expect(first.meta).toBe(orig);
+                                });
                             });
                         });
                     });
@@ -702,6 +713,16 @@
                         expect(videoDeck.activate).toHaveBeenCalled();
                         expect(adDeck.deactivate).toHaveBeenCalled();
                         expect(videoDeck.moveTo).toHaveBeenCalledWith($scope.deck[2]);
+                        expect(adDeck.moveTo).not.toHaveBeenCalled();
+                    });
+
+                    it('should go back to the beginning', function() {
+                        setCurrentCard($scope.deck[0]);
+                        setCurrentCard(null);
+
+                        expect(videoDeck.deactivate).toHaveBeenCalled();
+                        expect(adDeck.deactivate.callCount).toBe(2);
+                        expect(videoDeck.moveTo).toHaveBeenCalledWith(null);
                         expect(adDeck.moveTo).not.toHaveBeenCalled();
                     });
                 });

@@ -22,10 +22,6 @@
                 });
 
                 module('c6.rumble.services', function($provide) {
-                    $provide.value('ModuleService', {
-                        hasModule: jasmine.createSpy('ModuleService.hasModule()')
-                    });
-
                     $provide.value('ControlsService', {
                         bindTo: jasmine.createSpy('ControlsService.bindTo()')
                     });
@@ -57,6 +53,7 @@
                     c6EventEmitter = $injector.get('c6EventEmitter');
 
                     ModuleService = $injector.get('ModuleService');
+                    spyOn(ModuleService, 'hasModule').andCallThrough();
                     ControlsService = $injector.get('ControlsService');
                     c6ImagePreloader = $injector.get('c6ImagePreloader');
                     c6AppData = $injector.get('c6AppData');
@@ -407,10 +404,6 @@
                         expect(VideoEmbedCardCtrl.videoUrl).toBe(iface.webHref);
                     });
 
-                    it('should attach a listener to the "play" event', function() {
-                        expect(iface.once).toHaveBeenCalledWith('play', jasmine.any(Function));
-                    });
-
                     describe('when "play" is emitted', function() {
                         beforeEach(function() {
                             iface.emit('play', iface);
@@ -418,6 +411,54 @@
 
                         it('should set _data.modules.displayAd.active to true', function() {
                             expect($scope.config._data.modules.displayAd.active).toBe(true);
+                        });
+                    });
+
+                    describe('when "ended" is emitted', function() {
+                        beforeEach(function() {
+                            spyOn($scope, '$emit').andCallThrough();
+                        });
+
+                        describe('if the ballot module is present', function() {
+                            beforeEach(function() {
+                                $scope.config.modules.length = 0;
+                                $scope.config.modules.push('ballot');
+
+                                $scope.$apply(function() {
+                                    iface.emit('ended', iface);
+                                });
+                            });
+
+                            it('should not $emit the <mr-card>:contentEnd event', function() {
+                                expect($scope.$emit).not.toHaveBeenCalled();
+                            });
+                        });
+
+                        describe('if the ballot module is not present', function() {
+                            beforeEach(function() {
+                                $scope.config.modules.length = 0;
+
+                                $scope.$apply(function() {
+                                    iface.emit('ended', iface);
+                                });
+                            });
+
+                            it('should $emit the <mr-card>:contentEnd event', function() {
+                                expect($scope.$emit).toHaveBeenCalledWith('<mr-card>:contentEnd', $scope.config);
+                            });
+
+                            describe('if there is a config.meta object', function() {
+                                beforeEach(function() {
+                                    $scope.config.meta = {};
+                                    $scope.$apply(function() {
+                                        iface.emit('ended', iface);
+                                    });
+                                });
+
+                            it('should $emit the <mr-card>:contentEnd event with the meta object', function() {
+                                expect($scope.$emit).toHaveBeenCalledWith('<mr-card>:contentEnd', $scope.config.meta);
+                            });
+                            });
                         });
                     });
 

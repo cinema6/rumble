@@ -326,7 +326,7 @@
                         });
 
                         it('should not $emit the contentEnd event', function() {
-                            expect($scope.$emit).not.toHaveBeenCalledWith('<vpaid-card>:contentEnd', $scope.config);
+                            expect($scope.$emit).not.toHaveBeenCalledWith('<mr-card>:contentEnd', $scope.config);
                         });
                     });
 
@@ -335,13 +335,21 @@
                             $scope.active = true;
                             iface.emit('ended', iface);
 
-                            expect($scope.$emit).toHaveBeenCalledWith('<vpaid-card>:contentEnd', $scope.config);
+                            expect($scope.$emit).toHaveBeenCalledWith('<mr-card>:contentEnd', $scope.config);
                         });
 
                         it('should not emit the contentEnd if $scope is not active', function() {
                             iface.emit('ended', iface);
 
-                            expect($scope.$emit).not.toHaveBeenCalledWith('<vpaid-card>:contentEnd', $scope.config);
+                            expect($scope.$emit).not.toHaveBeenCalledWith('<mr-card>:contentEnd', $scope.config);
+                        });
+
+                        it('should emit contentEnd with the meta object if present', function() {
+                            $scope.active = true;
+                            $scope.config.meta = {};
+                            iface.emit('ended', iface);
+
+                            expect($scope.$emit).toHaveBeenCalledWith('<mr-card>:contentEnd', $scope.config.meta);
                         });
                     });
                 });
@@ -513,7 +521,7 @@
                         });
 
                         describe('when there was a problem with the ad and "ended" was emitted before the card was active', function() {
-                            it('should $emit <vpaid-card>:contentEnd', function() {
+                            it('should $emit <mr-card>:contentEnd', function() {
                                 $scope.$apply(function() {
                                     $scope.active = false;
                                 });
@@ -524,7 +532,7 @@
                                     $scope.active = true;
                                 });
 
-                                expect($scope.$emit.mostRecentCall.args[0]).toBe('<vpaid-card>:contentEnd');
+                                expect($scope.$emit.mostRecentCall.args[0]).toBe('<mr-card>:contentEnd');
                             });
                         });
 
@@ -552,7 +560,7 @@
                             $scope.$apply(function() {
                                 deferred.reject();
                             });
-                            expect($scope.$emit.mostRecentCall.args[0]).toBe('<vpaid-card>:contentEnd');
+                            expect($scope.$emit.mostRecentCall.args[0]).toBe('<mr-card>:contentEnd');
                         });
 
                         describe('when controlling the navigation', function() {
