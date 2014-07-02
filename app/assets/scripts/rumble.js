@@ -1,6 +1,8 @@
 (function(){
     'use strict';
 
+    var forEach = angular.forEach;
+
     angular.module('c6.rumble')
     .animation('.mr-cards__item',['$log', function($log){
         $log = $log.context('.mr-cards__item');
@@ -850,6 +852,101 @@
         $log.log('Rumble Controller is initialized!');
 
     }])
+
+    .controller('DeckController', ['$scope','c6EventEmitter','c6AppData',
+    function                      ( $scope , c6EventEmitter , c6AppData ) {
+        var self = this,
+            adCount = 0,
+            videoAdConfig = c6AppData.experience.data.adConfig.video,
+            videoDeck, adDeck;
+
+        function AdCard(config) {
+            this.id = 'rc-advertisement' + (++adCount);
+            this.type = 'ad';
+            this.ad = true;
+            this.modules = ['displayAd'];
+            this.data = {
+                autoplay: true,
+                skip: config.skip,
+                source: config.waterfall
+            };
+        }
+
+        function Deck(id, config) {
+            this.id = id;
+            this.active = false;
+            this.cards = [];
+            this.index = -1;
+
+            forEach(config, function(value, prop) {
+                this[prop] = value;
+            }, this);
+
+            c6EventEmitter(this);
+        }
+        Deck.prototype = {
+            moveTo: function(card) {
+                this.emit('deactivateCard', this.cards[this.index] || null);
+                this.index = this.cards.indexOf(card);
+                this.emit('activateCard', this.index > -1 ? card : null);
+            },
+            activate: function() {
+                var wasNotActive = !this.active;
+
+                this.active = true;
+
+                if (wasNotActive) {
+                    this.emit('activate');
+                }
+            },
+            deactivate: function() {
+                var wasActive = !!this.active;
+
+                this.active = false;
+
+                if (wasActive) {
+                    this.emit('deactivate');
+                }
+            },
+            reset: function() {
+                this.moveTo(null);
+            }
+        };
+
+        videoDeck = new Deck('video', {
+            includeCard: function(card) {
+                return !card.ad;
+            },
+            findCard: function(card) {
+                return this.cards.indexOf(card) > -1 ? card : undefined;
+            }
+        });
+        adDeck = new Deck('ad', {
+            cards: [
+                new AdCard(videoAdConfig),
+                new AdCard(videoAdConfig)
+            ],
+            includeCard: function() {
+                return false;
+            },
+            findCard: function(card) {
+                return card.ad ? this.cards[0] : undefined;
+            }
+        });
+
+        this.decks = [videoDeck, adDeck];
+
+        $scope.$watchCollection('deck', function(master) {
+            if (!master) { return; }
+
+            self.decks.forEach(function(deck) {
+                var cards = master.filter(deck.includeCard);
+
+                deck.cards = cards.length ? cards : deck.cards;
+            });
+        });
+    }])
+
     .directive('navbarButton', ['assetFilter','c6Computed',
     function                   ( assetFilter , c6Computed ) {
         return {
