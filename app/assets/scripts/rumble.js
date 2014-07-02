@@ -343,7 +343,7 @@
             return (card || null) && (card.ad && !card.sponsored);
         }
 
-        function handleAdEnd(event, card) {
+        function handleCardEnd(event, card) {
             if ($scope.currentCard === card) {
                 self.goForward();
             }
@@ -483,8 +483,9 @@
             });
         });
 
-        $scope.$on('<vast-card>:contentEnd', handleAdEnd);
-        $scope.$on('<vpaid-card>:contentEnd', handleAdEnd);
+        $scope.$on('<vast-card>:contentEnd', handleCardEnd);
+        $scope.$on('<vpaid-card>:contentEnd', handleCardEnd);
+        $scope.$on('<video>:contentEnd', handleCardEnd);
 
         $scope.$on('<vast-card>:init', handleAdInit);
         $scope.$on('<vpaid-card>:init', handleAdInit);
@@ -1168,15 +1169,21 @@
                 }
             });
 
-            iface.once('ready', function() {
-                self.videoUrl = player.webHref;
-                if (shouldPlay){
-                    iface.play();
-                }
-            });
-            iface.once('play', function() {
-                _data.modules.displayAd.active = true;
-            });
+            iface
+                .once('ready', function() {
+                    self.videoUrl = player.webHref;
+                    if (shouldPlay){
+                        iface.play();
+                    }
+                })
+                .once('play', function() {
+                    _data.modules.displayAd.active = true;
+                })
+                .on('ended', function() {
+                    if (!self.hasModule('ballot')) {
+                        $scope.$emit('<video>:contentEnd', config);
+                    }
+                });
 
             $scope.$watch('active', function(active, wasActive) {
                 if ((active === wasActive) && (wasActive === false)){ return; }

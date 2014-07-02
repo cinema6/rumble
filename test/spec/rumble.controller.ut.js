@@ -1475,6 +1475,36 @@
                     });
                 });
 
+                describe('<video>:contentEnd', function() {
+                    var currentCard;
+
+                    beforeEach(function() {
+                        $scope.currentCard = currentCard = {};
+
+                        spyOn(RumbleCtrl, 'goForward');
+                    });
+
+                    describe('if the event is not for the current card', function() {
+                        beforeEach(function() {
+                            $scope.$emit('<video>:contentEnd', {});
+                        });
+
+                        it('should not move forward', function() {
+                            expect(RumbleCtrl.goForward).not.toHaveBeenCalled();
+                        });
+                    });
+
+                    describe('if the event is for the currentCard', function() {
+                        beforeEach(function() {
+                            $scope.$emit('<video>:contentEnd', currentCard);
+                        });
+
+                        it('should move forward', function() {
+                            expect(RumbleCtrl.goForward).toHaveBeenCalled();
+                        });
+                    });
+                });
+
                 describe('ready',function(){
                     beforeEach(function() {
                         spyOn($scope, '$emit').andCallThrough();
