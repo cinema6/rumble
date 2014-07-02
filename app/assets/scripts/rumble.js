@@ -725,12 +725,55 @@
             return params;
         };
 
+        // adConfig = {
+        //     video: {
+        //         firstPlacement: 1,
+        //         frequency: 3,
+        //         waterfall: 'cinema6',
+        //         skip: 6
+        //     },
+        //     display: {
+        //         waterfall: 'cinema6'
+        //     }
+        // };
+
+        function AdLogic(config) {
+            var count = 0,
+                first = config.video.firstPlacement,
+                frequency = config.video.frequency;
+
+            this.increment = function() {
+                count++;
+            };
+
+            this.adOnDeck = function() {
+                if ((((count - first) % frequency) === 0) && !$scope.deck[$scope.currentIndex+1].ad) {
+                    return true;
+                }
+            };
+
+            this.spliceAd = function(index) {
+                $scope.deck.splice(index, 0, { ad: true });
+            };
+        }
+
+        var adLogic = new AdLogic(appData.experience.data.adConfig);
+
+        if (adLogic.adOnDeck()) {
+            adLogic.spliceAd($scope.currentIndex + 1);
+        }
+
         this.setPosition = function(i){
+            console.log('SET POSITION!!!!! ',$scope);
             var currentIndex = $scope.currentIndex,
                 isSkipping = Math.abs(currentIndex - i) > 1,
                 isGoingForward = (i - currentIndex) > 0,
                 cardBeforeThis = $scope.deck[i + (isGoingForward ? -1 : 1)],
                 toCard = $scope.deck[i] || null;
+
+            if (toCard && !toCard.ad) {
+                adLogic.increment();
+            }
 
             if (navController) {
                 navController.enabled(true);
@@ -752,9 +795,16 @@
             $scope.currentIndex   = i;
             $scope.currentCard    = toCard;
 
+            // tell the DeckCtrl which card is onDeck
+            $scope.$broadcast('onDeck', $scope.deck[i+1]);
+
             $log.info('Now on card:',$scope.currentCard);
             if ($scope.currentCard){
                 $scope.currentCard.visited = true;
+
+                if (adLogic.adOnDeck()) {
+                    adLogic.spliceAd(i + 1);
+                }
             }
 
             $scope.atHead         = $scope.currentIndex === 0;
