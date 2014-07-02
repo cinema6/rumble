@@ -1,5 +1,9 @@
 # MiniReel Player
 
+* *[Beta16.rc1]*
+  * [FIX]: Fix for an issue that caused YT videos to continue playing
+    after leaving their cards
+
 ## Beta15.3 (July 1, 2014)
 * *[Beta15.3.rc1]*
   * [FIX]: Fix for an issue where the light text version of the player
