@@ -329,6 +329,20 @@
                 .then(function(appData) {
                     angular.copy(appData, c6AppData);
 
+                    if (!c6AppData.experience.data.adConfig) {
+                        c6AppData.experience.data.adConfig = {
+                            video: {
+                                firstPlacement: 1,
+                                frequency: 3,
+                                waterfall: 'cinema6',
+                                skip: 6
+                            },
+                            display: {
+                                waterfall: 'cinema6'
+                            }
+                        };
+                    }
+
                     setMode(c6AppData, appData);
                     setBehaviors(c6AppData, c6AppData.mode);
 
