@@ -429,7 +429,7 @@
                                 });
                             });
 
-                            it('should not $emit the <video>:contentEnd event', function() {
+                            it('should not $emit the <mr-card>:contentEnd event', function() {
                                 expect($scope.$emit).not.toHaveBeenCalled();
                             });
                         });
@@ -443,8 +443,21 @@
                                 });
                             });
 
-                            it('should $emit the <video>:contentEnd event', function() {
-                                expect($scope.$emit).toHaveBeenCalledWith('<video>:contentEnd', $scope.config);
+                            it('should $emit the <mr-card>:contentEnd event', function() {
+                                expect($scope.$emit).toHaveBeenCalledWith('<mr-card>:contentEnd', $scope.config);
+                            });
+
+                            describe('if there is a config.meta object', function() {
+                                beforeEach(function() {
+                                    $scope.config.meta = {};
+                                    $scope.$apply(function() {
+                                        iface.emit('ended', iface);
+                                    });
+                                });
+
+                            it('should $emit the <mr-card>:contentEnd event with the meta object', function() {
+                                expect($scope.$emit).toHaveBeenCalledWith('<mr-card>:contentEnd', $scope.config.meta);
+                            });
                             });
                         });
                     });

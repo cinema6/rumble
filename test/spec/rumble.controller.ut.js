@@ -1456,26 +1456,7 @@
                     });
                 });
 
-                describe('<vast-card>:contentEnd', function() {
-                    beforeEach(function() {
-                        spyOn(RumbleCtrl, 'goForward');
-                    });
-
-                    it('should move to the next card if the event is for the currentCard', function() {
-                        var card1 = {},
-                            card2 = {};
-
-                        $scope.currentCard = card2;
-
-                        $scope.$emit('<vast-card>:contentEnd', card1);
-                        expect(RumbleCtrl.goForward).not.toHaveBeenCalled();
-
-                        $scope.$emit('<vast-card>:contentEnd', card2);
-                        expect(RumbleCtrl.goForward).toHaveBeenCalled();
-                    });
-                });
-
-                describe('<video>:contentEnd', function() {
+                describe('<mr-card>:contentEnd', function() {
                     var currentCard;
 
                     beforeEach(function() {
@@ -1486,7 +1467,7 @@
 
                     describe('if the event is not for the current card', function() {
                         beforeEach(function() {
-                            $scope.$emit('<video>:contentEnd', {});
+                            $scope.$emit('<mr-card>:contentEnd', {});
                         });
 
                         it('should not move forward', function() {
@@ -1496,7 +1477,7 @@
 
                     describe('if the event is for the currentCard', function() {
                         beforeEach(function() {
-                            $scope.$emit('<video>:contentEnd', currentCard);
+                            $scope.$emit('<mr-card>:contentEnd', currentCard);
                         });
 
                         it('should move forward', function() {

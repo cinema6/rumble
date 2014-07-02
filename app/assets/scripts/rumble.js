@@ -343,12 +343,6 @@
             return (card || null) && (card.ad && !card.sponsored);
         }
 
-        function handleCardEnd(event, card) {
-            if ($scope.currentCard === card) {
-                self.goForward();
-            }
-        }
-
         function handleAdInit(event, provideNavController) {
             provideNavController(navController = new NavController($scope.nav));
         }
@@ -483,9 +477,11 @@
             });
         });
 
-        $scope.$on('<vast-card>:contentEnd', handleCardEnd);
-        $scope.$on('<vpaid-card>:contentEnd', handleCardEnd);
-        $scope.$on('<video>:contentEnd', handleCardEnd);
+        $scope.$on('<mr-card>:contentEnd', function(event, card) {
+            if ($scope.currentCard === card) {
+                self.goForward();
+            }
+        });
 
         $scope.$on('<vast-card>:init', handleAdInit);
         $scope.$on('<vpaid-card>:init', handleAdInit);
@@ -986,8 +982,14 @@
                 return false;
             },
             findCard: function(card) {
-                return (card || undefined) &&
+                var result = (card || undefined) &&
                     card.ad ? this.cards[this.index + 1] : undefined;
+
+                if (result) {
+                    result.meta = card;
+                }
+
+                return result;
             }
         });
 
@@ -1181,7 +1183,7 @@
                 })
                 .on('ended', function() {
                     if (!self.hasModule('ballot')) {
-                        $scope.$emit('<video>:contentEnd', config);
+                        $scope.$emit('<mr-card>:contentEnd', config.meta || config);
                     }
                 });
 
@@ -1301,6 +1303,7 @@
             restrict : 'E',
             link     : fnLink,
             scope    : {
+                current : '=',
                 config  : '=',
                 profile : '=',
                 active  : '=',

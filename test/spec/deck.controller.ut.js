@@ -220,6 +220,13 @@
                                 it('should return undefined if the card is null', function() {
                                     expect(item.findCard(null)).toBeUndefined();
                                 });
+
+                                it('should put a meta reference to the provided card on the returned one', function() {
+                                    var orig = { ad: true };
+
+                                    expect(item.findCard(orig)).toBe(first);
+                                    expect(first.meta).toBe(orig);
+                                });
                             });
                         });
                     });
