@@ -972,7 +972,8 @@
                 return !card.ad;
             },
             findCard: function(card) {
-                return this.cards.indexOf(card) > -1 ? card : undefined;
+                return card &&
+                    (this.cards.indexOf(card) > -1 ? card : undefined);
             }
         });
         adDeck = new Deck('ad', {
@@ -984,7 +985,8 @@
                 return false;
             },
             findCard: function(card) {
-                return card.ad ? this.cards[this.index + 1] : undefined;
+                return (card || undefined) &&
+                    card.ad ? this.cards[this.index + 1] : undefined;
             }
         });
 
@@ -1006,8 +1008,6 @@
         });
 
         $scope.$watch('currentCard', function(currentCard) {
-            if (!currentCard) { return; }
-
             self.decks.forEach(function(deck) {
                 var card;
 
@@ -1018,6 +1018,10 @@
                         .moveTo(card);
                 } else {
                     deck.deactivate();
+
+                    if (card === null) {
+                        deck.moveTo(null);
+                    }
                 }
             });
         });
