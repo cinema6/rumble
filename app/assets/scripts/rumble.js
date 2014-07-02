@@ -877,6 +877,7 @@
             this.active = false;
             this.cards = [];
             this.index = -1;
+            this.activeCard = null;
 
             forEach(config, function(value, prop) {
                 this[prop] = value;
@@ -886,9 +887,27 @@
         }
         Deck.prototype = {
             moveTo: function(card) {
-                this.emit('deactivateCard', this.cards[this.index] || null);
-                this.index = this.cards.indexOf(card);
-                this.emit('activateCard', this.index > -1 ? card : null);
+                var index = this.cards.indexOf(card),
+                    oldCard = this.activeCard;
+
+                if (card && index < 0) {
+                    return this.moveTo(null);
+                }
+
+                if (card === this.activeCard) {
+                    this.index = index;
+                    return this;
+                }
+
+                this.index = index;
+                this.activeCard = this.cards[index] || null;
+
+                if (card !== oldCard) {
+                    this.emit('deactivateCard', oldCard);
+                    this.emit('activateCard', this.activeCard);
+                }
+
+                return this;
             },
             activate: function() {
                 var wasNotActive = !this.active;
@@ -898,6 +917,8 @@
                 if (wasNotActive) {
                     this.emit('activate');
                 }
+
+                return this;
             },
             deactivate: function() {
                 var wasActive = !!this.active;
@@ -907,9 +928,42 @@
                 if (wasActive) {
                     this.emit('deactivate');
                 }
+
+                return this;
             },
             reset: function() {
-                this.moveTo(null);
+                return this.moveTo(null);
+            },
+            pop: function() {
+                if (this.index === this.cards.length - 1) {
+                    throw new Error('The active card cannot be popped.');
+                }
+
+                return this.cards.pop();
+            },
+            push: function() {
+                return this.cards.push.apply(this.cards, arguments);
+            },
+            shift: function() {
+                var currentCard = this.cards[this.index],
+                    firstCard;
+
+                if (this.index === 0) {
+                    throw new Error('The active card cannot be shifted.');
+                }
+
+                firstCard = this.cards.shift();
+                this.moveTo(currentCard);
+                return firstCard;
+            },
+            update: function(cards) {
+                if (cards.length < 1) {
+                    return;
+                }
+
+                this.cards.length = 0;
+                this.cards.push.apply(this.cards, cards);
+                this.moveTo(this.activeCard);
             }
         };
 
@@ -930,19 +984,41 @@
                 return false;
             },
             findCard: function(card) {
-                return card.ad ? this.cards[0] : undefined;
+                return card.ad ? this.cards[this.index + 1] : undefined;
             }
         });
 
         this.decks = [videoDeck, adDeck];
 
+        adDeck.on('deactivateCard', function(card) {
+            if (!card) { return; }
+
+            adDeck.push(new AdCard(videoAdConfig));
+            adDeck.shift();
+        });
+
         $scope.$watchCollection('deck', function(master) {
             if (!master) { return; }
 
             self.decks.forEach(function(deck) {
-                var cards = master.filter(deck.includeCard);
+                deck.update(master.filter(deck.includeCard));
+            });
+        });
 
-                deck.cards = cards.length ? cards : deck.cards;
+        $scope.$watch('currentCard', function(currentCard) {
+            if (!currentCard) { return; }
+
+            self.decks.forEach(function(deck) {
+                var card;
+
+                /* jshint boss:true*/
+                if (card = deck.findCard(currentCard)) {
+                /* jshint boss:false*/
+                    deck.activate()
+                        .moveTo(card);
+                } else {
+                    deck.deactivate();
+                }
             });
         });
     }])

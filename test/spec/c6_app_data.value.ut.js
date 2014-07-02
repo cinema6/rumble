@@ -46,7 +46,9 @@
                 appData = {
                     experience: {
                         id: 'foo',
-                        data: {}
+                        data: {
+                            adConfig: {}
+                        }
                     },
                     profile: {
                         device: 'desktop',
@@ -120,6 +122,26 @@
                 });
 
                 expect(c6AppData).toEqual(jasmine.objectContaining(appData));
+            }));
+
+            it('should create an adConfig if one is not present', inject(function(c6AppData) {
+                delete appData.experience.data.adConfig;
+
+                $rootScope.$apply(function() {
+                    deferreds.getAppData.resolve(appData);
+                });
+
+                expect(c6AppData.experience.data.adConfig).toEqual({
+                    video: {
+                        firstPlacement: 1,
+                        frequency: 3,
+                        waterfall: 'cinema6',
+                        skip: 6
+                    },
+                    display: {
+                      waterfall: 'cinema6'
+                    }
+                });
             }));
 
             it('should set the version to 0 if there is none', inject(function(c6AppData) {
