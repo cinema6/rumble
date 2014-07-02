@@ -1,5 +1,11 @@
 # MiniReel Player
 
+## Beta15.1 (July 1, 2014)
+* *[Beta15.1.rc1]*
+  * [FIX]: Fix for an issue where the light text version of the player
+    appeared cut-off
+* *[/Beta15.1.rc1]*
+
 ## Beta15 (June 25, 2014)
 * *[Beta15.rc2]*
   * [FIX]: VAST card (mobile) now auto advances when ad is complete

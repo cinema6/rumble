@@ -7,7 +7,8 @@
     },
     "light" : {
         "minWidth"      : "18.75em",
-        "padding"       : "8.125em 0 63% 0",
+        "padding"       : "10.375em 0 58.71% 0",
+        "font-size"     : "16px",
         "height"        : "0px",
         "overflow"      : "hidden"
     }
