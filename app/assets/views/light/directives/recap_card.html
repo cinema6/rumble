@@ -1,22 +1,22 @@
-<article class="mr-card__group mr-recap__group">
-    <h3 class="mr-recap__intro tk--hdr">You just watched : &ldquo;<em>{{Ctrl.title}}</em>&rdquo;</h3>
+<article class="card__group recap__group">
+    <h3 class="recap__intro tk--hdr">You just watched : &ldquo;<em>{{Ctrl.title}}</em>&rdquo;</h3>
 
-    <ul class="mr-recap__list">
-        <li class="mr-recap__item clearfix" ng-repeat="card in Ctrl.deck">
-            <button class="mr-recap__imgBtn" type="button" ng-click="Ctrl.jumpTo(card)">
-                <span class="mr-recap__imgBox" style="background-image:url({{card.thumbs.large}});">&nbsp;</span>
+    <ul class="recap__list">
+        <li class="recap__item clearfix" ng-repeat="card in Ctrl.deck">
+            <button class="recap__imgBtn" type="button" ng-click="Ctrl.jumpTo(card)">
+                <span class="recap__imgBox" style="background-image:url({{card.thumbs.large}});">&nbsp;</span>
             </button>
-            <div class="mr-recap__copyBox">
-                <h1 class="mr-card__title-h1 tk--hdr" ng-click="Ctrl.jumpTo(card)">{{card.title}}
-                    <span class="mr-card__attributes">via <a ng-href="{{card.webHref}}" target="_blank" title="{{card.source}}">{{card.source}}</a></span>
+            <div class="recap__copyBox">
+                <h1 class="card__title-h1 tk--hdr" ng-click="Ctrl.jumpTo(card)">{{card.title}}
+                    <span class="card__attributes">via <a ng-href="{{card.webHref}}" target="_blank" title="{{card.source}}">{{card.source}}</a></span>
                 </h1>
-                <div class="mr-recap__ballotInfo" ng-show="card.hasModule('ballot')">
-                    <h3 class="mr-recap__ballotQuestion">Questionnaire: <strong>{{card.ballot.prompt}}</strong></h3>
-                    <p class="mr-recap__ballotResults">
-                        <span class="mr-recap__ballotA">
+                <div class="recap__ballotInfo" ng-show="card.hasModule('ballot')">
+                    <h3 class="recap__ballotQuestion">Questionnaire: <strong>{{card.ballot.prompt}}</strong></h3>
+                    <p class="recap__ballotResults">
+                        <span class="recap__ballotA">
                             {{card.ballot.choices[0]}} <strong>{{card.ballot.results[0].votes | percent}}</strong>
                         </span> &nbsp;&nbsp;|&nbsp;&nbsp;
-                        <span class="mr-recap__ballotB">
+                        <span class="recap__ballotB">
                             {{card.ballot.choices[1]}} <strong>{{card.ballot.results[1].votes | percent}}</strong>
                         </span>
                     </p>
@@ -26,11 +26,11 @@
     </ul>
 </article>
 
-<!--<article class="mr-card__group mr-more-reels__group c6-height-limiter">
-        <div class="mr-player__group">
-            <div class="mr-player c6-height-limiter">
-                <h3 class="mr-more-reels__intro">{{config.data.message}}</h3>
-                <button class="mr-more-reels__preview c6-height-limiter" type="button"
+<!--<article class="card__group more-reels__group c6-height-limiter">
+        <div class="player__group">
+            <div class="player c6-height-limiter">
+                <h3 class="more-reels__intro">{{config.data.message}}</h3>
+                <button class="more-reels__preview c6-height-limiter" type="button"
                     title="{{this.title}}">
                     <span class="ir">Click to Watch</span>
                 </button>
