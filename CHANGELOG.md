@@ -1,5 +1,15 @@
 # MiniReel Player
 
+## Beta16 (July 2, 2014)
+* *[Beta16.rc1]*
+  * Added infrastructure needed for dynamic ad placements (only being
+    used in light mode right now)
+  * [FIX]: Fix for an issue that caused YT videos to continue playing
+    after leaving their cards
+  * [FEATURE]: Video cards will now auto-advance to the next card when
+    they are done playing (if there is no voting)
+* *[/Beta16.rc1]*
+
 ## Beta15.3 (July 1, 2014)
 * *[Beta15.3.rc1]*
   * [FIX]: Fix for an issue where the light text version of the player

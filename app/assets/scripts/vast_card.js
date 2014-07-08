@@ -86,7 +86,7 @@
             };
 
             function goForward() {
-                $scope.$emit('<vast-card>:contentEnd', config);
+                $scope.$emit('<mr-card>:contentEnd', config.meta || config);
             }
 
             function initTimeout() {

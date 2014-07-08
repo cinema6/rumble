@@ -1456,22 +1456,33 @@
                     });
                 });
 
-                describe('<vast-card>:contentEnd', function() {
+                describe('<mr-card>:contentEnd', function() {
+                    var currentCard;
+
                     beforeEach(function() {
+                        $scope.currentCard = currentCard = {};
+
                         spyOn(RumbleCtrl, 'goForward');
                     });
 
-                    it('should move to the next card if the event is for the currentCard', function() {
-                        var card1 = {},
-                            card2 = {};
+                    describe('if the event is not for the current card', function() {
+                        beforeEach(function() {
+                            $scope.$emit('<mr-card>:contentEnd', {});
+                        });
 
-                        $scope.currentCard = card2;
+                        it('should not move forward', function() {
+                            expect(RumbleCtrl.goForward).not.toHaveBeenCalled();
+                        });
+                    });
 
-                        $scope.$emit('<vast-card>:contentEnd', card1);
-                        expect(RumbleCtrl.goForward).not.toHaveBeenCalled();
+                    describe('if the event is for the currentCard', function() {
+                        beforeEach(function() {
+                            $scope.$emit('<mr-card>:contentEnd', currentCard);
+                        });
 
-                        $scope.$emit('<vast-card>:contentEnd', card2);
-                        expect(RumbleCtrl.goForward).toHaveBeenCalled();
+                        it('should move forward', function() {
+                            expect(RumbleCtrl.goForward).toHaveBeenCalled();
+                        });
                     });
                 });
 

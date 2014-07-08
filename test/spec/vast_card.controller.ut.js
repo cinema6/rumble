@@ -398,7 +398,7 @@
                         });
 
                         it('should not $emit the contentEnd event', function() {
-                            expect($scope.$emit).not.toHaveBeenCalledWith('<vast-card>:contentEnd', $scope.config);
+                            expect($scope.$emit).not.toHaveBeenCalledWith('<mr-card>:contentEnd', $scope.config);
                         });
                     });
 
@@ -408,14 +408,21 @@
                         });
 
                         it('should emit the contentEnd event', function() {
-                            expect($scope.$emit).toHaveBeenCalledWith('<vast-card>:contentEnd', $scope.config);
+                            expect($scope.$emit).toHaveBeenCalledWith('<mr-card>:contentEnd', $scope.config);
                         });
                     });
 
                     it('should emit contentEnd event and advance to next card', function() {
                         iface.emit('ended', iface);
 
-                        expect($scope.$emit).toHaveBeenCalledWith('<vast-card>:contentEnd', $scope.config);
+                        expect($scope.$emit).toHaveBeenCalledWith('<mr-card>:contentEnd', $scope.config);
+                    });
+
+                    it('should emit contentEnd with config meta object if available', function() {
+                        $scope.config.meta = {};
+                        iface.emit('ended', iface);
+
+                        expect($scope.$emit).toHaveBeenCalledWith('<mr-card>:contentEnd', $scope.config.meta);
                     });
 
                     describe('pixel firing', function() {
@@ -669,7 +676,7 @@
                                 it('should advance to the next card if no videoSrc is found after 3 seconds', function() {
                                     $timeout.flush();
 
-                                    expect($scope.$emit.mostRecentCall.args[0]).toBe('<vast-card>:contentEnd');
+                                    expect($scope.$emit.mostRecentCall.args[0]).toBe('<mr-card>:contentEnd');
                                 });
 
                                 it('should not advance to the next card if a videoSrc is found after 3 seconds', function() {
@@ -677,12 +684,12 @@
 
                                     $timeout.flush();
 
-                                    expect($scope.$emit.mostRecentCall.args[0]).not.toBe('<vast-card>:contentEnd');
+                                    expect($scope.$emit.mostRecentCall.args[0]).not.toBe('<mr-card>:contentEnd');
                                 });
                             });
 
                             describe('if we do not have an ad', function() {
-                                it('should emit <vast-card>:contentEnd if we tried to get an ad while onDeck', function() {
+                                it('should emit <mr-card>:contentEnd if we tried to get an ad while onDeck', function() {
                                     VASTService.getVAST.andReturn($q.reject('No ad'));
                                     spyOn($scope, '$emit');
 
@@ -696,10 +703,10 @@
                                         $scope.active = true;
                                     });
 
-                                    expect($scope.$emit.mostRecentCall.args[0]).toBe('<vast-card>:contentEnd');
+                                    expect($scope.$emit.mostRecentCall.args[0]).toBe('<mr-card>:contentEnd');
                                 });
 
-                                it('should emit <vast-card>:contentEnd if onDeck was skipped and we are active', function() {
+                                it('should emit <mr-card>:contentEnd if onDeck was skipped and we are active', function() {
                                     VASTService.getVAST.andReturn($q.reject('No ad'));
                                     spyOn($scope, '$emit');
 
@@ -707,7 +714,7 @@
                                         $scope.active = true;
                                     });
 
-                                    expect($scope.$emit.mostRecentCall.args[0]).toBe('<vast-card>:contentEnd');
+                                    expect($scope.$emit.mostRecentCall.args[0]).toBe('<mr-card>:contentEnd');
                                 });
                             });
 

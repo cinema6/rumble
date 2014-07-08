@@ -305,6 +305,7 @@
             appData = $scope.app.data,
             id = appData.experience.id,
             election = appData.experience.data.election,
+            videoAdConfig = appData.experience.data.adConfig.video,
             c = c6Computed($scope),
             tracker = trackerService('c6mr'),
             cancelTrackVideo = null,
@@ -342,18 +343,6 @@
 
         function isAd(card) {
             return (card || null) && (card.ad && !card.sponsored);
-        }
-
-        function handleAdEnd(event, card) {
-            var index = $scope.deck.indexOf(card);
-
-            $scope.deck.splice(index, 1);
-
-            if ($scope.currentCard === card) {
-                self.goForward();
-            }
-
-            console.log($scope.deck);
         }
 
         function handleAdInit(event, provideNavController) {
@@ -490,8 +479,11 @@
             });
         });
 
-        $scope.$on('<vast-card>:contentEnd', handleAdEnd);
-        $scope.$on('<vpaid-card>:contentEnd', handleAdEnd);
+        $scope.$on('<mr-card>:contentEnd', function(event, card) {
+            if ($scope.currentCard === card) {
+                self.goForward();
+            }
+        });
 
         $scope.$on('<vast-card>:init', handleAdInit);
         $scope.$on('<vpaid-card>:init', handleAdInit);
@@ -735,46 +727,60 @@
         adController = {
             adCount: 0,
             videoCount: 0,
-            firstPlacement: appData.experience.data.adConfig.video.firstPlacement,
-            frequency: appData.experience.data.adConfig.video.frequency,
+            firstPlacement: videoAdConfig.firstPlacement,
+            frequency: videoAdConfig.frequency,
             broadcastOnDeck: function() {
                 $scope.$broadcast('onDeck', { ad: true });
             },
             spliceAd: function(index) {
                 $scope.deck.splice(index, 0, { ad: true });
-                this.adCount++;
+            },
+            removeAd: function(index) {
+                $scope.deck.splice(index, 1);
             }
         };
         Object.defineProperties(adController, {
             shouldLoadAd: {
                 get: function() {
-                    return (this.videoCount === (this.firstPlacement - 1)) ||
-                        ((this.videoCount + 1 - this.firstPlacement) % this.frequency === 0);
+                    return (this.videoCount + 1 - this.firstPlacement) % this.frequency === 0;
                 }
             },
             shouldPlayAd: {
                 get: function() {
-                    // return this.videoCount === this.firstPlacement ||
-                    //     ((this.videoCount - this.firstPlacement) % frequency === 0);
                     return this.adCount <= ((this.videoCount - this.firstPlacement) / this.frequency);
                 }
             }
         });
 
+        if (adController.firstPlacement === 0) {
+            adController.broadcastOnDeck();
+        }
+
         this.setPosition = function(i){
-            var toCard = $scope.deck[i] || null;
+            var toCard = $scope.deck[i] || null,
+                lastCard = $scope.currentCard;
 
-            if (toCard && !toCard.ad) {
-                if (adController.shouldLoadAd) {
-                    adController.broadcastOnDeck();
+            if (lastCard && lastCard.ad) {
+                adController.removeAd($scope.deck.indexOf(lastCard));
+                $scope.currentCard = null;
+                return this.setPosition(i - 1);
+            }
+
+            if (toCard) {
+                if (!toCard.ad) {
+                    if (adController.shouldLoadAd) {
+                        adController.broadcastOnDeck();
+                    }
+
+                    if (adController.shouldPlayAd) {
+                        adController.spliceAd(i);
+                        return this.setPosition(i);
+                    }
+
+                    adController.videoCount++;
+                } else {
+                    adController.adCount++;
                 }
-
-                if (adController.shouldPlayAd) {
-                    adController.spliceAd(i);
-                    return this.setPosition(i);
-                }
-
-                adController.videoCount++;
             }
 
             if (navController) {
@@ -787,9 +793,6 @@
             $scope.currentCard    = toCard;
 
             $log.info('Now on card:',$scope.currentCard);
-            if ($scope.currentCard){
-                $scope.currentCard.visited = true;
-            }
 
             $scope.atHead         = $scope.currentIndex === 0;
             $scope.atTail         = ($scope.currentIndex === ($scope.deck.length - 1));
@@ -1006,7 +1009,8 @@
                 return !card.ad;
             },
             findCard: function(card) {
-                return this.cards.indexOf(card) > -1 ? card : undefined;
+                return card &&
+                    (this.cards.indexOf(card) > -1 ? card : undefined);
             }
         });
         adDeck = new Deck('ad', {
@@ -1018,7 +1022,14 @@
                 return false;
             },
             findCard: function(card) {
-                return card.ad ? this.cards[this.index + 1] : undefined;
+                var result = (card || undefined) &&
+                    card.ad ? this.cards[this.index + 1] : undefined;
+
+                if (result) {
+                    result.meta = card;
+                }
+
+                return result;
             }
         });
 
@@ -1044,8 +1055,6 @@
         });
 
         $scope.$watch('currentCard', function(currentCard) {
-            if (!currentCard) { return; }
-
             self.decks.forEach(function(deck) {
                 var card;
 
@@ -1056,6 +1065,10 @@
                         .moveTo(card);
                 } else {
                     deck.deactivate();
+
+                    if (card === null) {
+                        deck.moveTo(null);
+                    }
                 }
             });
         });
@@ -1202,15 +1215,21 @@
                 }
             });
 
-            iface.once('ready', function() {
-                self.videoUrl = player.webHref;
-                if (shouldPlay){
-                    iface.play();
-                }
-            });
-            iface.once('play', function() {
-                _data.modules.displayAd.active = true;
-            });
+            iface
+                .once('ready', function() {
+                    self.videoUrl = player.webHref;
+                    if (shouldPlay){
+                        iface.play();
+                    }
+                })
+                .once('play', function() {
+                    _data.modules.displayAd.active = true;
+                })
+                .on('ended', function() {
+                    if (!self.hasModule('ballot')) {
+                        $scope.$emit('<mr-card>:contentEnd', config.meta || config);
+                    }
+                });
 
             $scope.$watch('active', function(active, wasActive) {
                 if ((active === wasActive) && (wasActive === false)){ return; }
@@ -1328,6 +1347,7 @@
             restrict : 'E',
             link     : fnLink,
             scope    : {
+                current : '=',
                 config  : '=',
                 profile : '=',
                 active  : '=',
