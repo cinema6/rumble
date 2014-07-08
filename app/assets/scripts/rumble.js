@@ -757,14 +757,19 @@
         }
 
         this.setPosition = function(i){
-            var toCard = $scope.deck[i] || null,
-                lastCard = $scope.currentCard;
+            var prevCard = $scope.currentCard,
+                toCard;
 
-            if (lastCard && lastCard.ad) {
-                adController.removeAd($scope.deck.indexOf(lastCard));
-                $scope.currentCard = null;
-                return this.setPosition(i - 1);
+            if (navController) {
+                navController.enabled(true);
             }
+
+            if (prevCard && prevCard.ad) {
+                adController.removeAd($scope.deck.indexOf(prevCard));
+                i--;
+            }
+
+            toCard = $scope.deck[i] || null;
 
             if (toCard) {
                 if (!toCard.ad) {
@@ -781,10 +786,6 @@
                 } else {
                     adController.adCount++;
                 }
-            }
-
-            if (navController) {
-                navController.enabled(true);
             }
 
             $log.info('setPosition: %1',i);
