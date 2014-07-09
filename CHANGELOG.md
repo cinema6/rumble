@@ -1,5 +1,8 @@
 # MiniReel Player
 
+* *[Beta16.rc2]*
+  * [FIX]: New styles added for light text embedded player
+
 ## Beta16 (July 2, 2014)
 * *[Beta16.rc1]*
   * Added infrastructure needed for dynamic ad placements (only being
