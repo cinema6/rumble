@@ -429,7 +429,7 @@
                     height      : $attr.height,
                     frameborder : 0,
                     params      : vparams
-                },$element.find('.player'));
+                },$element.find('.mr-player'));
 
                 player.on('ready',function(p){
                     $log.info('[%1] - I am ready',p);

@@ -308,7 +308,7 @@
                     scope.$emit('playerAdd', iface);
 
                     function createPlayer() {
-                        player = VPAIDService.createPlayer(scope.config.id, scope.config, $element.find('.player'));
+                        player = VPAIDService.createPlayer(scope.config.id, scope.config, $element.find('.mr-player'));
 
                         player.on('ready', function() {
                             // this fires when the flash object exists and responds to isCinema6player()
