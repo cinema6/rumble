@@ -1,72 +1,72 @@
-<section class="mr-comments">
-    <h1 class="mr-comments__title">Comments(59)</h1>
-    <form class="mr-comments__form">
-        <div class="mr-comments__body mr-card-shadow">
-            <header class="mr-comments__hdr-bar">
-                <label class="mr-comments__hdr-label" for="comment">Join the Discussion</label>
+<section class="comments">
+    <h1 class="comments__title">Comments(59)</h1>
+    <form class="comments__form">
+        <div class="comments__body card-shadow">
+            <header class="comments__hdr-bar">
+                <label class="comments__hdr-label" for="comment">Join the Discussion</label>
             </header>
-            <div class="mr-comments__textbox clearfix">
-                <textarea class="mr-comments__textarea" name="comment" ng-model="Ctrl.userComment.message"></textarea>
-                <button class="mr-comments__post-btn" ng-click="Ctrl.userComment.post()" ng-disabled="!Ctrl.userComment.message" type="button">Post</button>
+            <div class="comments__textbox clearfix">
+                <textarea class="comments__textarea" name="comment" ng-model="Ctrl.userComment.message"></textarea>
+                <button class="comments__post-btn" ng-click="Ctrl.userComment.post()" ng-disabled="!Ctrl.userComment.message" type="button">Post</button>
             </div>
         </div>
-        <select class="mr-comments__select mr-card-shadow" ng-model="Ctrl.showFriendsFirst"
+        <select class="comments__select card-shadow" ng-model="Ctrl.showFriendsFirst"
             ng-options="label for (label, value) in Ctrl.sortOptions">
         </select>
     </form>
-    <ul class="mr-comments__list mr-comments__list" ng-if="!Ctrl.showFriendsFirst">
+    <ul class="comments__list comments__list" ng-if="!Ctrl.showFriendsFirst">
         <li ng-repeat="this in Ctrl.comments">
-            <article class="mr-comments__comment clearfix">
-                <div class="mr-comments__userpic mr-card-shadow">
-                    <img class="mr-comments__userpic-img" src="http://lorempixel.com/56/56/">
+            <article class="comments__comment clearfix">
+                <div class="comments__userpic card-shadow">
+                    <img class="comments__userpic-img" src="http://lorempixel.com/56/56/">
                 </div>
-                <div class="mr-comments__body mr-card-shadow">
-                    <header class="mr-comments__meta clearfix">
-                        <h3 class="mr-comm-meta__username">{{this.user.name}}</h3>
-                        <small class="mr-comm-meta__timestamp">{{this.date | timestamp}}</small>
+                <div class="comments__body card-shadow">
+                    <header class="comments__meta clearfix">
+                        <h3 class="comm-meta__username">{{this.user.name}}</h3>
+                        <small class="comm-meta__timestamp">{{this.date | timestamp}}</small>
                     </header>
-                    <div class="mr-comments__copy">
+                    <div class="comments__copy">
                         {{this.message}}
                     </div>
                 </div>
             </article>
         </li>
-        <li class="mr-comments__terminator-outer"><span class="mr-comments__terminator sprite">&nbsp;</span></li>
+        <li class="comments__terminator-outer"><span class="comments__terminator sprite">&nbsp;</span></li>
     </ul>
-    <ul class="mr-comments__list" ng-if="Ctrl.showFriendsFirst">
+    <ul class="comments__list" ng-if="Ctrl.showFriendsFirst">
         <li ng-repeat="this in Ctrl.commentsByFriends">
-            <article class="mr-comments__comment mr-comments__comment--friend clearfix">
-                <div class="mr-comments__userpic mr-card-shadow">
-                    <img class="mr-comments__userpic-img" src="http://lorempixel.com/56/56/">
+            <article class="comments__comment comments__comment--friend clearfix">
+                <div class="comments__userpic card-shadow">
+                    <img class="comments__userpic-img" src="http://lorempixel.com/56/56/">
                 </div>
-                <div class="mr-comments__body mr-card-shadow">
-                    <header class="mr-comments__meta clearfix">
-                        <h3 class="mr-comm-meta__username">{{this.user.name}}</h3>
-                        <small class="mr-comm-meta__timestamp">{{this.date | timestamp}}</small>
+                <div class="comments__body card-shadow">
+                    <header class="comments__meta clearfix">
+                        <h3 class="comm-meta__username">{{this.user.name}}</h3>
+                        <small class="comm-meta__timestamp">{{this.date | timestamp}}</small>
                     </header>
-                    <div class="mr-comments__copy">
+                    <div class="comments__copy">
                         {{this.message}}
                     </div>
                 </div>
             </article>
         </li>
-        <li><span class="mr-comments__breaker sprite">&nbsp;</span></li>
+        <li><span class="comments__breaker sprite">&nbsp;</span></li>
         <li ng-repeat="this in Ctrl.commentsByStrangers">
-            <article class="mr-comments__comment clearfix">
-                <div class="mr-comments__userpic mr-card-shadow">
-                    <img class="mr-comments__userpic-img" src="http://lorempixel.com/56/56/">
+            <article class="comments__comment clearfix">
+                <div class="comments__userpic card-shadow">
+                    <img class="comments__userpic-img" src="http://lorempixel.com/56/56/">
                 </div>
-                <div class="mr-comments__body mr-card-shadow">
-                    <header class="mr-comments__meta clearfix">
-                        <h3 class="mr-comm-meta__username">{{this.user.name}}</h3>
-                        <small class="mr-comm-meta__timestamp">{{this.date | timestamp}}</small>
+                <div class="comments__body card-shadow">
+                    <header class="comments__meta clearfix">
+                        <h3 class="comm-meta__username">{{this.user.name}}</h3>
+                        <small class="comm-meta__timestamp">{{this.date | timestamp}}</small>
                     </header>
-                    <div class="mr-comments__copy">
+                    <div class="comments__copy">
                         {{this.message}}
                     </div>
                 </div>
             </article>
         </li>
-        <li class="mr-comments__terminator-outer"><span class="mr-comments__terminator sprite">&nbsp;</span></li>
+        <li class="comments__terminator-outer"><span class="comments__terminator sprite">&nbsp;</span></li>
     </ul>
 </section>

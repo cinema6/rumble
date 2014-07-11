@@ -4,8 +4,8 @@
     var forEach = angular.forEach;
 
     angular.module('c6.rumble')
-    .animation('.mr-cards__item',['$log', function($log){
-        $log = $log.context('.mr-cards__item');
+    .animation('.slides__item',['$log', function($log){
+        $log = $log.context('.slides__item');
         return {
             beforeAddClass: function(element,className,done) {
                 $log.log('addClass setup:',className);
@@ -32,8 +32,8 @@
             }
         };
     }])
-    .animation('.mr-ballot-module', ['$log', function($log) {
-        $log = $log.context('.mr-ballot-module');
+    .animation('.ballot-module', ['$log', function($log) {
+        $log = $log.context('.ballot-module');
         return {
             beforeAddClass: function(element,className,done) {
                 $log.log('addClass setup:',className);

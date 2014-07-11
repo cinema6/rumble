@@ -1,12 +1,12 @@
-<div class="mr-card__group mr-ad__group">
-    <div class="mr-adVideo__group" ng-style="{visibility: Ctrl.showVideo ? 'visible' : 'hidden'}">
-        <div class="mr-adVideo__videoHolder">
-            <video class="mr-adVideo__video" ng-click="Ctrl.clickThrough()"
+<div class="slide__group ad__group">
+    <div class="adVideo__group" ng-style="{visibility: Ctrl.showVideo ? 'visible' : 'hidden'}">
+        <div class="adVideo__videoHolder">
+            <video class="adVideo__video" ng-click="Ctrl.clickThrough()"
                 c6-video id="{{config.id}}" c6-src="Ctrl.videoSrc">
             </video>
         </div>
-        <button style="z-index:2;" ng-if="Ctrl.enablePlayButton" ng-show="Ctrl.showPlay" ng-click="Ctrl.playVideo()" class="mr-player__play-btn">
-            <div class="mr-player__play-icon">
+        <button style="z-index:2;" ng-if="Ctrl.enablePlayButton" ng-show="Ctrl.showPlay" ng-click="Ctrl.playVideo()" class="player__play-btn">
+            <div class="player__play-icon">
                 <span class="ir">Play Video</span>
             </div>
         </button>
@@ -18,4 +18,4 @@
         companion="Ctrl.companion">
     </display-ad-module>
 </div>
-<p class="mr-adVideo__label">Advertisement</p>
+<p class="adVideo__label">Advertisement</p>

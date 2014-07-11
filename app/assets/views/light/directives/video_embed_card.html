@@ -1,5 +1,6 @@
-<article class="mr-card__group">
-    <ballot-vote-module class="mr-ballot-module"
+<article class="slide__group">
+    <ballot-vote-module 
+        class="ballot-module player__height"
         ng-if="Ctrl.hasModule('ballot')"
         active="config._data.modules.ballot.ballotActive && active"
         vote="config._data.modules.ballot.vote"
@@ -8,7 +9,7 @@
         on-dismiss="Ctrl.dismissBallot()">
     </ballot-vote-module>
     <ballot-results-module ng-if="Ctrl.hasModule('ballot')"
-        class="mr-results-module"
+        class="results-module player__height"
         active="config._data.modules.ballot.resultsActive && active"
         vote="config._data.modules.ballot.vote"
         card-id="{{config.id}}"
@@ -16,25 +17,25 @@
         on-dismiss="Ctrl.dismissBallotResults()">
     </ballot-results-module>
 
-    <div class="mr-player__group">
-        <button ng-if="Ctrl.enablePlayButton" ng-show="Ctrl.showPlay" ng-click="Ctrl.playVideo()" class="mr-player__play-btn">
-            <div class="mr-player__play-icon">
+    <div class="player__group player__height">
+        <button ng-if="Ctrl.enablePlayButton" ng-show="Ctrl.showPlay" ng-click="Ctrl.playVideo()" class="player__play-btn">
+            <div class="player__play-icon">
                 <span class="ir">Play Video</span>
             </div>
         </button>
-        <div ng-class="{'mr-player--fly-away': Ctrl.flyAway}" class="mr-player c6-height-limiter"><!-- actual player will be inserted into this container --></div>
-        <div ng-show="Ctrl.flyAway" class="mr-player__thumbnail c6-height-limiter"
+        <div ng-class="{'mr-player--fly-away': Ctrl.flyAway}" class="mr-player"><!-- actual player will be inserted into this container --></div>
+        <div ng-show="Ctrl.flyAway" class="player__thumbnail c6-height-limiter"
             ng-style="{'background-image':config.thumbs.large ? 'url(' + config.thumbs.large + ')' : ''}">
             <span class="ir"><img ng-src="{{config.thumbs.large}}"></span>
         </div>
     </div>
 
-    <div class="mr-card__copy">
-        <h1 class="mr-card__title tk--hdr">
+    <div class="card__copy">
+        <h1 class="card__title tk--hdr">
             {{config.title}}
-            <span ng-show="!!config.source" class="mr-card__attributes">via <a ng-href="{{Ctrl.videoUrl}}" target="_blank" title="{{config.source}}">{{config.source}}</a></span>
+            <span ng-show="!!config.source" class="card__attributes">via <a ng-href="{{Ctrl.videoUrl}}" target="_blank" title="{{config.source}}">{{config.source}}</a></span>
         </h1>
-        <div class="mr-card__desc" ng-bind-html="config.note"></div>
+        <div class="card__desc" ng-bind-html="config.note"></div>
     </div>
 
     <!--<comments-module ng-if="Ctrl.hasModule('comments')"

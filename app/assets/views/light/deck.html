@@ -1,21 +1,22 @@
-<div ng-controller="DeckController as DeckCtrl">
-    <ul class="mr-cards__list" ng-repeat="deck in DeckCtrl.decks">
-        <li class="mr-cards__item" ng-repeat="item in deck.cards"
-            ng-class="{ 
-                squished : ($index !== deck.index || !deck.active),
-                'mr-charCount--low': item.title.length + item.note.length <= 100,
-                'mr-charCount--med': item.title.length + item.note.length > 100 && item.title.length + item.note.length <= 170,
-                'mr-charCount--high': item.title.length + item.note.length > 170 && item.title.length + item.note.length <= 210,
-                'mr-charCount--max': item.title.length + item.note.length > 210
-            }">
-            <mr-card
-                x-number="{{tocCards.indexOf(item) + 1}}"
-                x-total="{{tocCards.length}}"
-                x-config="item"
-                x-profile="deviceProfile"
-                x-active="($index === deck.index) && deck.active"
-                x-on-deck="($index === (deck.index + 1))">
-            </mr-card>
-        </li>
-    </ul>
-</div>
+<ul class="slides__list" ng-repeat="deck in DeckCtrl.decks"
+    ng-class="{
+        hidden : !deck.active
+    }">
+    <li class="slides__item" ng-repeat="item in deck.cards"
+        ng-class="{ 
+            hidden : ($index !== deck.index || !deck.active),
+            'text--low': item.title.length + item.note.length <= 100,
+            'text--med': item.title.length + item.note.length > 100 && item.title.length + item.note.length <= 170,
+            'text--high': item.title.length + item.note.length > 170 && item.title.length + item.note.length <= 210,
+            'text--max': item.title.length + item.note.length > 210
+        }">
+        <mr-card
+            x-number="{{tocCards.indexOf(item) + 1}}"
+            x-total="{{tocCards.length}}"
+            x-config="item"
+            x-profile="deviceProfile"
+            x-active="($index === deck.index) && deck.active"
+            x-on-deck="($index === (deck.index + 1))">
+        </mr-card>
+    </li>
+</ul>

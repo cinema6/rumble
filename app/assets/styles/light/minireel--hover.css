@@ -1,72 +1,72 @@
 /*  ==========================================================================
-    .mr-pager__group classes
+    .pager__group classes
     ========================================================================== */
-    .mr-pages__fader, 
-    .mr-pages__current-indicator {
+    .pages__fader, 
+    .pages__current-indicator {
         -webkit-transition: opacity 0.5s ease; 
         -moz-transition: opacity 0.5s ease; 
         -o-transition: opacity 0.5s ease; 
         transition: opacity 0.5s ease;
     }
-    .mr-pager__btn, .mr-pager__btn:hover {
+    .pager__btn, .pager__btn:hover {
         -webkit-transition: background 0.4s ease; 
         -moz-transition: background 0.4s ease; 
         -o-transition: background 0.4s ease; 
         transition: background 0.4s ease;
     }
-    .mr-pager__icon-path, 
-    .mr-pager__btn:hover .mr-pager__icon-path {
+    .pager__icon-path, 
+    .pager__btn:hover .pager__icon-path {
         -webkit-transition: fill 0.4s ease; 
         -moz-transition: fill 0.4s ease; 
         -o-transition: fill 0.4s ease; 
         transition: fill 0.4s ease;
 }
-    .mr-pager__btn, .mr-pager__icon-path {
+    .pager__btn, .pager__icon-path {
         -webkit-transition-delay: 0.1s;
         -moz-transition-delay: 0.1s;
         -o-transition-delay: 0.1s;
         transition-delay: 0.1s;
     }
-        .mr-pages__page:hover .mr-pages__fader {
+        .pages__page:hover .pages__fader {
             opacity:0;
         }
-        .mr-pager__btn:hover {
+        .pager__btn:hover {
             -webkit-transition-delay: 0;
             -moz-transition-delay: 0;
             -o-transition-delay: 0;
             transition-delay: 0;
             background:#fff no-repeat 50% 50%;
         }
-            .mr-pager__label {
+            .pager__label {
                 -webkit-transition: color 0.4s ease; 
                 -moz-transition: color 0.4s ease; 
                 -o-transition: color 0.4s ease; 
                 transition: color 0.4s ease;
             }
-            .mr-pager__btn:hover .mr-pager__label {
+            .pager__btn:hover .pager__label {
                 color:#d94040;
             }
-            .mr-pager__btn:hover .mr-pager__icon-path {
+            .pager__btn:hover .pager__icon-path {
                 -webkit-transition-delay: 0;
                 -moz-transition-delay: 0;
                 -o-transition-delay: 0;
                 transition-delay: 0;
                 fill: #d94040;
             }
-        .mr-pager__btn--disabled:hover {
+        .pager__btn--disabled:hover {
             background:#d94040 no-repeat 50% 50%;
         }
-            .mr-pager__btn--disabled:hover .mr-pager__label {
+            .pager__btn--disabled:hover .pager__label {
                 color:#1b1b1b;
             }
-            .mr-pager__btn--disabled:hover .mr-pager__icon-path {
+            .pager__btn--disabled:hover .pager__icon-path {
                 fill: #1b1b1b;
             }
 
-    .mr-pages__preview-img {
+    .pages__preview-img {
         transition: background 0.5s ease;
     }
-    .mr-pages__page:hover .mr-pages__preview-img {
+    .pages__page:hover .pages__preview-img {
         background-size:150%;
     }
 
@@ -96,7 +96,7 @@
 /*  ==========================================================================
     Splash Screen classes
     ========================================================================== */
-    .mr-splash__bar {
+    .splash__bar {
         -webkit-transition: background 0.2s ease; 
         -moz-transition: background 0.2s ease; 
         -o-transition: background 0.2s ease; 
