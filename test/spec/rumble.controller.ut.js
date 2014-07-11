@@ -1255,6 +1255,17 @@
                             slideTitle : 'vid1 caption'
                         });
                     });
+
+                    it('sends a pageview for the first slide',function(){
+                        expect(trackerSpy.trackPage).toHaveBeenCalledWith({
+                            page : '/mr/e-722bd3c4942331/vid1',
+                            title : 'my title - vid1 caption',
+                            slideIndex : 0,
+                            slideId : 'vid1',
+                            slideTitle : 'vid1 caption',
+                            sessionControl: 'start'
+                        });
+                    });
                 });
 
                 describe('if the behavior allows fullscreen', function() {

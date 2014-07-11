@@ -727,7 +727,8 @@
                 isSkipping = Math.abs(currentIndex - i) > 1,
                 isGoingForward = (i - currentIndex) > 0,
                 cardBeforeThis = $scope.deck[i + (isGoingForward ? -1 : 1)],
-                toCard = $scope.deck[i] || null;
+                toCard = $scope.deck[i] || null,
+                visited;
 
             if (navController) {
                 navController.enabled(true);
@@ -751,12 +752,17 @@
 
             $log.info('Now on card:',$scope.currentCard);
             if ($scope.currentCard){
+                visited = !!$scope.currentCard.visited;
                 $scope.currentCard.visited = true;
             }
 
             $scope.atHead         = $scope.currentIndex === 0;
             $scope.atTail         = ($scope.currentIndex === ($scope.deck.length - 1));
 
+            if ((i === 0) &&  (visited === false) ){
+                // On the first card for the first time, reset the GA session.
+                tracker.trackPage(this.getTrackingData({ sessionControl : 'start' }));
+            } else
             if (i >= 0) {
                 tracker.trackPage(this.getTrackingData());
             }
