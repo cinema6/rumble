@@ -1,7 +1,8 @@
 # MiniReel Player
 
-* *[Beta16.rc2]*
+* * Beta17
   * [FIX]: New styles added for light text embedded player
+  * [FEATURE]: Added ga session reset when first slide of MR is visited.
 
 ## Beta16 (July 2, 2014)
 * *[Beta16.rc1]*
