@@ -406,6 +406,10 @@
             });
 
             $scope.$on('positionDidChange', function(event, i) {
+                if (navController) {
+                    navController.enabled(true);
+                }
+
                 $scope.atHead = $scope.currentIndex === 0;
                 $scope.atTail = ($scope.currentIndex === ($scope.deck.length - 1));
 
@@ -460,8 +464,6 @@
 
         $log = $log.context('RumbleCtrl');
 
-        MasterDeckCtrl = new MasterDeckController();
-
         CommentsService.init(id);
 
         $scope.deviceProfile    = appData.profile;
@@ -470,6 +472,8 @@
         $scope.controls         = ControlsService.init();
 
         $scope.deck             = MiniReelService.createDeck(appData.experience.data);
+
+        MasterDeckCtrl = new MasterDeckController($scope.deck);
 
         if (election) {
             angular.forEach($scope.deck,function(card){
@@ -836,10 +840,6 @@
         };
 
         this.setPosition = function(i){
-            if (navController) {
-                navController.enabled(true);
-            }
-
             $log.info('setPosition: %1',i);
 
             if ($scope.$emit('positionWillChange', i).defaultPrevented) {
@@ -851,9 +851,7 @@
 
             $log.info('Now on card:',$scope.currentCard);
 
-            if ($scope.$emit('positionDidChange', i).defaultPrevented) {
-                return;
-            }
+            $scope.$emit('positionDidChange', $scope.currentIndex);
         };
 
         this.jumpTo = function(card) {
