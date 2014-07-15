@@ -3,7 +3,8 @@
 * * Beta17
   * [FIX]: New styles added for light text embedded player
   * [FEATURE]: Added ga session reset when first slide of MR is visited.
-  * [FEATURE]: Added styles for 300x250 ad MiniReels
+  * [FEATURE]: Added theme for c6 ad MiniReels
+  * [FIX]: ballot close behavior bug fixed
 
 ## Beta16 (July 2, 2014)
 * *[Beta16.rc1]*

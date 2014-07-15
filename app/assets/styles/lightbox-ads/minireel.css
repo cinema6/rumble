@@ -483,6 +483,10 @@
         position: absolute; z-index: 500; top:18.6%; bottom: 0; width:100%;
         text-align: center;
     }
+        .mr-ballot__closer {
+            z-index:-1; position: absolute;
+            top:0; left:0; bottom:0; right:0;
+        }
     .mr-ballot__title {
         color:#fff; font-size: 1.25em;/*20px*/ font-weight:normal; 
         text-align: center; line-height: 1.4;
