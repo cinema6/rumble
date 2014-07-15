@@ -1,5 +1,5 @@
 <ul class="mr-cards__list">
-    <li class="mr-cards__item" ng-repeat="item in players" ng-class="{ squished : ($index !== currentIndex)}" >
+    <li class="mr-cards__item slides__item" ng-repeat="item in players" ng-class="{ squished : ($index !== currentIndex)}" >
         <mr-card
             x-number="{{tocCards.indexOf(item) + 1}}"
             x-total="{{tocCards.length}}"
