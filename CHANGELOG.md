@@ -5,6 +5,11 @@
     placements)
 
 ## Beta17 (July 15, 2014)
+* *[Beta17.rc3]*
+  * [FIX]: transition animation bug fixed
+  * [FIX]: c6ad theme namespaced
+* *[/Beta17.rc3]*
+
 * *[Beta17.rc2]*
   * [FIX]: fixed responsive json padding typo
 * *[/Beta17.rc2]*

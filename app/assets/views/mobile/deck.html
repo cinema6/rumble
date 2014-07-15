@@ -3,7 +3,7 @@
     ng-class="{
         squished : !deck.active
     }">
-    <li class="mr-cards__item"
+    <li class="mr-cards__item slides__item"
         ng-repeat="item in deck.cards"
         ng-class="{
             squished : ($index !== deck.index || !deck.active)
