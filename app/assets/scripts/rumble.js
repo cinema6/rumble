@@ -364,20 +364,20 @@
                 if (previousCard && previousCard.ad) {
                     self.removeAd(previousCard);
                     if (isGoingForward) {
-                        index = Math.max(0,index-1);
+                        index = Math.max(0, index - 1);
                     }
                 }
 
                 return {
                     currentIndex: index,
-                    currentCard: deck[index]
+                    currentCard: deck[index] || null
                 };
             };
 
             this.showAd = function() {
                 deck.splice(index, 0, { ad: true });
-                $scope.currentIndex   = index;
-                $scope.currentCard    = deck[index];
+                $scope.currentIndex = index;
+                $scope.currentCard = deck[index];
                 adController.adCount++;
             };
 
