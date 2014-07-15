@@ -1,0 +1,29 @@
+/*  ==========================================================================
+    splash styles
+    ========================================================================== */
+    .c6brand__c6ads .c6mr-splashTextOverlay__group .c6mr-splashTextOverlay__copy .c6mr-title,
+    .c6brand__c6ads .c6mr-splashVerticalStack__group .c6mr-splashVerticalStack__copy .c6mr-title,
+    .c6brand__c6ads .c6mr-splashHorizontalStack__group .c6mr-splashHorizontalStack__copy .c6mr-title {
+        font:bold 1em "Helvetica Neue", Helvetica, Arial, sans-serif;
+        line-height:1.2;
+        color:#fff;
+        margin:0; border:0; padding:0;
+        background:none;
+    }
+
+    .c6brand__c6ads .c6mr-splashVerticalStack__group,
+    .c6brand__c6ads .c6mr-splashHorizontalStack__group {
+        background:#fff;
+    }
+        .c6brand__c6ads .c6mr-splashVerticalStack__group .c6mr-splashVerticalStack__copy .c6mr-title {
+            margin:0.5em;
+            color:#000;
+        }
+        .c6brand__c6ads .c6mr-splashHorizontalStack__group .c6mr-splashHorizontalStack__copy .c6mr-title {
+            color:#000;
+        }
+        .c6brand__c6ads .c6mr-splashVerticalStack__group .c6mr-splashTextOverlay__copy a,
+        .c6brand__c6ads .c6mr-splashHorizontalStack__copy .c6mr-splashTextOverlay__copy a {
+            color:#000; background:none;
+            border:0; padding:0; margin:0;
+        }

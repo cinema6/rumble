@@ -1,8 +1,25 @@
 # MiniReel Player
 
-* * Beta17
+* *[Beta18.rc1]*
+  * All view modes are now using multiple decks (to allow for dynamic ad
+    placements)
+
+## Beta17 (July 15, 2014)
+* *[Beta17.rc3]*
+  * [FIX]: transition animation bug fixed
+  * [FIX]: c6ad theme namespaced
+* *[/Beta17.rc3]*
+
+* *[Beta17.rc2]*
+  * [FIX]: fixed responsive json padding typo
+* *[/Beta17.rc2]*
+
+* *[Beta17.rc1]*
   * [FIX]: New styles added for light text embedded player
   * [FEATURE]: Added ga session reset when first slide of MR is visited.
+  * [FEATURE]: Added theme for c6 ad MiniReels
+  * [FIX]: ballot close behavior bug fixed  
+* *[/Beta17.rc1]*
 
 ## Beta16 (July 2, 2014)
 * *[Beta16.rc1]*
