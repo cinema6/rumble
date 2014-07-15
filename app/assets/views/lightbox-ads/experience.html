@@ -4,7 +4,7 @@
     </button>
     <div class="mr-card__container">
         <h1 class="mr-title tk--hdr">{{app.data.experience.data.title}}</h1>
-        <ng-include src="'deck.html' | asset:'views'"></ng-include>
+        <ng-include src="'deck.html' | asset:'views'" ng-controller="DeckController as DeckCtrl"></ng-include>
         
         <button ng-click="RumbleCtrl.goBack('nav')"
             ng-show="nav.enabled"
