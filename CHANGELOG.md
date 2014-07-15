@@ -3,6 +3,8 @@
 * *[Beta18.rc1]*
   * All view modes are now using multiple decks (to allow for dynamic ad
     placements)
+  * [FEATURE]: Ads are now loaded dynamically based on the experience ad config
+    but experiences with ad cards in the deck already are still supported
 
 ## Beta17 (July 15, 2014)
 * *[Beta17.rc3]*
