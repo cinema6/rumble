@@ -3,7 +3,7 @@ describe('splash.js', function() {
 
     var splashJS,
         c6, settings,
-        splash, loader, start;
+        splash, loader, starts, start, start2;
 
     beforeEach(function() {
         splash = document.createElement('div');
@@ -13,10 +13,13 @@ describe('splash.js', function() {
             '</div>',
             '<button class="c6js-start">',
                 'Start',
-            '</button>'
+            '</button>',
+            '<a href="#" class="c6js-start">Start</a>'
         ].join('\n');
         loader = splash.querySelectorAll('.c6js-loader')[0];
-        start = splash.querySelectorAll('.c6js-start')[0];
+        starts = splash.querySelectorAll('.c6js-start');
+        start = starts[0];
+        start2 = starts[1];
 
         c6 = {
             loadExperience: jasmine.createSpy('c6.loadExperience(settings)')
@@ -42,14 +45,17 @@ describe('splash.js', function() {
         });
 
         describe('when the start is clicked', function() {
-            beforeEach(function() {
+            function click(element) {
                 var event = document.createEvent('MouseEvents');
 
                 event.initMouseEvent('click');
 
-                loader.style.display = 'none';
+                element.dispatchEvent(event);
+            }
 
-                start.dispatchEvent(event);
+            beforeEach(function() {
+                loader.style.display = 'none';
+                click(start);
             });
 
             it('should show the loader', function() {
@@ -57,6 +63,13 @@ describe('splash.js', function() {
             });
 
             it('should load the experience', function() {
+                expect(c6.loadExperience).toHaveBeenCalledWith(settings);
+            });
+
+            it('should work for multiple start buttons', function() {
+                c6.loadExperience = jasmine.createSpy('c6.loadExperience()');
+                click(start2);
+
                 expect(c6.loadExperience).toHaveBeenCalledWith(settings);
             });
 
