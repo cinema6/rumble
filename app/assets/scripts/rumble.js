@@ -379,6 +379,7 @@
                 $scope.currentIndex = index;
                 $scope.currentCard = deck[index];
                 adController.adCount++;
+                $scope.$emit('positionDidChange', index);
             };
 
             this.removeAd = function(card) {
