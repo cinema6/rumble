@@ -1,10 +1,12 @@
 # MiniReel Player
 
-* * Beta17
+## Beta17 (July 15, 2014)
+* *[Beta17.rc1]*
   * [FIX]: New styles added for light text embedded player
   * [FEATURE]: Added ga session reset when first slide of MR is visited.
   * [FEATURE]: Added theme for c6 ad MiniReels
   * [FIX]: ballot close behavior bug fixed
+* *[/Beta17.rc1]*
 
 ## Beta16 (July 2, 2014)
 * *[Beta16.rc1]*
