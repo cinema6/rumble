@@ -1,5 +1,9 @@
 # MiniReel Player
 
+* *[Beta18.rc1]*
+  * All view modes are now using multiple decks (to allow for dynamic ad
+    placements)
+
 ## Beta17 (July 15, 2014)
 * *[Beta17.rc2]*
   * [FIX]: fixed responsive json padding typo
