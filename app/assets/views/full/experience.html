@@ -1,6 +1,6 @@
 <div class="mr-experience" ng-class="app.data.experience.data.theme">
     <div class="mr-card__container">
-        <ng-include src="'deck.html' | asset:'views'"></ng-include>
+        <ng-include ng-controller="DeckController as DeckCtrl" src="'deck.html' | asset:'views'"></ng-include>
     </div>
 
     <thumb-paginator active="tocIndex"
