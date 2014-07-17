@@ -25,14 +25,16 @@
                             rules   : [{
                                 match: /<!--C6ENV-->/,
                                 fn  : function(w, s){
-                                      return w + s +
-                                      '<script>window.c6={' +
-                                      'kDebug:' + grunt.config.get('settings.debug') + ',' +
-                                      'kCollateralUrl:\'' + grunt.config.get('settings.locations.collateral') + '\',' +
-                                      'kApiUrl:\'' + grunt.config.get('settings.locations.api') + '\',' +
-                                      'kEnvUrlRoot: \'http://staging.cinema6.com\',' +
-                                      'kDevMode: true' +
-                                      '};</script>'; 
+                                    return [
+                                        [w, s].join(''),
+                                        '<script>',
+                                        '(' + function(window) {
+                                            window.c6 = {
+                                                kLocal: true
+                                            };
+                                        }.toString() + '(window))',
+                                        '</script>'
+                                    ].join('\n');
                                 }
                             }]
                         }),
