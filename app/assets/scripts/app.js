@@ -1,8 +1,8 @@
 define( ['angular','angularAnimate','angularSanitize','c6ui','c6log','c6_defines',
-         'minireel','services','tracker',
+         'minireel','services','tracker','templates',
          'ui/paginator','ui/table_of_contents','ui/thumb_paginator'],
 function( angular , angularAnimate , angularSanitize , c6ui , c6log , c6Defines ,
-          minireel , services , tracker ,
+          minireel , services , tracker , templates ,
           uiPaginator  , uiTableOfContents    , uiThumbPaginator   ) {
     'use strict';
 
@@ -14,6 +14,7 @@ function( angular , angularAnimate , angularSanitize , c6ui , c6log , c6Defines 
         c6log.name,
         'c6.http',
         // App Files
+        templates.name,
         minireel.name,
         services.name,
         tracker.name,
