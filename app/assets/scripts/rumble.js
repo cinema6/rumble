@@ -342,6 +342,15 @@
                 }
             });
 
+            Object.defineProperties(self, {
+                currentIndex: {
+                    get: function() { return index; }
+                },
+                currentCard: {
+                    get: function() { return deck[index] || null; }
+                }
+            });
+
             function AdCard(config) {
                 this.id = 'rc-advertisement' + (adController.adCount + 1);
                 this.type = 'ad';
@@ -376,10 +385,7 @@
 
             this.showAd = function() {
                 deck.splice(index, 0, { ad: true });
-                $scope.currentIndex = index;
-                $scope.currentCard = deck[index];
                 adController.adCount++;
-                $scope.$emit('positionDidChange', index);
             };
 
             this.removeAd = function(card) {
@@ -404,7 +410,6 @@
                         }
 
                         if (adController.shouldPlayAd) {
-                            event.preventDefault();
                             self.showAd();
                         } else {
                             adController.videoCount++;
@@ -755,7 +760,7 @@
         };
 
         this.trackVideoEvent = function(player,eventName,eventLabel){
-            var currentCard = $scope.currentCard;
+            var currentCard = $scope.currentCard, nonInteraction = 0;
             if ((!currentCard) || (!currentCard.player)){
                 return;
             }
@@ -770,9 +775,17 @@
                     action          : eventName,
                     label           : eventLabel || 'ad',
                     videoSource     : 'ad',
-                    videoDuration   : Math.round(player.duration)
+                    videoDuration   : Math.round(player.duration),
+                    nonInteraction  : 1
                 }));
                 return;
+            }
+
+            // We report the video plays on autoplay MR's as
+            // nonInteraction events.  This is particularly important
+            // on the first slide as it will impact bounce rates
+            if ( (appData.experience.data.autoplay) && (eventName === 'Play') ){
+                nonInteraction = 1;
             }
 
             tracker.trackEvent(this.getTrackingData({
@@ -780,7 +793,8 @@
                 action          : eventName,
                 label           : eventLabel || player.webHref,
                 videoSource     : player.source || player.type,
-                videoDuration   : Math.round(player.duration)
+                videoDuration   : Math.round(player.duration),
+                nonInteraction  : nonInteraction
             }));
         };
 
@@ -858,12 +872,12 @@
                 return;
             }
 
-            $scope.currentIndex = toCard.currentIndex;
-            $scope.currentCard = toCard.currentCard;
+            $scope.currentIndex = MasterDeckCtrl.currentIndex;
+            $scope.currentCard = MasterDeckCtrl.currentCard;
 
-            $log.info('Now on card:', toCard.currentCard);
+            $log.info('Now on card:', MasterDeckCtrl.currentCard);
 
-            $scope.$emit('positionDidChange', toCard.currentIndex);
+            $scope.$emit('positionDidChange', MasterDeckCtrl.currentIndex);
         };
 
         this.jumpTo = function(card) {
@@ -871,8 +885,7 @@
         };
 
         this.start = function() {
-            this.goForward();
-            this.trackNavEvent('Start','Start');
+            self.setPosition(0);
             if (appData.behaviors.fullscreen) {
                 cinema6.fullscreen(true);
             }
@@ -929,7 +942,6 @@
                 'href'       : c6Defines.kHref,
                 'slideCount' : $scope.deck.length
             });
-//            tracker.trackPage(self.getTrackingData());
         });
 
         $scope.$on('shouldStart', function() {
