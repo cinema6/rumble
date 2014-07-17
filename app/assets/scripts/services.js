@@ -1,5 +1,5 @@
-define (['angular','c6ui'],
-function( angular , c6ui ) {
+define (['angular','c6ui','adtech'],
+function( angular , c6ui , adtech ) {
     'use strict';
 
     return angular.module('c6.mrplayer.services', [c6ui.name])
@@ -317,8 +317,8 @@ function( angular , c6ui ) {
                 return this;
             };
 
-            this.$get = ['$log','$http','$q','$window','$interval','$templateCache','c6EventEmitter','c6UrlMaker','compileAdTag','$timeout','$rootScope',
-            function    ( $log , $http , $q , $window , $interval , $templateCache , c6EventEmitter , c6UrlMaker , compileAdTag , $timeout , $rootScope ) {
+            this.$get = ['$log','$http','$q','$window','$interval','$templateCache','c6EventEmitter','compileAdTag','$timeout','$rootScope',
+            function    ( $log , $http , $q , $window , $interval , $templateCache , c6EventEmitter , compileAdTag , $timeout , $rootScope ) {
                 var service = {},
                     _service = {};
 
@@ -346,7 +346,7 @@ function( angular , c6ui ) {
                         function getPlayerTemplate() {
                             return $http({
                                 method: 'GET',
-                                url: c6UrlMaker('views/vpaid_object_embed.html'),
+                                url: 'views/vpaid_object_embed.html',
                                 cache: $templateCache
                             });
                         }
@@ -378,7 +378,7 @@ function( angular , c6ui ) {
                             var html,
                                 flashvars = '';
 
-                            html = template.data.replace(/__SWF__/g, c6UrlMaker('swf/player.swf'));
+                            html = template.data.replace(/__SWF__/g, 'swf/player.swf');
 
                             flashvars += 'adXmlUrl=' + encodeURIComponent(compileAdTag(_provider.adTags[config.data.source]));
                             flashvars += '&playerId=' + encodeURIComponent(playerId);
@@ -607,7 +607,7 @@ function( angular , c6ui ) {
                         : (domain.split('.').filter(function(v,i,a){return i===a.length-2;})[0]);
                 }
 
-                $window.ADTECH.loadAd({
+                adtech.loadAd({
                     secure: (c6Defines.kProtocol === 'https:'),
                     network: '5473.1',
                     server: 'adserver.adtechus.com',
@@ -628,7 +628,7 @@ function( angular , c6ui ) {
                 var adLoadDeferred = $q.defer();
 
                 getPlacementId().then(function(id) {
-                    $window.ADTECH.loadAd({
+                    adtech.loadAd({
                         secure: (c6Defines.kProtocol === 'https:'),
                         network: '5473.1',
                         server: 'adserver.adtechus.com',
