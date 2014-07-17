@@ -300,22 +300,152 @@
                                     'ControlsService','trackerService','c6Defines',
     function                       ( $log , $scope , $timeout , $interval, BallotService ,
                                      c6Computed , cinema6 , MiniReelService , CommentsService ,
-                                     ControlsService, trackerService,c6Defines ){
+                                     ControlsService , trackerService , c6Defines ){
         var self    = this, readyTimeout,
             appData = $scope.app.data,
             id = appData.experience.id,
             election = appData.experience.data.election,
+            videoAdConfig = appData.experience.data.adConfig.video,
             c = c6Computed($scope),
             tracker = trackerService('c6mr'),
             cancelTrackVideo = null,
             ballotMap = {},
             navController = null,
+            MasterDeckCtrl,
             readyWatch = $scope.$watch('ready', function(ready) {
                 if (ready) {
                     $scope.$emit('ready');
                     readyWatch();
                 }
             });
+
+        function MasterDeckController(deck) {
+            var index = null,
+                self = this,
+                adController = {
+                    adCount: 0,
+                    videoCount: 0,
+                    firstPlacement: videoAdConfig.firstPlacement,
+                    frequency: videoAdConfig.frequency
+                };
+
+            Object.defineProperties(adController, {
+                shouldLoadAd: {
+                    get: function() {
+                        return (this.videoCount + 1 - this.firstPlacement) % this.frequency === 0;
+                    }
+                },
+                shouldPlayAd: {
+                    get: function() {
+                        return this.adCount <= ((this.videoCount - this.firstPlacement) / this.frequency);
+                    }
+                }
+            });
+
+            Object.defineProperties(self, {
+                currentIndex: {
+                    get: function() { return index; }
+                },
+                currentCard: {
+                    get: function() { return deck[index] || null; }
+                }
+            });
+
+            function AdCard(config) {
+                this.id = 'rc-advertisement' + (adController.adCount + 1);
+                this.type = 'ad';
+                this.ad = true;
+                this.modules = ['displayAd'];
+                this.data = {
+                    autoplay: true,
+                    skip: config.skip,
+                    source: config.waterfall
+                };
+            }
+
+            this.convertToCard = function(i) {
+                var currentIndex = $scope.currentIndex,
+                    isGoingForward = (i - currentIndex) > 0,
+                    previousCard = $scope.currentCard;
+
+                index = i;
+
+                if (previousCard && previousCard.ad) {
+                    self.removeAd(previousCard);
+                    if (isGoingForward) {
+                        index = Math.max(0, index - 1);
+                    }
+                }
+
+                return {
+                    currentIndex: index,
+                    currentCard: deck[index] || null
+                };
+            };
+
+            this.showAd = function() {
+                deck.splice(index, 0, { ad: true });
+                adController.adCount++;
+            };
+
+            this.removeAd = function(card) {
+                deck.splice($scope.deck.indexOf(card), 1);
+            };
+
+            this.adOnDeck = function() {
+                $scope.$broadcast('adOnDeck', new AdCard(videoAdConfig));
+            };
+
+            if (adController.firstPlacement === 0) {
+                self.adOnDeck();
+            }
+
+            $scope.$on('positionWillChange', function(event, i) {
+                var toCard = deck[i] || null;
+
+                if (toCard) {
+                    if (!toCard.ad) {
+                        if (adController.shouldLoadAd) {
+                            self.adOnDeck();
+                        }
+
+                        if (adController.shouldPlayAd) {
+                            self.showAd();
+                        } else {
+                            adController.videoCount++;
+                        }
+                    } else {
+                        adController.adCount++;
+                    }
+                }
+            });
+
+            $scope.$on('positionDidChange', function(event, i) {
+                if (navController) {
+                    navController.enabled(true);
+                }
+
+                $scope.atHead = $scope.currentIndex === 0;
+                $scope.atTail = ($scope.currentIndex === (deck.length - 1));
+
+                if ($scope.atHead) {
+                    $scope.$emit('reelStart');
+                }
+                if ($scope.atTail) {
+                    $scope.$emit('reelEnd');
+                }
+                if (i < 0) {
+                    $scope.$emit('reelReset');
+                } else if(!$scope.atHead && !$scope.atTail){
+                    $scope.$emit('reelMove');
+                }
+            });
+
+            $scope.$on('reelReset', function() {
+                adController.adCount = 0;
+                adController.videoCount = 0;
+            });
+        }
 
         function NavController(nav) {
             this.tick = function(time) {
@@ -357,6 +487,8 @@
         $scope.controls         = ControlsService.init();
 
         $scope.deck             = MiniReelService.createDeck(appData.experience.data);
+
+        MasterDeckCtrl = new MasterDeckController($scope.deck);
 
         if (election) {
             angular.forEach($scope.deck,function(card){
@@ -732,61 +864,20 @@
         };
 
         this.setPosition = function(i){
-            var currentIndex = $scope.currentIndex,
-                isSkipping = Math.abs(currentIndex - i) > 1,
-                isGoingForward = (i - currentIndex) > 0,
-                cardBeforeThis = $scope.deck[i + (isGoingForward ? -1 : 1)],
-                toCard = $scope.deck[i] || null,
-                visited;
+            var toCard = MasterDeckCtrl.convertToCard(i);
 
-            if (navController) {
-                navController.enabled(true);
+            $log.info('setPosition: %1', toCard.currentIndex);
+
+            if ($scope.$emit('positionWillChange', toCard.currentIndex).defaultPrevented) {
+                return;
             }
 
-            if (isSkipping && cardBeforeThis && cardBeforeThis.ad && !cardBeforeThis.visited) {
-                return this.jumpTo(cardBeforeThis);
-            }
+            $scope.currentIndex = MasterDeckCtrl.currentIndex;
+            $scope.currentCard = MasterDeckCtrl.currentCard;
 
-            if (toCard &&
-                toCard.ad &&
-                toCard.visited /*&&
-                appData.behaviors.showsCompanionWithVideoAd*/) {
-                return this.setPosition(i + (isGoingForward ? 1 : -1));
-            }
+            $log.info('Now on card:', MasterDeckCtrl.currentCard);
 
-            $log.info('setPosition: %1',i);
-            $scope.currentReturns = null;
-            $scope.currentIndex   = i;
-            $scope.currentCard    = toCard;
-
-            $log.info('Now on card:',$scope.currentCard);
-            if ($scope.currentCard){
-                visited = !!$scope.currentCard.visited;
-                $scope.currentCard.visited = true;
-            }
-
-            $scope.atHead         = $scope.currentIndex === 0;
-            $scope.atTail         = ($scope.currentIndex === ($scope.deck.length - 1));
-
-            if ((i === 0) &&  (visited === false) ){
-                // On the first card for the first time, reset the GA session.
-                tracker.trackPage(this.getTrackingData({ sessionControl : 'start' }));
-            } else
-            if (i >= 0) {
-                tracker.trackPage(this.getTrackingData());
-            }
-
-            if ($scope.atHead) {
-                $scope.$emit('reelStart');
-            }
-            if ($scope.atTail) {
-                $scope.$emit('reelEnd');
-            }
-            if (i < 0) {
-                $scope.$emit('reelReset');
-            } else if(!$scope.atHead && !$scope.atTail){
-                $scope.$emit('reelMove');
-            }
+            $scope.$emit('positionDidChange', MasterDeckCtrl.currentIndex);
         };
 
         this.jumpTo = function(card) {
@@ -859,28 +950,31 @@
             }
         });
 
+        $scope.$on('positionDidChange', function(event, i) {
+            var visited;
+
+            if ($scope.currentCard){
+                visited = !!$scope.currentCard.visited;
+                $scope.currentCard.visited = true;
+            }
+
+            if ((i === 0) &&  (visited === false) ){
+                // On the first card for the first time, reset the GA session.
+                tracker.trackPage(self.getTrackingData({ sessionControl : 'start' }));
+            } else
+            if (i >= 0) {
+                tracker.trackPage(self.getTrackingData());
+            }
+        });
+
         $log.log('Rumble Controller is initialized!');
 
     }])
 
-    .controller('DeckController', ['$scope','c6EventEmitter','c6AppData',
-    function                      ( $scope , c6EventEmitter , c6AppData ) {
+    .controller('DeckController', ['$scope','c6EventEmitter',
+    function                      ( $scope , c6EventEmitter ) {
         var self = this,
-            adCount = 0,
-            videoAdConfig = c6AppData.experience.data.adConfig.video,
             videoDeck, adDeck;
-
-        function AdCard(config) {
-            this.id = 'rc-advertisement' + (++adCount);
-            this.type = 'ad';
-            this.ad = true;
-            this.modules = ['displayAd'];
-            this.data = {
-                autoplay: true,
-                skip: config.skip,
-                source: config.waterfall
-            };
-        }
 
         function Deck(id, config) {
             this.id = id;
@@ -987,10 +1081,6 @@
             }
         });
         adDeck = new Deck('ad', {
-            cards: [
-                new AdCard(videoAdConfig),
-                new AdCard(videoAdConfig)
-            ],
             includeCard: function() {
                 return false;
             },
@@ -1011,8 +1101,11 @@
         adDeck.on('deactivateCard', function(card) {
             if (!card) { return; }
 
-            adDeck.push(new AdCard(videoAdConfig));
             adDeck.shift();
+        });
+
+        $scope.$on('adOnDeck', function(event, card) {
+            adDeck.push(card);
         });
 
         $scope.$watchCollection('deck', function(master) {

@@ -1,5 +1,11 @@
 # MiniReel Player
 
+* *[Beta19.rc1]*
+  * All view modes are now using multiple decks (to allow for dynamic ad
+    placements)
+  * [FEATURE]: Ads are now loaded dynamically based on the experience ad config
+    but experiences with ad cards in the deck already are still supported
+
 ## Beta18 (July 17, 2014)
 * *[Beta18.rc1]*
   * Tweaks to GA tracking

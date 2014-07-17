@@ -10,6 +10,18 @@
 
             var c6AppData;
 
+            function AdCard(id) {
+                this.id = 'rc-advertisement' + id;
+                this.type = 'ad';
+                this.ad = true;
+                this.modules = ['displayAd'];
+                this.data = {
+                    autoplay: true,
+                    skip: c6AppData.experience.data.adConfig.video.skip,
+                    source: c6AppData.experience.data.adConfig.video.waterfall
+                }
+            }
+
             beforeEach(function() {
                 module('c6.rumble', function($provide) {
                     $provide.value('c6AppData', {
@@ -112,48 +124,26 @@
                                 id: 'ad',
                                 active: false,
                                 index: -1,
-                                cards: [
-                                    {
-                                        id: 'rc-advertisement1',
-                                        type: 'ad',
-                                        ad: true,
-                                        modules: [
-                                            'displayAd'
-                                        ],
-                                        data: {
-                                            autoplay: true,
-                                            skip: c6AppData.experience.data.adConfig.video.skip,
-                                            source: c6AppData.experience.data.adConfig.video.waterfall
-                                        }
-                                    },
-                                    {
-                                        id: 'rc-advertisement2',
-                                        type: 'ad',
-                                        ad: true,
-                                        modules: [
-                                            'displayAd'
-                                        ],
-                                        data: {
-                                            autoplay: true,
-                                            skip: c6AppData.experience.data.adConfig.video.skip,
-                                            source: c6AppData.experience.data.adConfig.video.waterfall
-                                        }
-                                    }
-                                ]
+                                cards: []
                             }));
                         });
 
-                        it('should be replacing the ad cards as it goes', function() {
-                            var originalCards = item.cards.concat();
+                        it('should be removing the ad cards as it goes', function() {
+                            var originalCards;
+
+                            $scope.$emit('adOnDeck', new AdCard(1));
+                            originalCards = item.cards.concat();
 
                             item.moveTo(item.cards[0]);
                             expect(item.cards).toEqual(originalCards);
 
+                            $scope.$emit('adOnDeck', new AdCard(2));
                             item.moveTo(item.cards[1]);
+
+                            expect(item.cards.length).toBe(1);
                             expect(item.cards).toEqual([
-                                originalCards[1],
                                 {
-                                    id: 'rc-advertisement3',
+                                    id: 'rc-advertisement2',
                                     type: 'ad',
                                     ad: true,
                                     modules: [
@@ -170,11 +160,11 @@
 
                             originalCards = item.cards.concat();
 
+                            $scope.$emit('adOnDeck', new AdCard(3));
                             item.moveTo(item.cards[1]);
                             expect(item.cards).toEqual([
-                                originalCards[1],
                                 {
-                                    id: 'rc-advertisement4',
+                                    id: 'rc-advertisement3',
                                     type: 'ad',
                                     ad: true,
                                     modules: [
@@ -188,6 +178,47 @@
                                 }
                             ]);
                             expect(item.index).toBe(0);
+                        });
+
+                        it('should be adding ad cards when adOnDeck is emitted', function() {
+                            expect(item.cards.length).toBe(0);
+
+                            $scope.$emit('adOnDeck', new AdCard(1));
+
+                            expect(item.cards.length).toBe(1);
+
+                            expect(item.cards[0]).toEqual({
+                                id: 'rc-advertisement1',
+                                type: 'ad',
+                                ad: true,
+                                modules: [
+                                    'displayAd'
+                                ],
+                                data: {
+                                    autoplay: true,
+                                    skip: c6AppData.experience.data.adConfig.video.skip,
+                                    source: c6AppData.experience.data.adConfig.video.waterfall
+                                }
+                            });
+
+                            $scope.$emit('adOnDeck', new AdCard(2));
+
+                            expect(item.cards.length).toBe(2);
+
+                            expect(item.cards[1]).toEqual({
+                                id: 'rc-advertisement2',
+                                type: 'ad',
+                                ad: true,
+                                modules: [
+                                    'displayAd'
+                                ],
+                                data: {
+                                    autoplay: true,
+                                    skip: c6AppData.experience.data.adConfig.video.skip,
+                                    source: c6AppData.experience.data.adConfig.video.waterfall
+                                }
+                            });
+
                         });
 
                         describe('methods', function() {
@@ -701,6 +732,7 @@
                     });
 
                     it('should go to the second card', function() {
+                        $scope.$emit('adOnDeck', new AdCard(1));
                         setCurrentCard($scope.deck[1]);
                         expect(videoDeck.deactivate).toHaveBeenCalled();
                         expect(adDeck.activate).toHaveBeenCalled();
@@ -756,7 +788,7 @@
                         videos.forEach(function(card, index) {
                             expect(DeckCtrl.decks[0].cards[index]).toBe(card);
                         });
-                        expect(DeckCtrl.decks[1].cards).toEqual([jasmine.any(Object), jasmine.any(Object)]);
+                        expect(DeckCtrl.decks[1].cards).toEqual([]);
 
                         expect(DeckCtrl.decks[0].update).toHaveBeenCalledWith(videos);
                     });
