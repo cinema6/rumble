@@ -1,7 +1,7 @@
-define( ['angular','angularAnimate','angularSanitize','c6ui','c6log',
+define( ['angular','angularAnimate','angularSanitize','c6ui','c6log','c6_defines',
          'minireel','services','tracker',
          'ui/paginator','ui/table_of_contents','ui/thumb_paginator'],
-function( angular , angularAnimate , angularSanitize , c6ui , c6log ,
+function( angular , angularAnimate , angularSanitize , c6ui , c6log , c6Defines ,
           minireel , services , tracker ,
           uiPaginator  , uiTableOfContents    , uiThumbPaginator   ) {
     'use strict';
@@ -28,8 +28,8 @@ function( angular , angularAnimate , angularSanitize , c6ui , c6log ,
         function( $sceProvider ) {
             $sceProvider.enabled(false);
         }])
-        .config(['c6UrlMakerProvider', 'c6Defines',
-        function( c6UrlMakerProvider ,  c6Defines ) {
+        .config(['c6UrlMakerProvider',
+        function( c6UrlMakerProvider ) {
             c6UrlMakerProvider.location(c6Defines.kCollateralUrl,'collateral');
             c6UrlMakerProvider.location(c6Defines.kApiUrl,'api');
             c6UrlMakerProvider.location(c6Defines.kProtocol + '/', 'protocol');

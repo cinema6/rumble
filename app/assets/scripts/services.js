@@ -1,10 +1,10 @@
-define (['angular','c6ui','adtech'],
-function( angular , c6ui , adtech ) {
+define (['angular','c6ui','adtech','c6_defines'],
+function( angular , c6ui , adtech , c6Defines  ) {
     'use strict';
 
     return angular.module('c6.mrplayer.services', [c6ui.name])
-        .service('VideoThumbService', ['$http','$q','c6UrlMaker','c6Defines',
-        function                      ( $http , $q , c6UrlMaker , c6Defines ) {
+        .service('VideoThumbService', ['$http','$q','c6UrlMaker',
+        function                      ( $http , $q , c6UrlMaker ) {
             var _private = {};
 
             _private.getFromYoutube = function(id) {
@@ -63,8 +63,8 @@ function( angular , c6ui , adtech ) {
             if (window.c6.kHasKarma) { this._private = _private; }
         }])
 
-        .factory('compileAdTag', ['$window','c6Defines',
-        function                 ( $window , c6Defines ) {
+        .factory('compileAdTag', ['$window',
+        function                 ( $window ) {
             var url = c6Defines.kDevMode ?
                 'http://www.mutantplayground.com' :
                 (function() {
@@ -583,8 +583,8 @@ function( angular , c6ui , adtech ) {
 
         }])
 
-        .service('AdTechService', ['$window', '$q', '$rootScope', 'c6Defines',
-        function                  ( $window ,  $q ,  $rootScope, c6Defines ) {
+        .service('AdTechService', ['$window', '$q', '$rootScope',
+        function                  ( $window ,  $q ,  $rootScope ) {
             var domain, placementId;
 
             function getPlacementId() {

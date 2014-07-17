@@ -1,8 +1,8 @@
-define (['angular',
+define (['angular','c6_defines',
          'cards/ad','cards/dailymotion','cards/recap','cards/vast','cards/vimeo','cards/vpaid',
          'cards/youtube',
          'modules/ballot','modules/display_ad'],
-function( angular ,
+function( angular , c6Defines  ,
           adCard   , dailymotionCard   , recapCard   , vastCard   , vimeoCard   , vpaidCard   ,
           youtubeCard   ,
           ballotModule   , displayAdModule    ) {
@@ -316,10 +316,10 @@ function( angular ,
     }])
     .controller('RumbleController',['$log','$scope','$timeout','$interval','BallotService',
                                     'c6Computed','cinema6','MiniReelService','CommentsService',
-                                    'ControlsService','trackerService','c6Defines',
+                                    'ControlsService','trackerService',
     function                       ( $log , $scope , $timeout , $interval, BallotService ,
                                      c6Computed , cinema6 , MiniReelService , CommentsService ,
-                                     ControlsService, trackerService,c6Defines ){
+                                     ControlsService , trackerService ) {
         var self    = this, readyTimeout,
             appData = $scope.app.data,
             id = appData.experience.id,
