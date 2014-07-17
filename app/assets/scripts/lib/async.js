@@ -24,8 +24,7 @@ define(function(){
     }
 
     function parse(name) {
-        var parts = name.split(':');
-        return parts[1];
+        return name.split(':').pop();
     }
 
     function uid(name) {
