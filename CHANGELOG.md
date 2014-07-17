@@ -1,5 +1,10 @@
 # MiniReel Player
 
+## Beta18 (July 17, 2014)
+* *[Beta18.rc1]*
+  * Tweaks to GA tracking
+* *[/Beta18.rc1]*
+
 ## Beta17 (July 15, 2014)
 * *[Beta17.rc3]*
   * [FIX]: transition animation bug fixed
