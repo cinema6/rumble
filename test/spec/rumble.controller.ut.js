@@ -677,7 +677,8 @@
                         action   : 'Play',
                         label    : 'ad',
                         videoSource : 'ad',
-                        videoDuration : 22
+                        videoDuration : 22,
+                        nonInteraction : 1
                     });
                 });
 
@@ -698,7 +699,8 @@
                         action   : 'Play',
                         label    : 'fooey',
                         videoSource : 'ad',
-                        videoDuration : 22
+                        videoDuration : 22,
+                        nonInteraction : 1
                     });
                 });
 
@@ -710,7 +712,36 @@
                         action   : 'Play',
                         label    : 'www.hotsauce.com/xyz',
                         videoSource : 'Hot Sauce',
-                        videoDuration : 33
+                        videoDuration : 33,
+                        nonInteraction : 0
+                    });
+                });
+                
+                it('tracks as nonInteraction if autoplay', function(){
+                    appData.experience.data.autoplay = true;
+                    RumbleCtrl.trackVideoEvent(player,'Play');
+                    expect(trackerSpy.trackEvent).toHaveBeenCalled();
+                    expect(RumbleCtrl.getTrackingData).toHaveBeenCalledWith({
+                        category : 'Video',
+                        action   : 'Play',
+                        label    : 'www.hotsauce.com/xyz',
+                        videoSource : 'Hot Sauce',
+                        videoDuration : 33,
+                        nonInteraction : 1
+                    });
+                });
+                
+                it('tracks as interaction if autoplay but not Play', function(){
+                    appData.experience.data.autoplay = true;
+                    RumbleCtrl.trackVideoEvent(player,'Quartile1');
+                    expect(trackerSpy.trackEvent).toHaveBeenCalled();
+                    expect(RumbleCtrl.getTrackingData).toHaveBeenCalledWith({
+                        category : 'Video',
+                        action   : 'Quartile1',
+                        label    : 'www.hotsauce.com/xyz',
+                        videoSource : 'Hot Sauce',
+                        videoDuration : 33,
+                        nonInteraction : 0
                     });
                 });
                 
@@ -722,7 +753,8 @@
                         action   : 'Play',
                         label    : 'booger',
                         videoSource : 'Hot Sauce',
-                        videoDuration : 33
+                        videoDuration : 33,
+                        nonInteraction : 0
                     });
                 });
 
@@ -735,7 +767,8 @@
                         action   : 'Play',
                         label    : 'booger',
                         videoSource : 'hotsauce',
-                        videoDuration : 33
+                        videoDuration : 33,
+                        nonInteraction : 0
                     });
                 });
             });
@@ -1073,8 +1106,7 @@
                         title    : 'my title - ad',
                         slideIndex : 1,
                         slideId: 'ad1',
-                        slideTitle : 'ad'
-                    }); 
+                        slideTitle : 'ad'                    }); 
                 });
 
 
@@ -1141,6 +1173,7 @@
                         slideIndex : 1,
                         slideId: 'ad1',
                         slideTitle : 'ad'
+
                     }); 
                 });
 
@@ -1243,17 +1276,8 @@
                         spyOn($scope, '$emit');
                         RumbleCtrl.start();
                     });
-                    it('sends an event for the launch',function(){
-                        expect(trackerSpy.trackEvent).toHaveBeenCalledWith({
-                            category : 'Navigation',
-                            action   : 'Start',
-                            label    : 'Start',
-                            page     : '/mr/e-722bd3c4942331/vid1',
-                            title    : 'my title - vid1 caption',
-                            slideIndex : 0,
-                            slideId : 'vid1',
-                            slideTitle : 'vid1 caption'
-                        });
+                    it('does not send an event for the launch',function(){
+                        expect(trackerSpy.trackEvent).not.toHaveBeenCalled();
                     });
 
                     it('sends a pageview for the first slide',function(){

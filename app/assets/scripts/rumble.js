@@ -628,7 +628,7 @@
         };
 
         this.trackVideoEvent = function(player,eventName,eventLabel){
-            var currentCard = $scope.currentCard;
+            var currentCard = $scope.currentCard, nonInteraction = 0;
             if ((!currentCard) || (!currentCard.player)){
                 return;
             }
@@ -643,9 +643,17 @@
                     action          : eventName,
                     label           : eventLabel || 'ad',
                     videoSource     : 'ad',
-                    videoDuration   : Math.round(player.duration)
+                    videoDuration   : Math.round(player.duration),
+                    nonInteraction  : 1
                 }));
                 return;
+            }
+
+            // We report the video plays on autoplay MR's as
+            // nonInteraction events.  This is particularly important
+            // on the first slide as it will impact bounce rates
+            if ( (appData.experience.data.autoplay) && (eventName === 'Play') ){
+                nonInteraction = 1;
             }
 
             tracker.trackEvent(this.getTrackingData({
@@ -653,7 +661,8 @@
                 action          : eventName,
                 label           : eventLabel || player.webHref,
                 videoSource     : player.source || player.type,
-                videoDuration   : Math.round(player.duration)
+                videoDuration   : Math.round(player.duration),
+                nonInteraction  : nonInteraction
             }));
         };
 
@@ -785,8 +794,7 @@
         };
 
         this.start = function() {
-            this.goForward();
-            this.trackNavEvent('Start','Start');
+            self.setPosition(0);
             if (appData.behaviors.fullscreen) {
                 cinema6.fullscreen(true);
             }
@@ -843,7 +851,6 @@
                 'href'       : c6Defines.kHref,
                 'slideCount' : $scope.deck.length
             });
-//            tracker.trackPage(self.getTrackingData());
         });
 
         $scope.$on('shouldStart', function() {
