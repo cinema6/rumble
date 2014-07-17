@@ -1,17 +1,17 @@
-/* jshint camelcase: false */
-(function(){
+define (['angular','c6ui','iframe'],
+function( angular , c6ui , iframe ) {
     'use strict';
 
-    angular.module('c6.rumble')
-    .factory('vimeo',['$log','$window','$q','c6EventEmitter','iframe','c6UrlMaker',
-    function         ( $log , $window , $q , c6EventEmitter , iframe , c6UrlMaker ){
-        $log = $log.context('vimeo');
+    return angular.module('c6.mrplayer.cards.dailymotion', [c6ui.name, iframe.name])
+    .factory('dailymotion',['$log','$window','$q','c6EventEmitter','iframe','c6UrlMaker',
+    function               ( $log , $window , $q , c6EventEmitter , iframe , c6UrlMaker ) {
+        $log = $log.context('dailymotion');
         var service = {};
 
-        service.origin = c6UrlMaker('player.vimeo.com', 'protocol');
+        service.origin = c6UrlMaker('www.dailymotion.com', 'protocol');
         service.formatPlayerSrc = function(videoId,playerId,params){
-            var src = this.origin + '/video/' + videoId + '?api=1' +
-                (playerId ? ('&player_id=' + playerId) : '');
+            var src = this.origin + '/embed/video/' + videoId + '?api=postMessage' +
+                (playerId ? ('&id=' + playerId) : '');
 
             if (params){
                 for (var name in params){
@@ -22,10 +22,26 @@
             return src;
         };
 
+        service.parseEventData = function(qstring){
+            var result;
+            if (qstring){
+                qstring.split('&').forEach(function(fragment){
+                    var nvp = fragment.split('=');
+                    if (nvp){
+                        if (!result) {
+                            result = {};
+                        }
+                        result[nvp[0]] = nvp[1];
+                    }
+                });
+            }
+            return result;
+        };
+
         service.createPlayer = function(playerId,config,$parentElement) {
             var $playerElement,src,params;
             if (!$parentElement){
-                throw new Error('Parent element is required for vimeo.createPlayer');
+                throw new Error('Parent element is required for dailymotion.createPlayer');
             }
 
             src = this.formatPlayerSrc(config.videoId, playerId, config.params);
@@ -41,10 +57,10 @@
             
             $parentElement.prepend($playerElement);
 
-            function VimeoPlayer(iframe$,playerId,$win){
+            function DailymotionPlayer(iframe$,playerId,$win){
                 var _iframe$ = iframe$,_playerId = playerId,
                     _url =  _iframe$.attr('src').split('?')[0],
-                    _val = 'VimeoPlayer#' + _playerId,
+                    _val = 'DailymotionPlayer#' + _playerId,
                     _promises = {},
                     self = this;
 
@@ -77,50 +93,17 @@
                 self.play = function(){
                     return self.post('play');
                 };
-                
+
                 self.pause = function(){
                     return self.post('pause');
                 };
 
-                self.setVolume = function(vol){
-                    return self.post('setVolume',vol);
-                };
-
-                self.getVolumeAsync = function(){
-                    var deferred = $q.defer();
-                    self.post('getVolume');
-                    getPromises('getVolume').push(deferred);
-                    return deferred.promise;
-                };
-
-                self.getDurationAsync = function(){
-                    var deferred = $q.defer();
-                    self.post('getDuration');
-                    getPromises('getDuration').push(deferred);
-                    return deferred.promise;
-                };
-
-                self.getCurrentTimeAsync = function(){
-                    var deferred = $q.defer();
-                    self.post('getCurrentTime');
-                    getPromises('getCurrentTime').push(deferred);
-                    return deferred.promise;
-                };
-
-                self.getPausedAsync = function(){
-                    var deferred = $q.defer();
-                    self.post('paused');
-                    getPromises('paused').push(deferred);
-                    return deferred.promise;
-                };
-
                 self.post = function(action, value){
-                    var data = { method : action };
+                    var data = action;
                     if (value){
-                        data.value = value;
+                        data += '=' + value;
                     }
-
-                    _iframe$[0].contentWindow.postMessage(angular.toJson(data), _url);
+                    _iframe$[0].contentWindow.postMessage(data, _url);
                     return self;
                 };
 
@@ -145,17 +128,8 @@
                 };
 
                 self.seekTo = function(seconds){
-                    self.post('seekTo',seconds);
+                    self.post('seek',seconds);
                 };
-
-                self.on('newListener',function(eventName){
-                    // ready does not need a listener
-                    if ( (eventName !== 'ready') &&
-                         (eventName !== 'newListener') &&
-                         (eventName !== 'removeListener') ) {
-                        self.post('addEventListener',eventName);
-                    }
-                });
 
                 self.toString = function() {
                     return _val;
@@ -167,9 +141,9 @@
                     }
 
 //                    $log.info('[%1] - messageReceived: [%2]',_playerId, event.data);
-                    var data = angular.fromJson(event.data), deferreds, deferred;
+                    var data = service.parseEventData(event.data), deferreds, deferred;
 
-                    if (data.player_id !== _playerId){
+                    if (data.id !== _playerId){
                         return;
                     }
 
@@ -181,7 +155,11 @@
                         return;
                     }
 
-                    self.emit(data.event,self,data.data);
+                    if (data.event === 'apiready'){
+                        data.event = 'ready';
+                    }
+
+                    self.emit(data.event,self,data);
                 }
 
                 $win.addEventListener('message', onMessageReceived, false);
@@ -189,68 +167,38 @@
                 $log.info('[%1] - created',_playerId);
             }
 
-            return new VimeoPlayer($playerElement,playerId,$window);
+            return new DailymotionPlayer($playerElement,playerId,$window);
         };
 
         return service;
     }])
-    .directive('vimeoCard',['$log','$timeout','$q','vimeo','_default','numberify','playerInterface','c6UrlMaker','assetFilter',
-    function               ( $log , $timeout , $q , vimeo , _default , numberify , playerInterface , c6UrlMaker , assetFilter ) {
-        $log = $log.context('<vimeo-card>');
+    .directive('dailymotionCard', ['$log','$timeout','$q','c6UserAgent','dailymotion','_default','numberify','playerInterface','c6UrlMaker','assetFilter',
+    function                      ( $log , $timeout , $q , c6UserAgent , dailymotion , _default , numberify , playerInterface , c6UrlMaker , assetFilter ) {
+        $log = $log.context('<dailymotion-card>');
         function fnLink(scope,$element,$attr){
             if (!$attr.videoid){
-                throw new SyntaxError('<vimeo-card> requires the videoid attribute to be set.');
+                throw new SyntaxError('<dailymotion-card> requires the videoid attribute to be set.');
             }
-            
-            $log.info('link: videoId=%1, start=%2, end=%3, autoPlay=%4',
-                $attr.videoid, $attr.start, $attr.end, $attr.autoplay);
-
             var player, playerIface  = playerInterface(),
-                playerIsReady = false, playerHasLoaded = false,
                 _playerIface = {
                     currentTime: 0,
                     ended: false,
-                    twerked: false,
                     duration: NaN,
                     paused: true
                 },
-                start = numberify($attr.start, 0), end = numberify($attr.end, Infinity);
+                playerIsReady = false, playerHasLoaded = false;
 
-            function handlePlayProgress(player, data) {
-                var time = _playerIface.currentTime = data.seconds;
+            $log.info('link: videoId=%1, start=%2, end=%3, autoPlay=%4',
+                $attr.videoid, $attr.start, $attr.end, $attr.autoplay);
+
+            function handleTimeUpdate(player, data) {
+                _playerIface.currentTime = parseFloat(data.time);
 
                 playerIface.emit('timeupdate', playerIface);
-
-                if (time >= end){
-                    player.pause();
-                    $log.info('[%1] - emit ended',player);
-                    player.emit('finish',player);
-                    return;
-                }
-
-                if (time < (start - 3)) {
-                    $log.info('Seeking to start time. Current time: %1; Start time: %2.', time, start);
-                    player.seekTo(start);
-                }
             }
 
-            function playListener(player) {
-                _playerIface.paused = false;
-                playerIface.emit('play', playerIface);
-
-                if (playerIface.ended) {
-                    _playerIface.ended = false;
-                    player.seekTo(start);
-                }
-            }
-
-            function pauseListener() {
-                _playerIface.paused = true;
-                playerIface.emit('pause', playerIface);
-            }
-
-            function twerk(wait){
-                var deferred = $q.defer(), waitTimer,
+            function twerk() {
+                /*var deferred = $q.defer(), waitTimer,
                 playingListener = function(){
                     $log.info('[%1] - stop twerk',player);
                     if (waitTimer){
@@ -260,16 +208,7 @@
                     deferred.resolve(playerIface);
                 };
 
-                if (playerIface.twerked) {
-                    deferred.reject(new Error('Player has already been twerked'));
-                    return deferred.promise;
-                }
-
-                player.removeListener('playProgress', handlePlayProgress);
-                player.removeListener('play', playListener);
-                player.removeListener('pause', pauseListener);
-
-                player.once('playProgress',playingListener);
+                player.once('playing',playingListener);
 
                 if (wait === undefined){
                     wait = 1000;
@@ -285,15 +224,10 @@
                 $log.info('[%1] - start twerk, wait=%2',player,wait);
                 player.play();
 
-                deferred.promise
-                    .then(function() {
-                        _playerIface.twerked = true;
-                    })
-                    .finally(function() {
-                        player.on('playProgress', handlePlayProgress);
-                        player.on('play', playListener);
-                        player.on('pause', pauseListener);
-                    });
+                return deferred.promise;*/
+                var deferred = $q.defer();
+
+                deferred.reject(new Error('DailyMotion ain\'t ratchet enough for twerking.'));
 
                 return deferred.promise;
             }
@@ -301,7 +235,7 @@
             /* -- playerInterface : begin -- */
 
             playerIface.getType = function () {
-                return 'vimeo';
+                return 'dailymotion';
             };
 
             playerIface.getVideoId = function() {
@@ -323,7 +257,7 @@
                     player.pause();
                 }
             };
-
+            
             playerIface.twerk = function(wait){
                 if (!playerIsReady){
                     return $q.reject(new Error('Player is not ready to twerk'));
@@ -334,21 +268,21 @@
             Object.defineProperties(playerIface, {
                 webHref: {
                     get: function() {
-                        return ('http://vimeo.com/' + $attr.videoid);
+                        return ('http://www.dailymotion.com/video/' + $attr.videoid);
                     }
                 },
                 currentTime: {
                     get: function() {
                         if (!playerIsReady) { return 0; }
 
-                        return Math.max((_playerIface.currentTime - start), 0);
+                        return _playerIface.currentTime;
                     },
                     set: function(time) {
                         if (!playerIsReady) {
                             throw new Error('Cannot set currentTime! Player is not yet ready.');
                         }
 
-                        player.seekTo(Math.max((time + start), start));
+                        player.seekTo(time);
                     }
                 },
                 ended: {
@@ -358,16 +292,12 @@
                 },
                 twerked: {
                     get: function() {
-                        return _playerIface.twerked;
+                        return false;
                     }
                 },
                 duration: {
                     get: function() {
-                        player.getDurationAsync().then(function(duration) {
-                            _playerIface.duration = duration;
-                        });
-
-                        return (($attr.end || _playerIface.duration) - ($attr.start || 0)) || NaN;
+                        return _playerIface.duration;
                     }
                 },
                 paused: {
@@ -378,11 +308,17 @@
             });
 
             scope.$emit('playerAdd',playerIface);
+            
+            scope.$on('$destroy',function(){
+                scope.$emit('playerRemove',playerIface);
+                if (player){
+                    //player.destroy();
+                }
+            });
 
             /* -- playerInterface : end -- */
-
-            _default($attr,'badge',0);
-            _default($attr,'portrait',0);
+            
+            _default($attr,'related'    ,0);
 
             $attr.$observe('width',function(){
                 if (player){
@@ -396,13 +332,6 @@
                 }
             });
 
-            scope.$on('$destroy',function(){
-                scope.$emit('playerRemove',playerIface);
-                if (player){
-                    //player.destroy();
-                }
-            });
-
             function regeneratePlayer(){
                 if (player){
                     player.destroy();
@@ -413,17 +342,19 @@
                 $timeout(createPlayer);
             }
 
+
             function createPlayer(){
                 var vparams  = { };
+                playerIsReady = false;
+                playerHasLoaded = false;
 
-                ['badge','byline','portrait','title'].forEach(function(prop){
+                ['startscreen','related','html','info'].forEach(function(prop){
                     if ($attr[prop] !== undefined) {
                         vparams[prop] = $attr[prop];
                     }
                 });
 
-                playerIsReady = false;
-                player = vimeo.createPlayer('vm_' + $attr.videoid,{
+                player = dailymotion.createPlayer('dm_' + $attr.videoid,{
                     videoId     : $attr.videoid,
                     width       : $attr.width,
                     height      : $attr.height,
@@ -431,48 +362,67 @@
                     params      : vparams
                 },$element.find('.mr-player'));
 
+                scope.$emit('createdPlayer',player);
+
                 player.on('ready',function(p){
                     $log.info('[%1] - I am ready',p);
 
                     $timeout(function() {
                         playerIsReady = true;
-                        player.on('playProgress', handlePlayProgress);
-                        playerIface.emit('ready',playerIface);
 
-                        scope.$watch('onDeck', function(onDeck) {
-                            if (onDeck) {
-                                if (numberify($attr.twerk, 0)) {
-                                    playerIface.twerk(5000);
-                                }
-                            }
+                        player.on('timeupdate', handleTimeUpdate);
+                        player.on('pause', function() {
+                            _playerIface.paused = true;
+                            playerIface.emit('pause', playerIface);
                         });
+
+                        playerIface.emit('ready',playerIface);
                     });
 
-                    player.on('finish',function(p){
+                    player.on('ended',function(p){
                         $log.info('[%1] - I am finished',p);
 
                         _playerIface.ended = true;
                         playerIface.emit('ended',playerIface);
 
-                        if ($attr.regenerate){
+                        if (numberify($attr.regenerate)){
                             regeneratePlayer();
                         }
                     });
 
-                    player.on('play', playListener);
-                    player.on('pause', pauseListener);
+                    player.on('playing', function(p) {
+                        _playerIface.paused = false;
+                        playerIface.emit('play', playerIface);
+
+                        if (playerIface.ended) {
+                            _playerIface.ended = false;
+                            p.seekTo(0);
+                        }
+                    });
+
+                    player.on('durationchange', function(player, data) {
+                        _playerIface.duration = parseFloat(data.duration);
+                    });
                 });
             }
+
+            scope.$watch('active', function(active, wasActive) {
+                if (active === wasActive) { return; }
+
+                if (!active) {
+                    regeneratePlayer();
+                }
+            });
 
             regeneratePlayer();
         }
 
         return {
-            restrict    : 'E',
-            link        : fnLink,
+            restrict : 'E',
+            link     : fnLink,
             controller  : 'VideoEmbedCardController',
             controllerAs: 'Ctrl',
             templateUrl : assetFilter('directives/video_embed_card.html', 'views')
         };
     }]);
-}());
+});

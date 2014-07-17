@@ -1,11 +1,11 @@
 (function(){
     'use strict';
 
-    var __C6_BUILD_VERSION__ = window.__C6_BUILD_VERSION__ = undefined,
+    /*var __C6_BUILD_VERSION__ = window.__C6_BUILD_VERSION__ = undefined,
         c6 = window.c6 = (window.c6 || {});
 
     require.config({
-        baseUrl: c6.kBaseUrl
+        baseUrl: 'scripts'
     });
 
     var protocol = (function() {
@@ -141,5 +141,97 @@
                 });
             }
         });
+    });*/
+    var protocol = window.c6.kProtocol = (function() {
+        var currentProtocol = window.location.protocol,
+            isValid = currentProtocol.search(/^https?/) > -1,
+            parentProtocol;
+
+        if (isValid) { return currentProtocol; }
+
+        try {
+            parentProtocol = window.parent.location.protocol;
+        } catch(e) {
+            parentProtocol = 'http:';
+        }
+
+        return parentProtocol;
+    }());
+
+    function libUrl(url) {
+        return protocol + '//lib.cinema6.com/' + url;
+    }
+
+    requirejs.config({
+        baseUrl: 'scripts',
+        paths: {
+            async: 'lib/async',
+            youtube: 'lib/youtube',
+            modernizr: libUrl('modernizr/modernizr.custom.71747'),
+            jquery: libUrl('jquery/2.0.3-0-gf576d00/jquery.min'),
+            angular: libUrl('angular/v1.2.12-0-g5cc5cc1/angular.min'),
+            angularAnimate: libUrl('angular/v1.2.12-0-g5cc5cc1/angular-animate.min'),
+            angularSanitize: libUrl('angular/v1.2.12-0-g5cc5cc1/angular-sanitize.min'),
+            angularTouch: libUrl('angular/v1.2.12-0-g5cc5cc1/angular-touch.min'),
+            c6ui: libUrl('c6ui/v2.5.0-0-gc58e712/c6uilib.min'),
+            c6log: libUrl('c6ui/v2.5.0-0-gc58e712/c6log.min'),
+            adtech: protocol + '//aka-cdn.adtechus.com/dt/common/DAC'
+        },
+        shim: {
+            modernizr: {
+                exports: 'Modernizr'
+            },
+            angular: {
+                deps: ['jquery'],
+                exports: 'angular'
+            },
+            angularAnimate: {
+                deps: ['angular'],
+                init: function(angular) {
+                    return angular.module('ngAnimate');
+                }
+            },
+            angularSanitize: {
+                deps: ['angular'],
+                init: function(angular) {
+                    return angular.module('ngSanitize');
+                }
+            },
+            angularTouch: {
+                deps: ['angular'],
+                init: function(angular) {
+                    return angular.module('ngTouch');
+                }
+            },
+            c6ui: {
+                deps: ['angular'],
+                init: function(angular) {
+                    return angular.module('c6.ui');
+                }
+            },
+            c6log: {
+                deps: ['angular','c6_defines'],
+                init: function(angular) {
+                    return angular.module('c6.log');
+                }
+            }
+        }
+    });
+
+    define( ['angular','app','modernizr'],
+    function( angular , app , modernizr ) {
+        var extraModules =  modernizr.touch ? ['angularTouch'] : [];
+
+        require(extraModules, function() {
+            var args = Array.prototype.slice.call(arguments);
+
+            var moduleNames = args.map(function(module) {
+                return module.name;
+            });
+
+            return angular.bootstrap(document.documentElement, [app.name].concat(moduleNames));
+        });
+
+        return true;
     });
 }());

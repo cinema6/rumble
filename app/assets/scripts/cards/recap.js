@@ -1,7 +1,8 @@
-(function() {
+define (['angular','services'],
+function( angular , services ) {
     'use strict';
 
-    angular.module('c6.rumble')
+    return angular.module('c6.mrplayer.cards.recap', [services.name])
         .controller('RecapCardController', ['$rootScope','$scope','$log','c6AppData',
                                             'MiniReelService','BallotService','ModuleService',
                                             'AdTechService',
@@ -89,8 +90,8 @@
             });
         }])
 
-        .directive('recapCard', ['c6UrlMaker','assetFilter',
-        function                ( c6UrlMaker , assetFilter ) {
+        .directive('recapCard', ['assetFilter',
+        function                ( assetFilter ) {
             return {
                 restrict: 'E',
                 templateUrl : assetFilter('directives/recap_card.html', 'views'),
@@ -98,4 +99,4 @@
                 controllerAs: 'Ctrl'
             };
         }]);
-}());
+});

@@ -1,9 +1,28 @@
-(function(){
+define (['angular',
+         'cards/ad','cards/dailymotion','cards/recap','cards/vast','cards/vimeo','cards/vpaid',
+         'cards/youtube',
+         'modules/ballot','modules/display_ad'],
+function( angular ,
+          adCard   , dailymotionCard   , recapCard   , vastCard   , vimeoCard   , vpaidCard   ,
+          youtubeCard   ,
+          ballotModule   , displayAdModule    ) {
     'use strict';
 
     var forEach = angular.forEach;
 
-    angular.module('c6.rumble')
+    return angular.module('c6.mrplayer.minireel', [
+        // Cards
+        adCard.name,
+        dailymotionCard.name,
+        recapCard.name,
+        vastCard.name,
+        vimeoCard.name,
+        vpaidCard.name,
+        youtubeCard.name,
+        // Modules
+        ballotModule.name,
+        displayAdModule.name
+    ])
     .animation('.slides__item',['$log', function($log){
         $log = $log.context('.slides__item');
         return {
@@ -1322,4 +1341,4 @@
     }]);
 
 
-}());
+});

@@ -1,7 +1,8 @@
-(function() {
+define (['angular','c6ui'],
+function( angular , c6ui ) {
     'use strict';
 
-    angular.module('c6.rumble.services', ['c6.ui'])
+    return angular.module('c6.mrplayer.services', [c6ui.name])
         .service('VideoThumbService', ['$http','$q','c6UrlMaker','c6Defines',
         function                      ( $http , $q , c6UrlMaker , c6Defines ) {
             var _private = {};
@@ -932,4 +933,4 @@
                 exceptions.push(exception);
             };
         }]);
-}());
+});
