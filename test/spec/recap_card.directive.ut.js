@@ -1,22 +1,20 @@
-(function() {
+define(['cards/recap'], function(recapModule) {
     'use strict';
 
-    define(['recap_card'], function() {
-        describe('<mini-reel-card>', function() {
-            var $rootScope,
-                $scope,
-                $compile;
+    describe('<mini-reel-card>', function() {
+        var $rootScope,
+            $scope,
+            $compile;
 
-            beforeEach(function() {
-                module('c6.rumble');
+        beforeEach(function() {
+            module(recapModule.name);
 
-                inject(function($injector) {
-                    $rootScope = $injector.get('$rootScope');
-                    $compile = $injector.get('$compile');
+            inject(function($injector) {
+                $rootScope = $injector.get('$rootScope');
+                $compile = $injector.get('$compile');
 
-                    $scope = $rootScope.$new();
-                });
+                $scope = $rootScope.$new();
             });
         });
     });
-}());
+});

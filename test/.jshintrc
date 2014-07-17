@@ -32,6 +32,7 @@
         "$": true,
         "by": true,
         "require": true,
+        "requirejs": true,
         "spyOn": true
     }
 }
