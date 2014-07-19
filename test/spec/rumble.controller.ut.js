@@ -1,4 +1,4 @@
-define(['c6ui', 'services', 'minireel'], function(c6uiModule, servicesModule, minireelModule) {
+define(['c6ui', 'services', 'minireel', 'c6_defines'], function(c6uiModule, servicesModule, minireelModule, c6Defines) {
     'use strict';
 
     describe('RumbleController', function() {
@@ -287,6 +287,7 @@ define(['c6ui', 'services', 'minireel'], function(c6uiModule, servicesModule, mi
                     'expId'    : 'e-722bd3c4942331',
                     'expVersion' : 'xyz',
                     'expTitle' : 'my title',
+                    'href'     : c6Defines.kHref,
                     'slideCount' : 6
                 });
                 /*

@@ -49,16 +49,16 @@ define(['app'], function(appModule) {
             });
 
             it('should load assets for the configured mode', function() {
-                expect(asset('directives/test.html', 'assets')).toBe(c6UrlMaker('assets/full/directives/test.html'));
-                expect(asset('minireel.css', 'styles')).toBe(c6UrlMaker('styles/full/minireel.css'));
+                expect(asset('directives/test.html', 'assets')).toBe('assets/full/directives/test.html');
+                expect(asset('minireel.css', 'styles')).toBe('styles/full/minireel.css');
 
                 c6AppData.mode = 'light';
-                expect(asset('directives/test.html', 'assets')).toBe(c6UrlMaker('assets/light/directives/test.html'));
-                expect(asset('minireel.css', 'styles')).toBe(c6UrlMaker('styles/light/minireel.css'));
+                expect(asset('directives/test.html', 'assets')).toBe('assets/light/directives/test.html');
+                expect(asset('minireel.css', 'styles')).toBe('styles/light/minireel.css');
 
                 c6AppData.mode = 'foo';
-                expect(asset('directives/test.html', 'assets')).toBe(c6UrlMaker('assets/foo/directives/test.html'));
-                expect(asset('minireel.css', 'styles')).toBe(c6UrlMaker('styles/foo/minireel.css'));
+                expect(asset('directives/test.html', 'assets')).toBe('assets/foo/directives/test.html');
+                expect(asset('minireel.css', 'styles')).toBe('styles/foo/minireel.css');
             });
         });
     });

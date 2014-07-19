@@ -1,8 +1,8 @@
-define (['angular','c6_defines',
+define (['angular','c6_defines','tracker',
          'cards/ad','cards/dailymotion','cards/recap','cards/vast','cards/vimeo','cards/vpaid',
          'cards/youtube',
          'modules/ballot','modules/display_ad'],
-function( angular , c6Defines  ,
+function( angular , c6Defines  , tracker ,
           adCard   , dailymotionCard   , recapCard   , vastCard   , vimeoCard   , vpaidCard   ,
           youtubeCard   ,
           ballotModule   , displayAdModule    ) {
@@ -11,6 +11,7 @@ function( angular , c6Defines  ,
     var forEach = angular.forEach;
 
     return angular.module('c6.mrplayer.minireel', [
+        tracker.name,
         // Cards
         adCard.name,
         dailymotionCard.name,

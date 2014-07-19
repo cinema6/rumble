@@ -1,15 +1,12 @@
-define(['services'], function(servicesModule) {
+define(['services', 'adtech', 'c6_defines'], function(servicesModule, adtech, c6Defines) {
     'use strict';
 
     describe('AdTechService', function() {
         var $window,
-            c6Defines,
             AdTechService;
 
         beforeEach(function() {
-            c6Defines = {};
             module(servicesModule.name, function($provide) {
-                $provide.value('c6Defines',c6Defines);
                 $provide.value('$window', {
                     location: {
                         hostname: 'localhost'
@@ -23,10 +20,8 @@ define(['services'], function(servicesModule) {
             });
 
             inject(function($injector) {
+                spyOn(adtech, 'loadAd');
                 $window = $injector.get('$window');
-                $window.ADTECH = {
-                    loadAd: jasmine.createSpy('window.ADTECH.loadAd()')
-                };
                 AdTechService = $injector.get('AdTechService');
             });
         });
@@ -54,7 +49,7 @@ define(['services'], function(servicesModule) {
                     });
 
                     it('should first call ADTECH.loadAd() with the master placement id', function() {
-                        expect($window.ADTECH.loadAd).toHaveBeenCalledWith({
+                        expect(adtech.loadAd).toHaveBeenCalledWith({
                             secure: false,
                             network: '5473.1',
                             server: 'adserver.adtechus.com',
@@ -66,17 +61,17 @@ define(['services'], function(servicesModule) {
                     });
 
                     it('should only call ADTECH.loadAd() once at this point', function() {
-                        expect($window.ADTECH.loadAd.calls.length).toBe(1);
+                        expect(adtech.loadAd.calls.length).toBe(1);
                     });
 
                     describe('when the publisher placement is returned', function() {
                         beforeEach(function() {
                             $window.c6AdtechPlacementId = 123456;
-                            $window.ADTECH.loadAd.calls[0].args[0].complete();
+                            adtech.loadAd.calls[0].args[0].complete();
                         });
 
                         it('should resolve the init() promise and call ADTECH.loadAd() again', function() {
-                            expect($window.ADTECH.loadAd).toHaveBeenCalledWith({
+                            expect(adtech.loadAd).toHaveBeenCalledWith({
                                 secure: false,
                                 network: '5473.1',
                                 server: 'adserver.adtechus.com',
@@ -87,11 +82,11 @@ define(['services'], function(servicesModule) {
                                 complete: jasmine.any(Function)
                             });
 
-                            expect($window.ADTECH.loadAd.calls.length).toBe(2);
+                            expect(adtech.loadAd.calls.length).toBe(2);
                         });
 
                         it('should resolve the loadAd() promise', function() {
-                            $window.ADTECH.loadAd.mostRecentCall.args[0].complete();
+                            adtech.loadAd.mostRecentCall.args[0].complete();
 
                             expect(adLoadThenSpy).toHaveBeenCalled();
                         });
@@ -102,19 +97,19 @@ define(['services'], function(servicesModule) {
                     beforeEach(function() {
                         AdTechService.loadAd({id: 'container', displayAdSource: 'waterfall'});
                         $window.c6AdtechPlacementId = 123456;
-                        $window.ADTECH.loadAd.calls[0].args[0].complete();
+                        adtech.loadAd.calls[0].args[0].complete();
                     });
 
                     it('should call ADTECH.loadAd() immediately', function() {
-                        var loadAdCallCount = $window.ADTECH.loadAd.calls.length;
+                        var loadAdCallCount = adtech.loadAd.calls.length;
 
                         AdTechService.loadAd({id: 'container2', displayAdSource: 'waterfall2'});
 
-                        $window.ADTECH.loadAd.mostRecentCall.args[0].complete();
+                        adtech.loadAd.mostRecentCall.args[0].complete();
 
-                        expect($window.ADTECH.loadAd.calls.length).toBe(loadAdCallCount + 1);
+                        expect(adtech.loadAd.calls.length).toBe(loadAdCallCount + 1);
 
-                        expect($window.ADTECH.loadAd.mostRecentCall.args[0]).toEqual({
+                        expect(adtech.loadAd.mostRecentCall.args[0]).toEqual({
                             secure: false,
                             network: '5473.1',
                             server: 'adserver.adtechus.com',
@@ -134,7 +129,7 @@ define(['services'], function(servicesModule) {
 
                         AdTechService.loadAd({id: 'container', displayAdSource: 'waterfall'});
 
-                        expect($window.ADTECH.loadAd).toHaveBeenCalledWith({
+                        expect(adtech.loadAd).toHaveBeenCalledWith({
                             secure: false,
                             network: '5473.1',
                             server: 'adserver.adtechus.com',
@@ -154,7 +149,7 @@ define(['services'], function(servicesModule) {
 
                         AdTechService.loadAd({id: 'container', displayAdSource: 'waterfall'});
 
-                        expect($window.ADTECH.loadAd).toHaveBeenCalledWith({
+                        expect(adtech.loadAd).toHaveBeenCalledWith({
                             secure: true,
                             network: '5473.1',
                             server: 'adserver.adtechus.com',
@@ -163,6 +158,7 @@ define(['services'], function(servicesModule) {
                             kv: { weburl: 'parent' },
                             complete: jasmine.any(Function)
                         });
+                        c6Defines.kProtocol = 'http:';
                     });
                 });
             });

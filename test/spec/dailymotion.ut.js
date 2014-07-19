@@ -1,11 +1,11 @@
-define(['cards/dailymotion','angular'], function(dailymotionCard, angular) {
+define(['app','angular'], function(appModule, angular) {
     'use strict';
 
     var $log, $window, $q, $rootScope, dailymotion;
             
     describe('dailymotion', function() {
         beforeEach(function(){
-            module(dailymotionCard.name);
+            module(appModule.name);
             
             inject(['$log','$window','$q','$rootScope',
                 function(_$log,_$window,_$q,_$rootScope) {

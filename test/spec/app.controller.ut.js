@@ -32,13 +32,6 @@ define(['app','c6ui','angular'], function(appModule, c6uiModule, angular) {
             };
             trackerServiceSpy = jasmine.createSpy('trackerService').andReturn(trackerSpy);
 
-            module('ng', function($provide) {
-                $provide.value('$document', {
-                    height: jasmine.createSpy('$document.height()')
-                        .andReturn(600)
-                });
-            });
-
             module(c6uiModule.name, function($provide) {
                 $provide.factory('cinema6', function($q) {
                     cinema6 = {
@@ -104,6 +97,7 @@ define(['app','c6ui','angular'], function(appModule, c6uiModule, angular) {
                 c6Defines.kAppVersion   = 'testAppVersion';
 
                 $document = $injector.get('$document');
+                spyOn($document, 'height').andReturn(600);
                 myFrame$ = $injector.get('myFrame$');
                 $animate = $injector.get('$animate');
                 spyOn($animate, 'enabled');

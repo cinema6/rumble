@@ -3,8 +3,8 @@ function( angular , c6ui , iframe , youtube ) {
     'use strict';
 
     return angular.module('c6.mrplayer.cards.youtube', [c6ui.name, iframe.name])
-    .factory('youtube',['$log','$window','c6EventEmitter','iframe',
-    function           ( $log , $window , c6EventEmitter , iframe ){
+    .factory('youtube',['$log','c6EventEmitter','iframe',
+    function           ( $log , c6EventEmitter , iframe ){
         $log = $log.context('youtube');
         var service = {};
 
@@ -19,12 +19,6 @@ function( angular , c6ui , iframe , youtube ) {
             }
 
             return src;
-        };
-
-        service.isReady = function() {
-            var YT = $window.YT;
-
-            return !!(YT && YT.Player);
         };
 
         service.createPlayer = function(playerId,config,$parentElement){

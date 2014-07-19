@@ -102,7 +102,7 @@ define(['app','c6ui'], function(appModule, c6uiModule) {
                 cinema6 = $injector.get('cinema6');
             });
 
-            $httpBackend.expectGET('assets/config/responsive-0.json')
+            $httpBackend.expectGET('config/responsive-0.json')
                 .respond(200, responsive);
         });
 
@@ -155,7 +155,7 @@ define(['app','c6ui'], function(appModule, c6uiModule) {
             appData.version = 1;
 
             $httpBackend.resetExpectations();
-            $httpBackend.expectGET('assets/config/responsive-1.json')
+            $httpBackend.expectGET('config/responsive-1.json')
                 .respond(200, responsive1);
 
             $rootScope.$apply(function() {
@@ -204,7 +204,7 @@ define(['app','c6ui'], function(appModule, c6uiModule) {
                     appData.version = 1;
 
                     $httpBackend.resetExpectations();
-                    $httpBackend.expectGET('assets/config/responsive-1.json')
+                    $httpBackend.expectGET('config/responsive-1.json')
                         .respond(200, responsive1);
 
                     $injector.get('c6AppData');
@@ -251,7 +251,7 @@ define(['app','c6ui'], function(appModule, c6uiModule) {
 
                 appData.experience.data.mode = mode;
 
-                $httpBackend.whenGET('assets/config/responsive-0.json')
+                $httpBackend.whenGET('config/responsive-0.json')
                     .respond(200, {});
 
                 inject(function($injector) {

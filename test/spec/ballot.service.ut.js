@@ -1,4 +1,4 @@
-define(['minireel'], function(minireelModule) {
+define(['app'], function(appModule) {
     'use strict';
 
     describe('BallotService', function() {
@@ -59,7 +59,7 @@ define(['minireel'], function(minireelModule) {
                 }
             };
 
-            module(minireelModule.name);
+            module(appModule.name);
 
             inject(function($injector) {
                 $rootScope = $injector.get('$rootScope');
@@ -105,7 +105,7 @@ define(['minireel'], function(minireelModule) {
 
                     describe('legacy election data',function(){
                         beforeEach(function() {
-                            $httpBackend.expectGET('/api/public/election/' + elDataOld.id)
+                            $httpBackend.expectGET('http://portal.cinema6.com/api/public/election/' + elDataOld.id)
                                 .respond(200, elDataOld);
                         });
 
@@ -176,7 +176,7 @@ define(['minireel'], function(minireelModule) {
 
                     describe('election data', function(){
                         beforeEach(function() {
-                            $httpBackend.expectGET('/api/public/election/' + elData.id)
+                            $httpBackend.expectGET('http://portal.cinema6.com/api/public/election/' + elData.id)
                                 .respond(200, elData);
 
                             BallotService.init(elData.id,ballotMap);
@@ -242,7 +242,7 @@ define(['minireel'], function(minireelModule) {
 
                     describe('legacy election data',function(){
                         beforeEach(function() {
-                            $httpBackend.expectGET('/api/public/election/' + elDataOld.id)
+                            $httpBackend.expectGET('http://portal.cinema6.com/api/public/election/' + elDataOld.id)
                                 .respond(200, elDataOld);
 
                         });
@@ -268,7 +268,7 @@ define(['minireel'], function(minireelModule) {
                                 .then(success, failure);
 
                             $httpBackend.flush();
-                            $httpBackend.expectGET('/api/public/election/' + elDataOld.id)
+                            $httpBackend.expectGET('http://portal.cinema6.com/api/public/election/' + elDataOld.id)
                                 .respond(200, elDataOld);
 
                             $rootScope.$apply(function() {
@@ -320,7 +320,7 @@ define(['minireel'], function(minireelModule) {
                         beforeEach(function() {
                             BallotService.init(elData.id,ballotMap);
 
-                            $httpBackend.expectGET('/api/public/election/' + elData.id)
+                            $httpBackend.expectGET('http://portal.cinema6.com/api/public/election/' + elData.id)
                                 .respond(200, elData);
 
                             BallotService.getBallot('rc-4770a2d7f85ce0')
@@ -338,7 +338,7 @@ define(['minireel'], function(minireelModule) {
 
                         it('should split the votes evenly if the vote percentages are 0',
                             function() {
-                            $httpBackend.expectGET('/api/public/election/' + elData.id)
+                            $httpBackend.expectGET('http://portal.cinema6.com/api/public/election/' + elData.id)
                                 .respond(200, elData);
 
                             $rootScope.$apply(function() {
@@ -376,7 +376,7 @@ define(['minireel'], function(minireelModule) {
 
                     describe('legacy data',function(){
                         beforeEach(function() {
-                            $httpBackend.expectGET('/api/public/election/' + elDataOld.id)
+                            $httpBackend.expectGET('http://portal.cinema6.com/api/public/election/' + elDataOld.id)
                                 .respond(200, elDataOld);
                         });
 
@@ -385,7 +385,7 @@ define(['minireel'], function(minireelModule) {
                             BallotService.getElection();
                             $httpBackend.flush();
                             
-                            $httpBackend.expectPOST('/api/public/vote', {
+                            $httpBackend.expectPOST('http://portal.cinema6.com/api/public/vote', {
                                 election: elDataOld.id,
                                 ballotItem: 'rc-22119a8cf9f755',
                                 vote: 'Painful'
@@ -403,7 +403,7 @@ define(['minireel'], function(minireelModule) {
                             BallotService.getElection();
                             $httpBackend.flush();
                             
-                            $httpBackend.expectPOST('/api/public/vote', {
+                            $httpBackend.expectPOST('http://portal.cinema6.com/api/public/vote', {
                                 election: elDataOld.id,
                                 ballotItem: 'rc-22119a8cf9f755',
                                 vote: 'Painful'
@@ -418,14 +418,14 @@ define(['minireel'], function(minireelModule) {
                     
                     describe('data',function(){
                         beforeEach(function() {
-                            $httpBackend.expectGET('/api/public/election/' + elData.id)
+                            $httpBackend.expectGET('http://portal.cinema6.com/api/public/election/' + elData.id)
                                 .respond(200, elData);
 
                             BallotService.init(elData.id,ballotMap);
                             BallotService.getElection();
                             $httpBackend.flush();
                             
-                            $httpBackend.expectPOST('/api/public/vote', {
+                            $httpBackend.expectPOST('http://portal.cinema6.com/api/public/vote', {
                                 election: elData.id,
                                 ballotItem: 'rc-22119a8cf9f755',
                                 vote: 1 

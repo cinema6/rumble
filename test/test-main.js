@@ -31,13 +31,14 @@
                 async: 'lib/async',
                 youtube: 'lib/youtube',
                 modernizr: libUrl('modernizr/modernizr.custom.71747'),
-                jquery: libUrl('jquery/2.0.3-0-gf576d00/jquery.min'),
-                angular: libUrl('angular/v1.2.12-0-g5cc5cc1/angular.min'),
-                angularAnimate: libUrl('angular/v1.2.12-0-g5cc5cc1/angular-animate.min'),
-                angularSanitize: libUrl('angular/v1.2.12-0-g5cc5cc1/angular-sanitize.min'),
-                angularTouch: libUrl('angular/v1.2.12-0-g5cc5cc1/angular-touch.min'),
-                c6ui: libUrl('c6ui/v2.5.0-0-gc58e712/c6uilib.min'),
-                c6log: libUrl('c6ui/v2.5.0-0-gc58e712/c6log.min'),
+                jquery: libUrl('jquery/2.0.3-0-gf576d00/jquery'),
+                angular: libUrl('angular/v1.2.12-0-g5cc5cc1/angular'),
+                angularAnimate: libUrl('angular/v1.2.12-0-g5cc5cc1/angular-animate'),
+                angularSanitize: libUrl('angular/v1.2.12-0-g5cc5cc1/angular-sanitize'),
+                angularTouch: libUrl('angular/v1.2.12-0-g5cc5cc1/angular-touch'),
+                angularMocks: libUrl('angular/v1.2.12-0-g5cc5cc1/angular-mocks'),
+                c6ui: libUrl('c6ui/v2.5.0-0-gc58e712/c6uilib'),
+                c6log: libUrl('c6ui/v2.5.0-0-gc58e712/c6log'),
                 adtech: 'http://aka-cdn.adtechus.com/dt/common/DAC',
                 templates   : '/base/.tmp/templates'
             },
@@ -67,6 +68,9 @@
                         return angular.module('ngTouch');
                     }
                 },
+                angularMocks: {
+                    deps: ['angular']
+                },
                 c6ui: {
                     deps: ['angular'],
                     init: function(angular) {
@@ -85,7 +89,7 @@
             }
         });
 
-        require(['c6_defines'], function(c6Defines) {
+        require(['c6_defines', 'angularMocks'], function(c6Defines) {
             c6Defines.kHasKarma = true;
 
             require(tests, $window.__karma__.start);

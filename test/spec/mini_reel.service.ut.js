@@ -1,4 +1,4 @@
-define(['minireel', 'c6ui', 'angular'], function(minireelModule, c6uiModule, angular) {
+define(['app', 'minireel', 'c6ui', 'angular'], function(appModule, minireelModule, c6uiModule, angular) {
     'use strict';
 
     var copy = angular.copy,
@@ -32,6 +32,7 @@ define(['minireel', 'c6ui', 'angular'], function(minireelModule, c6uiModule, ang
                         })
                 });
             });
+            module(appModule.name);
 
             inject(function($injector) {
                 MiniReelService = $injector.get('MiniReelService');
@@ -346,8 +347,8 @@ define(['minireel', 'c6ui', 'angular'], function(minireelModule, c6uiModule, ang
 
                                 it('should make both thumbnails the fully-resolved splash image', function() {
                                     expect(result[5].thumbs).toEqual({
-                                        small: 'http://foo.cinema6.com/collateral/mysplash.jpg',
-                                        large: 'http://foo.cinema6.com/collateral/mysplash.jpg'
+                                        small: 'http://portal.cinema6.com/collateral/mysplash.jpg',
+                                        large: 'http://portal.cinema6.com/collateral/mysplash.jpg'
                                     });
                                 });
                             });

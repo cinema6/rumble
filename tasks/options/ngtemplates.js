@@ -6,8 +6,7 @@
     module.exports = {
         options: {
             htmlmin: grunt.config.get('htmlmin.options'),
-            module: '<%= settings.appModule %>',
-            prefix: '<%= _version %>/<%= buildMode %>'
+            module: '<%= settings.appModule %>.templates',
         },
         dist: {
             files: [
@@ -21,10 +20,21 @@
         },
         test: {
             options: {
-                prefix: ''
+                bootstrap: function(module, script) {
+                    return '(' + function(module) {
+                        define( ['angular'],
+                        function( angular ) {
+                            return angular.module(module, [])
+                                .run(   ['$templateCache',
+                                function( $templateCache ) {
+                                    /* SCRIPT */
+                                }]);
+                        });
+                    }.toString().replace('/* SCRIPT */', script) + '("' + module + '"));';
+                }
             },
-            cwd: '<%= settings.appDir %>',
-            src: 'assets/views/**/*.html',
+            cwd: '<%= settings.appDir %>/assets',
+            src: 'views/**/*.html',
             dest: '.tmp/templates.js'
         }
     };

@@ -1,7 +1,7 @@
-define( ['angular','angularAnimate','angularSanitize','c6ui','c6log','c6_defines',
+define( ['angular','angularAnimate','angularSanitize','c6ui','c6log','c6_defines','modernizr',
          'minireel','services','tracker','templates',
          'ui/paginator','ui/table_of_contents','ui/thumb_paginator'],
-function( angular , angularAnimate , angularSanitize , c6ui , c6log , c6Defines ,
+function( angular , angularAnimate , angularSanitize , c6ui , c6log , c6Defines  , modernizr ,
           minireel , services , tracker , templates ,
           uiPaginator  , uiTableOfContents    , uiThumbPaginator   ) {
     'use strict';
@@ -22,6 +22,10 @@ function( angular , angularAnimate , angularSanitize , c6ui , c6log , c6Defines 
         uiTableOfContents.name,
         uiThumbPaginator.name
     ])
+        .config(['c6BrowserInfoProvider',
+        function( c6BrowserInfoProvider ) {
+            c6BrowserInfoProvider.setModernizr(modernizr);
+        }])
         .config(['trackerServiceProvider', function(trackerServiceProvider){
             trackerServiceProvider.api('c6Tracker');
         }])
