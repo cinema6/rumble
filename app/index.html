@@ -1,6 +1,7 @@
 <!doctype html>
 <html ng-controller="AppController as AppCtrl" ng-class="[app.data.profile.minimalUi ? null : 'no-minimal-ui']">
     <head>
+        <base href="assets/" />
         <meta charset="utf-8"/>
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
         <title>C6 MiniReel</title>
@@ -10,7 +11,7 @@
         <link href='//fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,400,700' rel='stylesheet' type='text/css'>
         <link rel="stylesheet" ng-href="{{'minireel.css' | asset:'styles'}}">
         <link rel="stylesheet" ng-href="{{'theme.css' | branding:'styles'}}">
-        
+
         <link ng-if="app.data.profile.touch === false" rel="stylesheet" ng-href="{{'minireel--hover.css' | asset:'styles'}}">
         <link ng-if="app.data.profile.touch === false" rel="stylesheet" ng-href="{{'theme--hover.css' | branding:'styles'}}">
         <script type="text/javascript">
@@ -26,38 +27,6 @@
         </div>
         <div id="adtechPlacement"></div>
         <!--C6ENV-->
-        <script>
-            (function(c6,base,q,s){
-                var queryCheck = ['kCollateralUrl','kDebug','kApiUrl','kDevMode','kDevice','kMode','kEnvUrlRoot'],
-                    query = (function(string) {
-                    if(!q) { return; }
-                    return string.substring(1).split('&').map(function(qs) {
-                        var qa = qs.split('=');
-                        if(qa[1] === 'true' || qa[1] === 'false') {
-                            qa[1] = qa[1] === 'true';
-                        }
-                        return qa;
-                    });
-                })(q);
-
-                try {
-                    if(parent.location.href !== location.href && query) {
-                        query.forEach(function(param){
-                            if(queryCheck.indexOf(param[0]) > -1) {
-                                c6[param[0]] = decodeURIComponent(param[1]);
-                            }
-                        });
-                    }
-                } catch(e) {}
-
-                c6.kMode = (c6.kMode === 'undefined' || (!c6.kMode)) ? 'full' : c6.kMode;
-                c6.kBaseUrl = (c6.kDevMode) ? base
-                    : ((c6.kDevice === 'phone') ? base + '/mobile' : (base + '/' + c6.kMode));
-                s = document.createElement('script');
-                s.setAttribute('data-main', (c6.kBaseUrl + '/scripts/main'));
-                s.setAttribute('src', '//lib.cinema6.com/require/2.1.5/require.min.js');
-                document.getElementsByTagName('body')[0].appendChild(s);
-            }((window.c6 = (window.c6 || {})),'assets',location.search));
-        </script>
+        <script src="https://lib.cinema6.com/require/2.1.5/require.min.js" data-main="scripts/main"></script>
     </body>
 </html>

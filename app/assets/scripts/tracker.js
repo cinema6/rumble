@@ -1,7 +1,8 @@
-(function(win$){
+define (['angular','c6_defines'],
+function( angular , c6Defines  ) {
     'use strict';
 
-    angular.module('c6.rumble.services')
+    return angular.module('c6.mrplayer.tracker', [])
     .provider('trackerService',[ function(){
 
         var api = 'ga';
@@ -137,7 +138,7 @@
                 return ctx;
             };
             
-            if (win$.__karma__){
+            if (c6Defines.kHasKarma){
                 service._private = _private;
             }
 
@@ -145,4 +146,4 @@
         }];
     }]);
 
-}(window));
+});

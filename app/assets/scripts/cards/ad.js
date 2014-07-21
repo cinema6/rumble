@@ -1,7 +1,8 @@
-(function(){
+define (['angular'],
+function( angular ) {
     'use strict';
 
-    angular.module('c6.rumble')
+    return angular.module('c6.mrplayer.cards.ad', [])
         .directive('adCard',[ '$log', '$compile',
         function            (  $log ,  $compile ) {
             $log = $log.context('<ad-card>');
@@ -31,4 +32,4 @@
             };
         }]);
 
-}());
+});

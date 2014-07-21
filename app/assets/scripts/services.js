@@ -1,9 +1,10 @@
-(function() {
+define (['angular','c6ui','adtech','c6_defines'],
+function( angular , c6ui , adtech , c6Defines  ) {
     'use strict';
 
-    angular.module('c6.rumble.services', ['c6.ui'])
-        .service('VideoThumbService', ['$http','$q','c6UrlMaker','c6Defines',
-        function                      ( $http , $q , c6UrlMaker , c6Defines ) {
+    return angular.module('c6.mrplayer.services', [c6ui.name])
+        .service('VideoThumbService', ['$http','$q','c6UrlMaker',
+        function                      ( $http , $q , c6UrlMaker ) {
             var _private = {};
 
             _private.getFromYoutube = function(id) {
@@ -62,8 +63,8 @@
             if (window.c6.kHasKarma) { this._private = _private; }
         }])
 
-        .factory('compileAdTag', ['$window','c6Defines',
-        function                 ( $window , c6Defines ) {
+        .factory('compileAdTag', ['$window',
+        function                 ( $window ) {
             var url = c6Defines.kDevMode ?
                 'http://www.mutantplayground.com' :
                 (function() {
@@ -316,8 +317,8 @@
                 return this;
             };
 
-            this.$get = ['$log','$http','$q','$window','$interval','$templateCache','c6EventEmitter','c6UrlMaker','compileAdTag','$timeout','$rootScope',
-            function    ( $log , $http , $q , $window , $interval , $templateCache , c6EventEmitter , c6UrlMaker , compileAdTag , $timeout , $rootScope ) {
+            this.$get = ['$log','$http','$q','$window','$interval','$templateCache','c6EventEmitter','compileAdTag','$timeout','$rootScope',
+            function    ( $log , $http , $q , $window , $interval , $templateCache , c6EventEmitter , compileAdTag , $timeout , $rootScope ) {
                 var service = {},
                     _service = {};
 
@@ -345,7 +346,7 @@
                         function getPlayerTemplate() {
                             return $http({
                                 method: 'GET',
-                                url: c6UrlMaker('views/vpaid_object_embed.html'),
+                                url: 'views/vpaid_object_embed.html',
                                 cache: $templateCache
                             });
                         }
@@ -377,7 +378,7 @@
                             var html,
                                 flashvars = '';
 
-                            html = template.data.replace(/__SWF__/g, c6UrlMaker('swf/player.swf'));
+                            html = template.data.replace(/__SWF__/g, 'swf/player.swf');
 
                             flashvars += 'adXmlUrl=' + encodeURIComponent(compileAdTag(_provider.adTags[config.data.source]));
                             flashvars += '&playerId=' + encodeURIComponent(playerId);
@@ -582,8 +583,8 @@
 
         }])
 
-        .service('AdTechService', ['$window', '$q', '$rootScope', 'c6Defines',
-        function                  ( $window ,  $q ,  $rootScope, c6Defines ) {
+        .service('AdTechService', ['$window', '$q', '$rootScope',
+        function                  ( $window ,  $q ,  $rootScope ) {
             var domain, placementId;
 
             function getPlacementId() {
@@ -606,7 +607,7 @@
                         : (domain.split('.').filter(function(v,i,a){return i===a.length-2;})[0]);
                 }
 
-                $window.ADTECH.loadAd({
+                adtech.loadAd({
                     secure: (c6Defines.kProtocol === 'https:'),
                     network: '5473.1',
                     server: 'adserver.adtechus.com',
@@ -627,7 +628,7 @@
                 var adLoadDeferred = $q.defer();
 
                 getPlacementId().then(function(id) {
-                    $window.ADTECH.loadAd({
+                    adtech.loadAd({
                         secure: (c6Defines.kProtocol === 'https:'),
                         network: '5473.1',
                         server: 'adserver.adtechus.com',
@@ -932,4 +933,4 @@
                 exceptions.push(exception);
             };
         }]);
-}());
+});

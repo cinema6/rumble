@@ -1,55 +1,52 @@
-(function() {
+define(['services','angular'], function(servicesModule, angular) {
     'use strict';
 
-    define(['services'], function() {
-        /* global angular:true */
-        var noop = angular.noop;
+    var noop = angular.noop;
 
-        describe('compileAdTag(tag)', function() {
-            var compileAdTag;
+    describe('compileAdTag(tag)', function() {
+        var compileAdTag;
 
-            var $window;
+        var $window;
 
-            var tag = 'http://u-ads.adap.tv/a/h/jSmRYUB6OAinZ1YEc6FP2eOeZCYQ_JsM?cb={cachebreaker}&pageUrl={pageUrl}&eov=eov';
+        var tag = 'http://u-ads.adap.tv/a/h/jSmRYUB6OAinZ1YEc6FP2eOeZCYQ_JsM?cb={cachebreaker}&pageUrl={pageUrl}&eov=eov';
 
-            beforeEach(function() {
-                module('ng', function($provide) {
-                    $provide.value('$window', {
-                        parent: {
-                            location: {
-                                href: 'http://www.urbantimes.com/minireels/bestvideos'
-                            }
-                        },
-                        addEventListener: noop,
-                        Date: {
-                            now: jasmine.createSpy('Date.now()')
-                                .andReturn(Date.now())
+        beforeEach(function() {
+            module('ng', function($provide) {
+                $provide.value('$window', {
+                    parent: {
+                        location: {
+                            href: 'http://www.urbantimes.com/minireels/bestvideos'
                         }
-                    });
-                });
-
-                module('c6.rumble');
-
-                inject(function($injector) {
-                    compileAdTag = $injector.get('compileAdTag');
-
-                    $window = $injector.get('$window');
+                    },
+                    addEventListener: noop,
+                    Date: {
+                        now: jasmine.createSpy('Date.now()')
+                            .andReturn(Date.now())
+                    }
                 });
             });
 
-            it('should exist', function() {
-                expect(compileAdTag).toEqual(jasmine.any(Function));
-            });
+            module(servicesModule.name);
 
-            it('should compile an ad tag with the url of the page and a cachebuster', function() {
-                var now = $window.Date.now();
+            inject(function($injector) {
+                compileAdTag = $injector.get('compileAdTag');
 
-                expect(compileAdTag(tag)).toBe('http://u-ads.adap.tv/a/h/jSmRYUB6OAinZ1YEc6FP2eOeZCYQ_JsM?cb=' + now + '&pageUrl=' + encodeURIComponent($window.parent.location.href) + '&eov=eov');
-            });
-
-            it('should handle having undefined passed in', function() {
-                expect(compileAdTag()).toBe('');
+                $window = $injector.get('$window');
             });
         });
+
+        it('should exist', function() {
+            expect(compileAdTag).toEqual(jasmine.any(Function));
+        });
+
+        it('should compile an ad tag with the url of the page and a cachebuster', function() {
+            var now = $window.Date.now();
+
+            expect(compileAdTag(tag)).toBe('http://u-ads.adap.tv/a/h/jSmRYUB6OAinZ1YEc6FP2eOeZCYQ_JsM?cb=' + now + '&pageUrl=' + encodeURIComponent($window.parent.location.href) + '&eov=eov');
+        });
+
+        it('should handle having undefined passed in', function() {
+            expect(compileAdTag()).toBe('');
+        });
     });
-}());
+});

@@ -1,9 +1,29 @@
-(function(){
+define (['angular','c6_defines','tracker',
+         'cards/ad','cards/dailymotion','cards/recap','cards/vast','cards/vimeo','cards/vpaid',
+         'cards/youtube',
+         'modules/ballot','modules/display_ad'],
+function( angular , c6Defines  , tracker ,
+          adCard   , dailymotionCard   , recapCard   , vastCard   , vimeoCard   , vpaidCard   ,
+          youtubeCard   ,
+          ballotModule   , displayAdModule    ) {
     'use strict';
 
     var forEach = angular.forEach;
 
-    angular.module('c6.rumble')
+    return angular.module('c6.mrplayer.minireel', [
+        tracker.name,
+        // Cards
+        adCard.name,
+        dailymotionCard.name,
+        recapCard.name,
+        vastCard.name,
+        vimeoCard.name,
+        vpaidCard.name,
+        youtubeCard.name,
+        // Modules
+        ballotModule.name,
+        displayAdModule.name
+    ])
     .animation('.slides__item',['$log', function($log){
         $log = $log.context('.slides__item');
         return {
@@ -297,10 +317,10 @@
     }])
     .controller('RumbleController',['$log','$scope','$timeout','$interval','BallotService',
                                     'c6Computed','cinema6','MiniReelService','CommentsService',
-                                    'ControlsService','trackerService','c6Defines',
+                                    'ControlsService','trackerService',
     function                       ( $log , $scope , $timeout , $interval, BallotService ,
                                      c6Computed , cinema6 , MiniReelService , CommentsService ,
-                                     ControlsService , trackerService , c6Defines ){
+                                     ControlsService , trackerService ) {
         var self    = this, readyTimeout,
             appData = $scope.app.data,
             id = appData.experience.id,
@@ -1422,4 +1442,4 @@
     }]);
 
 
-}());
+});

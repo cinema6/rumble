@@ -1,7 +1,7 @@
 (function(){
     'use strict';
     
-    define(['dailymotion'], function() {
+    define(['app','services','cards/dailymotion','angular'], function(appModule, servicesModule, dailymotionModule, angular) {
         describe('dailymotionPlayer directive',function(){
             var $compile,
                 $timeout,
@@ -13,12 +13,12 @@
 
             beforeEach(function() {
                 mockPlayers = [];
-                module('c6.rumble.services', function($provide) {
+                module(servicesModule.name, function($provide) {
                     $provide.value('ControlsService', {
                         bindTo: angular.noop
                     });
                 });
-                module('c6.rumble',function($provide){
+                module(appModule.name,function($provide){
                     $provide.value('c6AppData', {
                         mode: 'mobile',
                         behaviors: {},
@@ -31,7 +31,8 @@
                             touch: true
                         }
                     });
-
+                });
+                module(dailymotionModule.name, function($provide) {
                     dailymotion.createPlayer = jasmine.createSpy('dm.createPlayer')
                     .andCallFake(function(playerId,config,$parentElement){
                         var mockPlayer = {

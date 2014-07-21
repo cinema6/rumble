@@ -23,7 +23,7 @@
                     var src = srcs[0].replace(/^app\/assets/, grunt.config.process('<%= _version %>/<%= buildMode %>'));
 
                     return '(' + function(orig, src) {
-                        angular.module('c6.rumble')
+                        myModule
                             .run   (['$http','$cacheFactory',
                             function( $http , $cacheFactory ) {
                                 var $httpCache = $cacheFactory.get('$http');

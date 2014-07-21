@@ -5,6 +5,10 @@
     placements)
   * [FEATURE]: Ads are now loaded dynamically based on the experience ad config
     but experiences with ad cards in the deck already are still supported
+  * All JS files are now AMD modules to simplify dependency management
+    and improve performance.
+    * **New versions of c6Embed and the MR Editor must be deployed prior
+      to this being deployed.**
 
 ## Beta18 (July 17, 2014)
 * *[Beta18.rc1]*

@@ -1,7 +1,8 @@
-(function() {
+define (['angular'],
+function( angular ) {
     'use strict';
 
-    angular.module('c6.rumble')
+    return angular.module('c6.mrplayer.cards.video', [])
         .controller('VideoCardController', ['$scope','ModuleService','$log','ControlsService','EventService',
         function                           ( $scope , ModuleService , $log , ControlsService , EventService ) {
             var config = $scope.config,
@@ -71,8 +72,8 @@
             });
         }])
 
-        .directive('videoCard', ['playerInterface','$q','$timeout','c6UrlMaker','assetFilter',
-        function                ( playerInterface , $q , $timeout , c6UrlMaker , assetFilter ) {
+        .directive('videoCard', ['playerInterface','$q','$timeout','assetFilter',
+        function                ( playerInterface , $q , $timeout , assetFilter ) {
             return {
                 restrict: 'E',
                 templateUrl : assetFilter('directives/video_card.html', 'views'),
@@ -211,4 +212,4 @@
                 }
             };
         }]);
-}());
+});

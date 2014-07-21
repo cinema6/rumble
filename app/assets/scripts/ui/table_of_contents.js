@@ -1,7 +1,8 @@
-(function() {
+define (['angular'],
+function( angular ) {
     'use strict';
 
-    angular.module('c6.rumble')
+    return angular.module('c6.mrplayer.ui.tableOfContents', [])
         .directive('tableOfContents', ['assetFilter',
         function                      ( assetFilter ) {
             return {
@@ -24,4 +25,4 @@
                 $scope.onExit();
             };
         }]);
-}());
+});
