@@ -784,6 +784,13 @@
                 border:0;
             }
 
+        @media screen and (max-width:49.9375rem), screen and (max-height:28.6875rem) {
+            /*  w: - 799px
+                h: - 459px */
+            .mr-ad__med-rect {
+                top: 0;   
+            }
+        }
 
 
 /*  ==========================================================================
