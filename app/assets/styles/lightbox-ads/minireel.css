@@ -362,14 +362,12 @@
     .mr-card__container {
         background:#fff; 
         -webkit-border-radius: 3px; border-radius: 3px; 
-        position:relative; overflow:hidden;
+        position:relative; 
     }
 
     .mr-card__video-container {
-        background:#fff; 
         padding:0 20.125rem 4.5rem 1.125rem; /*15px 322px 72px 18px*/
-        -webkit-border-radius: 3px; border-radius: 3px; 
-        position:relative; overflow:hidden;
+        position:relative; 
     }
         @media screen and (min-width:76rem), screen and (min-height:43.125rem) {
             /*  w: 1216px +
