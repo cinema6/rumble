@@ -166,7 +166,18 @@ define(['c6ui', 'services', 'minireel', 'c6_defines'], function(c6uiModule, serv
                         title : 'my title',
                         election: 'el-a30a5954440d66',
                         deck : deck,
-                        mode : 'testMode'
+                        mode : 'testMode',
+                        adConfig : {
+                            video: {
+                                firstPlacement: 1,
+                                frequency: 3,
+                                waterfall: 'cinema6',
+                                skip: 6
+                            },
+                            display: {
+                                waterfall: 'cinema6'
+                            }
+                        }
                     }
                 },
                 behaviors: {},
@@ -287,8 +298,8 @@ define(['c6ui', 'services', 'minireel', 'c6_defines'], function(c6uiModule, serv
                     'expId'    : 'e-722bd3c4942331',
                     'expVersion' : 'xyz',
                     'expTitle' : 'my title',
-                    'href'     : c6Defines.kHref,
-                    'slideCount' : 6
+                    'slideCount' : 6,
+                    'href'       : jasmine.any(String)
                 });
                 /*
                 expect(trackerSpy.trackPage).toHaveBeenCalledWith({
@@ -679,7 +690,8 @@ define(['c6ui', 'services', 'minireel', 'c6_defines'], function(c6uiModule, serv
                     action   : 'Play',
                     label    : 'ad',
                     videoSource : 'ad',
-                    videoDuration : 22
+                    videoDuration : 22,
+                    nonInteraction : 1
                 });
             });
 
@@ -700,7 +712,8 @@ define(['c6ui', 'services', 'minireel', 'c6_defines'], function(c6uiModule, serv
                     action   : 'Play',
                     label    : 'fooey',
                     videoSource : 'ad',
-                    videoDuration : 22
+                    videoDuration : 22,
+                    nonInteraction : 1
                 });
             });
 
@@ -712,7 +725,36 @@ define(['c6ui', 'services', 'minireel', 'c6_defines'], function(c6uiModule, serv
                     action   : 'Play',
                     label    : 'www.hotsauce.com/xyz',
                     videoSource : 'Hot Sauce',
-                    videoDuration : 33
+                    videoDuration : 33,
+                    nonInteraction : 0
+                });
+            });
+            
+            it('tracks as nonInteraction if autoplay', function(){
+                appData.experience.data.autoplay = true;
+                RumbleCtrl.trackVideoEvent(player,'Play');
+                expect(trackerSpy.trackEvent).toHaveBeenCalled();
+                expect(RumbleCtrl.getTrackingData).toHaveBeenCalledWith({
+                    category : 'Video',
+                    action   : 'Play',
+                    label    : 'www.hotsauce.com/xyz',
+                    videoSource : 'Hot Sauce',
+                    videoDuration : 33,
+                    nonInteraction : 1
+                });
+            });
+            
+            it('tracks as interaction if autoplay but not Play', function(){
+                appData.experience.data.autoplay = true;
+                RumbleCtrl.trackVideoEvent(player,'Quartile1');
+                expect(trackerSpy.trackEvent).toHaveBeenCalled();
+                expect(RumbleCtrl.getTrackingData).toHaveBeenCalledWith({
+                    category : 'Video',
+                    action   : 'Quartile1',
+                    label    : 'www.hotsauce.com/xyz',
+                    videoSource : 'Hot Sauce',
+                    videoDuration : 33,
+                    nonInteraction : 0
                 });
             });
             
@@ -724,7 +766,8 @@ define(['c6ui', 'services', 'minireel', 'c6_defines'], function(c6uiModule, serv
                     action   : 'Play',
                     label    : 'booger',
                     videoSource : 'Hot Sauce',
-                    videoDuration : 33
+                    videoDuration : 33,
+                    nonInteraction : 0
                 });
             });
 
@@ -737,7 +780,8 @@ define(['c6ui', 'services', 'minireel', 'c6_defines'], function(c6uiModule, serv
                     action   : 'Play',
                     label    : 'booger',
                     videoSource : 'hotsauce',
-                    videoDuration : 33
+                    videoDuration : 33,
+                    nonInteraction : 0
                 });
             });
         });
@@ -877,135 +921,115 @@ define(['c6ui', 'services', 'minireel', 'c6_defines'], function(c6uiModule, serv
             });
 
             describe('splicing ads', function() {
-                beforeEach(function() {
-                    $scope.deck = [
-                        {},
-                        {},
-                        {
-                            ad: true
-                        },
-                        {}
-                    ];
-                });
-
                 describe('when leaving an ad card', function() {
                     var ad;
 
                     beforeEach(function() {
-                        ad = $scope.deck[2];
+                        ad = $scope.deck[1];
                     });
 
-                    it('should skip the ad card from then on', function() {
-                        RumbleCtrl.setPosition(2);
-                        expect($scope.currentCard.visited).toBe(true);
+                    it('should remove the ad card from the deck', function() {
+                        RumbleCtrl.setPosition(1);
                         expect($scope.currentCard.ad).toBe(true);
 
                         RumbleCtrl.setPosition(4);
-
-                        RumbleCtrl.setPosition(2);
-                        expect($scope.currentIndex).toBe(1);
-                        expect($scope.currentCard).toBe($scope.deck[1]);
+                        expect($scope.deck.indexOf(ad)).toBe(-1);
+                        expect($scope.currentIndex).toBe(3);
+                        expect($scope.currentCard).toBe($scope.deck[3]);
                     });
+                });
+            });
 
-                    xdescribe('if the companion and video ad are not shown together', function() {
-                        beforeEach(function() {
-                            appData.behaviors.showsCompanionWithVideoAd = false;
+            describe('loading ads', function() {
+                beforeEach(function() {
+                    spyOn($scope, '$broadcast').andCallThrough();
+                });
 
-                            RumbleCtrl.setPosition(2);
-                            RumbleCtrl.setPosition(4);
-                            RumbleCtrl.setPosition(2);
-                        });
+                it('should broadcast adOnDeck when an ad should play in the next position', function() {
+                    RumbleCtrl.setPosition(0);
+                    expect($scope.$broadcast).toHaveBeenCalledWith('adOnDeck',jasmine.any(Object));
+                    expect($scope.$broadcast.mostRecentCall.args[1].id).toBe('rc-advertisement1');
 
-                        it('should not skip the ad card', function() {
-                            expect($scope.currentIndex).toBe(2);
-                            expect($scope.currentCard).toBe($scope.deck[2]);
-                        });
-                    });
+                    RumbleCtrl.setPosition(1); // shows ad
+                    RumbleCtrl.setPosition(2); // video #1
+                    RumbleCtrl.setPosition(3); // video #2
+                    RumbleCtrl.setPosition(4); // video #3, ad should show after 3rd video, so it's loaded now
 
-                    xdescribe('if the companion and video ad are show together', function() {
-                        beforeEach(function() {
-                            appData.behaviors.showsCompanionWithVideoAd = true;
+                    expect($scope.$broadcast.callCount).toBe(2);
+                    expect($scope.$broadcast.mostRecentCall.args[1].id).toBe('rc-advertisement2');
+                });
 
-                            RumbleCtrl.setPosition(2);
-                            expect($scope.currentCard).toBe($scope.deck[2]);
-                            RumbleCtrl.setPosition(4);
-                            RumbleCtrl.setPosition(2);
-                        });
+                it('should not matter what the navigation sequence is', function() {
+                    RumbleCtrl.setPosition(0);
+                    expect($scope.$broadcast).toHaveBeenCalledWith('adOnDeck',jasmine.any(Object));
+                    expect($scope.$broadcast.mostRecentCall.args[1].id).toBe('rc-advertisement1');
 
-                        it('should remove the ad card from the deck', function() {
-                            expect($scope.currentIndex).toBe(1);
-                            expect($scope.currentCard).toBe($scope.deck[1]);
+                    RumbleCtrl.setPosition(4); // shows ad
+                    expect($scope.currentCard.ad).toBe(true);
 
-                            RumbleCtrl.setPosition(2);
+                    RumbleCtrl.setPosition(5); // video #1
+                    RumbleCtrl.setPosition(0); // video #2
+                    RumbleCtrl.setPosition(2); // video #3, ad should show after 3rd video, so it's loaded now
 
-                            expect($scope.currentIndex).toBe(3);
-                            expect($scope.currentCard).toBe($scope.deck[3]);
-                        });
-                    });
+                    expect($scope.$broadcast.callCount).toBe(2);
+                    expect($scope.$broadcast.mostRecentCall.args[1].id).toBe('rc-advertisement2');
                 });
             });
 
             describe('showing ads', function() {
                 beforeEach(function() {
-                    $scope.deck = [
-                        {},
-                        {},
-                        {
-                            ad: true
-                        },
-                        {},
-                        {},
-                        {}
-                    ];
-
                     spyOn(RumbleCtrl, 'setPosition').andCallThrough();
                 });
 
-                describe('going forward', function() {
-                    it('should show an ad if the user is skipping to the card after an ad', function() {
-                        RumbleCtrl.setPosition(1);
-                        expect(RumbleCtrl.setPosition.callCount).toBe(1);
-
-                        RumbleCtrl.setPosition(3);
-                        expect(RumbleCtrl.setPosition).toHaveBeenCalledWith(2);
-                        expect($scope.currentIndex).toBe(2);
-                        expect($scope.currentCard).toBe($scope.deck[2]);
-                    });
-
-                    it('should not show the ad if it has already been viewed', function() {
-                        RumbleCtrl.setPosition(2);
-                        RumbleCtrl.setPosition(-1);
-                        RumbleCtrl.setPosition(3);
-
-                        expect($scope.currentIndex).toBe(3);
-                        expect($scope.currentCard).toBe($scope.deck[3]);
-                    });
+                it('should show ad if it is already in the deck', function() {
+                    RumbleCtrl.setPosition(1);
+                    expect($scope.currentCard.ad).toBe(true);
                 });
 
-                describe('going backward', function() {
-                    beforeEach(function() {
-                        RumbleCtrl.setPosition(5);
-                        RumbleCtrl.setPosition.callCount = 0;
+                it('should show first ad based on config if no ad is in the deck', function() {
+                    var ad1 = $scope.deck[1],
+                        ad2 = $scope.deck[3];
+
+                    RumbleCtrl.setPosition(1);
+                    RumbleCtrl.setPosition($scope.currentIndex+1);
+                    RumbleCtrl.setPosition($scope.currentIndex+1);
+                    RumbleCtrl.setPosition($scope.currentIndex+1);
+                    RumbleCtrl.setPosition($scope.currentIndex+1);
+
+                    $scope.$emit('reelReset');
+
+                    // all ads that were already in the deck should have been removed
+                    [ad1, ad2].forEach(function(adCard) {
+                        expect($scope.deck.indexOf(adCard)).toBe(-1);
                     });
 
-                    it('should show an ad if the user is skipping to the card before an ad', function() {
-                        RumbleCtrl.setPosition(3);
-                        expect(RumbleCtrl.setPosition.callCount).toBe(1);
+                    // now that there are no ads in the deck we'll check that first and frequency work
+                    RumbleCtrl.setPosition(0); // first video
+                    RumbleCtrl.setPosition($scope.currentIndex+1); // ad
+                    expect($scope.currentCard.ad).toBe(true);
+                    RumbleCtrl.setPosition($scope.currentIndex+1); // video 1
+                    RumbleCtrl.setPosition($scope.currentIndex-1); // video 2
+                    RumbleCtrl.setPosition($scope.currentIndex+1); // video 3
+                    RumbleCtrl.setPosition($scope.currentIndex-1); // ad
+                    expect($scope.currentCard.ad).toBe(true);
+                });
 
-                        RumbleCtrl.setPosition(1);
-                        expect(RumbleCtrl.setPosition).toHaveBeenCalledWith(2);
-                        expect($scope.currentIndex).toBe(2);
-                        expect($scope.currentCard).toBe($scope.deck[2]);
-                    });
+                it('manipulates the index when leaving ad cards', function() {
+                    RumbleCtrl.setPosition(0); // video
+                    expect($scope.currentIndex).toBe(0);
+                    RumbleCtrl.setPosition(1); // ad
+                    expect($scope.currentIndex).toBe(1);
+                    expect($scope.currentCard.ad).toBe(true);
 
-                    it('should not show the ad if it has already been viewed', function() {
-                        RumbleCtrl.setPosition(2);
-                        RumbleCtrl.setPosition(5);
-                        RumbleCtrl.setPosition(1);
+                    RumbleCtrl.setPosition(2);
+                    expect($scope.currentIndex).toBe(1); // leaving an ad and moving forward shifts the index down 1
 
-                        expect($scope.currentIndex).toBe(1);
-                        expect($scope.currentCard).toBe($scope.deck[1]);
-                    });
+                    RumbleCtrl.setPosition(2);
+                    expect($scope.currentIndex).toBe(2);
+                    expect($scope.currentCard.ad).toBe(true);
+
+                    RumbleCtrl.setPosition(1);
+                    expect($scope.currentIndex).toBe(1); // leaving an ad and moving backward does not shift the index
                 });
             });
 
@@ -1038,7 +1062,7 @@ define(['c6ui', 'services', 'minireel', 'c6_defines'], function(c6uiModule, serv
                 expect($scope.atHead).toEqual(false);
                 expect($scope.atTail).toEqual(false);
                 expect($scope.$emit).toHaveBeenCalledWith('reelMove');
-                expect($scope.$emit.callCount).toBe(2);
+                expect($scope.$emit.callCount).toBe(4); // positionWillChange, positionDidChange, reelMove, ready
                 expect(trackerSpy.trackPage.callCount).toEqual(1);
                 expect(trackerSpy.trackPage).toHaveBeenCalledWith({
                     page : '/mr/e-722bd3c4942331/ad1',
@@ -1075,8 +1099,7 @@ define(['c6ui', 'services', 'minireel', 'c6_defines'], function(c6uiModule, serv
                     title    : 'my title - ad',
                     slideIndex : 1,
                     slideId: 'ad1',
-                    slideTitle : 'ad'
-                }); 
+                    slideTitle : 'ad'                    }); 
             });
 
 
@@ -1093,7 +1116,7 @@ define(['c6ui', 'services', 'minireel', 'c6_defines'], function(c6uiModule, serv
                 expect($scope.atHead).toEqual(false);
                 expect($scope.atTail).toEqual(false);
                 expect($scope.$emit).toHaveBeenCalledWith('reelMove');
-                expect($scope.$emit.callCount).toBe(2);
+                expect($scope.$emit.callCount).toBe(4); // positionWillChange, positionDidChange, reelMove, ready
                 expect(trackerSpy.trackPage.callCount).toEqual(1);
                 expect(trackerSpy.trackEvent.callCount).toEqual(1);
                 expect(trackerSpy.trackPage).toHaveBeenCalledWith({
@@ -1143,6 +1166,7 @@ define(['c6ui', 'services', 'minireel', 'c6_defines'], function(c6uiModule, serv
                     slideIndex : 1,
                     slideId: 'ad1',
                     slideTitle : 'ad'
+
                 }); 
             });
 
@@ -1163,7 +1187,7 @@ define(['c6ui', 'services', 'minireel', 'c6_defines'], function(c6uiModule, serv
                 expect($scope.atHead).toEqual(false);
                 expect($scope.atTail).toEqual(false);
                 expect($scope.$emit).toHaveBeenCalledWith('reelMove');
-                expect($scope.$emit.callCount).toBe(2);
+                expect($scope.$emit.callCount).toBe(4); // positionWillChange, positionDidChange, reelMove, ready
                 expect(trackerSpy.trackPage.callCount).toEqual(1);
                 expect(trackerSpy.trackEvent.callCount).toEqual(1);
                 expect(trackerSpy.trackPage).toHaveBeenCalledWith({
@@ -1242,20 +1266,11 @@ define(['c6ui', 'services', 'minireel', 'c6_defines'], function(c6uiModule, serv
                 beforeEach(function(){
                     trackerSpy.trackPage.reset();
                     trackerSpy.trackEvent.reset();
-                    spyOn($scope, '$emit');
+                    spyOn($scope, '$emit').andCallThrough();
                     RumbleCtrl.start();
                 });
-                it('sends an event for the launch',function(){
-                    expect(trackerSpy.trackEvent).toHaveBeenCalledWith({
-                        category : 'Navigation',
-                        action   : 'Start',
-                        label    : 'Start',
-                        page     : '/mr/e-722bd3c4942331/vid1',
-                        title    : 'my title - vid1 caption',
-                        slideIndex : 0,
-                        slideId : 'vid1',
-                        slideTitle : 'vid1 caption'
-                    });
+                it('does not send an event for the launch',function(){
+                    expect(trackerSpy.trackEvent).not.toHaveBeenCalled();
                 });
 
                 it('sends a pageview for the first slide',function(){
@@ -1272,7 +1287,7 @@ define(['c6ui', 'services', 'minireel', 'c6_defines'], function(c6uiModule, serv
 
             describe('if the behavior allows fullscreen', function() {
                 beforeEach(function() {
-                    spyOn($scope, '$emit');
+                    spyOn($scope, '$emit').andCallThrough();
                     appData.behaviors.fullscreen = true;
 
                     RumbleCtrl.start();
@@ -1289,7 +1304,7 @@ define(['c6ui', 'services', 'minireel', 'c6_defines'], function(c6uiModule, serv
 
             describe('if the behavior does not allow fullscreen', function() {
                 beforeEach(function() {
-                    spyOn($scope, '$emit');
+                    spyOn($scope, '$emit').andCallThrough();
                     appData.behaviors.fullscreen = false;
 
                     RumbleCtrl.start();
@@ -1305,11 +1320,23 @@ define(['c6ui', 'services', 'minireel', 'c6_defines'], function(c6uiModule, serv
             });
 
             describe('if the deck is empty except for a recap card', function() {
-                it('should start and end at the same time', function() {
-                    spyOn($scope, '$emit');
-                    $scope.$apply(function() {
-                        $scope.deck = [{ id: 'foo', type: 'recap' }];
+                beforeEach(function() {
+                    inject(function($injector) {
+                        $scope = $rootScope.$new();
+                        $scope.app = {
+                            data: appData
+                        };
+                        $scope.app.data.experience.data.deck = [{ id: 'foo', type: 'recap' }];
+
+                        RumbleCtrl = $controller('RumbleController', {
+                            $scope  : $scope,
+                            $log    : $log,
+                            trackerService : trackerServiceSpy
+                        });
                     });
+                });
+                it('should start and end at the same time', function() {
+                    spyOn($scope, '$emit').andCallThrough();
 
                     RumbleCtrl.start();
 
