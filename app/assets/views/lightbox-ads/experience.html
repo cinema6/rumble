@@ -2,9 +2,10 @@
     <button class="mr-ui__close" ng-click="RumbleCtrl.setPosition(-1);" type="button">
         <span class="sprite mr-icons__close"><span class="ir">Close</span></span>
     </button><!--^this is the x button in the upper right corner-->
+    
     <div class="mr-card__container">
-        <h1 class="mr-title tk--hdr">{{app.data.experience.data.title}}</h1> <!--this is title at the very top-->
-        <ng-include src="'deck.html' | asset:'views'" ng-controller="DeckController as DeckCtrl"></ng-include>
+        <h1 class="mr-title tk--hdr"><!--{{app.data.experience.data.title}}-->Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello Hello </h1> <!--this is title at the very top--> 
+        <ng-include src="'deck.html' | asset:'views'" ng-controller="DeckController as DeckCtrl"></ng-include> <!--this brings in the video player-->
         
         <button ng-click="RumbleCtrl.goBack('nav')"
             ng-show="nav.enabled"
@@ -52,7 +53,7 @@
                     </navbar-button>
                 </li>
             </ul>
-        </thumb-paginator><!--.mr-pager__group-->
+        </thumb-paginator><!--.mr-pager__group--> <!--this is the thumbnail navigation at the bottom-->
     </div>
 </div><!--.mr-experience-->
 
