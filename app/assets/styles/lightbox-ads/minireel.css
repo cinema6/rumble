@@ -344,9 +344,9 @@
         box-sizing:border-box;
         padding-top:1em;
     }
-    @media screen and (min-width:76rem), screen and (min-height:43.125rem) {
+    @media screen and (min-width:76rem), screen and (min-height:28.6875rem) {
         /*  w: 1216px +
-            h: 690px + */
+            h: 459px + */
         .mr-pages__page {
             width:6rem;/*96px*/ height:4rem;/*64px*/
         }
