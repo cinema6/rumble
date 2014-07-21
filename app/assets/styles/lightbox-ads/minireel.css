@@ -421,7 +421,7 @@
                 }
         .mr-card__copy {
             width:18.25rem;/*292px*/ overflow: scroll; overflow-x: hidden;
-            position: absolute; top:0; bottom: 345px; right:-19rem;
+            position: absolute; top:0; right:-19rem;
             background:#fff;
         }
             .mr-card__title {
@@ -439,42 +439,42 @@
             /*  w: 1420px +
                 h: 791px + */
             .mr-card__copy {
-                height:27.875rem; /*446px*/
+                height:27.5rem; 
             }
         }
         @media screen and (min-width:76rem) and (max-width:88.6875rem), screen and (min-height:43.125rem) and (max-height:49.375rem) {
             /*  w: 1216px - 1419px
                 h: 690px - 790px */
             .mr-card__copy {
-                height:20.25rem; /*324px*/
+                height:20rem;
             }
         }
         @media screen and (min-width:65rem) and (max-width:75.9375rem), screen and (min-height:37.5rem) and (max-height:43.0625rem) {
             /*  w: 1040px - 1215px
                 h: 600px - 689px */
             .mr-card__copy {
-                height:14.75rem; /*236px*/
+                height:15.5rem;
             }
         }
         @media screen and (min-width:60rem) and (max-width:64.9375rem), screen and (min-height:35.4375rem) and (max-height:37.4375rem) {
             /*  w: 960px - 1039px 
                 h: 567px - 599px */
             .mr-card__copy {
-                height:12.125rem; /*194px*/
+                height:12.9rem;
             }
         }
         @media screen and (min-width:50rem) and (max-width:59.9375rem), screen and (min-height:28.75rem) and (max-height:35.375rem) {
             /*  w: 800px - 959px
                 h: 460px - 570px */
             .mr-card__copy {
-                height:5.375rem; /*86px*/
+                height:6.1rem;
             }
         }
         @media screen and (max-width:49.9375rem), screen and (max-height:28.6875rem) {
             /*  w: - 799px
                 h: - 459px */
             .mr-card__copy {
-                height:114%;
+                display: none;
             }
         }
 
