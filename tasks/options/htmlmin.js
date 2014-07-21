@@ -15,6 +15,9 @@
             removeStyleLinkTypeAttributes: true
         },
         dist: {
+            options: {
+                removeAttributeQuotes: false,
+            },
             files: [
                 {
                     expand: true,
