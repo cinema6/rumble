@@ -151,8 +151,8 @@
             }
         }
         .mr-title {
-            font-size:1em; font-weight:normal; color:#6b6b6b; line-height:1;
-            margin:0 0 0.875rem 0;
+            font-size:1em; font-weight: normal; color:#6b6b6b; line-height:1;
+            margin:0 0 0.875rem 0; width: 100%;
         }
         .mr-ui__close {
             padding:6px; border-radius:50% 50%; border:3px solid white; 

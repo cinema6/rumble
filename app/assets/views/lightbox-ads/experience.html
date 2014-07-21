@@ -1,9 +1,9 @@
 <div class="mr-experience" ng-class="app.data.experience.data.theme">
     <button class="mr-ui__close" ng-click="RumbleCtrl.setPosition(-1);" type="button">
         <span class="sprite mr-icons__close"><span class="ir">Close</span></span>
-    </button>
+    </button><!--^this is the x button in the upper right corner-->
     <div class="mr-card__container">
-        <h1 class="mr-title tk--hdr">{{app.data.experience.data.title}}</h1>
+        <h1 class="mr-title tk--hdr">{{app.data.experience.data.title}}</h1> <!--this is title at the very top-->
         <ng-include src="'deck.html' | asset:'views'" ng-controller="DeckController as DeckCtrl"></ng-include>
         
         <button ng-click="RumbleCtrl.goBack('nav')"
@@ -18,7 +18,7 @@
                     L27.213,4.243L22.971,0z"/>
             </svg>
             <span class="ir">Previous Page</span>
-        </button>
+        </button><!--^This is the go back button over the video on the left side-->
         <button ng-click="RumbleCtrl.goForward('nav')"
             ng-show="nav.enabled"
             ng-hide="atTail"
@@ -32,7 +32,7 @@
                 L4.243,0z"/>
             </svg>
             <span class="ir">Next Page</span>
-        </button>
+        </button><!--^This is the go forward button over the video on the right side-->
 
         <thumb-paginator active="tocIndex"
             ng-if="currentIndex > -1"
