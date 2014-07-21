@@ -13,7 +13,10 @@
             },
             upload: [
                 {
-                    src: ['<%= settings.distDir %>/**','!<%= settings.distDir %>/index.html'],
+                    src: [
+                        '<%= settings.distDir %>/**',
+                        '!<%= settings.distDir %>/*.*'
+                    ],
                     dest: '<%= settings.s3.test.app %>',
                     rel : '<%= settings.distDir %>/',
                     options: {
@@ -28,7 +31,7 @@
                     }
                 },
                 {
-                    src: '<%= settings.distDir %>/index.html',
+                    src: '<%= settings.distDir %>/*.*',
                     dest: '<%= settings.s3.test.app %>index.html',
                     options: {
                         CacheControl: 'max-age=15'
@@ -57,7 +60,10 @@
             },
             upload: [
                 {
-                    src: ['<%= settings.distDir %>/**','!<%= settings.distDir %>/index.html'],
+                    src: [
+                        '<%= settings.distDir %>/**',
+                        '!<%= settings.distDir %>/*.*'
+                    ],
                     dest: '<%= settings.s3.production.app %>',
                     rel : '<%= settings.distDir %>/',
                     options: {
@@ -72,7 +78,7 @@
                     }
                 },
                 {
-                    src: '<%= settings.distDir %>/index.html',
+                    src: '<%= settings.distDir %>/*.*',
                     dest: '<%= settings.s3.production.app %>index.html',
                     options: {
                         CacheControl: 'max-age=60'
