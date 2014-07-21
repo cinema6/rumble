@@ -1,7 +1,7 @@
 (function(){
     'use strict';
 
-    var protocol = window.c6.kProtocol = (function() {
+    var protocol = (window.c6 || (window.c6 = {})).kProtocol = (function() {
         var currentProtocol = window.location.protocol,
             isValid = currentProtocol.search(/^https?/) > -1,
             parentProtocol;
