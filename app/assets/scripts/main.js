@@ -22,7 +22,6 @@
     }
 
     requirejs.config({
-        baseUrl: 'scripts',
         paths: {
             async: 'lib/async',
             youtube: 'lib/youtube',
