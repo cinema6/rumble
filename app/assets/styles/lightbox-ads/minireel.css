@@ -152,7 +152,7 @@
         }
         .mr-title {
             font-size:1em; font-weight: normal; color:#6b6b6b; line-height:1;
-            margin:0 0 0.875rem 0; padding:0.9375rem 1.125rem 0 1.125rem;
+            margin:0 1.125rem 0.875rem 1.125rem; padding: 0.9375rem 0 0 0;
         }
         .mr-ui__close {
             padding:6px; border-radius:50% 50%; border:3px solid white; 
@@ -365,118 +365,118 @@
         position:relative; 
     }
 
-    .mr-card__video-container {
-        padding:0 20.125rem 4.5rem 1.125rem; /*15px 322px 72px 18px*/
-        position:relative; 
-    }
-        @media screen and (min-width:76rem), screen and (min-height:43.125rem) {
-            /*  w: 1216px +
-                h: 690px + */
-            .mr-card__video-container {
-                padding-bottom: 5.5rem; /*88px*/
-            }
+        .mr-card__video-container {
+            padding:0 20.125rem 4.5rem 1.125rem; /*15px 322px 72px 18px*/
+            position:relative; 
         }
-    .mr-cards__list, .mr-cards__item {
-        margin:0; padding:0; list-style:none;
-    }
-        .mr-cards__list {
-            position:relative; width:100%; height:0; padding-bottom:66.67%;
-        }
-            .mr-cards__list.inactive {
-                height:0; overflow:hidden; padding: 0;
-            }
-        .mr-cards__item {
-             position:absolute; width:100%; height:100%;
-        }
-            .mr-cards__item.inactive {
-                height:0; overflow:hidden;
-            }
-            .mr-player__group {
-                padding:0 0 66.67%; margin:0;
-                width:100%; height:0; position:relative;
-                background:black url('../../img/default_square.jpg') 50% 50% / cover no-repeat;
-            }
-                .mr-player__play-btn {
-                    width: 6.375rem;/*68px*/ height: 5.4375rem;/*58px*/
-                    padding: 0; margin: -3.875rem 0 0 -3.1875rem; border: 0; 
-                    cursor: pointer;
-                    background: rgba(0,0,0,0.8);
-                    position: absolute; left: 50%; top: 50%; z-index:1;
+            @media screen and (min-width:76rem), screen and (min-height:43.125rem) {
+                /*  w: 1216px +
+                    h: 690px + */
+                .mr-card__video-container {
+                    padding-bottom: 5.5rem; /*88px*/
                 }
-                    .mr-player__play-icon {
-                        height: 45%; width: 100%;
-                        background: url('../../img/play-icon.svg') 50% 50% / contain no-repeat;
-                    }
-                .mr-player, .mr-player__thumbnail {
-                    position:absolute; width:100%; height:100%;
+            }
+        .mr-cards__list, .mr-cards__item {
+            margin:0; padding:0; list-style:none;
+        }
+            .mr-cards__list {
+                position:relative; width:100%; height:0; padding-bottom:66.67%;
+            }
+                .mr-cards__list.inactive {
+                    height:0; overflow:hidden; padding: 0;
                 }
-                    .mr-player iframe {
-                        width:100%; height:100%; position:absolute;
-                    }
-                    .mr-player--fly-away {
-                        left:-500%; height:0; width:0;
-                    }
-                .mr-player__thumbnail {
-                    background:50% 50% / cover no-repeat;
+            .mr-cards__item {
+                 position:absolute; width:100%; height:100%;
+            }
+                .mr-cards__item.inactive {
+                    height:0; overflow:hidden;
                 }
-        .mr-card__copy {
-            width:18.25rem;/*292px*/ overflow: scroll; overflow-x: hidden;
-            position: absolute; top:0; right:-19rem;
-            background:#fff;
-        }
-            .mr-card__title {
-                font-size:1.125rem;/*18px*/ color:#000; font-weight:normal; 
-                padding: 0; margin:0; line-height: 1.4;
-            }
-            .mr-card__attributes {
-                color:#999999; font-size:0.75em;/*12px*/ margin:0.16em 0 1em 0;
-            }
-            .mr-card__desc {
-                margin: 1em 0 0 0; font-size:0.8125rem;/*13px*/ 
-                color:#444444; line-height:1.69;
-            }
-        @media screen and (min-width:88.75rem), screen and (min-height:49.4375rem) {
-            /*  w: 1420px +
-                h: 791px + */
+                .mr-player__group {
+                    padding:0 0 66.67%; margin:0;
+                    width:100%; height:0; position:relative;
+                    background:black url('../../img/default_square.jpg') 50% 50% / cover no-repeat;
+                }
+                    .mr-player__play-btn {
+                        width: 6.375rem;/*68px*/ height: 5.4375rem;/*58px*/
+                        padding: 0; margin: -3.875rem 0 0 -3.1875rem; border: 0; 
+                        cursor: pointer;
+                        background: rgba(0,0,0,0.8);
+                        position: absolute; left: 50%; top: 50%; z-index:1;
+                    }
+                        .mr-player__play-icon {
+                            height: 45%; width: 100%;
+                            background: url('../../img/play-icon.svg') 50% 50% / contain no-repeat;
+                        }
+                    .mr-player, .mr-player__thumbnail {
+                        position:absolute; width:100%; height:100%;
+                    }
+                        .mr-player iframe {
+                            width:100%; height:100%; position:absolute;
+                        }
+                        .mr-player--fly-away {
+                            left:-500%; height:0; width:0;
+                        }
+                    .mr-player__thumbnail {
+                        background:50% 50% / cover no-repeat;
+                    }
             .mr-card__copy {
-                height:27.5rem; 
+                width:18.25rem;/*292px*/ overflow: auto; overflow-x: hidden;
+                position: absolute; top:0; right:-19rem;
+                background:#fff;
             }
-        }
-        @media screen and (min-width:76rem) and (max-width:88.6875rem), screen and (min-height:43.125rem) and (max-height:49.375rem) {
-            /*  w: 1216px - 1419px
-                h: 690px - 790px */
-            .mr-card__copy {
-                height:20rem;
+                .mr-card__title {
+                    font-size:1.125rem;/*18px*/ color:#000; font-weight:normal; 
+                    padding: 0; margin:0; line-height: 1.4;
+                }
+                .mr-card__attributes {
+                    color:#999999; font-size:0.75em;/*12px*/ margin:0.16em 0 1em 0;
+                }
+                .mr-card__desc {
+                    margin: 1em 0 0 0; font-size:0.8125rem;/*13px*/ 
+                    color:#444444; line-height:1.69;
+                }
+            @media screen and (min-width:88.75rem), screen and (min-height:49.4375rem) {
+                /*  w: 1420px +
+                    h: 791px + */
+                .mr-card__copy {
+                    height:27.5rem; 
+                }
             }
-        }
-        @media screen and (min-width:65rem) and (max-width:75.9375rem), screen and (min-height:37.5rem) and (max-height:43.0625rem) {
-            /*  w: 1040px - 1215px
-                h: 600px - 689px */
-            .mr-card__copy {
-                height:15.5rem;
+            @media screen and (min-width:76rem) and (max-width:88.6875rem), screen and (min-height:43.125rem) and (max-height:49.375rem) {
+                /*  w: 1216px - 1419px
+                    h: 690px - 790px */
+                .mr-card__copy {
+                    height:20rem;
+                }
             }
-        }
-        @media screen and (min-width:60rem) and (max-width:64.9375rem), screen and (min-height:35.4375rem) and (max-height:37.4375rem) {
-            /*  w: 960px - 1039px 
-                h: 567px - 599px */
-            .mr-card__copy {
-                height:12.9rem;
+            @media screen and (min-width:65rem) and (max-width:75.9375rem), screen and (min-height:37.5rem) and (max-height:43.0625rem) {
+                /*  w: 1040px - 1215px
+                    h: 600px - 689px */
+                .mr-card__copy {
+                    height:15rem;
+                }
             }
-        }
-        @media screen and (min-width:50rem) and (max-width:59.9375rem), screen and (min-height:28.75rem) and (max-height:35.375rem) {
-            /*  w: 800px - 959px
-                h: 460px - 570px */
-            .mr-card__copy {
-                height:6.1rem;
+            @media screen and (min-width:60rem) and (max-width:64.9375rem), screen and (min-height:35.4375rem) and (max-height:37.4375rem) {
+                /*  w: 960px - 1039px 
+                    h: 567px - 599px */
+                .mr-card__copy {
+                    height:12.5rem;
+                }
             }
-        }
-        @media screen and (max-width:49.9375rem), screen and (max-height:28.6875rem) {
-            /*  w: - 799px
-                h: - 459px */
-            .mr-card__copy {
-                display: none;
+            @media screen and (min-width:50rem) and (max-width:59.9375rem), screen and (min-height:28.75rem) and (max-height:35.375rem) {
+                /*  w: 800px - 959px
+                    h: 460px - 570px */
+                .mr-card__copy {
+                    height:5rem;
+                }
             }
-        }
+            @media screen and (max-width:49.9375rem), screen and (max-height:28.6875rem) {
+                /*  w: - 799px
+                    h: - 459px */
+                .mr-card__copy {
+                    display: none;
+                }
+            }
 
 
 /*  ==========================================================================
