@@ -1,6 +1,10 @@
 # MiniReel Player
 
 ## Beta19 (July 22, 2014)
+* *[Beta19.rc3]*
+  * [FIX]: Fix malformed base tag in build
+* *[/Beta19.rc3]*
+
 * *[Beta19.rc2]*
   * [FIX]: Upload player to the "rumble" folder again
 * *[/Beta19.rc2]*

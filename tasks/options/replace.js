@@ -10,7 +10,7 @@ module.exports = {
 
                     var grunt = require('grunt');
 
-                    return match.replace(matches[0], grunt.config('_version') + '/' + grunt.config('buildMode'));
+                    return match.replace(matches[0], grunt.config('_version') + '/' + grunt.config('buildMode') + '/');
                 }
             }
         ]
