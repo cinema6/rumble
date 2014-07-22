@@ -1,5 +1,6 @@
 # MiniReel Player
 
+## Beta19 (July 22, 2014)
 * *[Beta19.rc1]*
   * All view modes are now using multiple decks (to allow for dynamic ad
     placements)
@@ -11,6 +12,7 @@
       to this being deployed.**
   * [FIX]: MR Player will still load even if the user is using an ad
     blocker
+* *[/Beta19.rc1]*
 
 ## Beta18 (July 17, 2014)
 * *[Beta18.rc1]*
