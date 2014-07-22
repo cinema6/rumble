@@ -1,7 +1,8 @@
-(function() {
+define (['angular','services'],
+function( angular , services ) {
     'use strict';
 
-    angular.module('c6.rumble')
+    return angular.module('c6.rumble.cards.vast', [services.name])
         .controller('VastCardController', ['$scope','$window', 'VASTService','ControlsService',
                                            'EventService','ModuleService','$interval','$timeout',
         function                          ( $scope , $window ,  VASTService , ControlsService ,
@@ -255,8 +256,8 @@
             });
         }])
 
-        .directive('vastCard', ['playerInterface','$q','$timeout','c6UrlMaker','assetFilter',
-        function               ( playerInterface , $q , $timeout , c6UrlMaker , assetFilter ) {
+        .directive('vastCard', ['playerInterface','$q','$timeout','assetFilter',
+        function               ( playerInterface , $q , $timeout , assetFilter ) {
             return {
                 restrict: 'E',
                 templateUrl : assetFilter('directives/vast_card.html', 'views'),
@@ -395,4 +396,4 @@
                 }
             };
         }]);
-}());
+});

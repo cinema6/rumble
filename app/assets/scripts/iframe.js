@@ -1,7 +1,8 @@
-(function(){
+define (['angular'],
+function( angular ) {
     'use strict';
 
-    angular.module('c6.rumble')
+    return angular.module('c6.rumble.iframe', [])
     .factory('iframe',[function(){
         var service = {};
 
@@ -29,5 +30,4 @@
 
         return service;
     }]);
-}());
-
+});

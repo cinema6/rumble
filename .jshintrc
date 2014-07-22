@@ -18,12 +18,12 @@
   "trailing": true,
   "smarttabs": true,
   "globals": {
-    "__C6_APP_BASE_URL__" : true,
     "__dirname" : true,
-    "angular": false,
     "ga": true,
-    "module" : true,
-    "process" : true,
-    "require" : true
+    "module"    : true,
+    "process"   : true,
+    "require"   : true,
+    "define"    : true,
+    "requirejs" : true
   }
 }

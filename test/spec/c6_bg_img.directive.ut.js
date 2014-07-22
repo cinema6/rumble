@@ -1,66 +1,64 @@
-(function() {
+define(['app'], function(appModule) {
     'use strict';
 
-    define(['app'], function() {
-        describe('c6-bg-img=""', function() {
-            var $rootScope,
-                $scope,
-                $compile;
+    describe('c6-bg-img=""', function() {
+        var $rootScope,
+            $scope,
+            $compile;
 
-            function toAbs(url) {
-                return window.location.origin + '/' + url;
-            }
+        function toAbs(url) {
+            return window.location.origin + '/' + url;
+        }
+
+        beforeEach(function() {
+            module(appModule.name);
+
+            inject(function($injector) {
+                $rootScope = $injector.get('$rootScope');
+                $compile = $injector.get('$compile');
+
+                $scope = $rootScope.$new();
+            });
+        });
+
+        describe('if a truthy value is passed in', function() {
+            var $div;
 
             beforeEach(function() {
-                module('c6.rumble');
+                $scope.bg = 'foo.jpg';
 
-                inject(function($injector) {
-                    $rootScope = $injector.get('$rootScope');
-                    $compile = $injector.get('$compile');
-
-                    $scope = $rootScope.$new();
+                $scope.$apply(function() {
+                    $div = $compile('<div c6-bg-img="{{bg}}"></div>')($scope);
                 });
             });
 
-            describe('if a truthy value is passed in', function() {
-                var $div;
+            it('should set the background image', function() {
+                expect($div.css('background-image')).toBe('url(' + toAbs('foo.jpg') + ')');
+            });
 
-                beforeEach(function() {
-                    $scope.bg = 'foo.jpg';
-
-                    $scope.$apply(function() {
-                        $div = $compile('<div c6-bg-img="{{bg}}"></div>')($scope);
-                    });
+            it('should update the background image as bindings change', function() {
+                $scope.$apply(function() {
+                    $scope.bg = 'test.jpg';
                 });
 
-                it('should set the background image', function() {
-                    expect($div.css('background-image')).toBe('url(' + toAbs('foo.jpg') + ')');
-                });
+                expect($div.css('background-image')).toBe('url(' + toAbs('test.jpg') + ')');
+            });
+        });
 
-                it('should update the background image as bindings change', function() {
-                    $scope.$apply(function() {
-                        $scope.bg = 'test.jpg';
-                    });
+        describe('if a falsy value is passed in', function() {
+            var $span;
 
-                    expect($div.css('background-image')).toBe('url(' + toAbs('test.jpg') + ')');
+            beforeEach(function() {
+                $scope.bg = null;
+
+                $scope.$apply(function() {
+                    $span = $compile('<span c6-bg-img="{{bg}}"></span>')($scope);
                 });
             });
 
-            describe('if a falsy value is passed in', function() {
-                var $span;
-
-                beforeEach(function() {
-                    $scope.bg = null;
-
-                    $scope.$apply(function() {
-                        $span = $compile('<span c6-bg-img="{{bg}}"></span>')($scope);
-                    });
-                });
-
-                it('should not give the element a background image', function() {
-                    expect($span.css('background-image')).toBe('');
-                });
+            it('should not give the element a background image', function() {
+                expect($span.css('background-image')).toBe('');
             });
         });
     });
-}());
+});

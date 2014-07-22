@@ -1,9 +1,10 @@
-(function() {
+define (['angular','c6ui'],
+function( angular , c6ui ) {
     'use strict';
 
     var jqLite = angular.element;
 
-    angular.module('c6.rumble')
+    return angular.module('c6.rumble.ui.thumbPaginator', [c6ui.name])
         .directive('thumbPaginator', ['assetFilter','c6Debounce','$window',
         function                     ( assetFilter , c6Debounce , $window ) {
             return {
@@ -179,4 +180,4 @@
                 }
             };
         }]);
-}());
+});

@@ -1,8 +1,8 @@
-/* jshint camelcase: false */
-(function(){
+define (['angular','c6ui','iframe'],
+function( angular , c6ui , iframe ) {
     'use strict';
 
-    angular.module('c6.rumble')
+    return angular.module('c6.rumble.cards.vimeo', [c6ui.name, iframe.name])
     .factory('vimeo',['$log','$window','$q','c6EventEmitter','iframe','c6UrlMaker',
     function         ( $log , $window , $q , c6EventEmitter , iframe , c6UrlMaker ){
         $log = $log.context('vimeo');
@@ -169,7 +169,9 @@
 //                    $log.info('[%1] - messageReceived: [%2]',_playerId, event.data);
                     var data = angular.fromJson(event.data), deferreds, deferred;
 
+                    /* jshint camelcase:false */
                     if (data.player_id !== _playerId){
+                    /* jshint camelcase:true */
                         return;
                     }
 
@@ -194,8 +196,8 @@
 
         return service;
     }])
-    .directive('vimeoCard',['$log','$timeout','$q','vimeo','_default','numberify','playerInterface','c6UrlMaker','assetFilter',
-    function               ( $log , $timeout , $q , vimeo , _default , numberify , playerInterface , c6UrlMaker , assetFilter ) {
+    .directive('vimeoCard',['$log','$timeout','$q','vimeo','_default','numberify','playerInterface','assetFilter',
+    function               ( $log , $timeout , $q , vimeo , _default , numberify , playerInterface , assetFilter ) {
         $log = $log.context('<vimeo-card>');
         function fnLink(scope,$element,$attr){
             if (!$attr.videoid){
@@ -475,4 +477,4 @@
             templateUrl : assetFilter('directives/video_embed_card.html', 'views')
         };
     }]);
-}());
+});

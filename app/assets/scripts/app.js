@@ -1,37 +1,31 @@
-(function(window$){
+define( ['angular','angularAnimate','angularSanitize','c6ui','c6log','c6_defines','modernizr',
+         'minireel','services','tracker','templates','cache',
+         'ui/paginator','ui/table_of_contents','ui/thumb_paginator'],
+function( angular , angularAnimate , angularSanitize , c6ui , c6log , c6Defines  , modernizr ,
+          minireel , services , tracker , templates , cache ,
+          uiPaginator  , uiTableOfContents    , uiThumbPaginator   ) {
     'use strict';
 
-    angular.module('c6.rumble', window$.c6.kModDeps)
-        .constant('c6Defines', window$.c6)
-        .config(['$provide',
-        function( $provide ) {
-            $provide.decorator('cinema6', ['$delegate', '$q',
-            function                      ( $delegate ,  $q ) {
-                var mocks = {};
-
-                $delegate.db = {
-                    mock: function(query, value) {
-                        mocks[angular.toJson(query)] = value;
-
-                        return $delegate.db;
-                    },
-
-                    find: function(query) {
-                        var deferred = $q.defer(),
-                            mock = mocks[angular.toJson(query)];
-
-                        if (!mock) {
-                            deferred.reject({ code: 404, message: 'Could not find experience with query: "' + angular.toJson(query) + '"' });
-                        } else {
-                            deferred.resolve(angular.copy(mock));
-                        }
-
-                        return deferred.promise;
-                    }
-                };
-
-                return $delegate;
-            }]);
+    return angular.module('c6.rumble', [
+        // Lib Dependencies
+        angularAnimate.name,
+        angularSanitize.name,
+        c6ui.name,
+        c6log.name,
+        'c6.http',
+        // App Files
+        templates.name,
+        cache.name,
+        minireel.name,
+        services.name,
+        tracker.name,
+        uiPaginator.name,
+        uiTableOfContents.name,
+        uiThumbPaginator.name
+    ])
+        .config(['c6BrowserInfoProvider',
+        function( c6BrowserInfoProvider ) {
+            c6BrowserInfoProvider.setModernizr(modernizr);
         }])
         .config(['trackerServiceProvider', function(trackerServiceProvider){
             trackerServiceProvider.api('c6Tracker');
@@ -40,9 +34,8 @@
         function( $sceProvider ) {
             $sceProvider.enabled(false);
         }])
-        .config(['c6UrlMakerProvider', 'c6Defines',
-        function( c6UrlMakerProvider ,  c6Defines ) {
-            c6UrlMakerProvider.location(c6Defines.kBaseUrl,'default');
+        .config(['c6UrlMakerProvider',
+        function( c6UrlMakerProvider ) {
             c6UrlMakerProvider.location(c6Defines.kCollateralUrl,'collateral');
             c6UrlMakerProvider.location(c6Defines.kApiUrl,'api');
             c6UrlMakerProvider.location(c6Defines.kProtocol + '/', 'protocol');
@@ -62,22 +55,6 @@
                 'cinema6-publisher': 'http://u-ads.adap.tv/a/h/jSmRYUB6OAj1k0TZythPvadnVgRzoU_ZPrm0eqz83CjPXEF4pAnE3w==?cb={cachebreaker}&pageUrl={pageUrl}&eov=eov',
                 'publisher-cinema6': 'http://u-ads.adap.tv/a/h/jSmRYUB6OAinZ1YEc6FP2fCQPSbU6FwIdK4EW3jlLza+WaaKRuPC_g==?cb={cachebreaker}&pageUrl={pageUrl}&eov=eov'
             });
-        }])
-        .run(   ['cinema6',
-        function( cinema6 ) {
-            cinema6.db
-                .mock({ id: ['1', '2', '3'] }, [
-                    {
-                        id: '1',
-                        title: 'The 15 Most Legendary Pro Wrestling  Intros Of All Time',
-                        summary: [
-                            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus ornare ',
-                            'libero ut fermentum pharetra. Praesent convallis pulvinar neque id ',
-                            'sollicitudin.'
-                        ].join(''),
-                        data: {}
-                    }
-                ]);
         }])
         .filter('percent',function(){
             return function(input){
@@ -260,12 +237,12 @@
                 }
             };
         }])
-        .filter('asset', ['c6AppData','c6UrlMaker',
-        function         ( c6AppData , c6UrlMaker ) {
+        .filter('asset', ['c6AppData',
+        function         ( c6AppData ) {
             return function(url, base) {
                 var mode = c6AppData.mode;
 
-                return mode && c6UrlMaker(base + '/' + mode + '/' + url);
+                return mode && (base + '/' + mode + '/' + url);
             };
         }])
         .filter('branding', ['c6AppData','c6UrlMaker',
@@ -293,7 +270,7 @@
                     version = 0;
                 }
 
-                return $http.get(c6UrlMaker('config/responsive-' + version + '.json'), {
+                return $http.get('config/responsive-' + version + '.json', {
                     cache: true
                 });
             }
@@ -454,4 +431,4 @@
                 $scope.$broadcast('shouldStart');
             });
         }]);
-}(window));
+});

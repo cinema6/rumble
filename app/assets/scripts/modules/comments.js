@@ -1,7 +1,8 @@
-(function() {
+define (['angular','c6ui'],
+function( angular , c6ui ) {
     'use strict';
 
-    angular.module('c6.rumble')
+    return angular.module('c6.rumble.modules.comments', [c6ui.name])
         .directive('commentsModule', ['assetFilter',
         function                     ( assetFilter ) {
             return {
@@ -61,4 +62,4 @@
                     });
             });
         }]);
-}());
+});

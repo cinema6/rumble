@@ -1,7 +1,8 @@
-(function(){
+define (['angular','c6ui','iframe'],
+function( angular , c6ui , iframe ) {
     'use strict';
 
-    angular.module('c6.rumble')
+    return angular.module('c6.rumble.cards.dailymotion', [c6ui.name, iframe.name])
     .factory('dailymotion',['$log','$window','$q','c6EventEmitter','iframe','c6UrlMaker',
     function               ( $log , $window , $q , c6EventEmitter , iframe , c6UrlMaker ) {
         $log = $log.context('dailymotion');
@@ -424,4 +425,4 @@
             templateUrl : assetFilter('directives/video_embed_card.html', 'views')
         };
     }]);
-}());
+});

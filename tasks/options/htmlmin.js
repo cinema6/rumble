@@ -1,6 +1,8 @@
 (function() {
     'use strict';
 
+    var grunt = require('grunt');
+
     module.exports = {
         options: {
             collapseBooleanAttributes: true,
@@ -13,12 +15,31 @@
             removeStyleLinkTypeAttributes: true
         },
         dist: {
+            options: {
+                removeAttributeQuotes: false,
+            },
             files: [
                 {
                     expand: true,
                     cwd: '<%= settings.appDir %>',
-                    src: '*.html',
+                    src: [
+                        '*.html',
+                        '!index.html'
+                    ],
                     dest: '<%= settings.distDir %>'
+                },
+                {
+                    expand: true,
+                    cwd: '<%= settings.appDir %>',
+                    src: [
+                        'index.html'
+                    ],
+                    dest: '<%= settings.distDir %>',
+                    rename: function(dest) {
+                        var mode = grunt.config('buildMode');
+
+                        return dest + '/' + mode + '.html';
+                    }
                 },
                 {
                     expand: true,

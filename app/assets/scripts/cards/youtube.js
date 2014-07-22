@@ -1,10 +1,10 @@
-/* jshint camelcase: false */
-(function(){
+define (['angular','c6ui','iframe','youtube'],
+function( angular , c6ui , iframe , youtube ) {
     'use strict';
 
-    angular.module('c6.rumble')
-    .factory('youtube',['$log','$window','c6EventEmitter','iframe',
-    function           ( $log , $window , c6EventEmitter , iframe ){
+    return angular.module('c6.rumble.cards.youtube', [c6ui.name, iframe.name])
+    .factory('youtube',['$log','c6EventEmitter','iframe',
+    function           ( $log , c6EventEmitter , iframe ){
         $log = $log.context('youtube');
         var service = {};
 
@@ -19,12 +19,6 @@
             }
 
             return src;
-        };
-
-        service.isReady = function() {
-            var YT = $window.YT;
-
-            return !!(YT && YT.Player);
         };
 
         service.createPlayer = function(playerId,config,$parentElement){
@@ -43,7 +37,7 @@
 
             $parentElement.prepend($playerElement);
 
-            function YoutubePlayer(iframe$,playerId,$win){
+            function YoutubePlayer(iframe$,playerId,YT){
                 var _iframe$ = iframe$,_playerId = playerId,
                     _val = 'YoutubePlayer#' + _playerId,
                     _readyHandler,_stateChangeHandler,_errorHandler, _player, self = this;
@@ -55,7 +49,7 @@
 
                 _stateChangeHandler = function(event){
                     $log.info('[%1] STATE:%2',_playerId,event.data);
-                    var PlayerState = $win.YT.PlayerState;
+                    var PlayerState = YT.PlayerState;
                     switch(event.data){
                         case PlayerState.ENDED:
                             {
@@ -121,25 +115,14 @@
                     self.emit('error',self,err);
                 };
 
-                function createPlayer() {
-                    $log.info('API ready. Creating player: %1', playerId);
-                    _player = new $win.YT.Player(playerId, {
-                        events: {
-                            'onReady'       : _readyHandler,
-                            'onStateChange' : _stateChangeHandler,
-                            'onError'       : _errorHandler
-                        }
-                    } );
-
-                    $window.onYouTubeIframeAPIReady = undefined;
-                }
-
-                if (!service.isReady()) {
-                    $log.warn('API not ready. Adding event handler.');
-                    $window.onYouTubeIframeAPIReady = createPlayer;
-                } else {
-                    createPlayer();
-                }
+                $log.info('API ready. Creating player: %1', playerId);
+                _player = new YT.Player(playerId, {
+                    events: {
+                        'onReady'       : _readyHandler,
+                        'onStateChange' : _stateChangeHandler,
+                        'onError'       : _errorHandler
+                    }
+                } );
 
                 self.getPlayerId = function(){
                     return _playerId;
@@ -178,7 +161,7 @@
                 };
 
                 self.isPlaying = function(){
-                    return (_player.getPlayerState() === $win.YT.PlayerState.PLAYING);
+                    return (_player.getPlayerState() === YT.PlayerState.PLAYING);
                 };
 
                 self.getDuration = function() {
@@ -195,32 +178,8 @@
                 };
 
                 $log.info('[%1] - created',_playerId);
-/*
-                function onMessageReceived(event){
-                    if (event.origin !== service.origin) {
-                        return;
-                    }
-                    var data = angular.fromJson(event.data);
-
-                    if (data.event === 'initialDelivery'){
-                        if (data.info && data.info.videoData) {
-                            if (data.info.videoData.video_id === _videoId){
-                                _ytId = data.id;
-                            }
-                        }
-                    }
-
-                    if (data.id !== _ytId){
-                        return;
-                    }
-
-                    $log.info('[%1] - messageReceived [%2]',_playerId,event.data );
-                }
-
-                $win.addEventListener('message', onMessageReceived, false);
-*/
             }
-            return new YoutubePlayer($playerElement,playerId,$window);
+            return new YoutubePlayer($playerElement,playerId,youtube);
         };
 
         return service;
@@ -526,4 +485,4 @@
             templateUrl : assetFilter('directives/video_embed_card.html', 'views')
         };
     }]);
-}());
+});

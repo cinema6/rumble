@@ -1,32 +1,26 @@
-(function() {
+define(['app'], function(appModule) {
     'use strict';
 
-    define(['ballot_module'], function() {
-        describe('<comments-module>', function() {
-            var $rootScope,
-                $scope,
-                $compile;
+    describe('<comments-module>', function() {
+        var $rootScope,
+            $scope,
+            $compile;
 
-            var $animate;
+        var $animate;
 
-            beforeEach(function() {
-                module('c6.rumble', function($provide) {
-                    $provide.value('rumbleVotes', {
+        beforeEach(function() {
+            module(appModule.name);
 
-                    });
-                });
+            inject(function($injector) {
+                $rootScope = $injector.get('$rootScope');
+                $compile = $injector.get('$compile');
+                $animate = $injector.get('$animate');
 
-                inject(function($injector) {
-                    $rootScope = $injector.get('$rootScope');
-                    $compile = $injector.get('$compile');
-                    $animate = $injector.get('$animate');
+                spyOn($animate, 'addClass');
+                spyOn($animate, 'removeClass');
 
-                    spyOn($animate, 'addClass');
-                    spyOn($animate, 'removeClass');
-
-                    $scope = $rootScope.$new();
-                });
+                $scope = $rootScope.$new();
             });
         });
     });
-}());
+});

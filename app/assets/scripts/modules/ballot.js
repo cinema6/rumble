@@ -1,7 +1,8 @@
-(function() {
+define (['angular','services'],
+function( angular , services ) {
     'use strict';
 
-    angular.module('c6.rumble')
+    return angular.module('c6.rumble.modules.ballot', [services.name])
         .directive('ballotVoteModule', ['assetFilter','$animate',
         function                       ( assetFilter , $animate ) {
             return {
@@ -90,4 +91,4 @@
                     });
             });
         }]);
-}());
+});

@@ -110,6 +110,23 @@ module.exports = function(grunt) {
         grunt.config('buildMode',mode);
     });
 
+    /* jshint quotmark:false */
+    grunt.registerTask('writeVersion', 'create a AMD module with the version', function() {
+        grunt.file.write('.tmp/version.js', [
+            "define(function() {",
+            "    return '" + grunt.config('_version') + "';",
+            "});"
+        ].join('\n'));
+    });
+    /* jshint quotmark:single */
+
+    grunt.registerTask('writeMeta', 'write a meta.json file into the project', function() {
+        grunt.file.write(grunt.config('settings.distDir') + '/meta.json', JSON.stringify({
+            version: grunt.config('_version'),
+            buildDate: (new Date()).toString()
+        }));
+    });
+
     grunt.registerTask('build', 'build app into distDir', function(){
         var modes = grunt.file.expand({
             cwd: settings.appDir+'/assets/views',
@@ -123,23 +140,18 @@ module.exports = function(grunt) {
         // loop through modes and run these
         modes.forEach(function(mode) {
             grunt.task.run('setmode:'+mode);
-            //grunt.task.run('git_last_commit');
             grunt.task.run('git_describe_tags');
+            grunt.task.run('writeVersion');
             grunt.task.run('copy:dist');
             grunt.task.run('ngtemplates:dist');
             grunt.task.run('jsify:dist');
+            grunt.task.run('concat:dist');
             grunt.task.run('htmlmin:dist');
-            grunt.task.run('sed:main');
-            grunt.task.run('sed:html');
-            grunt.task.run('sed:index1');
-            grunt.task.run('cssmin:dist');
-            grunt.task.run('uglify:dist');
+            grunt.task.run('replace:dist');
+            grunt.task.run('requirejs:dist');
         });
 
-        if (grunt.option('with-maps')){
-            grunt.task.run('copy:raw');
-            grunt.task.run('sed:app_map');
-        }
+        grunt.task.run('writeMeta');
     });
 
     /*********************************************************************************************

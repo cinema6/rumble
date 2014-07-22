@@ -1,7 +1,8 @@
-(function() {
+define (['angular'],
+function( angular ) {
     'use strict';
 
-    angular.module('c6.rumble')
+    return angular.module('c6.rumble.modules.displayAd', [])
         .directive('displayAdModule', ['assetFilter',
         function                      ( assetFilter ) {
             return {
@@ -30,4 +31,4 @@
                 }
             };
         }]);
-}());
+});

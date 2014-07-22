@@ -1,4 +1,4 @@
-(function() {
+define(['app','minireel'], function(appModule, minireelModule) {
     'use strict';
 
     describe('<navbar-button>', function() {
@@ -9,11 +9,12 @@
             scope;
 
         beforeEach(function() {
-            module('c6.rumble', function($provide) {
+            module(appModule.name, function($provide) {
                 $provide.value('c6AppData', {
                     mode: 'full'
                 });
             });
+            module(minireelModule.name);
 
             inject(function($injector) {
                 $rootScope = $injector.get('$rootScope');
@@ -95,4 +96,4 @@
             });
         });
     });
-}());
+});

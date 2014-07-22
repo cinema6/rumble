@@ -1,10 +1,26 @@
 # MiniReel Player
 
+## Beta19 (July 22, 2014)
+* *[Beta19.rc3]*
+  * [FIX]: Fix malformed base tag in build
+* *[/Beta19.rc3]*
+
+* *[Beta19.rc2]*
+  * [FIX]: Upload player to the "rumble" folder again
+* *[/Beta19.rc2]*
+
 * *[Beta19.rc1]*
   * All view modes are now using multiple decks (to allow for dynamic ad
     placements)
   * [FEATURE]: Ads are now loaded dynamically based on the experience ad config
     but experiences with ad cards in the deck already are still supported
+  * All JS files are now AMD modules to simplify dependency management
+    and improve performance.
+    * **New versions of c6Embed and the MR Editor must be deployed prior
+      to this being deployed.**
+  * [FIX]: MR Player will still load even if the user is using an ad
+    blocker
+* *[/Beta19.rc1]*
 
 ## Beta18 (July 17, 2014)
 * *[Beta18.rc1]*
