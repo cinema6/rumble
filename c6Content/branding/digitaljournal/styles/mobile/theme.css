@@ -30,12 +30,12 @@
     Interface Styles
     ========================================================================== */
     a {
-        color:#2870a2; border-bottom:1px dotted #2870a2;
+        color:#cc1100; border-bottom:1px dotted #cc1100;
     }
     .ui-control__next, 
     .ui-control__prev, 
     .ui-nav__next, 
     .ui-nav__prev,
     .mr-splash__copy {
-        background-color: #4394CB;
+        background-color: #cc1100;
     }
