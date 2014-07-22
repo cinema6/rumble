@@ -761,7 +761,7 @@
     }
     .mr-ad__med-rect {
         width:300px; height:250px;
-        position:absolute; bottom:-4.39rem; right:-19rem;
+        position:absolute; bottom:-3.35rem; right:-19rem;
         background:#ccc;
     }
         .mr-ad__group .mr-ad__med-rect {
@@ -783,51 +783,14 @@
             .mr-adDisplay__group .mr-adDisplay__view a {
                 border:0;
             }
-
-        
-        @media screen and (min-width:88.75rem), screen and (min-height:49.4375rem) {
-            /*  w: 1420px +
-                h: 791px + */
+        @media screen and (min-width:76rem), screen and (min-height:43.125rem) {
+        /*  w: 1216px +
+            h: 690px + */
             .mr-ad__med-rect {
+                bottom: -4.39rem;
+            }
+        }        
 
-            }
-        }
-        @media screen and (min-width:76rem) and (max-width:88.6875rem), screen and (min-height:43.125rem) and (max-height:49.375rem) {
-            /*  w: 1216px - 1419px
-                h: 690px - 790px */
-            .mr-ad__med-rect {
-
-            }
-        }
-        @media screen and (min-width:65rem) and (max-width:75.9375rem), screen and (min-height:37.5rem) and (max-height:43.0625rem) {
-            /*  w: 1040px - 1215px
-                h: 600px - 689px */
-            .mr-ad__med-rect {
-
-            }
-        }
-        @media screen and (min-width:60rem) and (max-width:64.9375rem), screen and (min-height:35.4375rem) and (max-height:37.4375rem) {
-            /*  w: 960px - 1039px 
-                h: 567px - 599px */
-            .mr-ad__med-rect {
-            }
-
-        }
-        @media screen and (min-width:50rem) and (max-width:59.9375rem), screen and (min-height:28.75rem) and (max-height:35.375rem) {
-            /*  w: 800px - 959px
-                h: 460px - 570px */
-            .mr-ad__med-rect {
-                top:5.55rem;
-
-            }
-        }
-        @media screen and (max-width:49.9375rem), screen and (max-height:28.6875rem) {
-            /*  w: - 799px
-                h: - 459px */
-            .mr-ad__med-rect {
-                top:0;   
-            }
-        }
 
 
 /*  ==========================================================================
