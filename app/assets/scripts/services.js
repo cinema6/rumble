@@ -65,7 +65,7 @@ function( angular , c6ui , adtech , c6Defines  ) {
 
         .factory('compileAdTag', ['$window',
         function                 ( $window ) {
-            var url = c6Defines.kDevMode ?
+            var url = c6Defines.kLocal ?
                 'http://www.mutantplayground.com' :
                 (function() {
                     try {
