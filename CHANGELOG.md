@@ -1,6 +1,10 @@
 # MiniReel Player
 
 ## Beta19 (July 22, 2014)
+* *[Beta19.rc2]*
+  * [FIX]: Upload player to the "rumble" folder again
+* *[/Beta19.rc2]*
+
 * *[Beta19.rc1]*
   * All view modes are now using multiple decks (to allow for dynamic ad
     placements)

@@ -2,7 +2,7 @@ define (['angular','services'],
 function( angular , services ) {
     'use strict';
 
-    return angular.module('c6.mrplayer.cards.recap', [services.name])
+    return angular.module('c6.rumble.cards.recap', [services.name])
         .controller('RecapCardController', ['$rootScope','$scope','$log','c6AppData',
                                             'MiniReelService','BallotService','ModuleService',
                                             'AdTechService',

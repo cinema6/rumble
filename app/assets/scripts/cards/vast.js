@@ -2,7 +2,7 @@ define (['angular','services'],
 function( angular , services ) {
     'use strict';
 
-    return angular.module('c6.mrplayer.cards.vast', [services.name])
+    return angular.module('c6.rumble.cards.vast', [services.name])
         .controller('VastCardController', ['$scope','$window', 'VASTService','ControlsService',
                                            'EventService','ModuleService','$interval','$timeout',
         function                          ( $scope , $window ,  VASTService , ControlsService ,

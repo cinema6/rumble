@@ -2,7 +2,7 @@ define (['angular'],
 function( angular ) {
     'use strict';
 
-    return angular.module('c6.mrplayer.cards.vpaid', [])
+    return angular.module('c6.rumble.cards.vpaid', [])
         .controller('VpaidCardController', ['$scope','$log','ModuleService','EventService',
                                             '$interval','c6AppData','$rootScope',
         function                            ($scope , $log , ModuleService , EventService ,

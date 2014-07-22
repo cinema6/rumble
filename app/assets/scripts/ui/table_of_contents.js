@@ -2,7 +2,7 @@ define (['angular'],
 function( angular ) {
     'use strict';
 
-    return angular.module('c6.mrplayer.ui.tableOfContents', [])
+    return angular.module('c6.rumble.ui.tableOfContents', [])
         .directive('tableOfContents', ['assetFilter',
         function                      ( assetFilter ) {
             return {
