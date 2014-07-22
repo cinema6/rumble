@@ -2,7 +2,7 @@ define (['angular'],
 function( angular ) {
     'use strict';
 
-    return angular.module('c6.mrplayer.modules.displayAd', [])
+    return angular.module('c6.rumble.modules.displayAd', [])
         .directive('displayAdModule', ['assetFilter',
         function                      ( assetFilter ) {
             return {

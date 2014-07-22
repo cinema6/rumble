@@ -2,7 +2,7 @@ define (['angular','c6ui'],
 function( angular , c6ui ) {
     'use strict';
 
-    return angular.module('c6.mrplayer.modules.comments', [c6ui.name])
+    return angular.module('c6.rumble.modules.comments', [c6ui.name])
         .directive('commentsModule', ['assetFilter',
         function                     ( assetFilter ) {
             return {

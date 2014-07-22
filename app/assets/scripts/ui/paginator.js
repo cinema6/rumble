@@ -2,7 +2,7 @@ define (['angular','c6ui'],
 function( angular , c6ui ) {
     'use strict';
 
-    return angular.module('c6.mrplayer.ui.paginator', [c6ui.name])
+    return angular.module('c6.rumble.ui.paginator', [c6ui.name])
         .directive('mrPaginator', ['assetFilter','c6Computed',
         function                  ( assetFilter , c6Computed ) {
             return {

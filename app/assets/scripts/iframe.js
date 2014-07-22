@@ -2,7 +2,7 @@ define (['angular'],
 function( angular ) {
     'use strict';
 
-    return angular.module('c6.mrplayer.iframe', [])
+    return angular.module('c6.rumble.iframe', [])
     .factory('iframe',[function(){
         var service = {};
 

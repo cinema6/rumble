@@ -4,7 +4,7 @@ function( angular , c6ui ) {
 
     var jqLite = angular.element;
 
-    return angular.module('c6.mrplayer.ui.thumbPaginator', [c6ui.name])
+    return angular.module('c6.rumble.ui.thumbPaginator', [c6ui.name])
         .directive('thumbPaginator', ['assetFilter','c6Debounce','$window',
         function                     ( assetFilter , c6Debounce , $window ) {
             return {

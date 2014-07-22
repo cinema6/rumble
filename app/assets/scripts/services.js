@@ -2,7 +2,7 @@ define (['angular','c6ui','adtech','c6_defines'],
 function( angular , c6ui , adtech , c6Defines  ) {
     'use strict';
 
-    return angular.module('c6.mrplayer.services', [c6ui.name])
+    return angular.module('c6.rumble.services', [c6ui.name])
         .service('VideoThumbService', ['$http','$q','c6UrlMaker',
         function                      ( $http , $q , c6UrlMaker ) {
             var _private = {};
