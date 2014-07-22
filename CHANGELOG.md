@@ -1,6 +1,9 @@
 # MiniReel Player
 
 ## Beta19 (July 22, 2014)
+* *[Beta19.rc4]*
+  * [THEME]: Digital Journal created 
+
 * *[Beta19.rc3]*
   * [FIX]: Fix malformed base tag in build
 * *[/Beta19.rc3]*
