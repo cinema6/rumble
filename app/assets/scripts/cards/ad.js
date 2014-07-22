@@ -2,7 +2,7 @@ define (['angular'],
 function( angular ) {
     'use strict';
 
-    return angular.module('c6.mrplayer.cards.ad', [])
+    return angular.module('c6.rumble.cards.ad', [])
         .directive('adCard',[ '$log', '$compile',
         function            (  $log ,  $compile ) {
             $log = $log.context('<ad-card>');

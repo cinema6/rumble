@@ -10,7 +10,7 @@ function( angular , c6Defines  , tracker ,
 
     var forEach = angular.forEach;
 
-    return angular.module('c6.mrplayer.minireel', [
+    return angular.module('c6.rumble.minireel', [
         tracker.name,
         // Cards
         adCard.name,

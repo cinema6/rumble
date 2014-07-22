@@ -2,7 +2,7 @@ define (['angular'],
 function( angular ) {
     'use strict';
 
-    return angular.module('c6.mrplayer.cards.video', [])
+    return angular.module('c6.rumble.cards.video', [])
         .controller('VideoCardController', ['$scope','ModuleService','$log','ControlsService','EventService',
         function                           ( $scope , ModuleService , $log , ControlsService , EventService ) {
             var config = $scope.config,

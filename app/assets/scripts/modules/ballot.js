@@ -2,7 +2,7 @@ define (['angular','services'],
 function( angular , services ) {
     'use strict';
 
-    return angular.module('c6.mrplayer.modules.ballot', [services.name])
+    return angular.module('c6.rumble.modules.ballot', [services.name])
         .directive('ballotVoteModule', ['assetFilter','$animate',
         function                       ( assetFilter , $animate ) {
             return {

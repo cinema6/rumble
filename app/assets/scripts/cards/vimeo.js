@@ -2,7 +2,7 @@ define (['angular','c6ui','iframe'],
 function( angular , c6ui , iframe ) {
     'use strict';
 
-    return angular.module('c6.mrplayer.cards.vimeo', [c6ui.name, iframe.name])
+    return angular.module('c6.rumble.cards.vimeo', [c6ui.name, iframe.name])
     .factory('vimeo',['$log','$window','$q','c6EventEmitter','iframe','c6UrlMaker',
     function         ( $log , $window , $q , c6EventEmitter , iframe , c6UrlMaker ){
         $log = $log.context('vimeo');

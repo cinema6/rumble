@@ -2,7 +2,7 @@ define (['angular','c6ui','iframe','youtube'],
 function( angular , c6ui , iframe , youtube ) {
     'use strict';
 
-    return angular.module('c6.mrplayer.cards.youtube', [c6ui.name, iframe.name])
+    return angular.module('c6.rumble.cards.youtube', [c6ui.name, iframe.name])
     .factory('youtube',['$log','c6EventEmitter','iframe',
     function           ( $log , c6EventEmitter , iframe ){
         $log = $log.context('youtube');

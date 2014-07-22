@@ -6,7 +6,7 @@ function( angular , angularAnimate , angularSanitize , c6ui , c6log , c6Defines 
           uiPaginator  , uiTableOfContents    , uiThumbPaginator   ) {
     'use strict';
 
-    return angular.module('c6.mrplayer', [
+    return angular.module('c6.rumble', [
         // Lib Dependencies
         angularAnimate.name,
         angularSanitize.name,

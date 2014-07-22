@@ -2,7 +2,7 @@ define (['angular','c6_defines'],
 function( angular , c6Defines  ) {
     'use strict';
 
-    return angular.module('c6.mrplayer.tracker', [])
+    return angular.module('c6.rumble.tracker', [])
     .provider('trackerService',[ function(){
 
         var api = 'ga';
