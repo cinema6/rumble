@@ -2,7 +2,7 @@
     Theme Styles (#4394CB)
     ========================================================================== */
     a:hover {
-        color:#4394cb; border-bottom:1px dotted #4394cb;
+        color:black; border-bottom:1px dotted black;
     }
     .mr-pager__btn--disabled:hover,
     .mr-preview__button:hover,

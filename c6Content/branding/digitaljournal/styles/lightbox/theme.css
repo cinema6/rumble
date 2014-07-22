@@ -19,7 +19,7 @@
     Theme Styles
     ========================================================================== */
     a {
-        color:#2870a2; border-bottom:1px dotted #2870a2;
+        color:#cc1100; border-bottom:1px dotted #cc1100;
     }
     .mr-preview__button {
         background: rgba(213,22,29,0.7);
@@ -29,8 +29,9 @@
     .ui-nav__prev,
     .mr-player__play-btn,
     .mr-pages__current-indicator,
-    .mr-splash__copy {
-        background-color: #4394cb;
+    .mr-splash__copy,
+    .pages__current-indicator {
+        background-color: #cc1100;
     }
 
     .mr-pager__btn--disabled .mr-pager__icon-path {
