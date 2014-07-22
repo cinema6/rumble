@@ -34,7 +34,10 @@
             angularTouch: libUrl('angular/v1.2.12-0-g5cc5cc1/angular-touch.min'),
             c6ui: libUrl('c6ui/v2.5.0-0-gc58e712/c6uilib.min'),
             c6log: libUrl('c6ui/v2.5.0-0-gc58e712/c6log.min'),
-            adtech: protocol + '//aka-cdn.adtechus.com/dt/common/DAC'
+            adtech: [
+                protocol + '//aka-cdn.adtechus.com/dt/common/DAC',
+                'backup/shmadshteck'
+            ]
         },
         shim: {
             modernizr: {
