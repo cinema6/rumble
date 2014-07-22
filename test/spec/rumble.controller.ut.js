@@ -1320,22 +1320,9 @@ define(['c6ui', 'services', 'minireel', 'c6_defines'], function(c6uiModule, serv
             });
 
             describe('if the deck is empty except for a recap card', function() {
-                beforeEach(function() {
-                    inject(function($injector) {
-                        $scope = $rootScope.$new();
-                        $scope.app = {
-                            data: appData
-                        };
-                        $scope.app.data.experience.data.deck = [{ id: 'foo', type: 'recap' }];
-
-                        RumbleCtrl = $controller('RumbleController', {
-                            $scope  : $scope,
-                            $log    : $log,
-                            trackerService : trackerServiceSpy
-                        });
-                    });
-                });
                 it('should start and end at the same time', function() {
+                    $scope.deck = [{ id: 'foo', type: 'recap' }];
+
                     spyOn($scope, '$emit').andCallThrough();
 
                     RumbleCtrl.start();
