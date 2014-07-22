@@ -9,6 +9,8 @@
     and improve performance.
     * **New versions of c6Embed and the MR Editor must be deployed prior
       to this being deployed.**
+  * [FIX]: MR Player will still load even if the user is using an ad
+    blocker
 
 ## Beta18 (July 17, 2014)
 * *[Beta18.rc1]*
