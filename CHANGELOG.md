@@ -2,6 +2,9 @@
 
 ## Beta19 (July 22, 2014)
 * *[Beta19.rc4]*
+  * [FIX]: Lightbox-ads player headers now span full width of modal
+  * [FIX]: Lightbox-ads Ad placement now correctly re-aligns with media queries
+  * [FIX]: Light text ad player is now vertically taller to minimize unused space.
   * [THEME]: Digital Journal created 
 
 * *[Beta19.rc3]*
