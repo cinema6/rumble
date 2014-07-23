@@ -1,0 +1,30 @@
+/*  ==========================================================================
+    copy styles
+    ========================================================================== */
+    @import url(http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,800italic,400,700,800);
+
+    body, .card__btn-watch {
+        font-family: 'Open Sans', Arial, Helvetica, sans-serif; font-weight: 400;
+    }
+    .tk--hdr, .ui-context__label {
+        font-family: 'Open Sans', Arial, Helvetica, sans-serif; font-weight:700;
+    }
+    .ui-nav__counter, .card__type, .card__title-h1, 
+    .ballot__title, .results__title {
+        font-weight: 400;
+    }
+
+
+/*  ==========================================================================
+    Theme Styles
+    ========================================================================== */
+    a {
+        color:#CC1100; border-bottom:1px dotted #CC1100;
+    }
+    .pager__btn, 
+    .card__btn,
+    .player__play-btn,
+    .splash__copy,
+    .pages__current-indicator {
+        background-color: #CC1100;
+    }

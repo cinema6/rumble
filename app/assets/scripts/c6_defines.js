@@ -58,7 +58,8 @@ function( version ) {
     c6Default('kLogLevels', c6.kDebug ? ['error','warn','log','info'] : []);
     c6Default('kProtocol', 'http:');
     c6Default('kEnvUrlRoot', c6.kProtocol + '//portal.cinema6.com');
-    c6Default('kCollateralUrl', c6.kEnvUrlRoot + '/collateral');
+    c6Default('kCollateralUrl', !c6.kLocal ?
+        (c6.kEnvUrlRoot + '/collateral') : '/__dirname/c6Content');
     c6Default('kApiUrl', c6.kEnvUrlRoot + '/api');
     c6Default('kHref', (function() {
         try {

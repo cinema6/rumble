@@ -1,0 +1,50 @@
+/*  ==========================================================================
+    copy styles
+    ========================================================================== */
+    @import url(http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,800italic,400,700,800);
+
+    body, .mr-card__btn-watch {
+        font-family: 'Open Sans', Arial, Helvetica, sans-serif;
+    }
+    .tk--hdr, .ui-context__label {
+        font-family: 'Open Sans', Arial, Helvetica, sans-serif; font-weight:700;
+    }
+    body, .ui-nav__counter, .mr-card__type, .mr-card__title-h1, 
+    .mr-ballot__title, .mr-results__title {
+        font-weight: 400;
+    }
+
+
+/*  ==========================================================================
+    Theme Styles
+    ========================================================================== */
+    a {
+        color:#cc1100; border-bottom:1px dotted #cc1100;
+    }
+    .mr-preview__button {
+        background: rgba(213,22,29,0.7);
+    }
+    .mr-pager__btn,
+    .ui-nav__next, 
+    .ui-nav__prev,
+    .mr-player__play-btn,
+    .mr-pages__current-indicator,
+    .mr-splash__copy,
+    .pages__current-indicator {
+        background-color: #cc1100;
+    }
+
+    .mr-pager__btn--disabled .mr-pager__icon-path {
+        fill: #252626;
+    }
+    .mr-pager__btn--disabled .mr-pager__label {
+        color:#252626;
+    }
+
+/*  ==========================================================================
+    Splash Styles
+    ========================================================================== */
+    .mr-splash__group {
+        padding:0 0 75% 0; 
+        height:0; min-width:10rem;
+    }
