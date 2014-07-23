@@ -5,7 +5,7 @@
   * [FIX]: Lightbox-ads player headers now span full width of modal
   * [FIX]: Lightbox-ads Ad placement now correctly re-aligns with media queries
   * [FIX]: Light text ad player is now vertically taller to minimize unused space.
-* *[/Beta19.rc4]*
+  * [THEME]: Digital Journal created 
 
 * *[Beta19.rc3]*
   * [FIX]: Fix malformed base tag in build
