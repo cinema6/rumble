@@ -928,9 +928,24 @@ define(['c6ui', 'services', 'minireel', 'c6_defines'], function(c6uiModule, serv
                         ad = $scope.deck[1];
                     });
 
-                    it('should remove the ad card from the deck', function() {
+                    it('should not remove the ad from the deck if static ads are enabled', function() {
                         RumbleCtrl.setPosition(1);
                         expect($scope.currentCard.ad).toBe(true);
+
+                        RumbleCtrl.setPosition(2);
+                        expect($scope.deck.indexOf(ad)).toBe(1);
+                        expect($scope.currentIndex).toBe(2);
+                        expect($scope.currentCard).toBe($scope.deck[2]);
+                    });
+
+                    it('should remove the ad card from the deck if dynamic ads are enabled', function() {
+                        $scope.deck = [{id: 'foo'},{id: 'bar'},{id: 'baz'},{id:'biz'},{id:'buzz'},{id:'fub'}];
+
+                        RumbleCtrl.setPosition(0);
+                        RumbleCtrl.setPosition(1);
+                        expect($scope.currentCard.ad).toBe(true);
+
+                        ad = $scope.currentCard;
 
                         RumbleCtrl.setPosition(4);
                         expect($scope.deck.indexOf(ad)).toBe(-1);
@@ -945,7 +960,28 @@ define(['c6ui', 'services', 'minireel', 'c6_defines'], function(c6uiModule, serv
                     spyOn($scope, '$broadcast').andCallThrough();
                 });
 
-                it('should broadcast adOnDeck when an ad should play in the next position', function() {
+                it('should broadcast adOnDeck when a static ad is in the next position', function() {
+                    RumbleCtrl.setPosition(0); // video 1
+                    expect($scope.$broadcast).toHaveBeenCalledWith('adOnDeck',jasmine.any(Object));
+                    expect($scope.$broadcast.mostRecentCall.args[1].id).toBe('rc-advertisement1');
+
+                    RumbleCtrl.setPosition(1); // shows static ad
+                    RumbleCtrl.setPosition(2); // video 2
+                    RumbleCtrl.setPosition(3); // shows other static ad
+
+                    expect($scope.$broadcast.callCount).toBe(2);
+                    expect($scope.$broadcast.mostRecentCall.args[1].id).toBe('rc-advertisement2');
+                });
+
+                it('should broadcast adOnDeck if a static ad is jumped to directly', function() {
+                    RumbleCtrl.setPosition(1);
+                    expect($scope.$broadcast).toHaveBeenCalledWith('adOnDeck',jasmine.any(Object));
+                    expect($scope.$broadcast.mostRecentCall.args[1].id).toBe('rc-advertisement1');
+                });
+
+                it('should broadcast adOnDeck when dynamic ad should play in the next position', function() {
+                    $scope.deck = [{id: 'foo'},{id: 'bar'},{id: 'baz'},{id:'biz'},{id:'buzz'},{id:'fub'}];
+
                     RumbleCtrl.setPosition(0);
                     expect($scope.$broadcast).toHaveBeenCalledWith('adOnDeck',jasmine.any(Object));
                     expect($scope.$broadcast.mostRecentCall.args[1].id).toBe('rc-advertisement1');
@@ -959,7 +995,9 @@ define(['c6ui', 'services', 'minireel', 'c6_defines'], function(c6uiModule, serv
                     expect($scope.$broadcast.mostRecentCall.args[1].id).toBe('rc-advertisement2');
                 });
 
-                it('should not matter what the navigation sequence is', function() {
+                it('should not matter what the navigation sequence is when dynamic ads are enabled', function() {
+                    $scope.deck = [{id: 'foo'},{id: 'bar'},{id: 'baz'},{id:'biz'},{id:'buzz'},{id:'fub'}];
+
                     RumbleCtrl.setPosition(0);
                     expect($scope.$broadcast).toHaveBeenCalledWith('adOnDeck',jasmine.any(Object));
                     expect($scope.$broadcast.mostRecentCall.args[1].id).toBe('rc-advertisement1');
@@ -981,55 +1019,132 @@ define(['c6ui', 'services', 'minireel', 'c6_defines'], function(c6uiModule, serv
                     spyOn(RumbleCtrl, 'setPosition').andCallThrough();
                 });
 
-                it('should show ad if it is already in the deck', function() {
-                    RumbleCtrl.setPosition(1);
-                    expect($scope.currentCard.ad).toBe(true);
-                });
+                describe('when static ads are in the deck', function(){
+                    it('should show if user moves to a card with an ad before it from either direction', function() {
+                        RumbleCtrl.setPosition(4);
+                        expect($scope.currentCard.ad).toBe(true);
+                        expect($scope.currentIndex).toBe(3);
 
-                it('should show first ad based on config if no ad is in the deck', function() {
-                    var ad1 = $scope.deck[1],
-                        ad2 = $scope.deck[3];
-
-                    RumbleCtrl.setPosition(1);
-                    RumbleCtrl.setPosition($scope.currentIndex+1);
-                    RumbleCtrl.setPosition($scope.currentIndex+1);
-                    RumbleCtrl.setPosition($scope.currentIndex+1);
-                    RumbleCtrl.setPosition($scope.currentIndex+1);
-
-                    $scope.$emit('reelReset');
-
-                    // all ads that were already in the deck should have been removed
-                    [ad1, ad2].forEach(function(adCard) {
-                        expect($scope.deck.indexOf(adCard)).toBe(-1);
+                        RumbleCtrl.setPosition(0);
+                        expect($scope.currentCard.ad).toBe(true);
+                        expect($scope.currentIndex).toBe(1);
                     });
 
-                    // now that there are no ads in the deck we'll check that first and frequency work
-                    RumbleCtrl.setPosition(0); // first video
-                    RumbleCtrl.setPosition($scope.currentIndex+1); // ad
-                    expect($scope.currentCard.ad).toBe(true);
-                    RumbleCtrl.setPosition($scope.currentIndex+1); // video 1
-                    RumbleCtrl.setPosition($scope.currentIndex-1); // video 2
-                    RumbleCtrl.setPosition($scope.currentIndex+1); // video 3
-                    RumbleCtrl.setPosition($scope.currentIndex-1); // ad
-                    expect($scope.currentCard.ad).toBe(true);
+                    it('should only show the ad once and skip over the card', function() {
+                        RumbleCtrl.setPosition(1);
+                        expect($scope.currentCard.ad).toBe(true);
+                        expect($scope.currentCard.visited).toBe(true);
+                        expect($scope.currentIndex).toBe(1);
+
+                        RumbleCtrl.setPosition(0);
+                        RumbleCtrl.setPosition(1);
+                        expect($scope.currentCard.ad).toBe(undefined);
+                        expect($scope.currentIndex).toBe(2);
+
+                        RumbleCtrl.setPosition(1);
+                        expect($scope.currentCard.ad).toBe(undefined);
+                        expect($scope.currentIndex).toBe(0);
+                    });
+
+                    it('should show ads again if user closes player and re-opens', function() {
+                        RumbleCtrl.setPosition(1); // show ad
+                        expect($scope.currentCard.ad).toBe(true);
+
+                        RumbleCtrl.setPosition(1); // now ad will not show again
+                        expect($scope.currentCard.ad).toBe(undefined);
+
+                        RumbleCtrl.setPosition(-1); // reset reel
+                        RumbleCtrl.setPosition(1); // will show ad again
+                        expect($scope.currentCard.ad).toBe(true);
+                    });
                 });
 
-                it('manipulates the index when leaving ad cards', function() {
-                    RumbleCtrl.setPosition(0); // video
-                    expect($scope.currentIndex).toBe(0);
-                    RumbleCtrl.setPosition(1); // ad
-                    expect($scope.currentIndex).toBe(1);
-                    expect($scope.currentCard.ad).toBe(true);
+                describe('when using dynamic ads', function() {
+                    var i;
 
-                    RumbleCtrl.setPosition(2);
-                    expect($scope.currentIndex).toBe(1); // leaving an ad and moving forward shifts the index down 1
+                    beforeEach(function() {
+                        $scope.deck = [{id: 'foo'},{id: 'bar'},{id: 'baz'},{id:'biz'},{id:'buzz'},{id:'fub'}];
 
-                    RumbleCtrl.setPosition(2);
-                    expect($scope.currentIndex).toBe(2);
-                    expect($scope.currentCard.ad).toBe(true);
+                        i = function() { return $scope.currentIndex; };
+                    });
 
-                    RumbleCtrl.setPosition(1);
-                    expect($scope.currentIndex).toBe(1); // leaving an ad and moving backward does not shift the index
+                    it('should show first ad based on config', function() {
+                        RumbleCtrl.setPosition(0);
+                        expect(i()).toBe(0);
+
+                        RumbleCtrl.setPosition(i()+1); // ad
+                        expect(i()).toBe(1);
+                        expect($scope.currentCard.ad).toBe(true);
+
+                        RumbleCtrl.setPosition(i()+1); // vid1
+                        expect(i()).toBe(1);
+
+                        RumbleCtrl.setPosition(i()+1); // vid2
+                        expect(i()).toBe(2);
+
+                        RumbleCtrl.setPosition(i()+1); // vid3
+                        expect(i()).toBe(3);
+
+                        RumbleCtrl.setPosition(i()+1); // ad
+                        expect(i()).toBe(4);
+                        expect($scope.currentCard.ad).toBe(true);
+                    });
+
+                    it('manipulates the index when leaving ad cards', function() {
+                        RumbleCtrl.setPosition(0); // video
+                        expect(i()).toBe(0);
+
+                        RumbleCtrl.setPosition(1); // ad
+                        expect(i()).toBe(1);
+                        expect($scope.currentCard.ad).toBe(true);
+
+                        RumbleCtrl.setPosition(2); // vid1
+                        expect(i()).toBe(1); // leaving an ad and moving forward shifts the index down 1
+
+                        RumbleCtrl.setPosition(2); // vid2
+                        expect(i()).toBe(2);
+
+                        RumbleCtrl.setPosition(1); // vid3
+                        expect(i()).toBe(1);
+
+                        RumbleCtrl.setPosition(3); // ad2
+                        expect(i()).toBe(3);
+                        expect($scope.currentCard.ad).toBe(true); // leaving an ad and moving backward does not shift the index
+
+                        RumbleCtrl.setPosition(3);
+                        expect(i()).toBe(2);
+                    });
+
+                    it('should not matter what order the user navigates', function() {
+                        RumbleCtrl.setPosition(0); // first vid
+                        RumbleCtrl.setPosition(4); // shows ad
+                        expect($scope.currentCard.ad).toBe(true);
+                        RumbleCtrl.setPosition(2); // vid1
+                        RumbleCtrl.setPosition(5); // vid1
+                        RumbleCtrl.setPosition(1); // vid1
+                        RumbleCtrl.setPosition(3); // shows ad2
+                        expect($scope.currentCard.ad).toBe(true);
+                    });
+
+                    it('should use the navigation direction to determine which card should come after the ad', function() {
+                        var card;
+                        RumbleCtrl.setPosition(0);
+                        RumbleCtrl.setPosition(4); // ad
+
+                        card = $scope.currentCard;
+                        $scope.$emit('<mr-card>:contentEnd', card);
+
+                        expect($scope.currentCard).toBe($scope.deck[4]);
+
+                        RumbleCtrl.setPosition(-1);
+                        RumbleCtrl.setPosition(4);
+                        RumbleCtrl.setPosition(2);
+
+                        card = $scope.currentCard;
+                        $scope.$emit('<mr-card>:contentEnd', card);
+
+                        expect($scope.currentCard).toBe($scope.deck[2]);
+                    });
                 });
             });
 

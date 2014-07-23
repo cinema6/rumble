@@ -348,22 +348,25 @@ function( angular , c6Defines  , tracker ,
                     videoCount: 0,
                     firstPlacement: videoAdConfig.firstPlacement,
                     frequency: videoAdConfig.frequency
-                },
-                enableDynamicAds = !(function() {
-                    return $scope.deck.filter(function(card) {
-                        return card.ad && card.id;
-                    }).length;
-                }());
+                };
 
             Object.defineProperties(adController, {
+                enableDynamicAds: {
+                    get: function() {
+                        return !$scope.deck.filter(function(card) {
+                            // dynamic ads that are spliced in don't have ids
+                            return card.ad && card.id;
+                        }).length;
+                    }
+                },
                 shouldLoadAd: {
                     get: function() {
-                        return enableDynamicAds && ((this.videoCount + 1 - this.firstPlacement) % this.frequency === 0);
+                        return this.enableDynamicAds && ((this.videoCount + 1 - this.firstPlacement) % this.frequency === 0);
                     }
                 },
                 shouldPlayAd: {
                     get: function() {
-                        return enableDynamicAds && (this.adCount <= ((this.videoCount - this.firstPlacement) / this.frequency));
+                        return this.enableDynamicAds && (this.adCount <= ((this.videoCount - this.firstPlacement) / this.frequency));
                     }
                 }
             });
@@ -378,7 +381,7 @@ function( angular , c6Defines  , tracker ,
             });
 
             function AdCard(config) {
-                this.id = 'rc-advertisement' + adId++;
+                this.id = 'rc-advertisement' + (++adId);
                 this.type = 'ad';
                 this.ad = true;
                 this.modules = ['displayAd'];
@@ -407,10 +410,10 @@ function( angular , c6Defines  , tracker ,
                     }
                 }
 
-                if (nextCard.ad && !nextCard.visited) {
+                if (nextCard && nextCard.ad && !nextCard.visited) {
                     // only called when static ads are used
                     self.adOnDeck();
-                    nextCard.loaded = true;
+                    nextCard.preloaded = true;
                 }
 
                 if (previousCard && previousCard.ad && !previousCard.visited) {
@@ -424,7 +427,7 @@ function( angular , c6Defines  , tracker ,
                     if (toCard.visited) {
                         // skipping an ad that's already played
                         index = i + (isGoingForward ? 1 : -1);
-                    } else if (!toCard.loaded) {
+                    } else if (!toCard.preloaded) {
                         // loading an ad card into the deck when a static ad
                         // is jumped to without getting the chance to preload
                         self.adOnDeck();
