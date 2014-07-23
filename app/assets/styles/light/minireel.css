@@ -561,7 +561,7 @@
     Ad styles
     ========================================================================== */
     .ad__group { 
-        position: relative; height:calc(100% - 4.5rem); width: 100%; 
+        position: relative; min-height:80%; height:calc(100% - 4.5rem); width: 100%;
         overflow:hidden; 
     }
     .ad__group .player__play-btn {
