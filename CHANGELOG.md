@@ -9,6 +9,7 @@
   * [THEME]: Digital Journal created 
   * [FIX]: Light text player ad doesn't render when there is no height value for container box. Fixed via min-height.
   * [FIX]: Uses existing ad cards if they're included in the experience and uses dynamic/relative ad cards when they're not
+  * [FIX]: Reset 'preloaded' property on static ad cards when MR is reset
 * *[/Beta19.rc4]*
 
 * *[Beta19.rc3]*
