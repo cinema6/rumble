@@ -1,5 +1,8 @@
 # MiniReel Player
 
+* *[Beta20.rc1]*
+  * Collateral assets now live in their own GH repo
+
 ## Beta19 (July 22, 2014)
 * *[Beta19.rc4]*
   * [FIX]: Lightbox-ads player headers now span full width of modal
