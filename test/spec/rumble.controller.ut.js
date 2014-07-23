@@ -1023,6 +1023,7 @@ define(['c6ui', 'services', 'minireel', 'c6_defines'], function(c6uiModule, serv
             describe('showing ads', function() {
                 beforeEach(function() {
                     spyOn(RumbleCtrl, 'setPosition').andCallThrough();
+                    spyOn($scope, '$broadcast').andCallThrough();
                 });
 
                 describe('when static ads are in the deck', function(){
@@ -1055,6 +1056,7 @@ define(['c6ui', 'services', 'minireel', 'c6_defines'], function(c6uiModule, serv
                     it('should show ads again if user closes player and re-opens', function() {
                         RumbleCtrl.setPosition(1); // show ad
                         expect($scope.currentCard.ad).toBe(true);
+                        expect($scope.$broadcast).toHaveBeenCalledWith('adOnDeck',jasmine.any(Object));
 
                         RumbleCtrl.setPosition(1); // now ad will not show again
                         expect($scope.currentCard.ad).toBe(undefined);
@@ -1062,6 +1064,11 @@ define(['c6ui', 'services', 'minireel', 'c6_defines'], function(c6uiModule, serv
                         RumbleCtrl.setPosition(-1); // reset reel
                         RumbleCtrl.setPosition(1); // will show ad again
                         expect($scope.currentCard.ad).toBe(true);
+                        expect($scope.$broadcast).toHaveBeenCalledWith('adOnDeck',jasmine.any(Object));
+
+                        expect($scope.$broadcast.callCount).toBe(2);
+                        expect($scope.$broadcast.calls[0].args[0]).toBe('adOnDeck');
+                        expect($scope.$broadcast.calls[1].args[0]).toBe('adOnDeck');
                     });
                 });
 
@@ -1152,6 +1159,29 @@ define(['c6ui', 'services', 'minireel', 'c6_defines'], function(c6uiModule, serv
                         $scope.$emit('<mr-card>:contentEnd', card);
 
                         expect($scope.currentCard).toBe($scope.deck[2]);
+                    });
+
+                    it('should show ads again if user closes player and re-opens', function() {
+                        RumbleCtrl.setPosition(0);
+                        RumbleCtrl.setPosition(1); // ad
+                        expect($scope.currentCard.ad).toBe(true);
+
+                        RumbleCtrl.setPosition(1);
+                        RumbleCtrl.setPosition(2);
+                        RumbleCtrl.setPosition(3);
+                        RumbleCtrl.setPosition(4); // ad
+                        expect($scope.currentCard.ad).toBe(true);
+
+                        RumbleCtrl.setPosition(-1); // reset reel
+                        RumbleCtrl.setPosition(0);
+                        RumbleCtrl.setPosition(1); // ad again!
+                        expect($scope.currentCard.ad).toBe(true);
+
+                        RumbleCtrl.setPosition(1);
+                        RumbleCtrl.setPosition(2);
+                        RumbleCtrl.setPosition(3);
+                        RumbleCtrl.setPosition(4); // ad
+                        expect($scope.currentCard.ad).toBe(true);
                     });
                 });
             });

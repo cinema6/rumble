@@ -457,9 +457,6 @@ function( angular , c6Defines  , tracker ,
             }
 
             $scope.$watch('deck', function() {
-                // enableDynamicAds = !$scope.deck.filter(function(card) {
-                //     return card.ad && card.id;
-                // }).length;
                 enableDynamicAds = checkForStaticAds();
             });
 
@@ -509,6 +506,9 @@ function( angular , c6Defines  , tracker ,
                 adController.videoCount = 0;
                 $scope.deck.forEach(function(card) {
                     card.visited = false;
+                    if (card.preloaded) {
+                        card.preloaded = false;
+                    }
                 });
             });
         }
