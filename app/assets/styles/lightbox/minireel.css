@@ -429,6 +429,10 @@
             position: absolute;top:0.25rem; right:-12.75rem; 
             padding-right:0.875rem;
         }
+            .mr-pub-logo-box {
+            width:9.375rem; height:1.25rem; position:absolute; top:0; left:0; margin:.55rem 0 0 0; 
+            background-color:red;
+            }
             .mr-card__counter {
                 text-align: right; margin-right:1rem; font-size:0.875em; color:#999;
                 font-family: 'Georgia', 'Times New Roman', serif;

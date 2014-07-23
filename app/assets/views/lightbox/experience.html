@@ -5,7 +5,6 @@
     <h1 class="mr-title tk--hdr">{{app.data.experience.data.title}}</h1>
     <div class="mr-card__container" ng-class="{'mr-card__container--ad': currentCard.type === 'ad'}">
         <ng-include ng-controller="DeckController as DeckCtrl" src="'deck.html' | asset:'views'"></ng-include>
-        
         <button ng-click="RumbleCtrl.goBack('nav')"
             ng-show="nav.enabled"
             class="mr-nav__btn mr-nav__prev c6-fade"
