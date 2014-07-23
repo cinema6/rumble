@@ -51,16 +51,6 @@
                     dest: '<%= _modeDir %>'
                 }
             ]
-        },
-        collateral: {
-            files: [
-                {
-                    expand: true,
-                    cwd: '.tmp/collateral',
-                    src: '**/*.html',
-                    dest: '.tmp/collateral'
-                }
-            ]
         }
     };
 }());
