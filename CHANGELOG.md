@@ -1,6 +1,9 @@
 # MiniReel Player
 
 ## Beta19 (July 22, 2014)
+* *[Beta19.rc5]*
+  * [FIX]: Light text player ad doesn't render when there is no height value for container box. Fixed via min-height.
+
 * *[Beta19.rc4]*
   * [FIX]: Lightbox-ads player headers now span full width of modal
   * [FIX]: Lightbox-ads Ad placement now correctly re-aligns with media queries
