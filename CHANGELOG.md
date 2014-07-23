@@ -1,11 +1,13 @@
 # MiniReel Player
 
 ## Beta19 (July 22, 2014)
+
 * *[Beta19.rc4]*
   * [FIX]: Lightbox-ads player headers now span full width of modal
   * [FIX]: Lightbox-ads Ad placement now correctly re-aligns with media queries
   * [FIX]: Light text ad player is now vertically taller to minimize unused space.
   * [THEME]: Digital Journal created 
+  * [FIX]: Light text player ad doesn't render when there is no height value for container box. Fixed via min-height.
 
 * *[Beta19.rc3]*
   * [FIX]: Fix malformed base tag in build
