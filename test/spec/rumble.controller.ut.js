@@ -939,7 +939,9 @@ define(['c6ui', 'services', 'minireel', 'c6_defines'], function(c6uiModule, serv
                     });
 
                     it('should remove the ad card from the deck if dynamic ads are enabled', function() {
-                        $scope.deck = [{id: 'foo'},{id: 'bar'},{id: 'baz'},{id:'biz'},{id:'buzz'},{id:'fub'}];
+                        $scope.$apply(function() {
+                            $scope.deck = [{id: 'foo'},{id: 'bar'},{id: 'baz'},{id:'biz'},{id:'buzz'},{id:'fub'}];
+                        });
 
                         RumbleCtrl.setPosition(0);
                         RumbleCtrl.setPosition(1);
@@ -980,7 +982,9 @@ define(['c6ui', 'services', 'minireel', 'c6_defines'], function(c6uiModule, serv
                 });
 
                 it('should broadcast adOnDeck when dynamic ad should play in the next position', function() {
-                    $scope.deck = [{id: 'foo'},{id: 'bar'},{id: 'baz'},{id:'biz'},{id:'buzz'},{id:'fub'}];
+                    $scope.$apply(function() {
+                        $scope.deck = [{id: 'foo'},{id: 'bar'},{id: 'baz'},{id:'biz'},{id:'buzz'},{id:'fub'}];
+                    });
 
                     RumbleCtrl.setPosition(0);
                     expect($scope.$broadcast).toHaveBeenCalledWith('adOnDeck',jasmine.any(Object));
@@ -996,7 +1000,9 @@ define(['c6ui', 'services', 'minireel', 'c6_defines'], function(c6uiModule, serv
                 });
 
                 it('should not matter what the navigation sequence is when dynamic ads are enabled', function() {
-                    $scope.deck = [{id: 'foo'},{id: 'bar'},{id: 'baz'},{id:'biz'},{id:'buzz'},{id:'fub'}];
+                    $scope.$apply(function() {
+                        $scope.deck = [{id: 'foo'},{id: 'bar'},{id: 'baz'},{id:'biz'},{id:'buzz'},{id:'fub'}];
+                    });
 
                     RumbleCtrl.setPosition(0);
                     expect($scope.$broadcast).toHaveBeenCalledWith('adOnDeck',jasmine.any(Object));
@@ -1063,7 +1069,9 @@ define(['c6ui', 'services', 'minireel', 'c6_defines'], function(c6uiModule, serv
                     var i;
 
                     beforeEach(function() {
-                        $scope.deck = [{id: 'foo'},{id: 'bar'},{id: 'baz'},{id:'biz'},{id:'buzz'},{id:'fub'}];
+                        $scope.$apply(function() {
+                            $scope.deck = [{id: 'foo'},{id: 'bar'},{id: 'baz'},{id:'biz'},{id:'buzz'},{id:'fub'}];
+                        });
 
                         i = function() { return $scope.currentIndex; };
                     });

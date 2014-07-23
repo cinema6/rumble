@@ -348,25 +348,18 @@ function( angular , c6Defines  , tracker ,
                     videoCount: 0,
                     firstPlacement: videoAdConfig.firstPlacement,
                     frequency: videoAdConfig.frequency
-                };
+                },
+                enableDynamicAds = checkForStaticAds();
 
             Object.defineProperties(adController, {
-                enableDynamicAds: {
-                    get: function() {
-                        return !$scope.deck.filter(function(card) {
-                            // dynamic ads that are spliced in don't have ids
-                            return card.ad && card.id;
-                        }).length;
-                    }
-                },
                 shouldLoadAd: {
                     get: function() {
-                        return this.enableDynamicAds && ((this.videoCount + 1 - this.firstPlacement) % this.frequency === 0);
+                        return enableDynamicAds && ((this.videoCount + 1 - this.firstPlacement) % this.frequency === 0);
                     }
                 },
                 shouldPlayAd: {
                     get: function() {
-                        return this.enableDynamicAds && (this.adCount <= ((this.videoCount - this.firstPlacement) / this.frequency));
+                        return enableDynamicAds && (this.adCount <= ((this.videoCount - this.firstPlacement) / this.frequency));
                     }
                 }
             });
@@ -390,6 +383,12 @@ function( angular , c6Defines  , tracker ,
                     skip: config.skip,
                     source: config.waterfall
                 };
+            }
+
+            function checkForStaticAds() {
+                return !$scope.deck.filter(function(card) {
+                    return card.ad && card.id;
+                }).length;
             }
 
             this.convertToCard = function(i) {
@@ -456,6 +455,13 @@ function( angular , c6Defines  , tracker ,
             if (adController.firstPlacement === 0) {
                 self.adOnDeck();
             }
+
+            $scope.$watch('deck', function() {
+                // enableDynamicAds = !$scope.deck.filter(function(card) {
+                //     return card.ad && card.id;
+                // }).length;
+                enableDynamicAds = checkForStaticAds();
+            });
 
             $scope.$on('positionWillChange', function(event, i) {
                 var toCard = $scope.deck[i] || null;
