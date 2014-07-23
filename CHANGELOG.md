@@ -8,6 +8,7 @@
   * [FIX]: Light text ad player is now vertically taller to minimize unused space.
   * [THEME]: Digital Journal created 
   * [FIX]: Light text player ad doesn't render when there is no height value for container box. Fixed via min-height.
+  * [FIX]: Uses existing ad cards if they're included in the experience and uses dynamic/relative ad cards when they're not
 
 * *[Beta19.rc3]*
   * [FIX]: Fix malformed base tag in build
