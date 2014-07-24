@@ -157,8 +157,7 @@
         }
 
         .mr-pub-logo-box {
-            width:150px; height:20px; position:absolute; right:0; top:0;
-            margin:1.125rem 1.125rem 0 0;
+            width:9.375rem; height:1.25rem; position:absolute; right:1.125rem; top:1.125rem;
         }
 
         .mr-ui__close {
