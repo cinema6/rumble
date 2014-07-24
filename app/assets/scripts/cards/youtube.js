@@ -430,7 +430,7 @@ function( angular , c6ui , iframe , youtube ) {
                 });
 
                 playerIsReady = false;
-                player = youtube.createPlayer('yt_' + $attr.videoid,{
+                player = youtube.createPlayer('yt_' + scope.config.id,{
                     videoId     : $attr.videoid,
                     width       : $attr.width,
                     height      : $attr.height,

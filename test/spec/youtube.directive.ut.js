@@ -117,6 +117,7 @@ define(['app', 'services', 'angular'], function(appModule, servicesModule, angul
                 $scope.width = 100;
                 $scope.height = 100;
                 $scope.config = {
+                    id: 'rc-161af5a36a4543',
                     data: {
                         videoid: 'foo'
                     }
@@ -141,8 +142,7 @@ define(['app', 'services', 'angular'], function(appModule, servicesModule, angul
                 $timeout.flush();
                 expect($log.context).toHaveBeenCalledWith('<youtube-card>');
                 expect(mockPlayers.length).toEqual(1);
-                expect(youtube.createPlayer.calls[0].args[0]).toEqual('yt_abc123');
-                expect(youtube.createPlayer.calls[0].args[1]).toEqual({
+                expect(youtube.createPlayer).toHaveBeenCalledWith('yt_' + $scope.config.id, {
                     videoId: 'abc123',
                     width: '1',
                     height: '2',
@@ -152,7 +152,7 @@ define(['app', 'services', 'angular'], function(appModule, servicesModule, angul
                         modestbranding  : 1
                     },
                     frameborder: 0
-                });
+                }, jasmine.any(Object));
             });
         });
         /* -- end describe('initialization' */
