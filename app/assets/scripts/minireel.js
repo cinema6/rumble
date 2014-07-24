@@ -1,10 +1,10 @@
 define (['angular','c6_defines','tracker',
          'cards/ad','cards/dailymotion','cards/recap','cards/vast','cards/vimeo','cards/vpaid',
-         'cards/youtube',
+         'cards/youtube','cards/text',
          'modules/ballot','modules/display_ad'],
 function( angular , c6Defines  , tracker ,
           adCard   , dailymotionCard   , recapCard   , vastCard   , vimeoCard   , vpaidCard   ,
-          youtubeCard   ,
+          youtubeCard   , textCard   ,
           ballotModule   , displayAdModule    ) {
     'use strict';
 
@@ -20,6 +20,7 @@ function( angular , c6Defines  , tracker ,
         vimeoCard.name,
         vpaidCard.name,
         youtubeCard.name,
+        textCard.name,
         // Modules
         ballotModule.name,
         displayAdModule.name
@@ -132,22 +133,23 @@ function( angular , c6Defines  , tracker ,
             }
 
             function fetchThumb(card) {
-                card.thumbs = null;
-
                 switch (card.type) {
+                case 'text':
                 case 'recap':
                     (function() {
                         var splash = (data.collateral || {}).splash ?
                             envrootFilter(data.collateral.splash) :
                             null;
 
-                        card.thumbs = splash ? {
+                        card.thumbs = card.thumbs || (splash ? {
                             small: splash,
                             large: splash
-                        } : null;
+                        } : null);
                     }());
                     break;
                 default:
+                    card.thumbs = null;
+
                     VideoThumbService.getThumbs(card.type, card.data.videoid)
                         .then(function(thumbs) {
                             card.thumbs = thumbs;
@@ -339,25 +341,27 @@ function( angular , c6Defines  , tracker ,
                 }
             });
 
-        function MasterDeckController(deck) {
+        function MasterDeckController() {
             var index = null,
                 self = this,
+                adId = 0,
                 adController = {
                     adCount: 0,
                     videoCount: 0,
                     firstPlacement: videoAdConfig.firstPlacement,
                     frequency: videoAdConfig.frequency
-                };
+                },
+                enableDynamicAds = checkForStaticAds();
 
             Object.defineProperties(adController, {
                 shouldLoadAd: {
                     get: function() {
-                        return (this.videoCount + 1 - this.firstPlacement) % this.frequency === 0;
+                        return enableDynamicAds && ((this.videoCount + 1 - this.firstPlacement) % this.frequency === 0);
                     }
                 },
                 shouldPlayAd: {
                     get: function() {
-                        return this.adCount <= ((this.videoCount - this.firstPlacement) / this.frequency);
+                        return enableDynamicAds && (this.adCount <= ((this.videoCount - this.firstPlacement) / this.frequency));
                     }
                 }
             });
@@ -367,12 +371,12 @@ function( angular , c6Defines  , tracker ,
                     get: function() { return index; }
                 },
                 currentCard: {
-                    get: function() { return deck[index] || null; }
+                    get: function() { return $scope.deck[index] || null; }
                 }
             });
 
             function AdCard(config) {
-                this.id = 'rc-advertisement' + (adController.adCount + 1);
+                this.id = 'rc-advertisement' + (++adId);
                 this.type = 'ad';
                 this.ad = true;
                 this.modules = ['displayAd'];
@@ -383,33 +387,67 @@ function( angular , c6Defines  , tracker ,
                 };
             }
 
+            function checkForStaticAds() {
+                return !$scope.deck.filter(function(card) {
+                    return card.ad && card.id;
+                }).length;
+            }
+
             this.convertToCard = function(i) {
                 var currentIndex = $scope.currentIndex,
                     isGoingForward = (i - currentIndex) > 0,
-                    previousCard = $scope.currentCard;
+                    previousCard = $scope.deck[i + (isGoingForward ? -1 : 1)],
+                    currentCard = $scope.currentCard,
+                    nextCard = $scope.deck[i+1],
+                    toCard = $scope.deck[i];
 
                 index = i;
 
-                if (previousCard && previousCard.ad) {
-                    self.removeAd(previousCard);
+                if (currentCard && currentCard.ad && currentCard.dynamic) {
+                    // only called when dynamic ads have been inserted
+                    self.removeAd(currentCard);
                     if (isGoingForward) {
                         index = Math.max(0, index - 1);
                     }
                 }
 
+                if (nextCard && nextCard.ad && !nextCard.visited) {
+                    // only called when static ads are used
+                    self.adOnDeck();
+                    nextCard.preloaded = true;
+                }
+
+                if (previousCard && previousCard.ad && !previousCard.visited) {
+                    // this is also for showing static ads when skipping
+                    // to a card before or after an ad
+                    index = Math.max(0, index + (isGoingForward ? -1 : 1));
+                    toCard = $scope.deck[index];
+                }
+
+                if (toCard && toCard.ad) {
+                    if (toCard.visited) {
+                        // skipping an ad that's already played
+                        index = i + (isGoingForward ? 1 : -1);
+                    } else if (!toCard.preloaded) {
+                        // loading an ad card into the deck when a static ad
+                        // is jumped to without getting the chance to preload
+                        self.adOnDeck();
+                    }
+                }
+
                 return {
                     currentIndex: index,
-                    currentCard: deck[index] || null
+                    currentCard: $scope.deck[index] || null
                 };
             };
 
             this.showAd = function() {
-                deck.splice(index, 0, { ad: true });
+                $scope.deck.splice(index, 0, { ad: true, dynamic: true, type: 'ad' });
                 adController.adCount++;
             };
 
             this.removeAd = function(card) {
-                deck.splice($scope.deck.indexOf(card), 1);
+                $scope.deck.splice($scope.deck.indexOf(card), 1);
             };
 
             this.adOnDeck = function() {
@@ -420,8 +458,12 @@ function( angular , c6Defines  , tracker ,
                 self.adOnDeck();
             }
 
+            $scope.$watch('deck', function() {
+                enableDynamicAds = checkForStaticAds();
+            });
+
             $scope.$on('positionWillChange', function(event, i) {
-                var toCard = deck[i] || null;
+                var toCard = $scope.deck[i] || null;
 
                 if (toCard) {
                     if (!toCard.ad) {
@@ -446,7 +488,7 @@ function( angular , c6Defines  , tracker ,
                 }
 
                 $scope.atHead = $scope.currentIndex === 0;
-                $scope.atTail = ($scope.currentIndex === (deck.length - 1));
+                $scope.atTail = ($scope.currentIndex === ($scope.deck.length - 1));
 
                 if ($scope.atHead) {
                     $scope.$emit('reelStart');
@@ -464,6 +506,12 @@ function( angular , c6Defines  , tracker ,
             $scope.$on('reelReset', function() {
                 adController.adCount = 0;
                 adController.videoCount = 0;
+                $scope.deck.forEach(function(card) {
+                    card.visited = false;
+                    if (card.preloaded) {
+                        card.preloaded = false;
+                    }
+                });
             });
         }
 
@@ -508,7 +556,7 @@ function( angular , c6Defines  , tracker ,
 
         $scope.deck             = MiniReelService.createDeck(appData.experience.data);
 
-        MasterDeckCtrl = new MasterDeckController($scope.deck);
+        MasterDeckCtrl = new MasterDeckController();
 
         if (election) {
             angular.forEach($scope.deck,function(card){
@@ -1366,8 +1414,8 @@ function( angular , c6Defines  , tracker ,
             self.dismissBallot();
         });
     }])
-    .directive('mrCard',['$log','$compile','$window','c6UserAgent','InflectorService',
-    function            ( $log , $compile , $window , c6UserAgent , InflectorService ){
+    .directive('mrCard',['$log','$compile','$window','c6UserAgent','InflectorService','c6AppData',
+    function            ( $log , $compile , $window , c6UserAgent , InflectorService , c6AppData ){
         $log = $log.context('<mr-card>');
         function fnLink(scope,$element){
             var canTwerk = false,/*(function() {
@@ -1392,6 +1440,8 @@ function( angular , c6Defines  , tracker ,
             var dasherize = InflectorService.dasherize.bind(InflectorService);
 
             $log.info('link:',scope);
+
+            scope.title = c6AppData.experience.data.title;
 
             var inner = '<' + dasherize(type) + '-card';
             for (var key in data){
