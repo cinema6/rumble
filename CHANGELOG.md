@@ -1,6 +1,10 @@
 # MiniReel Player
 
 ## Beta19 (July 22, 2014)
+* *[Beta19.rc6]*
+  * Made txt on fallback display ad easier to read
+* *[/Beta19.rc6]*
+
 * *[Beta19.rc5]*
   * [FIX]: Reset 'preloaded' property on static ad cards when MR is reset
 * *[/Beta19.rc5]*
