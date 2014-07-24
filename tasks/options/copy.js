@@ -42,16 +42,6 @@
                     dest: '.tmp/main-<%= buildMode %>.js'
                 }
             ]
-        },
-        collateral: {
-            files: [
-                {
-                    expand: true,
-                    cwd: '<%= settings.collateralDir %>',
-                    src: '**',
-                    dest: '.tmp/collateral/'
-                }
-            ]
         }
     };
 }());

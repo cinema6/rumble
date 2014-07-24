@@ -1,0 +1,12 @@
+<article class="slide__group">
+    <div class="player__group player__height">
+        <div class="player__thumbnail c6-height-limiter" ng-style="{'background-image':config.thumbs.large ? 'url(' + config.thumbs.large + ')' : ''}">
+            <span class="ir"><img ng-src="{{config.thumbs.large}}"></span>
+        </div>
+    </div>
+
+    <div class="card__copy">
+        <h1 class="card__title tk--hdr">{{config.title}}</h1>
+        <div class="card__desc" ng-bind-html="config.note"></div>
+    </div>
+</article>

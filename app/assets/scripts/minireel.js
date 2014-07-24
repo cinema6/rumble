@@ -1,10 +1,10 @@
 define (['angular','c6_defines','tracker',
          'cards/ad','cards/dailymotion','cards/recap','cards/vast','cards/vimeo','cards/vpaid',
-         'cards/youtube',
+         'cards/youtube','cards/text',
          'modules/ballot','modules/display_ad'],
 function( angular , c6Defines  , tracker ,
           adCard   , dailymotionCard   , recapCard   , vastCard   , vimeoCard   , vpaidCard   ,
-          youtubeCard   ,
+          youtubeCard   , textCard   ,
           ballotModule   , displayAdModule    ) {
     'use strict';
 
@@ -20,6 +20,7 @@ function( angular , c6Defines  , tracker ,
         vimeoCard.name,
         vpaidCard.name,
         youtubeCard.name,
+        textCard.name,
         // Modules
         ballotModule.name,
         displayAdModule.name
@@ -132,22 +133,23 @@ function( angular , c6Defines  , tracker ,
             }
 
             function fetchThumb(card) {
-                card.thumbs = null;
-
                 switch (card.type) {
+                case 'text':
                 case 'recap':
                     (function() {
                         var splash = (data.collateral || {}).splash ?
                             envrootFilter(data.collateral.splash) :
                             null;
 
-                        card.thumbs = splash ? {
+                        card.thumbs = card.thumbs || (splash ? {
                             small: splash,
                             large: splash
-                        } : null;
+                        } : null);
                     }());
                     break;
                 default:
+                    card.thumbs = null;
+
                     VideoThumbService.getThumbs(card.type, card.data.videoid)
                         .then(function(thumbs) {
                             card.thumbs = thumbs;
@@ -1412,8 +1414,8 @@ function( angular , c6Defines  , tracker ,
             self.dismissBallot();
         });
     }])
-    .directive('mrCard',['$log','$compile','$window','c6UserAgent','InflectorService',
-    function            ( $log , $compile , $window , c6UserAgent , InflectorService ){
+    .directive('mrCard',['$log','$compile','$window','c6UserAgent','InflectorService','c6AppData',
+    function            ( $log , $compile , $window , c6UserAgent , InflectorService , c6AppData ){
         $log = $log.context('<mr-card>');
         function fnLink(scope,$element){
             var canTwerk = false,/*(function() {
@@ -1438,6 +1440,8 @@ function( angular , c6Defines  , tracker ,
             var dasherize = InflectorService.dasherize.bind(InflectorService);
 
             $log.info('link:',scope);
+
+            scope.title = c6AppData.experience.data.title;
 
             var inner = '<' + dasherize(type) + '-card';
             for (var key in data){

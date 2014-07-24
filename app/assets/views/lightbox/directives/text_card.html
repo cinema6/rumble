@@ -1,0 +1,13 @@
+<article class="mr-card__group">
+    <div class="mr-player__group">
+        <div class="mr-player__thumbnail" ng-style="{'background-image':config.thumbs.large ? 'url(' + config.thumbs.large + ')' : ''}">
+            <span class="ir"><img ng-src="{{config.thumbs.large}}"></span>
+        </div>
+    </div>
+
+    <div class="mr-card__copy">
+        <p class="mr-card__counter">{{number}} of {{total}}</p>
+        <h1 class="mr-card__title tk--hdr">{{config.title}}</h1>
+        <div class="mr-card__desc" ng-bind-html="config.note"></div>
+    </div>
+</article>

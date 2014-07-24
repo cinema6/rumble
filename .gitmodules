@@ -1,0 +1,3 @@
+[submodule "c6Content"]
+	path = c6Content
+	url = git@github.com:cinema6/collateral.git

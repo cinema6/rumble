@@ -50,6 +50,14 @@
             "autoplay": true,
             "deck": [
                 {
+                    "id": "rc-c539bacdb79a14",
+                    "type": "text",
+                    "title": "This is the name of the stuff.",
+                    "note": "Blah blah blah blah.",
+                    "modules": ["displayAd"],
+                    "data": {}
+                },
+                {
                     "id": "rc-22119a8cf9f755",
                     "type": "youtube",
                     "title": "Epic Sax Guy",
