@@ -1,10 +1,12 @@
 # MiniReel Player
 
+## Beta20 (July 24, 2014)
 * *[Beta20.rc1]*
   * Collateral assets now live in their own GH repo
   * [FEATURE]: Added support for text cards
   * [FIX]: The same YouTube video can now be embedded multiple times
     with different start/end times
+* *[/Beta20.rc1]*
 
 ## Beta19 (July 22, 2014)
 * *[Beta19.rc6]*
