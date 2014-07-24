@@ -160,15 +160,6 @@ module.exports = function(grunt) {
      *
      *********************************************************************************************/
 
-    grunt.registerTask('publish:collateral', 'upload collateral assets to s3', function(target) {
-        grunt.task.run('copy:collateral');
-        grunt.task.run('inline:collateral');
-        grunt.task.run('htmlmin:collateral');
-        grunt.task.run('uglify:collateral');
-        grunt.task.run('jsify:splash');
-        grunt.task.run('s3:collateral-' + target);
-    });
-
     grunt.registerTask('publish:app', 'build and upload the application to s3', function(target) {
         grunt.task.run('build');
         grunt.task.run('s3:' + target);
@@ -187,7 +178,6 @@ module.exports = function(grunt) {
         }
 
         setTimeout(function(){
-            grunt.task.run('publish:collateral:' + target);
             grunt.task.run('publish:app:' + target);
             done(true);
         },delay);

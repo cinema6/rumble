@@ -19,12 +19,10 @@
     "s3": {
         "test": {
             "bucket": "com.cinema6.staging",
-            "collateral": "collateral/",
             "app": "apps/<%= package.name %>/"
         },
         "production": {
             "bucket": "com.cinema6.portal",
-            "collateral": "collateral/",
             "app": "apps/<%= package.name %>/"
         }
     }

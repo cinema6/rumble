@@ -1,6 +1,7 @@
 # MiniReel Player
 
 * *[Beta20.rc1]*
+  * Collateral assets now live in their own GH repo
   * [FEATURE]: Added support for text cards
 
 ## Beta19 (July 22, 2014)
