@@ -1,5 +1,8 @@
 # MiniReel Player
 
+* *[Beta20.rc1]*
+  * [FEATURE]: Added support for text cards
+
 ## Beta19 (July 22, 2014)
 * *[Beta19.rc6]*
   * Made txt on fallback display ad easier to read

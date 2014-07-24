@@ -114,6 +114,14 @@ define(['app', 'minireel', 'c6ui', 'angular'], function(appModule, minireelModul
                             ],
                             deck: [
                                 {
+                                    id: 'rc-c539bacdb79a14',
+                                    type: 'text',
+                                    title: 'This is the MiniReel',
+                                    note: 'Hello somebody',
+                                    thumbs: {},
+                                    data: {}
+                                },
+                                {
                                     id: 'rc-22119a8cf9f755',
                                     type: 'youtube',
                                     title: 'Did someone say FOX?',
@@ -242,10 +250,10 @@ define(['app', 'minireel', 'c6ui', 'angular'], function(appModule, minireelModul
                     });
 
                     it('should resolve any properties ending in "Id" to a reference to the object it\'s pointing to', function() {
-                        var video1 = result[0],
-                            video2 = result[2],
-                            video3 = result[3],
-                            video4 = result[4],
+                        var video1 = result[1],
+                            video2 = result[3],
+                            video3 = result[4],
+                            video4 = result[5],
                             ballot1 = mrData.ballots[0],
                             ballot2 = mrData.ballots[1],
                             commentGroup1 = mrData.commentGroups[0],
@@ -283,15 +291,17 @@ define(['app', 'minireel', 'c6ui', 'angular'], function(appModule, minireelModul
 
                     describe('getting thumbnails', function() {
                         it('should make every thumbnail null at first', function() {
-                            result.forEach(function(card) {
+                            result.filter(function(card) {
+                                return !(/^(recap|text)$/).test(card.type);
+                            }).forEach(function(card) {
                                 expect(card.thumbs).toBeNull('card:' + card.id);
                             });
                         });
 
                         it('should get a thumbnail for every video', function() {
-                            result.forEach(function(card) {
-                                if (card.type === 'recap') { return; }
-
+                            result.filter(function(card) {
+                                return !(/^(recap|text)$/).test(card.type);
+                            }).forEach(function(card) {
                                 expect(VideoThumbService.getThumbs).toHaveBeenCalledWith(card.type, card.data.videoid);
                             });
                         });
@@ -299,20 +309,20 @@ define(['app', 'minireel', 'c6ui', 'angular'], function(appModule, minireelModul
                         it('should update the thumb if a thumbnail is returned', function() {
                             $rootScope.$digest();
 
-                            expect(result[0].thumbs).toEqual({
+                            expect(result[1].thumbs).toEqual({
                                 small: 'http://img.youtube.com/vi/gy1B3agGNxw/2.jpg',
                                 large: 'http://img.youtube.com/vi/gy1B3agGNxw/0.jpg'
                             });
-                            expect(result[1].thumbs).toBeNull();
-                            expect(result[2].thumbs).toEqual({
+                            expect(result[2].thumbs).toBeNull();
+                            expect(result[3].thumbs).toEqual({
                                 small: 'http://s2.dmcdn.net/Dm9Np/x120-6Xz.jpg',
                                 large: 'http://s2.dmcdn.net/Dm9Np/x720-6Xz.jpg'
                             });
-                            expect(result[3].thumbs).toEqual({
+                            expect(result[4].thumbs).toEqual({
                                 small: 'http://b.vimeocdn.com/ts/462/944/462944068_100.jpg',
                                 large: 'http://b.vimeocdn.com/ts/462/944/462944068_600.jpg'
                             });
-                            expect(result[4].thumbs).toEqual({
+                            expect(result[5].thumbs).toEqual({
                                 small: 'http://img.youtube.com/vi/Cn9yJrrm2tk/2.jpg',
                                 large: 'http://img.youtube.com/vi/Cn9yJrrm2tk/0.jpg'
                             });
@@ -329,10 +339,51 @@ define(['app', 'minireel', 'c6ui', 'angular'], function(appModule, minireelModul
                             expect(c6ImagePreloader.load).toHaveBeenCalledWith(['http://img.youtube.com/vi/Cn9yJrrm2tk/2.jpg']);
                         });
 
+                        describe('for a text card', function() {
+                            describe('if there are already thumbs', function() {
+                                it('should be the same object', function() {
+                                    expect(result[0].thumbs).toEqual(mrData.deck[0].thumbs);
+                                });
+                            });
+
+                            describe('if there are not already thumbs', function() {
+                                beforeEach(function() {
+                                    delete mrData.deck[0].thumbs;
+                                });
+
+                                describe('if there are no collateral assets', function() {
+                                    beforeEach(function() {
+                                        result = MiniReelService.createDeck(mrData);
+                                    });
+
+                                    it('should be null', function() {
+                                        expect(result[0].thumbs).toBeNull();
+                                    });
+                                });
+
+                                describe('if there are collateral assets', function() {
+                                    beforeEach(function() {
+                                        mrData.collateral = {
+                                            splash: '/collateral/mysplash.jpg'
+                                        };
+
+                                        result = MiniReelService.createDeck(mrData);
+                                    });
+
+                                    it('should make both thumbnails the fully-resolved splash image', function() {
+                                        expect(result[0].thumbs).toEqual({
+                                            small: 'http://portal.cinema6.com/collateral/mysplash.jpg',
+                                            large: 'http://portal.cinema6.com/collateral/mysplash.jpg'
+                                        });
+                                    });
+                                });
+                            });
+                        });
+
                         describe('for the recap card', function() {
                             describe('if there are no collateral assets', function() {
                                 it('should be null', function() {
-                                    expect(result[5].thumbs).toBeNull();
+                                    expect(result[6].thumbs).toBeNull();
                                 });
                             });
 
@@ -346,7 +397,7 @@ define(['app', 'minireel', 'c6ui', 'angular'], function(appModule, minireelModul
                                 });
 
                                 it('should make both thumbnails the fully-resolved splash image', function() {
-                                    expect(result[5].thumbs).toEqual({
+                                    expect(result[6].thumbs).toEqual({
                                         small: 'http://portal.cinema6.com/collateral/mysplash.jpg',
                                         large: 'http://portal.cinema6.com/collateral/mysplash.jpg'
                                     });
