@@ -447,7 +447,8 @@
                     color:#444; line-height:1.69;
                 }
             .mr-pub-logo-box {
-                width:9.375rem; height:1.25rem; position:absolute; bottom:-3.85rem; right:.5rem;
+                width:9.375rem; height:1.25rem; position:absolute; bottom:-3.85rem;
+                left:.8125rem; right:.8125rem;
             }    
 
             @media screen and (min-width:88.75rem), screen and (min-height:49.4375rem) {
