@@ -1,6 +1,9 @@
 # MiniReel Player
 
 ## Beta19 (July 22, 2014)
+* *[Beta19.rc5]*
+  * [FIX]: Reset 'preloaded' property on static ad cards when MR is reset
+* *[/Beta19.rc5]*
 
 * *[Beta19.rc4]*
   * [FIX]: Lightbox-ads player headers now span full width of modal
@@ -8,6 +11,8 @@
   * [FIX]: Light text ad player is now vertically taller to minimize unused space.
   * [THEME]: Digital Journal created 
   * [FIX]: Light text player ad doesn't render when there is no height value for container box. Fixed via min-height.
+  * [FIX]: Uses existing ad cards if they're included in the experience and uses dynamic/relative ad cards when they're not
+* *[/Beta19.rc4]*
 
 * *[Beta19.rc3]*
   * [FIX]: Fix malformed base tag in build
