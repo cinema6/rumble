@@ -1,6 +1,11 @@
 # MiniReel Player
 
 ## Beta20 (July 24, 2014)
+* *[Beta20.rc2]*
+  * [FIX]: "Via" is no longer shown in the recap card for non-video
+    cards
+* *[/Beta20.rc2]*
+
 * *[Beta20.rc1]*
   * Collateral assets now live in their own GH repo
   * [FEATURE]: Added support for text cards
