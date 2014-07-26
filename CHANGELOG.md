@@ -1,6 +1,12 @@
 # MiniReel Player
 
 ## Beta20 (July 24, 2014)
+* *[Beta20.rc3]*
+  * [FIX]: (Mobile) Tapping the "Previous" button when on the first card
+    of the MiniReel no longer activates the element underneath where the
+    previous button was when the MiniReel closes
+* *[/Beta20.rc3]*
+
 * *[Beta20.rc2]*
   * [FIX]: "Via" is no longer shown in the recap card for non-video
     cards
