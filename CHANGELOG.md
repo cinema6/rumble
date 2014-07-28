@@ -1,5 +1,10 @@
 # MiniReel Player
 
+## Beta21 (July 28, 2014)
+* *[Beta21.rc1]*
+  * [FEATURE]: Added place for publisher logo in Lightbox MiniReels
+* *[/Beta21.rc1]*
+
 ## Beta20 (July 24, 2014)
 * *[Beta20.rc3]*
   * [FIX]: (Mobile) Tapping the "Previous" button when on the first card
