@@ -15,6 +15,7 @@
         fetch-when="onDeck || active"
         on-dismiss="Ctrl.dismissBallotResults()">
     </ballot-results-module>
+    
     <div class="mr-player__group">
         <button ng-if="Ctrl.enablePlayButton" ng-show="Ctrl.showPlay" ng-click="Ctrl.playVideo()" class="mr-player__play-btn">
             <div class="mr-player__play-icon">
@@ -27,13 +28,17 @@
             <span class="ir"><img ng-src="{{config.thumbs.large}}"></span>
         </div>
     </div>
-
-    <div class="mr-card__copy">
-        <p class="mr-card__counter">{{number}} of {{total}}</p>
-        <h1 class="mr-card__title tk--hdr">{{config.title}}</h1>
-        <p ng-show="!!config.source" class="mr-card__attributes">via <a ng-href="{{Ctrl.videoUrl}}" target="_blank" title="YouTube">{{config.source}}</a></p>
-        <div class="mr-card__desc" ng-bind-html="config.note"></div>
+    
+    <div class="mr-card__copy-container">
+        <div class="mr-card__copy">   
+            <p class="mr-card__counter">{{number}} of {{total}}</p>
+            <h1 class="mr-card__title tk--hdr">{{config.title}}</h1>
+            <p ng-show="!!config.source" class="mr-card__attributes">via <a ng-href="{{Ctrl.videoUrl}}" target="_blank" title="YouTube">{{config.source}}</a></p> 
+            <div class="mr-card__desc" ng-bind-html="config.note"></div>
+        </div>
+        <div class="mr-pub-logo-box">&nbsp;</div>
     </div>
+
 
 
     <!--<comments-module ng-if="Ctrl.hasModule('comments')"
