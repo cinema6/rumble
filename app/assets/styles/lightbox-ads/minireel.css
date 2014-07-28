@@ -153,7 +153,7 @@
         .mr-title {
             font-size:1em; font-weight: normal; color:#6b6b6b; line-height:1;
             margin:0 1.125rem 0.875rem 1.125rem; padding: 0.9375rem 0 0 0;
-            width: calc(100% - 200px);
+            width: calc(100% - 12.5rem);
         }
 
         .mr-pub-logo-box {
