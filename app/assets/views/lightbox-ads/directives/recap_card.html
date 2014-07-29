@@ -7,7 +7,7 @@
                 </button>
                 <div class="mr-recap__copyBox">
                     <h1 class="mr-card__title tk--hdr" ng-click="Ctrl.jumpTo(card)">{{card.title}}</h1>
-                    <p class="mr-card__attributes">via <a ng-href="{{card.webHref}}" target="_blank" title="{{card.source}}">{{card.source}}</a></p>
+                    <p ng-show="!!card.source" class="mr-card__attributes">via <a ng-href="{{card.webHref}}" target="_blank" title="{{card.source}}">{{card.source}}</a></p>
                     <div class="mr-recap__ballotInfo" ng-show="card.hasModule('ballot')">
                         <h3 class="mr-recap__ballotQuestion">Questionnaire: <strong>{{card.ballot.prompt}}</strong></h3>
                         <p class="mr-recap__ballotResults">

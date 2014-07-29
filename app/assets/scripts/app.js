@@ -133,6 +133,8 @@ function( angular , angularAnimate , angularSanitize , c6ui , c6log , c6Defines 
                     }
 
                     function handle(event) {
+                        event.preventDefault();
+
                         scope.$apply(function() {
                             fn(scope, {
                                 $event: event

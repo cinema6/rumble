@@ -1,8 +1,28 @@
 # MiniReel Player
 
+## Beta21 (July 28, 2014)
+* *[Beta21.rc1]*
+  * [FEATURE]: Added place for publisher logo in Lightbox MiniReels
+* *[/Beta21.rc1]*
+
+## Beta20 (July 24, 2014)
+* *[Beta20.rc3]*
+  * [FIX]: (Mobile) Tapping the "Previous" button when on the first card
+    of the MiniReel no longer activates the element underneath where the
+    previous button was when the MiniReel closes
+* *[/Beta20.rc3]*
+
+* *[Beta20.rc2]*
+  * [FIX]: "Via" is no longer shown in the recap card for non-video
+    cards
+* *[/Beta20.rc2]*
+
 * *[Beta20.rc1]*
   * Collateral assets now live in their own GH repo
   * [FEATURE]: Added support for text cards
+  * [FIX]: The same YouTube video can now be embedded multiple times
+    with different start/end times
+* *[/Beta20.rc1]*
 
 ## Beta19 (July 22, 2014)
 * *[Beta19.rc6]*
