@@ -13,7 +13,7 @@
                 "splash": "/collateral/experiences/rumble/splash-6thumb.jpg"
             },
             "title": "Rumble Video",
-            "branding": "digitaljournal",
+            "branding": "whosay",
             "conversations": [
                 {
                     "id": "rcv-f9efca48d85143",
@@ -207,7 +207,7 @@
             "collateral": {
                 "splash": "/collateral/experiences/gopro/splash-6thumb.jpg"
             },
-            "branding": "digitaljournal",
+            "branding": "whosay",
             "autoplay": true,
             "deck": [
                 {
@@ -573,7 +573,7 @@
             "title": "The 15 Most Amazing GoPro Videos Ever Recorded",
             "mode": "lightbox-ads",
             "theme": "ed-videos",
-            "branding": "digitaljournal",
+            "branding": "whosay",
             "collateral": {
                 "splash": "/collateral/experiences/gopro-lightbox/splash-6thumb.jpg"
             },
@@ -975,7 +975,7 @@
             "title": "The 15 Most Amazing GoPro Videos Ever Recorded",
             "mode": "lightbox-ads",
             "theme": "ed-videos",
-            "branding": "digitaljournal",
+            "branding": "whosay",
             "collateral": {
                 "splash": "/collateral/experiences/gopro-lightbox/splash-6thumb.jpg"
             },
@@ -1380,7 +1380,7 @@
             "collateral": {
                 "splash": "/collateral/experiences/superbowl/splash-6thumb.jpg"
             },
-            "branding": "digitaljournal",
+            "branding": "whosay",
             "autoplay": true,
             "deck": [
                 {
@@ -1617,7 +1617,7 @@
             "collateral": {
                 "splash": "/collateral/experiences/superbowl-lightbox/splash-6thumb.jpg"
             },
-            "branding": "digitaljournal",
+            "branding": "whosay",
             "autoplay": true,
             "deck": [
                 {
@@ -1853,7 +1853,7 @@
             "collateral": {
                 "splash": "/collateral/experiences/superbowl-lightbox/splash-6thumb.jpg"
             },
-            "branding": "digitaljournal",
+            "branding": "whosay",
             "autoplay": false,
             "deck": [
                 {
@@ -2090,7 +2090,7 @@
             "collateral": {
                 "splash": "/collateral/experiences/wrestling/splash-6thumb.jpg"
             },
-            "branding": "digitaljournal",
+            "branding": "whosay",
             "autoplay": true,
             "deck": [
                 {
