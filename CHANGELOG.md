@@ -1,5 +1,8 @@
 # MiniReel Player
 
+* *[Beta22.rc1]*
+  * [FIX]: Player now properly handles dynamic ad config with a firstPlacement of -1 and/or frequency of 0
+
 ## Beta21 (July 28, 2014)
 * *[Beta21.rc1]*
   * [FEATURE]: Added place for publisher logo in Lightbox MiniReels
