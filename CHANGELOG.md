@@ -1,7 +1,8 @@
 # MiniReel Player
 
 * *[Beta22.rc1]*
-  * [FIX]: Player now properly handles dynamic ad config with a firstPlacement of -1 and/or frequency of 0
+  * [FIX]: If dynamic ad configuration has a "first ad" setting of -1 it will disable all ads from playing,
+    if the ad "frequency" is set to 0 then only the ad in first position will be shown
 
 ## Beta21 (July 28, 2014)
 * *[Beta21.rc1]*
