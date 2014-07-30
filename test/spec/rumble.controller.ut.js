@@ -21,7 +21,8 @@ define(['c6ui', 'services', 'minireel', 'c6_defines'], function(c6uiModule, serv
             MiniReelService,
             ControlsService,
             trackerServiceSpy,
-            trackerSpy;
+            trackerSpy,
+            initController;
 
         beforeEach(function() {
             trackerSpy = {
@@ -224,11 +225,16 @@ define(['c6ui', 'services', 'minireel', 'c6_defines'], function(c6uiModule, serv
                 spyOn(CommentsService, 'init');
                 spyOn(BallotService, 'init');
                 spyOn(BallotService, 'getElection');
-                RumbleCtrl = $controller('RumbleController', {
-                    $scope  : $scope,
-                    $log    : $log,
-                    trackerService : trackerServiceSpy
-                });
+
+                initController = function() {
+                    RumbleCtrl = $controller('RumbleController', {
+                        $scope  : $scope,
+                        $log    : $log,
+                        trackerService : trackerServiceSpy
+                    });
+                };
+
+                initController();
 
                 $scope.$emit('analyticsReady');
                 $timeout.flush(1000);
@@ -907,6 +913,8 @@ define(['c6ui', 'services', 'minireel', 'c6_defines'], function(c6uiModule, serv
         });
 
         describe('navigation',function(){
+            var recompileCtrl;
+
             beforeEach(function(){
                 $scope.deviceProfile = { multiPlayer : true };
                 $scope.deck.forEach(function(item,index){
@@ -918,6 +926,21 @@ define(['c6ui', 'services', 'minireel', 'c6_defines'], function(c6uiModule, serv
                     item.player.isReady.andReturn(true);
                 });
                 spyOn($scope, '$emit').andCallThrough();
+
+                recompileCtrl = function(first, freq) {
+                    $scope = $rootScope.$new();
+                    $scope.app = {
+                        data: appData
+                    };
+                    $scope.app.data.experience.data.adConfig.video.frequency = freq;
+                    $scope.app.data.experience.data.adConfig.video.firstPlacement = first;
+                    $scope.app.data.experience.data.deck = [{id: 'foo'},{id: 'bar'},{id: 'baz'},{id:'biz'},{id:'buzz'},{id:'fub'}];
+                    $scope.AppCtrl = {};
+
+                    spyOn($scope, '$broadcast').andCallThrough();
+
+                    initController();
+                };
             });
 
             describe('splicing ads', function() {
@@ -997,6 +1020,40 @@ define(['c6ui', 'services', 'minireel', 'c6_defines'], function(c6uiModule, serv
 
                     expect($scope.$broadcast.callCount).toBe(2);
                     expect($scope.$broadcast.mostRecentCall.args[1].id).toBe('rc-advertisement2');
+                });
+
+                it('should only happen once if frequency is set to 0', function() {
+                    recompileCtrl(1, 0);
+
+                    RumbleCtrl.setPosition(0);
+                    expect($scope.$broadcast).toHaveBeenCalledWith('adOnDeck',jasmine.any(Object));
+                    expect($scope.$broadcast.mostRecentCall.args[1].id).toBe('rc-advertisement1');
+
+                    RumbleCtrl.setPosition(1); // shows ad
+                    RumbleCtrl.setPosition(2); // video #1
+                    RumbleCtrl.setPosition(3); // video #2
+                    RumbleCtrl.setPosition(4); // video #3
+
+                    expect($scope.$broadcast.callCount).toBe(1);
+                });
+
+                it('should not occur if firstPLacement is set to -1', function() {
+                    recompileCtrl(-1, 2);
+
+                    RumbleCtrl.setPosition(0);
+                    RumbleCtrl.setPosition(1); // shows ad
+                    RumbleCtrl.setPosition(2); // video #1
+                    RumbleCtrl.setPosition(3); // video #2
+                    RumbleCtrl.setPosition(4); // video #3
+                    expect($scope.$broadcast).not.toHaveBeenCalledWith('adOnDeck',jasmine.any(Object));
+                });
+
+                it('should happen right away if firstPlacement is set to 0', function() {
+                    recompileCtrl(0, 3);
+
+                    expect($scope.$broadcast).toHaveBeenCalledWith('adOnDeck',jasmine.any(Object));
+                    expect($scope.$broadcast.mostRecentCall.args[1].id).toBe('rc-advertisement1');
+                    expect($scope.$broadcast.callCount).toBe(1);
                 });
 
                 it('should not matter what the navigation sequence is when dynamic ads are enabled', function() {
@@ -1081,6 +1138,45 @@ define(['c6ui', 'services', 'minireel', 'c6_defines'], function(c6uiModule, serv
                         });
 
                         i = function() { return $scope.currentIndex; };
+                    });
+
+                    it('should not happen if firstPlacement is set to -1', function() {
+                        recompileCtrl(-1, 3);
+
+                        RumbleCtrl.setPosition(0);
+                        expect($scope.currentCard.ad).not.toBe(true);
+                        RumbleCtrl.setPosition(1);
+                        expect($scope.currentCard.ad).not.toBe(true);
+                        RumbleCtrl.setPosition(2);
+                        expect($scope.currentCard.ad).not.toBe(true);
+                        RumbleCtrl.setPosition(3);
+                        expect($scope.currentCard.ad).not.toBe(true);
+                        RumbleCtrl.setPosition(4);
+                        expect($scope.currentCard.ad).not.toBe(true);
+                        RumbleCtrl.setPosition(5);
+                        expect($scope.currentCard.ad).not.toBe(true);
+                        expect($scope.$broadcast).not.toHaveBeenCalledWith('adOnDeck',jasmine.any(Object));
+                    });
+
+                    it('should only happen once if frequency is set to 0', function() {
+                        recompileCtrl(1, 0);
+
+                        RumbleCtrl.setPosition(0);
+                        RumbleCtrl.setPosition(1);
+                        expect($scope.currentCard.ad).toBe(true);
+
+                        RumbleCtrl.setPosition(2);
+                        expect($scope.currentCard.ad).not.toBe(true);
+                        RumbleCtrl.setPosition(3);
+                        expect($scope.currentCard.ad).not.toBe(true);
+                        RumbleCtrl.setPosition(4);
+                        expect($scope.currentCard.ad).not.toBe(true);
+                        RumbleCtrl.setPosition(3);
+                        expect($scope.currentCard.ad).not.toBe(true);
+                        RumbleCtrl.setPosition(2);
+                        expect($scope.currentCard.ad).not.toBe(true);
+                        RumbleCtrl.setPosition(1);
+                        expect($scope.currentCard.ad).not.toBe(true);
                     });
 
                     it('should show first ad based on config', function() {
