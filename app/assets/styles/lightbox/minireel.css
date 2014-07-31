@@ -169,7 +169,7 @@
         .mr-ui__close {
             padding:6px; border-radius:50% 50%; border:3px solid white;
             background:black;
-            position:absolute; top:-1.25rem; right:-0.75rem; z-index: 1;
+            position:absolute; top:-1.25rem; right:-0.75rem; z-index: 2;
             cursor:pointer;
             -webkit-box-shadow: 0 3px 3px 0 rgba(0,0,0,0.5);
             box-shadow: 0 3px 3px 0 rgba(0,0,0,0.5);
@@ -184,6 +184,9 @@
             border:0;
             cursor:pointer;
         }
+            .mr-nav__btn--hide {
+                display: none;
+            }
             .mr-nav__next {
                 right:12.75rem; left:auto;
             }
@@ -486,6 +489,96 @@
             .mr-card__copy {
                 height:114%;
             }
+        }
+
+/*  ==========================================================================
+    .mr-textCard styles
+    ========================================================================== */
+    .mr-textCard__group {
+        width:100%; height:100%;
+        padding:0 12.75rem 0 0;
+        position:relative;
+    }
+        .mr-textCard__img {
+            position:absolute; top:0;
+            width:30%; height:100%;
+            background:50% 50% / cover no-repeat;
+            border:0.75rem solid #fff;
+            box-sizing:border-box;
+        }
+        .mr-textCard__group .mr-card__counter {
+            margin:1em 0 0.75em 0;
+            position:absolute; right:1.875rem;
+            z-index:1;
+            background:#fff;
+        }
+        .mr-textCard__copy {
+            width:100%; height:100%;
+            position:absolute;
+            overflow: auto;
+            right:0;
+        }
+            .mr-textCard__copy .mr-card__title {
+                padding:0;
+                margin:10% 3% 0 33%;
+                font-size:2rem; font-weight:normal;
+            }
+            .mr-textCard__copy .mr-card__desc {
+                margin:1em 0 1em 33%;
+                width:44%;
+            }
+            @media screen and (min-width:88.75rem), screen and (min-height:49.4375rem) {
+                /*  w: 1420px +
+                    h: 791px + */
+                .mr-textCard__copy .mr-card__desc {
+                    font-size:1rem;
+                }
+            }
+            @media screen and (min-width:76rem) and (max-width:88.6875rem), screen and (min-height:43.125rem) and (max-height:49.375rem) {
+                /*  w: 1216px - 1419px
+                    h: 690px - 790px */
+                .mr-textCard__copy .mr-card__desc {
+                    font-size:0.9375rem;
+                }
+            }
+            @media screen and (min-width:60rem) and (max-width:75.9375rem), screen and (min-height:35.4375rem) and (max-height:43.0625rem) {
+                /*  w: 960px - 1215px 
+                    h: 567px - 689px */
+                .mr-textCard__copy .mr-card__title {
+                    font-size:1.75rem;
+                    margin-top:7%;
+                }
+                .mr-textCard__copy .mr-card__desc {
+                    font-size:0.875rem;
+                }
+            }
+            @media screen and (max-width:59.9375rem), screen and (max-height:35.375rem) {
+                /*  w: -959px 
+                    h: -566px */
+                .mr-textCard__copy .mr-card__title {
+                    font-size:1.5rem;
+                    margin-top:5%;
+                }
+                .mr-textCard__copy .mr-card__desc {
+                    font-size:0.8125rem;
+                }
+            }
+        .mr-card__fader {
+            position:absolute; bottom:0; left:31%;
+            width:66%; height:1rem;
+            background:url('../../img/textcard__fader.png') 0 bottom / 100% 100% repeat-x;
+        }
+        .mr-card__fader--top {
+            top:0; bottom:auto;
+            background:url('../../img/textcard__fader--top.png') 0 bottom / 100% 100% repeat-x;
+        }
+        .mr-card__startBtn {
+            background:#d94040;
+            margin:0 0 5% 33%; 
+            border:0; padding:0.5em 1em;
+            font-size:0.875rem; font-weight:bold; color:#fff;
+            cursor:pointer;
+            display: inline-block;
         }
 
 

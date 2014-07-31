@@ -7,7 +7,7 @@
         "title": "Rumble Video",
         "data": {
             "election": "e-d0e407bb69675b",
-            "mode": "light",
+            "mode": "lightbox",
             "theme": "ed-entertainment",
             "collateral": {
                 "splash": "/collateral/experiences/rumble/splash-6thumb.jpg"
@@ -52,8 +52,8 @@
                 {
                     "id": "rc-c539bacdb79a14",
                     "type": "text",
-                    "title": "This is the name of the stuff.",
-                    "note": "Blah blah blah blah.",
+                    "title": "2014 Was The Year Of The GoPro",
+                    "note": "Blah blah blah blah. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec odio. Quisque volutpat mattis eros. Nullam malesuada erat ut turpis. Suspendisse urna nibh, viverra non, semper suscipit, posuere a, pede. Donec nec justo eget felis facilisis fermentum. Aliquam porttitor mauris sit amet orci. Aenean dignissim pellentesque felis.Morbi in sem quis dui placerat ornare. Pellentesque odio nisi, euismod in, pharetra a, ultricies in, diam. Sed arcu. Cras consequat.Praesent dapibus, neque id cursus faucibus, tortor neque egestas augue, eu vulputate magna eros eu erat. Aliquam erat volutpat. Nam dui mi, tincidunt quis, accumsan porttitor, facilisis luctus, metus.",
                     "modules": ["displayAd"],
                     "data": {}
                 },

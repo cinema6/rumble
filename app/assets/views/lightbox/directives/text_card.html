@@ -1,13 +1,13 @@
-<article class="mr-card__group">
-    <div class="mr-player__group">
-        <div class="mr-player__thumbnail" ng-style="{'background-image':config.thumbs.large ? 'url(' + config.thumbs.large + ')' : ''}">
-            <span class="ir"><img ng-src="{{config.thumbs.large}}"></span>
-        </div>
+<article class="mr-textCard__group">
+    <div class="mr-textCard__img" ng-style="{'background-image':config.thumbs.large ? 'url(' + config.thumbs.large + ')' : ''}">&nbsp;</div>
+    <p class="mr-card__counter">{{number}} of {{total}}</p>
+    <div class="mr-textCard__copy">
+            <h1 class="mr-card__title tk--hdr">{{config.title}}</h1>
+            <div class="mr-card__desc" ng-bind-html="config.note"></div>
+            <btn class="mr-card__startBtn" type="button">Let's Get Started</btn>
     </div>
-
-    <div class="mr-card__copy">
-        <p class="mr-card__counter">{{number}} of {{total}}</p>
-        <h1 class="mr-card__title tk--hdr">{{config.title}}</h1>
-        <div class="mr-card__desc" ng-bind-html="config.note"></div>
+    <div class="mr-card__fader">&nbsp;</div>
+    <div class="mr-card__fader mr-card__fader--top">&nbsp;</div>
+        
     </div>
 </article>

@@ -7,6 +7,7 @@
         <ng-include ng-controller="DeckController as DeckCtrl" src="'deck.html' | asset:'views'"></ng-include>
         
         <button ng-click="RumbleCtrl.goBack('nav')"
+            ng-class="{'mr-nav__btn--hide' : currentCard.type === 'text'}"
             ng-show="nav.enabled"
             class="mr-nav__btn mr-nav__prev c6-fade"
             type="button"
@@ -20,10 +21,11 @@
             <span class="ir">Previous Page</span>
         </button>
         <button ng-click="RumbleCtrl.goForward('nav')"
-            ng-class="{'mr-nav__next--display-ad': currentCard.type === 'ad'}"
+            ng-class="{'mr-nav__next--display-ad': currentCard.type === 'ad', 
+                'mr-nav__btn--hide' : currentCard.type === 'text'}"
             ng-show="nav.enabled"
             ng-hide="atTail"
-            class="mr-nav__btn mr-nav__next"
+            class="mr-nav__btn mr-nav__next c6-fade"
             type="button"
             title="Next Page"
             ng-hide="currentCard.type === 'recap'">
@@ -39,7 +41,7 @@
             ng-if="currentIndex > -1"
             class="mr-pager__group"
             ng-class="{
-                'mr-pager__group--fullWidth' : currentCard.type === 'recap',
+                'mr-pager__group--fullWidth' : currentCard.type === 'recap' || currentCard.type === 'text',
                 'mr-pager__group--adWidth' : currentCard.type === 'ad'
             }"
             disable-prev-when="!nav.enabled"
