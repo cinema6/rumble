@@ -356,12 +356,22 @@ function( angular , c6Defines  , tracker ,
             Object.defineProperties(adController, {
                 shouldLoadAd: {
                     get: function() {
-                        return enableDynamicAds && ((this.videoCount + 1 - this.firstPlacement) % this.frequency === 0);
+                        var zeroFreq = this.frequency === 0,
+                            hasFirst = this.firstPlacement > -1,
+                            nextIsFirst = (this.videoCount + 1 === this.firstPlacement),
+                            nextMatchesFreq = ((this.videoCount + 1 - this.firstPlacement) % this.frequency === 0);
+
+                        return enableDynamicAds && hasFirst && (nextMatchesFreq || (zeroFreq && nextIsFirst));
                     }
                 },
                 shouldPlayAd: {
                     get: function() {
-                        return enableDynamicAds && (this.adCount <= ((this.videoCount - this.firstPlacement) / this.frequency));
+                        var hasFreq = !!(this.frequency),
+                            hasFirst = this.firstPlacement > -1,
+                            isFirst = (this.videoCount === this.firstPlacement) && (this.adCount < 1),
+                            adCountMatchesFreq = (this.adCount <= ((this.videoCount - this.firstPlacement) / this.frequency));
+
+                        return enableDynamicAds && hasFirst && (isFirst || (hasFreq && adCountMatchesFreq));
                     }
                 }
             });

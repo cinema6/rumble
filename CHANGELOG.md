@@ -1,5 +1,14 @@
 # MiniReel Player
 
+* *[Beta22.rc1]*
+  * [FIX]: If dynamic ad configuration has a "first ad" setting of -1 it will disable all ads from playing,
+    if the ad "frequency" is set to 0 then only the ad in first position will be shown
+
+## Beta21 (July 28, 2014)
+* *[Beta21.rc1]*
+  * [FEATURE]: Added place for publisher logo in Lightbox MiniReels
+* *[/Beta21.rc1]*
+
 ## Beta20 (July 24, 2014)
 * *[Beta20.rc3]*
   * [FIX]: (Mobile) Tapping the "Previous" button when on the first card
