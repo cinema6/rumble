@@ -1,8 +1,6 @@
 <div ng-hide="currentIndex < 0" ng-class="app.data.experience.data.theme">
     <div ng-hide="showTOC" class="ui-nav-left--landscape c6-slide-bar--left css-promote">
-        <button class="publisher__branding-logo" type="button" title="Elite Daily">
-            <span class="ir">Elite Daily</span>
-        </button>
+        <div class="publisher__branding-logo">&nbsp;</div>
         <button class="ui-nav__prev" title="Previous Video" type="button" c6-touch="RumbleCtrl.goBack('landscape')" ng-disabled="!nav.enabled">
             <span class="ui-nav__label ui-nav__label-prev">
                 Prev
@@ -44,9 +42,7 @@
     </div><!--.ui-nav-right--landscape-->
 
     <div ng-hide="showTOC" class="ui-context--portrait c6-slide-bar--top css-promote">
-        <button class="publisher__branding-logo" type="button" title="Elite Daily">
-            <span class="ir">Elite Daily</span>
-        </button>
+        <div class="publisher__branding-logo">&nbsp;</div>
         <button ng-click="RumbleCtrl.setPosition(-1);" class="ui-context__close" title="Close" type="button">
             <span class="ui-context__label ui-context__label-close">
                 Close
