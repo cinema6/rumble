@@ -1,5 +1,8 @@
 # MiniReel Player
 
+* *[Beta22.rc1]*
+  * [FIX]: VPAID ads now work in Internet Explorer
+
 ## Beta21 (July 28, 2014)
 * *[Beta21.rc1]*
   * [FEATURE]: Added place for publisher logo in Lightbox MiniReels
