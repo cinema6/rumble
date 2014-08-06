@@ -6,6 +6,8 @@
     if the ad "frequency" is set to 0 then only the ad in first position will be shown
   * [FIX]: Fixed an issue that caused ads to hang on Firefox on the Mac
     when flash is not installed
+  * [FIX]: VPAID card will now automatically advance if an ad does not start
+    playing in 3 seconds
 
 ## Beta21 (July 28, 2014)
 * *[Beta21.rc1]*

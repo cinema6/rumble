@@ -340,7 +340,9 @@ function( angular , c6ui , adtech , c6Defines  ) {
                         var self = this,
                             adPlayerDeferred = $q.defer(),
                             adDeferred = $q.defer(),
-                            actualAdDeferred = $q.defer();
+                            actualAdDeferred = $q.defer(),
+                            adStarted = false,
+                            adVideoStart = false;
 
                         c6EventEmitter(self);
 
@@ -425,10 +427,20 @@ function( angular , c6ui , adtech , c6Defines  ) {
                         });
 
                         function initTimer() {
+                            var check = $interval(function() {
+                                    if (self.player.getAdProperties) {
+                                        if (self.player.getAdProperties().adCurrentTime > 0 &&
+                                            adStarted && adVideoStart) {
+                                            actualAdDeferred.resolve();
+                                        }
+                                    }
+                                }, 300);
+
                             $timeout(function() {
                                 adPlayerDeferred.reject();
                                 adDeferred.reject();
                                 actualAdDeferred.reject();
+                                $interval.cancel(check);
                             }, 3000);
                         }
 
@@ -439,6 +451,7 @@ function( angular , c6ui , adtech , c6Defines  ) {
                         self.loadAd = function() {
                             return adPlayerDeferred.promise.then(function() {
                                 self.player.loadAd();
+                                return adDeferred.promise;
                             });
                         };
 
@@ -447,6 +460,7 @@ function( angular , c6ui , adtech , c6Defines  ) {
 
                             return adDeferred.promise.then(function() {
                                 self.player.startAd();
+                                return actualAdDeferred.promise;
                             });
                         };
 
@@ -534,9 +548,13 @@ function( angular , c6ui , adtech , c6Defines  ) {
                                         {
                                             // we DEFINITELY have an ACTUAL ad
                                             self.emit('play', self);
-                                            $rootScope.$apply(function() {
-                                                actualAdDeferred.resolve();
-                                            });
+                                            adStarted = true;
+                                            break;
+                                        }
+                                    case 'AdVideoStart':
+                                        {
+                                            // another event that indicates we should DEFINITELY have an ACTUAL ad
+                                            adVideoStart = true;
                                             break;
                                         }
                                     case 'AdPlaying':
