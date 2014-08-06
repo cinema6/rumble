@@ -2,7 +2,7 @@
 
 ## Beta22 (August 6, 2014)
 * *[Beta22.rc2]*
-  * [FIX]: VPAID ads should pause if loaded after auto-advance to next card
+  * [FIX]: VPAID ads pause if ad is loaded after auto-advancing to next card
 * *[/Beta22.rc2]*
 
 * *[Beta22.rc1]*
