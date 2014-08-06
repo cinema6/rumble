@@ -347,66 +347,24 @@ define(['services', 'angular'], function(servicesModule, angular) {
                                 expect(mockFlashPlayer.pauseAd).not.toHaveBeenCalled();
                             });
 
-                            it('should not call pauseAd() if current time has not advanced', function() {
-                                var message1 = {
-                                        data: '{ "__vpaid__" : { "type" : "AdStarted", "id" : "testId" } }',
-                                    },
-                                    message2 = {
-                                        data: '{ "__vpaid__" : { "type" : "AdVideoStart", "id" : "testId" } }',
-                                    };
-
-                                mockFlashPlayer.getAdProperties.andReturn({adCurrentTime:0});
-
-                                player.startAd();
-
-                                messageHandler(message1);
-                                messageHandler(message2);
-
-                                $interval.flush(500);
+                            it('should call pauseAd() on the flash object after AdLoaded fires', function() {
+                                var message = {
+                                    data: '{ "__vpaid__" : { "type" : "AdLoaded", "id" : "testId" } }',
+                                };
 
                                 player.pause();
 
-                                $rootScope.$digest();
-
-                                expect(mockFlashPlayer.pauseAd).not.toHaveBeenCalled();
-
-                            });
-
-                            it('should call pauseAd() on the flash object after AdStarted + AdVideoStart fires, and the current time advances', function() {
-                                var message1 = {
-                                        data: '{ "__vpaid__" : { "type" : "AdStarted", "id" : "testId" } }',
-                                    },
-                                    message2 = {
-                                        data: '{ "__vpaid__" : { "type" : "AdVideoStart", "id" : "testId" } }',
-                                    };
-
-                                player.startAd();
-                                player.pause();
-
-                                messageHandler(message1);
-                                messageHandler(message2);
-
-                                $interval.flush(500);
-
-                                $rootScope.$digest();
+                                messageHandler(message);
 
                                 expect(mockFlashPlayer.pauseAd).toHaveBeenCalled();
                             });
 
-                            it('should call pauseAd() immediately if AdStart + AdVideoStart have already fired, and the current time has advanced', function() {
-                                var message1 = {
-                                        data: '{ "__vpaid__" : { "type" : "AdStarted", "id" : "testId" } }',
-                                    },
-                                    message2 = {
-                                        data: '{ "__vpaid__" : { "type" : "AdVideoStart", "id" : "testId" } }',
-                                    };
+                            it('should call pauseAd() immediately if AdLoaded already fired', function() {
+                                var message = {
+                                    data: '{ "__vpaid__" : { "type" : "AdLoaded", "id" : "testId" } }',
+                                };
 
-                                player.startAd();
-
-                                messageHandler(message1);
-                                messageHandler(message2);
-
-                                $interval.flush(500);
+                                messageHandler(message);
 
                                 player.pause();
 
@@ -438,72 +396,30 @@ define(['services', 'angular'], function(servicesModule, angular) {
                         });
 
                         describe('resumeAd()', function() {
-                            it('shoudl not call resumeAd() if AdStarted has not fired', function() {
+                            it('shoudl not call resumeAd() if AdLoaded has not fired', function() {
                                 player.resumeAd();
 
                                 expect(mockFlashPlayer.resumeAd).not.toHaveBeenCalled();
                             });
 
-                            it('should not call resumeAd() if current time has not advanced', function() {
-                                var message1 = {
-                                        data: '{ "__vpaid__" : { "type" : "AdStarted", "id" : "testId" } }',
-                                    },
-                                    message2 = {
-                                        data: '{ "__vpaid__" : { "type" : "AdVideoStart", "id" : "testId" } }',
-                                    };
-
-                                mockFlashPlayer.getAdProperties.andReturn({adCurrentTime:0});
-
-                                player.startAd();
-
-                                messageHandler(message1);
-                                messageHandler(message2);
-
-                                $interval.flush(500);
+                            it('should call resumeAd() on the flash object once AdLoaded fires', function() {
+                                var message = {
+                                    data: '{ "__vpaid__" : { "type" : "AdLoaded", "id" : "testId" } }',
+                                };
 
                                 player.resumeAd();
 
-                                $rootScope.$digest();
-
-                                expect(mockFlashPlayer.resumeAd).not.toHaveBeenCalled();
-
-                            });
-
-                            it('should call resumeAd() on the flash object', function() {
-                                var message1 = {
-                                        data: '{ "__vpaid__" : { "type" : "AdStarted", "id" : "testId" } }',
-                                    },
-                                    message2 = {
-                                        data: '{ "__vpaid__" : { "type" : "AdVideoStart", "id" : "testId" } }',
-                                    };
-
-                                player.startAd();
-                                player.resumeAd();
-
-                                messageHandler(message1);
-                                messageHandler(message2);
-
-                                $interval.flush(500);
-
-                                $rootScope.$digest();
+                                messageHandler(message);
 
                                 expect(mockFlashPlayer.resumeAd).toHaveBeenCalled();
                             });
 
-                            it('should call resumeAd() immediately if AdStart has already fired', function() {
-                                var message1 = {
-                                        data: '{ "__vpaid__" : { "type" : "AdStarted", "id" : "testId" } }',
-                                    },
-                                    message2 = {
-                                        data: '{ "__vpaid__" : { "type" : "AdVideoStart", "id" : "testId" } }',
-                                    };
+                            it('should call resumeAd() immediately if AdLoaded has already fired', function() {
+                                var message = {
+                                    data: '{ "__vpaid__" : { "type" : "AdLoaded", "id" : "testId" } }',
+                                };
 
-                                player.startAd();
-
-                                messageHandler(message1);
-                                messageHandler(message2);
-
-                                $interval.flush(500);
+                                messageHandler(message);
 
                                 player.resumeAd();
 

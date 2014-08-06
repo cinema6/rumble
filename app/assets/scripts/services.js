@@ -465,8 +465,9 @@ function( angular , c6ui , adtech , c6Defines  ) {
                         };
 
                         self.pause = function() {
-                            return actualAdDeferred.promise.then(function() {
+                            return adDeferred.promise.then(function() {
                                 self.player.pauseAd();
+                                return actualAdDeferred.promise;
                             });
                         };
 
@@ -483,8 +484,9 @@ function( angular , c6ui , adtech , c6Defines  ) {
                         };
 
                         self.resumeAd = function() {
-                            return actualAdDeferred.promise.then(function() {
+                            return adDeferred.promise.then(function() {
                                 self.player.resumeAd();
+                                return actualAdDeferred.promise;
                             });
                         };
 

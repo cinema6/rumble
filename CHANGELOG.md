@@ -1,6 +1,10 @@
 # MiniReel Player
 
 ## Beta22 (August 6, 2014)
+* *[Beta22.rc2]*
+  * [FIX]: VPAID ads should pause if loaded after auto-advance to next card
+* *[/Beta22.rc2]*
+
 * *[Beta22.rc1]*
   * [FIX]: VPAID ads now work in Internet Explorer
   * [FIX]: If dynamic ad configuration has a "first ad" setting of -1 it will disable all ads from playing,
