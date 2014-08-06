@@ -450,6 +450,7 @@ function( angular , c6ui , adtech , c6Defines  ) {
                         self.loadAd = function() {
                             return adPlayerDeferred.promise.then(function() {
                                 self.player.loadAd();
+                                return adDeferred.promise;
                             });
                         };
 
@@ -458,6 +459,7 @@ function( angular , c6ui , adtech , c6Defines  ) {
 
                             return adDeferred.promise.then(function() {
                                 self.player.startAd();
+                                return actualAdDeferred.promise;
                             });
                         };
 
@@ -546,9 +548,6 @@ function( angular , c6ui , adtech , c6Defines  ) {
                                             // we DEFINITELY have an ACTUAL ad
                                             self.emit('play', self);
                                             adStarted = true;
-                                            // $rootScope.$apply(function() {
-                                            //     actualAdDeferred.resolve();
-                                            // });
                                             break;
                                         }
                                     case 'AdVideoStart':
