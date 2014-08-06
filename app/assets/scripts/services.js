@@ -428,7 +428,8 @@ function( angular , c6ui , adtech , c6Defines  ) {
                         function initTimer() {
                             var check = $interval(function() {
                                     if (self.player.getAdProperties) {
-                                        if (self.player.getAdProperties().adCurrentTime > 0 && adStarted && adVideoStart) {
+                                        if (self.player.getAdProperties().adCurrentTime > 0 &&
+                                            adStarted && adVideoStart) {
                                             actualAdDeferred.resolve();
                                         }
                                     }
