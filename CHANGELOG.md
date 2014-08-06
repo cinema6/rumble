@@ -4,6 +4,8 @@
   * [FIX]: VPAID ads now work in Internet Explorer
   * [FIX]: If dynamic ad configuration has a "first ad" setting of -1 it will disable all ads from playing,
     if the ad "frequency" is set to 0 then only the ad in first position will be shown
+  * [FIX]: Fixed an issue that caused ads to hang on Firefox on the Mac
+    when flash is not installed
 
 ## Beta21 (July 28, 2014)
 * *[Beta21.rc1]*
