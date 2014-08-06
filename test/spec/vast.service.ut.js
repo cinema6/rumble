@@ -4,6 +4,7 @@ define(['services'], function(servicesModule) {
     describe('VASTService', function() {
         var VASTService,
             VASTServiceProvider,
+            c6VideoService,
             $rootScope,
             $q,
             $window,
@@ -188,6 +189,7 @@ define(['services'], function(servicesModule) {
                 $window = $injector.get('$window');
                 spyOn($window.Date, 'now').andReturn(Date.now());
                 c6ImagePreloader = $injector.get('c6ImagePreloader');
+                c6VideoService = $injector.get('c6VideoService');
                 compileAdTag = $injector.get('compileAdTag');
 
                 _service = VASTService._private;
@@ -393,6 +395,36 @@ define(['services'], function(servicesModule) {
 
                                 it('should return null if the type is not found', function() {
                                     expect(vast.getVideoSrc('video/webm')).toBeNull();
+                                });
+
+                                describe('if a type is not provided', function() {
+                                    var result;
+
+                                    beforeEach(function() {
+                                        spyOn(c6VideoService, 'bestFormat')
+                                            .andReturn('video/mp4');
+
+                                        result = vast.getVideoSrc();
+                                    });
+
+                                    it('should check for the best video format', function() {
+                                        expect(c6VideoService.bestFormat).toHaveBeenCalledWith(['video/mp4', 'video/x-flv']);
+                                    });
+
+                                    it('should return the src of that best format', function() {
+                                        expect(result).toBe(vast.video.mediaFiles[0].url);
+                                    });
+
+                                    describe('if no best format is provided', function() {
+                                        beforeEach(function() {
+                                            c6VideoService.bestFormat.andReturn(undefined);
+                                            result = vast.getVideoSrc();
+                                        });
+
+                                        it('should return null', function() {
+                                            expect(result).toBeNull();
+                                        });
+                                    });
                                 });
                             });
 
