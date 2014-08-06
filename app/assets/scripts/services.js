@@ -92,7 +92,9 @@ function( angular , c6ui , adtech , c6Defines  ) {
             };
 
             this.$get = ['$log','$http','$window','c6ImagePreloader','compileAdTag','$q',
-            function    ( $log , $http , $window , c6ImagePreloader , compileAdTag , $q ) {
+                         'c6VideoService',
+            function    ( $log , $http , $window , c6ImagePreloader , compileAdTag , $q ,
+                          c6VideoService ) {
                 var service = {},
                     _service = {};
 
@@ -217,17 +219,16 @@ function( angular , c6ui , adtech , c6Defines  ) {
                 };
 
                 _service.VAST.prototype = {
-                    getVideoSrc: function(type) {
-                        var src = null;
+                    getVideoSrc: function(_type) {
+                        var type = _type || c6VideoService.bestFormat(
+                            this.video.mediaFiles.map(function(mediaFile) {
+                                return mediaFile.type;
+                            })
+                        );
 
-                        this.video.mediaFiles.some(function(mediaFile) {
-                            if (mediaFile.type === type) {
-                                src = mediaFile.url;
-                                return true;
-                            }
-                        });
-
-                        return src;
+                        return this.video.mediaFiles.reduce(function(result, mediaFile) {
+                            return mediaFile.type === type ? mediaFile.url : result;
+                        }, null);
                     },
                     getCompanion: function() {
                         // this just returns the first one
