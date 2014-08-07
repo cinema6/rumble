@@ -1,11 +1,12 @@
 <article class="mr-textCard__group">
-    <div class="mr-textCard__img" ng-style="{'background-image':config.thumbs.large ? 'url(' + config.thumbs.large + ')' : ''}">
-        <btn class="mr-card__startBtn" type="button">
+    <button class="mr-textCard__goBtn" ng-style="{'background-image':config.thumbs.large ? 'url(' + config.thumbs.large + ')' : ''}" type="button">
+        <span class="mr-card__startText">
             Let&rsquo;s Go!
-        </btn>
-    </div>
-    <p class="mr-card__counter">{{number}} of {{total}}</p>
+        </span>
+        <span class="mr-card__startOverlay">&nbsp;</span>
+    </button>
     <div class="mr-textCard__copy">
+        <p class="mr-card__counter">{{number}} of {{total}}</p>
         <h1 class="mr-card__title tk--hdr">{{config.title}}</h1>
         <div class="mr-card__desc" ng-bind-html="config.note"></div>
     </div>

@@ -513,33 +513,68 @@
         padding:0 12.75rem 0 0;
         position:relative;
     }
-        .mr-textCard__img {
-            position:absolute; top:0;
-            width:30%; height:100%;
+        .mr-textCard__goBtn {
+            position:absolute; top:0; z-index: 1; right:0;
+            width:32%; height:100%;
             background:50% 50% / cover no-repeat;
-            border:0.75rem solid #fff;
+            border:0.75rem solid #fff; border-left:0;
             box-sizing:border-box;
+            margin:0; padding:0;
+            cursor:pointer;
         }
-        .mr-textCard__group .mr-card__counter {
-            margin:1em 0 0.75em 0;
-            position:absolute; right:1.875rem;
-            z-index:1;
-            background:#fff;
-        }
+            .mr-textCard__goBtn:active,
+            .mr-textCard__goBtn:focus {
+                border:0.75rem solid #fff; border-left:0;
+            }
+            .mr-card__startText {
+                background:#d94040; color:#fff; font-weight:bold;
+                margin:-1.05em 0 0 0; padding:0.75rem 0;
+                border:0;
+                width:100%;
+                display: block;
+                position:absolute; top:50%; z-index: 1;
+                text-align: center; vertical-align: middle; line-height:1;
+                font-size:1.25rem;
+            }
+                @media screen and (min-width:88.75rem), screen and (min-height:49.4375rem) {
+                    /*  w: 1420px +
+                        h: 791px + */
+                    .mr-card__startText {
+                        font-size:1.75rem;
+                        margin:-1.464em 0 0 0; padding:1em 0;
+                    }
+                }
+                @media screen and (min-width:76rem) and (max-width:88.6875rem), screen and (min-height:43.125rem) and (max-height:49.375rem) {
+                    /*  w: 1216px - 1419px
+                        h: 690px - 790px */
+                    .mr-card__startText {
+                        font-size:1.5rem;
+                        margin:-1.5em 0 0 0; padding:1em 0;
+                    }
+                }
+            .mr-card__startOverlay {
+                position:absolute; top:0; bottom:0; left:0; right:0;
+                background:black; opacity:0.3;
+                transition: background 0.5s linear;
+            }
         .mr-textCard__copy {
-            width:100%; height:100%;
-            position:absolute;
+            width:63%; height:100%;
+            position:absolute; left:5%;
             overflow: auto;
-            right:0;
+            text-align: justify;
         }
+            .mr-textCard__copy .mr-card__counter {
+                margin:10% 0 0 0;
+                text-align: left;
+            }
             .mr-textCard__copy .mr-card__title {
                 padding:0;
-                margin:10% 3% 0 33%;
+                margin:0.25em 3% 0 0;
                 font-size:2rem; font-weight:normal;
             }
             .mr-textCard__copy .mr-card__desc {
-                margin:1em 0 1em 33%;
-                width:44%;
+                margin:1em 0;
+                width:80%;
             }
             @media screen and (min-width:88.75rem), screen and (min-height:49.4375rem) {
                 /*  w: 1420px +
@@ -558,9 +593,11 @@
             @media screen and (min-width:60rem) and (max-width:75.9375rem), screen and (min-height:35.4375rem) and (max-height:43.0625rem) {
                 /*  w: 960px - 1215px 
                     h: 567px - 689px */
+                .mr-textCard__copy .mr-card__counter {
+                    margin-top:7%;
+                }
                 .mr-textCard__copy .mr-card__title {
                     font-size:1.75rem;
-                    margin-top:7%;
                 }
                 .mr-textCard__copy .mr-card__desc {
                     font-size:0.875rem;
@@ -569,16 +606,18 @@
             @media screen and (max-width:59.9375rem), screen and (max-height:35.375rem) {
                 /*  w: -959px 
                     h: -566px */
+                .mr-textCard__copy .mr-card__counter {
+                    margin-top:5%;
+                }
                 .mr-textCard__copy .mr-card__title {
                     font-size:1.5rem;
-                    margin-top:5%;
                 }
                 .mr-textCard__copy .mr-card__desc {
                     font-size:0.8125rem;
                 }
             }
         .mr-card__fader {
-            position:absolute; bottom:0; left:31%;
+            position:absolute; bottom:0; left:2%;
             width:66%; height:1rem;
             background:url('../../img/textcard__fader.png') 0 bottom / 100% 100% repeat-x;
         }
@@ -594,41 +633,7 @@
             cursor:pointer;
             display: inline-block;
         }
-        .mr-card__startBtn {
-            background:#d94040; color:#fff; font-weight:bold;
-            margin:0; padding:0.5em 0.75em; border-radius:3px;
-            cursor:pointer;
-            display: inline-block;
-            position:absolute; top:40%; right:8%;
-            text-align: center; vertical-align: middle; line-height:1;
-            font-size:1.25em;
-        }
-            .mr-card__startBtn span {
-                display: block;
-                float:left;
-                margin:0 6px 0 0;
-                text-shadow: 0 1px 0 rgba(0,0,0,0.5);
-            }
-            .mr-card__startBtn .startBtn__arrow {
-                display: block;
-                float:left;
-                font-size:2em; font-weight:normal;
-                line-height: 0.3;
-            }
-            @media screen and (min-width:88.75rem), screen and (min-height:49.4375rem) {
-                /*  w: 1420px +
-                    h: 791px + */
-                .mr-card__startBtn {
-                    font-size:1.75em;
-                }
-            }
-            @media screen and (min-width:76rem) and (max-width:88.6875rem), screen and (min-height:43.125rem) and (max-height:49.375rem) {
-                /*  w: 1216px - 1419px
-                    h: 690px - 790px */
-                .mr-card__startBtn {
-                    font-size:1.5em;
-                }
-            }
+        
 
 
 /*  ==========================================================================
