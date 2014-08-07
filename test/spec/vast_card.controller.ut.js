@@ -998,9 +998,33 @@ define(['cards/vast', 'services', 'angular'], function(vastModule, servicesModul
 
                     describe('after the promise is resolved', function() {
                         it('should set videoSrc to vast video ad url', function() {
-                            expect(vast.getVideoSrc).toHaveBeenCalledWith('video/mp4');
+                            expect(vast.getVideoSrc).toHaveBeenCalledWith();
                             expect(VastCardCtrl.videoSrc).toBe('http://www.videos.com/video.mp4');
                             expect(VastCardCtrl.companion).toEqual({adType:'iframe', fileURI: '//ads.adap.tv/c/companion?cck=cck&creativeId=110497&melaveId=42657&key=tribal360llc&adSourceId=208567&bidId=&afppId=159224&exSId=639284&cb=9874983758324475&pageUrl=http%3A%2F%2Fcinema6.com&eov=eov'});
+                        });
+
+                        describe('if a src is not returned', function() {
+                            beforeEach(function() {
+                                $scope.$destroy();
+                                $scope = $rootScope.$new();
+
+                                $scope.config = {
+                                    data: {}
+                                };
+                                $scope.profile = {};
+                                $scope.$apply(function() {
+                                    VastCardCtrl = $controller('VastCardController', { $scope: $scope });
+                                });
+                                spyOn($scope, '$emit');
+                                vast.getVideoSrc.andReturn(null);
+                                $scope.$apply(function() {
+                                    $scope.onDeck = true;
+                                });
+                            });
+
+                            it('should skip the card', function() {
+                                expect($scope.$emit).toHaveBeenCalledWith('<mr-card>:contentEnd', jasmine.any(Object));
+                            });
                         });
                     });
                 });

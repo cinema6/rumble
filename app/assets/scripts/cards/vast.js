@@ -102,8 +102,14 @@ function( angular , services ) {
                 if(onDeck) {
                     if(!adHasBeenCalledFor) {
                         VASTService.getVAST(data.source).then(function(vast) {
+                            var src = vast.getVideoSrc();
+
+                            if (!src) {
+                                goForward();
+                            }
+
                             _data.vastData = vast;
-                            self.videoSrc = vast.getVideoSrc('video/mp4');
+                            self.videoSrc = src;
                             self.companion = vast.getCompanion();
                         }, function() {
                             if ($scope.active) {
