@@ -184,9 +184,6 @@
             border:0;
             cursor:pointer;
         }
-            .mr-nav__btn--hide {
-                display: none;
-            }
             .mr-nav__next {
                 right:12.75rem; left:auto;
             }
@@ -523,11 +520,6 @@
             margin:0; padding:0;
             cursor:pointer;
         }
-            .mr-textCard__goBtn2:active,
-            .mr-textCard__goBtn2:focus {
-                border:0.75rem solid #fff; border-left:0;
-                border-top:2rem solid #fff;
-            }
             .mr-card__startText {
                 background:#d94040; color:#fff; font-weight:bold;
                 margin:-1.05em 0 0 0; padding:0.75rem 0;

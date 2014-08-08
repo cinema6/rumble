@@ -1,14 +1,21 @@
-<article class="mr-card__group">
+<article class="mr-textCard__group">
     <div class="mr-player__group">
-        <div class="mr-player__thumbnail" ng-style="{'background-image':config.thumbs.large ? 'url(' + config.thumbs.large + ')' : ''}">
+        <!--<div class="mr-player__thumbnail" ng-style="{'background-image':config.thumbs.large ? 'url(' + config.thumbs.large + ')' : ''}">
             <span class="ir"><img ng-src="{{config.thumbs.large}}"></span>
+        </div>-->
+        <div class="mr-textCard__copy">
+            <h1 class="mr-card__title tk--hdr">{{config.title}}</h1>
+            <div class="mr-card__desc" ng-bind-html="config.note"></div>
         </div>
     </div>
 
-    <div class="mr-card__copy">
-        <h1 class="mr-card__title tk--hdr">{{config.title}}</h1>
-        <div class="mr-card__desc" ng-bind-html="config.note"></div>
-    </div>
+    <button class="mr-textCard__goBtn" ng-style="{'background-image':config.thumbs.large ? 'url(' + config.thumbs.large + ')' : ''}" type="button">
+        <span class="mr-card__startText">
+            Let&rsquo;s Go!
+        </span>
+        <span class="mr-card__startOverlay">&nbsp;</span>
+    </button>
+
     <div class="mr-ad__med-rect">
         <display-ad-module ng-if="Ctrl.hasModule('displayAd')"
             active="active"
