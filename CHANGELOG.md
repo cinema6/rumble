@@ -1,5 +1,8 @@
 # MiniReel Player
 
+* *[Beta22.rc3]*
+  * [FEATURE]: text card styles added
+
 ## Beta22 (August 6, 2014)
 * *[Beta22.rc2]*
   * [FIX]: VPAID ads pause if ad is loaded after auto-advancing to next card
