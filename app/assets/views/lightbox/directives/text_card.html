@@ -1,12 +1,16 @@
 <article class="mr-textCard__group">
-    <button class="mr-textCard__goImg" 
-    ng-style="{'background-image':config.thumbs.large ? 'url(' + config.thumbs.large + ')' : ''}" type="button">&nbsp;</button>
+    <button class="mr-textCard__goImg"
+        ng-style="{'background-image':config.thumbs.large ? 'url(' + config.thumbs.large + ')' : ''}"
+        ng-click="$emit('<mr-card>:contentEnd', config)"
+        type="button">
+        &nbsp;
+    </button>
     <div class="mr-pub-logo-box">&nbsp;</div>
     <div class="mr-textCard__copy">
         <p class="mr-card__counter">{{number}} of {{total}}</p>
         <h1 class="mr-card__title tk--hdr">{{config.title}}</h1>
         <div class="mr-card__desc" ng-bind-html="config.note"></div>
-        <button class="mr-textCard__goBtn">Begin</button>
+        <button ng-click="$emit('<mr-card>:contentEnd', config)" class="mr-textCard__goBtn">Begin</button>
     </div>
     
     <div class="mr-card__fader">&nbsp;</div>
