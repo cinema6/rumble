@@ -21,11 +21,10 @@
         <button ng-click="RumbleCtrl.goForward('nav')"
             ng-class="{'mr-nav__next--display-ad': currentCard.type === 'ad'}"
             ng-show="nav.enabled"
-            ng-hide="atTail"
             class="mr-nav__btn mr-nav__next c6-fade"
             type="button"
             title="Next Page"
-            ng-hide="currentCard.type === 'recap' || currentCard.type === 'text'">
+            ng-hide="atTail || currentCard.type === 'recap' || currentCard.type === 'text'">
             <svg class="mr-nav__icon mr-nav__icon-next" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
              viewBox="0 0 27.213 45.941" enable-background="new 0 0 27.213 45.941" xml:space="preserve">
                 <path class="mr-nav__icon-path" fill-rule="evenodd" clip-rule="evenodd" d="M4.243,0l22.971,22.971L4.243,45.941L0,41.699l18.728-18.728L0,4.243

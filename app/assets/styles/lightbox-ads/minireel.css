@@ -491,77 +491,75 @@
     .mr-textCard__group .mr-player__group {
         background:none;
     }
-    .mr-textCard__goBtn {
+    .mr-textCard__goImg {
         position:absolute; z-index: 1; 
         top:0; right:-19rem;
         width:18.75rem; height:auto;
-        background:50% 50% / cover no-repeat;
+        background: 50% 50% / cover no-repeat;
         border:0;
         box-sizing:border-box;
         margin:0; padding:0;
         cursor:pointer;
     }
-        .mr-card__startText {
-            background:#d94040; color:#fff; font-weight:bold;
-            margin:-1.05em 0 0 0; padding:0.75rem 0;
-            border:0;
-            width:100%;
-            display: block;
-            position:absolute; top:50%; z-index: 1;
-            text-align: center; vertical-align: middle; line-height:1;
-            font-size:1.25rem;
-        }
-        .mr-card__startOverlay {
+        .mr-textCard__goImg:after {
+            content:'';
             position:absolute; top:0; bottom:0; left:0; right:0;
             background:black; opacity:0;
-            transition: opacity 0.5s linear;
         }
         @media screen and (min-width:88.75rem), screen and (min-height:49.4375rem) {
             /*  w: 1420px +
                 h: 791px + */
-            .mr-textCard__goBtn {
+            .mr-textCard__goImg {
                 height:27.5rem; 
             }
         }
         @media screen and (min-width:76rem) and (max-width:88.6875rem), screen and (min-height:43.125rem) and (max-height:49.375rem) {
             /*  w: 1216px - 1419px
                 h: 690px - 790px */
-            .mr-textCard__goBtn {
+            .mr-textCard__goImg {
                 height:20rem;
             }
         }
         @media screen and (min-width:65rem) and (max-width:75.9375rem), screen and (min-height:37.5rem) and (max-height:43.0625rem) {
             /*  w: 1040px - 1215px
                 h: 600px - 689px */
-            .mr-textCard__goBtn {
+            .mr-textCard__goImg {
                 height:14.5rem;
             }
         }
         @media screen and (min-width:60rem) and (max-width:64.9375rem), screen and (min-height:35.4375rem) and (max-height:37.4375rem) {
             /*  w: 960px - 1039px 
                 h: 567px - 599px */
-            .mr-textCard__goBtn {
+            .mr-textCard__goImg {
                 height:12rem;
             }
         }
         @media screen and (min-width:50rem) and (max-width:59.9375rem), screen and (min-height:28.75rem) and (max-height:35.375rem) {
             /*  w: 800px - 959px
                 h: 460px - 570px */
-            .mr-textCard__goBtn {
+            .mr-textCard__goImg {
                 height:5.375rem;
-            }
-            .mr-card__startText {
-                top:0; bottom:0;
-                margin:0; padding:1.7em 0 0 0;
+                background: none !important;
             }
         }
         @media screen and (max-width:49.9375rem), screen and (max-height:28.6875rem) {
             /*  w: - 799px
                 h: - 459px */
-            .mr-textCard__goBtn {
+            .mr-textCard__goImg {
                 display: none;
             }
         }
+    .mr-textCard__goBtn {
+        background:#d94040 url('../../img/play-icon.svg') 84% 50% / auto 30% no-repeat; color:#fff; font-weight:bold;
+        margin:1em 0 4em; padding:0.75em 2.25em 0.75em 1em;
+        border:0; border-radius:3px;
+        display: block;
+        text-align: center; line-height:1;
+        font-size:1rem;
+        cursor:pointer;
+        overflow: hidden;
+        position: relative;
+    }
     .mr-textCard__copy {
         position:absolute; top:0; bottom:0; left:0; right:0;
         overflow: auto;

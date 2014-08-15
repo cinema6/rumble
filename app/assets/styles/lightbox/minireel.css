@@ -510,47 +510,33 @@
         padding:0 12.75rem 0 0;
         position:relative;
     }
-        .mr-textCard__goBtn {
+        .mr-textCard__goImg {
             position:absolute; z-index: 1; 
             top:2rem; right:0.75rem; bottom:0.75rem;
             width:30%; height:auto;
-            background:50% 50% / cover no-repeat;
+            background: 50% 50% / cover no-repeat;
             border:0;
             box-sizing:border-box;
             margin:0; padding:0;
             cursor:pointer;
         }
-            .mr-card__startText {
-                background:#d94040; color:#fff; font-weight:bold;
-                margin:-1.05em 0 0 0; padding:0.75rem 0;
-                border:0;
-                width:100%;
-                display: block;
-                position:absolute; top:50%; z-index: 1;
-                text-align: center; vertical-align: middle; line-height:1;
-                font-size:1.25rem;
-            }
-                @media screen and (min-width:88.75rem), screen and (min-height:49.4375rem) {
-                    /*  w: 1420px +
-                        h: 791px + */
-                    .mr-card__startText {
-                        font-size:1.75rem;
-                        margin:-1.464em 0 0 0; padding:1em 0;
-                    }
-                }
-                @media screen and (min-width:76rem) and (max-width:88.6875rem), screen and (min-height:43.125rem) and (max-height:49.375rem) {
-                    /*  w: 1216px - 1419px
-                        h: 690px - 790px */
-                    .mr-card__startText {
-                        font-size:1.5rem;
-                        margin:-1.5em 0 0 0; padding:1em 0;
-                    }
-                }
-            .mr-card__startOverlay {
+            .mr-textCard__goImg:after {
+                content:'';
                 position:absolute; top:0; bottom:0; left:0; right:0;
                 background:black; opacity:0;
-                transition: opacity 0.5s linear;
             }
+        .mr-textCard__goBtn {
+            background:#d94040 url('../../img/play-icon.svg') 84% 50% / auto 30% no-repeat; color:#fff; font-weight:bold;
+            margin:1em 0 4em; padding:0.75em 2.25em 0.75em 1em;
+            border:0; border-radius:3px;
+            display: block;
+            text-align: center; line-height:1;
+            font-size:1rem;
+            cursor:pointer;
+            overflow: hidden;
+            position: relative;
+        }
+        
         .mr-textCard__group .mr-pub-logo-box {
             top:0.5em; bottom:auto; right:auto; left:69%;
             z-index: 1;

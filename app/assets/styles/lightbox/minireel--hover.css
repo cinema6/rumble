@@ -72,6 +72,29 @@
             opacity:1;
         }
 
+
+/*  ==========================================================================
+    text card classes
+    ========================================================================== */    
+    .mr-textCard__goImg:after {
+        -webkit-transition: opacity 0.5s ease; 
+        -moz-transition: opacity 0.5s ease; 
+        -o-transition: opacity 0.5s ease; 
+        transition: opacity 0.5s ease;
+    }
+        .mr-textCard__goImg:hover:after {
+            opacity:0.3;
+        }
+    .mr-textCard__goBtn {
+        -webkit-transition: background 0.2s; 
+        -moz-transition: background 0.2s; 
+        -o-transition: background 0.2s; 
+        transition: background 0.2s;
+    }
+        .mr-textCard__goBtn:hover {
+            background-position:88% 50%;
+        }
+
 /*  ==========================================================================
     Splash Screen classes
     ========================================================================== */
