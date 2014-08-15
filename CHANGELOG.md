@@ -1,6 +1,6 @@
 # MiniReel Player
 
-* *[Beta22.rc3]*
+* *[Beta23.rc1]*
   * [FEATURE]: text card styles added
 
 ## Beta22 (August 6, 2014)
