@@ -1,14 +1,22 @@
-<article class="mr-card__group">
+<article class="mr-textCard__group">
     <div class="mr-player__group">
-        <div class="mr-player__thumbnail" ng-style="{'background-image':config.thumbs.large ? 'url(' + config.thumbs.large + ')' : ''}">
+        <!--<div class="mr-player__thumbnail" ng-style="{'background-image':config.thumbs.large ? 'url(' + config.thumbs.large + ')' : ''}">
             <span class="ir"><img ng-src="{{config.thumbs.large}}"></span>
+        </div>-->
+        <div class="mr-textCard__copy">
+            <h1 class="mr-card__title tk--hdr">{{config.title}}</h1>
+            <div class="mr-card__desc" ng-bind-html="config.note"></div>
+            <button class="mr-textCard__goBtn" ng-click="$emit('<mr-card>:contentEnd', config)">Begin</button>
         </div>
     </div>
 
-    <div class="mr-card__copy">
-        <h1 class="mr-card__title tk--hdr">{{config.title}}</h1>
-        <div class="mr-card__desc" ng-bind-html="config.note"></div>
-    </div>
+    <button class="mr-textCard__goImg"
+        ng-style="{'background-image':config.thumbs.large ? 'url(' + config.thumbs.large + ')' : ''}"
+        ng-click="$emit('<mr-card>:contentEnd', config)"
+        type="button">
+        &nbsp;
+    </button>
+
     <div class="mr-ad__med-rect">
         <display-ad-module ng-if="Ctrl.hasModule('displayAd')"
             active="active"
