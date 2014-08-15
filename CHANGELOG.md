@@ -1,7 +1,10 @@
 # MiniReel Player
 
+## Beta23 (August 15, 2014)
 * *[Beta23.rc1]*
-  * [FEATURE]: text card styles added
+  * [FEATURE]: Text card now features buttons for starting the MiniReel
+    in the lightbox view modes
+* *[/Beta23.rc1]*
 
 ## Beta22 (August 6, 2014)
 * *[Beta22.rc2]*
