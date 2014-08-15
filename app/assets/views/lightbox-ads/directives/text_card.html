@@ -6,12 +6,16 @@
         <div class="mr-textCard__copy">
             <h1 class="mr-card__title tk--hdr">{{config.title}}</h1>
             <div class="mr-card__desc" ng-bind-html="config.note"></div>
-            <button class="mr-textCard__goBtn">Begin</button>
+            <button class="mr-textCard__goBtn" ng-click="$emit('<mr-card>:contentEnd', config)">Begin</button>
         </div>
     </div>
 
-    <button class="mr-textCard__goImg" 
-    ng-style="{'background-image':config.thumbs.large ? 'url(' + config.thumbs.large + ')' : ''}" type="button">&nbsp;</button>
+    <button class="mr-textCard__goImg"
+        ng-style="{'background-image':config.thumbs.large ? 'url(' + config.thumbs.large + ')' : ''}"
+        ng-click="$emit('<mr-card>:contentEnd', config)"
+        type="button">
+        &nbsp;
+    </button>
 
     <div class="mr-ad__med-rect">
         <display-ad-module ng-if="Ctrl.hasModule('displayAd')"
