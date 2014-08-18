@@ -892,7 +892,7 @@
     ====================================================== */
     .mr-adDisplay__group {
         width: 18.75rem;
-        position:absolute; right:-12.75rem; top:0;
+        position:absolute; right:-12.75rem; bottom:-3rem;
         text-align: center;
     }
         .mr-adDisplay__view {
@@ -906,6 +906,11 @@
         .mr-adDisplay__label {
             font-size:0.6875em; color:#929292; text-align: center; 
             display: block; width:100%; margin:2px 0 0 0;
+        }
+        @media screen and (min-width:76rem) {
+            .mr-adDisplay__group {
+                bottom:-4rem;
+            }
         }
 
 /*  ==========================================================================
