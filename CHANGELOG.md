@@ -1,6 +1,10 @@
 # MiniReel Player
 
 ## Beta23 (August 15, 2014)
+* *[Beta23.rc2]*
+  * [FIX]: In Lightbox + ads mode, display ads do not display on text only cards.
+  * [FIX]: In Lightbox mode, display ad docked to bottom of player
+
 * *[Beta23.rc1]*
   * [FEATURE]: Text card now features buttons for starting the MiniReel
     in the lightbox view modes
