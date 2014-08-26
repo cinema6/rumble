@@ -187,7 +187,7 @@
             .mr-nav__next {
                 right:12.75rem; left:auto;
             }
-                .mr-nav__next--display-ad {
+                .mr-card__container--ad .mr-nav__next {
                     right:18.75rem;
                 }
             .mr-nav__icon {
