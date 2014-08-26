@@ -1,5 +1,9 @@
 # MiniReel Player
 
+* *[Beta24.rc1]*
+  * [FIX]: Hide Adtech placement container so that default Adtech ad doesn't
+    show up erroneously when a publisher is not in the Adtech system
+
 ## Beta23 (August 15, 2014)
 * *[Beta23.rc2]*
   * [FIX]: In Lightbox + ads mode, display ads do not display on text only cards.
