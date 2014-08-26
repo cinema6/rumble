@@ -43,6 +43,7 @@ function( angular ) {
             });
 
             function goForward() {
+                player.pause();
                 $scope.$emit('<mr-card>:contentEnd', config.meta || config);
             }
 

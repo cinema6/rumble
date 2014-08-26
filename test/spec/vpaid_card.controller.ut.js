@@ -564,6 +564,13 @@ define(['services', 'cards/vpaid', 'app'], function(servicesModule, vpaidModule,
                         expect($scope.$emit.mostRecentCall.args[0]).toBe('<mr-card>:contentEnd');
                     });
 
+                    it('should tell the player to pause when skipping in case an ad is loaded after we skip', function() {
+                        $scope.$apply(function() {
+                            deferred.reject();
+                        });
+                        expect(iface.pause).toHaveBeenCalled();
+                    });
+
                     describe('when controlling the navigation', function() {
                         var control, navController;
 
