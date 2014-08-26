@@ -86,10 +86,10 @@
             opacity:0.3;
         }
     .mr-textCard__goBtn {
-        -webkit-transition: background 0.2s; 
-        -moz-transition: background 0.2s; 
-        -o-transition: background 0.2s; 
-        transition: background 0.2s;
+        -webkit-transition: background-position 0.2s; 
+        -moz-transition: background-position 0.2s; 
+        -o-transition: background-position 0.2s; 
+        transition: background-position 0.2s;
     }
         .mr-textCard__goBtn:hover {
             background-position:88% 50%;
