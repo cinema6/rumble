@@ -6,6 +6,8 @@
   * [FIX]: Fixed bug where Next button wasn't being hidden on ad cards in lighbox mode
   * [FIX]: Safari animation fixed for text intro start button
   * [FEATURE]: lightbox intro card styles updated
+  * [FIX]: Ensure that whenever we skip/advance past an ad card our VPAID player knows not
+    to show an ad if it eventually loads
 
 ## Beta23 (August 15, 2014)
 * *[Beta23.rc2]*
