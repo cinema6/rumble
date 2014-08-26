@@ -3,6 +3,7 @@
 * *[Beta24.rc1]*
   * [FIX]: Hide Adtech placement container so that default Adtech ad doesn't
     show up erroneously when a publisher is not in the Adtech system
+  * [FIX]: Fixed bug where Next button wasn't being hidden on ad cards in lighbox mode
 
 ## Beta23 (August 15, 2014)
 * *[Beta23.rc2]*
