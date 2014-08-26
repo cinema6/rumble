@@ -1,5 +1,6 @@
 # MiniReel Player
 
+## Beta24 (August 26, 2014)
 * *[Beta24.rc1]*
   * [FIX]: Hide Adtech placement container so that default Adtech ad doesn't
     show up erroneously when a publisher is not in the Adtech system
@@ -8,6 +9,7 @@
   * [FEATURE]: lightbox intro card styles updated
   * [FIX]: Ensure that whenever we skip/advance past an ad card our VPAID player knows not
     to show an ad if it eventually loads
+* *[Beta24.rc1]*
 
 ## Beta23 (August 15, 2014)
 * *[Beta23.rc2]*
