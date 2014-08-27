@@ -362,18 +362,45 @@ define(['app', 'minireel', 'c6ui', 'angular'], function(appModule, minireelModul
                                 });
 
                                 describe('if there are collateral assets', function() {
+                                    var nowMethod,
+                                        now;
+
                                     beforeEach(function() {
+                                        nowMethod = Date.now;
+                                        now = Date.now();
+
                                         mrData.collateral = {
                                             splash: '/collateral/mysplash.jpg'
                                         };
 
+                                        spyOn(Date, 'now').andReturn(now);
+
                                         result = MiniReelService.createDeck(mrData);
+                                    });
+
+                                    afterEach(function() {
+                                        Date.now = nowMethod;
                                     });
 
                                     it('should make both thumbnails the fully-resolved splash image', function() {
                                         expect(result[0].thumbs).toEqual({
-                                            small: 'http://portal.cinema6.com/collateral/mysplash.jpg',
-                                            large: 'http://portal.cinema6.com/collateral/mysplash.jpg'
+                                            small: 'http://portal.cinema6.com/collateral/mysplash.jpg?cb=' + now,
+                                            large: 'http://portal.cinema6.com/collateral/mysplash.jpg?cb=' + now
+                                        });
+                                    });
+
+                                    describe('if the splash is a local blob', function() {
+                                        beforeEach(function() {
+                                            mrData.collateral.splash = 'blob:http%3A//localhost%3A9000/d1a849e5-4afb-40fd-8c06-e853a55ace10';
+
+                                            result = MiniReelService.createDeck(mrData);
+                                        });
+
+                                        it('should make both thumbnails the unchanged blob', function() {
+                                            expect(result[0].thumbs).toEqual({
+                                                small: mrData.collateral.splash,
+                                                large: mrData.collateral.splash
+                                            });
                                         });
                                     });
                                 });
@@ -388,7 +415,15 @@ define(['app', 'minireel', 'c6ui', 'angular'], function(appModule, minireelModul
                             });
 
                             describe('if there is a splash image', function() {
+                                var nowMethod,
+                                    now;
+
                                 beforeEach(function() {
+                                    nowMethod = Date.now;
+                                    now = Date.now();
+
+                                    spyOn(Date, 'now').andReturn(now);
+
                                     mrData.collateral = {
                                         splash: '/collateral/mysplash.jpg'
                                     };
@@ -396,10 +431,14 @@ define(['app', 'minireel', 'c6ui', 'angular'], function(appModule, minireelModul
                                     result = MiniReelService.createDeck(mrData);
                                 });
 
+                                afterEach(function() {
+                                    Date.now = nowMethod;
+                                });
+
                                 it('should make both thumbnails the fully-resolved splash image', function() {
                                     expect(result[6].thumbs).toEqual({
-                                        small: 'http://portal.cinema6.com/collateral/mysplash.jpg',
-                                        large: 'http://portal.cinema6.com/collateral/mysplash.jpg'
+                                        small: 'http://portal.cinema6.com/collateral/mysplash.jpg?cb=' + now,
+                                        large: 'http://portal.cinema6.com/collateral/mysplash.jpg?cb=' + now
                                     });
                                 });
                             });

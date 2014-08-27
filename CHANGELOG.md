@@ -1,5 +1,9 @@
 # MiniReel Player
 
+* *[Beta25.rc1]*
+  * [FIX]: Fix for an issue that could cause a custom splash image not
+    to appear when previewing a MiniReel from the MiniReel Studio
+
 ## Beta24 (August 26, 2014)
 * *[Beta24.rc1]*
   * [FIX]: Hide Adtech placement container so that default Adtech ad doesn't

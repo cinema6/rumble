@@ -139,11 +139,13 @@ function( angular , c6Defines  , tracker ,
                     (function() {
                         var splash = (data.collateral || {}).splash ?
                             envrootFilter(data.collateral.splash) :
-                            null;
+                            null,
+                            isBlob = (/^blob:/).test(splash),
+                            thumb = isBlob ? splash : (splash + '?cb=' + Date.now());
 
                         card.thumbs = card.thumbs || (splash ? {
-                            small: splash,
-                            large: splash
+                            small: thumb,
+                            large: thumb
                         } : null);
                     }());
                     break;
