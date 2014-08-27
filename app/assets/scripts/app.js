@@ -64,7 +64,9 @@ function( angular , angularAnimate , angularSanitize , c6ui , c6log , c6Defines 
         .filter('envroot', ['c6UrlMaker',
         function              ( c6UrlMaker ) {
             return function(url) {
-                return url && c6UrlMaker(url.replace(/^\//,''), 'envroot');
+                var isBlob = (/^blob:/).test(url || '');
+
+                return url && (isBlob ? url : c6UrlMaker(url.replace(/^\//,''), 'envroot'));
             };
         }])
         .filter('collateral', ['c6UrlMaker',
