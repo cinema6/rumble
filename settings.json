@@ -25,5 +25,19 @@
             "bucket": "com.cinema6.portal",
             "app": "apps/<%= package.name %>/"
         }
+    },
+    "build": {
+        "ui/paginator": {
+            "whitelist": ["mobile"]
+        },
+        "cards/vpaid": {
+            "blacklist": ["mobile"]
+        },
+        "ui/table_of_contents": {
+            "whitelist": ["mobile"]
+        },
+        "ui/thumb_paginator": {
+            "blacklist": ["mobile"]
+        }
     }
 }

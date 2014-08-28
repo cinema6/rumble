@@ -1,3 +1,5 @@
+var grunt = require('grunt');
+
 module.exports = {
     dist: {
         options: {
@@ -25,7 +27,23 @@ module.exports = {
             },
             modules: [{
                 name: 'main'
-            }]
+            }],
+            onBuildRead: function(moduleName, path, contents) {
+                'use strict';
+
+                var mode = grunt.config('buildMode'),
+                    settings = grunt.config('settings').build,
+                    config = settings[moduleName] || {},
+                    whitelist = config.whitelist || [mode],
+                    blacklist = config.blacklist || [];
+
+                function isAllowed(whitelist, blacklist, mode) {
+                    return whitelist.indexOf(mode) > -1 && blacklist.indexOf(mode) < 0;
+                }
+
+                return isAllowed(whitelist, blacklist, mode) ?
+                    contents : grunt.file.read(path.replace(/\.js$/, '.stub'));
+            }
         }
     }
 };
