@@ -13,7 +13,6 @@ define(['cards/vast', 'services', 'angular'], function(vastModule, servicesModul
             $q;
 
         var VASTService,
-            ControlsService,
             ModuleService,
             vast;
 
@@ -63,10 +62,6 @@ define(['cards/vast', 'services', 'angular'], function(vastModule, servicesModul
                 $provide.value('ModuleService', {
                     hasModule: jasmine.createSpy('ModuleService.hasModule()')
                 });
-
-                $provide.value('ControlsService', {
-                    bindTo: jasmine.createSpy('ControlsService.bindTo()')
-                });
             });
             module(vastModule.name);
 
@@ -80,7 +75,6 @@ define(['cards/vast', 'services', 'angular'], function(vastModule, servicesModul
                 $q = $injector.get('$q');
 
                 VASTService = $injector.get('VASTService');
-                ControlsService = $injector.get('ControlsService');
                 ModuleService = $injector.get('ModuleService');
 
                 $scope = $rootScope.$new();
@@ -762,10 +756,6 @@ define(['cards/vast', 'services', 'angular'], function(vastModule, servicesModul
                                 $scope.$apply(function() {
                                     $scope.active = true;
                                 });
-                            });
-
-                            it('should bind the interface to the controls', function() {
-                                expect(ControlsService.bindTo).toHaveBeenCalledWith(iface);
                             });
 
                             it('should $emit <vast-card>:init', function() {

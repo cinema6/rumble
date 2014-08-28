@@ -1,4 +1,4 @@
-define(['c6ui', 'services', 'minireel', 'c6_defines'], function(c6uiModule, servicesModule, minireelModule, c6Defines) {
+define(['c6ui', 'services', 'minireel', 'angular'], function(c6uiModule, servicesModule, minireelModule, angular) {
     'use strict';
 
     describe('RumbleController', function() {
@@ -12,7 +12,6 @@ define(['c6ui', 'services', 'minireel', 'c6_defines'], function(c6uiModule, serv
             c6EventEmitter,
             RumbleCtrl,
             BallotService,
-            CommentsService,
             deck,
             appData,
             mockPlayer,
@@ -74,6 +73,7 @@ define(['c6ui', 'services', 'minireel', 'c6_defines'], function(c6uiModule, serv
             });
 
             deck = [
+                /* jshint quotmark:false */
                 {
                     "id"     : "vid1",
                     "type"   : "youtube",
@@ -152,6 +152,7 @@ define(['c6ui', 'services', 'minireel', 'c6_defines'], function(c6uiModule, serv
                         "videoid" : "vid4video"
                     }
                 }
+                /* jshint quotmark:single */
             ];
 
             appData = {
@@ -208,7 +209,6 @@ define(['c6ui', 'services', 'minireel', 'c6_defines'], function(c6uiModule, serv
                 c6UserAgent = $injector.get('c6UserAgent');
                 c6EventEmitter = $injector.get('c6EventEmitter');
                 BallotService = $injector.get('BallotService');
-                CommentsService = $injector.get('CommentsService');
                 ControlsService = $injector.get('ControlsService');
 
                 $scope      = $rootScope.$new();
@@ -222,7 +222,6 @@ define(['c6ui', 'services', 'minireel', 'c6_defines'], function(c6uiModule, serv
                     sessionDeferred = $q.defer();
                     return sessionDeferred.promise;
                 });
-                spyOn(CommentsService, 'init');
                 spyOn(BallotService, 'init');
                 spyOn(BallotService, 'getElection');
 
@@ -276,10 +275,6 @@ define(['c6ui', 'services', 'minireel', 'c6_defines'], function(c6uiModule, serv
                 });
 
                 expect(BallotService.init.callCount).toBe(1);
-            });
-
-            it('should initialize the CommentsService with the id', function() {
-                expect(CommentsService.init).toHaveBeenCalledWith(appData.experience.id);
             });
 
             it('should initialize the google analytics', function(){
@@ -461,31 +456,6 @@ define(['c6ui', 'services', 'minireel', 'c6_defines'], function(c6uiModule, serv
 
                 currentIndex(2);
                 expect($scope.players).toEqual([playlist(0), playlist(1), playlist(2), playlist(3), playlist(4)]);
-            });
-        });
-
-        describe('$scope.controls', function() {
-            var controlsIFace;
-
-            beforeEach(function() {
-                var newScope = $rootScope.$new();
-
-                newScope.app = $scope.app;
-                newScope.AppCtrl = {
-                    resize: angular.noop
-                };
-
-                controlsIFace = {};
-
-                ControlsService.init.andReturn(controlsIFace);
-
-                $scope = newScope;
-                RumbleCtrl = $controller('RumbleController', { $scope: $scope });
-            });
-
-            it('should be the result of calling init() on the ControlsService', function() {
-                expect($scope.controls).toBe(controlsIFace);
-                expect(ControlsService.init).toHaveBeenCalled();
             });
         });
 

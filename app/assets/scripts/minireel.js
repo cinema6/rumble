@@ -83,54 +83,12 @@ function( angular , c6Defines  , tracker ,
             }
         };
     }])
-    .service('MiniReelService', ['InflectorService','CommentsService','VideoThumbService',
+    .service('MiniReelService', ['InflectorService','VideoThumbService',
                                  'c6ImagePreloader','envrootFilter',
-    function                    ( InflectorService , CommentsService , VideoThumbService ,
+    function                    ( InflectorService , VideoThumbService ,
                                   c6ImagePreloader , envrootFilter ) {
         this.createDeck = function(data) {
             var playlist = angular.copy(data.deck);
-
-            function getObject(type, id) {
-                var pluralType = InflectorService.pluralize(type),
-                    collection = data[pluralType],
-                    object;
-
-                collection.some(function(item) {
-                    if (item.id === id) {
-                        object = item;
-                    }
-                });
-
-                return object;
-            }
-
-            function resolve(object) {
-                angular.forEach(object, function(value, prop) {
-                    var words,
-                        lastWord,
-                        type;
-
-                    if (angular.isObject(value)) {
-                        resolve(value);
-                        return;
-                    }
-
-                    if (!angular.isString(prop)) {
-                        return;
-                    }
-
-                    words = InflectorService.getWords(prop);
-                    lastWord = words[words.length - 1];
-
-                    if ((lastWord === 'id') && (words.length > 1)) {
-                        words.pop();
-                        type = InflectorService.toCamelCase(words);
-
-                        delete object[prop];
-                        object[type] = getObject(type, value);
-                    }
-                });
-            }
 
             function fetchThumb(card) {
                 switch (card.type) {
@@ -162,12 +120,7 @@ function( angular , c6Defines  , tracker ,
             }
 
             angular.forEach(playlist, function(video) {
-                resolve(video);
                 fetchThumb(video);
-
-                //TODO: remove this when the service works for real
-                CommentsService.push(video.id, (video.conversation && video.conversation.comments));
-                delete video.conversation;
 
                 video.player = null;
             });
@@ -320,14 +273,11 @@ function( angular , c6Defines  , tracker ,
         };
     }])
     .controller('RumbleController',['$log','$scope','$timeout','$interval','BallotService',
-                                    'c6Computed','cinema6','MiniReelService','CommentsService',
-                                    'ControlsService','trackerService',
+                                    'c6Computed','cinema6','MiniReelService','trackerService',
     function                       ( $log , $scope , $timeout , $interval, BallotService ,
-                                     c6Computed , cinema6 , MiniReelService , CommentsService ,
-                                     ControlsService , trackerService ) {
+                                     c6Computed , cinema6 , MiniReelService , trackerService ) {
         var self    = this, readyTimeout,
             appData = $scope.app.data,
-            id = appData.experience.id,
             election = appData.experience.data.election,
             videoAdConfig = appData.experience.data.adConfig.video,
             c = c6Computed($scope),
@@ -559,12 +509,8 @@ function( angular , c6Defines  , tracker ,
 
         $log = $log.context('RumbleCtrl');
 
-        CommentsService.init(id);
-
         $scope.deviceProfile    = appData.profile;
         $scope.title            = appData.experience.data.title;
-
-        $scope.controls         = ControlsService.init();
 
         $scope.deck             = MiniReelService.createDeck(appData.experience.data);
 
@@ -1244,8 +1190,8 @@ function( angular , c6Defines  , tracker ,
             }
         };
     }])
-    .controller('VideoEmbedCardController', ['$scope','ModuleService','ControlsService','EventService','c6AppData','c6ImagePreloader', 'AdTechService',
-    function                                ( $scope , ModuleService , ControlsService , EventService , c6AppData , c6ImagePreloader ,  AdTechService ) {
+    .controller('VideoEmbedCardController', ['$scope','ModuleService','EventService','c6AppData','c6ImagePreloader', 'AdTechService',
+    function                                ( $scope , ModuleService , EventService , c6AppData , c6ImagePreloader ,  AdTechService ) {
         var self = this,
             config = $scope.config,
             profile = $scope.profile,
@@ -1377,8 +1323,6 @@ function( angular , c6Defines  , tracker ,
                 if ((active === wasActive) && (wasActive === false)){ return; }
 
                 if (active) {
-                    ControlsService.bindTo(player);
-
                     if (c6AppData.behaviors.canAutoplay &&
                         c6AppData.profile.autoplay &&
                         c6AppData.experience.data.autoplay) {

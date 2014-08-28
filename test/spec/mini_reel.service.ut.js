@@ -5,8 +5,7 @@ define(['app', 'minireel', 'c6ui', 'angular'], function(appModule, minireelModul
         noop = angular.noop;
 
     describe('MiniReelService', function() {
-        var CommentsService,
-            MiniReelService,
+        var MiniReelService,
             $rootScope,
             $q;
 
@@ -36,10 +35,8 @@ define(['app', 'minireel', 'c6ui', 'angular'], function(appModule, minireelModul
 
             inject(function($injector) {
                 MiniReelService = $injector.get('MiniReelService');
-                CommentsService = $injector.get('CommentsService');
                 $rootScope = $injector.get('$rootScope');
                 $q = $injector.get('$q');
-                CommentsService.init('r-738c2403d83ddc');
 
                 VideoThumbService = $injector.get('VideoThumbService');
                 c6ImagePreloader = $injector.get('c6ImagePreloader');
@@ -58,60 +55,6 @@ define(['app', 'minireel', 'c6ui', 'angular'], function(appModule, minireelModul
 
                     beforeEach(function() {
                         mrData = {
-                            ballots: [
-                                {
-                                    id: 'rb-01eb03bc062c15',
-                                    choices: [
-                                        {
-                                            button: 'Good',
-                                            most: 'The Goodest video'
-                                        },
-                                        {
-                                            button: 'Bad',
-                                            most: 'The Badest video'
-                                        },
-                                        {
-                                            button: 'Ugly',
-                                            most: 'The Ugliest video'
-                                        }
-                                    ]
-                                },
-                                {
-                                    id: 'rb-dddd8635eb6db3',
-                                    choices: [
-                                        {
-                                            button: 'Cool',
-                                            most: 'The sweetest video'
-                                        },
-                                        {
-                                            button: 'Lame',
-                                            most: 'The lamest video'
-                                        }
-                                    ]
-                                }
-                            ],
-                            commentGroups: [
-                                {
-                                    id: 'rc-90db37d7af97a7',
-                                    comments: [
-                                        'Hello',
-                                        'What\'s up?'
-                                    ]
-                                },
-                                {
-                                    id: 'rc-1d98e6113fd436',
-                                    comments: [
-                                        'This video sucks!',
-                                        'I love this video!'
-                                    ]
-                                }
-                            ],
-                            notes: [
-                                {
-                                    id: 'rn-abe1698644256e',
-                                    text: 'Hello!'
-                                }
-                            ],
                             deck: [
                                 {
                                     id: 'rc-c539bacdb79a14',
@@ -134,9 +77,7 @@ define(['app', 'minireel', 'c6ui', 'angular'], function(appModule, minireelModul
                                         rel: 0,
                                         modestbranding: 1,
                                         noteId: 'rn-abe1698644256e'
-                                    },
-                                    ballotId: 'rb-01eb03bc062c15',
-                                    commentGroupId: 'rc-1d98e6113fd436'
+                                    }
                                 },
                                 {
                                     id: 'rc-2d46a04b21b073',
@@ -159,9 +100,7 @@ define(['app', 'minireel', 'c6ui', 'angular'], function(appModule, minireelModul
                                     data: {
                                         videoid: 'x18b09a',
                                         related: 0
-                                    },
-                                    ballotId: 'rb-dddd8635eb6db3',
-                                    commentGroupId: 'rc-90db37d7af97a7'
+                                    }
                                 },
                                 {
                                     id: 'rc-e489d1c6359fb3',
@@ -174,9 +113,7 @@ define(['app', 'minireel', 'c6ui', 'angular'], function(appModule, minireelModul
                                         videoid: '81766071',
                                         start: 35,
                                         end: 45
-                                    },
-                                    ballotId: 'rb-01eb03bc062c15',
-                                    commentGroupId: 'rc-1d98e6113fd436'
+                                    }
                                 },
                                 {
                                     id: 'rc-e2947c9bec017e',
@@ -189,9 +126,7 @@ define(['app', 'minireel', 'c6ui', 'angular'], function(appModule, minireelModul
                                         rel: 0,
                                         modestbranding: 1,
                                         end: 18
-                                    },
-                                    ballotId: 'rb-dddd8635eb6db3',
-                                    commentGroupId: 'rc-90db37d7af97a7'
+                                    }
                                 },
                                 {
                                     id: 'rc-df011e0f447867',
@@ -247,40 +182,6 @@ define(['app', 'minireel', 'c6ui', 'angular'], function(appModule, minireelModul
                     it('should return a copy of the deck', function() {
                         expect(angular.copy).toHaveBeenCalledWith(mrData.deck);
                         expect(result).toBe(angular.copy.mostRecentCall.result);
-                    });
-
-                    it('should resolve any properties ending in "Id" to a reference to the object it\'s pointing to', function() {
-                        var video1 = result[1],
-                            video2 = result[3],
-                            video3 = result[4],
-                            video4 = result[5],
-                            ballot1 = mrData.ballots[0],
-                            ballot2 = mrData.ballots[1],
-                            commentGroup1 = mrData.commentGroups[0],
-                            commentGroup2 = mrData.commentGroups[1],
-                            note1 = mrData.notes[0];
-
-                        expect(video1.ballot).toBe(ballot1);
-                        expect(video1.ballotId).toBeUndefined();
-                        expect(video1.commentGroup).toBe(commentGroup2);
-                        expect(video1.commentGroupId).toBeUndefined();
-                        expect(video1.data.note).toBe(note1);
-                        expect(video1.data.noteId).toBeUndefined();
-
-                        expect(video2.ballot).toBe(ballot2);
-                        expect(video2.ballotId).toBeUndefined();
-                        expect(video2.commentGroup).toBe(commentGroup1);
-                        expect(video2.commentGroupId).toBeUndefined();
-
-                        expect(video3.ballot).toBe(ballot1);
-                        expect(video3.ballotId).toBeUndefined();
-                        expect(video3.commentGroup).toBe(commentGroup2);
-                        expect(video3.commentGroupId).toBeUndefined();
-
-                        expect(video4.ballot).toBe(ballot2);
-                        expect(video4.ballotId).toBeUndefined();
-                        expect(video4.commentGroup).toBe(commentGroup1);
-                        expect(video4.commentGroupId).toBeUndefined();
                     });
 
                     it('should give each video a "null" player', function() {

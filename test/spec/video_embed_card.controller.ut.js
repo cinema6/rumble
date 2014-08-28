@@ -1,4 +1,4 @@
-define(['minireel', 'c6ui', 'services'], function(minireelModule, c6uiModule, servicesModule) {
+define(['minireel', 'c6ui', 'services'], function(minireelModule, c6uiModule) {
     'use strict';
 
     describe('VideoEmbedCardController', function() {
@@ -9,7 +9,6 @@ define(['minireel', 'c6ui', 'services'], function(minireelModule, c6uiModule, se
             VideoEmbedCardCtrl;
 
         var ModuleService,
-            ControlsService,
             c6ImagePreloader,
             c6AppData;
 
@@ -17,12 +16,6 @@ define(['minireel', 'c6ui', 'services'], function(minireelModule, c6uiModule, se
             module(c6uiModule.name, function($provide) {
                 $provide.value('c6ImagePreloader', {
                     load: jasmine.createSpy('c6ImagePreloader.load()')
-                });
-            });
-
-            module(servicesModule.name, function($provide) {
-                $provide.value('ControlsService', {
-                    bindTo: jasmine.createSpy('ControlsService.bindTo()')
                 });
             });
 
@@ -53,7 +46,6 @@ define(['minireel', 'c6ui', 'services'], function(minireelModule, c6uiModule, se
 
                 ModuleService = $injector.get('ModuleService');
                 spyOn(ModuleService, 'hasModule').andCallThrough();
-                ControlsService = $injector.get('ControlsService');
                 c6ImagePreloader = $injector.get('c6ImagePreloader');
                 c6AppData = $injector.get('c6AppData');
 
@@ -299,10 +291,6 @@ define(['minireel', 'c6ui', 'services'], function(minireelModule, c6uiModule, se
                         $scope.$apply(function() {
                             $scope.active = true;
                         });
-                    });
-
-                    it('should bind to the controls', function() {
-                        expect(ControlsService.bindTo).toHaveBeenCalledWith(iface);
                     });
 
                     it('should dismiss the ballot and results', function() {
