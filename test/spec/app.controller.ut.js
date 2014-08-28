@@ -126,9 +126,7 @@ define(['app','c6ui','angular'], function(appModule, c6uiModule, angular) {
 
         describe('site integration', function() {
             it('should initialize a session with the site', function() {
-                expect(cinema6.init).toHaveBeenCalledWith({
-                    setup: jasmine.any(Function)
-                });
+                expect(cinema6.init).toHaveBeenCalledWith();
             });
 
             describe('events', function() {
@@ -141,30 +139,6 @@ define(['app','c6ui','angular'], function(appModule, c6uiModule, angular) {
                     it('should $emit shouldStart', function() {
                         expect($scope.$broadcast).toHaveBeenCalledWith('shouldStart');
                     });
-                });
-            });
-
-            describe('setup()', function() {
-                var success;
-
-                beforeEach(function() {
-                    var setup = cinema6.init.mostRecentCall.args[0].setup;
-
-                    success = jasmine.createSpy('setup() success');
-
-                    $scope.$apply(function() {
-                        setup(c6AppData).then(success);
-                    });
-                });
-
-                it('should return a promise that resolves when the players are ready', function() {
-                    expect(success).not.toHaveBeenCalled();
-
-                    $scope.$apply(function() {
-                        $scope.$emit('ready');
-                    });
-
-                    expect(success).toHaveBeenCalled();
                 });
             });
         });

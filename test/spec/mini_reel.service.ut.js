@@ -6,6 +6,7 @@ define(['app', 'minireel', 'c6ui', 'angular'], function(appModule, minireelModul
 
     describe('MiniReelService', function() {
         var MiniReelService,
+            playerInterface,
             $rootScope,
             $q;
 
@@ -37,6 +38,7 @@ define(['app', 'minireel', 'c6ui', 'angular'], function(appModule, minireelModul
                 MiniReelService = $injector.get('MiniReelService');
                 $rootScope = $injector.get('$rootScope');
                 $q = $injector.get('$q');
+                playerInterface = $injector.get('playerInterface');
 
                 VideoThumbService = $injector.get('VideoThumbService');
                 c6ImagePreloader = $injector.get('c6ImagePreloader');
@@ -184,7 +186,7 @@ define(['app', 'minireel', 'c6ui', 'angular'], function(appModule, minireelModul
                         expect(result).toBe(angular.copy.mostRecentCall.result);
                     });
 
-                    it('should give each video a "null" player', function() {
+                    it('should give each video a player', function() {
                         result.forEach(function(video) {
                             expect(video.player).toBeNull();
                         });

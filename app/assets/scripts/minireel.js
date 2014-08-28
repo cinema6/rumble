@@ -272,11 +272,11 @@ function( angular , c6Defines  , tracker ,
             }).then(process);
         };
     }])
-    .controller('RumbleController',['$log','$scope','$timeout','$interval','BallotService',
+    .controller('RumbleController',['$log','$scope','$interval','BallotService',
                                     'c6Computed','cinema6','MiniReelService','trackerService',
-    function                       ( $log , $scope , $timeout , $interval, BallotService ,
+    function                       ( $log , $scope , $interval, BallotService ,
                                      c6Computed , cinema6 , MiniReelService , trackerService ) {
-        var self    = this, readyTimeout,
+        var self = this,
             appData = $scope.app.data,
             election = appData.experience.data.election,
             videoAdConfig = appData.experience.data.adConfig.video,
@@ -285,13 +285,7 @@ function( angular , c6Defines  , tracker ,
             cancelTrackVideo = null,
             ballotMap = {},
             navController = null,
-            MasterDeckCtrl,
-            readyWatch = $scope.$watch('ready', function(ready) {
-                if (ready) {
-                    $scope.$emit('ready');
-                    readyWatch();
-                }
-            });
+            MasterDeckCtrl;
 
         function MasterDeckController() {
             var index = null,
@@ -542,7 +536,7 @@ function( angular , c6Defines  , tracker ,
         $scope.atHead           = null;
         $scope.atTail           = null;
         $scope.currentReturns   = null;
-        $scope.ready            = false;
+        $scope.ready            = true;
         c($scope, 'prevThumb', function() {
             var index = this.currentIndex - 1,
                 card;
@@ -613,10 +607,8 @@ function( angular , c6Defines  , tracker ,
 
             card.player = player;
 
-            player.on('ready',function(){
+            player.once('ready',function(){
                 $log.log('Player ready: %1 - %2',player.getType(),player.getVideoId());
-                self.checkReady();
-                player.removeListener('ready',this);
             });
 
             player.on('play', function(){
@@ -737,27 +729,6 @@ function( angular , c6Defines  , tracker ,
             });
 
             return result;
-        };
-
-        this.checkReady = function(){
-            if ($scope.ready){
-                return;
-            }
-
-            var result = true;
-            $scope.players.some(function(item){
-                if ((!item.player) || (!item.player.isReady())){
-                    result = false;
-                    return true;
-                }
-            });
-
-            $scope.ready = result;
-
-            if ($scope.ready){
-                $log.info('MiniReel Player is ready!');
-                $timeout.cancel(readyTimeout);
-            }
         };
 
         this.startVideoTracking = function(){
@@ -931,11 +902,6 @@ function( angular , c6Defines  , tracker ,
             self.setPosition($scope.currentIndex + 1);
             this.trackNavEvent('Next',src || 'auto');
         };
-
-        readyTimeout = $timeout(function(){
-            $log.warn('Not all players are ready, but proceding anyway!');
-            $scope.ready = true;
-        }, 3000);
 
         $scope.$on('$destroy',function(){
             $log.info('I am slain!');

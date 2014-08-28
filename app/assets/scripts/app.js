@@ -257,10 +257,10 @@ function( angular , angularAnimate , angularSanitize , c6ui , c6log , c6Defines 
         }])
         .controller('AppController', ['$scope','$log','cinema6','c6UrlMaker','$timeout',
                                       '$document','$window','c6Debounce','$animate','c6AppData',
-                                      'trackerService','$q',
+                                      'trackerService',
         function                     ( $scope , $log , cinema6 , c6UrlMaker , $timeout ,
                                        $document , $window , c6Debounce , $animate , c6AppData ,
-                                       trackerService , $q ) {
+                                       trackerService ) {
             $log = $log.context('AppCtrl');
             $log.info('Location:',$window.location);
             var _app = {
@@ -269,7 +269,6 @@ function( angular , angularAnimate , angularSanitize , c6ui , c6log , c6Defines 
                 app = {
                     data: c6AppData
                 },
-                readyDeferred = $q.defer(),
                 session,
                 tracker = trackerService('c6mr');
 
@@ -285,10 +284,6 @@ function( angular , angularAnimate , angularSanitize , c6ui , c6log , c6Defines 
                 session.ping('close');
             }
 
-            function waitForReady() {
-                return readyDeferred.promise;
-            }
-
             $animate.enabled(false);
 
             Object.defineProperties(app, {
@@ -302,19 +297,11 @@ function( angular , angularAnimate , angularSanitize , c6ui , c6log , c6Defines 
             $scope.$on('reelStart', gotoDeck);
             $scope.$on('reelReset', gotoSplash);
 
-            $scope.$on('ready', function() {
-                readyDeferred.resolve(true);
-            });
-
             $log.info('loaded.');
 
             $scope.app = app;
 
-            session = cinema6.init({
-                setup: function() {
-                    return waitForReady();
-                }
-            });
+            session = cinema6.init();
 
             session.on('initAnalytics',function(cfg){
                 $log.info('Init analytics with accountId: %1, clientId: %2',
