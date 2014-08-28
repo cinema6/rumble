@@ -997,6 +997,22 @@ function( angular , c6Defines  , tracker ,
 
     }])
 
+    .filter('deck', [function() {
+        var noopCards = [];
+
+        return function(deck, index, buffer) {
+            var first = index - buffer,
+                last = index + buffer;
+
+            return deck.map(function(card, index) {
+                return (index >= first && index <= last) ?
+                    card : (noopCards[index] || (noopCards[index] = {
+                        type: 'noop'
+                    }));
+            });
+        };
+    }])
+
     .controller('DeckController', ['$scope','c6EventEmitter',
     function                      ( $scope , c6EventEmitter ) {
         var self = this,
