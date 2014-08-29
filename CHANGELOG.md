@@ -3,6 +3,9 @@
 * *[Beta25.rc1]*
   * [FIX]: Fix for an issue that could cause a custom splash image not
     to appear when previewing a MiniReel from the MiniReel Studio
+  * [PERFORMANCE]: Removed code that is no longer being used, further
+    optimized the mobile build to increase load speeds, reduced the 
+    amount of library code being downloaded
 
 ## Beta24 (August 26, 2014)
 * *[Beta24.rc1]*
