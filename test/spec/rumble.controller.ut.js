@@ -1,4 +1,4 @@
-define(['c6ui', 'services', 'minireel', 'c6_defines'], function(c6uiModule, servicesModule, minireelModule, c6Defines) {
+define(['c6ui', 'services', 'minireel', 'angular'], function(c6uiModule, servicesModule, minireelModule, angular) {
     'use strict';
 
     describe('RumbleController', function() {
@@ -12,7 +12,6 @@ define(['c6ui', 'services', 'minireel', 'c6_defines'], function(c6uiModule, serv
             c6EventEmitter,
             RumbleCtrl,
             BallotService,
-            CommentsService,
             deck,
             appData,
             mockPlayer,
@@ -58,22 +57,8 @@ define(['c6ui', 'services', 'minireel', 'c6_defines'], function(c6uiModule, serv
                 getSession: function(){}
             };
 
-            mockPlayer = {
-                getType         : jasmine.createSpy('player.getType'),
-                getVideoId      : jasmine.createSpy('player.getVideoId'),
-                isReady         : jasmine.createSpy('player.isReady'),
-                on              : jasmine.createSpy('player.on'),
-                removeListener  : jasmine.createSpy('player.removeListener'),
-                _on       : {}
-            };
-            mockPlayer.on.andCallFake(function(eventName,handler){
-                if (mockPlayer._on[eventName] === undefined){
-                    mockPlayer._on[eventName] = [];
-                }
-                mockPlayer._on[eventName].push(handler);
-            });
-
             deck = [
+                /* jshint quotmark:false */
                 {
                     "id"     : "vid1",
                     "type"   : "youtube",
@@ -152,6 +137,7 @@ define(['c6ui', 'services', 'minireel', 'c6_defines'], function(c6uiModule, serv
                         "videoid" : "vid4video"
                     }
                 }
+                /* jshint quotmark:single */
             ];
 
             appData = {
@@ -208,8 +194,14 @@ define(['c6ui', 'services', 'minireel', 'c6_defines'], function(c6uiModule, serv
                 c6UserAgent = $injector.get('c6UserAgent');
                 c6EventEmitter = $injector.get('c6EventEmitter');
                 BallotService = $injector.get('BallotService');
-                CommentsService = $injector.get('CommentsService');
                 ControlsService = $injector.get('ControlsService');
+
+                mockPlayer = c6EventEmitter({
+                    getType         : jasmine.createSpy('player.getType'),
+                    getVideoId      : jasmine.createSpy('player.getVideoId'),
+                    isReady         : jasmine.createSpy('player.isReady'),
+                });
+                spyOn(mockPlayer, 'on').andCallThrough();
 
                 $scope      = $rootScope.$new();
 
@@ -222,7 +214,6 @@ define(['c6ui', 'services', 'minireel', 'c6_defines'], function(c6uiModule, serv
                     sessionDeferred = $q.defer();
                     return sessionDeferred.promise;
                 });
-                spyOn(CommentsService, 'init');
                 spyOn(BallotService, 'init');
                 spyOn(BallotService, 'getElection');
 
@@ -250,7 +241,7 @@ define(['c6ui', 'services', 'minireel', 'c6_defines'], function(c6uiModule, serv
                 expect($scope.currentCard).toBeNull();
                 expect($scope.atHead).toBeNull();
                 expect($scope.atTail).toBeNull();
-                expect($scope.ready).toEqual(false);
+                expect($scope.ready).toEqual(true);
                 expect($scope.nav).toEqual({
                     enabled: true,
                     wait: null
@@ -276,10 +267,6 @@ define(['c6ui', 'services', 'minireel', 'c6_defines'], function(c6uiModule, serv
                 });
 
                 expect(BallotService.init.callCount).toBe(1);
-            });
-
-            it('should initialize the CommentsService with the id', function() {
-                expect(CommentsService.init).toHaveBeenCalledWith(appData.experience.id);
             });
 
             it('should initialize the google analytics', function(){
@@ -461,31 +448,6 @@ define(['c6ui', 'services', 'minireel', 'c6_defines'], function(c6uiModule, serv
 
                 currentIndex(2);
                 expect($scope.players).toEqual([playlist(0), playlist(1), playlist(2), playlist(3), playlist(4)]);
-            });
-        });
-
-        describe('$scope.controls', function() {
-            var controlsIFace;
-
-            beforeEach(function() {
-                var newScope = $rootScope.$new();
-
-                newScope.app = $scope.app;
-                newScope.AppCtrl = {
-                    resize: angular.noop
-                };
-
-                controlsIFace = {};
-
-                ControlsService.init.andReturn(controlsIFace);
-
-                $scope = newScope;
-                RumbleCtrl = $controller('RumbleController', { $scope: $scope });
-            });
-
-            it('should be the result of calling init() on the ControlsService', function() {
-                expect($scope.controls).toBe(controlsIFace);
-                expect(ControlsService.init).toHaveBeenCalled();
             });
         });
 
@@ -1305,13 +1267,13 @@ define(['c6ui', 'services', 'minireel', 'c6_defines'], function(c6uiModule, serv
                 $scope.currentIndex = 0;
                 $scope.currentCard  = $scope.deck[0];
                 RumbleCtrl.goForward();
-                $timeout.flush();
+
                 expect($scope.currentIndex).toEqual(1);
                 expect($scope.currentCard).toBe($scope.deck[1]);
                 expect($scope.atHead).toEqual(false);
                 expect($scope.atTail).toEqual(false);
                 expect($scope.$emit).toHaveBeenCalledWith('reelMove');
-                expect($scope.$emit.callCount).toBe(4); // positionWillChange, positionDidChange, reelMove, ready
+                expect($scope.$emit.callCount).toBe(3); // positionWillChange, positionDidChange, reelMove
                 expect(trackerSpy.trackPage.callCount).toEqual(1);
                 expect(trackerSpy.trackPage).toHaveBeenCalledWith({
                     page : '/mr/e-722bd3c4942331/ad1',
@@ -1328,7 +1290,7 @@ define(['c6ui', 'services', 'minireel', 'c6_defines'], function(c6uiModule, serv
                 $scope.currentIndex = 0;
                 $scope.currentCard  = $scope.deck[0];
                 RumbleCtrl.goForward('test');
-                $timeout.flush();
+
                 expect($scope.currentIndex).toEqual(1);
                 expect($scope.currentCard).toBe($scope.deck[1]);
                 expect(trackerSpy.trackPage.callCount).toEqual(1);
@@ -1358,14 +1320,13 @@ define(['c6ui', 'services', 'minireel', 'c6_defines'], function(c6uiModule, serv
                 $scope.currentIndex = 2;
                 $scope.currentCard  = $scope.deck[2];
                 RumbleCtrl.goBack();
-                $timeout.flush();
-                $scope.$digest();
+
                 expect($scope.currentIndex).toEqual(1);
                 expect($scope.currentCard).toBe($scope.deck[1]);
                 expect($scope.atHead).toEqual(false);
                 expect($scope.atTail).toEqual(false);
                 expect($scope.$emit).toHaveBeenCalledWith('reelMove');
-                expect($scope.$emit.callCount).toBe(4); // positionWillChange, positionDidChange, reelMove, ready
+                expect($scope.$emit.callCount).toBe(3); // positionWillChange, positionDidChange, reelMove
                 expect(trackerSpy.trackPage.callCount).toEqual(1);
                 expect(trackerSpy.trackEvent.callCount).toEqual(1);
                 expect(trackerSpy.trackPage).toHaveBeenCalledWith({
@@ -1393,8 +1354,7 @@ define(['c6ui', 'services', 'minireel', 'c6_defines'], function(c6uiModule, serv
                 $scope.currentIndex = 2;
                 $scope.currentCard  = $scope.deck[2];
                 RumbleCtrl.goBack('test');
-                $timeout.flush();
-                $scope.$digest();
+
                 expect($scope.currentIndex).toEqual(1);
                 expect($scope.currentCard).toBe($scope.deck[1]);
                 expect(trackerSpy.trackPage.callCount).toEqual(1);
@@ -1429,14 +1389,13 @@ define(['c6ui', 'services', 'minireel', 'c6_defines'], function(c6uiModule, serv
                 $scope.currentIndex = 0;
                 $scope.currentCard  = $scope.deck[0];
                 RumbleCtrl.goTo(2);
-                $timeout.flush();
-                $scope.$digest();
+
                 expect($scope.currentIndex).toEqual(2);
                 expect($scope.currentCard).toBe($scope.deck[2]);
                 expect($scope.atHead).toEqual(false);
                 expect($scope.atTail).toEqual(false);
                 expect($scope.$emit).toHaveBeenCalledWith('reelMove');
-                expect($scope.$emit.callCount).toBe(4); // positionWillChange, positionDidChange, reelMove, ready
+                expect($scope.$emit.callCount).toBe(3); // positionWillChange, positionDidChange, reelMove
                 expect(trackerSpy.trackPage.callCount).toEqual(1);
                 expect(trackerSpy.trackEvent.callCount).toEqual(1);
                 expect(trackerSpy.trackPage).toHaveBeenCalledWith({
@@ -1468,8 +1427,7 @@ define(['c6ui', 'services', 'minireel', 'c6_defines'], function(c6uiModule, serv
                 $scope.currentIndex = 0;
                 $scope.currentCard  = $scope.deck[0];
                 RumbleCtrl.goTo(2,'test');
-                $timeout.flush();
-                $scope.$digest();
+
                 expect($scope.currentIndex).toEqual(2);
                 expect($scope.currentCard).toBe($scope.deck[2]);
                 expect(trackerSpy.trackPage.callCount).toEqual(1);
@@ -1633,8 +1591,7 @@ define(['c6ui', 'services', 'minireel', 'c6_defines'], function(c6uiModule, serv
                     expect($scope.deck[2].player).toBeNull();
                     $scope.$emit('playerAdd',mockPlayer);
                     expect($scope.deck[2].player).toBe(mockPlayer);
-                    expect(mockPlayer.on.callCount).toEqual(4);
-                    expect(mockPlayer.on.argsForCall[0][0]).toEqual('ready');
+                    expect(mockPlayer.on.callCount).toEqual(3);
                 });
             });
 
@@ -1759,60 +1716,6 @@ define(['c6ui', 'services', 'minireel', 'c6_defines'], function(c6uiModule, serv
                     it('should move forward', function() {
                         expect(RumbleCtrl.goForward).toHaveBeenCalled();
                     });
-                });
-            });
-
-            describe('ready',function(){
-                beforeEach(function() {
-                    spyOn($scope, '$emit').andCallThrough();
-                });
-
-                it('runs a ready check when a player becomes ready',function(){
-                    spyOn(RumbleCtrl,'checkReady').andCallThrough();
-                    
-                    $scope.$emit('playerAdd',mockPlayer);
-                    
-                    mockPlayer.isReady.andReturn(true);
-
-                    expect(RumbleCtrl.checkReady).not.toHaveBeenCalled();
-                    expect($scope.ready).toEqual(false);
-
-                    mockPlayer._on.ready[0](mockPlayer);
-                    expect(RumbleCtrl.checkReady).toHaveBeenCalled();
-                    expect($scope.ready).toEqual(false);
-                });
-
-                it('reports ready when all players are ready',function(){
-                    spyOn(RumbleCtrl,'checkReady').andCallThrough();
-                    $scope.deck[0].player = {
-                        isReady : jasmine.createSpy('player0.isReady')
-                    };
-                    $scope.deck[1].player = mockPlayer;
-                    $scope.deck[2].player = {
-                        isReady : jasmine.createSpy('player2.isReady')
-                    };
-
-                    $scope.$apply(function() {
-                        $scope.currentIndex = 0;
-                    });
-
-                    $scope.deck[0].player.isReady.andReturn(true);
-                    $scope.deck[2].player.isReady.andReturn(true);
-                    $scope.$apply(function() {
-                        $scope.$emit('playerAdd',mockPlayer);
-                    });
-                    expect($scope.ready).toEqual(false);
-                    expect($scope.$emit).not.toHaveBeenCalledWith('ready');
-                    mockPlayer.isReady.andReturn(true);
-                    $scope.$apply(function() {
-                        mockPlayer._on.ready[0](mockPlayer);
-                    });
-                    expect(RumbleCtrl.checkReady).toHaveBeenCalled();
-                    expect($scope.deck[0].player.isReady).toHaveBeenCalled();
-                    expect($scope.deck[1].player.isReady).toHaveBeenCalled();
-                    expect($scope.deck[2].player.isReady).toHaveBeenCalled();
-                    expect($scope.$emit).toHaveBeenCalledWith('ready');
-                    expect($scope.ready).toEqual(true);
                 });
             });
         });

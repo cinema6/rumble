@@ -41,8 +41,8 @@ function( angular , angularAnimate , angularSanitize , c6ui , c6log , c6Defines 
             c6UrlMakerProvider.location(c6Defines.kProtocol + '/', 'protocol');
             c6UrlMakerProvider.location(c6Defines.kEnvUrlRoot,'envroot');
         }])
-        .config(['VASTServiceProvider', 'VPAIDServiceProvider',
-        function( VASTServiceProvider, VPAIDServiceProvider ) {
+        .config(['VASTServiceProvider','VPAIDServiceProvider',
+        function( VASTServiceProvider , VPAIDServiceProvider ) {
             VASTServiceProvider.adTags({
                 cinema6: 'http://u-ads.adap.tv/a/h/jSmRYUB6OAj1k0TZythPvTfWmlP8j6NQ7PLXxjjb3_8=?cb={cachebreaker}&pageUrl={pageUrl}&eov=eov',
                 publisher: 'http://u-ads.adap.tv/a/h/jSmRYUB6OAinZ1YEc6FP2ey+WPdagwFmCGZaBkvRjnc=?cb={cachebreaker}&pageUrl={pageUrl}&eov=eov',
@@ -73,20 +73,6 @@ function( angular , angularAnimate , angularSanitize , c6ui , c6log , c6Defines 
         function              ( c6UrlMaker ) {
             return function(url) {
                 return url && c6UrlMaker(url, 'collateral');
-            };
-        }])
-        .filter('timestamp', ['dateFilter','$window',
-        function             ( dateFilter , $window ) {
-            return function(epoch) {
-                var jsEpoch = (epoch * 1000),
-                    date = new $window.Date(jsEpoch),
-                    daysAgo = Math.round(Math.abs(($window.Date.now() - date.getTime()) / 86400000));
-
-                if (!daysAgo) {
-                    return dateFilter(date, 'h:mm a').toLowerCase();
-                }
-
-                return daysAgo + ' day' + ((daysAgo > 1) ? 's' : '') + ' ago';
             };
         }])
         .factory('_default',[function(){
@@ -164,79 +150,6 @@ function( angular , angularAnimate , angularSanitize , c6ui , c6log , c6Defines 
                 link: function(scope, element, attrs) {
                     attrs.$observe('c6BgImg', function(src) {
                         element.css('background-image', (src || '') && ('url("' + src + '")'));
-                    });
-                }
-            };
-        }])
-        .directive('c6DockAnchor', ['$window',
-        function                   ( $window ) {
-            return {
-                restrict: 'EA',
-                link: function(scope, element, attrs) {
-                    var window$ = angular.element($window),
-                        positionEvent = ('c6-dock-anchor(' + attrs.id + '):position'),
-                        dockEvent = ('c6-dock(' + attrs.id + '):linked');
-
-                    function notifyPosition() {
-                        var top = element.prop('offsetTop'),
-                            left = element.prop('offsetLeft'),
-                            height = element.prop('offsetHeight'),
-                            width = element.prop('offsetWidth'),
-                            position = {
-                                top: top,
-                                right: left + width,
-                                bottom: top + height,
-                                left: left
-                            };
-
-                        scope.$broadcast(positionEvent, position, element.prop('offsetParent'));
-                    }
-
-                    if (!attrs.id) {
-                        throw new Error('c6-dock-anchor requires an id.');
-                    }
-
-                    scope.$on(dockEvent, notifyPosition);
-                    window$.on('resize', notifyPosition);
-
-                    scope.$on('$destroy', function() {
-                        window$.off('resize', notifyPosition);
-                    });
-
-                    notifyPosition();
-                }
-            };
-        }])
-        .directive('c6Dock', [function() {
-            return {
-                restrict: 'A',
-                link: function(scope, element, attrs) {
-                    var configs = (function() {
-                            return attrs.c6Dock.split(/,\s*/).map(function(param) {
-                                var parts = param.split(' to '),
-                                    anchorParts = parts[1].split(':');
-
-                                return {
-                                    prop: parts[0],
-                                    anchorId: anchorParts[0],
-                                    anchorPosition: anchorParts[1]
-                                };
-                            });
-                        }());
-
-                    angular.forEach(configs, function(config) {
-                        var positionEvent = ('c6-dock-anchor(' + config.anchorId + '):position'),
-                            dockEvent = ('c6-dock(' + config.anchorId + '):linked');
-
-                        scope.$on(positionEvent, function(event, position, offsetParent) {
-                            if (offsetParent !== element.prop('offsetParent')) {
-                                throw new Error('Cannot dock ' + attrs.c6Dock + ' because the element to dock has a different offsetParent than its anchor.');
-                            }
-
-                            element.css(config.prop, (position[config.anchorPosition] + 'px'));
-                        });
-
-                        scope.$broadcast(dockEvent);
                     });
                 }
             };
@@ -344,10 +257,10 @@ function( angular , angularAnimate , angularSanitize , c6ui , c6log , c6Defines 
         }])
         .controller('AppController', ['$scope','$log','cinema6','c6UrlMaker','$timeout',
                                       '$document','$window','c6Debounce','$animate','c6AppData',
-                                      'trackerService','$q',
+                                      'trackerService',
         function                     ( $scope , $log , cinema6 , c6UrlMaker , $timeout ,
                                        $document , $window , c6Debounce , $animate , c6AppData ,
-                                       trackerService , $q ) {
+                                       trackerService ) {
             $log = $log.context('AppCtrl');
             $log.info('Location:',$window.location);
             var _app = {
@@ -356,7 +269,6 @@ function( angular , angularAnimate , angularSanitize , c6ui , c6log , c6Defines 
                 app = {
                     data: c6AppData
                 },
-                readyDeferred = $q.defer(),
                 session,
                 tracker = trackerService('c6mr');
 
@@ -372,10 +284,6 @@ function( angular , angularAnimate , angularSanitize , c6ui , c6log , c6Defines 
                 session.ping('close');
             }
 
-            function waitForReady() {
-                return readyDeferred.promise;
-            }
-
             $animate.enabled(false);
 
             Object.defineProperties(app, {
@@ -389,19 +297,11 @@ function( angular , angularAnimate , angularSanitize , c6ui , c6log , c6Defines 
             $scope.$on('reelStart', gotoDeck);
             $scope.$on('reelReset', gotoSplash);
 
-            $scope.$on('ready', function() {
-                readyDeferred.resolve(true);
-            });
-
             $log.info('loaded.');
 
             $scope.app = app;
 
-            session = cinema6.init({
-                setup: function() {
-                    return waitForReady();
-                }
-            });
+            session = cinema6.init();
 
             session.on('initAnalytics',function(cfg){
                 $log.info('Init analytics with accountId: %1, clientId: %2',

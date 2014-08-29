@@ -3,10 +3,10 @@ function( angular , services ) {
     'use strict';
 
     return angular.module('c6.rumble.cards.vast', [services.name])
-        .controller('VastCardController', ['$scope','$window', 'VASTService','ControlsService',
-                                           'EventService','ModuleService','$interval','$timeout',
-        function                          ( $scope , $window ,  VASTService , ControlsService ,
-                                            EventService , ModuleService , $interval , $timeout ) {
+        .controller('VastCardController', ['$scope','$window','VASTService','EventService',
+                                           'ModuleService','$interval','$timeout',
+        function                          ( $scope , $window , VASTService , EventService ,
+                                            ModuleService , $interval , $timeout ) {
             var self = this,
                 config = $scope.config,
                 _data = config._data = config._data || {
@@ -243,8 +243,6 @@ function( angular , services ) {
                         if(shouldGoForward) {
                             goForward();
                         } else {
-                            ControlsService.bindTo(iface);
-
                             if (_data.playerEvents.play.emitCount < 1) {
                                 $scope.$emit('<vast-card>:init', controlNavigation);
 

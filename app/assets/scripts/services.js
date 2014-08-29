@@ -669,159 +669,6 @@ function( angular , c6ui , adtech , c6Defines  ) {
             };
         }])
 
-        .service('ControlsService', ['$timeout',
-        function                    ( $timeout ) {
-            var _private = {};
-
-            _private.target = null;
-            _private.iface = null;
-
-            function handlePlay() {
-                _private.iface.controller.play();
-            }
-
-            function handlePause() {
-                _private.iface.controller.pause();
-            }
-
-            function handleTimeupdate(player) {
-                var duration = player.duration,
-                    currentTime = player.currentTime;
-
-                if (isNaN(duration)) { return; }
-
-                _private.iface.controller.progress((currentTime / duration) * 100);
-            }
-
-            this.init = function() {
-                var noop = angular.noop,
-                    wasPlaying;
-
-                _private.iface = {
-                    controller: {
-                        play: noop,
-                        pause: noop,
-                        progress: noop,
-                        volumeChange: noop,
-                        muteChange: noop,
-                        buffer: noop,
-                        repositionNodes: noop,
-                        setButtonDisabled: noop,
-                        ready: false
-                    },
-                    delegate: {
-                        play: function() {
-                            _private.target.play();
-                        },
-                        pause: function() {
-                            _private.target.pause();
-                        },
-                        seekStart: function() {
-                            wasPlaying = !_private.target.paused;
-
-                            _private.target.pause();
-                        },
-                        seek: function(event) {
-                            $timeout(function() {
-                                _private.iface.controller.progress(event.percent);
-                            });
-                        },
-                        seekStop: function(event) {
-                            var percent = event.percent,
-                                duration = _private.target.duration;
-
-                            _private.target.currentTime = ((percent * duration) / 100);
-
-                            if (wasPlaying) {
-                                _private.target.play();
-                            }
-                        }
-                    },
-                    enabled: true
-                };
-
-                return _private.iface;
-            };
-
-            this.bindTo = function(iface) {
-                _private.iface.controller.progress(0);
-                _private.iface.controller.pause();
-
-                if (_private.target) {
-                    _private.target
-                        .removeListener('play', handlePlay)
-                        .removeListener('pause', handlePause)
-                        .removeListener('timeupdate', handleTimeupdate);
-                }
-
-                _private.target = iface;
-
-                iface
-                    .on('play', handlePlay)
-                    .on('pause', handlePause)
-                    .on('timeupdate', handleTimeupdate);
-            };
-
-            if (window.c6.kHasKarma) { this._private = _private; }
-        }])
-
-        .service('CommentsService', ['$cacheFactory','$q','$window',
-        function                    ( $cacheFactory , $q , $window ) {
-            var _private = {};
-
-            _private.mrId = null;
-
-            _private.cache = $cacheFactory('comments');
-
-            this.init = function(id) {
-                _private.mrId = id;
-
-                _private.cache.put(id, $cacheFactory('comments:' + id));
-            };
-
-            this.push = function(id, comments) {
-                _private.cache.get(_private.mrId).put(id, comments);
-            };
-
-            this.fetch = function(id) {
-                var deferred = $q.defer(),
-                    mrId = _private.mrId,
-                    cache = _private.cache.get(mrId),
-                    comments;
-
-                if (!cache) {
-                    deferred.reject('Service has not been initialized with CommentsService.init(id)!');
-                    return deferred.promise;
-                }
-
-                comments = cache.get(id);
-
-                if (!comments) {
-                    deferred.reject({ code: 404, message: 'Could not find comments with id: ' + id + '.' });
-                }
-
-                deferred.resolve(comments);
-
-                return deferred.promise;
-            };
-
-            this.post = function(id, message) {
-                var cache = _private.cache.get(_private.mrId),
-                    comments = cache.put(id, (cache.get(id) || []));
-
-                comments.unshift({
-                    user: {
-                        pic: 'anonymous.png',
-                        name: 'Anonymous'
-                    },
-                    date: Math.floor($window.Date.now() / 1000),
-                    message: message
-                });
-            };
-
-            if (window.c6.kHasKarma) { this._private = _private; }
-        }])
-
         .service('ModuleService', [function() {
             this.hasModule = function(modules, module) {
                 return ((modules || []).indexOf(module) > -1);
@@ -846,39 +693,20 @@ function( angular , c6ui , adtech , c6Defines  ) {
             };
         }])
 
+        // TODO: Cleanup this code
         .service('InflectorService', [function() {
             var exceptions = [];
 
             this.pluralize = function(word) {
-                var plural = (function() {
-                    var result;
-
-                    exceptions.some(function(exception) {
-                        if (exception.singular === word) {
-                            return !!(result = exception.plural);
-                        }
-                    });
-
-                    return result;
-                }());
-
-                return plural || (word + 's');
+                return exceptions.reduce(function(result, exception) {
+                    return exception.singular === word ? exception.plural : result;
+                }, word + 's');
             };
 
             this.singularize = function(word) {
-                var singular = (function() {
-                    var result;
-
-                    exceptions.some(function(exception) {
-                        if (exception.plural === word) {
-                            return !!(result = exception.singular);
-                        }
-                    });
-
-                    return result;
-                }());
-
-                return singular || word.replace(/s$/, '');
+                return exceptions.reduce(function(result, exception) {
+                    return exception.plural === word ? exception.singular : result;
+                }, word.replace(/s$/, ''));
             };
 
             this.capitalize = function(word) {
@@ -886,52 +714,16 @@ function( angular , c6ui , adtech , c6Defines  ) {
             };
 
             this.getWords = function(string) {
-                var result = [],
-                    word, character, index, length;
-
-                function isDelimiter(char) {
-                    return !!char.match(/-|_|[A-Z]| /);
-                }
-
-                function isLetter(char) {
-                    return !!char.match(/[A-Za-z]/);
-                }
-
-                function pushWord(word) {
-                    result.push(word.toLowerCase());
-                }
-
                 if (angular.isArray(string)) { return string; }
 
-                word = string.charAt(0);
-                length = string.length;
-
-                for (index = 1; index < length; index++) {
-                    character = string.charAt(index);
-
-                    if (isDelimiter(character) && word) {
-                        pushWord(word);
-                        word = isLetter(character) ? character : '';
-
-                        continue;
-                    }
-
-                    word += character;
-                }
-
-                pushWord(word);
-
-                return result;
+                return string.match(/[A-Z]?[^-|_| |A-Z]+|[A-Z]/g)
+                    .map(function(word) { return word.toLowerCase(); });
             };
 
             this.toCamelCase = function(words) {
-                var self = this;
-
                 return this.getWords(words).map(function(word, index) {
-                    if (index === 0) { return word; }
-
-                    return self.capitalize(word);
-                }).join('');
+                    return index ? this.capitalize(word) : word;
+                }, this).join('');
             };
 
             this.toConstructorCase = function(words) {
