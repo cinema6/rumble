@@ -1,5 +1,10 @@
 # MiniReel Player
 
+## v1.0.0 (September 12, 2014)
+* *[v1.0.0.rc1]*
+  * Player has been updated with new Ad Tags from Adap.tv
+* *[/v1.0.0.rc1]*
+
 ## Beta25 (August 29, 2014)
 * *[Beta25.rc1]*
   * [FIX]: Fix for an issue that could cause a custom splash image not
