@@ -44,16 +44,16 @@ function( angular , angularAnimate , angularSanitize , c6ui , c6log , c6Defines 
         .config(['VASTServiceProvider','VPAIDServiceProvider',
         function( VASTServiceProvider , VPAIDServiceProvider ) {
             VASTServiceProvider.adTags({
-                cinema6: 'http://u-ads.adap.tv/a/h/jSmRYUB6OAj1k0TZythPvTfWmlP8j6NQ7PLXxjjb3_8=?cb={cachebreaker}&pageUrl={pageUrl}&eov=eov',
-                publisher: 'http://u-ads.adap.tv/a/h/jSmRYUB6OAinZ1YEc6FP2ey+WPdagwFmCGZaBkvRjnc=?cb={cachebreaker}&pageUrl={pageUrl}&eov=eov',
-                'cinema6-publisher': 'http://u-ads.adap.tv/a/h/jSmRYUB6OAj1k0TZythPvadnVgRzoU_Z7L5Y91qDAWYqO9LOfrpuqQ==?cb={cachebreaker}&pageUrl={pageUrl}&eov=eov',
-                'publisher-cinema6': 'http://u-ads.adap.tv/a/h/jSmRYUB6OAinZ1YEc6FP2fCQPSbU6FwIZz5J5C0Fsw2tnkCzhk2yTw==?cb={cachebreaker}&pageUrl={pageUrl}&eov=eov'
+                cinema6: 'http://u-ads.adap.tv/a/h/DCQzzI0K2rv1k0TZythPvTfWmlP8j6NQnxBMIgFJa80=?cb={cachebreaker}&pageUrl={pageUrl}&eov=eov',
+                publisher: 'http://u-ads.adap.tv/a/h/DCQzzI0K2runZ1YEc6FP2ey+WPdagwFmdz7a2uK_A_c=?cb={cachebreaker}&pageUrl={pageUrl}&eov=eov',
+                'cinema6-publisher': 'http://u-ads.adap.tv/a/h/DCQzzI0K2rv1k0TZythPvadnVgRzoU_Z7L5Y91qDAWYoGast41+eSw==?cb={cachebreaker}&pageUrl={pageUrl}&eov=eov',
+                'publisher-cinema6': 'http://u-ads.adap.tv/a/h/DCQzzI0K2runZ1YEc6FP2fCQPSbU6FwIZz5J5C0Fsw29iCueyXx8iw==?cb={cachebreaker}&pageUrl={pageUrl}&eov=eov'
             });
             VPAIDServiceProvider.adTags({
-                cinema6: 'http://u-ads.adap.tv/a/h/jSmRYUB6OAj1k0TZythPvYyD60pQS_90Geh1rmQXJf8=?cb={cachebreaker}&pageUrl={pageUrl}&eov=eov',
-                publisher: 'http://u-ads.adap.tv/a/h/jSmRYUB6OAinZ1YEc6FP2eOeZCYQ_JsM?cb={cachebreaker}&pageUrl={pageUrl}&eov=eov',
-                'cinema6-publisher': 'http://u-ads.adap.tv/a/h/jSmRYUB6OAj1k0TZythPvadnVgRzoU_ZPrm0eqz83CjPXEF4pAnE3w==?cb={cachebreaker}&pageUrl={pageUrl}&eov=eov',
-                'publisher-cinema6': 'http://u-ads.adap.tv/a/h/jSmRYUB6OAinZ1YEc6FP2fCQPSbU6FwIdK4EW3jlLza+WaaKRuPC_g==?cb={cachebreaker}&pageUrl={pageUrl}&eov=eov'
+                cinema6: 'http://u-ads.adap.tv/a/h/DCQzzI0K2rv1k0TZythPvYyD60pQS_90o8grI6Qm2PI=?cb={cachebreaker}&pageUrl={pageUrl}&eov=eov',
+                publisher: 'http://u-ads.adap.tv/a/h/DCQzzI0K2runZ1YEc6FP2T65tHqs_Nwo9+XmsX4pnb4=?cb={cachebreaker}&pageUrl={pageUrl}&eov=eov',
+                'cinema6-publisher': 'http://u-ads.adap.tv/a/h/DCQzzI0K2rv1k0TZythPvadnVgRzoU_ZPrm0eqz83CjfbcCg1uJO3w==?cb={cachebreaker}&pageUrl={pageUrl}&eov=eov',
+                'publisher-cinema6': 'http://u-ads.adap.tv/a/h/DCQzzI0K2runZ1YEc6FP2fCQPSbU6FwIdK4EW3jlLzbnPQftO7fDdA==?cb={cachebreaker}&pageUrl={pageUrl}&eov=eov'
             });
         }])
         .filter('percent',function(){
