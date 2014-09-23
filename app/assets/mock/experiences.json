@@ -577,6 +577,7 @@
             "collateral": {
                 "splash": "/collateral/experiences/gopro-lightbox/splash-6thumb.jpg"
             },
+            "placementId": "1111111",
             "autoplay": true,
             "deck": [
                 {
@@ -974,6 +975,7 @@
             "election": "e-5fd1f0451a0eb8",
             "title": "The 15 Most Amazing GoPro Videos Ever Recorded",
             "mode": "lightbox-ads",
+            "placementId": "1111111",
             "theme": "ed-videos",
             "branding": "digitaljournal",
             "collateral": {

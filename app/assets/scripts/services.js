@@ -604,17 +604,10 @@ function( angular , c6ui , adtech , c6Defines  ) {
 
         }])
 
-        .service('AdTechService', ['$window', '$q', '$rootScope',
-        function                  ( $window ,  $q ,  $rootScope ) {
-            var domain, placementId;
-
-            function getPlacementId() {
-                if (placementId) {
-                    return placementId.promise;
-                }
-
-                placementId = $q.defer();
-                domain = $window.location.hostname;
+        .service('AdTechService', ['$window', '$q', '$rootScope', 'c6AppData',
+        function                  ( $window ,  $q ,  $rootScope ,  c6AppData ) {
+            function getDomain() {
+                var domain = $window.location.hostname;
 
                 if (!domain){
                     try {
@@ -628,41 +621,25 @@ function( angular , c6ui , adtech , c6Defines  ) {
                         : (domain.split('.').filter(function(v,i,a){return i===a.length-2;})[0]);
                 }
 
-                adtech.loadAd({
-                    secure: (c6Defines.kProtocol === 'https:'),
-                    network: '5473.1',
-                    server: 'adserver.adtechus.com',
-                    placement: 3220577,
-                    adContainerId: 'adtechPlacement',
-                    kv: { weburl: domain },
-                    complete: function() {
-                        $rootScope.$apply(function() {
-                            placementId.resolve($window.c6AdtechPlacementId);
-                        });
-                    }
-                });
-
-                return placementId.promise;
+                return domain;
             }
 
             this.loadAd = function(config) {
                 var adLoadDeferred = $q.defer();
 
-                getPlacementId().then(function(id) {
-                    adtech.loadAd({
-                        secure: (c6Defines.kProtocol === 'https:'),
-                        network: '5473.1',
-                        server: 'adserver.adtechus.com',
-                        placement: id,
-                        adContainerId: config.id,
-                        debugMode: (domain === 'localhost'),
-                        kv: { mode: (config.displayAdSource || 'default') },
-                        complete: function() {
-                            $rootScope.$apply(function() {
-                                adLoadDeferred.resolve();
-                            });
-                        }
-                    });
+                adtech.loadAd({
+                    secure: (c6Defines.kProtocol === 'https:'),
+                    network: '5473.1',
+                    server: 'adserver.adtechus.com',
+                    placement: parseInt(c6AppData.experience.data.placementId),
+                    adContainerId: config.id,
+                    debugMode: (getDomain() === 'localhost'),
+                    kv: { mode: (c6AppData.experience.data.adConfig.display.waterfall || 'default') },
+                    complete: function() {
+                        $rootScope.$apply(function() {
+                            adLoadDeferred.resolve();
+                        });
+                    }
                 });
 
                 return adLoadDeferred.promise;
