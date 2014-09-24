@@ -1,8 +1,10 @@
 # MiniReel Player
 
+## v1.1.0 (September 24, 2014)
 * *[v1.1.0.rc1]*
   * Player now uses AdTech placementId from experience to avoid calling
   AdTech more than once
+* *[/v1.1.0.rc1]*
 
 ## v1.0.0 (September 12, 2014)
 * *[v1.0.0.rc1]*
