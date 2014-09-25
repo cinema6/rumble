@@ -159,35 +159,6 @@ define(['app', 'minireel', 'cards/recap', 'services'], function(appModule, minir
                     });
                     expect($rootScope.$broadcast).toHaveBeenCalled();
                 });
-
-                describe('if there is no displayAd', function() {
-                    beforeEach(function() {
-                        $scope.config.modules.length = 0;
-                        AdTechService.loadAd = jasmine.createSpy('AdTechService.loadAd()');
-
-                        $scope.$apply(function() {
-                            $scope.active = true;
-                        });
-                    });
-
-                    it('should not load a displayAd', function() {
-                        expect(AdTechService.loadAd).not.toHaveBeenCalled();
-                    });
-                });
-
-                describe('if there is a displayAd', function() {
-                    beforeEach(function() {
-                        $scope.config.modules = ['displayAd'];
-
-                        $scope.$apply(function() {
-                            $scope.active = true;
-                        });
-                    });
-
-                    it('should load a displayAd', function() {
-                        expect(AdTechService.loadAd).toHaveBeenCalledWith($scope.config);
-                    });
-                });
             });
         });
 
