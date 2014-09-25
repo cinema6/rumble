@@ -1,7 +1,7 @@
 define(['app'], function(appModule) {
     'use strict';
 
-    describe('<display-ad-module>', function() {
+    describe('<companion-ad-module>', function() {
         var $rootScope,
             $scope,
             $compile;
@@ -29,7 +29,7 @@ define(['app'], function(appModule) {
 
             beforeEach(function() {
                 $scope.$apply(function() {
-                    adModule = $compile('<display-ad-module companion="companion"></display-ad-module>')($scope);
+                    adModule = $compile('<companion-ad-module companion="companion"></companion-ad-module>')($scope);
                 });
 
                 scope = adModule.children().scope();

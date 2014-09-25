@@ -4,11 +4,11 @@
         <video c6-video id="{{config.id}}" c6-src="Ctrl.videoSrc" ng-click="Ctrl.clickThrough()"
             class="mr-vast-video"></video>
     </div>
-    <display-ad-module ng-if="Ctrl.hasModule('displayAd')"
+    <companion-ad-module ng-if="Ctrl.hasModule('displayAd')"
         active="config._data.modules.displayAd.active"
         ad-src="{{config.displayAd}}"
         companion="Ctrl.companion">
-    </display-ad-module>
+    </companion-ad-module>
     <section>
         <ballot-module ng-if="Ctrl.hasModule('ballot')"
             active="config._data.modules.ballot.active"

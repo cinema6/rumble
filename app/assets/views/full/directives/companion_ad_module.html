@@ -3,7 +3,6 @@
     <div ng-switch="adType" ng-show="active">
         <div class="mr-adDisplay__view" ng-switch-when="iframe"><iframe ng-src="{{fileURI}}" scrolling="no"></iframe></div>
         <div class="mr-adDisplay__view" ng-switch-when="image"><img ng-src="{{fileURI}}" /></div>
-        <div class="mr-adDisplay__view" ng-hide="companion()"><img ng-src="{{adSrc}}" /></div>
         <div class="mr-adDisplay__view" ng-switch-when="html" ng-bind-html="fileURI"></div>
     </div>
 </div>

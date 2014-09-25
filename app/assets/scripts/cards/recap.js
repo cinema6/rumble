@@ -5,10 +5,8 @@ function( angular , services ) {
     return angular.module('c6.rumble.cards.recap', [services.name])
         .controller('RecapCardController', ['$rootScope','$scope','$log','c6AppData',
                                             'MiniReelService','BallotService','ModuleService',
-                                            'AdTechService',
         function                           ( $rootScope , $scope , $log , c6AppData ,
-                                             MiniReelService , BallotService , ModuleService,
-                                             AdTechService ) {
+                                             MiniReelService , BallotService , ModuleService ) {
             var config = $scope.config,
                 self = this,
                 _deck;
@@ -76,12 +74,6 @@ function( angular , services ) {
                     self.deck = [];
                     _deck = setupDeck(MiniReelService.createDeck(c6AppData.experience.data));
                     self.title = c6AppData.experience.data.title;
-
-                    if (self.hasModule('displayAd')) {
-                        // TODO: need to replace 'waterfall' with 1 of the 8 ad modes,
-                        // ie. C6 w/ publisher fallback, Publisher only, etc.
-                        AdTechService.loadAd(config);
-                    }
                 }
 
                 if(c6AppData.experience.data.mode === 'lightbox') {

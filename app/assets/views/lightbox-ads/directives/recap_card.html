@@ -24,33 +24,6 @@
         </ul>
     </div>
     <div class="mr-ad__med-rect">
-        <display-ad-module ng-if="Ctrl.hasModule('displayAd')"
-            active="true"
-            ad-src="{{config.displayAd}}"
-            ad-container-id="{{config.id}}">
-        </display-ad-module>
+        <display-ad-module active="active" config="config"></display-ad-module>
     </div>
 </article>
-
-<!--<article class="mr-card__group mr-more-reels__group">
-    <div class="mr-player__group">
-        <div class="mr-player">
-            <button class="mr-more-reels__preview c6-height-limiter" type="button"
-                title="{{this.title}}">
-                <span class="ir">Click to Watch</span>
-            </button>
-        </div>
-    </div>
-    <div class="mr-card__copy" ng-repeat="this in Ctrl.miniReels">
-        <h3 class="mr-more-reels__intro">{{config.data.message}}</h3>
-        <h1 class="mr-card__title tk--hdr">{{this.title}}</h1>
-        <div class="mr-card__desc">{{this.summary}}</div>
-        <p class="mr-more-reels__link"><a>Watch Now</a></p>
-    </div>
-    <div class="mr-ad__med-rect">
-        <display-ad-module ng-if="Ctrl.hasModule('displayAd')"
-            active="true"
-            ad-src="{{config.displayAd}}">
-        </display-ad-module>
-    </div>
-</article>-->

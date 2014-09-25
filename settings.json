@@ -38,6 +38,9 @@
         },
         "ui/thumb_paginator": {
             "blacklist": ["mobile"]
+        },
+        "modules/display_ad": {
+            "whitelist": ["lightbox-ads"]
         }
     }
 }

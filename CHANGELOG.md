@@ -1,6 +1,11 @@
 # MiniReel Player
 
-## v1.1.0 (September 24, 2014)
+## v1.1.0 (September 25, 2014)
+* *[v1.1.0.rc2]*
+  * [FIX]: Fix for an issue that could cause display ads not to appear
+    from within an MR2 widget
+* *[/v1.1.0.rc2]*
+
 * *[v1.1.0.rc1]*
   * Player now uses AdTech placementId from experience to avoid calling
   AdTech more than once

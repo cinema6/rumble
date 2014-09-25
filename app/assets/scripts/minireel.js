@@ -1,11 +1,11 @@
 define (['angular','c6_defines','tracker',
          'cards/ad','cards/dailymotion','cards/recap','cards/vast','cards/vimeo','cards/vpaid',
          'cards/youtube','cards/text',
-         'modules/ballot','modules/display_ad'],
+         'modules/ballot','modules/companion_ad','modules/display_ad'],
 function( angular , c6Defines  , tracker ,
           adCard   , dailymotionCard   , recapCard   , vastCard   , vimeoCard   , vpaidCard   ,
           youtubeCard   , textCard   ,
-          ballotModule   , displayAdModule    ) {
+          ballotModule   , companionAdModule    , displayAdModule ) {
     'use strict';
 
     var forEach = angular.forEach;
@@ -23,6 +23,7 @@ function( angular , c6Defines  , tracker ,
         textCard.name,
         // Modules
         ballotModule.name,
+        companionAdModule.name,
         displayAdModule.name
     ])
     .animation('.slides__item',['$log', function($log){
@@ -1172,8 +1173,8 @@ function( angular , c6Defines  , tracker ,
             }
         };
     }])
-    .controller('VideoEmbedCardController', ['$scope','ModuleService','EventService','c6AppData','c6ImagePreloader', 'AdTechService',
-    function                                ( $scope , ModuleService , EventService , c6AppData , c6ImagePreloader ,  AdTechService ) {
+    .controller('VideoEmbedCardController', ['$scope','ModuleService','EventService','c6AppData','c6ImagePreloader',
+    function                                ( $scope , ModuleService , EventService , c6AppData , c6ImagePreloader ) {
         var self = this,
             config = $scope.config,
             profile = $scope.profile,
@@ -1315,13 +1316,6 @@ function( angular , c6Defines  , tracker ,
 
                     self.dismissBallot();
                     self.dismissBallotResults();
-
-                    if(self.hasModule('displayAd')) {
-                        // TODO: need to replace 'waterfall' with 1 of the 8 ad modes,
-                        // ie. C6 w/ publisher fallback, Publisher only, etc.
-                        AdTechService.loadAd(config);
-                    }
-
                 } else {
                     if (_data.modules.ballot.ballotActive) {
                         _data.modules.ballot.vote = -1;
