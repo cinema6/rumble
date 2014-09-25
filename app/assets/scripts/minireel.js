@@ -1,7 +1,7 @@
 define (['angular','c6_defines','tracker',
          'cards/ad','cards/dailymotion','cards/recap','cards/vast','cards/vimeo','cards/vpaid',
          'cards/youtube','cards/text',
-         'modules/ballot','modules/display_ad'],
+         'modules/ballot','modules/companion_ad'],
 function( angular , c6Defines  , tracker ,
           adCard   , dailymotionCard   , recapCard   , vastCard   , vimeoCard   , vpaidCard   ,
           youtubeCard   , textCard   ,

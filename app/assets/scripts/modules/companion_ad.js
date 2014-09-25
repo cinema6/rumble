@@ -3,14 +3,13 @@ function( angular ) {
     'use strict';
 
     return angular.module('c6.rumble.modules.displayAd', [])
-        .directive('displayAdModule', ['assetFilter',
+        .directive('companionAdModule', ['assetFilter',
         function                      ( assetFilter ) {
             return {
                 restrict: 'E',
-                templateUrl: assetFilter('directives/display_ad_module.html', 'views'),
+                templateUrl: assetFilter('directives/companion_ad_module.html', 'views'),
                 scope: {
                     adSrc: '@',
-                    adContainerId: '@',
                     companion: '&',
                     active: '='
                 },
