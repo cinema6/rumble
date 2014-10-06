@@ -411,12 +411,14 @@ function( angular , c6Defines  , tracker ,
                 $scope.$broadcast('adOnDeck', new AdCard(videoAdConfig));
             };
 
-            if (adController.firstPlacement === 0) {
-                self.adOnDeck();
-            }
-
             $scope.$watch('deck', function() {
                 enableDynamicAds = checkForStaticAds();
+            });
+
+            $scope.$on('deckControllerReady', function() {
+                if (adController.firstPlacement === 0) {
+                    self.adOnDeck();
+                }
             });
 
             $scope.$on('positionWillChange', function(event, i) {
@@ -1143,6 +1145,8 @@ function( angular , c6Defines  , tracker ,
                 }
             });
         });
+
+        $scope.$emit('deckControllerReady');
     }])
 
     .directive('navbarButton', ['assetFilter','c6Computed',

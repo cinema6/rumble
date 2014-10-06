@@ -49,6 +49,8 @@ define(['app','minireel'], function(appModule, minireelModule) {
             $scope.deck = [];
             $scope.currentCard = null;
 
+            spyOn($scope, '$emit').andCallThrough();
+
             $scope.$apply(function() {
                 DeckCtrl = $controller('DeckController', { $scope: $scope });
             });
@@ -56,6 +58,10 @@ define(['app','minireel'], function(appModule, minireelModule) {
 
         it('should exist', function() {
             expect(DeckCtrl).toEqual(jasmine.any(Object));
+        });
+
+        it('should $emit a ready event', function() {
+            expect($scope.$emit).toHaveBeenCalledWith('deckControllerReady');
         });
 
         describe('properites', function() {
