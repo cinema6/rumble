@@ -1568,6 +1568,23 @@ define(['c6ui', 'services', 'minireel', 'angular'], function(c6uiModule, service
 
                     expect($scope.$broadcast).not.toHaveBeenCalledWith('adOnDeck',jasmine.any(Object));
                 });
+
+                it('should not broadcast adOnDeck if first card is a static ad card', function() {
+                    $scope.deck.unshift({
+                        "id"     : "ad1",
+                        "title"  : "ad",
+                        "type"   : "vast",
+                        "voting" : [ 100, 50, 10 ],
+                        "ad"     : true,
+                        "data"   : {}
+                    });
+
+                    spyOn($scope, '$broadcast').andCallThrough();
+
+                    $scope.$emit('deckControllerReady');
+
+                    expect($scope.$broadcast).not.toHaveBeenCalledWith('adOnDeck',jasmine.any(Object));
+                });
             });
 
             describe('shouldStart', function() {

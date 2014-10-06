@@ -416,7 +416,7 @@ function( angular , c6Defines  , tracker ,
             });
 
             $scope.$on('deckControllerReady', function() {
-                if (adController.firstPlacement === 0) {
+                if (adController.firstPlacement === 0 && enableDynamicAds) {
                     self.adOnDeck();
                 }
             });
