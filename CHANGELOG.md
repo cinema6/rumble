@@ -1,5 +1,8 @@
 # MiniReel Player
 
+* *[v1.1.0.rc3]*
+  * [FIX]: Player properly handles a dynamic ad card in the first position
+
 ## v1.1.0 (September 25, 2014)
 * *[v1.1.0.rc2]*
   * [FIX]: Fix for an issue that could cause display ads not to appear
