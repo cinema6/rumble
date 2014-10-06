@@ -7,13 +7,12 @@
         "title": "Rumble Video",
         "data": {
             "election": "e-d0e407bb69675b",
-            "mode": "lightbox",
+            "mode": "full",
             "theme": "ed-entertainment",
             "collateral": {
                 "splash": "/collateral/experiences/rumble/splash-6thumb.jpg"
             },
             "title": "Rumble Video",
-            "branding": "digitaljournal",
             "conversations": [
                 {
                     "id": "rcv-f9efca48d85143",

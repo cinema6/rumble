@@ -1,10 +1,16 @@
-<article class="mr-card__group c6-height-limiter">
-    <section class="mr-card__copy">
-        <div class="mr-card__preview">
-            <div class="mr-preview__thumbnail" ng-style="{'background-image':config.thumbs.large ? 'url(' + config.thumbs.large + ')' : ''}"></div>
+<article class="textOnly__group">
+    <div class="textOnly__coverGroup">
+        <div class="textOnly__cover" ng-style="{'background-image':config.thumbs.large ? 'url(' + config.thumbs.large + ')' : ''}">
+            <span class="ir"><img ng-src="{{config.thumbs.large}}"></span>
         </div>
-
-        <h1 class="mr-card__title-h1 tk--hdr">{{config.title}}</h1>
-        <div class="mr-card__desc" ng-bind-html="config.note"></div>
-    </section>
+    </div>
+    <div class="textOnly__copy">
+        <h1 class="textOnly__title tk--hdr">{{config.title}}</h1>
+        <div class="textOnly__desc" ng-bind-html="config.note"></div>
+        <button class="textOnly__btn" title="Begin"
+        ng-click="$emit('<mr-card>:contentEnd', config)"
+        type="button">
+            Begin
+        </button>
+    </div>
 </article>

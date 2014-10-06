@@ -2,36 +2,38 @@
 <button thumb-paginator-button
     ng-style="{width: Ctrl.buttonWidth}"
     ng-click="onPrev()"
-    ng-class="{'mr-pager__btn--disabled': disablePrevWhen()}"
+    ng-class="{'pager__btn--disabled': disablePrevWhen()}"
     ng-disabled="disablePrevWhen()"
-    class="mr-pager__btn mr-pager__prev"
+    class="pager__btn pager__prev"
     type="button"
     title="Previous Page">
-    <svg class="mr-pager__icon mr-pager__icon-prev" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+    <svg class="pager__icon pager__icon-prev" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
      viewBox="0 0 27.213 45.941" enable-background="new 0 0 27.213 45.941" xml:space="preserve">
-        <path class="mr-pager__icon-path" fill-rule="evenodd" clip-rule="evenodd" d="M22.971,0L0,22.971l22.971,22.97l4.243-4.243L8.485,22.971
+        <path class="pager__icon-path" fill-rule="evenodd" clip-rule="evenodd" d="M22.971,0L0,22.971l22.971,22.97l4.243-4.243L8.485,22.971
             L27.213,4.243L22.971,0z"/>
     </svg>
-    <span class="mr-pager__label">Prev</span>
+    <span class="pager__label">Prev</span>
     <span class="ir">Previous Page</span>
+    <span class="pager__border">&nbsp;</span>
 </button>
 <button thumb-paginator-button
     ng-style="{width: Ctrl.buttonWidth}"
     ng-click="onNext()"
-    ng-class="{'mr-pager__btn--disabled': disableNextWhen()}"
+    ng-class="{'pager__btn--disabled': disableNextWhen()}"
     ng-disabled="disableNextWhen()"
-    class="mr-pager__btn mr-pager__next"
+    class="pager__btn pager__next"
     type="button"
     title="Next Page">
-    <svg class="mr-pager__icon mr-pager__icon-next" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+    <svg class="pager__icon pager__icon-next" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
      viewBox="0 0 27.213 45.941" enable-background="new 0 0 27.213 45.941" xml:space="preserve">
-        <path class="mr-pager__icon-path" fill-rule="evenodd" clip-rule="evenodd" d="M4.243,0l22.971,22.971L4.243,45.941L0,41.699l18.728-18.728L0,4.243
+        <path class="pager__icon-path" fill-rule="evenodd" clip-rule="evenodd" d="M4.243,0l22.971,22.971L4.243,45.941L0,41.699l18.728-18.728L0,4.243
         L4.243,0z"/>
     </svg>
-    <span class="mr-pager__label">Next</span>
+    <span class="pager__label">Next</span>
     <span class="ir">Next Page</span>
+    <span class="pager__border">&nbsp;</span>
 </button>
 
-<div ng-style="{left: Ctrl.thumbsOffset, right: Ctrl.thumbsOffset}" class="mr-pages__group">
-    <div ng-style="{left: (page * -100) + '%'}" class="mr-pages__scroller" ng-transclude></div>
+<div ng-style="{left: Ctrl.thumbsOffset, right: Ctrl.thumbsOffset}" class="pages__group">
+    <div ng-style="{left: (page * -100) + '%'}" class="pages__scroller" ng-transclude></div>
 </div>

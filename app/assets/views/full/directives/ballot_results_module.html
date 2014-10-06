@@ -1,14 +1,19 @@
-<section class="mr-results__group clearfix">
-    <ul class="mr-results__list">
-        <li class="mr-results__item mr-results__item{{$index}}" ng-repeat="choice in Ctrl.ballot">
-            <p class="mr-results__tally tk--hdr">{{choice.votes | percent}}</p>
-            <p class="mr-results__option">
-                {{choice.name}}
-                <span class="mr-results__tally mr-results__tiny-tally tk--hdr">{{choice.votes | percent}}</span>
-            </p>
+<section class="results__group" ng-click="onDismiss()">
+    <h2 class="results__title tk--hdr">Voting Results:</h2>
+
+    <ul class="results__list">
+        <li class="results__item results__item{{$index}}" ng-repeat="choice in Ctrl.ballot">
+            <p class="results__option">{{choice.name}}</p>
+            <p class="results__tally">{{choice.votes | percent}}</p>
         </li>
     </ul>
-    <div class="mr-results__meter">
-        <div class="mr-results__bar1" ng-style="{width: (Ctrl.ballot[0].votes | percent)}">&nbsp;</div>
+    <div class="results__meter">
+        <div class="results__bar1" ng-style="{width: (Ctrl.ballot[0].votes | percent)}">&nbsp;</div>
     </div>
+
+    <p class="results__watch-again">
+        <a ng-click="onDismiss()" title="Watch Video Again">Watch Video Again</a>
+    </p>
+
+    <button ng-click="onDismiss()" class="sprite results__close"><span class="ir">Close</span></button>
 </section>
