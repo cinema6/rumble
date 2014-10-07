@@ -809,6 +809,7 @@
     ================================================ */
         .adVideo__group {
             position: absolute;
+            min-height:10em;
             top:0; bottom:4.5em; left:0; right:0;
         }
         .adVideo__label {
