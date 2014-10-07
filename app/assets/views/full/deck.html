@@ -7,8 +7,8 @@ ng-class="{
         ng-class="{
             hidden : ($index !== deck.index || !deck.active),
             'text--low': item.title.length + item.note.length <= 100,
-            'text--med': item.title.length + item.note.length > 100 && item.title.length + item.note.length <= 170,
-            'text--high': item.title.length + item.note.length > 170
+            'text--med': item.title.length + item.note.length > 100 && item.title.length + item.note.length <= 200,
+            'text--high': item.title.length + item.note.length > 200
         }">
         <mr-card
             x-number="{{tocCards.indexOf(item) + 1}}"
@@ -26,7 +26,7 @@ ng-show="nav.enabled"
 class="slideNav__btn slideNav__btn--prev c6-fade"
 ng-class="{
     'slideNav__btn--small': currentCard.title.length + currentCard.note.length <= 100 || currentCard.ad,
-    'slideNav__btn--med': currentCard.title.length + currentCard.note.length > 100 && currentCard.title.length + currentCard.note.length <= 170
+    'slideNav__btn--med': currentCard.title.length + currentCard.note.length > 100 && currentCard.title.length + currentCard.note.length <= 200
 }"
 type="button"
 title="Previous Page"
@@ -43,7 +43,7 @@ ng-show="nav.enabled"
 class="slideNav__btn slideNav__btn--next c6-fade"
 ng-class="{
     'slideNav__btn--small': currentCard.title.length + currentCard.note.length <= 100 || currentCard.ad,
-    'slideNav__btn--med': currentCard.title.length + currentCard.note.length > 100 && currentCard.title.length + currentCard.note.length <= 170
+    'slideNav__btn--med': currentCard.title.length + currentCard.note.length > 100 && currentCard.title.length + currentCard.note.length <= 200
 }"
 type="button"
 title="Next Page"
