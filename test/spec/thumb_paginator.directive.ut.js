@@ -72,7 +72,7 @@ define(['app'], function(appModule) {
 
             module(appModule.name, function($provide) {
                 $provide.value('c6AppData', {
-                    mode: 'full'
+                    mode: 'lightbox'
                 });
             });
 

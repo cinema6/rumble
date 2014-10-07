@@ -267,7 +267,7 @@ define(['app','c6ui'], function(appModule, c6uiModule) {
 
             describe('canAutoplay', function() {
                 it('should be set based on the mode', function() {
-                    expect(c6AppData('full').behaviors.canAutoplay).toBe(false);
+                    expect(c6AppData('full').behaviors.canAutoplay).toBe(true);
                     expect(c6AppData('mobile').behaviors.canAutoplay).toBe(false);
                     expect(c6AppData('light').behaviors.canAutoplay).toBe(true);
                     expect(c6AppData('lightbox').behaviors.canAutoplay).toBe(true);
@@ -277,7 +277,7 @@ define(['app','c6ui'], function(appModule, c6uiModule) {
 
             describe('inlineVoteResults', function() {
                 it('should be set based on the mode', function() {
-                    expect(c6AppData('full').behaviors.inlineVoteResults).toBe(true);
+                    expect(c6AppData('full').behaviors.inlineVoteResults).toBe(false);
                     expect(c6AppData('mobile').behaviors.inlineVoteResults).toBe(true);
                     expect(c6AppData('light').behaviors.inlineVoteResults).toBe(false);
                     expect(c6AppData('lightbox').behaviors.inlineVoteResults).toBe(false);
@@ -287,7 +287,7 @@ define(['app','c6ui'], function(appModule, c6uiModule) {
 
             describe('separateTextView', function() {
                 it('should be set based on the mode', function() {
-                    expect(c6AppData('full').behaviors.separateTextView).toBe(true);
+                    expect(c6AppData('full').behaviors.separateTextView).toBe(false);
                     expect(c6AppData('mobile').behaviors.separateTextView).toBe(false);
                     expect(c6AppData('light').behaviors.separateTextView).toBe(false);
                     expect(c6AppData('lightbox').behaviors.separateTextView).toBe(false);
@@ -297,7 +297,7 @@ define(['app','c6ui'], function(appModule, c6uiModule) {
 
             describe('fullscreen', function() {
                 it('should be set based on the mode', function() {
-                    expect(c6AppData('full').behaviors.fullscreen).toBe(false);
+                    expect(c6AppData('full').behaviors.fullscreen).toBe(true);
                     expect(c6AppData('mobile').behaviors.fullscreen).toBe(true);
                     expect(c6AppData('light').behaviors.fullscreen).toBe(false);
                     expect(c6AppData('lightbox').behaviors.fullscreen).toBe(true);
