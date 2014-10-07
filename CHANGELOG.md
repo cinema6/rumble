@@ -1,5 +1,8 @@
 # MiniReel Player
 
+* *[v1.2.0.rc1]*
+  * [FEATURE]: full page MiniReel player added.
+
 ## v1.1.0 (September 25, 2014)
 * *[v1.1.0.rc2]*
   * [FIX]: Fix for an issue that could cause display ads not to appear
