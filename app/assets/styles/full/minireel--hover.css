@@ -20,3 +20,8 @@
         .slideNav__btn:hover .slideNav__iconPath {
             fill:#d94040;
         }
+
+
+    .mr-titleBar__title:hover {
+        color:#d94040;
+    }

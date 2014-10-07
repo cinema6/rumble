@@ -127,6 +127,7 @@
             white-space: nowrap;
             overflow: hidden;
             cursor:pointer;
+            -webkit-transition:color 0.25s; transition:color 0.25s;
         }
 
         .mr-titleBar__disabler {
