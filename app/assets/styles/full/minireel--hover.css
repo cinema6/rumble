@@ -1,104 +1,22 @@
-/*  ==========================================================================
-    .pager__group classes
-    ========================================================================== */
-    .pages__fader, 
-    .pages__current-indicator {
-        -webkit-transition: opacity 0.5s ease; 
-        -moz-transition: opacity 0.5s ease; 
-        -o-transition: opacity 0.5s ease; 
-        transition: opacity 0.5s ease;
+/*  ================================================
+    .playlist__group classes
+    ================================================ */
+    .playlist__item:hover {
+        background-color:#efefef;
     }
-    .pager__btn, .pager__btn:hover {
-        -webkit-transition: background 0.4s ease; 
-        -moz-transition: background 0.4s ease; 
-        -o-transition: background 0.4s ease; 
-        transition: background 0.4s ease;
-    }
-    .pager__icon-path, 
-    .pager__btn:hover .pager__icon-path {
-        -webkit-transition: fill 0.4s ease; 
-        -moz-transition: fill 0.4s ease; 
-        -o-transition: fill 0.4s ease; 
-        transition: fill 0.4s ease;
-}
-    .pager__btn, .pager__icon-path {
-        -webkit-transition-delay: 0.1s;
-        -moz-transition-delay: 0.1s;
-        -o-transition-delay: 0.1s;
-        transition-delay: 0.1s;
-    }
-        .pages__page:hover .pages__fader {
-            opacity:0;
-        }
-        .pager__btn:hover {
-            -webkit-transition-delay: 0;
-            -moz-transition-delay: 0;
-            -o-transition-delay: 0;
-            transition-delay: 0;
-            background:#fff no-repeat 50% 50%;
-        }
-            .pager__label {
-                -webkit-transition: color 0.4s ease; 
-                -moz-transition: color 0.4s ease; 
-                -o-transition: color 0.4s ease; 
-                transition: color 0.4s ease;
-            }
-            .pager__btn:hover .pager__label {
-                color:#d94040;
-            }
-            .pager__btn:hover .pager__icon-path {
-                -webkit-transition-delay: 0;
-                -moz-transition-delay: 0;
-                -o-transition-delay: 0;
-                transition-delay: 0;
-                fill: #d94040;
-            }
-        .pager__btn--disabled:hover {
-            background:#d94040 no-repeat 50% 50%;
-        }
-            .pager__btn--disabled:hover .pager__label {
-                color:#1b1b1b;
-            }
-            .pager__btn--disabled:hover .pager__icon-path {
-                fill: #1b1b1b;
-            }
-
-    .pages__preview-img {
-        transition: background 0.5s ease;
-    }
-    .pages__page:hover .pages__preview-img {
-        background-size:150%;
+    .playlist__item--current:hover {
+        background-color:#d94040;
     }
 
-/*  ==========================================================================
-    .ui-navbar classes
-    ========================================================================== */    
-    .ui-control__preview-img {
-        -webkit-transition:opacity 0.5s; transition:opacity 0.5s;
-    }
-        .ui-nav__prev:hover .ui-control__preview-img, 
-        .ui-nav__next:hover .ui-control__preview-img {
-            opacity:0.76;
-        }
-    .ui-navbar__page {
-        -webkit-transition:background 0.5s; transition:background 0.5s;
-    }
-        .ui-navbar__page:hover {
-            background:#4c4c4c;
-        }
-        .ui-navbar__page .ui-control__preview-img--active {
-            opacity:1;
-        }
-        .ui-navbar__page:hover .ui-control__preview-img {
-            opacity:1;
-        }
 
-/*  ==========================================================================
-    Splash Screen classes
-    ========================================================================== */
-    .splash__bar {
-        -webkit-transition: background 0.2s ease; 
-        -moz-transition: background 0.2s ease; 
-        -o-transition: background 0.2s ease; 
-        transition: background 0.2s ease;
+/*  ================================================
+    button styles 
+    ================================================ */
+    .textOnly__btn:hover,
+    .slideNav__btn:hover {
+        background-color:#fff;
+        color:#d94040;
     }
+        .slideNav__btn:hover .slideNav__iconPath {
+            fill:#d94040;
+        }
