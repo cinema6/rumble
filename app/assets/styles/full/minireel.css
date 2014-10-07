@@ -801,7 +801,7 @@
             margin:-0.5rem 0 0 0;
             text-align: center; 
             font-size:0.75em;
-            color:#929292;
+            color:#6c6c6c;
         }
 
     /*  Video Ad styles
@@ -811,7 +811,7 @@
             top:0; bottom:4.5em; left:0; right:0;
         }
         .adVideo__label {
-            font-size: 0.75em; color: #929292; text-align: center;
+            font-size: 0.75em; color: #6c6c6c; text-align: center;
             margin:0;
             position:absolute; 
             left:0; right:0; bottom:1.25rem;
@@ -848,7 +848,7 @@
     More Reels card classes
     ========================================================================== */
     .more-reels__intro {
-        font-size:0.875rem; color:#929292; font-weight:300; text-align: center;
+        font-size:0.875rem; color:#6c6c6c; font-weight:300; text-align: center;
         background: #1b1b1b; margin:0; padding: 0.125rem 0 0.4375rem 0;
     }
         .more-reels__preview {
@@ -871,76 +871,88 @@
 /*  ================================================
     recap card classes
     ================================================ */
-    .recap__group {
-
+    .recap__list {
+        width:100%;
+        position: absolute; 
+        top:0; bottom:4.5em;
+        overflow-y:auto; overflow-x:hidden;
+        margin:0; padding:0; list-style: none;
+        border-bottom:2px solid #333;
+        counter-reset: recap;
     }
-        .recap__list {
-            width:100%;
-            position: absolute; 
-            top:0; bottom:4.5em;
-            overflow-y:auto; overflow-x:hidden;
-            margin:0; padding:0; list-style: none;
-            border-bottom:2px solid #333;
+        .recap__item {
+            position:relative;
+            padding:0.75em 0 0.75em 0; 
+            border-bottom:1px solid #ddd;
+            cursor:pointer;
         }
-            .recap__item {
-                position:relative;
-                padding:0.75em 0 0.75em 0; 
-                border-bottom:1px solid #ddd;
-                cursor:pointer;
+            .recap__item:last-child {
+                border-bottom:0;
             }
-                .recap__item:last-child {
-                    border-bottom:0;
+
+
+            .recap__imgBox {
+                width:10em; height:7.5em;
+                background:url('../../img/default_square.jpg') 50% 50% / cover no-repeat;
+                float:left;
+                margin:0 0 0 1.875em;
+            }
+                .recap__imgBox:before {
+                    counter-increment: recap;
+                    content:counter(recap);
+                    display:block;
+                    width:2.5em;
+                    font-size:0.75em;
+                    color:#6c6c6c;
+                    margin:0.6875rem 0 0 0;
+                    position: absolute;
+                    left:0;
                 }
-                .recap__imgBox {
+                .recap__img {
                     width:10em; height:7.5em;
-                    background:url('../../img/default_square.jpg') 50% 50% / cover no-repeat;
-                    float:left;
+                    background: 50% 50% / cover no-repeat;
                 }
-                    .recap__img {
-                        width:10em; height:7.5em;
-                        background: 50% 50% / cover no-repeat;
-                    }
-                .recap__copyBox {
-                    float:right;
-                    width:calc(100% - 10.75em);
+            .recap__copyBox {
+                float:right;
+                width:calc(100% - 12.625em);
+            }
+                .recap__title {
+                    font-size:1.5em;/*24px*/
+                    line-height: 1;
+                    margin:0.125em 0 0.5em; padding:0;
+                    color:#333;
                 }
-                    .recap__title {
-                        font-size:1.5em;/*24px*/
-                        line-height: 1;
-                        margin:0.125em 0 0.5em; padding:0;
-                        color:#333;
+                    @media screen and (min-width:40.0625rem) and (max-width:58.75rem) {
+                        /* 641px - 940px */
+                        .recap__title {
+                            font-size:1.25em;
+                        }
                     }
-                        @media screen and (min-width:40.0625rem) and (max-width:58.75rem) {
-                            /* 641px - 940px */
-                            .recap__title {
-                                font-size:1.25em;
-                            }
+                    @media screen and (max-width:40rem) {
+                        /* 640px or smaller */
+                        .recap__title {
+                            font-size:1em;
                         }
-                        @media screen and (max-width:40rem) {
-                            /* 640px or smaller */
-                            .recap__title {
-                                font-size:1em;
-                            }
-                        }
-                    .recap__ballotInfo {
-                        font-size:0.875em;
                     }
-                        .recap__ballotQuestion {
-                            font-size:1em; font-weight:normal;
-                            margin:0;
+                .recap__ballotInfo {
+                    font-size:0.875em;
+                }
+                    .recap__ballotQuestion {
+                        font-size:1em; font-weight:normal;
+                        margin:0;
+                    }
+                        .recap__ballotQuestion strong {
+                            font-style:italic;
                         }
-                            .recap__ballotQuestion strong {
-                                font-style:italic;
-                            }
-                        .recap__ballotResults {
-                            margin:0;
-                        }
-                        .recap__ballotA {
-                            color:#8ac12a;
-                        }
-                        .recap__ballotB {
-                            color:#19cbe6;
-                        } 
+                    .recap__ballotResults {
+                        margin:0;
+                    }
+                    .recap__ballotA {
+                        color:#8ac12a;
+                    }
+                    .recap__ballotB {
+                        color:#19cbe6;
+                    } 
 
 
 /*  ==========================================================================
