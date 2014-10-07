@@ -1,76 +1,40 @@
-<article class="mr-card__group c6-height-limiter">
-    <div class="mr-switch__group">
-        <button class="mr-switch__btn mr-switch__btn-reader clearfix"
-            ng-click="Ctrl.showText()"
-            ng-class="{'mr-switch__btn--active': config._data.textMode}">
-            <span class="ir">Show Reader</span>
-        </button>
-        <button class="mr-switch__btn mr-switch__btn-video clearfix"
-            ng-click="Ctrl.hideText()"
-            ng-class="{'mr-switch__btn--active': !config._data.textMode}">
-            <span class="ir">Show Video</span>
-        </button>
-        <div class="mr-switch__counter tk--hdr clearfix">{{number}}/{{total}}</div>
-    </div>
-    
-    <section ng-show="config._data.textMode" class="mr-card__copy">
-        <div class="mr-card__preview">
-            <div class="mr-preview__thumbnail" ng-style="{'background-image':config.thumbs.large ? 'url(' + config.thumbs.large + ')' : ''}" ng-click="Ctrl.hideText()">
-                <button ng-click="Ctrl.hideText()" class="mr-preview__button">
-                    <div class="mr-preview__play-icon">
-                        <span class="ir">Play Video</span>
-                    </div>
-                </button>
-            </div>
-        </div>
-
-        <h1 class="mr-card__title-h1 tk--hdr">{{config.title}}</h1>
-        <p class="mr-card__attributes">via <a ng-href="{{Ctrl.videoUrl}}" target="_blank" title="YouTube">{{config.source}}</a></p>
-        <div class="mr-card__desc" ng-bind-html="config.note"></div>
-
-        
-        <button ng-click="Ctrl.hideText()" 
-            class="mr-card__btn-watch"
-            ng-hide="config._data.modules.ballot.resultsActive && active">
-            Watch Now.
-        </button>
-        <p ng-click="Ctrl.hideText()" 
-            class="mr-card__text-watch"
-            ng-hide="config._data.modules.ballot.resultsActive && active">
-            <a>Watch Now</a>
-        </p>
-        
-        <ballot-results-module ng-if="Ctrl.hasModule('ballot')"
-            active="config._data.modules.ballot.resultsActive && active"
-            vote="config._data.modules.ballot.vote"
-            card-id="{{config.id}}"
-            fetch-when="onDeck || active"
-            on-dismiss="Ctrl.dismissBallotResults()">
-        </ballot-results-module>
-    </section>
-
-
+<article class="slide__group">
     <ballot-vote-module 
-        class="mr-ballot-module ballot-module"
+        class="ballot-module player__height"
         ng-if="Ctrl.hasModule('ballot')"
         active="config._data.modules.ballot.ballotActive && active"
-        card-id="{{config.id}}"
         vote="config._data.modules.ballot.vote"
+        card-id="{{config.id}}"
         ballot="config.ballot"
         on-dismiss="Ctrl.dismissBallot()">
     </ballot-vote-module>
+    <ballot-results-module ng-if="Ctrl.hasModule('ballot')"
+        class="results-module player__height"
+        active="config._data.modules.ballot.resultsActive && active"
+        vote="config._data.modules.ballot.vote"
+        card-id="{{config.id}}"
+        fetch-when="onDeck || active"
+        on-dismiss="Ctrl.dismissBallotResults()">
+    </ballot-results-module>
 
-    <div class="mr-player__group">
-        <h1 ng-hide="config._data.textMode" class="mr-player__title tk--hdr">{{config.title}}</h1>
-        <button ng-if="Ctrl.enablePlayButton" ng-show="Ctrl.showPlay && !Ctrl.flyAway" ng-click="Ctrl.playVideo()" class="mr-player__play-btn">
-            <div class="mr-player__play-icon">
+    <div class="player__group player__height">
+        <button ng-if="Ctrl.enablePlayButton" ng-show="Ctrl.showPlay" ng-click="Ctrl.playVideo()" class="player__play-btn">
+            <div class="player__play-icon">
                 <span class="ir">Play Video</span>
             </div>
         </button>
-        <div ng-class="{'mr-player--fly-away': Ctrl.flyAway}" class="mr-player c6-height-limiter"><!-- actual player will be inserted into this container --></div>
-        <div ng-show="Ctrl.flyAway" class="mr-player__thumbnail c6-height-limiter"
+        <div ng-class="{'mr-player--fly-away': Ctrl.flyAway}" class="mr-player"><!-- actual player will be inserted into this container --></div>
+        <div ng-show="Ctrl.flyAway" class="player__thumbnail c6-height-limiter"
             ng-style="{'background-image':config.thumbs.large ? 'url(' + config.thumbs.large + ')' : ''}">
             <span class="ir"><img ng-src="{{config.thumbs.large}}"></span>
         </div>
+    </div>
+
+    <div class="card__copy">
+        <h1 class="card__title tk--hdr">
+            {{config.title}}
+            <span ng-show="!!config.source" class="card__attributes">via <a ng-href="{{Ctrl.videoUrl}}" target="_blank" title="{{config.source}}">{{config.source}}</a></span>
+        </h1>
+        <div class="card__desc" ng-bind-html="config.note"></div>
     </div>
 </article>

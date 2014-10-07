@@ -1,17 +1,6 @@
-<section class="mr-splash__group">
-    <div class="mr-splash__img"
-        c6-bg-img="{{app.data.experience.data.collateral.splash | envroot}}">
-        <button type="button"
-            class="mr-splash__start"
-            ng-click="RumbleCtrl.start()"
-            ng-show="ready">
-            <span class="mr-splash__copy">
-                <span class="ir">Click Here to Start</span>
-            </span>
-        </button>
-
-        <div class="mr-splash__loading" ng-hide="ready">
-            <span class="ir">Loading...</span>
-        </div>
-    </div>
-</section>
+<button type="button"
+    class="splash__start"
+    ng-click="RumbleCtrl.start()"
+    ng-show="ready">
+        Click Here to Start
+</button>

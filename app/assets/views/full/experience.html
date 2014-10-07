@@ -1,33 +1,73 @@
-<div class="mr-experience" ng-class="app.data.experience.data.theme">
-    <div class="mr-card__container">
-        <ng-include ng-controller="DeckController as DeckCtrl" src="'deck.html' | asset:'views'"></ng-include>
-    </div>
+<script src="//use.typekit.net/xuz8gem.js"></script>
+<script>try{Typekit.load();}catch(e){}</script>
+<div class="MiniReel" ng-class="app.data.experience.data.theme">
+    
 
-    <thumb-paginator active="tocIndex"
-        ng-if="currentIndex > -1"
-        class="mr-pager__group"
-        disable-prev-when="!nav.enabled"
-        disable-next-when="atTail || !nav.enabled"
-        on-prev="RumbleCtrl.goBack('thumb')"
-        on-next="RumbleCtrl.goForward('thumb')"
-        countdown="nav.wait">
-        <ul class="mr-pages__list">
-            <li thumb-paginator-item ng-repeat="this in tocCards" class="mr-pages__item">
-                <navbar-button index="$index"
-                    current-index="tocIndex"
-                    card="this"
-                    on-select="RumbleCtrl.goTo(deck.indexOf(this),'thumb');"
-                    disable-when="!nav.enabled">
-                </navbar-button>
+    <header class="mr-titleBar__group clearfix">
+        <div class="mr-titleBar__disabler" ng-show="!nav.enabled">&nbsp;</div>
+        <div class="mr-titleBar__splashImg"
+        ng-click="RumbleCtrl.jumpTo(tocCards[0])"
+        c6-bg-img="{{app.data.experience.data.collateral.splash | envroot}}">
+            &nbsp;
+        </div>
+        <h1 class="mr-titleBar__title tk--hdr"
+        ng-click="RumbleCtrl.jumpTo(tocCards[0])">
+            {{app.data.experience.data.title}}
+        </h1>
+    </header>
+
+    <ng-include ng-controller="DeckController as DeckCtrl" src="'deck.html' | asset:'views'"></ng-include>
+    
+
+    <div class="playlist__group" ng-hide="currentCard.type === 'recap'">
+        <div class="playlist__disabler c6-fade" ng-show="!nav.enabled">&nbsp;</div>
+        
+        <header class="playlistHead__group clearfix">
+            <h2 class="playlistHead__title tk--hdr">Playlist</h2>
+            <span class="playlistHead__pageCount"
+            ng-show="tocIndex > -1">
+                {{tocIndex + 1}} of {{tocCards.length}}
+            </span>
+        </header>
+
+        <ul class="playlist">
+            <li class="playlist__item clearfix"
+            ng-repeat="item in tocCards"
+            ng-click="RumbleCtrl.jumpTo(item)"
+            ng-class="{'playlist__item--current' : item === currentCard}">
+                <div class="playlist__thumbHolder">
+                    <div class="playlist__thumb"
+                    title="This is the Best Video Title Ever!!!"
+                    c6-bg-img="{{item.thumbs.small}}">
+                        &nbsp;
+                    </div>
+                </div>
+                <div class="playlist__copy">
+                    <h3 class="playlist__title tk--hdr">
+                        <span class="playlist__link"
+                        title="{{item.title}}">
+                            {{item.title}}
+                        </span>
+                    </h3>
+                    <p class="playlist__source" ng-show="!!item.source">via 
+                        <a href="{{item.webHref}}" 
+                        ng-click="$event.stopPropagation()"
+                        title="{{item.source}}"
+                        class="playlist__sourceLink"
+                        target="_blank">{{item.source}}</a>
+                    </p>
+                </div>
             </li>
         </ul>
-    </thumb-paginator><!--.mr-pager__group-->
-</div><!--.mr-experience-->
 
-<article id="card" class="mr-container" ng-class="app.data.experience.data.theme">
-    <ng-switch on="app.state">
-        <div class="splash-screen" ng-switch-when="splash">
-            <ng-include ng-if="app.data.version < 1" src="'splash.html' | asset:'views'"></ng-include>
-        </div>
-    </ng-switch>
-</article>
+    </div><!--.playlist__group-->
+
+
+</div><!--.MiniReel-->
+
+
+<ng-switch on="app.state">
+    <div class="splash__group" ng-switch-when="splash">
+        <ng-include ng-if="app.data.version < 1"  src="'splash.html' | asset:'views'"></ng-include>
+    </div>
+</ng-switch>

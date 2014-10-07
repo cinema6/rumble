@@ -1,9 +1,8 @@
-<div class="mr-card__group mr-ad__group">
-    <div class="mr-adVideo__group" ng-style="{visibility: Ctrl.showVideo ? 'visible' : 'hidden'}">
-        <p class="mr-adVideo__label tk--hdr">Advertisement</p>
+<div class="slide__group ad__group">
+    <div class="adVideo__group" ng-style="{visibility: Ctrl.showVideo ? 'visible' : 'hidden'}">
         <div class="mr-player"></div>
-        <button style="z-index:2;" ng-if="Ctrl.enablePlayButton" ng-show="Ctrl.showPlay" ng-click="Ctrl.playVideo()" class="mr-player__play-btn">
-            <div class="mr-player__play-icon">
+        <button style="z-index:2;" ng-if="Ctrl.enablePlayButton" ng-show="Ctrl.showPlay" ng-click="Ctrl.playVideo()" class="player__play-btn">
+            <div class="player__play-icon">
                 <span class="ir">Play Video</span>
             </div>
         </button>
@@ -15,3 +14,5 @@
         companion="Ctrl.companion">
     </companion-ad-module>
 </div>
+
+<p class="adVideo__label">Advertisement</p>

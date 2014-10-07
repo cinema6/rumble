@@ -1,144 +1,27 @@
-/*  ==========================================================================
-    .mr-pager__group classes
-    ========================================================================== */
-    .mr-pages__fader, 
-    .mr-pages__current-indicator, 
-    .mr-nav__btn {
-        -webkit-transition: opacity 0.5s ease; 
-        -moz-transition: opacity 0.5s ease; 
-        -o-transition: opacity 0.5s ease; 
-        transition: opacity 0.5s ease;
+/*  ================================================
+    .playlist__group classes
+    ================================================ */
+    .playlist__item:hover {
+        background-color:#efefef;
     }
-    .mr-pager__btn, .mr-pager__btn:hover {
-        -webkit-transition: background 0.4s ease; 
-        -moz-transition: background 0.4s ease; 
-        -o-transition: background 0.4s ease; 
-        transition: background 0.4s ease;
-    }
-    .mr-pager__icon-path, 
-    .mr-pager__btn:hover .mr-pager__icon-path {
-        -webkit-transition: fill 0.4s ease; 
-        -moz-transition: fill 0.4s ease; 
-        -o-transition: fill 0.4s ease; 
-        transition: fill 0.4s ease;
-    }
-    .mr-pager__btn, .mr-pager__icon-path {
-        -webkit-transition-delay: 0.1s;
-        -moz-transition-delay: 0.1s;
-        -o-transition-delay: 0.1s;
-        transition-delay: 0.1s;
-    }
-        .mr-nav__btn:hover {
-            opacity:1;
-        }
-        .mr-pages__page:hover .mr-pages__fader {
-            opacity:0;
-        }
-        .mr-pager__btn:hover {
-            -webkit-transition-delay: 0;
-            -moz-transition-delay: 0;
-            -o-transition-delay: 0;
-            transition-delay: 0;
-            background:#fff no-repeat 50% 50%;
-        }
-            .mr-pager__btn:hover .mr-pager__label {
-                color:#d94040;
-            }
-            .mr-pager__btn:hover .mr-pager__icon-path {
-                -webkit-transition-delay: 0;
-                -moz-transition-delay: 0;
-                -o-transition-delay: 0;
-                transition-delay: 0;
-                fill: #d94040;
-            }
-        .mr-pager__btn--disabled:hover {
-            background:#d94040 no-repeat 50% 50%;
-        }
-            .mr-pager__btn--disabled:hover .mr-pager__label {
-                color:#252626;
-            }
-            .mr-pager__btn--disabled:hover .mr-pager__icon-path {
-                fill: #252626;
-            }
-
-    .mr-pages__preview-img {
-        -webkit-transition: -webkit-transform 0.5s ease; 
-        -moz-transition: -moz-transform 0.5s ease; 
-        -o-transition: -o-transform 0.5s ease; 
-        transition: transform 0.5s ease;
-    }
-    .mr-pages__page:hover .mr-pages__preview-img {
-        -webkit-transform: scale(1.25);
-        -moz-transform: scale(1.25);
-        -o-transform: scale(1.25);
-        -ms-transform: scale(1.25);
-        transform: scale(1.25);
+    .playlist__item--current:hover {
+        background-color:#d94040;
     }
 
-/*  ==========================================================================
-    .ui-navbar classes
-    ========================================================================== */    
-    .ui-control__preview-img {
-        -webkit-transition:opacity 0.5s; transition:opacity 0.5s;
+
+/*  ================================================
+    button styles 
+    ================================================ */
+    .textOnly__btn:hover,
+    .slideNav__btn:hover {
+        background-color:#fff;
+        color:#d94040;
     }
-        .ui-nav__prev:hover .ui-control__preview-img, 
-        .ui-nav__next:hover .ui-control__preview-img {
-            opacity:0.76;
-        }
-    .ui-navbar__page {
-        -webkit-transition:background 0.5s; transition:background 0.5s;
-    }
-        .ui-navbar__page:hover {
-            background:#4c4c4c;
-        }
-        .ui-navbar__page .ui-control__preview-img--active {
-            opacity:1;
-        }
-        .ui-navbar__page:hover .ui-control__preview-img {
-            opacity:1;
+        .slideNav__btn:hover .slideNav__iconPath {
+            fill:#d94040;
         }
 
 
-/*  ==========================================================================
-    Mini Reel Cards classes
-    ========================================================================== */
-    .mr-preview__button, .mr-card__btn-watch {
-        -webkit-transition: background 0.4s ease; 
-        -moz-transition: background 0.4s ease; 
-        -o-transition: background 0.4s ease; 
-        transition: background 0.4s ease;
-    }
-        .mr-preview__button:hover, .mr-preview__thumbnail:hover .mr-preview__button {
-            background:#d94040;
-        }
-    .mr-card__btn-watch {
-        -webkit-transition: all 0.4s ease; 
-        -moz-transition: all 0.4s ease; 
-        -o-transition: all 0.4s ease; 
-        transition: all 0.4s ease;
-    }
-        .mr-card__btn-watch:hover {
-            background-color: #fff;
-            color: #d94040;
-        }
-
-    .mr-card__text-watch a, .mr-more-reels__link a{
-        -webkit-transition: all 0.4s ease; 
-        -moz-transition: all 0.4s ease; 
-        -o-transition: all 0.4s ease; 
-        transition: all 0.4s ease;
-        
-    }
-        .mr-card__text-watch a:hover, .mr-more-reels__link a:hover {
-            color: #fff; border-bottom: 1px dotted #fff;
-        }
-
-/*  ==========================================================================
-    Splash Screen classes
-    ========================================================================== */
-    .mr-splash__bar {
-        -webkit-transition: background 0.2s ease; 
-        -moz-transition: background 0.2s ease; 
-        -o-transition: background 0.2s ease; 
-        transition: background 0.2s ease;
+    .mr-titleBar__title:hover {
+        color:#d94040;
     }
