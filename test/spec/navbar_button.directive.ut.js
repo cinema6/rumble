@@ -11,7 +11,7 @@ define(['app','minireel'], function(appModule, minireelModule) {
         beforeEach(function() {
             module(appModule.name, function($provide) {
                 $provide.value('c6AppData', {
-                    mode: 'full'
+                    mode: 'lightbox'
                 });
             });
             module(minireelModule.name);
