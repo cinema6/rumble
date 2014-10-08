@@ -211,12 +211,6 @@ define(['app', 'minireel', 'cards/recap', 'services'], function(appModule, minir
                     it('should only add video cards to the public deck', function() {
                         expect(RecapCardCtrl.deck.length).toBe(3);
                     });
-
-                    it('should set the webHref for each card', function() {
-                        expect(RecapCardCtrl.deck[0].webHref).toBe('https://www.youtube.com/watch?v=1234');
-                        expect(RecapCardCtrl.deck[1].webHref).toBe('http://www.dailymotion.com/video/1234');
-                        expect(RecapCardCtrl.deck[2].webHref).toBe('http://vimeo.com/1234');
-                    });
                 });
             });
 

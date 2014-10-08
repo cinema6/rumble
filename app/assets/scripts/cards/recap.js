@@ -19,18 +19,6 @@ function( angular , services ) {
                 deck.forEach(function(card) {
                     if(card.type === 'ad' || card.type === 'recap') { return; }
 
-                    switch (card.type) {
-                        case 'youtube':
-                            card.webHref = 'https://www.youtube.com/watch?v=' + card.data.videoid;
-                            break;
-                        case 'dailymotion':
-                            card.webHref = 'http://www.dailymotion.com/video/' + card.data.videoid;
-                            break;
-                        case 'vimeo':
-                            card.webHref = 'http://vimeo.com/' + card.data.videoid;
-                            break;
-                    }
-
                     card.hasModule = ModuleService.hasModule.bind(ModuleService, card.modules);
 
                     if(card.hasModule('ballot')) {
