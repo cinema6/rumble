@@ -1,8 +1,10 @@
 # MiniReel Player
 
+## v1.2.0 (October 8, 2014)
 * *[v1.2.0.rc1]*
   * [FIX]: Player properly handles a dynamic ad card in the first position
   * [FEATURE]: full page MiniReel player added.
+* *[/v1.2.0.rc1]*
 
 ## v1.1.0 (September 25, 2014)
 * *[v1.1.0.rc2]*
