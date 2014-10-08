@@ -437,7 +437,10 @@
     }
         .ui-control__prev, .ui-control__next, .ui-control__view-list, .ui-context__close, 
         .ui-control__preview-img, .ui-control__label, .ui-control__activator, .ui-context__label, .ui-nav__prev, .ui-nav__next, .ui-nav__view-list, .ui-nav__close {
-            width:100%; height:100%; display:block; border:0; margin:0; padding:0; position:absolute; font-size:1em; background-color:transparent;
+            width:100%; height:100%; display:block; 
+            border:0; margin:0; padding:0; 
+            position:absolute; 
+            font-size:1em; background-color:transparent;
         }
         .ui-control__prev, .ui-control__next, .ui-control__view-list, .ui-context__close {
             width:8em;/*128px*/ height:3.75em;/*60px*/
@@ -464,9 +467,15 @@
                 .ui-control__view-list--open .ui-icon__list {
                     opacity:0.5;
                 }
-            .ui-control__next, .ui-control__prev, .ui-nav__next, .ui-nav__prev {
+            .ui-control__next, .ui-control__prev, 
+            .ui-nav__next, .ui-nav__prev {
                 background-color: #d94040;
             }
+                .ui-nav__next:disabled, .ui-nav__prev:disabled,
+                .ui-control__next:disabled, .ui-control__prev:disabled {
+                    opacity:0.1;
+                    background-color:#2a2a2a;
+                }
         .ui-control__label {
             top:1em; z-index: 10; color:#fff; width:auto; height:0; line-height: 1;
             font-size: 1.25em; font-weight:700; 
