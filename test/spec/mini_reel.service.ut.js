@@ -192,6 +192,49 @@ define(['app', 'minireel', 'c6ui', 'angular'], function(appModule, minireelModul
                         });
                     });
 
+                    describe('webHref', function() {
+                        var youtube, vimeo, dailymotion, others;
+
+                        beforeEach(function() {
+                            youtube = result.filter(function(card) {
+                                return card.type === 'youtube';
+                            });
+                            vimeo = result.filter(function(card) {
+                                return card.type === 'vimeo';
+                            });
+                            dailymotion = result.filter(function(card) {
+                                return card.type === 'dailymotion';
+                            });
+                            others = result.filter(function(card) {
+                                return !(/^(youtube|vimeo|dailymotion)$/).test(card.type);
+                            });
+                        });
+
+                        it('should set a webHref for the youtube cards', function() {
+                            youtube.forEach(function(card) {
+                                expect(card.webHref).toBe('https://www.youtube.com/watch?v=' + card.data.videoid);
+                            });
+                        });
+
+                        it('should set a webHref for the vimeo cards', function() {
+                            vimeo.forEach(function(card) {
+                                expect(card.webHref).toBe('http://vimeo.com/' + card.data.videoid);
+                            });
+                        });
+
+                        it('should set a webHref for the dailymotion cards', function() {
+                            dailymotion.forEach(function(card) {
+                                expect(card.webHref).toBe('http://www.dailymotion.com/video/' + card.data.videoid);
+                            });
+                        });
+
+                        it('should set webHref to null for other cards', function() {
+                            others.forEach(function(card) {
+                                expect(card.webHref).toBeNull();
+                            });
+                        });
+                    });
+
                     describe('getting thumbnails', function() {
                         it('should make every thumbnail null at first', function() {
                             result.filter(function(card) {

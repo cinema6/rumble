@@ -37,7 +37,7 @@
             "whitelist": ["mobile"]
         },
         "ui/thumb_paginator": {
-            "blacklist": ["mobile"]
+            "blacklist": ["mobile", "full"]
         },
         "modules/display_ad": {
             "whitelist": ["lightbox-ads"]

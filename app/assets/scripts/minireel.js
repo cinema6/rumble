@@ -120,8 +120,24 @@ function( angular , c6Defines  , tracker ,
                 }
             }
 
+            function setWebHref(card) {
+                card.webHref = (function() {
+                    switch (card.type) {
+                    case 'youtube':
+                        return 'https://www.youtube.com/watch?v=' + card.data.videoid;
+                    case 'vimeo':
+                        return 'http://vimeo.com/' + card.data.videoid;
+                    case 'dailymotion':
+                        return 'http://www.dailymotion.com/video/' + card.data.videoid;
+                    default:
+                        return null;
+                    }
+                }());
+            }
+
             angular.forEach(playlist, function(video) {
                 fetchThumb(video);
+                setWebHref(video);
 
                 video.player = null;
             });
