@@ -1,6 +1,11 @@
 # MiniReel Player
 
 ## v1.2.0 (October 8, 2014)
+* *[v1.2.0.rc2]*
+  * [FIX]: Fix for an issue that could allow the MR to be closed in
+    standalone mode using the previous button on the first slide
+* *[/v1.2.0.rc2]*
+
 * *[v1.2.0.rc1]*
   * [FIX]: Player properly handles a dynamic ad card in the first position
   * [FEATURE]: full page MiniReel player added.
