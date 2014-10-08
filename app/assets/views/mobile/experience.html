@@ -1,7 +1,7 @@
 <div ng-hide="currentIndex < 0" ng-class="app.data.experience.data.theme">
     <div ng-hide="showTOC" class="ui-nav-left--landscape c6-slide-bar--left css-promote">
         <div class="publisher__branding-logo">&nbsp;</div>
-        <button class="ui-nav__prev" title="Previous Video" type="button" c6-touch="RumbleCtrl.goBack('landscape')" ng-disabled="!nav.enabled">
+        <button class="ui-nav__prev" title="Previous Video" type="button" c6-touch="RumbleCtrl.goBack('landscape')" ng-disabled="!nav.enabled || (app.data.standalone && tocIndex < 1)">
             <span class="ui-nav__label ui-nav__label-prev">
                 Prev
             </span>
@@ -54,7 +54,7 @@
     </div><!--.ui-context-->
 
     <div class="ui-control--portrait c6-slide-bar--bottom  css-promote">
-        <button ng-hide="showTOC" class="ui-control__prev" title="Previous Video" type="button" c6-touch="RumbleCtrl.goBack('portrait')" ng-disabled="!nav.enabled">
+        <button ng-hide="showTOC" class="ui-control__prev" title="Previous Video" type="button" c6-touch="RumbleCtrl.goBack('portrait')" ng-disabled="!nav.enabled || (app.data.standalone && tocIndex < 1)">
             <span class="ui-control__label ui-control__label-prev">
                 Prev
             </span>
