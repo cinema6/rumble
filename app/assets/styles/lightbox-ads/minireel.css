@@ -53,8 +53,8 @@
     .hidden {
         visibility: hidden;
     }
-    .sprite--alpha-png {
-        background:url('../../img/mr-sprite__alpha@2x.png') 0 0 / 6.25rem 3.125rem no-repeat;
+    .sprite__social {
+        background:url('../../img/sprite__social@2x.png') 0 0 / 10rem 1rem no-repeat;
     }
     .sprite {
         background:url('../../img/sprite--light.svg') 0 0 / 18.75rem 18.75rem no-repeat;
@@ -79,6 +79,22 @@
         margin:0; padding: 0; border: 0; display: block;
         font-size: 1em; background-position: 2px -118px; background-size:15rem 15rem;
     }
+    .mr-socialIcons {
+        width:1rem; height:1rem;
+        display: inline-block;
+    }
+        .mr-socialIcons--youtube {
+            background-position:0 0;
+        }
+        .mr-socialIcons--vimeo {
+            background-position: -1.25rem 0;
+        }
+        .mr-socialIcons--facebook {
+            background-position: -2.5rem 0;
+        }
+        .mr-socialIcons--twitter {
+            background-position: -3.75rem 0;
+        }
 
 /*  ==========================================================================
     .ng-animate classes
@@ -160,7 +176,8 @@
         }
 
         .mr-pub-logo-box {
-            width:9.375rem; height:1.25rem; position:absolute; right:1.125rem; top:1.125rem;
+            width:9.375rem; height:1.25rem; 
+            position:absolute; left:1.125rem; top:1.125rem;
         }
 
         .mr-ui__close {
@@ -487,6 +504,51 @@
                 }
             }
 
+/*  ================================================
+    sponsored card styles
+    ================================================ */
+    .mr-sponsorProfile__group {
+        margin:0.6875em 0 0 0;
+    }
+
+
+        .mr-sponsorProfile__imgBox {
+            width:3em; height:3em;
+            float:left;
+            border:1px solid #ddd;
+            margin:0 0.5em 0 0;
+            display: block;
+            text-decoration: none;
+        }
+            .mr-sponsorProfile__img {
+                width:3em; height:3em;
+                display: block;
+            }
+
+
+        .mr-sponsorProfile__tag {
+            font-size:0.75em; color:#999;
+            margin:0.125rem 0 0.25rem 0;
+        }
+        
+        .mr-sponsorProfile__link {
+            border:0;
+        }
+
+
+        .mr-sponsor__goBtn {
+            background:#d94040; 
+            color:#fff; font-weight:bold;
+            margin:1em 0 4em; padding:0.75em 2.25em 0.75em 1em;
+            border:0; border-radius:3px;
+            display: block;
+            text-align: center; line-height:1;
+            font-size:1rem;
+        }
+
+
+
+
 
 /*  ==========================================================================
     .mr-textCard styles
@@ -517,8 +579,9 @@
             }
         }
     .mr-textCard__goBtn {
-        background:#d94040 url('../../img/play-icon.svg') 84% 50% / auto 30% no-repeat; color:#fff; font-weight:bold;
-        margin:1em 0 4em; padding:0.75em 2.25em 0.75em 1em;
+        background:#d94040 url('../../img/play-icon.svg') 84% 50% / auto 30% no-repeat; 
+        color:#fff; font-weight:bold;
+        margin:0 0 1em 0; padding:0.75em 0.5em;
         border:0; border-radius:3px;
         display: block;
         text-align: center; line-height:1;

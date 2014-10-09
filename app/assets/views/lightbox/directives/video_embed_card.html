@@ -33,8 +33,49 @@
         <div class="mr-card__copy">   
             <p class="mr-card__counter">{{number}} of {{total}}</p>
             <h1 class="mr-card__title tk--hdr">{{config.title}}</h1>
+
+            <div class="mr-sponsorProfile__group clearfix">
+                <a href="#" title="Sponsor link" class="mr-sponsorProfile__imgBox">
+                    <img src="https://yt3.ggpht.com/-E_tsaPMH5Qk/AAAAAAAAAAI/AAAAAAAAAAA/Y8Bz2pEIKeI/s100-c-k-no/photo.jpg" class="mr-sponsorProfile__img">
+                </a>
+                <div class="mr-sponsorProfile__copy">
+                    <p class="mr-sponsorProfile__tag">
+                        Sponsored by 
+                        <a href="#" title="Ubisoft">Ubisoft</a>
+                    </p>
+                    <div class="mr-sponsorProfile__links">
+                        <a href="#" title="YouTube"
+                        class="mr-sponsorProfile__link sprite__social 
+                        mr-socialIcons mr-socialIcons--youtube ">
+                            <span class="ir">YouTube</span>
+                        </a>
+                        <a href="#" title="Vimeo"
+                        class="mr-sponsorProfile__link sprite__social
+                        mr-socialIcons mr-socialIcons--vimeo ">
+                            <span class="ir">Vimeo</span>
+                        </a>
+                        <a href="#" title="Facebook"
+                        class="mr-sponsorProfile__link sprite__social
+                        mr-socialIcons mr-socialIcons--facebook ">
+                            <span class="ir">Facebook</span>
+                        </a>
+                        <a href="#" title="Twitter"
+                        class="mr-sponsorProfile__link sprite__social
+                        mr-socialIcons mr-socialIcons--twitter ">
+                            <span class="ir">Twitter</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
             <p ng-show="!!config.source" class="mr-card__attributes">via <a ng-href="{{Ctrl.videoUrl}}" target="_blank" title="YouTube">{{config.source}}</a></p> 
             <div class="mr-card__desc" ng-bind-html="config.note"></div>
+
+            <div class="mr-card__desc">
+                <a href="#">text only links get added to the bottom</a>
+                <a href="#" class="mr-sponsor__goBtn" title="Button Name">Button Name</a>
+            </div>
+
         </div>
         <div class="mr-pub-logo-box">&nbsp;</div>
     </div>
