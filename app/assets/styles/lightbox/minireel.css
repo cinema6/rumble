@@ -475,7 +475,7 @@
                 /*  w: 1420px +
                     h: 791px + */
                 .mr-card__copy {
-                    height:110%;
+                    height:108%;
                 }
             }
             @media screen and (min-width:76rem) and (max-width:88.6875rem), screen and (min-height:43.125rem) and (max-height:49.375rem) {
