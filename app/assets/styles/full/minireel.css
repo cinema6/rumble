@@ -72,6 +72,9 @@
         background:rgb(0,0,0); background:rgba(0,0,0,0.8);
         position:absolute; width:100%; height:100%; z-index: 1; left:0;
     }
+    .sprite__social {
+        background:url('../../img/sprite__social@2x.png') 0 0 / 10rem 1rem no-repeat;
+    }
     .sprite {
         background:url('../../img/sprite--light.svg') 0 0 / 18.75rem 18.75rem no-repeat;
     }
@@ -81,6 +84,23 @@
             background-image:url('../../img/sprite--light.png');
         }
     }
+
+    .socialIcons {
+        width:1rem; height:1rem;
+        display: inline-block;
+    }
+        .socialIcons--youtube {
+            background-position:0 0;
+        }
+        .socialIcons--vimeo {
+            background-position: -1.25rem 0;
+        }
+        .socialIcons--facebook {
+            background-position: -2.5rem 0;
+        }
+        .socialIcons--twitter {
+            background-position: -3.75rem 0;
+        }
 
 /*  ================================================
     ng-animate classes
@@ -193,6 +213,7 @@
                 margin:0; padding:0;
                 border-bottom:1px solid #ddd;
                 cursor:pointer;
+                position: relative;
                 -webkit-transition:background 0.25s; 
                 transition:background 0.25s;
             }
@@ -227,6 +248,14 @@
                             margin:0.7em 0 0 0;
                             position: absolute;
                             left:0;
+                        }
+                        .playlist__thumbHolder--ad:after {
+                            content:'Ad';
+                            position: absolute;
+                            top:0.5rem; left:2rem;
+                            background:#000; color:#fff;
+                            padding:0 2px;
+                            font-size:0.625rem; font-weight:bold;
                         }
                             .playlist__item--current .playlist__thumbHolder:before {
                                 color:#fff;
@@ -318,9 +347,6 @@
         top:3.75em; right:20.25em; bottom:0.75em; left:0.75em;
         overflow: hidden;
     }
-        .slides__list--fullWidth {
-            right:0.75em;
-        }
         @media screen and (min-width:40.0625rem) and (max-width:58.75rem) {
             /* 641px - 940px */
             .slides__list {
@@ -332,6 +358,10 @@
             .slides__list {
                 right:8em;
             }
+        }
+
+        .slides__list--fullWidth {
+            right:0.75em;
         }
 
         .slides__item.hidden,
@@ -433,7 +463,6 @@
             .text--high .player__height {
                 height:calc(100% - 8.25em);
             }
-            
 
 
 
@@ -540,6 +569,54 @@
         .slideNav__btn--med .slideNav__label {
             margin:0.8125rem 0 0 0;
         }
+
+
+
+
+/*  ================================================
+    sponsored card styles
+    ================================================ */
+    .sponsorProfile__group {
+        margin:0.6875em 0;
+    }
+
+
+        .sponsorProfile__imgBox {
+            width:3.125em; height:3.125em;
+            float:left;
+            border:1px solid #ddd;
+            margin:0 0.5em 0 0;
+            display: block;
+            text-decoration: none;
+        }
+            .sponsorProfile__img {
+                width:3em; height:3em;
+                display: block;
+            }
+
+
+        .sponsorProfile__tag {
+            font-size:0.75em; color:#999;
+            margin:0.125rem 0 0.25rem 0;
+        }
+        
+        .sponsorProfile__link {
+            border:0;
+        }
+
+
+        .sponsor__actions {
+            margin:1em 0;
+        }
+            .sponsor__goBtn {
+                background:#d94040; 
+                color:#fff; font-weight:bold;
+                margin:0 0 1em 0; padding:0.75em 0.5em;
+                border:0; border-radius:3px;
+                display: inline-block;
+                text-align: center; line-height:1;
+            }
+
 
 
 
@@ -878,6 +955,11 @@
 /*  ================================================
     recap card classes
     ================================================ */
+    .recap__group {
+
+    }
+
+
     .recap__list {
         width:100%;
         position: absolute; 
@@ -915,6 +997,15 @@
                     position: absolute;
                     left:0;
                 }
+                .recap__imgBox--ad:after {
+                    content:'Ad';
+                    position: absolute;
+                    top:0.875rem; left:2rem;
+                    background:#000; color:#fff;
+                    padding:0 2px;
+                    font-size:0.625rem; font-weight:bold;
+                }
+
                 .recap__img {
                     width:10em; height:7.5em;
                     background: 50% 50% / cover no-repeat;

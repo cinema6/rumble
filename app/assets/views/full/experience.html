@@ -35,7 +35,8 @@
             ng-repeat="item in tocCards"
             ng-click="RumbleCtrl.jumpTo(item)"
             ng-class="{'playlist__item--current' : item === currentCard}">
-                <div class="playlist__thumbHolder">
+                <div class="playlist__thumbHolder"
+                ng-class="{'playlist__thumbHolder--ad' : true}">
                     <div class="playlist__thumb"
                     title="This is the Best Video Title Ever!!!"
                     c6-bg-img="{{item.thumbs.small}}">
@@ -55,6 +56,13 @@
                         title="{{item.source}}"
                         class="playlist__sourceLink"
                         target="_blank">{{item.source}}</a>
+                    </p>
+                    <p class="playlist__source">Sponsored by 
+                        <a href="{{item.webHref}}" 
+                        ng-click="$event.stopPropagation()"
+                        title="Ubisoft"
+                        class="playlist__sourceLink"
+                        target="_blank">Ubisoft</a>
                     </p>
                 </div>
             </li>

@@ -325,6 +325,16 @@
                         cursor: pointer;
                         background:black url('../../img/default_square.jpg') 50% 50% / cover no-repeat;
                     }
+                        .mr-pages__page--ad:before {
+                            content:'Ad';
+                            position: absolute;
+                            top:2px; left:2px;
+                            background:#000; color:#fff;
+                            padding:0 2px;
+                            font-size:0.625rem; font-weight:bold;
+                            z-index: 2;
+                        }
+
                         .mr-pages__preview-img {
                             position:absolute; top:0;
                             width:100%; height:100%; display: block;
@@ -539,7 +549,7 @@
         .mr-sponsor__goBtn {
             background:#d94040; 
             color:#fff; font-weight:bold;
-            margin:1em 0 4em; padding:0.75em 2.25em 0.75em 1em;
+            margin:0 0 1em 0; padding:0.75em 0.5em;
             border:0; border-radius:3px;
             display: block;
             text-align: center; line-height:1;

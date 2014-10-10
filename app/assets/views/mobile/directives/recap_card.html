@@ -2,13 +2,20 @@
     <h3 class="mr-title">You just watched : <br> &ldquo;<em>{{Ctrl.title}}</em>&rdquo;</h3>
 
     <ul class="mr-recap__list">
-        <li class="mr-recap__item mr-card mr-card-shadow" ng-repeat="card in Ctrl.deck">
-            <button class="mr-recap__imgBtn" type="button" ng-click="Ctrl.jumpTo(card)">
+        <li class="mr-recap__item mr-card mr-card-shadow clearfix" ng-repeat="card in Ctrl.deck">
+            <button class="mr-recap__imgBtn" type="button" 
+            ng-click="Ctrl.jumpTo(card)"
+            ng-class="{'mr-recap__imgBtn--ad':true}">
                 <span class="mr-recap__imgBox" style="background-image:url({{card.thumbs.large}});">&nbsp;</span>
             </button>
             <div class="mr-recap__copyBox">
                 <h1 class="mr-card__title-h1 tk--hdr" ng-click="Ctrl.jumpTo(card)">{{card.title}}</h1>
                 <p ng-show="!!card.source" class="mr-card__attributes">via <a ng-href="{{card.webHref}}" target="_blank" title="{{card.source}}">{{card.source}}</a></p>
+                <p class="mr-card__attributes">sponsored by  
+                    <a ng-href="{{card.webHref}}" target="_blank" 
+                    title="ubisoft"
+                    ng-click="$event.stopPropagation()">ubisoft</a>
+                </p>
                 <div class="mr-recap__ballotInfo" ng-show="card.hasModule('ballot')">
                     <h3 class="mr-results__title mr-recap__ballotQuestion">Questionnaire: <strong>{{card.ballot.prompt}}</strong></h3>
                     <p class="mr-recap__ballotResults">
