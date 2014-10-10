@@ -328,6 +328,16 @@
                         cursor: pointer;
                         background:black url('../../img/default_square.jpg') 50% 50% / cover no-repeat;
                     }
+                        .mr-pages__page--ad:before {
+                            content:'Ad';
+                            position: absolute;
+                            top:2px; left:2px;
+                            background:#000; color:#fff;
+                            padding:0 2px;
+                            font-size:0.625rem; font-weight:bold;
+                            z-index: 2;
+                        }
+
                         .mr-pages__preview-img {
                             position:absolute; top:0;
                             width:100%; height:100%; display: block;
