@@ -637,13 +637,13 @@
             font-size:0.75em; font-weight:300;
         }
         .mr-card__title {
-            margin:0 0.5em;
+            margin:0 0.5em; 
             }
             .mr-card__title-h1 {
-                font-size:1.25em; /*20px*/ color:#444444; font-weight:300; margin:0; line-height: 1.2;
+                font-size:1.25em; /*20px*/ color:#444; font-weight:300; margin:0; line-height: 1.2;
             }
             .mr-card__attributes {
-                color:#999999; font-size:0.75em;/*12px*/ margin:0.16em 0 1em 0;
+                color:#999; font-size:0.75em;/*12px*/ margin:0.16em 0 1em 0;
             }
         .mr-card__copy {
             margin:1em 0.5em 0.143em 0.5em; font-size:0.875em;/*14px*/ color:#747474; line-height:1.75;
@@ -678,7 +678,7 @@
 
 
         .mr-sponsorProfile__imgBox {
-            width:3.125em; height:3.125em;
+            width:3em; height:3em;
             float:left;
             border:1px solid #ddd;
             margin:0 0.5em 0 0;

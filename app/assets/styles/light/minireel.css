@@ -56,6 +56,9 @@
     .sprite--alpha-png {
         background:url('../../img/sprite__alpha@2x.png') 0 0 / 6.25rem 3.125rem no-repeat;
     }
+    .sprite__social {
+        background:url('../../img/sprite__social@2x.png') 0 0 / 10rem 1rem no-repeat;
+    }
     .sprite {
         background:url('../../img/sprite--light.svg') 0 0 / 18.75em 18.75em no-repeat;
     }
@@ -76,6 +79,25 @@
     .c6-height-limiter { 
         min-height:11.125rem;/*178px*/
     }
+
+    .socialIcons {
+        width:1rem; height:1rem;
+        display: inline-block;
+        border:0;
+    }
+        .socialIcons--youtube {
+            background-position:0 0;
+        }
+        .socialIcons--vimeo {
+            background-position: -1.25rem 0;
+        }
+        .socialIcons--facebook {
+            background-position: -2.5rem 0;
+        }
+        .socialIcons--twitter {
+            background-position: -3.75rem 0;
+        }
+
 
 /*  ==========================================================================
     .ng-animate classes
@@ -99,7 +121,7 @@
         padding:0 0 85% 0;
         height:0; 
         position:relative;
-        background:#1b1b1b; 
+        background:#fff; 
     }
 
 /*  ==========================================================================
@@ -135,7 +157,7 @@
         width:1px;
         display: block;
         position: absolute; top:0; bottom:0;
-        background:#1b1b1b;
+        background:#fff;
     }
         .pager__prev .pager__border {
             right:0;
@@ -182,8 +204,8 @@
                     margin:0; padding:0;
                     position:relative; overflow: hidden;
                     border:0;
-                    border-left:1px solid #1b1b1b;
-                    border-right:1px solid #1b1b1b;
+                    border-left:1px solid #fff;
+                    border-right:1px solid #fff;
                     box-sizing:border-box;
                 }
                     .pages__navBtn,
@@ -196,6 +218,14 @@
                         cursor: pointer;
                         background:black url('../../img/default_square.jpg') 50% 50% / cover no-repeat;
                     }
+                        .pages__page--ad:after {
+                            content:'Ad';
+                            position: absolute;
+                            top:2px; left:2px;
+                            background:#000; color:#fff;
+                            padding:0 2px;
+                            font-size:0.625rem; font-weight:bold;
+                        }
                         .pages__preview-img {
                             position:absolute; top:0;
                             width:100%; height:100%; display: block;
@@ -283,13 +313,18 @@
             }
         .card__copy { 
             margin: 0 0.625em;
+            overflow-y:auto; overflow-x:hidden;
         }
+            .text--low .card__copy,
+            .text--med .card__copy,
+            .text--high .card__copy {
+                height:4.5rem;
+            }
             .text--max .card__copy {
-                overflow-y:auto;
-                height:6.5em;
+                height:6.5rem;
             }
             .card__title {
-                font-size:1rem;/*16px*/ color:#fff; font-weight:normal;
+                font-size:1rem;/*16px*/ color:#333; font-weight:normal;
                 padding:0; margin:0.4em 0; line-height: 1.2;
             }
             .card__attributes {
@@ -297,7 +332,7 @@
             }
             .card__desc {
                 margin:0; font-size:0.875rem;/*14px*/ 
-                color:#999; line-height:1.4286;
+                line-height:1.4286;
             }
         .text--low .player__height,
         .text--med .player__height,
@@ -316,25 +351,8 @@
                     font-size:0.75rem;/*12px*/
                 }
             }
-            @media screen and (min-width:25rem) and (max-width:32.5rem) {
-                /*400px - 520px*/
-                .text--low .player__height {
-                    height:calc(100% - 7.5rem); /*120*/
-                }
-                .text--high .player__height {
-                    height:calc(100% - 9.25rem); /*148*/
-                }
-            }
             @media screen and (min-width:32.5625rem) and (max-width:35.625rem) {
                 /*521px - 570px*/
-                .text--low .player__height,
-                .text--med .player__height {
-                    height:calc(100% - 7.5rem); /*120*/
-                }
-                .text--high .player__height {
-                    height:calc(100% - 9.25rem); /*148*/
-                }
-
                 .card__title {
                     font-size:0.9375rem;/*15px*/
                 }
@@ -342,34 +360,55 @@
                     font-size:0.8125rem;/*13px*/
                 }
             }
-            @media screen and (min-width:35.6875rem) and (max-width:44.9375rem) {
-                /*571px - 719px */
-                .text--low .player__height {
-                    height:calc(100% - 7.5rem); /*120*/
-                }
-                .text--high .player__height {
-                    height:calc(100% - 9.25rem); /*148*/
-                }
+            
+
+
+
+/*  ================================================
+    sponsored card styles
+    ================================================ */
+    .sponsorProfile__group {
+        margin:0.5em 0;
+    }
+
+
+        .sponsorProfile__imgBox {
+            width:3em; height:3em;
+            float:left;
+            border:1px solid #ddd;
+            margin:0 0.5em 0 0;
+            display: block;
+            text-decoration: none;
+        }
+            .sponsorProfile__img {
+                width:3em; height:3em;
+                display: block;
             }
-            @media screen and (min-width:45rem) and (max-width:60rem) {
-                /*720px - 960px */
-                .text--low .player__height {
-                    height:calc(100% - 7.5rem); /*120*/
-                }
-                .text--med .player__height,
-                .text--high .player__height {
-                    height:calc(100% - 8rem); /*128*/
-                }
+
+
+        .sponsorProfile__copy {
+            margin:-0.5em 0 0 3.5em;
+        }
+
+            .sponsorProfile__tag {
+                font-weight:normal;
             }
-            @media screen and (min-width:60.0625rem) {
-                /*961px+ */
-                .text--low .player__height,
-                .text--med .player__height {
-                    height:calc(100% - 6.875rem); /*110*/
-                }
-                .text--high .player__height {
-                    height:calc(100% - 8rem); /*128*/
-                }
+            
+            .sponsorProfile__link {
+                border:0;
+            }
+
+
+        .sponsor__actions {
+            margin:1em 0;
+        }
+            .sponsor__goBtn {
+                background:#d94040; 
+                color:#fff; font-weight:bold;
+                margin:0 0 1em 0; padding:0.75em 0.5em;
+                border:0; border-radius:3px;
+                display: inline-block;
+                text-align: center; line-height:1;
             }
 
 
@@ -669,6 +708,15 @@
                         position:relative;
                         cursor:pointer;
                     }
+                        .recap__imgBtn--ad:before {
+                            content:'Ad';
+                            position: absolute;
+                            top:2px; left:2px;
+                            background:#000; color:#fff;
+                            padding:0 2px;
+                            font-size:0.625rem; font-weight:bold;
+                            z-index: 1;
+                        }
                         .recap__imgBox {
                             display: block;
                             position:absolute; top:0; left:0; bottom:0; right:0;
@@ -681,7 +729,7 @@
                         .recap__copyBox .card__title-h1 {
                             font-size:1.125em;
                             margin:0.25em 0; padding:0;
-                            color:#fff;
+                            color:#333;
                         }
                         .recap__ballotInfo {
                             color:#999; font-size:0.875em;
@@ -691,7 +739,7 @@
                                 margin:0;
                             }
                                 .recap__ballotQuestion strong {
-                                    color:#fff; font-style:italic;
+                                    color:#333; font-style:italic;
                                 }
                             .recap__ballotResults {
                                 margin:0;
