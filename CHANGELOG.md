@@ -1,5 +1,9 @@
 # MiniReel Player
 
+* *[v1.3.0.rc1]*
+  * [FEATURE]: Full page player with ads styles added
+  * [FEATURE]: Removed cover image from text only cards 
+
 ## v1.2.0 (October 8, 2014)
 * *[v1.2.0.rc2]*
   * [FIX]: Fix for an issue that could allow the MR to be closed in
