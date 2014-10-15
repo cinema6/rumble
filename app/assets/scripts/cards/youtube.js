@@ -185,8 +185,8 @@ function( angular , c6ui , iframe , youtube ) {
         return service;
 
     }])
-    .directive('youtubeCard',['$log','$window','$timeout','$interval','$q','youtube','_default','playerInterface','numberify','c6UrlMaker','assetFilter',
-    function                 ( $log , $window , $timeout , $interval , $q , youtube , _default , playerInterface , numberify , c6UrlMaker , assetFilter ){
+    .directive('youtubeCard',['$log','$window','$timeout','$interval','$q','youtube','_default','playerInterface','numberify',
+    function                 ( $log , $window , $timeout , $interval , $q , youtube , _default , playerInterface , numberify ){
         $log = $log.context('<youtube-card>');
         function fnLink(scope,$element,$attr){
             if (!$attr.videoid){
@@ -474,7 +474,11 @@ function( angular , c6ui , iframe , youtube ) {
                 });
             }
 
-            regeneratePlayer();
+            scope.$on('<youtube-card>:viewLoaded', function($event) {
+                $event.stopPropagation();
+
+                regeneratePlayer();
+            });
         }
 
         return {
@@ -482,7 +486,11 @@ function( angular , c6ui , iframe , youtube ) {
             link        : fnLink,
             controller  : 'VideoEmbedCardController',
             controllerAs: 'Ctrl',
-            templateUrl : assetFilter('directives/video_embed_card.html', 'views')
+            template: [
+                '<ng-include src="config.templateUrl || (\'directives/video_embed_card.html\' | asset:\'views\')"',
+                '    onload="$emit(\'<youtube-card>:viewLoaded\')">',
+                '</ng-include>'
+            ].join('\n')
         };
     }]);
 });

@@ -3,11 +3,12 @@ function( angular , services ) {
     'use strict';
 
     return angular.module('c6.rumble.cards.text', [services.name])
-        .directive('textCard', ['assetFilter',
-        function               ( assetFilter ) {
+        .directive('textCard', [function() {
             return {
                 restrict: 'E',
-                templateUrl: assetFilter('directives/text_card.html', 'views'),
+                template: [
+                    '<ng-include src="config.templateUrl || (\'directives/text_card.html\' | asset:\'views\')"></ng-include>'
+                ].join('\n'),
                 controller: 'TextCardController',
                 controllerAs: 'Ctrl'
             };
