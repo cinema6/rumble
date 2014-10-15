@@ -732,6 +732,12 @@ function( angular , c6Defines  , tracker ,
             });
         });
 
+        this.moduleActive = function(module) {
+            var modules = (($scope.currentCard || {}).modules || []);
+
+            return modules.indexOf(module) > -1;
+        };
+
         this.findCardByVideo = function(videoType,videoId){
             var result;
             $scope.deck.some(function(item){

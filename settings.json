@@ -40,7 +40,7 @@
             "blacklist": ["mobile", "full"]
         },
         "modules/display_ad": {
-            "whitelist": ["lightbox-ads"]
+            "whitelist": ["lightbox-ads", "full"]
         }
     }
 }

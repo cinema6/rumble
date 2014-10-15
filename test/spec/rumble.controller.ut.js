@@ -322,6 +322,53 @@ define(['c6ui', 'services', 'minireel', 'angular'], function(c6uiModule, service
             });
         });
 
+        describe('methods', function() {
+            describe('moduleActive(module)', function() {
+                var card;
+
+                beforeEach(function() {
+                    card = {
+                        modules: [
+                            'displayAd',
+                            'ballot'
+                        ]
+                    };
+
+                    $scope.currentCard = card;
+                });
+
+                it('should be true if the current card has the provided module', function() {
+                    expect(RumbleCtrl.moduleActive('displayAd')).toBe(true);
+                    expect(RumbleCtrl.moduleActive('ballot')).toBe(true);
+                });
+
+                it('should be false if the current card does not have the provided module', function() {
+                    expect(RumbleCtrl.moduleActive('foo')).toBe(false);
+                    expect(RumbleCtrl.moduleActive('comments')).toBe(false);
+                });
+
+                describe('if the card has no modules array', function() {
+                    beforeEach(function() {
+                        $scope.currentCard = {};
+                    });
+
+                    it('should return false', function() {
+                        expect(RumbleCtrl.moduleActive('displayAd')).toBe(false);
+                    });
+                });
+
+                describe('if there is no current card', function() {
+                    beforeEach(function() {
+                        $scope.currentCard = null;
+                    });
+
+                    it('should return false', function() {
+                        expect(RumbleCtrl.moduleActive('ballot')).toBe(false);
+                    });
+                });
+            });
+        });
+
         describe('$scope.prevThumb', function() {
             beforeEach(function() {
                 $scope.currentIndex = 0;

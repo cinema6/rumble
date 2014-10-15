@@ -55,6 +55,77 @@ define(['app'], function(appModule) {
                     it('should load an ad', function() {
                         expect(AdTechService.loadAd).toHaveBeenCalledWith($scope.config);
                     });
+
+                    describe('if there is no config', function() {
+                        beforeEach(function() {
+                            $scope.$apply(function() {
+                                $scope.active = false;
+                                $scope.config = null;
+                            });
+                            AdTechService.loadAd = jasmine.createSpy('loadAd()');
+                            $scope.$apply(function() {
+                                $scope.active = true;
+                            });
+                        });
+
+                        it('should not load an ad', function() {
+                            expect(AdTechService.loadAd).not.toHaveBeenCalledWith($scope.config);
+                        });
+                    });
+                });
+            });
+
+            describe('config', function() {
+                describe('if the config changes', function() {
+                    describe('if the module is not active', function() {
+                        beforeEach(function() {
+                            $scope.$apply(function() {
+                                $scope.active = false;
+                            });
+                            $scope.$apply(function() {
+                                $scope.config = {
+                                    id: 'rc-b15f7fb9750557',
+                                    data: {}
+                                };
+                            });
+                        });
+
+                        it('should not load an ad', function() {
+                            expect(AdTechService.loadAd).not.toHaveBeenCalled();
+                        });
+                    });
+
+                    describe('if the module is active', function() {
+                        beforeEach(function() {
+                            $scope.$apply(function() {
+                                $scope.active = true;
+                            });
+                            AdTechService.loadAd = jasmine.createSpy('loadAd()');
+                            $scope.$apply(function() {
+                                $scope.config = {
+                                    id: 'rc-b15f7fb9750557',
+                                    data: {}
+                                };
+                            });
+                        });
+
+                        it('should load a new ad', function() {
+                            expect(AdTechService.loadAd).toHaveBeenCalledWith($scope.config);
+                        });
+
+                        describe('if the config becomes falsy', function() {
+                            beforeEach(function() {
+                                AdTechService.loadAd = jasmine.createSpy('loadAd()');
+                                $scope.$apply(function() {
+                                    $scope.config = null;
+                                });
+                            });
+
+                            it('should not load an ad', function() {
+                                expect(AdTechService.loadAd).not.toHaveBeenCalled();
+                            });
+                        });
+                    });
                 });
             });
         });
