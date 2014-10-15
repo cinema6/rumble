@@ -70,11 +70,12 @@ function( angular , services ) {
             });
         }])
 
-        .directive('recapCard', ['assetFilter',
-        function                ( assetFilter ) {
+        .directive('recapCard', [function() {
             return {
                 restrict: 'E',
-                templateUrl : assetFilter('directives/recap_card.html', 'views'),
+                template: [
+                    '<ng-include src="config.templateUrl || (\'directives/recap_card.html\' | asset:\'views\')"></ng-include>'
+                ].join('\n'),
                 controller: 'RecapCardController',
                 controllerAs: 'Ctrl'
             };
