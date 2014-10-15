@@ -136,9 +136,11 @@ define(['app', 'services', 'angular'], function(appModule, servicesModule, angul
             });
 
             it('will create a player',function(){
-                $compile(
-                    '<youtube-card videoid="abc123" width="1" height="2"></youtube-card>'
-                )($scope);
+                $scope.$apply(function() {
+                    $compile(
+                        '<youtube-card videoid="abc123" width="1" height="2"></youtube-card>'
+                    )($scope);
+                });
                 $timeout.flush();
                 expect($log.context).toHaveBeenCalledWith('<youtube-card>');
                 expect(mockPlayers.length).toEqual(1);
@@ -167,10 +169,12 @@ define(['app', 'services', 'angular'], function(appModule, servicesModule, angul
                 });
 
                 $scope.$on('playerAdd'      ,addSpy);
-                
-                $compile(
-                    '<youtube-card videoid="abc123" width="1" height="2" start="{{start}}" end="{{end}}"></youtube-card>'
-                )($scope);
+
+                $scope.$apply(function() {
+                    $compile(
+                        '<youtube-card videoid="abc123" width="1" height="2" start="{{start}}" end="{{end}}"></youtube-card>'
+                    )($scope);
+                });
                 $timeout.flush();
             });
 
@@ -336,12 +340,14 @@ define(['app', 'services', 'angular'], function(appModule, servicesModule, angul
 
                     describe('if a start time is specified', function() {
                         beforeEach(function() {
-                            $compile(
-                                '<youtube-card videoid="abc1234" width="1" height="2" start="10"></youtube-card>'
-                            )($scope);
+                            $scope.$apply(function() {
+                                $compile(
+                                    '<youtube-card videoid="abc1234" width="1" height="2" start="10"></youtube-card>'
+                                )($scope);
+                            });
                             $timeout.flush();
 
-                            player = mockPlayers[1];
+                            player = mockPlayers[mockPlayers.length - 1];
 
                             player._on.ready[0]({},player);
                             $timeout.flush();
@@ -425,7 +431,7 @@ define(['app', 'services', 'angular'], function(appModule, servicesModule, angul
                     var player;
 
                     beforeEach(function() {
-                        player = mockPlayers[0];
+                        player = mockPlayers[mockPlayers.length - 1];
                     });
 
                     describe('getting', function() {
@@ -448,12 +454,14 @@ define(['app', 'services', 'angular'], function(appModule, servicesModule, angul
                             beforeEach(function() {
                                 $scope.start = 0;
 
-                                $compile(
-                                    '<youtube-card videoid="abc1234" width="1" height="2" start="{{start}}"></youtube-card>'
-                                )($scope);
+                                $scope.$apply(function() {
+                                    $compile(
+                                        '<youtube-card videoid="abc1234" width="1" height="2" start="{{start}}"></youtube-card>'
+                                    )($scope);
+                                });
                                 $timeout.flush();
 
-                                player = mockPlayers[1];
+                                player = mockPlayers[mockPlayers.length - 1];
                                 player.getDuration.andReturn(30);
 
                                 player._on.ready[0]({},player);
@@ -480,12 +488,14 @@ define(['app', 'services', 'angular'], function(appModule, servicesModule, angul
                             beforeEach(function() {
                                 $scope.end = 30;
 
-                                $compile(
-                                    '<youtube-card videoid="abc1234" width="1" height="2" end="{{end}}"></youtube-card>'
-                                )($scope);
+                                $scope.$apply(function() {
+                                    $compile(
+                                        '<youtube-card videoid="abc1234" width="1" height="2" end="{{end}}"></youtube-card>'
+                                    )($scope);
+                                });
                                 $timeout.flush();
 
-                                player = mockPlayers[1];
+                                player = mockPlayers[mockPlayers.length - 1];
                                 player.getDuration.andReturn(30);
 
                                 player._on.ready[0]({},player);
@@ -509,12 +519,14 @@ define(['app', 'services', 'angular'], function(appModule, servicesModule, angul
 
                         describe('if there is no start or end time', function() {
                             beforeEach(function() {
-                                $compile(
-                                    '<youtube-card videoid="abc1234" width="1" height="2"></youtube-card>'
-                                )($scope);
+                                $scope.$apply(function() {
+                                    $compile(
+                                        '<youtube-card videoid="abc1234" width="1" height="2"></youtube-card>'
+                                    )($scope);
+                                });
                                 $timeout.flush();
 
-                                player = mockPlayers[1];
+                                player = mockPlayers[mockPlayers.length - 1];
                                 player.getDuration.andReturn(30);
 
                                 player._on.ready[0]({},player);
@@ -609,12 +621,14 @@ define(['app', 'services', 'angular'], function(appModule, servicesModule, angul
 
                         describe('if start is provided', function() {
                             beforeEach(function() {
-                                $compile(
-                                    '<youtube-card videoid="abc1234" width="1" height="2" start="10"></youtube-card>'
-                                )($scope);
+                                $scope.$apply(function() {
+                                    $compile(
+                                        '<youtube-card videoid="abc1234" width="1" height="2" start="10"></youtube-card>'
+                                    )($scope);
+                                });
                                 $timeout.flush();
 
-                                player = mockPlayers[1];
+                                player = mockPlayers[mockPlayers.length - 1];
 
                                 player._on.ready[0]({},player);
                                 $timeout.flush();
@@ -742,10 +756,12 @@ define(['app', 'services', 'angular'], function(appModule, servicesModule, angul
 
                     resolveSpy = jasmine.createSpy('twerk.resolve');
                     rejectSpy  = jasmine.createSpy('twerk.reject');
-                    
-                    $compile(
-                        '<youtube-card videoid="abc123" width="1" height="2"></youtube-card>'
-                    )($scope);
+
+                    $scope.$apply(function() {
+                        $compile(
+                            '<youtube-card videoid="abc123" width="1" height="2"></youtube-card>'
+                        )($scope);
+                    });
                     $timeout.flush();
                 });
 
@@ -944,9 +960,11 @@ define(['app', 'services', 'angular'], function(appModule, servicesModule, angul
             describe('ready',function(){
                 it('is emitted when the player is ready',function(){
                     var readySpy = jasmine.createSpy('playerIsReady');
-                    $compile(
-                        '<youtube-card videoid="a" width="1" height="2"></youtube-card>'
-                    )($scope);
+                    $scope.$apply(function() {
+                        $compile(
+                            '<youtube-card videoid="a" width="1" height="2"></youtube-card>'
+                        )($scope);
+                    });
                     $timeout.flush();
                     iface.on('ready',readySpy);
                     expect(readySpy).not.toHaveBeenCalled();
@@ -1012,9 +1030,11 @@ define(['app', 'services', 'angular'], function(appModule, servicesModule, angul
                 it('will seekTo start value if currentTime is < start',function(){
                     var player;
 
-                    $compile(
-                        '<youtube-card videoid="a" start="10" end="20"></youtube-card>'
-                    )($scope);
+                    $scope.$apply(function() {
+                        $compile(
+                            '<youtube-card videoid="a" start="10" end="20"></youtube-card>'
+                        )($scope);
+                    });
                     $timeout.flush();
                     player = mockPlayers[0];
 
@@ -1075,9 +1095,11 @@ define(['app', 'services', 'angular'], function(appModule, servicesModule, angul
 
                 it('youtube ended event will triger ended',function(){
                     var endedSpy = jasmine.createSpy('playerHasEnded');
-                    $compile(
-                        '<youtube-card videoid="a" end="10"></youtube-card>'
-                    )($scope);
+                    $scope.$apply(function() {
+                        $compile(
+                            '<youtube-card videoid="a" end="10"></youtube-card>'
+                        )($scope);
+                    });
                     $timeout.flush();
                     iface.on('ended',endedSpy);
                     //simulate the firing of the ready event
@@ -1091,9 +1113,11 @@ define(['app', 'services', 'angular'], function(appModule, servicesModule, angul
                 });
 
                 it('end param will trigger ended based on playing',function(){
-                    $compile(
-                        '<youtube-card videoid="a" end="10"></youtube-card>'
-                    )($scope);
+                    $scope.$apply(function() {
+                        $compile(
+                            '<youtube-card videoid="a" end="10"></youtube-card>'
+                        )($scope);
+                    });
                     $timeout.flush();
 
                     expect(mockPlayers[0]._on.ended).not.toBeDefined();
@@ -1136,9 +1160,11 @@ define(['app', 'services', 'angular'], function(appModule, servicesModule, angul
                 });
 
                 it('will not regenerate the player by default', function(){
-                    $compile(
-                        '<youtube-card videoid="a" end="10"></youtube-card>'
-                    )($scope);
+                    $scope.$apply(function() {
+                        $compile(
+                            '<youtube-card videoid="a" end="10"></youtube-card>'
+                        )($scope);
+                    });
                     $timeout.flush();
                     
                     //simulate the firing of the ready event
@@ -1158,9 +1184,11 @@ define(['app', 'services', 'angular'], function(appModule, servicesModule, angul
 
                 it('will regenerate the player if regenerate param is set',function(){
                     spyOn($interval, 'cancel');
-                    $compile(
-                        '<youtube-card videoid="a" regenerate="1"></youtube-card>'
-                    )($scope);
+                    $scope.$apply(function() {
+                        $compile(
+                            '<youtube-card videoid="a" regenerate="1"></youtube-card>'
+                        )($scope);
+                    });
                     $timeout.flush();
                     //simulate the firing of the ready event
                     mockPlayers[0]._on.ready[0](mockPlayers[0]);
