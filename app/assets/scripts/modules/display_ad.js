@@ -6,8 +6,10 @@ function( angular ) {
         .directive('displayAdModule', ['assetFilter','AdTechService',
         function                      ( assetFilter , AdTechService ) {
             function link(scope) {
-                scope.$watch('active', function(active) {
-                    if (active) {
+                scope.$watchCollection('[active, config]', function(props) {
+                    var active = props[0], config = props[1];
+
+                    if (active && config) {
                         AdTechService.loadAd(scope.config);
                     }
                 });
