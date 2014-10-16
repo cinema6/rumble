@@ -9,6 +9,23 @@
     }
 
 
+
+/*  ================================================
+    sponsored card styles
+    ================================================ */
+    .sponsorProfile__imgBox {
+        -webkit-transition:border 0.5s;
+        transition:border 0.5s;
+    }
+    .sponsorProfile__imgBox:hover {
+        border:1px solid #d94040;
+    }
+    .sponsor__goBtn:hover {
+        color:#fff;
+    }
+
+
+
 /*  ================================================
     button styles 
     ================================================ */
