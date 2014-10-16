@@ -1,0 +1,47 @@
+/*  ================================================
+    .playlist__group classes
+    ================================================ */
+    .playlist__item:hover {
+        background-color:#efefef;
+    }
+    .playlist__item--current:hover {
+        background-color:#d94040;
+    }
+
+
+
+/*  ================================================
+    sponsored card styles
+    ================================================ */
+    .sponsorProfile__imgBox {
+        -webkit-transition:border 0.5s;
+        transition:border 0.5s;
+    }
+    .sponsorProfile__imgBox:hover {
+        border:3px solid #d94040;
+    }
+    .sponsor__goBtn:hover {
+        color:#fff;
+    }
+
+
+
+/*  ================================================
+    button styles 
+    ================================================ */
+    .textOnly__btn:hover,
+    .slideNav__btn:hover {
+        background-color:#fff;
+        color:#d94040;
+    }
+        .slideNav__btn:hover .slideNav__iconPath {
+            fill:#d94040;
+        }
+
+    .slideNav__btn:disabled:hover {
+        background:#ddd; color:#fff;
+        border:4px solid #ddd;
+    }
+        .slideNav__btn:disabled:hover .slideNav__iconPath {
+            fill:#fff;
+        }

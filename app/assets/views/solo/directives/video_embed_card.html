@@ -1,0 +1,81 @@
+<article class="slide__group">
+    <ballot-vote-module 
+        class="ballot-module player__height"
+        ng-if="Ctrl.hasModule('ballot')"
+        active="config._data.modules.ballot.ballotActive && active"
+        vote="config._data.modules.ballot.vote"
+        card-id="{{config.id}}"
+        ballot="config.ballot"
+        on-dismiss="Ctrl.dismissBallot()">
+    </ballot-vote-module>
+    <ballot-results-module ng-if="Ctrl.hasModule('ballot')"
+        class="results-module player__height"
+        active="config._data.modules.ballot.resultsActive && active"
+        vote="config._data.modules.ballot.vote"
+        card-id="{{config.id}}"
+        fetch-when="onDeck || active"
+        on-dismiss="Ctrl.dismissBallotResults()">
+    </ballot-results-module>
+
+    <div class="player__group player__height">
+        <button ng-if="Ctrl.enablePlayButton" ng-show="Ctrl.showPlay" ng-click="Ctrl.playVideo()" class="player__play-btn">
+            <div class="player__play-icon">
+                <span class="ir">Play Video</span>
+            </div>
+        </button>
+        <div ng-class="{'mr-player--fly-away': Ctrl.flyAway}" class="mr-player"><!-- actual player will be inserted into this container --></div>
+        <div ng-show="Ctrl.flyAway" class="player__thumbnail c6-height-limiter"
+            ng-style="{'background-image':config.thumbs.large ? 'url(' + config.thumbs.large + ')' : ''}">
+            <span class="ir"><img ng-src="{{config.thumbs.large}}"></span>
+        </div>
+    </div>
+
+    <div class="card__copyBox">
+        
+        <a href="#" title="Sponsor link" class="sponsorProfile__imgBox">
+            <img src="https://yt3.ggpht.com/-E_tsaPMH5Qk/AAAAAAAAAAI/AAAAAAAAAAA/Y8Bz2pEIKeI/s100-c-k-no/photo.jpg" class="sponsorProfile__img">
+        </a>
+
+        <div class="sponsor__links">
+            <a href="#" title="YouTube"
+            class="sponsor__link">
+                <span class="sprite__social socialIcons socialIcons--youtube">
+                    <span class="ir">YouTube</span>
+                </span>
+            </a>
+            <a href="#" title="Vimeo"
+            class="sponsor__link">
+                <span class="sprite__social socialIcons socialIcons--vimeo">
+                    <span class="ir">Vimeo</span>
+                </span>
+            </a>
+            <a href="#" title="Facebook"
+            class="sponsor__link">
+                <span class="sprite__social socialIcons socialIcons--facebook">
+                    <span class="ir">Facebook</span>
+                </span>
+            </a>
+            <a href="#" title="Twitter"
+            class="sponsor__link">
+                <span class="sprite__social socialIcons socialIcons--twitter">
+                    <span class="ir">Twitter</span>
+                </span>
+            </a>
+        </div>
+
+        <div class="card__copy">
+            <h1 class="card__title tk--hdr">
+                {{config.title}}
+                <span ng-show="!!config.source" class="card__attributes">via <a ng-href="{{Ctrl.videoUrl}}" target="_blank" title="{{config.source}}">{{config.source}}</a></span>
+            </h1>
+
+            <div class="card__desc" ng-bind-html="config.note"></div>
+
+            <div class="card__desc sponsor__actions">
+                <a href="#">text only links get added to the bottom</a>
+                <a href="#" class="sponsor__goBtn" title="Button Name">Button Name</a>
+            </div>
+
+        </div>
+    </div>
+</article>

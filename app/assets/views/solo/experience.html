@@ -1,0 +1,28 @@
+<script src="//use.typekit.net/xuz8gem.js"></script>
+<script>try{Typekit.load();}catch(e){}</script>
+<div class="MiniReel" ng-class="app.data.experience.data.theme">
+    
+
+    <header class="mr-titleBar__group clearfix">
+        <div class="mr-titleBar__disabler" ng-show="!nav.enabled">&nbsp;</div>
+        <h1 class="mr-titleBar__title"
+        ng-show="true">
+            Sponsored by <a href="#" title="Ubisoft"><strong>Ubisoft</strong></a>
+        </h1>
+    </header>
+
+    <ng-include ng-controller="DeckController as DeckCtrl" src="'deck.html' | asset:'views'"></ng-include>
+
+    <!--<display-ad-module ng-if="RumbleCtrl.moduleActive('displayAd')"
+        config="currentCard"
+        active="RumbleCtrl.moduleActive('displayAd')">
+    </display-ad-module>-->
+
+</div><!--.MiniReel-->
+
+
+<ng-switch on="app.state">
+    <div class="splash__group" ng-switch-when="splash">
+        <ng-include ng-if="app.data.version < 1"  src="'splash.html' | asset:'views'"></ng-include>
+    </div>
+</ng-switch>
