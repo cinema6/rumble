@@ -1,9 +1,11 @@
 # MiniReel Player
 
+## v1.3.0 (October 16, 2014)
 * *[v1.3.0.rc1]*
   * [FEATURE]: Full page player with ads styles added
   * [FEATURE]: Removed cover image from text only cards 
   * [FEATURE]: Custom templates can now be specified for a MiniReel card
+* *[/v1.3.0.rc1]*
 
 ## v1.2.0 (October 8, 2014)
 * *[v1.2.0.rc2]*
