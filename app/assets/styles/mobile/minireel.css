@@ -645,6 +645,9 @@
             .mr-card__attributes {
                 color:#999; font-size:0.75em;/*12px*/ margin:0.16em 0 1em 0;
             }
+                .mr-card__attributes--sponsor {
+                    display: none;
+                }
         .mr-card__copy {
             margin:1em 0.5em 0.143em 0.5em; font-size:0.875em;/*14px*/ color:#747474; line-height:1.75;
             background: transparent !important;
@@ -674,6 +677,7 @@
     ================================================ */
     .mr-sponsorProfile__group {
         margin:0.6875em 0.5em;
+        display: none;
     }
 
 
@@ -699,6 +703,10 @@
         .mr-sponsorProfile__link {
             border:0;
         }
+
+    .sponsor__actions {
+        display: none;
+    }
 
         .mr-sponsor__goBtn {
             background:#d94040; 
@@ -970,6 +978,7 @@
                     padding:0 2px;
                     font-size:0.625rem; font-weight:bold;
                     z-index: 1;
+                    display: none;
                 }
 
                 .mr-toc-item__imgBox .mr-toc-item__img {
@@ -988,6 +997,9 @@
                     color:#999; font-size:0.75em;
                     margin:0;
                 }
+                    .mr-toc-item__attributes--sponsor {
+                        display: none;
+                    }
 
 /*  ==========================================================================
     .more-reels card classes
