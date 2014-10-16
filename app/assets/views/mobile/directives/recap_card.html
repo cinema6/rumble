@@ -11,7 +11,7 @@
             <div class="mr-recap__copyBox">
                 <h1 class="mr-card__title-h1 tk--hdr" ng-click="Ctrl.jumpTo(card)">{{card.title}}</h1>
                 <p ng-show="!!card.source" class="mr-card__attributes">via <a ng-href="{{card.webHref}}" target="_blank" title="{{card.source}}">{{card.source}}</a></p>
-                <p class="mr-card__attributes">sponsored by  
+                <p class="mr-card__attributes mr-card__attributes--sponsor">sponsored by  
                     <a ng-href="{{card.webHref}}" target="_blank" 
                     title="ubisoft"
                     ng-click="$event.stopPropagation()">ubisoft</a>

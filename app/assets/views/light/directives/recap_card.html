@@ -12,7 +12,7 @@
                 <h1 class="card__title-h1 tk--hdr" ng-click="Ctrl.jumpTo(card)">{{card.title}}
                     <span ng-show="!!card.source" class="card__attributes">via <a ng-href="{{card.webHref}}" target="_blank" title="{{card.source}}">{{card.source}}</a></span>
 
-                    <span ng-show="!!card.source" class="card__attributes">sponsored by <a ng-href="{{card.webHref}}" target="_blank" title="Ubisoft">Ubisoft</a></span>
+                    <span class="card__attributes card__attributes--sponsor">sponsored by <a ng-href="{{card.webHref}}" target="_blank" title="Ubisoft">Ubisoft</a></span>
                 </h1>
                 <div class="recap__ballotInfo" ng-show="card.hasModule('ballot')">
                     <h3 class="recap__ballotQuestion">Questionnaire: <strong>{{card.ballot.prompt}}</strong></h3>
