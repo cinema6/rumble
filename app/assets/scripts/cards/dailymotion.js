@@ -172,8 +172,8 @@ function( angular , c6ui , iframe ) {
 
         return service;
     }])
-    .directive('dailymotionCard', ['$log','$timeout','$q','c6UserAgent','dailymotion','_default','numberify','playerInterface','c6UrlMaker','assetFilter',
-    function                      ( $log , $timeout , $q , c6UserAgent , dailymotion , _default , numberify , playerInterface , c6UrlMaker , assetFilter ) {
+    .directive('dailymotionCard', ['$log','$timeout','$q','c6UserAgent','dailymotion','_default','numberify','playerInterface',
+    function                      ( $log , $timeout , $q , c6UserAgent , dailymotion , _default , numberify , playerInterface ) {
         $log = $log.context('<dailymotion-card>');
         function fnLink(scope,$element,$attr){
             if (!$attr.videoid){
@@ -422,7 +422,9 @@ function( angular , c6ui , iframe ) {
             link     : fnLink,
             controller  : 'VideoEmbedCardController',
             controllerAs: 'Ctrl',
-            templateUrl : assetFilter('directives/video_embed_card.html', 'views')
+            template: [
+                '<ng-include src="config.templateUrl || (\'directives/video_embed_card.html\' | asset:\'views\')"></ng-include>'
+            ].join('\n')
         };
     }]);
 });

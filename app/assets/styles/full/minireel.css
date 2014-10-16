@@ -166,19 +166,22 @@
     .playlist__group {
         margin:0; display: block;
         position: absolute;
-        top:3.75em; right:0.75em; bottom:0.75em;
+        top:3.75em; right:0.75em; bottom:17.25em;
         width:18.75em;
         border-bottom:2px solid #333333;
     }
+        .playlist__group--noAds {
+            bottom:0.75em;
+        }
         @media screen and (min-width:40.0625rem) and (max-width:58.75rem) {
             /* 641px - 940px */
-            .playlist__group {
+            .playlist__group--noAds {
                 width:8.5em;
             }
         }
         @media screen and (max-width:40rem) {
             /* 640px or smaller */
-            .playlist__group {
+            .playlist__group--noAds {
                 width:6.5em;
             }
         }
@@ -263,18 +266,18 @@
                         
                         @media screen and (min-width:40.0625rem) and (max-width:58.75rem) {
                             /* 641px - 940px */
-                            .playlist__thumbHolder {
+                            .playlist__group--noAds .playlist__thumbHolder {
                                 float:none;
                                 margin:0.375em 0 0.3125em 1.875em;
                             }
                         }
                         @media screen and (max-width:40rem) {
                             /* 640px or smaller */
-                            .playlist__thumbHolder {
+                            .playlist__group--noAds .playlist__thumbHolder {
                                 float:none;
                                 margin:0.375em auto 0.3125em auto;
                             }
-                            .playlist__thumbHolder:before {
+                            .playlist__group--noAds .playlist__thumbHolder:before {
                                 display: none;
                             }
                         }
@@ -287,7 +290,7 @@
                 }
                     @media screen and (min-width:40.0625rem) and (max-width:58.75rem) {
                         /* 641px - 940px */
-                        .playlist__copy {
+                        .playlist__group--noAds .playlist__copy {
                             float:none;
                             width:auto;
                             margin:0.75em;
@@ -295,7 +298,7 @@
                     }
                     @media screen and (max-width:40rem) {
                         /* 640px or smaller */
-                        .playlist__copy {
+                        .playlist__group--noAds .playlist__copy {
                             display:none;
                         }
                     }
@@ -335,6 +338,29 @@
 
 
 
+
+/*  ================================================
+    Companion Ad classes
+    ================================================ */
+    .companionAd__group {
+        width:300px;
+        position:absolute;
+        right:0.75em; bottom:0;
+    }
+        .companionAd {
+            width:300px; height:250px;
+            background:#ccc;
+        } 
+        .companionAd__label {
+            color:#ccc;
+            font-size:0.6875em; text-align: center;
+            margin:0;
+        }
+
+
+
+
+
 /*  ================================================
     MiniReel Cards classes
     ================================================ */
@@ -349,13 +375,13 @@
     }
         @media screen and (min-width:40.0625rem) and (max-width:58.75rem) {
             /* 641px - 940px */
-            .slides__list {
+            .slides__list--noAds {
                 right:10em;
             }
         }
         @media screen and (max-width:40rem) {
             /* 640px or smaller */
-            .slides__list {
+            .slides__list--noAds {
                 right:8em;
             }
         }
@@ -624,28 +650,23 @@
 /*  ================================================
     Text Only Card classes
     ================================================ */
-    .textOnly__coverGroup {
-        width:34%;
-        position: absolute;
-        top:0; bottom:0; left:0;
-        background:black url('../../img/default_square.jpg') 50% 50% / cover no-repeat;
-    }
-        .textOnly__cover {
-            position: absolute;
-            top:0; right:0; bottom:0; left:0;
-            background:50% 50% / cover no-repeat;
-        }
     .textOnly__copy {
         position:absolute;
-        top:0; left:34%; bottom:0; right:0;
+        top:0; left:0; bottom:0; right:0;
         padding:0 3em;
         overflow-y: auto; overflow-x:hidden;
     }
         .textOnly__title {
             color:#333; 
             font-size:2.25em; line-height:1;
-            margin:5.5625rem 0 0 0;
+            margin:5.5625rem 0 1.5rem 0;
         }
+            @media screen and (max-width:50rem) {
+                /*800px*/
+                .textOnly__title {
+                    margin-top:2.5rem;
+                }
+            }
         .textOnly__desc {
             font-size:0.875em;
             margin:0.75rem 0;

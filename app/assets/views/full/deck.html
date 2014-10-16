@@ -1,7 +1,8 @@
 <ul class="slides__list" ng-repeat="deck in DeckCtrl.decks"
 ng-class="{
     hidden : !deck.active,
-    'slides__list--fullWidth' : currentCard.type === 'recap'
+    'slides__list--fullWidth' : currentCard.type === 'recap',
+    'slides__list--noAds' : !RumbleCtrl.moduleActive('displayAd')
 }">
     <li class="slides__item" ng-repeat="item in (deck.cards | deck:deck.index:1)"
         ng-class="{

@@ -196,8 +196,8 @@ function( angular , c6ui , iframe ) {
 
         return service;
     }])
-    .directive('vimeoCard',['$log','$timeout','$q','vimeo','_default','numberify','playerInterface','assetFilter',
-    function               ( $log , $timeout , $q , vimeo , _default , numberify , playerInterface , assetFilter ) {
+    .directive('vimeoCard',['$log','$timeout','$q','vimeo','_default','numberify','playerInterface',
+    function               ( $log , $timeout , $q , vimeo , _default , numberify , playerInterface ) {
         $log = $log.context('<vimeo-card>');
         function fnLink(scope,$element,$attr){
             if (!$attr.videoid){
@@ -474,7 +474,9 @@ function( angular , c6ui , iframe ) {
             link        : fnLink,
             controller  : 'VideoEmbedCardController',
             controllerAs: 'Ctrl',
-            templateUrl : assetFilter('directives/video_embed_card.html', 'views')
+            template: [
+                '<ng-include src="config.templateUrl || (\'directives/video_embed_card.html\' | asset:\'views\')"></ng-include>'
+            ].join('\n')
         };
     }]);
 });
