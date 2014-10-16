@@ -296,7 +296,6 @@ function( angular , c6Defines  , tracker ,
         var self = this,
             appData = $scope.app.data,
             election = appData.experience.data.election,
-            videoAdConfig = appData.experience.data.adConfig.video,
             c = c6Computed($scope),
             tracker = trackerService('c6mr'),
             cancelTrackVideo = null,
@@ -308,15 +307,37 @@ function( angular , c6Defines  , tracker ,
             var index = null,
                 self = this,
                 adId = 0,
-                adController = {
-                    adCount: 0,
-                    videoCount: 0,
-                    firstPlacement: videoAdConfig.firstPlacement,
-                    frequency: videoAdConfig.frequency
-                },
+                adController,
                 enableDynamicAds = checkForStaticAds();
 
+            Object.defineProperties(self, {
+                currentIndex: {
+                    get: function() { return index; }
+                },
+                currentCard: {
+                    get: function() { return $scope.deck[index] || null; }
+                },
+                videoAdConfig: {
+                    get: function() { return appData.experience.data.adConfig.video; }
+                }
+            });
+
+            adController = {
+                adCount: 0,
+                videoCount: 0
+            };
+
             Object.defineProperties(adController, {
+                firstPlacement: {
+                    get: function() {
+                        return self.videoAdConfig.firstPlacement;
+                    }
+                },
+                frequency: {
+                    get: function() {
+                        return self.videoAdConfig.frequency;
+                    }
+                },
                 shouldLoadAd: {
                     get: function() {
                         var zeroFreq = this.frequency === 0,
@@ -336,15 +357,6 @@ function( angular , c6Defines  , tracker ,
 
                         return enableDynamicAds && hasFirst && (isFirst || (hasFreq && adCountMatchesFreq));
                     }
-                }
-            });
-
-            Object.defineProperties(self, {
-                currentIndex: {
-                    get: function() { return index; }
-                },
-                currentCard: {
-                    get: function() { return $scope.deck[index] || null; }
                 }
             });
 
@@ -424,7 +436,7 @@ function( angular , c6Defines  , tracker ,
             };
 
             this.adOnDeck = function() {
-                $scope.$broadcast('adOnDeck', new AdCard(videoAdConfig));
+                $scope.$broadcast('adOnDeck', new AdCard(self.videoAdConfig));
             };
 
             $scope.$watch('deck', function() {
