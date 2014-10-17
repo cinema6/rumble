@@ -402,6 +402,7 @@ function( angular , c6Defines  , tracker ,
                 this.modules = ['displayAd'];
                 this.data = {
                     autoplay: true,
+                    autoadvance: true,
                     skip: config.skip,
                     source: config.waterfall
                 };
