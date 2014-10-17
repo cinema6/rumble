@@ -1,5 +1,9 @@
 # MiniReel Player
 
+* *[v1.4.0.rc1]*
+  * [FEATURE]: Allow for display ads, card autoplaying, and card
+    autoadvancing to be overridden on a card-by-card basis
+
 ## v1.3.0 (October 16, 2014)
 * *[v1.3.0.rc1]*
   * [FEATURE]: Full page player with ads styles added

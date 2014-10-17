@@ -1768,7 +1768,11 @@ define(['c6ui', 'services', 'minireel', 'angular'], function(c6uiModule, service
                 var currentCard;
 
                 beforeEach(function() {
-                    $scope.currentCard = currentCard = {};
+                    $scope.currentCard = currentCard = {
+                        data: {
+                            autoadvance: true
+                        }
+                    };
 
                     spyOn(RumbleCtrl, 'goForward');
                 });
@@ -1790,6 +1794,18 @@ define(['c6ui', 'services', 'minireel', 'angular'], function(c6uiModule, service
 
                     it('should move forward', function() {
                         expect(RumbleCtrl.goForward).toHaveBeenCalled();
+                    });
+
+                    describe('if the card is not set to autoadvance', function() {
+                        beforeEach(function() {
+                            currentCard.data.autoadvance = false;
+                            RumbleCtrl.goForward = jasmine.createSpy('goForward()');
+                            $scope.$emit('<mr-card>:contentEnd', currentCard);
+                        });
+
+                        it('should not move forward', function() {
+                            expect(RumbleCtrl.goForward).not.toHaveBeenCalled();
+                        });
                     });
                 });
             });

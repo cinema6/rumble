@@ -28,7 +28,6 @@ define(['minireel', 'c6ui', 'services'], function(minireelModule, c6uiModule) {
                     },
                     experience: {
                         data: {
-                            autoplay: true,
                             title: 'Foo'
                         }
                     },
@@ -52,6 +51,7 @@ define(['minireel', 'c6ui', 'services'], function(minireelModule, c6uiModule) {
                 $rootScope.config = {
                     modules: ['ballot', 'comments'],
                     data: {
+                        autoplay: true,
                         videoid: 'gy1B3agGNxw'
                     },
                     thumbs: {
@@ -310,7 +310,7 @@ define(['minireel', 'c6ui', 'services'], function(minireelModule, c6uiModule) {
                         beforeEach(function() {
                             currentPlayCalls = iface.play.callCount;
 
-                            c6AppData.experience.data.autoplay = false;
+                            $scope.config.data.autoplay = false;
 
                             $scope.$apply(function() {
                                 $scope.active = false;
@@ -689,9 +689,9 @@ define(['minireel', 'c6ui', 'services'], function(minireelModule, c6uiModule) {
                         });
                     });
 
-                    describe('if this is an autoplay minireel', function() {
+                    describe('if this is an autoplay card', function() {
                         beforeEach(function() {
-                            c6AppData.experience.data.autoplay = true;
+                            $scope.config.data.autoplay = true;
 
                             $scope.$apply(function() {
                                 VideoEmbedCardCtrl = $controller('VideoEmbedCardController', { $scope: $scope });
@@ -705,7 +705,7 @@ define(['minireel', 'c6ui', 'services'], function(minireelModule, c6uiModule) {
 
                     describe('otherwise', function() {
                         beforeEach(function() {
-                            c6AppData.experience.data.autoplay = false;
+                            $scope.config.data.autoplay = false;
 
                             $scope.$apply(function() {
                                 VideoEmbedCardCtrl = $controller('VideoEmbedCardController', { $scope: $scope });
@@ -808,7 +808,7 @@ define(['minireel', 'c6ui', 'services'], function(minireelModule, c6uiModule) {
                     describe('if the experience is click to play', function() {
                         beforeEach(function() {
                             spyOn(VideoEmbedCardCtrl, 'hasModule').andReturn(false);
-                            c6AppData.experience.data.autoplay = false;
+                            $scope.config.data.autoplay = false;
 
                             $scope.active = true;
                             VideoEmbedCardCtrl.enablePlayButton = true;
