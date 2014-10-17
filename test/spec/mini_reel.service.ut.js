@@ -296,7 +296,7 @@ define(['app', 'minireel', 'c6ui', 'angular'], function(appModule, minireelModul
 
                             beforeEach(function() {
                                 indicesOfAutoadvancelessCards = indicesWhere(function(card) {
-                                    return isVideo(card) && !isSet(card.data, 'autoadvance');
+                                    return !isSet(card.data, 'autoadvance');
                                 });
                                 expect(indicesOfAutoadvancelessCards.length).toBeGreaterThan(0);
 

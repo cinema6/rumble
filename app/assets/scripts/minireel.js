@@ -146,6 +146,8 @@ function( angular , c6Defines  , tracker ,
 
             function setDefaults(card) {
                 card.placementId = card.placementId || data.placementId;
+                card.data.autoadvance = isSet(card.data.autoadvance) ?
+                    card.data.autoadvance : autoadvance;
             }
 
             function setVideoDefaults(card) {
@@ -155,10 +157,6 @@ function( angular , c6Defines  , tracker ,
                     {
                         prop: 'autoplay',
                         default: autoplay
-                    },
-                    {
-                        prop: 'autoadvance',
-                        default: autoadvance
                     }
                 ].forEach(function(config) {
                     var prop = config.prop;
@@ -463,7 +461,14 @@ function( angular , c6Defines  , tracker ,
             };
 
             this.showAd = function() {
-                $scope.deck.splice(index, 0, { ad: true, dynamic: true, type: 'ad' });
+                $scope.deck.splice(index, 0, {
+                    ad: true,
+                    dynamic: true,
+                    type: 'ad',
+                    data: {
+                        autoadvance: true
+                    }
+                });
                 adController.adCount++;
             };
 
@@ -695,7 +700,7 @@ function( angular , c6Defines  , tracker ,
         });
 
         $scope.$on('<mr-card>:contentEnd', function(event, card) {
-            if ($scope.currentCard === card) {
+            if ($scope.currentCard === card && card.data.autoadvance) {
                 self.goForward();
             }
         });
