@@ -57,6 +57,7 @@ define(['app', 'minireel', 'c6ui', 'angular'], function(appModule, minireelModul
 
                     beforeEach(function() {
                         mrData = {
+                            placementId: 'r2398fnfr',
                             deck: [
                                 {
                                     id: 'rc-c539bacdb79a14',
@@ -72,7 +73,9 @@ define(['app', 'minireel', 'c6ui', 'angular'], function(appModule, minireelModul
                                     title: 'Did someone say FOX?',
                                     note: 'Thought so',
                                     voting: [ 100, 50, 10 ],
+                                    placementId: null,
                                     data: {
+                                        autoadvance: false,
                                         videoid: 'jofNR_WkoCE',
                                         start: 10,
                                         end: 20,
@@ -88,6 +91,7 @@ define(['app', 'minireel', 'c6ui', 'angular'], function(appModule, minireelModul
                                     modules: [
                                         'displayAd'
                                     ],
+                                    placementId: null,
                                     data: {
                                         autoplay: true
                                     },
@@ -99,7 +103,10 @@ define(['app', 'minireel', 'c6ui', 'angular'], function(appModule, minireelModul
                                     title: 'Kristen Stewart for Channel',
                                     note: 'Psychotic glamour',
                                     voting: [ 200, 50, 10 ],
+                                    placementId: '3948thfguf43',
                                     data: {
+                                        autoadvance: null,
+                                        autoplay: false,
                                         videoid: 'x18b09a',
                                         related: 0
                                     }
@@ -110,7 +117,9 @@ define(['app', 'minireel', 'c6ui', 'angular'], function(appModule, minireelModul
                                     title: 'Aquatic paradise',
                                     note: 'How may we help you?',
                                     voting: [ 300, 50, 10 ],
+                                    placementId: 'c849f4324r',
                                     data: {
+                                        autoplay: true,
                                         type: 'vimeo',
                                         videoid: '81766071',
                                         start: 35,
@@ -123,7 +132,10 @@ define(['app', 'minireel', 'c6ui', 'angular'], function(appModule, minireelModul
                                     title: 'Geek cool',
                                     note: 'Doctor Who #11 meets #4',
                                     voting: [ 400, 50, 10 ],
+                                    placementId: null,
                                     data: {
+                                        autoadvance: true,
+                                        autoplay: null,
                                         videoid: 'Cn9yJrrm2tk',
                                         rel: 0,
                                         modestbranding: 1,
@@ -139,6 +151,7 @@ define(['app', 'minireel', 'c6ui', 'angular'], function(appModule, minireelModul
                                         small: 'http://upload.wikimedia.org/wikipedia/en/8/8c/Ubisoft.png',
                                         large: 'http://upload.wikimedia.org/wikipedia/en/8/8c/Ubisoft.png'
                                     },
+                                    placementId: '98fun3u4',
                                     data: {}
                                 },
                                 {
@@ -200,6 +213,163 @@ define(['app', 'minireel', 'c6ui', 'angular'], function(appModule, minireelModul
                     it('should give each video a player', function() {
                         result.forEach(function(video) {
                             expect(video.player).toBeNull();
+                        });
+                    });
+
+                    describe('inheriting defaults:', function() {
+                        function indicesWhere(predicate) {
+                            return mrData.deck.map(function(card, index) {
+                                return index;
+                            }).filter(function(index) {
+                                var card = mrData.deck[index];
+
+                                return predicate(card, index);
+                            });
+                        }
+
+                        function isVideo(card) {
+                            return (/^(youtube|vimeo|dailymotion)$/).test(card.type);
+                        }
+
+                        function isSet(object, prop) {
+                            return ((prop in object) && object[prop] !== null);
+                        }
+
+                        describe('autoplay', function() {
+                            var indicesOfAutoplaylessCards,
+                                indicesOfAutoplayCards;
+
+                            beforeEach(function() {
+                                indicesOfAutoplaylessCards = indicesWhere(function(card) {
+                                    return isVideo(card) && !isSet(card.data, 'autoplay');
+                                });
+                                expect(indicesOfAutoplaylessCards.length).toBeGreaterThan(0);
+
+                                indicesOfAutoplayCards = indicesWhere(function(card, index) {
+                                    return indicesOfAutoplaylessCards.indexOf(index) < 0;
+                                });
+                                expect(indicesOfAutoplayCards.length).toBeGreaterThan(0);
+                            });
+
+                            describe('if not set on the experience', function() {
+                                beforeEach(function() {
+                                    delete mrData.autoplay;
+
+                                    result = MiniReelService.createDeck(mrData);
+                                });
+
+                                it('should make all video cards with null or undefined autoplay properties true', function() {
+                                    indicesOfAutoplaylessCards.forEach(function(index) {
+                                        var card = result[index];
+
+                                        expect(card.data.autoplay).toBe(true);
+                                    });
+                                    indicesOfAutoplayCards.forEach(function(index) {
+                                        expect(mrData.deck[index].data.autoplay).toBe(result[index].data.autoplay);
+                                    });
+                                });
+                            });
+
+                            describe('if set on the experience', function() {
+                                beforeEach(function() {
+                                    mrData.autoplay = false;
+
+                                    result = MiniReelService.createDeck(mrData);
+                                });
+
+                                it('should make all video cards with null or undefined autoplay properties whatver the minireel\'s setting is', function() {
+                                    indicesOfAutoplaylessCards.forEach(function(index) {
+                                        var card = result[index];
+
+                                        expect(card.data.autoplay).toBe(mrData.autoplay);
+                                    });
+                                    indicesOfAutoplayCards.forEach(function(index) {
+                                        expect(mrData.deck[index].data.autoplay).toBe(result[index].data.autoplay);
+                                    });
+                                });
+                            });
+                        });
+
+                        describe('autoadvance', function() {
+                            var indicesOfAutoadvanceCards,
+                                indicesOfAutoadvancelessCards;
+
+                            beforeEach(function() {
+                                indicesOfAutoadvancelessCards = indicesWhere(function(card) {
+                                    return isVideo(card) && !isSet(card.data, 'autoadvance');
+                                });
+                                expect(indicesOfAutoadvancelessCards.length).toBeGreaterThan(0);
+
+                                indicesOfAutoadvanceCards = indicesWhere(function(card, index) {
+                                    return indicesOfAutoadvancelessCards.indexOf(index) < 0;
+                                });
+                                expect(indicesOfAutoadvanceCards.length).toBeGreaterThan(0);
+                            });
+
+                            describe('if not set on the experience', function() {
+                                beforeEach(function() {
+                                    delete mrData.autoadvance;
+
+                                    result = MiniReelService.createDeck(mrData);
+                                });
+
+                                it('should make all videos with a null or undefined autoadvance property true', function() {
+                                    indicesOfAutoadvancelessCards.forEach(function(index) {
+                                        var card = result[index];
+
+                                        expect(card.data.autoadvance).toBe(true);
+                                    });
+                                    indicesOfAutoadvanceCards.forEach(function(index) {
+                                        expect(result[index].data.autoadvance).toBe(mrData.deck[index].data.autoadvance);
+                                    });
+                                });
+                            });
+
+                            describe('if set on the experience', function() {
+                                beforeEach(function() {
+                                    mrData.autoadvance = false;
+
+                                    result = MiniReelService.createDeck(mrData);
+                                });
+
+                                it('should make all videos with a null or undefined autoadvance property the same as the minireel', function() {
+                                    indicesOfAutoadvancelessCards.forEach(function(index) {
+                                        var card = result[index];
+
+                                        expect(card.data.autoadvance).toBe(mrData.autoadvance);
+                                    });
+                                    indicesOfAutoadvanceCards.forEach(function(index) {
+                                        expect(result[index].data.autoadvance).toBe(mrData.deck[index].data.autoadvance);
+                                    });
+                                });
+                            });
+                        });
+
+                        describe('placementId', function() {
+                            var indicesOfPlacementIdlessCards,
+                                indicesOfPlacementIdCards;
+
+                            beforeEach(function() {
+                                indicesOfPlacementIdlessCards = indicesWhere(function(card) {
+                                    return !isSet(card, 'placementId');
+                                });
+                                expect(indicesOfPlacementIdlessCards.length).toBeGreaterThan(0);
+                                indicesOfPlacementIdCards = indicesWhere(function(card) {
+                                    return isSet(card, 'placementId');
+                                });
+                                expect(indicesOfPlacementIdCards.length).toBeGreaterThan(0);
+                            });
+
+                            it('should make all cards without a placementId have the same placementId as the minireel', function() {
+                                indicesOfPlacementIdlessCards.forEach(function(index) {
+                                    var card = result[index];
+
+                                    expect(card.placementId).toBe(mrData.placementId);
+                                });
+                                indicesOfPlacementIdCards.forEach(function(index) {
+                                    expect(result[index].placementId).toBe(mrData.deck[index].placementId);
+                                });
+                            });
                         });
                     });
 

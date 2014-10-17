@@ -8,7 +8,8 @@ function( angular , c6Defines  , tracker ,
           ballotModule   , companionAdModule    , displayAdModule ) {
     'use strict';
 
-    var forEach = angular.forEach;
+    var forEach = angular.forEach,
+        isDefined = angular.isDefined;
 
     return angular.module('c6.rumble.minireel', [
         tracker.name,
@@ -89,8 +90,14 @@ function( angular , c6Defines  , tracker ,
                                  'c6ImagePreloader','envrootFilter',
     function                    ( InflectorService , VideoThumbService ,
                                   c6ImagePreloader , envrootFilter ) {
+        function isSet(value) {
+            return isDefined(value) && value !== null;
+        }
+
         this.createDeck = function(data) {
-            var playlist = angular.copy(data.deck);
+            var playlist = angular.copy(data.deck),
+                autoplay = isSet(data.autoplay) ? data.autoplay : true,
+                autoadvance = isSet(data.autoadvance) ? data.autoadvance : true;
 
             function fetchThumb(card) {
                 switch (card.type) {
@@ -137,9 +144,35 @@ function( angular , c6Defines  , tracker ,
                 }());
             }
 
+            function setDefaults(card) {
+                card.placementId = card.placementId || data.placementId;
+            }
+
+            function setVideoDefaults(card) {
+                if (!(/^(youtube|vimeo|dailymotion)$/).test(card.type)) { return; }
+
+                [
+                    {
+                        prop: 'autoplay',
+                        default: autoplay
+                    },
+                    {
+                        prop: 'autoadvance',
+                        default: autoadvance
+                    }
+                ].forEach(function(config) {
+                    var prop = config.prop;
+
+                    card.data[prop] = isSet(card.data[prop]) ?
+                        card.data[prop] : config.default;
+                });
+            }
+
             angular.forEach(playlist, function(video) {
-                fetchThumb(video);
-                setWebHref(video);
+                [fetchThumb, setWebHref, setDefaults, setVideoDefaults]
+                    .forEach(function(fn) {
+                        return fn(video);
+                    });
 
                 video.player = null;
             });
