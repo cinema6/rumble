@@ -6,6 +6,7 @@
         "appUri": "rumble",
         "title": "Rumble Video",
         "data": {
+            "placementId": "3220650",
             "election": "e-d0e407bb69675b",
             "mode": "full",
             "theme": "ed-entertainment",
@@ -181,6 +182,22 @@
                         "videoid": "xorbb7",
                         "related": 0
                     }
+                },
+                {
+                    "id": "rc-01894cc5ee20d4",
+                    "type": "displayAd",
+                    "title": "By Ubisoft",
+                    "ad": false,
+                    "modules": [],
+                    "thumbs": {
+                        "small": "http://upload.wikimedia.org/wikipedia/en/8/8c/Ubisoft.png",
+                        "large": "http://upload.wikimedia.org/wikipedia/en/8/8c/Ubisoft.png"
+                    },
+                    "links": {
+                        "Facebook": "https://www.facebook.com/ubisoftus",
+                        "Twitter": "https://twitter.com/Ubisoft"
+                    },
+                    "data": {}
                 },
                 {
                     "id": "rc-235d41cde02032",
