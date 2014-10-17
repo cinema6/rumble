@@ -21,7 +21,6 @@ define(['services', 'adtech', 'c6_defines'], function(servicesModule, adtech, c6
                 $provide.value('c6AppData', {
                     experience: {
                         data: {
-                            placementId: '111111',
                             adConfig: {
                                 display: {
                                     waterfall: 'cinema6'
@@ -52,7 +51,7 @@ define(['services', 'adtech', 'c6_defines'], function(servicesModule, adtech, c6
 
                 beforeEach(function() {
                     adLoadThenSpy = jasmine.createSpy('adLoadThenSpy()');
-                    adLoadPromise = AdTechService.loadAd({id: 'container'});
+                    adLoadPromise = AdTechService.loadAd({id: 'container', placementId: '111111'});
                     adLoadPromise.then(adLoadThenSpy);
                 });
 
@@ -82,13 +81,13 @@ define(['services', 'adtech', 'c6_defines'], function(servicesModule, adtech, c6
                 it('should use https: when detected', function() {
                     c6Defines.kProtocol = 'https:';
 
-                    AdTechService.loadAd({id: 'container'});
+                    AdTechService.loadAd({id: 'container', placementId: '222222'});
 
                     expect(adtech.loadAd.mostRecentCall.args[0]).toEqual({
                         secure: true,
                         network: '5473.1',
                         server: 'adserver.adtechus.com',
-                        placement: 111111,
+                        placement: 222222,
                         adContainerId: 'container',
                         debugMode: true,
                         kv: { mode: 'cinema6' },
@@ -102,13 +101,13 @@ define(['services', 'adtech', 'c6_defines'], function(servicesModule, adtech, c6
                     $window.location.hostname = '';
                     $window.parent.location.hostname = 'parent.com';
 
-                    AdTechService.loadAd({id: 'container'});
+                    AdTechService.loadAd({id: 'container', placementId: '1234567'});
 
                     expect(adtech.loadAd.mostRecentCall.args[0]).toEqual({
                         secure: false,
                         network: '5473.1',
                         server: 'adserver.adtechus.com',
-                        placement: 111111,
+                        placement: 1234567,
                         adContainerId: 'container',
                         debugMode: false,
                         kv: { mode: 'cinema6' },

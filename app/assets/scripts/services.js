@@ -631,7 +631,7 @@ function( angular , c6ui , adtech , c6Defines  ) {
                     secure: (c6Defines.kProtocol === 'https:'),
                     network: '5473.1',
                     server: 'adserver.adtechus.com',
-                    placement: parseInt(c6AppData.experience.data.placementId),
+                    placement: parseInt(config.placementId),
                     adContainerId: config.id,
                     debugMode: (getDomain() === 'localhost'),
                     kv: { mode: (c6AppData.experience.data.adConfig.display.waterfall || 'default') },
