@@ -1,10 +1,10 @@
 define (['angular','c6_defines','tracker',
          'cards/ad','cards/dailymotion','cards/recap','cards/vast','cards/vimeo','cards/vpaid',
-         'cards/youtube','cards/text',
+         'cards/youtube','cards/text','cards/display_ad',
          'modules/ballot','modules/companion_ad','modules/display_ad'],
 function( angular , c6Defines  , tracker ,
           adCard   , dailymotionCard   , recapCard   , vastCard   , vimeoCard   , vpaidCard   ,
-          youtubeCard   , textCard   ,
+          youtubeCard   , textCard   , displayAdCard    ,
           ballotModule   , companionAdModule    , displayAdModule ) {
     'use strict';
 
@@ -21,6 +21,7 @@ function( angular , c6Defines  , tracker ,
         vpaidCard.name,
         youtubeCard.name,
         textCard.name,
+        displayAdCard.name,
         // Modules
         ballotModule.name,
         companionAdModule.name,
@@ -94,6 +95,7 @@ function( angular , c6Defines  , tracker ,
             function fetchThumb(card) {
                 switch (card.type) {
                 case 'text':
+                case 'displayAd':
                 case 'recap':
                     (function() {
                         var splash = (data.collateral || {}).splash ?

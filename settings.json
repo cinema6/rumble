@@ -38,9 +38,6 @@
         },
         "ui/thumb_paginator": {
             "blacklist": ["mobile", "full"]
-        },
-        "modules/display_ad": {
-            "whitelist": ["lightbox-ads", "full"]
         }
     }
 }

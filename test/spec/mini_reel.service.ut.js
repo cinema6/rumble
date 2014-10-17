@@ -131,6 +131,17 @@ define(['app', 'minireel', 'c6ui', 'angular'], function(appModule, minireelModul
                                     }
                                 },
                                 {
+                                    id: 'rc-979f2665b8ec21',
+                                    type: 'displayAd',
+                                    title: 'By Ubisoft',
+                                    note: null,
+                                    thumbs: {
+                                        small: 'http://upload.wikimedia.org/wikipedia/en/8/8c/Ubisoft.png',
+                                        large: 'http://upload.wikimedia.org/wikipedia/en/8/8c/Ubisoft.png'
+                                    },
+                                    data: {}
+                                },
+                                {
                                     id: 'rc-df011e0f447867',
                                     type: 'recap',
                                     title: 'Recap',
@@ -238,7 +249,7 @@ define(['app', 'minireel', 'c6ui', 'angular'], function(appModule, minireelModul
                     describe('getting thumbnails', function() {
                         it('should make every thumbnail null at first', function() {
                             result.filter(function(card) {
-                                return !(/^(recap|text)$/).test(card.type);
+                                return !(/^(recap|text|displayAd)$/).test(card.type);
                             }).forEach(function(card) {
                                 expect(card.thumbs).toBeNull('card:' + card.id);
                             });
@@ -246,7 +257,7 @@ define(['app', 'minireel', 'c6ui', 'angular'], function(appModule, minireelModul
 
                         it('should get a thumbnail for every video', function() {
                             result.filter(function(card) {
-                                return !(/^(recap|text)$/).test(card.type);
+                                return !(/^(recap|text|displayAd)$/).test(card.type);
                             }).forEach(function(card) {
                                 expect(VideoThumbService.getThumbs).toHaveBeenCalledWith(card.type, card.data.videoid);
                             });
@@ -353,10 +364,16 @@ define(['app', 'minireel', 'c6ui', 'angular'], function(appModule, minireelModul
                             });
                         });
 
+                        describe('for a displayAd card', function() {
+                            it('should have the thumbs it already had', function() {
+                                expect(result[6].thumbs).toEqual(mrData.deck[6].thumbs);
+                            });
+                        });
+
                         describe('for the recap card', function() {
                             describe('if there are no collateral assets', function() {
                                 it('should be null', function() {
-                                    expect(result[6].thumbs).toBeNull();
+                                    expect(result[7].thumbs).toBeNull();
                                 });
                             });
 
@@ -382,7 +399,7 @@ define(['app', 'minireel', 'c6ui', 'angular'], function(appModule, minireelModul
                                 });
 
                                 it('should make both thumbnails the fully-resolved splash image', function() {
-                                    expect(result[6].thumbs).toEqual({
+                                    expect(result[7].thumbs).toEqual({
                                         small: 'http://portal.cinema6.com/collateral/mysplash.jpg?cb=' + now,
                                         large: 'http://portal.cinema6.com/collateral/mysplash.jpg?cb=' + now
                                     });
