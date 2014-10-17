@@ -1284,7 +1284,7 @@ function( angular , c6Defines  , tracker ,
                         /* If there is a separate view for text, and if that mode is active: */
                         (behaviors.separateTextView && _data.textMode) ||
                         /* If this is a click-to-play minireel, it hasn't been played yet and the play button is enabled */
-                        (!c6AppData.experience.data.autoplay && !(_data.playerEvents.play || {}).emitCount && this.enablePlayButton);
+                        (!config.data.autoplay && !(_data.playerEvents.play || {}).emitCount && this.enablePlayButton);
                 }
             },
             showPlay: {
@@ -1296,7 +1296,7 @@ function( angular , c6Defines  , tracker ,
 
         this.enablePlayButton = (config.type !== 'dailymotion') &&
             !profile.touch &&
-            !c6AppData.experience.data.autoplay;
+            !config.data.autoplay;
 
         this.videoUrl = null;
 
@@ -1382,7 +1382,7 @@ function( angular , c6Defines  , tracker ,
                 if (active) {
                     if (c6AppData.behaviors.canAutoplay &&
                         c6AppData.profile.autoplay &&
-                        c6AppData.experience.data.autoplay) {
+                        config.data.autoplay) {
 
                         shouldPlay = true;
                         iface.play();
