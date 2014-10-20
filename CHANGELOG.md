@@ -3,6 +3,8 @@
 * *[v1.4.0.rc1]*
   * [FEATURE]: Solo player templates and styles, with and without ads, added. 
     Solo players are MRs with a single video card.
+  * [FEATURE]: Allow for display ads, card autoplaying, and card
+    autoadvancing to be overridden on a card-by-card basis
 
 ## v1.3.0 (October 16, 2014)
 * *[v1.3.0.rc1]*

@@ -1,14 +1,15 @@
 define (['angular','c6_defines','tracker',
          'cards/ad','cards/dailymotion','cards/recap','cards/vast','cards/vimeo','cards/vpaid',
-         'cards/youtube','cards/text',
+         'cards/youtube','cards/text','cards/display_ad',
          'modules/ballot','modules/companion_ad','modules/display_ad'],
 function( angular , c6Defines  , tracker ,
           adCard   , dailymotionCard   , recapCard   , vastCard   , vimeoCard   , vpaidCard   ,
-          youtubeCard   , textCard   ,
+          youtubeCard   , textCard   , displayAdCard    ,
           ballotModule   , companionAdModule    , displayAdModule ) {
     'use strict';
 
-    var forEach = angular.forEach;
+    var forEach = angular.forEach,
+        isDefined = angular.isDefined;
 
     return angular.module('c6.rumble.minireel', [
         tracker.name,
@@ -21,6 +22,7 @@ function( angular , c6Defines  , tracker ,
         vpaidCard.name,
         youtubeCard.name,
         textCard.name,
+        displayAdCard.name,
         // Modules
         ballotModule.name,
         companionAdModule.name,
@@ -88,12 +90,19 @@ function( angular , c6Defines  , tracker ,
                                  'c6ImagePreloader','envrootFilter',
     function                    ( InflectorService , VideoThumbService ,
                                   c6ImagePreloader , envrootFilter ) {
+        function isSet(value) {
+            return isDefined(value) && value !== null;
+        }
+
         this.createDeck = function(data) {
-            var playlist = angular.copy(data.deck);
+            var playlist = angular.copy(data.deck),
+                autoplay = isSet(data.autoplay) ? data.autoplay : true,
+                autoadvance = isSet(data.autoadvance) ? data.autoadvance : true;
 
             function fetchThumb(card) {
                 switch (card.type) {
                 case 'text':
+                case 'displayAd':
                 case 'recap':
                     (function() {
                         var splash = (data.collateral || {}).splash ?
@@ -135,9 +144,33 @@ function( angular , c6Defines  , tracker ,
                 }());
             }
 
+            function setDefaults(card) {
+                card.placementId = card.placementId || data.placementId;
+                card.data.autoadvance = isSet(card.data.autoadvance) ?
+                    card.data.autoadvance : autoadvance;
+            }
+
+            function setVideoDefaults(card) {
+                if (!(/^(youtube|vimeo|dailymotion)$/).test(card.type)) { return; }
+
+                [
+                    {
+                        prop: 'autoplay',
+                        default: autoplay
+                    }
+                ].forEach(function(config) {
+                    var prop = config.prop;
+
+                    card.data[prop] = isSet(card.data[prop]) ?
+                        card.data[prop] : config.default;
+                });
+            }
+
             angular.forEach(playlist, function(video) {
-                fetchThumb(video);
-                setWebHref(video);
+                [fetchThumb, setWebHref, setDefaults, setVideoDefaults]
+                    .forEach(function(fn) {
+                        return fn(video);
+                    });
 
                 video.player = null;
             });
@@ -367,6 +400,7 @@ function( angular , c6Defines  , tracker ,
                 this.modules = ['displayAd'];
                 this.data = {
                     autoplay: true,
+                    autoadvance: true,
                     skip: config.skip,
                     source: config.waterfall
                 };
@@ -427,7 +461,14 @@ function( angular , c6Defines  , tracker ,
             };
 
             this.showAd = function() {
-                $scope.deck.splice(index, 0, { ad: true, dynamic: true, type: 'ad' });
+                $scope.deck.splice(index, 0, {
+                    ad: true,
+                    dynamic: true,
+                    type: 'ad',
+                    data: {
+                        autoadvance: true
+                    }
+                });
                 adController.adCount++;
             };
 
@@ -659,7 +700,7 @@ function( angular , c6Defines  , tracker ,
         });
 
         $scope.$on('<mr-card>:contentEnd', function(event, card) {
-            if ($scope.currentCard === card) {
+            if ($scope.currentCard === card && card.data.autoadvance) {
                 self.goForward();
             }
         });
@@ -1248,7 +1289,7 @@ function( angular , c6Defines  , tracker ,
                         /* If there is a separate view for text, and if that mode is active: */
                         (behaviors.separateTextView && _data.textMode) ||
                         /* If this is a click-to-play minireel, it hasn't been played yet and the play button is enabled */
-                        (!c6AppData.experience.data.autoplay && !(_data.playerEvents.play || {}).emitCount && this.enablePlayButton);
+                        (!config.data.autoplay && !(_data.playerEvents.play || {}).emitCount && this.enablePlayButton);
                 }
             },
             showPlay: {
@@ -1260,7 +1301,7 @@ function( angular , c6Defines  , tracker ,
 
         this.enablePlayButton = (config.type !== 'dailymotion') &&
             !profile.touch &&
-            !c6AppData.experience.data.autoplay;
+            !config.data.autoplay;
 
         this.videoUrl = null;
 
@@ -1346,7 +1387,7 @@ function( angular , c6Defines  , tracker ,
                 if (active) {
                     if (c6AppData.behaviors.canAutoplay &&
                         c6AppData.profile.autoplay &&
-                        c6AppData.experience.data.autoplay) {
+                        config.data.autoplay) {
 
                         shouldPlay = true;
                         iface.play();
