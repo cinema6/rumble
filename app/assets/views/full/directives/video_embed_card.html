@@ -33,38 +33,24 @@
     <div class="card__copy">
         <h1 class="card__title tk--hdr">
             {{config.title}}
-            <span ng-show="!!config.source" class="card__attributes">via <a ng-href="{{Ctrl.videoUrl}}" target="_blank" title="{{config.source}}">{{config.source}}</a></span>
+            <span ng-if="!config.data.hideSource" ng-show="!!config.source" class="card__attributes">via <a ng-href="{{Ctrl.videoUrl}}" target="_blank" title="{{config.source}}">{{config.source}}</a></span>
         </h1>
 
-        <div class="sponsorProfile__group clearfix">
-            <a href="#" title="Sponsor link" class="sponsorProfile__imgBox">
-                <img src="https://yt3.ggpht.com/-E_tsaPMH5Qk/AAAAAAAAAAI/AAAAAAAAAAA/Y8Bz2pEIKeI/s100-c-k-no/photo.jpg" class="sponsorProfile__img">
+        <div class="sponsorProfile__group clearfix" ng-if="config.collateral.logo || config.social.length > 0 || config.params.sponsor">
+            <a ng-if="!!config.collateral.logo" ng-href="{{config.links.Website}}" title="Sponsor link" class="sponsorProfile__imgBox" target="_blank">
+                <img ng-src="{{config.collateral.logo}}" class="sponsorProfile__img">
             </a>
-            <div class="sponsorProfile__copy">
-                <p class="sponsorProfile__tag">
+            <div class="sponsorProfile__copy" ng-if="config.params.sponsor || config.social.length > 0">
+                <p class="sponsorProfile__tag" ng-if="config.params.sponsor">
                     Sponsored by 
-                    <a href="#" title="Ubisoft">Ubisoft</a>
+                    <a ng-href="{{config.links.Website}}" title="Ubisoft">{{config.params.sponsor}}</a>
                 </p>
-                <div class="sponsorProfile__links">
-                    <a href="#" title="YouTube"
-                    class="sponsorProfile__link sprite__social 
-                    socialIcons socialIcons--youtube ">
-                        <span class="ir">YouTube</span>
-                    </a>
-                    <a href="#" title="Vimeo"
-                    class="sponsorProfile__link sprite__social
-                    socialIcons socialIcons--vimeo ">
-                        <span class="ir">Vimeo</span>
-                    </a>
-                    <a href="#" title="Facebook"
-                    class="sponsorProfile__link sprite__social
-                    socialIcons socialIcons--facebook ">
-                        <span class="ir">Facebook</span>
-                    </a>
-                    <a href="#" title="Twitter"
-                    class="sponsorProfile__link sprite__social
-                    socialIcons socialIcons--twitter ">
-                        <span class="ir">Twitter</span>
+                <div class="sponsorProfile__links" ng-if="config.social.length > 0">
+                    <a ng-repeat="link in config.social"
+                        ng-href="{{link.href}}" title="YouTube"
+                        target="_blank"
+                        class="sponsorProfile__link sprite__social socialIcons socialIcons--{{link.type}}">
+                        <span class="ir">{{link.label}}</span>
                     </a>
                 </div>
             </div>
@@ -72,9 +58,9 @@
 
         <div class="card__desc" ng-bind-html="config.note"></div>
 
-        <div class="card__desc sponsor__actions">
-            <a href="#">text only links get added to the bottom</a>
-            <a href="#" class="sponsor__goBtn" title="Button Name">Button Name</a>
+        <div class="card__desc sponsor__actions" ng-if="!!config.params.action" ng-switch="config.params.action.type" c6-alias="config.params.action as action">
+            <a ng-href="{{config.links.Action}}" target="_blank" ng-switch-when="text">{{action.label}}</a>
+            <a ng-href="{{config.links.Action}}" target="_blank" ng-switch-when="button" class="sponsor__goBtn" title="{{action.label}}">{{action.label}}</a>
         </div>
 
     </div>

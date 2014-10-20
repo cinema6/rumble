@@ -608,7 +608,6 @@
     ================================================ */
     .sponsorProfile__group {
         margin:0.6875em 0;
-        display: none;
     }
 
 
@@ -638,7 +637,6 @@
 
         .sponsor__actions {
             margin:1em 0;
-            display: none;
         }
             .sponsor__goBtn {
                 background:#d94040; 
