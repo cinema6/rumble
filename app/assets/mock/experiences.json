@@ -74,7 +74,27 @@
                             "Painful"
                         ]
                     },
+                    "links": {
+                        "Action": "https://portal.cinema6.com/#/apps/minireel/studio/dashboard?filter=all&limit=50&page=1",
+                        "Website": "http://cinema6.com/",
+                        "Facebook": "https://www.facebook.com/Cinema6Video",
+                        "Twitter": "https://twitter.com/Cinema6Video",
+                        "YouTube": "http://www.youtube.com/channel/UCSszI_zUkVVA24WVuTYpHTQ",
+                        "Vimeo": "https://vimeo.com/user27205886"
+                    },
+                    "params": {
+                        "sponsor": "Cinema6",
+                        "ad": true,
+                        "action": {
+                            "label": "OH HAI MARK",
+                            "type": "button"
+                        }
+                    },
+                    "collateral": {
+                        "logo": "http://cinema6.com/assets/img/c6-logo@2x.png"
+                    },
                     "data": {
+                        "hideSource": true,
                         "videoid": "gy1B3agGNxw",
                         "start": 42,
                         "end": 130,
