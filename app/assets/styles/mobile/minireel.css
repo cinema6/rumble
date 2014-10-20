@@ -677,7 +677,6 @@
     ================================================ */
     .mr-sponsorProfile__group {
         margin:0.6875em 0.5em;
-        display: none;
     }
 
 
@@ -703,10 +702,6 @@
         .mr-sponsorProfile__link {
             border:0;
         }
-
-    .sponsor__actions {
-        display: none;
-    }
 
         .mr-sponsor__goBtn {
             background:#d94040; 
