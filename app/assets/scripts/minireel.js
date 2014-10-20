@@ -144,6 +144,22 @@ function( angular , c6Defines  , tracker ,
                 }());
             }
 
+            function setSocial(card) {
+                var social = ['Facebook', 'Twitter', 'YouTube', 'Vimeo'];
+
+                card.social = Object.keys(card.links || {})
+                    .filter(function(label) {
+                        return social.indexOf(label) > -1;
+                    })
+                    .map(function(label) {
+                        return {
+                            label: label,
+                            type: label.toLowerCase(),
+                            href: card.links[label]
+                        };
+                    });
+            }
+
             function setDefaults(card) {
                 card.placementId = card.placementId || data.placementId;
                 card.data.autoadvance = isSet(card.data.autoadvance) ?
@@ -167,7 +183,7 @@ function( angular , c6Defines  , tracker ,
             }
 
             angular.forEach(playlist, function(video) {
-                [fetchThumb, setWebHref, setDefaults, setVideoDefaults]
+                [fetchThumb, setWebHref, setDefaults, setVideoDefaults, setSocial]
                     .forEach(function(fn) {
                         return fn(video);
                     });
