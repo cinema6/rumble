@@ -1,27 +1,12 @@
 /*  ================================================
-    .playlist__group classes
+    Brand Profile styles
     ================================================ */
-    .playlist__item:hover {
-        background-color:#efefef;
-    }
-    .playlist__item--current:hover {
-        background-color:#d94040;
-    }
-
-
-
-/*  ================================================
-    sponsored card styles
-    ================================================ */
-    .sponsorProfile__imgBox {
+    .brandProfile__imgBox {
         -webkit-transition:border 0.5s;
         transition:border 0.5s;
     }
-    .sponsorProfile__imgBox:hover {
+    .brandProfile__imgBox:hover {
         border:3px solid #d94040;
-    }
-    .sponsor__goBtn:hover {
-        color:#fff;
     }
 
 
@@ -29,19 +14,23 @@
 /*  ================================================
     button styles 
     ================================================ */
-    .textOnly__btn:hover,
-    .slideNav__btn:hover {
-        background-color:#fff;
+    .actionBtn:hover {
+        background:#fff;
         color:#d94040;
+        text-shadow:none;
     }
-        .slideNav__btn:hover .slideNav__iconPath {
-            fill:#d94040;
+        .actionBtn:hover:before {
+            content:'';
+            position:absolute;
+            border:2px solid #d94040;
+            border-radius:3px;
+            width:100%; height:100%;
+            top:0; left:0;
         }
-
-    .slideNav__btn:disabled:hover {
-        background:#ddd; color:#fff;
-        border:4px solid #ddd;
-    }
-        .slideNav__btn:disabled:hover .slideNav__iconPath {
-            fill:#fff;
+        
+        .endActions__group .actionBtn:hover:before {
+            display: none;
+        }
+        .endActions__group .actionBtn:hover .actionBtn__iconBox {
+            background-color:#d94040;
         }

@@ -1,4 +1,4 @@
-<section class="ballot__group">
+<section class="ballot__group" ng-show="false">
     <h2 class="ballot__title tk--hdr" ng-click="onDismiss()">{{ballot.prompt}}</h2>
     <ul class="ballot__list" ng-click="onDismiss()">
         <li class="ballot__item ballot__item{{$index}}" ng-repeat="choice in ballot.choices">
@@ -14,6 +14,17 @@
     <div class="mr-ballot__closer" ng-click="onDismiss()">&nbsp;</div>
 </section>
 
+<section class="endActions__group" ng-show="true">
+    <button class="endActions__watchAgain sprite actionBtn" type="button">
+        <span class="actionBtn__iconBox sprite">&nbsp;</span>
+        <span class="actionBtn__label">Watch Video Again</span>
+    </button>
+    <button class="endActions__visitLink actionBtn" type="button">
+        <span class="actionBtn__iconBox sprite">&nbsp;</span>
+        <span class="actionBtn__label">Visit Sponsor Site</span>
+    </button>
+</section>
+
 <div class="overlay" ng-click="onDismiss()">
-    <button class="sprite ballot__close"><span class="ir">Close</span></button>
+    <button class="sprite overlay__closeBtn"><span class="ir">Close</span></button>
 </div>
