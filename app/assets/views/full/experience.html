@@ -40,7 +40,7 @@
             ng-click="RumbleCtrl.jumpTo(item)"
             ng-class="{'playlist__item--current' : item === currentCard}">
                 <div class="playlist__thumbHolder"
-                ng-class="{'playlist__thumbHolder--ad' : true}">
+                ng-class="{'playlist__thumbHolder--ad' : item.params.ad}">
                     <div class="playlist__thumb"
                     title="This is the Best Video Title Ever!!!"
                     c6-bg-img="{{item.thumbs.small}}">
@@ -54,19 +54,19 @@
                             {{item.title}}
                         </span>
                     </h3>
-                    <p class="playlist__source" ng-show="!!item.source">via 
+                    <p ng-if="!item.data.hideSource" class="playlist__source" ng-show="!!item.source">via 
                         <a href="{{item.webHref}}" 
                         ng-click="$event.stopPropagation()"
                         title="{{item.source}}"
                         class="playlist__sourceLink"
                         target="_blank">{{item.source}}</a>
                     </p>
-                    <p class="playlist__source">Sponsored by 
-                        <a href="{{item.webHref}}" 
+                    <p ng-if="!!item.params.sponsor" class="playlist__source">Sponsored by 
+                        <a ng-href="{{item.links.Website}}" 
                         ng-click="$event.stopPropagation()"
-                        title="Ubisoft"
+                        title="{{item.params.sponsor}}"
                         class="playlist__sourceLink"
-                        target="_blank">Ubisoft</a>
+                        target="_blank">{{item.params.sponsor}}</a>
                     </p>
                 </div>
             </li>

@@ -259,7 +259,6 @@
                             background:#000; color:#fff;
                             padding:0 2px;
                             font-size:0.625rem; font-weight:bold;
-                            display: none;
                         }
                             .playlist__item--current .playlist__thumbHolder:before {
                                 color:#fff;
