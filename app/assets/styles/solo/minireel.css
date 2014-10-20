@@ -327,13 +327,15 @@
     }
     
     .brand__links {
+        width:2.75em;
         position:absolute;
         top:0;
-        right:3.625em;
+        right:2.25em;
     }
         .brand__link {
             border:0; padding:0.125em;
-            display: block;
+            display: block; 
+            float:left;
         }
             .brand__link .sprite {
                 display: block;
