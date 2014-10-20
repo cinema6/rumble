@@ -343,14 +343,17 @@
     .endActions__group {
         position:absolute; z-index: 2;
         top:50%; left:50%;
-        margin-top:-1.5rem;
+        width:32.5em;
+        margin:-1.5em 0 0 -16.25em;
+        text-align: center;
     }
 
         .endActions__group .actionBtn {
-            display: block;
+            display: inline-block;
             width:14.25em;
             padding:1em 0 0.875em 3em;
-            position:absolute;
+            margin:0 0.75em;
+            position:relative;
         }
             .endActions__group .actionBtn__iconBox {
                 width:3em; height:3em;
@@ -363,16 +366,9 @@
                 font-size:1rem;
             }
 
-        .endActions__watchAgain {
-            margin-left:-15em;
-        }
             .endActions__watchAgain .sprite {
                 background-position:-0.1875rem -2.4375rem;
             }
-
-        .endActions__visitLink {
-            margin-left:0.75em;
-        }
             .endActions__visitLink .sprite {
                 background-position:-2.4375rem -2.5rem;
             }
@@ -380,14 +376,11 @@
         @media screen and (max-width:54rem) {
             /*max 864px*/
             .endActions__group {
-                margin-top:-60px;
+                margin:-3.75em 0 0 -114px;
+                width:228px;
             }
-            .endActions__watchAgain {
-                margin:0 0 0 -114px;
-            }
-            
-            .endActions__visitLink {
-                margin:72px 0 0 -114px;
+            .endActions__group .actionBtn {
+                margin:0 0 24px 0;
             }
         }
 
