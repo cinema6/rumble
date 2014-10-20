@@ -645,9 +645,6 @@
             .mr-card__attributes {
                 color:#999; font-size:0.75em;/*12px*/ margin:0.16em 0 1em 0;
             }
-                .mr-card__attributes--sponsor {
-                    display: none;
-                }
         .mr-card__copy {
             margin:1em 0.5em 0.143em 0.5em; font-size:0.875em;/*14px*/ color:#747474; line-height:1.75;
             background: transparent !important;
