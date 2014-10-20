@@ -5,16 +5,19 @@
         <li class="mr-recap__item mr-card mr-card-shadow clearfix" ng-repeat="card in Ctrl.deck">
             <button class="mr-recap__imgBtn" type="button" 
             ng-click="Ctrl.jumpTo(card)"
-            ng-class="{'mr-recap__imgBtn--ad':true}">
+            ng-class="{'mr-recap__imgBtn--ad':card.params.ad}">
                 <span class="mr-recap__imgBox" style="background-image:url({{card.thumbs.large}});">&nbsp;</span>
             </button>
             <div class="mr-recap__copyBox">
                 <h1 class="mr-card__title-h1 tk--hdr" ng-click="Ctrl.jumpTo(card)">{{card.title}}</h1>
-                <p ng-show="!!card.source" class="mr-card__attributes">via <a ng-href="{{card.webHref}}" target="_blank" title="{{card.source}}">{{card.source}}</a></p>
-                <p class="mr-card__attributes mr-card__attributes--sponsor">sponsored by  
-                    <a ng-href="{{card.webHref}}" target="_blank" 
-                    title="ubisoft"
-                    ng-click="$event.stopPropagation()">ubisoft</a>
+                <p ng-if="!card.data.hideSource" ng-show="!!card.source" class="mr-card__attributes">via <a ng-href="{{card.webHref}}" target="_blank" title="{{card.source}}">{{card.source}}</a></p>
+                <p ng-if="!!card.params.sponsor" class="mr-card__attributes mr-card__attributes--sponsor">sponsored by  
+                    <a ng-href="{{card.links.Website}}"
+                        target="_blank" 
+                        title="{{card.params.sponsor}}"
+                        ng-click="$event.stopPropagation()">
+                        {{card.params.sponsor}}
+                    </a>
                 </p>
                 <div class="mr-recap__ballotInfo" ng-show="card.hasModule('ballot')">
                     <h3 class="mr-results__title mr-recap__ballotQuestion">Questionnaire: <strong>{{card.ballot.prompt}}</strong></h3>

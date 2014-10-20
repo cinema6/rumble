@@ -259,7 +259,6 @@
                             background:#000; color:#fff;
                             padding:0 2px;
                             font-size:0.625rem; font-weight:bold;
-                            display: none;
                         }
                             .playlist__item--current .playlist__thumbHolder:before {
                                 color:#fff;
@@ -460,9 +459,6 @@
             .card__attributes {
                 color:#6c6c6c; font-size:0.8125rem;/*13px*/
             }
-                .card__attributes--sponsor {
-                    display: none;
-                }
             .card__desc {
                 margin:0; 
                 font-size:0.8125rem;/*13px*/ 
@@ -608,7 +604,6 @@
     ================================================ */
     .sponsorProfile__group {
         margin:0.6875em 0;
-        display: none;
     }
 
 
@@ -638,7 +633,6 @@
 
         .sponsor__actions {
             margin:1em 0;
-            display: none;
         }
             .sponsor__goBtn {
                 background:#d94040; 
@@ -1031,7 +1025,6 @@
                     background:#000; color:#fff;
                     padding:0 2px;
                     font-size:0.625rem; font-weight:bold;
-                    display: none;
                 }
 
                 .recap__img {

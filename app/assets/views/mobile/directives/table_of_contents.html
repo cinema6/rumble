@@ -1,18 +1,22 @@
 <section class="mr-toc">
     <h1 class="mr-toc__title tk--hdr">{{app.data.experience.data.title}}</h1>
     <ul class="mr-toc__list clearfix">
-        <li class="mr-toc__item c6-show clearfix" ng-repeat="this in cards" ng-show="!!this.title" ng-click="Ctrl.select(this)">
+        <li class="mr-toc__item c6-show clearfix" ng-repeat="card in cards" ng-show="!!card.title" ng-click="Ctrl.select(card)">
             <div class="mr-toc-item__imgBox"
-            ng-class="{'mr-toc-item__imgBox--ad':true}">
-                <div class="mr-toc-item__img" ng-style="{'background-image': this.thumbs && 'url(' + this.thumbs.large + ')'}">&nbsp;</div>
+            ng-class="{'mr-toc-item__imgBox--ad':card.params.ad}">
+                <div class="mr-toc-item__img" ng-style="{'background-image': card.thumbs && 'url(' + card.thumbs.large + ')'}">&nbsp;</div>
             </div>
             <div class="mr-toc-item__details">
-                <h1 class="mr-toc-item__title tk--hdr">{{this.title}}</h1>
-                <p ng-show="!!this.source" class="mr-toc-item__attributes">via {{this.source}}</p>
-                <p class="mr-toc-item__attributes mr-toc-item__attributes--sponsor">sponsored by  
-                    <a ng-href="{{card.webHref}}" target="_blank" 
-                    title="ubisoft"
-                    ng-click="$event.stopPropagation()">ubisoft</a>
+                <h1 class="mr-toc-item__title tk--hdr">{{card.title}}</h1>
+                <p ng-if="!card.data.hideSource" ng-show="!!card.source" class="mr-toc-item__attributes">via {{card.source}}</p>
+                <p ng-if="!!card.params.sponsor"
+                    class="mr-toc-item__attributes mr-toc-item__attributes--sponsor">
+                    sponsored by <a ng-href="{{card.links.Website}}"
+                        target="_blank"
+                        title="{{card.params.sponsor}}"
+                        ng-click="$event.stopPropagation()">
+                        {{card.params.sponsor}}
+                    </a>
                 </p>
             </div>
         </li>

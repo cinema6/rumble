@@ -225,7 +225,6 @@
                             background:#000; color:#fff;
                             padding:0 2px;
                             font-size:0.625rem; font-weight:bold;
-                            display: none;
                         }
                         .pages__preview-img {
                             position:absolute; top:0;
@@ -331,9 +330,6 @@
             .card__attributes {
                 color:#999; font-size:0.75em;/*12px*/
             }
-                .card__attributes--sponsor {
-                    display: none;
-                }
             .card__desc {
                 margin:0; font-size:0.875rem;/*14px*/ 
                 line-height:1.4286;
@@ -373,7 +369,6 @@
     ================================================ */
     .sponsorProfile__group {
         margin:0.5em 0;
-        display: none;
     }
 
 
@@ -722,7 +717,6 @@
                             padding:0 2px;
                             font-size:0.625rem; font-weight:bold;
                             z-index: 1;
-                            display: none;
                         }
                         .recap__imgBox {
                             display: block;

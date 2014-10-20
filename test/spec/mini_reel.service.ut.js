@@ -104,6 +104,12 @@ define(['app', 'minireel', 'c6ui', 'angular'], function(appModule, minireelModul
                                     note: 'Psychotic glamour',
                                     voting: [ 200, 50, 10 ],
                                     placementId: '3948thfguf43',
+                                    links: {
+                                        'Action': 'foo.html',
+                                        'Website': 'bar.html',
+                                        'Facebook': 'fb.html',
+                                        'Twitter': 'twitter.html'
+                                    },
                                     data: {
                                         autoadvance: null,
                                         autoplay: false,
@@ -118,6 +124,12 @@ define(['app', 'minireel', 'c6ui', 'angular'], function(appModule, minireelModul
                                     note: 'How may we help you?',
                                     voting: [ 300, 50, 10 ],
                                     placementId: 'c849f4324r',
+                                    links: {
+                                        'Facebook': 'facebook.html',
+                                        'Twitter': 'twitter.html',
+                                        'YouTube': 'yt.html',
+                                        'Vimeo': 'vimeo.html'
+                                    },
                                     data: {
                                         autoplay: true,
                                         type: 'vimeo',
@@ -213,6 +225,51 @@ define(['app', 'minireel', 'c6ui', 'angular'], function(appModule, minireelModul
                     it('should give each video a player', function() {
                         result.forEach(function(video) {
                             expect(video.player).toBeNull();
+                        });
+                    });
+
+                    describe('social', function() {
+                        it('should create an array of social links from the links hash', function() {
+                            expect(result[0].social).toEqual([]);
+                            expect(result[1].social).toEqual([]);
+                            expect(result[2].social).toEqual([]);
+                            expect(result[3].social).toEqual([
+                                {
+                                    label: 'Facebook',
+                                    type: 'facebook',
+                                    href: 'fb.html'
+                                },
+                                {
+                                    label: 'Twitter',
+                                    type: 'twitter',
+                                    href: 'twitter.html'
+                                }
+                            ]);
+                            expect(result[4].social).toEqual([
+                                {
+                                    label: 'Facebook',
+                                    type: 'facebook',
+                                    href: 'facebook.html'
+                                },
+                                {
+                                    label: 'Twitter',
+                                    type: 'twitter',
+                                    href: 'twitter.html'
+                                },
+                                {
+                                    label: 'YouTube',
+                                    type: 'youtube',
+                                    href: 'yt.html'
+                                },
+                                {
+                                    label: 'Vimeo',
+                                    type: 'vimeo',
+                                    href: 'vimeo.html'
+                                }
+                            ]);
+                            expect(result[5].social).toEqual([]);
+                            expect(result[6].social).toEqual([]);
+                            expect(result[7].social).toEqual([]);
                         });
                     });
 
