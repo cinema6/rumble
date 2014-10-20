@@ -17,7 +17,7 @@
         on-dismiss="Ctrl.dismissBallotResults()">
     </ballot-results-module>
 
-    <div class="player__group player__height">
+    <div class="player__group">
         <button ng-if="Ctrl.enablePlayButton" ng-show="Ctrl.showPlay" ng-click="Ctrl.playVideo()" class="player__play-btn">
             <div class="player__play-icon">
                 <span class="ir">Play Video</span>
@@ -36,45 +36,11 @@
             <span ng-show="!!config.source" class="card__attributes">via <a ng-href="{{Ctrl.videoUrl}}" target="_blank" title="{{config.source}}">{{config.source}}</a></span>
         </h1>
 
-        <div class="sponsorProfile__group clearfix">
-            <a href="#" title="Sponsor link" class="sponsorProfile__imgBox">
-                <img src="https://yt3.ggpht.com/-E_tsaPMH5Qk/AAAAAAAAAAI/AAAAAAAAAAA/Y8Bz2pEIKeI/s100-c-k-no/photo.jpg" class="sponsorProfile__img">
-            </a>
-            <div class="sponsorProfile__copy">
-                <p class="sponsorProfile__tag">
-                    Sponsored by 
-                    <a href="#" title="Ubisoft">Ubisoft</a>
-                </p>
-                <div class="sponsorProfile__links">
-                    <a href="#" title="YouTube"
-                    class="sponsorProfile__link sprite__social 
-                    socialIcons socialIcons--youtube ">
-                        <span class="ir">YouTube</span>
-                    </a>
-                    <a href="#" title="Vimeo"
-                    class="sponsorProfile__link sprite__social
-                    socialIcons socialIcons--vimeo ">
-                        <span class="ir">Vimeo</span>
-                    </a>
-                    <a href="#" title="Facebook"
-                    class="sponsorProfile__link sprite__social
-                    socialIcons socialIcons--facebook ">
-                        <span class="ir">Facebook</span>
-                    </a>
-                    <a href="#" title="Twitter"
-                    class="sponsorProfile__link sprite__social
-                    socialIcons socialIcons--twitter ">
-                        <span class="ir">Twitter</span>
-                    </a>
-                </div>
-            </div>
-        </div>
-
         <div class="card__desc" ng-bind-html="config.note"></div>
 
-        <div class="card__desc sponsor__actions">
+        <div class="card__desc brand__actions">
             <a href="#">text only links get added to the bottom</a>
-            <a href="#" class="sponsor__goBtn" title="Button Name">Button Name</a>
+            <a href="#" class="brand__goBtn" title="Button Name">Button Name</a>
         </div>
 
     </div>

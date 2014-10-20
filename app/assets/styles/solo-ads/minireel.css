@@ -124,32 +124,10 @@
     .mr-titleBar classes
     ================================================ */
     .mr-titleBar__group {
-        -webkit-box-shadow: 0 1px 3px 0 rgba(0,0,0,0.5);
-        box-shadow: 0 1px 3px 0 rgba(0,0,0,0.5);
-        background:#fff;
-        height:3.75em;
+        height:4.125em;
         position:absolute; z-index:10;
         top:0; left:0; right:0;
     }
-        .mr-titleBar__splashImg {
-            margin:0.375em 0.75em 0.375em 0.375em;
-            width:4em; height:3em;
-            background:50% 50% / cover no-repeat;
-            float:left;
-            cursor:pointer;
-        }
-        .mr-titleBar__title {
-            margin:0.7em 0 0 0;
-            float:left;
-            color:#333; font-size:1.25em;
-            width:calc(100% - 5.125rem);
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            overflow: hidden;
-            cursor:pointer;
-            -webkit-transition:color 0.25s; transition:color 0.25s;
-        }
-
         .mr-titleBar__disabler {
             position:absolute;
             width:100%; height:100%;
@@ -344,9 +322,9 @@
     Companion Ad classes
     ================================================ */
     .companionAd__group {
-        width:300px;
+        width:18.75em;
         position:absolute;
-        right:0.75em; bottom:0;
+        right:0; bottom:0;
     }
         .companionAd {
             width:300px; height:250px;
@@ -365,28 +343,22 @@
 /*  ================================================
     MiniReel Cards classes
     ================================================ */
+    .MiniReel {
+        position:absolute;
+        top:1.5em; left:1.5em; right:1.5em; bottom:1.5em;
+    }
     .slides__list, .slides__item,
     .slide__group {
         margin:0; padding:0; list-style:none;
     }
     .slides__list {
         position: absolute;
-        top:3.75em; right:20.25em; bottom:0.75em; left:0.75em;
+        top:4.125em; right:0; bottom:0; left:0;
         overflow: hidden;
     }
-        @media screen and (min-width:40.0625rem) and (max-width:58.75rem) {
-            /* 641px - 940px */
-            .slides__list--noAds {
-                right:10em;
-            }
+        .MiniReel--noBrandProfile .slides__list {
+            top:0;
         }
-        @media screen and (max-width:40rem) {
-            /* 640px or smaller */
-            .slides__list--noAds {
-                right:8em;
-            }
-        }
-
         .slides__list--fullWidth {
             right:0.75em;
         }
@@ -406,7 +378,8 @@
 
         .player__group {
             margin:0; padding:0;
-            width:100%;  position:relative;
+            position:absolute;
+            top:0; left:0; right:19.875em; bottom:0;
             background:black url('../../img/default_square.jpg') 50% 50% / cover no-repeat;
         }
             
@@ -439,18 +412,14 @@
             }
 
         .card__copy { 
-            margin:0.75em 6.75em 0;
+            width:18.75em;
+            position: absolute;
+            top:0; right:0; bottom:17.25em;
             overflow-y: auto; overflow-x:hidden;
             -webkit-transition:height 0.25s; transition:height 0.25s;
         }
-            .text--low .card__copy {
-                height:3.75em;
-            }
-            .text--med .card__copy {
-                height:5em;
-            }
-            .text--high .card__copy {
-                height:7.5em;
+            .slides__list--noAds .card__copy {
+                bottom:0;
             }
 
             .card__title {
@@ -480,19 +449,6 @@
                         font-size:1em;/*16px*/
                     }
                 }
-
-        .player__height {
-            -webkit-transition:height 0.25s; transition:height 0.25s;
-        }
-            .text--low .player__height {
-                height:calc(100% - 4.5em);
-            }
-            .text--med .player__height {
-                height:calc(100% - 5.75em);
-            }
-            .text--high .player__height {
-                height:calc(100% - 8.25em);
-            }
 
 
 
@@ -604,48 +560,46 @@
 
 
 /*  ================================================
-    sponsored card styles
+    brand card styles
     ================================================ */
-    .sponsorProfile__group {
-        margin:0.6875em 0;
-        display: none;
+    .brandProfile__group {
+        margin:0;
     }
 
 
-        .sponsorProfile__imgBox {
-            width:3.125em; height:3.125em;
+        .brandProfile__imgBox {
+            width:3.375em; height:3.375em;
             float:left;
-            border:1px solid #ddd;
+            border:3px solid #ddd;
             margin:0 0.5em 0 0;
             display: block;
             text-decoration: none;
         }
-            .sponsorProfile__img {
+            .brandProfile__img {
                 width:3em; height:3em;
                 display: block;
             }
 
 
-        .sponsorProfile__tag {
+        .brandProfile__tag {
             font-size:0.75em; color:#999;
             margin:0.125rem 0 0.25rem 0;
         }
         
-        .sponsorProfile__link {
+        .brandProfile__link {
             border:0;
         }
 
 
-        .sponsor__actions {
+        .brand__actions {
             margin:1em 0;
-            display: none;
         }
-            .sponsor__goBtn {
+            .brand__goBtn {
                 background:#d94040; 
                 color:#fff; font-weight:bold;
-                margin:0 0 1em 0; padding:0.75em 0.5em;
+                margin:1em 0; padding:0.75em 0.5em;
                 border:0; border-radius:3px;
-                display: inline-block;
+                display: table;
                 text-align: center; line-height:1;
             }
 
