@@ -5,14 +5,26 @@
         <li class="recap__item clearfix" ng-repeat="card in Ctrl.deck">
             <button class="recap__imgBtn" type="button" 
             ng-click="Ctrl.jumpTo(card)"
-            ng-class="{'recap__imgBtn--ad' : true}">
+            ng-class="{'recap__imgBtn--ad' : card.params.ad}">
                 <span class="recap__imgBox" style="background-image:url({{card.thumbs.large}});">&nbsp;</span>
             </button>
             <div class="recap__copyBox">
                 <h1 class="card__title-h1 tk--hdr" ng-click="Ctrl.jumpTo(card)">{{card.title}}
-                    <span ng-show="!!card.source" class="card__attributes">via <a ng-href="{{card.webHref}}" target="_blank" title="{{card.source}}">{{card.source}}</a></span>
+                    <span ng-if="!card.data.hideSource"
+                        ng-show="!!card.source"
+                        class="card__attributes">
+                        via <a ng-href="{{card.webHref}}" target="_blank" title="{{card.source}}">{{card.source}}</a>
+                    </span>
 
-                    <span class="card__attributes card__attributes--sponsor">sponsored by <a ng-href="{{card.webHref}}" target="_blank" title="Ubisoft">Ubisoft</a></span>
+                    <span ng-if="!!card.params.sponsor"
+                        class="card__attributes card__attributes--sponsor">
+                        sponsored by <a ng-href="{{card.links.Website}}"
+                            target="_blank"
+                            ng-click="$event.stopPropagation()"
+                            title="{{card.params.sponsor}}">
+                            {{card.params.sponsor}}
+                        </a>
+                    </span>
                 </h1>
                 <div class="recap__ballotInfo" ng-show="card.hasModule('ballot')">
                     <h3 class="recap__ballotQuestion">Questionnaire: <strong>{{card.ballot.prompt}}</strong></h3>
