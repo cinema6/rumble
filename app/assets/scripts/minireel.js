@@ -1269,8 +1269,8 @@ function( angular , c6Defines  , tracker ,
             }
         };
     }])
-    .controller('VideoEmbedCardController', ['$scope','ModuleService','EventService','c6AppData','c6ImagePreloader',
-    function                                ( $scope , ModuleService , EventService , c6AppData , c6ImagePreloader ) {
+    .controller('VideoEmbedCardController', ['$scope','ModuleService','EventService','c6AppData','c6ImagePreloader','$interval',
+    function                                ( $scope , ModuleService , EventService , c6AppData , c6ImagePreloader , $interval ) {
         var self = this,
             config = $scope.config,
             profile = $scope.profile,
@@ -1402,6 +1402,48 @@ function( angular , c6Defines  , tracker ,
                 if ((active === wasActive) && (wasActive === false)){ return; }
 
                 if (active) {
+                    if (_data.playerEvents.play.emitCount < 1) {
+                        $scope.$emit('<mr-card>:init', function(navController) {
+                            var skip = config.data.skip || iface.duration,
+                                canSkipAnyTime = skip === true;
+
+                            function handleTimeUpdate() {
+                                var remaining = Math.max(
+                                    skip - iface.currentTime,
+                                    0
+                                );
+
+                                navController.tick(remaining);
+
+                                if (!remaining) {
+                                    navController.enabled(true);
+                                    iface.removeListener('timeupdate', handleTimeUpdate);
+                                }
+                            }
+
+                            if (canSkipAnyTime) { return; }
+
+                            navController.tick(skip)
+                                .enabled(false);
+
+                            if (config.data.autoplay || config.data.skip === false) {
+                                return iface.on('timeupdate', handleTimeUpdate)
+                                    .once('ended', function() {
+                                        navController.enabled(true);
+                                        iface.removeListener('timeupdate', handleTimeUpdate);
+                                    });
+                            }
+
+                            $interval(function() {
+                                navController.tick(--skip);
+
+                                if (!skip) {
+                                    navController.enabled(true);
+                                }
+                            }, 1000, skip);
+                        });
+                    }
+
                     if (c6AppData.behaviors.canAutoplay &&
                         c6AppData.profile.autoplay &&
                         config.data.autoplay) {
