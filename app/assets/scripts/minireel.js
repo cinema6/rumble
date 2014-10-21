@@ -173,6 +173,10 @@ function( angular , c6Defines  , tracker ,
                     {
                         prop: 'autoplay',
                         default: autoplay
+                    },
+                    {
+                        prop: 'skip',
+                        default: true
                     }
                 ].forEach(function(config) {
                     var prop = config.prop;

@@ -76,6 +76,7 @@ define(['app', 'minireel', 'c6ui', 'angular'], function(appModule, minireelModul
                                     placementId: null,
                                     data: {
                                         autoadvance: false,
+                                        skip: 6,
                                         videoid: 'jofNR_WkoCE',
                                         start: 10,
                                         end: 20,
@@ -111,6 +112,7 @@ define(['app', 'minireel', 'c6ui', 'angular'], function(appModule, minireelModul
                                         'Twitter': 'twitter.html'
                                     },
                                     data: {
+                                        skip: null,
                                         autoadvance: null,
                                         autoplay: false,
                                         videoid: 'x18b09a',
@@ -131,6 +133,7 @@ define(['app', 'minireel', 'c6ui', 'angular'], function(appModule, minireelModul
                                         'Vimeo': 'vimeo.html'
                                     },
                                     data: {
+                                        skip: true,
                                         autoplay: true,
                                         type: 'vimeo',
                                         videoid: '81766071',
@@ -146,6 +149,7 @@ define(['app', 'minireel', 'c6ui', 'angular'], function(appModule, minireelModul
                                     voting: [ 400, 50, 10 ],
                                     placementId: null,
                                     data: {
+                                        skip: false,
                                         autoadvance: true,
                                         autoplay: null,
                                         videoid: 'Cn9yJrrm2tk',
@@ -398,6 +402,35 @@ define(['app', 'minireel', 'c6ui', 'angular'], function(appModule, minireelModul
                                     indicesOfAutoadvanceCards.forEach(function(index) {
                                         expect(result[index].data.autoadvance).toBe(mrData.deck[index].data.autoadvance);
                                     });
+                                });
+                            });
+                        });
+
+                        describe('skip', function() {
+                            var indicesOfSkipCards,
+                                indicesOfSkiplessCards;
+
+                            beforeEach(function() {
+                                indicesOfSkiplessCards = indicesWhere(function(card) {
+                                    return isVideo(card) && !isSet(card.data, 'skip');
+                                });
+                                expect(indicesOfSkiplessCards.length).toBeGreaterThan(0);
+
+                                indicesOfSkipCards = indicesWhere(function(card, index) {
+                                    return indicesOfSkiplessCards.indexOf(index) < 0;
+                                });
+                                expect(indicesOfSkipCards.length).toBeGreaterThan(0);
+                            });
+
+                            it('should not change the value if set', function() {
+                                indicesOfSkipCards.forEach(function(index) {
+                                    expect(result[index].data.skip).toBe(mrData.deck[index].data.skip);
+                                });
+                            });
+
+                            it('should be true if the value is not set', function() {
+                                indicesOfSkiplessCards.forEach(function(index) {
+                                    expect(result[index].data.skip).toBe(true);
                                 });
                             });
                         });
