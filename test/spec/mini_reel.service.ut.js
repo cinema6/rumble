@@ -1,4 +1,4 @@
-define(['app', 'minireel', 'c6ui', 'angular'], function(appModule, minireelModule, c6uiModule, angular) {
+define(['app', 'minireel', 'c6uilib', 'angular'], function(appModule, minireelModule, c6uilibModule, angular) {
     'use strict';
 
     var copy = angular.copy,
@@ -14,7 +14,7 @@ define(['app', 'minireel', 'c6ui', 'angular'], function(appModule, minireelModul
             c6ImagePreloader;
 
         beforeEach(function() {
-            module(c6uiModule.name, function($provide) {
+            module(c6uilibModule.name, function($provide) {
                 $provide.value('c6ImagePreloader', {
                     load: jasmine.createSpy('c6ImagePreloader.load()')
                 });

@@ -1,7 +1,7 @@
-define( ['angular','angularAnimate','angularSanitize','c6ui','c6log','c6_defines','modernizr',
+define( ['angular','angularAnimate','angularSanitize','c6uilib','c6log','c6_defines','modernizr',
          'minireel','services','tracker','templates','cache',
          'ui/paginator','ui/table_of_contents','ui/thumb_paginator'],
-function( angular , angularAnimate , angularSanitize , c6ui , c6log , c6Defines  , modernizr ,
+function( angular , angularAnimate , angularSanitize , c6uilib , c6log , c6Defines  , modernizr ,
           minireel , services , tracker , templates , cache ,
           uiPaginator  , uiTableOfContents    , uiThumbPaginator   ) {
     'use strict';
@@ -10,7 +10,7 @@ function( angular , angularAnimate , angularSanitize , c6ui , c6log , c6Defines 
         // Lib Dependencies
         angularAnimate.name,
         angularSanitize.name,
-        c6ui.name,
+        c6uilib.name,
         c6log.name,
         'c6.http',
         // App Files

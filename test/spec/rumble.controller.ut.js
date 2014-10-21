@@ -1,4 +1,4 @@
-define(['c6ui', 'services', 'minireel', 'angular'], function(c6uiModule, servicesModule, minireelModule, angular) {
+define(['c6uilib', 'services', 'minireel', 'angular'], function(c6uilibModule, servicesModule, minireelModule, angular) {
     'use strict';
 
     describe('RumbleController', function() {
@@ -172,7 +172,7 @@ define(['c6ui', 'services', 'minireel', 'angular'], function(c6uiModule, service
                 mode : 'testMode'
             };
 
-            module(c6uiModule.name, function($provide) {
+            module(c6uilibModule.name, function($provide) {
                 $provide.value('cinema6', cinema6);
             });
             module(servicesModule.name, function($provide) {

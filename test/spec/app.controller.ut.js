@@ -1,4 +1,4 @@
-define(['app','c6ui','angular'], function(appModule, c6uiModule, angular) {
+define(['app','c6uilib','angular'], function(appModule, c6uilibModule, angular) {
     'use strict';
 
     describe('AppController', function() {
@@ -32,7 +32,7 @@ define(['app','c6ui','angular'], function(appModule, c6uiModule, angular) {
             };
             trackerServiceSpy = jasmine.createSpy('trackerService').andReturn(trackerSpy);
 
-            module(c6uiModule.name, function($provide) {
+            module(c6uilibModule.name, function($provide) {
                 $provide.factory('cinema6', function($q) {
                     cinema6 = {
                         init: jasmine.createSpy('cinema6.init()').andCallFake(function() {
