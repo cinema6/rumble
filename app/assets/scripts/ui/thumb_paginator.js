@@ -1,10 +1,10 @@
-define (['angular','c6ui'],
-function( angular , c6ui ) {
+define (['angular','c6uilib'],
+function( angular , c6uilib ) {
     'use strict';
 
     var jqLite = angular.element;
 
-    return angular.module('c6.rumble.ui.thumbPaginator', [c6ui.name])
+    return angular.module('c6.rumble.ui.thumbPaginator', [c6uilib.name])
         .directive('thumbPaginator', ['assetFilter','c6Debounce','$window',
         function                     ( assetFilter , c6Debounce , $window ) {
             return {

@@ -1,4 +1,4 @@
-define(['minireel', 'c6ui', 'services'], function(minireelModule, c6uiModule) {
+define(['minireel', 'c6uilib', 'services'], function(minireelModule, c6uilibModule) {
     'use strict';
 
     describe('VideoEmbedCardController', function() {
@@ -13,7 +13,7 @@ define(['minireel', 'c6ui', 'services'], function(minireelModule, c6uiModule) {
             c6AppData;
 
         beforeEach(function() {
-            module(c6uiModule.name, function($provide) {
+            module(c6uilibModule.name, function($provide) {
                 $provide.value('c6ImagePreloader', {
                     load: jasmine.createSpy('c6ImagePreloader.load()')
                 });

@@ -1,4 +1,4 @@
-define(['app', 'c6ui'], function(appModule, c6uiModule) {
+define(['app', 'c6uilib'], function(appModule, c6uilibModule) {
     'use strict';
 
     describe('<vast-card></vast-card>', function() {
@@ -55,7 +55,7 @@ define(['app', 'c6ui'], function(appModule, c6uiModule) {
         }
 
         beforeEach(function() {
-            module(c6uiModule.name, function($provide) {
+            module(c6uilibModule.name, function($provide) {
                 $provide.factory('c6VideoDirective', function() {
                     return {};
                 });

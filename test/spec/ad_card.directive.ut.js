@@ -1,4 +1,4 @@
-define(['cards/ad','c6ui'], function(adCardModule, c6uiModule) {
+define(['cards/ad','c6uilib'], function(adCardModule, c6uilibModule) {
     'use strict';
 
     describe('<ad-card></ad-card>', function() {
@@ -9,7 +9,7 @@ define(['cards/ad','c6ui'], function(adCardModule, c6uiModule) {
             $httpBackend;
 
         beforeEach(function() {
-            module(c6uiModule.name, function($provide) {
+            module(c6uilibModule.name, function($provide) {
                 $provide.factory('c6VideoDirective', function() {
                     return {};
                 });
