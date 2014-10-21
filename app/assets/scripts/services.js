@@ -84,7 +84,7 @@ function( angular , c6uilib , adtech , c6Defines  ) {
             };
         }])
 
-        .provider('VASTService', [function() {
+        .provider('RumbleVASTService', [function() {
             var _provider = {};
 
             this.adTags = function(tags) {
@@ -309,7 +309,7 @@ function( angular , c6uilib , adtech , c6Defines  ) {
             if (window.c6.kHasKarma) { this._private = _provider; }
         }])
 
-        .provider('VPAIDService', [function() {
+        .provider('RumbleVPAIDService', [function() {
             var _provider = {};
 
             this.adTags = function(tags) {

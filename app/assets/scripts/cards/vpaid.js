@@ -215,8 +215,8 @@ function( angular ) {
             });
         }])
 
-        .directive('vpaidCard', ['$log', 'assetFilter', 'VPAIDService', 'playerInterface', '$q',
-        function                ( $log ,  assetFilter ,  VPAIDService ,  playerInterface ,  $q ) {
+        .directive('vpaidCard', ['$log', 'assetFilter', 'RumbleVPAIDService', 'playerInterface', '$q',
+        function                ( $log ,  assetFilter ,  RumbleVPAIDService ,  playerInterface ,  $q ) {
             $log = $log.context('<vpaid-card>');
             return {
                 restrict: 'E',
@@ -310,7 +310,7 @@ function( angular ) {
                     scope.$emit('playerAdd', iface);
 
                     function createPlayer() {
-                        player = VPAIDService.createPlayer(scope.config.id, scope.config, $element.find('.mr-player'));
+                        player = RumbleVPAIDService.createPlayer(scope.config.id, scope.config, $element.find('.mr-player'));
 
                         player.on('ready', function() {
                             // this fires when the flash object exists and responds to isCinema6player()

@@ -94,6 +94,8 @@
                         "logo": "http://cinema6.com/assets/img/c6-logo@2x.png"
                     },
                     "data": {
+                        "autoplay": true,
+                        "skip": 6,
                         "videoid": "gy1B3agGNxwuyt",
                         "vast": "http://u-ads.adap.tv/a/h/DCQzzI0K2rv1k0TZythPvTfWmlP8j6NQnxBMIgFJa80=?cb={cachebreaker}&pageUrl={pageUrl}&eov=eov",
                         "vpaid": "http://u-ads.adap.tv/a/h/DCQzzI0K2rv1k0TZythPvYyD60pQS_90o8grI6Qm2PI=?cb={cachebreaker}&pageUrl={pageUrl}&eov=eov"

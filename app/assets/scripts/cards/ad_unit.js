@@ -3,8 +3,8 @@ function( angular ) {
     'use strict';
 
     return angular.module('c6.rumble.cards.adUnit', [])
-        .controller('AdUnitCardController', ['$rootScope','$scope','$log','$interval','ModuleService','EventService','c6AppData','compileAdTag',
-        function                            ( $rootScope , $scope , $log , $interval , ModuleService , EventService , c6AppData , compileAdTag ) {
+        .controller('AdUnitCardController', ['$rootScope','$scope','$log','$interval','ModuleService','EventService','c6AppData',
+        function                            ( $rootScope , $scope , $log , $interval , ModuleService , EventService , c6AppData ) {
             var self = this,
                 config = $scope.config,
                 profile = $scope.profile,
@@ -26,6 +26,7 @@ function( angular ) {
                 hasStarted = !data.autoplay,
                 shouldPlay = false,
                 shouldGoForward = false,
+                shouldLoadAd = false,
                 adHasBeenCalledFor = false,
                 ballotTargetPlays = 0,
                 resultsTargetPlays = 0,
@@ -131,6 +132,9 @@ function( angular ) {
                 });
 
                 player.on('ready', function() {
+                    if (shouldLoadAd) {
+                        player.load();
+                    }
                     if (shouldPlay) {
                         player.play();
                     }
@@ -236,8 +240,6 @@ function( angular ) {
                 }
             });
 
-            this.adTag = compileAdTag(config.data[$scope.adType]);
-
             this.hasModule = ModuleService.hasModule.bind(ModuleService, config.modules);
 
             this.enablePlayButton = !$scope.profile.touch;
@@ -273,7 +275,11 @@ function( angular ) {
 
                     if (!adHasBeenCalledFor) {
                         adHasBeenCalledFor = true;
-                        player.loadAd();
+                        if (!player || !player.load) {
+                            shouldLoadAd = true;
+                        } else {
+                            player.load();
+                        }
                     }
                 }
             });
@@ -300,12 +306,14 @@ function( angular ) {
             });
         }])
 
-        .directive('adUnitCard',['$log','$compile','assetFilter',
-        function                ( $log , $compile , assetFilter ) {
+        .directive('adUnitCard',['$log','$compile','assetFilter','compileAdTag',
+        function                ( $log , $compile , assetFilter , compileAdTag ) {
             $log = $log.context('<ad-unit-card>');
 
             function fnLink(scope) {
                 scope.adType = scope.profile.flash ? 'vpaid' : 'vast';
+
+                scope.adTag = compileAdTag(scope.config.data[scope.adType]);
             }
 
             return {

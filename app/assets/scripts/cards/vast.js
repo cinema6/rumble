@@ -3,9 +3,9 @@ function( angular , services ) {
     'use strict';
 
     return angular.module('c6.rumble.cards.vast', [services.name])
-        .controller('VastCardController', ['$scope','$window','VASTService','EventService',
+        .controller('VastCardController', ['$scope','$window','RumbleVASTService','EventService',
                                            'ModuleService','$interval','$timeout',
-        function                          ( $scope , $window , VASTService , EventService ,
+        function                          ( $scope , $window , RumbleVASTService , EventService ,
                                             ModuleService , $interval , $timeout ) {
             var self = this,
                 config = $scope.config,
@@ -101,7 +101,7 @@ function( angular , services ) {
             $scope.$watch('onDeck || active', function(onDeck) {
                 if(onDeck) {
                     if(!adHasBeenCalledFor) {
-                        VASTService.getVAST(data.source).then(function(vast) {
+                        RumbleVASTService.getVAST(data.source).then(function(vast) {
                             var src = vast.getVideoSrc();
 
                             if (!src) {
