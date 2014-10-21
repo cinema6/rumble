@@ -1,4 +1,4 @@
-define(['async!https://www.youtube.com/iframe_api?noext!null:onYouTubeIframeAPIReady'], function() {
+define(['c6uilib'], function() {
     'use strict';
 
     return window.YT;

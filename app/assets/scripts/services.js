@@ -1,8 +1,8 @@
-define (['angular','c6ui','adtech','c6_defines'],
-function( angular , c6ui , adtech , c6Defines  ) {
+define (['angular','c6uilib','adtech','c6_defines'],
+function( angular , c6uilib , adtech , c6Defines  ) {
     'use strict';
 
-    return angular.module('c6.rumble.services', [c6ui.name])
+    return angular.module('c6.rumble.services', [c6uilib.name])
         .service('VideoThumbService', ['$http','$q','c6UrlMaker',
         function                      ( $http , $q , c6UrlMaker ) {
             var _private = {};

@@ -1,8 +1,8 @@
-define (['angular','c6ui','iframe'],
-function( angular , c6ui , iframe ) {
+define (['angular','c6uilib','iframe'],
+function( angular , c6uilib , iframe ) {
     'use strict';
 
-    return angular.module('c6.rumble.cards.dailymotion', [c6ui.name, iframe.name])
+    return angular.module('c6.rumble.cards.dailymotion', [c6uilib.name, iframe.name])
     .factory('dailymotion',['$log','$window','$q','c6EventEmitter','iframe','c6UrlMaker',
     function               ( $log , $window , $q , c6EventEmitter , iframe , c6UrlMaker ) {
         $log = $log.context('dailymotion');
