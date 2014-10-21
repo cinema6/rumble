@@ -244,7 +244,7 @@ function( angular , services ) {
                             goForward();
                         } else {
                             if (_data.playerEvents.play.emitCount < 1) {
-                                $scope.$emit('<vast-card>:init', controlNavigation);
+                                $scope.$emit('<mr-card>:init', controlNavigation);
 
                                 initTimeout();
 

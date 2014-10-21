@@ -589,10 +589,6 @@ function( angular , c6Defines  , tracker ,
             return (card || null) && (card.ad && !card.sponsored);
         }
 
-        function handleAdInit(event, provideNavController) {
-            provideNavController(navController = new NavController($scope.nav));
-        }
-
         $log = $log.context('RumbleCtrl');
 
         $scope.deviceProfile    = appData.profile;
@@ -725,8 +721,9 @@ function( angular , c6Defines  , tracker ,
             }
         });
 
-        $scope.$on('<vast-card>:init', handleAdInit);
-        $scope.$on('<vpaid-card>:init', handleAdInit);
+        $scope.$on('<mr-card>:init', function($event, provideNavController) {
+            provideNavController(navController = new NavController($scope.nav));
+        });
 
         $scope.$on('<recap-card>:jumpTo', function(event, index) {
             self.setPosition(index);

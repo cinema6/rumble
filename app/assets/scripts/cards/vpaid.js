@@ -193,7 +193,7 @@ function( angular ) {
                         if (shouldGoForward) {
                             goForward();
                         } else if (_data.playerEvents.play.emitCount < 1) {
-                            $scope.$emit('<vpaid-card>:init', controlNavigation);
+                            $scope.$emit('<mr-card>:init', controlNavigation);
                             if (data.autoplay) {
                                 adHasBeenCalledFor = true;
                                 iface.play().then(null, goForward);

@@ -1490,7 +1490,7 @@ define(['c6ui', 'services', 'minireel', 'angular'], function(c6uiModule, service
             });
 
             it('will call enable() on a NavController if there is one', function() {
-                ['<vast-card>:init', '<vpaid-card>:init'].forEach(function(event) {
+                ['<mr-card>:init'].forEach(function(event) {
                     var provideNavController = jasmine.createSpy('provideNavController()'),
                         navController;
 
@@ -1670,14 +1670,14 @@ define(['c6ui', 'services', 'minireel', 'angular'], function(c6uiModule, service
                 });
             });
 
-            describe('<vast-card>:init', function() {
+            describe('<mr-card>:init', function() {
                 var provideController;
 
                 beforeEach(function() {
                     provideController = jasmine.createSpy('provideController()');
 
                     $scope.$apply(function() {
-                        $scope.$emit('<vast-card>:init', provideController);
+                        $scope.$emit('<mr-card>:init', provideController);
                     });
                 });
 
