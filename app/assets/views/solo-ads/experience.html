@@ -1,0 +1,67 @@
+<script src="//use.typekit.net/xuz8gem.js"></script>
+<script>try{Typekit.load();}catch(e){}</script>
+<div class="MiniReel" 
+ng-class="{
+    'MiniReel--noBrandProfile' : false
+}">
+    
+
+    <header class="mr-titleBar__group clearfix"
+    ng-show="true">
+        <div class="mr-titleBar__disabler" ng-show="!nav.enabled">&nbsp;</div>
+        <div class="brandProfile__group clearfix">
+            <a href="#" title="Sponsor link" class="brandProfile__imgBox">
+                <img src="https://yt3.ggpht.com/-E_tsaPMH5Qk/AAAAAAAAAAI/AAAAAAAAAAA/Y8Bz2pEIKeI/s100-c-k-no/photo.jpg" class="brandProfile__img">
+            </a>
+            <div class="brandProfile__copy">
+                <p class="brandProfile__tag">
+                    Sponsored by 
+                    <a href="#" title="Ubisoft">Ubisoft</a>
+                </p>
+                <div class="brandProfile__links">
+                    <a href="#" title="YouTube"
+                    class="brandProfile__link sprite 
+                    socialIcons socialIcons--youtube">
+                        <span class="ir">YouTube</span>
+                    </a>
+                    <a href="#" title="Vimeo"
+                    class="brandProfile__link sprite
+                    socialIcons socialIcons--vimeo">
+                        <span class="ir">Vimeo</span>
+                    </a>
+                    <a href="#" title="Facebook"
+                    class="brandProfile__link sprite
+                    socialIcons socialIcons--facebook">
+                        <span class="ir">Facebook</span>
+                    </a>
+                    <a href="#" title="Twitter"
+                    class="brandProfile__link sprite
+                    socialIcons socialIcons--twitter">
+                        <span class="ir">Twitter</span>
+                    </a>
+                    <a href="#" title="Pinterest"
+                    class="brandProfile__link sprite
+                    socialIcons socialIcons--pinterest">
+                        <span class="ir">Pinterest</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <ng-include ng-controller="DeckController as DeckCtrl" src="'deck.html' | asset:'views'"></ng-include>
+    
+
+    <display-ad-module ng-if="RumbleCtrl.moduleActive('displayAd')"
+        config="currentCard"
+        active="RumbleCtrl.moduleActive('displayAd')">
+    </display-ad-module>
+
+</div><!--.MiniReel-->
+
+
+<ng-switch on="app.state">
+    <div class="splash__group" ng-switch-when="splash">
+        <ng-include ng-if="app.data.version < 1"  src="'splash.html' | asset:'views'"></ng-include>
+    </div>
+</ng-switch>

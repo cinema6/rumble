@@ -1,0 +1,8 @@
+<div ng-show="active" class="adDisplay__group">
+    <h1 class="adVideo__label tk--hdr">Advertisement</h1>
+    <div ng-switch="adType" ng-show="active">
+        <div class="adDisplay__view" ng-switch-when="iframe"><iframe ng-src="{{fileURI}}" scrolling="no"></iframe></div>
+        <div class="adDisplay__view" ng-switch-when="image"><img ng-src="{{fileURI}}" /></div>
+        <div class="adDisplay__view" ng-switch-when="html" ng-bind-html="fileURI"></div>
+    </div>
+</div>

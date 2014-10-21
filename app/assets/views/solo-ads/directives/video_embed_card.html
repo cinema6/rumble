@@ -1,0 +1,66 @@
+<article class="slide__group">
+    <!--<ballot-vote-module 
+        class="ballot-module"
+        ng-if="Ctrl.hasModule('ballot')"
+        active="config._data.modules.ballot.ballotActive && active"
+        vote="config._data.modules.ballot.vote"
+        card-id="{{config.id}}"
+        ballot="config.ballot"
+        on-dismiss="Ctrl.dismissBallot()">
+    </ballot-vote-module>
+    <ballot-results-module ng-if="Ctrl.hasModule('ballot')"
+        class="results-module"
+        active="config._data.modules.ballot.resultsActive && active"
+        vote="config._data.modules.ballot.vote"
+        card-id="{{config.id}}"
+        fetch-when="onDeck || active"
+        on-dismiss="Ctrl.dismissBallotResults()">
+    </ballot-results-module>-->
+
+    <div class="postModule" ng-show="false">
+        <section class="endActions__group">
+            <button class="endActions__watchAgain sprite actionBtn" type="button">
+                <span class="actionBtn__iconBox sprite">&nbsp;</span>
+                <span class="actionBtn__label">Watch Video Again</span>
+            </button>
+            <button class="endActions__visitLink actionBtn" type="button">
+                <span class="actionBtn__iconBox sprite">&nbsp;</span>
+                <span class="actionBtn__label">Visit Sponsor Site</span>
+            </button>
+        </section>
+
+        <div class="overlay" ng-click="onDismiss()">
+            <button class="sprite overlay__closeBtn"><span class="ir">Close</span></button>
+        </div>
+    </div>
+
+    <div class="player__group">
+        <button ng-if="Ctrl.enablePlayButton" ng-show="Ctrl.showPlay" ng-click="Ctrl.playVideo()" class="player__play-btn">
+            <div class="player__play-icon">
+                <span class="ir">Play Video</span>
+            </div>
+        </button>
+        <div ng-class="{'mr-player--fly-away': Ctrl.flyAway}" class="mr-player"><!-- actual player will be inserted into this container --></div>
+        <div ng-show="Ctrl.flyAway" class="player__thumbnail c6-height-limiter"
+            ng-style="{'background-image':config.thumbs.large ? 'url(' + config.thumbs.large + ')' : ''}">
+            <span class="ir"><img ng-src="{{config.thumbs.large}}"></span>
+        </div>
+    </div>
+
+    <div class="card__copy">
+        <h1 class="card__title tk--hdr">
+            {{config.title}}
+            <span ng-show="!!config.source" class="card__attributes">via <a ng-href="{{Ctrl.videoUrl}}" target="_blank" title="{{config.source}}">{{config.source}}</a></span>
+        </h1>
+
+        <div class="card__desc" ng-bind-html="config.note"></div>
+
+        <div class="card__desc brand__actions">
+            <a href="#">text only links get added to the bottom</a>
+            <a href="#" class="brand__goBtn actionBtn" title="Button Name">
+                <span class="actionBtn__label">Button Name</span>
+            </a>
+        </div>
+
+    </div>
+</article>

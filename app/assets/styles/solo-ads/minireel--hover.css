@@ -1,0 +1,41 @@
+/*  ================================================
+    sponsored card styles
+    ================================================ */
+    .sponsorProfile__imgBox {
+        -webkit-transition:border 0.5s;
+        transition:border 0.5s;
+    }
+    .sponsorProfile__imgBox:hover {
+        border:1px solid #d94040;
+    }
+
+
+
+/*  ================================================
+    button styles 
+    ================================================ */
+    .actionBtn:hover {
+        background:#fff;
+        color:#d94040;
+        text-shadow:none;
+    }
+        .actionBtn:hover:before {
+            content:'';
+            position:absolute;
+            border:2px solid #d94040;
+            border-radius:3px;
+            width:100%; height:100%;
+            top:0; left:0;
+        }
+        
+        .endActions__group .actionBtn:hover:before {
+            display: none;
+        }
+        .endActions__group .actionBtn:hover .actionBtn__iconBox {
+            background-color:#d94040;
+        }
+
+
+    .mr-titleBar__title:hover {
+        color:#d94040;
+    }
