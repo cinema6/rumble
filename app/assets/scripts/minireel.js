@@ -957,6 +957,8 @@ function( angular , c6Defines  , tracker ,
         this.setPosition = function(i){
             var toCard = MasterDeckCtrl.convertToCard(i);
 
+            if (toCard.currentIndex > $scope.deck.length - 1) { return; }
+
             $log.info('setPosition: %1', toCard.currentIndex);
 
             if ($scope.$emit('positionWillChange', toCard.currentIndex).defaultPrevented) {

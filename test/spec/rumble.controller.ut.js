@@ -1386,6 +1386,14 @@ define(['c6uilib', 'services', 'minireel', 'angular'], function(c6uilibModule, s
                 }); 
             });
 
+            it('does not go past the last card', function() {
+                RumbleCtrl.setPosition($scope.deck.length - 1, 'set to last card');
+                expect($scope.currentIndex).toBe($scope.deck.length - 1);
+
+                RumbleCtrl.setPosition($scope.deck.length);
+                expect($scope.currentIndex).toBe($scope.deck.length - 1, 'set past last card');
+            });
+
             it('sends ga event if moving backward from control', function(){
                 trackerSpy.trackPage.reset();
                 trackerSpy.trackEvent.reset();
