@@ -1,0 +1,22 @@
+<div class="postModule player__height" ng-show="active">
+    <section class="endActions__group">
+        <button class="endActions__watchAgain sprite actionBtn"
+            type="button"
+            ng-click="onReplay()">
+            <span class="actionBtn__iconBox sprite">&nbsp;</span>
+            <span class="actionBtn__label">Watch Video Again</span>
+        </button>
+        <a ng-if="!!sponsorHref"
+            class="endActions__visitLink actionBtn"
+            type="button"
+            ng-href="{{sponsorHref}}"
+            target="_blank">
+            <span class="actionBtn__iconBox sprite">&nbsp;</span>
+            <span class="actionBtn__label">Visit Sponsor Site</span>
+        </a>
+    </section>
+
+    <div class="overlay" ng-click="onDismiss()">
+        <button class="sprite overlay__closeBtn"><span class="ir">Close</span></button>
+    </div>
+</div>

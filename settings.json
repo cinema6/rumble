@@ -54,6 +54,9 @@
         "modules/display_ad": {
             "blacklist": ["solo"]
         },
+        "modules/post": {
+            "whitelist": ["solo", "solo-ads"]
+        },
         "ui/paginator": {
             "whitelist": ["mobile"]
         },

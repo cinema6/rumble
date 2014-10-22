@@ -393,7 +393,14 @@ define(['minireel', 'c6uilib', 'services'], function(minireelModule, c6uilibModu
 
                 describe('when "play" is emitted', function() {
                     beforeEach(function() {
+                        VideoEmbedCardCtrl.postModuleActive = true;
                         iface.emit('play', iface);
+                        VideoEmbedCardCtrl.postModuleActive = true;
+                        iface.emit('play', iface);
+                    });
+
+                    it('should set "postModuleActive" to false', function() {
+                        expect(VideoEmbedCardCtrl.postModuleActive).toBe(false);
                     });
 
                     it('should set _data.modules.displayAd.active to true', function() {
@@ -406,6 +413,14 @@ define(['minireel', 'c6uilib', 'services'], function(minireelModule, c6uilibModu
                         spyOn($scope, '$emit').andCallThrough();
                     });
 
+                    it('should set postModuleActive to true', function() {
+                        $scope.$apply(function() {
+                            iface.emit('ended');
+                        });
+
+                        expect(VideoEmbedCardCtrl.postModuleActive).toBe(true);
+                    });
+
                     describe('if the ballot module is present', function() {
                         beforeEach(function() {
                             $scope.config.modules.length = 0;
@@ -413,6 +428,21 @@ define(['minireel', 'c6uilib', 'services'], function(minireelModule, c6uilibModu
 
                             $scope.$apply(function() {
                                 iface.emit('ended', iface);
+                            });
+                        });
+
+                        it('should not $emit the <mr-card>:contentEnd event', function() {
+                            expect($scope.$emit).not.toHaveBeenCalled();
+                        });
+                    });
+
+                    describe('if the post module is present', function() {
+                        beforeEach(function() {
+                            $scope.config.modules.length = 0;
+                            $scope.config.modules.push('post');
+
+                            $scope.$apply(function() {
+                                iface.emit('ended');
                             });
                         });
 
@@ -620,6 +650,12 @@ define(['minireel', 'c6uilib', 'services'], function(minireelModule, c6uilibModu
 
         describe('@public', function() {
             describe('properties', function() {
+                describe('postModuleActive', function() {
+                    it('should be false', function() {
+                        expect(VideoEmbedCardCtrl.postModuleActive).toBe(false);
+                    });
+                });
+
                 describe('experienceTitle', function() {
                     it('should come from the c6AppData experience', function() {
                         expect(VideoEmbedCardCtrl.experienceTitle).toBe('Foo');
