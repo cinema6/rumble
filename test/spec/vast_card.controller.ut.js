@@ -758,11 +758,11 @@ define(['cards/vast', 'services', 'angular'], function(vastModule, servicesModul
                                 });
                             });
 
-                            it('should $emit <vast-card>:init', function() {
-                                expect($scope.$emit).toHaveBeenCalledWith('<vast-card>:init', jasmine.any(Function));
+                            it('should $emit <mr-card>:init', function() {
+                                expect($scope.$emit).toHaveBeenCalledWith('<mr-card>:init', jasmine.any(Function));
                             });
 
-                            it('should only $emit <vast-card>:init if the ad has not been played', function() {
+                            it('should only $emit <mr-card>:init if the ad has not been played', function() {
                                 $scope.$apply(function() {
                                     $scope.active = false;
                                 });

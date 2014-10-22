@@ -1,5 +1,57 @@
 [
     {
+        "id": "e-a0a7842d71a037",
+        "uri": "rumble",
+        "appUriPrefix": "<%= settings.appUrl %>",
+        "appUri": "rumble",
+        "title": "Heinz Automato 2",
+        "subtitle": "",
+        "summary": "",
+        "data": {
+            "title": "Heinz Automato 2",
+            "mode": "solo",
+            "autoplay": true,
+            "deck": [
+                {
+                    "id": "rc-761077ab2c8a59",
+                    "type": "youtube",
+                    "title": "Heinz Automato 2",
+                    "note": "The Heinz Automato57 teaches junior how to dispense Heinz ketchup.",
+                    "links": {
+                        "Action": "https://portal.cinema6.com/#/apps/minireel/studio/dashboard?filter=all&limit=50&page=1",
+                        "Website": "http://cinema6.com/",
+                        "Facebook": "https://www.facebook.com/Cinema6Video",
+                        "Twitter": "https://twitter.com/Cinema6Video",
+                        "YouTube": "http://www.youtube.com/channel/UCSszI_zUkVVA24WVuTYpHTQ",
+                        "Vimeo": "https://vimeo.com/user27205886"
+                    },
+                    "params": {
+                        "sponsor": "Cinema6",
+                        "ad": true,
+                        "action": {
+                            "label": "OH HAI MARK",
+                            "type": "button"
+                        }
+                    },
+                    "collateral": {
+                        "logo": "http://cinema6.com/assets/img/c6-logo@2x.png"
+                    },
+                    "modules": [
+                        "post"
+                    ],
+                    "data": {
+                        "hideSource": true,
+                        "videoid": "JcniyQYFU6M",
+                        "start": null,
+                        "end": null,
+                        "rel": 0,
+                        "modestbranding": 1
+                    }
+                }
+            ]
+        }
+    },
+    {
         "id": "e-d0e407bb69675b",
         "uri": "rumble",
         "appUriPrefix": "<%= settings.appUrl %>",
@@ -54,7 +106,9 @@
                     "type": "text",
                     "title": "2014 Was The Year Of The GoPro",
                     "note": "Blah blah blah blah. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec odio. Quisque volutpat mattis eros. Nullam malesuada erat ut turpis. Suspendisse urna nibh, viverra non, semper suscipit, posuere a, pede. Donec nec justo eget felis facilisis fermentum. Aliquam porttitor mauris sit amet orci. Aenean dignissim pellentesque felis.Morbi in sem quis dui placerat ornare. Pellentesque odio nisi, euismod in, pharetra a, ultricies in, diam. Sed arcu. Cras consequat.Praesent dapibus, neque id cursus faucibus, tortor neque egestas augue, eu vulputate magna eros eu erat. Aliquam erat volutpat. Nam dui mi, tincidunt quis, accumsan porttitor, facilisis luctus, metus.",
-                    "modules": ["displayAd"],
+                    "modules": [
+                        "displayAd"
+                    ],
                     "data": {}
                 },
                 {
@@ -2351,5 +2405,15 @@
                 }
             ]
         }
+    },
+    {
+        "id": "e-a0a7842d71a037",
+        "uri": "rumble",
+        "appUriPrefix": "<%= settings.appUrl %>",
+        "appUri": "rumble",
+        "title": "Heinz Automato 2",
+        "subtitle": "",
+        "summary": "",
+        "data": {}
     }
 ]

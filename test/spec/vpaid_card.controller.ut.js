@@ -541,11 +541,11 @@ define(['services', 'cards/vpaid', 'app'], function(servicesModule, vpaidModule,
                         expect(iface.play).toHaveBeenCalled();
                     });
 
-                    it('should $emit <vpaid-card>:init', function() {
-                        expect($scope.$emit).toHaveBeenCalledWith('<vpaid-card>:init', jasmine.any(Function));
+                    it('should $emit <mr-card>:init', function() {
+                        expect($scope.$emit).toHaveBeenCalledWith('<mr-card>:init', jasmine.any(Function));
                     });
 
-                    it('should only $emit <vpaid-card>:init if it has not played yet', function() {
+                    it('should only $emit <mr-card>:init if it has not played yet', function() {
                         $scope.$apply(function() {
                             $scope.active = false;
                         });

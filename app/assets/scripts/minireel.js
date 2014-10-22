@@ -1,11 +1,12 @@
 define (['angular','c6_defines','tracker',
          'cards/ad','cards/dailymotion','cards/recap','cards/vast','cards/vimeo','cards/vpaid',
          'cards/youtube','cards/text','cards/display_ad','cards/ad_unit',
-         'modules/ballot','modules/companion_ad','modules/display_ad'],
+         'modules/ballot','modules/companion_ad','modules/display_ad','modules/post'],
 function( angular , c6Defines  , tracker ,
           adCard   , dailymotionCard   , recapCard   , vastCard   , vimeoCard   , vpaidCard   ,
           youtubeCard   , textCard   , displayAdCard    , adUnitCard     ,
-          ballotModule   , companionAdModule    , displayAdModule ) {
+          ballotModule   , companionAdModule    , displayAdModule    , postModule   ) {
+
     'use strict';
 
     var forEach = angular.forEach,
@@ -27,7 +28,8 @@ function( angular , c6Defines  , tracker ,
         // Modules
         ballotModule.name,
         companionAdModule.name,
-        displayAdModule.name
+        displayAdModule.name,
+        postModule.name
     ])
     .animation('.slides__item',['$log', function($log){
         $log = $log.context('.slides__item');
@@ -174,6 +176,10 @@ function( angular , c6Defines  , tracker ,
                     {
                         prop: 'autoplay',
                         default: autoplay
+                    },
+                    {
+                        prop: 'skip',
+                        default: true
                     }
                 ].forEach(function(config) {
                     var prop = config.prop;
@@ -586,10 +592,6 @@ function( angular , c6Defines  , tracker ,
             return (card || null) && (card.ad && !card.sponsored);
         }
 
-        function handleAdInit(event, provideNavController) {
-            provideNavController(navController = new NavController($scope.nav));
-        }
-
         $log = $log.context('RumbleCtrl');
 
         $scope.deviceProfile    = appData.profile;
@@ -722,9 +724,9 @@ function( angular , c6Defines  , tracker ,
             }
         });
 
-        $scope.$on('<vast-card>:init', handleAdInit);
-        $scope.$on('<vpaid-card>:init', handleAdInit);
-        $scope.$on('<ad-unit-card>:init', handleAdInit);
+        $scope.$on('<mr-card>:init', function($event, provideNavController) {
+            provideNavController(navController = new NavController($scope.nav));
+        });
 
         $scope.$on('<recap-card>:jumpTo', function(event, index) {
             self.setPosition(index);
@@ -958,6 +960,8 @@ function( angular , c6Defines  , tracker ,
 
         this.setPosition = function(i){
             var toCard = MasterDeckCtrl.convertToCard(i);
+
+            if (toCard.currentIndex > $scope.deck.length - 1) { return; }
 
             $log.info('setPosition: %1', toCard.currentIndex);
 
@@ -1270,8 +1274,8 @@ function( angular , c6Defines  , tracker ,
             }
         };
     }])
-    .controller('VideoEmbedCardController', ['$scope','ModuleService','EventService','c6AppData','c6ImagePreloader',
-    function                                ( $scope , ModuleService , EventService , c6AppData , c6ImagePreloader ) {
+    .controller('VideoEmbedCardController', ['$scope','ModuleService','EventService','c6AppData','c6ImagePreloader','$interval',
+    function                                ( $scope , ModuleService , EventService , c6AppData , c6ImagePreloader , $interval ) {
         var self = this,
             config = $scope.config,
             profile = $scope.profile,
@@ -1324,6 +1328,8 @@ function( angular , c6Defines  , tracker ,
         this.videoUrl = null;
 
         this.experienceTitle = c6AppData.experience.data.title;
+
+        this.postModuleActive = false;
 
         this.hasModule = ModuleService.hasModule.bind(ModuleService, config.modules);
 
@@ -1393,8 +1399,13 @@ function( angular , c6Defines  , tracker ,
                 .once('play', function() {
                     _data.modules.displayAd.active = true;
                 })
+                .on('play', function() {
+                    self.postModuleActive = false;
+                })
                 .on('ended', function() {
-                    if (!self.hasModule('ballot')) {
+                    self.postModuleActive = true;
+
+                    if (!self.hasModule('ballot') && !self.hasModule('post')) {
                         $scope.$emit('<mr-card>:contentEnd', config.meta || config);
                     }
                 });
@@ -1403,6 +1414,48 @@ function( angular , c6Defines  , tracker ,
                 if ((active === wasActive) && (wasActive === false)){ return; }
 
                 if (active) {
+                    if (_data.playerEvents.play.emitCount < 1) {
+                        $scope.$emit('<mr-card>:init', function(navController) {
+                            var skip = config.data.skip || iface.duration,
+                                canSkipAnyTime = skip === true;
+
+                            function handleTimeUpdate() {
+                                var remaining = Math.max(
+                                    skip - iface.currentTime,
+                                    0
+                                );
+
+                                navController.tick(remaining);
+
+                                if (!remaining) {
+                                    navController.enabled(true);
+                                    iface.removeListener('timeupdate', handleTimeUpdate);
+                                }
+                            }
+
+                            if (canSkipAnyTime) { return; }
+
+                            navController.tick(skip)
+                                .enabled(false);
+
+                            if (config.data.autoplay || config.data.skip === false) {
+                                return iface.on('timeupdate', handleTimeUpdate)
+                                    .once('ended', function() {
+                                        navController.enabled(true);
+                                        iface.removeListener('timeupdate', handleTimeUpdate);
+                                    });
+                            }
+
+                            $interval(function() {
+                                navController.tick(--skip);
+
+                                if (!skip) {
+                                    navController.enabled(true);
+                                }
+                            }, 1000, skip);
+                        });
+                    }
+
                     if (c6AppData.behaviors.canAutoplay &&
                         c6AppData.profile.autoplay &&
                         config.data.autoplay) {
@@ -1471,6 +1524,10 @@ function( angular , c6Defines  , tracker ,
             $log.info('link:',scope);
 
             scope.title = c6AppData.experience.data.title;
+
+            scope.hasModule = function(module) {
+                return scope.config.modules.indexOf(module) > -1;
+            };
 
             var inner = '<' + dasherize(type) + '-card';
             for (var key in data){

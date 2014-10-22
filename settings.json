@@ -27,17 +27,44 @@
         }
     },
     "build": {
+        "cards/vpaid": {
+            "blacklist": ["mobile", "solo", "solo-ads"]
+        },
+        "cards/ad": {
+            "blacklist": ["solo", "solo-ads"]
+        },
+        "cards/display_ad": {
+            "blacklist": ["solo", "solo-ads"]
+        },
+        "cards/recap": {
+            "blacklist": ["solo", "solo-ads"]
+        },
+        "cards/text": {
+            "blacklist": ["solo", "solo-ads"]
+        },
+        "cards/vast": {
+            "blacklist": ["solo", "solo-ads"]
+        },
+        "modules/ballot": {
+            "blacklist": ["solo", "solo-ads"]
+        },
+        "modules/companion_ad": {
+            "blacklist": ["solo", "solo-ads"]
+        },
+        "modules/display_ad": {
+            "blacklist": ["solo"]
+        },
+        "modules/post": {
+            "whitelist": ["solo", "solo-ads"]
+        },
         "ui/paginator": {
             "whitelist": ["mobile"]
-        },
-        "cards/vpaid": {
-            "blacklist": ["mobile"]
         },
         "ui/table_of_contents": {
             "whitelist": ["mobile"]
         },
         "ui/thumb_paginator": {
-            "blacklist": ["mobile", "full"]
+            "blacklist": ["mobile", "full", "solo", "solo-ads"]
         }
     }
 }

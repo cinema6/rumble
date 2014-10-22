@@ -171,7 +171,7 @@ function( angular ) {
                             if (player.ended) {
                                 resetState();
                             }
-                            $scope.$emit('<ad-unit-card>:init', controlNavigation);
+                            $scope.$emit('<mr-card>:init', controlNavigation);
                             if (data.autoplay) {
                                 adHasBeenCalledFor = true;
                                 shouldPlay = true;

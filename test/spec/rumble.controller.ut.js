@@ -1386,6 +1386,14 @@ define(['c6uilib', 'services', 'minireel', 'angular'], function(c6uilibModule, s
                 }); 
             });
 
+            it('does not go past the last card', function() {
+                RumbleCtrl.setPosition($scope.deck.length - 1, 'set to last card');
+                expect($scope.currentIndex).toBe($scope.deck.length - 1);
+
+                RumbleCtrl.setPosition($scope.deck.length);
+                expect($scope.currentIndex).toBe($scope.deck.length - 1, 'set past last card');
+            });
+
             it('sends ga event if moving backward from control', function(){
                 trackerSpy.trackPage.reset();
                 trackerSpy.trackEvent.reset();
@@ -1490,7 +1498,7 @@ define(['c6uilib', 'services', 'minireel', 'angular'], function(c6uilibModule, s
             });
 
             it('will call enable() on a NavController if there is one', function() {
-                ['<vast-card>:init', '<vpaid-card>:init'].forEach(function(event) {
+                ['<mr-card>:init'].forEach(function(event) {
                     var provideNavController = jasmine.createSpy('provideNavController()'),
                         navController;
 
@@ -1670,14 +1678,14 @@ define(['c6uilib', 'services', 'minireel', 'angular'], function(c6uilibModule, s
                 });
             });
 
-            describe('<vast-card>:init', function() {
+            describe('<mr-card>:init', function() {
                 var provideController;
 
                 beforeEach(function() {
                     provideController = jasmine.createSpy('provideController()');
 
                     $scope.$apply(function() {
-                        $scope.$emit('<vast-card>:init', provideController);
+                        $scope.$emit('<mr-card>:init', provideController);
                     });
                 });
 
