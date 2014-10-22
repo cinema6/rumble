@@ -43,7 +43,7 @@ define(['app', 'services'], function(appModule, servicesModule) {
 
         beforeEach(function() {
             module(servicesModule.name, function($provide) {
-                $provide.provider('VPAIDService', function() {
+                $provide.provider('RumbleVPAIDService', function() {
                     this.$get = [function() {
                         var service = {};
                         service.createPlayer = function() {
@@ -67,7 +67,7 @@ define(['app', 'services'], function(appModule, servicesModule) {
                 $log = $injector.get('$log');
                 $q = $injector.get('$q');
                 c6EventEmitter = $injector.get('c6EventEmitter');
-                VPAIDService = $injector.get('VPAIDService');
+                VPAIDService = $injector.get('RumbleVPAIDService');
 
                 $scope = $rootScope.$new();
                 $scope.config = {

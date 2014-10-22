@@ -49,7 +49,7 @@ define(['cards/vast', 'services', 'angular'], function(vastModule, servicesModul
             };
 
             module(servicesModule.name, function($provide) {
-                $provide.provider('VASTService', function() {
+                $provide.provider('RumbleVASTService', function() {
                     this.$get = function($q) {
                         return {
                             getVAST : jasmine.createSpy('getVAST()').andReturn($q.when(vast))
@@ -74,7 +74,7 @@ define(['cards/vast', 'services', 'angular'], function(vastModule, servicesModul
                 c6EventEmitter = $injector.get('c6EventEmitter');
                 $q = $injector.get('$q');
 
-                VASTService = $injector.get('VASTService');
+                VASTService = $injector.get('RumbleVASTService');
                 ModuleService = $injector.get('ModuleService');
 
                 $scope = $rootScope.$new();

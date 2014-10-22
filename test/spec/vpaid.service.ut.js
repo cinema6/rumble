@@ -43,7 +43,7 @@ define(['services', 'angular'], function(servicesModule, angular) {
 
         beforeEach(function() {
             module(servicesModule.name, function($provide, $injector) {
-                VPAIDServiceProvider = $injector.get('VPAIDServiceProvider');
+                VPAIDServiceProvider = $injector.get('RumbleVPAIDServiceProvider');
 
                 _provider = VPAIDServiceProvider._private;
                 $provide.value('c6Defines', window.c6);
@@ -60,7 +60,7 @@ define(['services', 'angular'], function(servicesModule, angular) {
                 $httpBackend = $injector.get('$httpBackend');
                 compileAdTag = $injector.get('compileAdTag');
 
-                VPAIDService = $injector.get('VPAIDService');
+                VPAIDService = $injector.get('RumbleVPAIDService');
                 c6EventEmitter = $injector.get('c6EventEmitter');
 
                 _service = VPAIDService._private;

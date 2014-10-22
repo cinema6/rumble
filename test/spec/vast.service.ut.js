@@ -176,13 +176,13 @@ define(['services'], function(servicesModule) {
             ].join('\n');
 
             module(servicesModule.name, function($injector) {
-                VASTServiceProvider = $injector.get('VASTServiceProvider');
+                VASTServiceProvider = $injector.get('RumbleVASTServiceProvider');
 
                 _provider = VASTServiceProvider._private;
             });
 
             inject(function($injector) {
-                VASTService = $injector.get('VASTService');
+                VASTService = $injector.get('RumbleVASTService');
                 $rootScope = $injector.get('$rootScope');
                 $q = $injector.get('$q');
                 $httpBackend = $injector.get('$httpBackend');
