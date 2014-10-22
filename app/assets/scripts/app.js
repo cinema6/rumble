@@ -211,11 +211,11 @@ function( angular , angularAnimate , angularSanitize , c6uilib , c6log , c6Defin
                 }
 
                 obj.behaviors = {
-                    canAutoplay: isMode('full', 'light', 'lightbox', 'lightbox-ads'),
+                    canAutoplay: isMode('full', 'light', 'lightbox', 'lightbox-ads', 'solo', 'solo-ads'),
                     inlineVoteResults: isMode('mobile'),
                     separateTextView: false,
-                    fullscreen: isMode('full', 'mobile', 'lightbox', 'lightbox-ads'),
-                    showsCompanionWithVideoAd: isMode('full-ads', 'lightbox', 'lightbox-ads')
+                    fullscreen: isMode('full', 'mobile', 'lightbox', 'lightbox-ads', 'solo', 'solo-ads'),
+                    showsCompanionWithVideoAd: isMode('lightbox', 'lightbox-ads')
                 };
             }
 

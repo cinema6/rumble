@@ -1,11 +1,11 @@
 define (['angular','c6_defines','tracker',
          'cards/ad','cards/dailymotion','cards/recap','cards/vast','cards/vimeo','cards/vpaid',
          'cards/youtube','cards/text','cards/display_ad',
-         'modules/ballot','modules/companion_ad','modules/display_ad'],
+         'modules/ballot','modules/companion_ad','modules/display_ad','modules/post'],
 function( angular , c6Defines  , tracker ,
           adCard   , dailymotionCard   , recapCard   , vastCard   , vimeoCard   , vpaidCard   ,
           youtubeCard   , textCard   , displayAdCard    ,
-          ballotModule   , companionAdModule    , displayAdModule ) {
+          ballotModule   , companionAdModule    , displayAdModule    , postModule   ) {
     'use strict';
 
     var forEach = angular.forEach,
@@ -26,7 +26,8 @@ function( angular , c6Defines  , tracker ,
         // Modules
         ballotModule.name,
         companionAdModule.name,
-        displayAdModule.name
+        displayAdModule.name,
+        postModule.name
     ])
     .animation('.slides__item',['$log', function($log){
         $log = $log.context('.slides__item');
@@ -958,6 +959,8 @@ function( angular , c6Defines  , tracker ,
         this.setPosition = function(i){
             var toCard = MasterDeckCtrl.convertToCard(i);
 
+            if (toCard.currentIndex > $scope.deck.length - 1) { return; }
+
             $log.info('setPosition: %1', toCard.currentIndex);
 
             if ($scope.$emit('positionWillChange', toCard.currentIndex).defaultPrevented) {
@@ -1324,6 +1327,8 @@ function( angular , c6Defines  , tracker ,
 
         this.experienceTitle = c6AppData.experience.data.title;
 
+        this.postModuleActive = false;
+
         this.hasModule = ModuleService.hasModule.bind(ModuleService, config.modules);
 
         this.playVideo = function() {
@@ -1392,8 +1397,13 @@ function( angular , c6Defines  , tracker ,
                 .once('play', function() {
                     _data.modules.displayAd.active = true;
                 })
+                .on('play', function() {
+                    self.postModuleActive = false;
+                })
                 .on('ended', function() {
-                    if (!self.hasModule('ballot')) {
+                    self.postModuleActive = true;
+
+                    if (!self.hasModule('ballot') && !self.hasModule('post')) {
                         $scope.$emit('<mr-card>:contentEnd', config.meta || config);
                     }
                 });
@@ -1512,6 +1522,10 @@ function( angular , c6Defines  , tracker ,
             $log.info('link:',scope);
 
             scope.title = c6AppData.experience.data.title;
+
+            scope.hasModule = function(module) {
+                return scope.config.modules.indexOf(module) > -1;
+            };
 
             var inner = '<' + dasherize(type) + '-card';
             for (var key in data){

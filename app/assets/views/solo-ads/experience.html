@@ -1,48 +1,30 @@
 <script src="//use.typekit.net/xuz8gem.js"></script>
 <script>try{Typekit.load();}catch(e){}</script>
-<div class="MiniReel" 
-ng-class="{
-    'MiniReel--noBrandProfile' : false
-}">
-    
+<div class="MiniReel"
+    c6-alias="(!!currentCard.params.sponsor || !!currentCard.collateral.logo || !!currentCard.social.length > 0) as hasSponsorship"
+    ng-class="{
+        'MiniReel--noBrandProfile' : !hasSponsorship
+    }">
 
     <header class="mr-titleBar__group clearfix"
-    ng-show="true">
+        ng-show="hasSponsorship">
         <div class="mr-titleBar__disabler" ng-show="!nav.enabled">&nbsp;</div>
         <div class="brandProfile__group clearfix">
-            <a href="#" title="Sponsor link" class="brandProfile__imgBox">
-                <img src="https://yt3.ggpht.com/-E_tsaPMH5Qk/AAAAAAAAAAI/AAAAAAAAAAA/Y8Bz2pEIKeI/s100-c-k-no/photo.jpg" class="brandProfile__img">
+            <a ng-if="!!currentCard.collateral.logo" ng-href="{{currentCard.links.Website}}" target="_blank" title="Sponsor link" class="brandProfile__imgBox">
+                <img ng-src="{{currentCard.collateral.logo}}" class="brandProfile__img">
             </a>
-            <div class="brandProfile__copy">
-                <p class="brandProfile__tag">
+            <div ng-if="!!currentCard.params.sponsor || currentCard.social.length > 0" class="brandProfile__copy">
+                <p ng-if="!!currentCard.params.sponsor" class="brandProfile__tag">
                     Sponsored by 
-                    <a href="#" title="Ubisoft">Ubisoft</a>
+                    <a ng-href="{{currentCard.links.Website}}" target="_blank" title="{{currentCard.params.sponsor}}">{{currentCard.params.sponsor}}</a>
                 </p>
-                <div class="brandProfile__links">
-                    <a href="#" title="YouTube"
-                    class="brandProfile__link sprite 
-                    socialIcons socialIcons--youtube">
-                        <span class="ir">YouTube</span>
-                    </a>
-                    <a href="#" title="Vimeo"
-                    class="brandProfile__link sprite
-                    socialIcons socialIcons--vimeo">
-                        <span class="ir">Vimeo</span>
-                    </a>
-                    <a href="#" title="Facebook"
-                    class="brandProfile__link sprite
-                    socialIcons socialIcons--facebook">
-                        <span class="ir">Facebook</span>
-                    </a>
-                    <a href="#" title="Twitter"
-                    class="brandProfile__link sprite
-                    socialIcons socialIcons--twitter">
-                        <span class="ir">Twitter</span>
-                    </a>
-                    <a href="#" title="Pinterest"
-                    class="brandProfile__link sprite
-                    socialIcons socialIcons--pinterest">
-                        <span class="ir">Pinterest</span>
+                <div ng-if="currentCard.social.length > 0" class="brandProfile__links">
+                    <a ng-repeat="link in currentCard.social"
+                        ng-href="{{link.href}}"
+                        target="_blank"
+                        title="{{link.label}}"
+                        class="brandProfile__link sprite socialIcons socialIcons--{{link.type}}">
+                        <span class="ir">{{link.label}}</span>
                     </a>
                 </div>
             </div>
@@ -52,9 +34,8 @@ ng-class="{
     <ng-include ng-controller="DeckController as DeckCtrl" src="'deck.html' | asset:'views'"></ng-include>
     
 
-    <display-ad-module ng-if="RumbleCtrl.moduleActive('displayAd')"
-        config="currentCard"
-        active="RumbleCtrl.moduleActive('displayAd')">
+    <display-ad-module config="currentCard"
+        active="true">
     </display-ad-module>
 
 </div><!--.MiniReel-->
