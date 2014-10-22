@@ -35,7 +35,6 @@
             {{config.title}}
             <span ng-if="!config.data.hideSource" ng-show="!!config.source" class="card__attributes">via <a ng-href="{{Ctrl.videoUrl}}" target="_blank" title="{{config.source}}">{{config.source}}</a></span>
         </h1>
-
         <div class="sponsorProfile__group clearfix" ng-if="config.collateral.logo || config.social.length > 0 || config.params.sponsor">
             <a ng-if="!!config.collateral.logo" ng-href="{{config.links.Website}}" title="Sponsor link" class="sponsorProfile__imgBox" target="_blank">
                 <img ng-src="{{config.collateral.logo}}" class="sponsorProfile__img">
@@ -43,13 +42,16 @@
             <div class="sponsorProfile__copy" ng-if="config.params.sponsor || config.social.length > 0">
                 <p class="sponsorProfile__tag" ng-if="config.params.sponsor">
                     Sponsored by 
-                    <a ng-href="{{config.links.Website}}" title="Ubisoft">{{config.params.sponsor}}</a>
+                    <a ng-href="{{config.links.Website}}" 
+                    title="{{config.params.sponsor}}" target="_blank">
+                        {{config.params.sponsor}}
+                    </a>
                 </p>
                 <div class="sponsorProfile__links" ng-if="config.social.length > 0">
                     <a ng-repeat="link in config.social"
-                        ng-href="{{link.href}}" title="YouTube"
+                        ng-href="{{link.href}}" title="{{link.label}}"
                         target="_blank"
-                        class="sponsorProfile__link sprite__social socialIcons socialIcons--{{link.type}}">
+                        class="sponsorProfile__link sprite socialIcons socialIcons--{{link.type}}">
                         <span class="ir">{{link.label}}</span>
                     </a>
                 </div>

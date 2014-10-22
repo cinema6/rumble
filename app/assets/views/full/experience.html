@@ -3,17 +3,71 @@
 <div class="MiniReel" ng-class="app.data.experience.data.theme">
     
 
-    <header class="mr-titleBar__group clearfix">
-        <div class="mr-titleBar__disabler" ng-show="!nav.enabled">&nbsp;</div>
-        <div class="mr-titleBar__splashImg"
+    <header class="titleBar__group clearfix">
+        <div class="titleBar__disabler" ng-show="!nav.enabled">&nbsp;</div>
+        <div class="titleBar__splashImg"
         ng-click="RumbleCtrl.jumpTo(tocCards[0])"
         c6-bg-img="{{app.data.experience.data.collateral.splash | envroot}}">
             &nbsp;
         </div>
-        <h1 class="mr-titleBar__title tk--hdr"
-        ng-click="RumbleCtrl.jumpTo(tocCards[0])">
-            {{app.data.experience.data.title}}
+        <h1 class="titleBar__title"
+        ng-class="{'titleBar__title--brandedMR' : true}">
+            <span class="brandedMR__tagline"
+            ng-show="true">
+                <a href="#" target="_blank" title="!!!!BRAND NAME!!!!"
+                class="brandedMR__taglineBrand">!!!!BRAND NAME!!!!</a> 
+                Presents
+            </span>
+            <span ng-click="RumbleCtrl.jumpTo(tocCards[0])" 
+            class="titleBar__titleText tk--hdr">
+                {{app.data.experience.data.title}}
+            </span>
         </h1>
+        <div class="brandProfile__group">
+            <a href="#" title="!!!!BRAND NAME!!!!" target="_blank"
+            class="brandProfile__logoBox">
+                <img class="brandProfile__logo" alt="!!!!BRAND NAME!!!!"
+                src="http://images.gs-cdn.net/static/broadcasts/120_19470543-1402723544.jpg">
+            </a>
+            <div class="brandProfile__linksBox">
+                <a href="!!!!BRAND SITE URL!!!!" title="!!!!BRAND NAME!!!!"
+                target="_blank" class="brandProfile__brandURL">
+                    !!!!BRAND NAME!!!!
+                </a>
+                <div class="brandProfile__links">
+                    <a href="!!!!BRAND SOCIAL LINK!!!!"
+                    title="!!!!SOCIAL MEDIA SITE NAME!!!!"
+                    target="_blank"
+                    class="brandProfile__link sprite socialIcons socialIcons--youtube">
+                        <span class="ir">!!!!SOCIAL MEDIA SITE NAME!!!!</span>
+                    </a>
+                    <a href="!!!!BRAND SOCIAL LINK!!!!"
+                    title="!!!!SOCIAL MEDIA SITE NAME!!!!"
+                    target="_blank"
+                    class="brandProfile__link sprite socialIcons socialIcons--vimeo">
+                        <span class="ir">!!!!SOCIAL MEDIA SITE NAME!!!!</span>
+                    </a>
+                    <a href="!!!!BRAND SOCIAL LINK!!!!"
+                    title="!!!!SOCIAL MEDIA SITE NAME!!!!"
+                    target="_blank"
+                    class="brandProfile__link sprite socialIcons socialIcons--facebook">
+                        <span class="ir">!!!!SOCIAL MEDIA SITE NAME!!!!</span>
+                    </a>
+                    <a href="!!!!BRAND SOCIAL LINK!!!!"
+                    title="!!!!SOCIAL MEDIA SITE NAME!!!!"
+                    target="_blank"
+                    class="brandProfile__link sprite socialIcons socialIcons--twitter">
+                        <span class="ir">!!!!SOCIAL MEDIA SITE NAME!!!!</span>
+                    </a>
+                    <a href="!!!!BRAND SOCIAL LINK!!!!"
+                    title="!!!!SOCIAL MEDIA SITE NAME!!!!"
+                    target="_blank"
+                    class="brandProfile__link sprite socialIcons socialIcons--pinterest">
+                        <span class="ir">!!!!SOCIAL MEDIA SITE NAME!!!!</span>
+                    </a>
+                </div>
+            </div>
+        </div>
     </header>
 
     <ng-include ng-controller="DeckController as DeckCtrl" src="'deck.html' | asset:'views'"></ng-include>
@@ -42,7 +96,7 @@
                 <div class="playlist__thumbHolder"
                 ng-class="{'playlist__thumbHolder--ad' : item.params.ad}">
                     <div class="playlist__thumb"
-                    title="This is the Best Video Title Ever!!!"
+                    title="{{item.title}}"
                     c6-bg-img="{{item.thumbs.small}}">
                         &nbsp;
                     </div>
