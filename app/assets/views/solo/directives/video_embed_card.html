@@ -1,21 +1,10 @@
 <article class="slide__group">
-    <div class="postModule player__height" ng-show="false">
-        <section class="endActions__group">
-            <button class="endActions__watchAgain sprite actionBtn" type="button">
-                <span class="actionBtn__iconBox sprite">&nbsp;</span>
-                <span class="actionBtn__label">Watch Video Again</span>
-            </button>
-            <button class="endActions__visitLink actionBtn" type="button">
-                <span class="actionBtn__iconBox sprite">&nbsp;</span>
-                <span class="actionBtn__label">Visit Sponsor Site</span>
-            </button>
-        </section>
-
-        <div class="overlay" ng-click="onDismiss()">
-            <button class="sprite overlay__closeBtn"><span class="ir">Close</span></button>
-        </div>
-    </div>
-
+    <post-module ng-if="hasModule('post')"
+        active="Ctrl.postModuleActive"
+        on-replay="Ctrl.playVideo()"
+        on-dismiss="Ctrl.postModuleActive = false"
+        sponsor-href="{{config.links.Website}}">
+    </post-module>
     <div class="player__group player__height">
         <button ng-if="Ctrl.enablePlayButton" ng-show="Ctrl.showPlay" ng-click="Ctrl.playVideo()" class="player__play-btn">
             <div class="player__play-icon">
