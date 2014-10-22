@@ -724,6 +724,7 @@ function( angular , c6Defines  , tracker ,
 
         $scope.$on('<vast-card>:init', handleAdInit);
         $scope.$on('<vpaid-card>:init', handleAdInit);
+        $scope.$on('<ad-unit-card>:init', handleAdInit);
 
         $scope.$on('<recap-card>:jumpTo', function(event, index) {
             self.setPosition(index);
