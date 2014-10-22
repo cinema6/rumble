@@ -5,6 +5,7 @@ define(['minireel', 'c6uilib', 'services'], function(minireelModule, c6uilibModu
         var $rootScope,
             $scope,
             $controller,
+            $interval,
             c6EventEmitter,
             VideoEmbedCardCtrl;
 
@@ -41,6 +42,7 @@ define(['minireel', 'c6uilib', 'services'], function(minireelModule, c6uilibModu
             inject(function($injector) {
                 $rootScope = $injector.get('$rootScope');
                 $controller = $injector.get('$controller');
+                $interval = $injector.get('$interval');
                 c6EventEmitter = $injector.get('c6EventEmitter');
 
                 ModuleService = $injector.get('ModuleService');
@@ -290,6 +292,215 @@ define(['minireel', 'c6uilib', 'services'], function(minireelModule, c6uilibModu
 
                         $scope.$apply(function() {
                             $scope.active = true;
+                        });
+                    });
+
+                    describe('if the video has never played before', function() {
+                        beforeEach(function() {
+                            $scope.$apply(function() {
+                                $scope.active = false;
+                            });
+
+                            $scope.config._data.playerEvents.play.emitCount = 0;
+                            spyOn($scope, '$emit').andCallThrough();
+
+                            $scope.$apply(function() {
+                                $scope.active = true;
+                            });
+                        });
+
+                        it('should $emit <mr-card>:init', function() {
+                            expect($scope.$emit).toHaveBeenCalledWith('<mr-card>:init', jasmine.any(Function));
+                        });
+
+                        describe('when the passed function is called back', function() {
+                            var navController;
+
+                            function passNavController() {
+                                $scope.$emit.mostRecentCall.args[1](navController);
+                            }
+
+                            function timeupdate(time) {
+                                iface.currentTime = time;
+                                iface.emit('timeupdate');
+                            }
+
+                            beforeEach(function() {
+                                navController = {
+                                    tick: jasmine.createSpy('NavController.tick()')
+                                        .andCallFake(function() { return this; }),
+                                    enabled: jasmine.createSpy('NavController.enabled()')
+                                        .andCallFake(function() { return this; })
+                                };
+                            });
+
+                            describe('if the card can be skipped any time', function() {
+                                beforeEach(function() {
+                                    $scope.config.data.skip = true;
+                                    passNavController();
+                                });
+
+                                it('should not disable the nav', function() {
+                                    expect(navController.enabled).not.toHaveBeenCalled();
+                                    expect(navController.tick).not.toHaveBeenCalled();
+                                });
+                            });
+
+                            describe('if the card can never be skipped', function() {
+                                beforeEach(function() {
+                                    $scope.config.data.skip = false;
+                                });
+
+                                [true, false].forEach(function(autoplay) {
+                                    describe('if autoplay is ' + autoplay, function() {
+                                        beforeEach(function() {
+                                            iface.duration = 60;
+                                            $scope.config.data.autoplay = autoplay;
+                                            passNavController();
+                                        });
+
+                                        it('should tick the nav with the video\'s duration', function() {
+                                            expect(navController.tick).toHaveBeenCalledWith(60);
+                                        });
+
+                                        it('should disable the nav', function() {
+                                            expect(navController.enabled).toHaveBeenCalledWith(false);
+                                        });
+
+                                        it('should decrement the time as the video progresses', function() {
+                                            timeupdate(0.5);
+                                            expect(navController.tick).toHaveBeenCalledWith(59.5);
+
+                                            timeupdate(2);
+                                            expect(navController.tick).toHaveBeenCalledWith(58);
+                                        });
+
+                                        describe('when the video ends', function() {
+                                            var tickCount, enabledCount;
+
+                                            beforeEach(function() {
+                                                iface.emit('ended');
+                                                tickCount = navController.tick.callCount;
+                                                enabledCount = navController.enabled.callCount;
+                                            });
+
+                                            it('should enable the nav', function() {
+                                                expect(navController.enabled).toHaveBeenCalledWith(true);
+                                            });
+
+                                            it('should not interact with the nav controller again', function() {
+                                                iface.emit('timeupdate');
+                                                expect(navController.tick.callCount).toBe(tickCount, 'called tick');
+
+                                                iface.emit('ended');
+                                                expect(navController.enabled.callCount).toBe(enabledCount, 'called enabled');
+                                            });
+                                        });
+                                    });
+                                });
+                            });
+
+                            describe('if the card can be skipped after a certain amount of time', function() {
+                                beforeEach(function() {
+                                    $scope.config.data.skip = 6;
+                                    passNavController();
+                                });
+
+                                it('should tick the controller with the amount of time remaining', function() {
+                                    expect(navController.tick).toHaveBeenCalledWith(6);
+                                });
+
+                                it('should disable the nav', function() {
+                                    expect(navController.enabled).toHaveBeenCalledWith(false);
+                                });
+
+                                describe('if the video is autoplay', function() {
+                                    beforeEach(function() {
+                                        $scope.config.data.autoplay = true;
+                                        passNavController();
+                                    });
+
+                                    it('should not count via $interval', function() {
+                                        $interval.flush(1000);
+                                        expect(navController.tick).not.toHaveBeenCalledWith(5);
+                                    });
+
+                                    it('should tick the nav controller as the video plays', function() {
+                                        timeupdate(0.2);
+                                        expect(navController.tick).toHaveBeenCalledWith(5.8);
+
+                                        timeupdate(1);
+                                        expect(navController.tick).toHaveBeenCalledWith(5);
+
+                                        timeupdate(6.1);
+                                        expect(navController.tick).toHaveBeenCalledWith(0);
+                                    });
+
+                                    it('should enable the nav when the video has played enough', function() {
+                                        timeupdate(3);
+                                        expect(navController.enabled).not.toHaveBeenCalledWith(true);
+
+                                        timeupdate(6.4);
+                                        expect(navController.enabled).toHaveBeenCalledWith(true);
+                                    });
+
+                                    it('should remove the timeupdate listener after the nav has been enabled', function() {
+                                        var callCount;
+
+                                        timeupdate(6);
+                                        callCount = navController.tick.callCount;
+
+                                        timeupdate(7);
+                                        expect(navController.tick.callCount).toBe(callCount);
+                                    });
+                                });
+
+                                describe('if the video is not autoplay', function() {
+                                    beforeEach(function() {
+                                        $scope.config.data.autoplay = false;
+                                        iface.removeAllListeners();
+                                        passNavController();
+                                    });
+
+                                    it('should count down via a $interval', function() {
+                                        $interval.flush(1000);
+                                        expect(navController.tick).toHaveBeenCalledWith(6);
+
+                                        $interval.flush(1000);
+                                        expect(navController.tick).toHaveBeenCalledWith(5);
+
+                                        $interval.flush(1000);
+                                        expect(navController.tick).toHaveBeenCalledWith(4);
+                                    });
+
+                                    it('should enable the nav after the countdown', function() {
+                                        $interval.flush(1000);
+                                        expect(navController.enabled).not.toHaveBeenCalledWith(true);
+
+                                        $interval.flush(5000);
+                                        expect(navController.enabled).toHaveBeenCalledWith(true);
+                                    });
+                                });
+                            });
+                        });
+                    });
+
+                    describe('if the video has played', function() {
+                        beforeEach(function() {
+                            $scope.$apply(function() {
+                                $scope.active = false;
+                            });
+
+                            $scope.config._data.playerEvents.play.emitCount = 1;
+                            spyOn($scope, '$emit').andCallThrough();
+
+                            $scope.$apply(function() {
+                                $scope.active = true;
+                            });
+                        });
+
+                        it('should not $emit <mr-card>:init', function() {
+                            expect($scope.$emit).not.toHaveBeenCalled();
                         });
                     });
 
