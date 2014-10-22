@@ -3,44 +3,46 @@ function( angular ) {
     'use strict';
 
     return angular.module('c6.rumble.cards.adUnit', [])
-        .controller('AdUnitCardController', ['$rootScope','$scope','$log','$interval','ModuleService','EventService','c6AppData',
-        function                            ( $rootScope , $scope , $log , $interval , ModuleService , EventService , c6AppData ) {
+        .controller('AdUnitCardController', ['$rootScope','$scope','$log','$interval','ModuleService','EventService','c6AppData','compileAdTag','c6ImagePreloader',
+        function                            ( $rootScope , $scope , $log , $interval , ModuleService , EventService , c6AppData , compileAdTag , c6ImagePreloader ) {
             var self = this,
-                config = $scope.config,
                 profile = $scope.profile,
+                config = $scope.config,
+                data = config.data,
                 _data = config._data = config._data || {
                     playerEvents: {},
-                    textMode: true,
                     modules: {
-                        ballot: {
-                            ballotActive: false,
-                            resultsActive: false,
-                            vote: null
-                        },
                         displayAd: {
                             active: false
                         }
                     }
                 },
-                data = config.data,
                 hasStarted = !data.autoplay,
-                shouldPlay = false,
+                adHasBeenCalledFor = false,
                 shouldGoForward = false,
                 shouldLoadAd = false,
-                adHasBeenCalledFor = false,
-                ballotTargetPlays = 0,
-                resultsTargetPlays = 0,
+                shouldPlay = false,
                 player;
+
 
             function goForward() {
                 $scope.$emit('<mr-card>:contentEnd', config.meta || config);
+            }
+
+            function resetState() {
+                _data.playerEvents.play.emitCount = 0;
+                hasStarted = !data.autoplay;
+                adHasBeenCalledFor = false;
+                shouldGoForward = false;
+                shouldLoadAd = false;
+                shouldPlay = false;
             }
 
             function handleIface(event, iface) {
                 function controlNavigation(controller) {
                     var autoplay = data.autoplay,
                         mustWatchEntireAd = data.skip === false,
-                        canSkipAnyTime = data.skip === true,
+                        canSkipAnyTime = !data.skip || data.skip === true,
                         waitTime;
 
                     function getWaitTime() {
@@ -89,7 +91,8 @@ function( angular ) {
                     }
 
                     if (autoplay) {
-                        return iface.on('timeupdate', tickNav);
+                        // there are no timeupdates coming from the VPAID player! ARRGHHH
+                        // return iface.on('timeupdate', tickNav);
                     }
 
                     $interval(function() {
@@ -103,36 +106,10 @@ function( angular ) {
 
                 player = iface;
 
-                _data.playerEvents = EventService.trackEvents(iface, ['play', 'pause']);
-
-                Object.defineProperties(_data.modules.ballot, {
-                    ballotActive: {
-                        configurable: true,
-                        get: function() {
-                            var playing = (!iface.paused && !iface.ended),
-                                voted = angular.isNumber(_data.modules.ballot.vote),
-                                hasPlayed = _data.playerEvents.play.emitCount > ballotTargetPlays;
-
-                            return !voted && !playing && hasPlayed;
-                        }
-                    },
-                    resultsActive: {
-                        get: function() {
-                            var playing = (!iface.paused && !iface.ended),
-                                voted = angular.isNumber(this.vote),
-                                hasPlayed = _data.playerEvents.play.emitCount > resultsTargetPlays;
-
-                            if (c6AppData.behaviors.inlineVoteResults) {
-                                return voted;
-                            }
-
-                            return voted && !playing && hasPlayed;
-                        }
-                    }
-                });
+                _data.playerEvents = EventService.trackEvents(iface, ['play']);
 
                 player.on('ready', function() {
-                    if (shouldLoadAd) {
+                    if ($scope.adType === 'vpaid' && shouldLoadAd) {
                         player.load();
                     }
                     if (shouldPlay) {
@@ -141,12 +118,10 @@ function( angular ) {
                 });
 
                 player.on('ended', function() {
-                    if (!self.hasModule('ballot')) {
-                        if ($scope.active) {
-                            goForward();
-                        } else {
-                            shouldGoForward = true;
-                        }
+                    if ($scope.active) {
+                        goForward();
+                    } else {
+                        shouldGoForward = true;
                     }
                 });
 
@@ -160,13 +135,17 @@ function( angular ) {
 
                 player.on('play', function() {
                     hasStarted = true;
-                    _data.modules.displayAd.active = false;
+                    if (!$scope.active || !shouldPlay) {
+                        player.pause();
+                    }
                 });
 
-                player.on('pause', function() {
-                    if (self.hasModule('displayAd') && self.enableDisplayAd) {
-                        _data.modules.displayAd.active = true;
-                    }
+                player.on('canplay', function() {
+                    // not coming through from VPAID
+                });
+
+                player.on('timeupdate', function() {
+                    // not coming through from VPAID
                 });
 
                 player.on('companionsReady', function() {
@@ -182,65 +161,37 @@ function( angular ) {
                 $scope.$watch('active', function(active, wasActive) {
                     if (!active && !wasActive) { return; }
 
-                    if (c6AppData.experience.data.mode === 'lightbox') {
-                        $rootScope.$broadcast('resize');
-                    }
-
                     if (active) {
                         if (shouldGoForward) {
                             goForward();
-                        } else if (_data.playerEvents.play.emitCount < 1) {
-                            $scope.$emit('<vpaid-card>:init', controlNavigation);
+                            return;
+                        }
+
+                        if (player.ended || _data.playerEvents.play.emitCount < 1) {
+                            if (player.ended) {
+                                resetState();
+                            }
+                            $scope.$emit('<ad-unit-card>:init', controlNavigation);
                             if (data.autoplay) {
-                                shouldPlay = true;
                                 adHasBeenCalledFor = true;
-                                player.play().then(null, goForward);
+                                shouldPlay = true;
+                                player.play();
                             }
                         }
                     } else {
-                        if (!player.paused) {
-                            shouldPlay = false;
-                            player.pause();
-                        }
-                        // _data.modules.displayAd.active = true;
+                        shouldPlay = false;
+                        player.pause();
                     }
                 });
             }
 
             Object.defineProperties(this, {
-                flyAway: {
-                    get: function() {
-                        var ballot = $scope.config._data.modules.ballot,
-                            behaviors = c6AppData.behaviors;
-
-                        if (!$scope.active) { return true; }
-
-                                /* If we have a ballot:  If the ballot is being show.   If the results are a modal and they're being shown. */
-                        return (this.hasModule('ballot') && (ballot.ballotActive || (ballot.resultsActive && !behaviors.inlineVoteResults))) ||
-                            /* If there is a separate view for text, and if that mode is active: */
-                            (behaviors.separateTextView && _data.textMode) ||
-                            /* If this is a click-to-play minireel, it hasn't been played yet and the play button is enabled */
-                            (!config.data.autoplay && !(_data.playerEvents.play || {}).emitCount && this.enablePlayButton);
-                    }
-                },
-                showVideo: {
-                    get: function() {
-                        return $scope.active && !_data.modules.displayAd.active;
-                    }
-                },
                 showPlay: {
                     get: function() {
-                        return !!player && player.paused && !_data.modules.displayAd.active && hasStarted;
-                    }
-                },
-                enableDisplayAd: {
-                    get: function() {
-                        return (!!player && player.ended) || !$scope.profile.inlineVideo;
+                        return !!player && player.paused && hasStarted;
                     }
                 }
             });
-
-            this.hasModule = ModuleService.hasModule.bind(ModuleService, config.modules);
 
             this.enablePlayButton = !$scope.profile.touch;
 
@@ -248,52 +199,25 @@ function( angular ) {
                 player.play();
             };
 
-            this.dismissBallot = function() {
-                ballotTargetPlays = _data.playerEvents.play.emitCount;
-            };
+            $scope.adType = profile.flash ? 'vpaid' : 'vast';
+            $scope.adTag = compileAdTag(config.data[$scope.adType]);
 
-            this.dismissBallotResults = function() {
-                resultsTargetPlays = _data.playerEvents.play.emitCount;
-            };
-
-            this.showText = function() {
-                player.pause();
-                _data.textMode = true;
-            };
-
-            this.hideText = function() {
-                if (profile.autoplay) {
-                    player.play();
-                }
-
-                _data.textMode = false;
-            };
-
-            $scope.$watch('onDeck', function(shouldLoad) {
-                if (shouldLoad) {
-                    _data.modules.displayAd.src = config.displayAd;
-
+            $scope.$watch('onDeck', function(onDeck) {
+                if (onDeck) {
                     if (!adHasBeenCalledFor) {
                         adHasBeenCalledFor = true;
-                        if (!player || !player.load) {
-                            shouldLoadAd = true;
-                        } else {
+
+                        if (player && player.load) {
                             player.load();
+                        } else {
+                            shouldLoadAd = true;
                         }
                     }
+
+                    if (config.thumbs) {
+                        c6ImagePreloader.load([config.thumbs.large]);
+                    }
                 }
-            });
-
-            $scope.$watch('config._data.modules.ballot.vote', function(vote, prevVote) {
-                if (vote === prevVote) { return; }
-
-                self.showText();
-            });
-
-            $scope.$watch('config._data.textMode', function(textMode, wasTextMode) {
-                if (textMode === wasTextMode) { return; }
-
-                self.dismissBallot();
             });
 
             $scope.$on('<vpaid-player>:init', handleIface);
@@ -306,19 +230,12 @@ function( angular ) {
             });
         }])
 
-        .directive('adUnitCard',['$log','$compile','assetFilter','compileAdTag',
-        function                ( $log , $compile , assetFilter , compileAdTag ) {
+        .directive('adUnitCard',['$log','assetFilter',
+        function                ( $log , assetFilter ) {
             $log = $log.context('<ad-unit-card>');
-
-            function fnLink(scope) {
-                scope.adType = scope.profile.flash ? 'vpaid' : 'vast';
-
-                scope.adTag = compileAdTag(scope.config.data[scope.adType]);
-            }
 
             return {
                 restrict: 'E',
-                link: fnLink,
                 controller: 'AdUnitCardController',
                 controllerAs: 'Ctrl',
                 templateUrl: assetFilter('directives/ad_unit_card.html', 'views')
