@@ -27,7 +27,7 @@ define(['minireel','modules/ballot'], function(minireelModule, ballotModule) {
                     var self = this;
 
                     this.getBallot = jasmine.createSpy('rumbleVotes.getReturnsForItem()')
-                        .andCallFake(function() {
+                        .and.callFake(function() {
                             return self._.getBallotDeferred.promise;
                         });
 

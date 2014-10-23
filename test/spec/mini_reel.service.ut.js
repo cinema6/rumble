@@ -27,7 +27,7 @@ define(['app', 'minireel', 'c6uilib', 'angular'], function(appModule, minireelMo
 
                 $provide.value('VideoThumbService', {
                     getThumbs: jasmine.createSpy('VideoThumbService.getThumb()')
-                        .andCallFake(function() {
+                        .and.callFake(function() {
                             return $q.defer().promise;
                         })
                 });
@@ -180,7 +180,7 @@ define(['app', 'minireel', 'c6uilib', 'angular'], function(appModule, minireelMo
                             ]
                         };
 
-                        VideoThumbService.getThumbs.andCallFake(function(type, id) {
+                        VideoThumbService.getThumbs.and.callFake(function(type, id) {
                             switch (id) {
 
                             case 'jofNR_WkoCE':
@@ -210,10 +210,10 @@ define(['app', 'minireel', 'c6uilib', 'angular'], function(appModule, minireelMo
                             }
                         });
 
-                        spyOn(angular, 'copy').andCallFake(function(value) {
+                        spyOn(angular, 'copy').and.callFake(function(value) {
                             var result = copy(value);
 
-                            angular.copy.mostRecentCall.result = result;
+                            angular.copy.calls.mostRecent().result = result;
 
                             return result;
                         });
@@ -223,7 +223,7 @@ define(['app', 'minireel', 'c6uilib', 'angular'], function(appModule, minireelMo
 
                     it('should return a copy of the deck', function() {
                         expect(angular.copy).toHaveBeenCalledWith(mrData.deck);
-                        expect(result).toBe(angular.copy.mostRecentCall.result);
+                        expect(result).toBe(angular.copy.calls.mostRecent().result);
                     });
 
                     it('should give each video a player', function() {
@@ -548,7 +548,7 @@ define(['app', 'minireel', 'c6uilib', 'angular'], function(appModule, minireelMo
                         it('should preload all of the small images', function() {
                             $rootScope.$digest();
 
-                            expect(c6ImagePreloader.load.callCount).toBe(4);
+                            expect(c6ImagePreloader.load.calls.count()).toBe(4);
 
                             expect(c6ImagePreloader.load).toHaveBeenCalledWith(['http://img.youtube.com/vi/gy1B3agGNxw/2.jpg']);
                             expect(c6ImagePreloader.load).toHaveBeenCalledWith(['http://s2.dmcdn.net/Dm9Np/x120-6Xz.jpg']);
@@ -590,7 +590,7 @@ define(['app', 'minireel', 'c6uilib', 'angular'], function(appModule, minireelMo
                                             splash: '/collateral/mysplash.jpg'
                                         };
 
-                                        spyOn(Date, 'now').andReturn(now);
+                                        spyOn(Date, 'now').and.returnValue(now);
 
                                         result = MiniReelService.createDeck(mrData);
                                     });
@@ -645,7 +645,7 @@ define(['app', 'minireel', 'c6uilib', 'angular'], function(appModule, minireelMo
                                     nowMethod = Date.now;
                                     now = Date.now();
 
-                                    spyOn(Date, 'now').andReturn(now);
+                                    spyOn(Date, 'now').and.returnValue(now);
 
                                     mrData.collateral = {
                                         splash: '/collateral/mysplash.jpg'

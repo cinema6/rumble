@@ -59,11 +59,11 @@ define(['app', 'angular'], function(appModule, angular) {
                 angularElementMock.remove      = jasmine.createSpy('elt.remove');
                 angularElementMock.attr        = function (name) { return name; };
                 
-                spyOn(angular,'element').andCallFake(function(elt){
+                spyOn(angular,'element').and.callFake(function(elt){
                     return angularElementMock; 
                 });
 
-                spyOn($window,'addEventListener').andCallFake(function(ename,listener){
+                spyOn($window,'addEventListener').and.callFake(function(ename,listener){
                     msgListener = listener;       
                 });
 
@@ -84,7 +84,7 @@ define(['app', 'angular'], function(appModule, angular) {
                             height: 100,
                             videoId: 'xyz'
                         });
-                    }).toThrow('Parent element is required for vimeo.createPlayer');
+                    }).toThrow(new Error('Parent element is required for vimeo.createPlayer'));
                 });
 
             });
@@ -94,7 +94,7 @@ define(['app', 'angular'], function(appModule, angular) {
                     var result;
 
                     spyOn(vimeo, 'formatPlayerSrc')
-                        .andCallFake(function(videoId,playerId,params){
+                        .and.callFake(function(videoId,playerId,params){
                             return 'http://player.vimeo.com/x123?api=1&player_id=player1';
                         });
 
@@ -106,12 +106,12 @@ define(['app', 'angular'], function(appModule, angular) {
 
                     expect(vimeo.formatPlayerSrc)
                         .toHaveBeenCalledWith('x123','player1',undefined);
-                    expect(angular.element.calls[0].args[0]).toEqual('<iframe id="player1" src="http://player.vimeo.com/x123?api=1&player_id=player1" width="100" height="100"></iframe>');
-                    expect(angular.element.calls[1].args[0]).toEqual(angularElementMock);
+                    expect(angular.element.calls.argsFor(0)[0]).toEqual('<iframe id="player1" src="http://player.vimeo.com/x123?api=1&player_id=player1" width="100" height="100"></iframe>');
+                    expect(angular.element.calls.argsFor(1)[0]).toEqual(angularElementMock);
 
                     expect(angularElementMock.prepend)
                         .toHaveBeenCalledWith(angularElementMock);
-                    expect($window.addEventListener.calls[0].args[0]).toEqual('message');
+                    expect($window.addEventListener.calls.argsFor(0)[0]).toEqual('message');
                 });
             });
 
@@ -119,7 +119,7 @@ define(['app', 'angular'], function(appModule, angular) {
                 var player;
                 beforeEach(function(){
                 
-                    spyOn(angularElementMock,'attr').andCallFake(function(name){
+                    spyOn(angularElementMock,'attr').and.callFake(function(name){
                         return (name === 'src') ? 
                             'http://player.vimeo.com/x123?api=1&player_id=player1' : '';
                     });
@@ -195,7 +195,7 @@ define(['app', 'angular'], function(appModule, angular) {
                     it('destroy', function(){
                         player.destroy();
                         expect(angularElementMock.remove).toHaveBeenCalled();
-                        expect($window.removeEventListener.calls[0].args[0]).toEqual('message');
+                        expect($window.removeEventListener.calls.argsFor(0)[0]).toEqual('message');
                     });
                 });
 
@@ -263,12 +263,12 @@ define(['app', 'angular'], function(appModule, angular) {
                         player.destroy();
                         $rootScope.$apply();
                         expect(successSpy).not.toHaveBeenCalled();
-                        expect(failedSpy.callCount).toEqual(3);
-                        expect(failedSpy.argsForCall[0][0].message)
+                        expect(failedSpy.calls.count()).toEqual(3);
+                        expect(failedSpy.calls.argsFor(0)[0].message)
                             .toEqual('Player destroyed, cannot resolve getDuration');
-                        expect(failedSpy.argsForCall[1][0].message)
+                        expect(failedSpy.calls.argsFor(1)[0].message)
                             .toEqual('Player destroyed, cannot resolve getCurrentTime');
-                        expect(failedSpy.argsForCall[2][0].message)
+                        expect(failedSpy.calls.argsFor(2)[0].message)
                             .toEqual('Player destroyed, cannot resolve paused');
                     });
 

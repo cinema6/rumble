@@ -33,7 +33,7 @@ define(['cards/vimeo', 'services', 'app', 'angular'], function(vimeoModule, serv
                 });
 
                 vimeo.createPlayer = jasmine.createSpy('vimeo.createPlayer')
-                .andCallFake(function(playerId,config,$parentElement){
+                .and.callFake(function(playerId,config,$parentElement){
                     var mockPlayer = {
                         on                  : jasmine.createSpy('vimeoPlayer.on'),
                         once                : jasmine.createSpy('vimeoPlayer.once'),
@@ -54,21 +54,21 @@ define(['cards/vimeo', 'services', 'app', 'angular'], function(vimeoModule, serv
                         _removes            : {}
                     };
 
-                    mockPlayer.on.andCallFake(function(eventName,handler){
+                    mockPlayer.on.and.callFake(function(eventName,handler){
                         if (mockPlayer._on[eventName] === undefined){
                             mockPlayer._on[eventName] = [];
                         }
                         mockPlayer._on[eventName].push(handler);
                     });
 
-                    mockPlayer.once.andCallFake(function(eventName,handler){
+                    mockPlayer.once.and.callFake(function(eventName,handler){
                         if (mockPlayer._once[eventName] === undefined){
                             mockPlayer._once[eventName] = [];
                         }
                         mockPlayer._once[eventName].push(handler);
                     });
 
-                    mockPlayer.removeListener.andCallFake(function(eventName,listener){
+                    mockPlayer.removeListener.and.callFake(function(eventName,listener){
                         var ons = mockPlayer._on[eventName] || [],
                             onces = mockPlayer._once[eventName] || [],
                             onIndex = ons.indexOf(listener),
@@ -84,9 +84,9 @@ define(['cards/vimeo', 'services', 'app', 'angular'], function(vimeoModule, serv
                         mockPlayer._removes[eventName].push(listener);
                     });
 
-                    mockPlayer.getDurationAsync.andReturn($q.defer().promise);
+                    mockPlayer.getDurationAsync.and.returnValue($q.defer().promise);
 
-                    mockPlayer.getPlayerId.andReturn('68160950');
+                    mockPlayer.getPlayerId.and.returnValue('68160950');
 
                     mockPlayers.push(mockPlayer);
                     return mockPlayer;
@@ -103,7 +103,7 @@ define(['cards/vimeo', 'services', 'app', 'angular'], function(vimeoModule, serv
                 $q          = $injector.get('$q');
                 
                 $log.context = jasmine.createSpy('$log.context');
-                $log.context.andCallFake(function() { return $log; });
+                $log.context.and.callFake(function() { return $log; });
 
                 $rootScope.config = {};
                 $scope = $rootScope.$new();
@@ -124,7 +124,7 @@ define(['cards/vimeo', 'services', 'app', 'angular'], function(vimeoModule, serv
                     $scope.$apply(function() {
                         $compile('<vimeo-card></vimeo-card>')($scope);
                     });
-                }).toThrow('<vimeo-card> requires the videoid attribute to be set.');
+                }).toThrow(new Error('<vimeo-card> requires the videoid attribute to be set.'));
             });
 
             it('will create a player',function(){
@@ -134,8 +134,8 @@ define(['cards/vimeo', 'services', 'app', 'angular'], function(vimeoModule, serv
                 $timeout.flush();
                 expect($log.context).toHaveBeenCalledWith('<vimeo-card>');
                 expect(mockPlayers.length).toEqual(1);
-                expect(vimeo.createPlayer.calls[0].args[0]).toEqual('vm_abc123');
-                expect(vimeo.createPlayer.calls[0].args[1]).toEqual({
+                expect(vimeo.createPlayer.calls.argsFor(0)[0]).toEqual('vm_abc123');
+                expect(vimeo.createPlayer.calls.argsFor(0)[1]).toEqual({
                     videoId: 'abc123',
                     width: '1',
                     height: '2',
@@ -169,7 +169,7 @@ define(['cards/vimeo', 'services', 'app', 'angular'], function(vimeoModule, serv
             beforeEach(function(){
                 iface = null, addSpy = null;
                 addSpy = jasmine.createSpy('playerAdd');
-                addSpy.andCallFake(function(event,playerInterface){
+                addSpy.and.callFake(function(event,playerInterface){
                     iface = playerInterface;
                 });
 
@@ -425,7 +425,7 @@ define(['cards/vimeo', 'services', 'app', 'angular'], function(vimeoModule, serv
                                 $timeout.flush();
 
                                 player = mockPlayers[1];
-                                player.getDurationAsync.andReturn(duration.promise);
+                                player.getDurationAsync.and.returnValue(duration.promise);
 
                                 player._on.ready[0]({},player);
                                 $timeout.flush();
@@ -492,7 +492,7 @@ define(['cards/vimeo', 'services', 'app', 'angular'], function(vimeoModule, serv
                                 $timeout.flush();
 
                                 player = mockPlayers[1];
-                                player.getDurationAsync.andReturn(duration.promise);
+                                player.getDurationAsync.and.returnValue(duration.promise);
 
                                 player._on.ready[0]({},player);
                                 $timeout.flush();
@@ -665,7 +665,7 @@ define(['cards/vimeo', 'services', 'app', 'angular'], function(vimeoModule, serv
                                 '<vimeo-card videoid="abc123" width="1" height="2" twerk="1"></vimeo-card>'
                             )($scope);
                         });
-                        spyOn(iface, 'twerk').andCallFake(function() {
+                        spyOn(iface, 'twerk').and.callFake(function() {
                             return twerkDeferred.promise;
                         });
                         $timeout.flush();
@@ -757,9 +757,7 @@ define(['cards/vimeo', 'services', 'app', 'angular'], function(vimeoModule, serv
                     iface.twerk().then(resolveSpy,rejectSpy);
                     $scope.$digest();
                     expect(resolveSpy).not.toHaveBeenCalled();
-                    expect(rejectSpy).toHaveBeenCalledWith({
-                        message : 'Player is not ready to twerk'
-                    });
+                    expect(rejectSpy).toHaveBeenCalledWith(new Error('Player is not ready to twerk'));
                     expect(iface.twerked).toBe(false);
                 });
 
@@ -787,9 +785,7 @@ define(['cards/vimeo', 'services', 'app', 'angular'], function(vimeoModule, serv
                     
                     $timeout.flush(1000);
                     expect(resolveSpy).not.toHaveBeenCalled();
-                    expect(rejectSpy).toHaveBeenCalledWith({
-                        message : 'Player twerk timed out'
-                    });
+                    expect(rejectSpy).toHaveBeenCalledWith(new Error('Player twerk timed out'));
                     expect(iface.twerked).toBe(false);
                 });
 
@@ -804,9 +800,7 @@ define(['cards/vimeo', 'services', 'app', 'angular'], function(vimeoModule, serv
                     
                     $timeout.flush(5000);
                     expect(resolveSpy).not.toHaveBeenCalled();
-                    expect(rejectSpy).toHaveBeenCalledWith({
-                        message : 'Player twerk timed out'
-                    });
+                    expect(rejectSpy).toHaveBeenCalledWith(new Error('Player twerk timed out'));
                     expect(iface.twerked).toBe(false);
                 });
 
@@ -821,10 +815,8 @@ define(['cards/vimeo', 'services', 'app', 'angular'], function(vimeoModule, serv
                     $scope.$apply(function() {
                         iface.twerk().then(resolveSpy, rejectSpy);
                     });
-                    expect(rejectSpy).toHaveBeenCalledWith({
-                        message: 'Player has already been twerked'
-                    });
-                    expect(mockPlayers[0].play.callCount).toBe(1);
+                    expect(rejectSpy).toHaveBeenCalledWith(new Error('Player has already been twerked'));
+                    expect(mockPlayers[0].play.calls.count()).toBe(1);
                     expect(mockPlayers[0]._on.playProgress.length).toBe(1);
                 });
 
@@ -965,10 +957,10 @@ define(['cards/vimeo', 'services', 'app', 'angular'], function(vimeoModule, serv
 
                         player._on.play[0](player);
                         expect(iface.emit).toHaveBeenCalledWith('play', iface);
-                        callCount = iface.emit.callCount;
+                        callCount = iface.emit.calls.count();
 
                         player._on.play[0](player);
-                        expect(iface.emit.callCount).toBe(callCount + 1);
+                        expect(iface.emit.calls.count()).toBe(callCount + 1);
                     });
                 });
             });
@@ -1008,16 +1000,16 @@ define(['cards/vimeo', 'services', 'app', 'angular'], function(vimeoModule, serv
                     expect(mockPlayers[0].seekTo).toHaveBeenCalledWith(10);
 
                     mockPlayers[0]._on.playProgress[0](mockPlayers[0], { seconds: 10 });
-                    expect(mockPlayers[0].seekTo.callCount).toBe(1);
+                    expect(mockPlayers[0].seekTo.calls.count()).toBe(1);
 
                     mockPlayers[0]._on.playProgress[0](mockPlayers[0], { seconds: 7 });
-                    expect(mockPlayers[0].seekTo.callCount).toBe(1);
+                    expect(mockPlayers[0].seekTo.calls.count()).toBe(1);
 
                     mockPlayers[0]._on.playProgress[0](mockPlayers[0], { seconds: 8 });
-                    expect(mockPlayers[0].seekTo.callCount).toBe(1);
+                    expect(mockPlayers[0].seekTo.calls.count()).toBe(1);
 
                     mockPlayers[0]._on.playProgress[0](mockPlayers[0], { seconds: 9 });
-                    expect(mockPlayers[0].seekTo.callCount).toBe(1);
+                    expect(mockPlayers[0].seekTo.calls.count()).toBe(1);
                 });
             });
 
@@ -1037,10 +1029,10 @@ define(['cards/vimeo', 'services', 'app', 'angular'], function(vimeoModule, serv
                     expect(iface.emit).toHaveBeenCalledWith('timeupdate', iface);
 
                     mockPlayers[0]._on.playProgress[0](mockPlayers[0], { seconds: 20 });
-                    expect(iface.emit.callCount).toBe(2);
+                    expect(iface.emit.calls.count()).toBe(2);
 
                     mockPlayers[0]._on.playProgress[0](mockPlayers[0], { seconds: 30 });
-                    expect(iface.emit.callCount).toBe(3);
+                    expect(iface.emit.calls.count()).toBe(3);
                 });
             });
 
@@ -1089,7 +1081,7 @@ define(['cards/vimeo', 'services', 'app', 'angular'], function(vimeoModule, serv
 
                     mockPlayers[0]._on.playProgress[0](mockPlayers[0], { seconds : 10 });
                     expect(mockPlayers[0].pause).toHaveBeenCalled();
-                    expect(mockPlayers[0].emit.mostRecentCall.args[0]).toEqual('finish');
+                    expect(mockPlayers[0].emit.calls.mostRecent().args[0]).toEqual('finish');
                 });
 
                 it('will not regenerate the player by default', function(){
@@ -1103,13 +1095,13 @@ define(['cards/vimeo', 'services', 'app', 'angular'], function(vimeoModule, serv
                     $timeout.flush();
                     expect(mockPlayers.length).toEqual(1);
                     expect(iface.isReady()).toEqual(true);
-                    expect(mockPlayers[0].destroy.callCount).toEqual(0);
+                    expect(mockPlayers[0].destroy.calls.count()).toEqual(0);
 
                     //simulate the firing of the finish event
                     mockPlayers[0]._on.finish[0](mockPlayers[0]);
                     expect(function(){$timeout.flush();}).toThrow();
                     expect(mockPlayers.length).toEqual(1);
-                    expect(mockPlayers[0].destroy.callCount).toEqual(0);
+                    expect(mockPlayers[0].destroy.calls.count()).toEqual(0);
                     expect(iface.isReady()).toEqual(true);
                 });
 
@@ -1123,13 +1115,13 @@ define(['cards/vimeo', 'services', 'app', 'angular'], function(vimeoModule, serv
                     $timeout.flush();
                     expect(mockPlayers.length).toEqual(1);
                     expect(iface.isReady()).toEqual(true);
-                    expect(mockPlayers[0].destroy.callCount).toEqual(0);
+                    expect(mockPlayers[0].destroy.calls.count()).toEqual(0);
 
                     //simulate the firing of the finish event
                     mockPlayers[0]._on.finish[0](mockPlayers[0]);
                     $timeout.flush();
                     expect(mockPlayers.length).toEqual(2);
-                    expect(mockPlayers[0].destroy.callCount).toEqual(1);
+                    expect(mockPlayers[0].destroy.calls.count()).toEqual(1);
                     expect(iface.isReady()).toEqual(false);
                 });
             });

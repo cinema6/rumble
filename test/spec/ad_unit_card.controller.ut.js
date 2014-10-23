@@ -15,18 +15,10 @@ define(['minireel', 'services'], function(minireelModule) {
 
 
         function Player() {
-            var self = this;
+            this.play = jasmine.createSpy('iface.play()');
+            this.pause = jasmine.createSpy('iface.pause()');
+            this.load = jasmine.createSpy('iface.load()');
 
-            this.play = jasmine.createSpy('iface.play()')
-                .andCallFake(function() {
-                    self.emit('play', self);
-                });
-            this.pause = jasmine.createSpy('iface.pause()')
-                .andCallFake(function() {
-                    self.emit('pause', self);
-                });
-            this.load = jasmine.createSpy('iface.loadAd()');
-            this.isReady = jasmine.createSpy('iface.isReady()');
             this.paused = true;
             this.currentTime = 0;
             this.duration = 0;
@@ -61,7 +53,7 @@ define(['minireel', 'services'], function(minireelModule) {
                 c6EventEmitter = $injector.get('c6EventEmitter');
 
                 ModuleService = $injector.get('ModuleService');
-                spyOn(ModuleService, 'hasModule').andCallThrough();
+                spyOn(ModuleService, 'hasModule').and.callThrough();
                 c6ImagePreloader = $injector.get('c6ImagePreloader');
                 spyOn(c6ImagePreloader, 'load');
                 c6AppData = $injector.get('c6AppData');
@@ -138,13 +130,6 @@ define(['minireel', 'services'], function(minireelModule) {
                         applyOnDeck();
                         expect(c6ImagePreloader.load).not.toHaveBeenCalled();
                     });
-
-                    it('should call load() if its a VPAID player', function() {
-                        var iface = new Player();
-                        $scope.$emit('<vpaid-player>:init', iface);
-                        applyOnDeck();
-                        expect(iface.load).toHaveBeenCalled();
-                    });
                 });
 
                 describe('when false', function() {
@@ -156,122 +141,6 @@ define(['minireel', 'services'], function(minireelModule) {
 
                     it('should not preload the large image', function() {
                         expect(c6ImagePreloader.load).not.toHaveBeenCalled();
-                    });
-                });
-            });
-
-            describe('active', function() {
-                var iface;
-
-                beforeEach(function() {
-                    iface = new Player();
-                    $rootScope.$broadcast('<vpaid-player>:init', iface);
-                });
-
-                describe('when initialized', function() {
-                    beforeEach(function() {
-                        $rootScope.$digest();
-                    });
-
-                    it('should not play or paused the player', function() {
-                        expect(iface.play).not.toHaveBeenCalled();
-                    });
-                });
-
-                describe('when not active', function() {
-                    beforeEach(function() {
-                        $scope.$apply(function() {
-                            $scope.active = true;
-                        });
-
-                        $scope.$apply(function() {
-                            $scope.active = false;
-                        });
-                    });
-
-                    it('should pause the player', function() {
-                        expect(iface.pause).toHaveBeenCalled();
-                    });
-                });
-
-                describe('when active', function() {
-                    beforeEach(function() {
-                        $scope.$apply(function() {
-                            $scope.active = false;
-                        });
-
-                        $scope.$apply(function() {
-                            $scope.active = true;
-                        });
-                    });
-
-                    describe('if the behavior can autoplay and the experience is set to autoplay', function() {
-                        it('should play the video', function() {
-                            expect(iface.play).toHaveBeenCalled();
-                        });
-                    });
-
-                    describe('if the experience is set not to autoplay', function() {
-                        var currentPlayCalls;
-
-                        beforeEach(function() {
-                            currentPlayCalls = iface.play.callCount;
-
-                            $scope.config.data.autoplay = false;
-
-                            $scope.$apply(function() {
-                                $scope.active = false;
-                            });
-                            $scope.$apply(function() {
-                                $scope.active = true;
-                            });
-                        });
-
-                        it('should not play the video', function() {
-                            expect(iface.play.callCount).toBe(currentPlayCalls);
-                        });
-                    });
-
-                    describe('if the device does not support autoplay', function() {
-                        var currentPlayCalls;
-
-                        beforeEach(function() {
-                            currentPlayCalls = iface.play.callCount;
-
-                            c6AppData.profile.autoplay = false;
-
-                            $scope.$apply(function() {
-                                $scope.active = false;
-                            });
-                            $scope.$apply(function() {
-                                $scope.active = true;
-                            });
-                        });
-
-                        it('should not play the video', function() {
-                            expect(iface.play.callCount).toBe(currentPlayCalls);
-                        });
-                    });
-
-                    describe('if the behavior is not to autoplay', function() {
-                        var currentPlayCalls;
-
-                        beforeEach(function() {
-                            currentPlayCalls = iface.play.callCount;
-
-                            c6AppData.behaviors.canAutoplay = false;
-
-                            $scope.$apply(function() {
-                                $scope.active = false;
-                            });
-                            $scope.$apply(function() {
-                                $scope.active = true;
-                            });
-                        });
-
-                        it('should not play the video', function() {
-                            expect(iface.play.callCount).toBe(currentPlayCalls);
-                        });
                     });
                 });
             });

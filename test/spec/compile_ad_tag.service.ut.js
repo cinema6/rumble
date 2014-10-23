@@ -21,7 +21,7 @@ define(['services','angular'], function(servicesModule, angular) {
                     addEventListener: noop,
                     Date: {
                         now: jasmine.createSpy('Date.now()')
-                            .andReturn(Date.now())
+                            .and.returnValue(Date.now())
                     }
                 });
             });

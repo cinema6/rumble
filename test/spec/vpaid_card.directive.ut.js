@@ -29,7 +29,7 @@ define(['app', 'services'], function(appModule, servicesModule) {
             this.loadAd = jasmine.createSpy('player.loadAd()');
             this.startAd = jasmine.createSpy('player.startAd()');
             this.insertHTML = jasmine.createSpy('player.insertHTML()')
-                .andReturn(deferred.promise);
+                .and.returnValue(deferred.promise);
             this.getCurrentTime = function() { return 2; };
             this.getDuration = function() { return 5; };
             this.getAdProperties = function() {};
@@ -82,7 +82,7 @@ define(['app', 'services'], function(appModule, servicesModule) {
 
         describe('initialization', function() {
             it('should $emit the playerAdd event with an interface', function() {
-                spyOn($scope, '$emit').andCallThrough();
+                spyOn($scope, '$emit').and.callThrough();
 
                 $scope.$apply(function() {
                     $compile('<vpaid-card></vpaid-card>')($scope);
@@ -94,7 +94,7 @@ define(['app', 'services'], function(appModule, servicesModule) {
             it('should create the player', function() {
                 var _player = VPAIDService.createPlayer();
 
-                spyOn(VPAIDService, 'createPlayer').andReturn(_player);
+                spyOn(VPAIDService, 'createPlayer').and.returnValue(_player);
 
                 $scope.$apply(function() {
                     $compile('<vpaid-card></vpaid-card>')($scope);
@@ -112,7 +112,7 @@ define(['app', 'services'], function(appModule, servicesModule) {
             beforeEach(function() {
                 _player = VPAIDService.createPlayer();
 
-                spyOn(VPAIDService, 'createPlayer').andReturn(_player);
+                spyOn(VPAIDService, 'createPlayer').and.returnValue(_player);
 
                 $scope.$on('playerAdd', function(event, playerInterface) {
                     iface = playerInterface;
@@ -122,7 +122,7 @@ define(['app', 'services'], function(appModule, servicesModule) {
                     $compile('<vpaid-card></vpaid-card>')($scope);
                 });
 
-                spyOn(iface, 'emit').andCallThrough();
+                spyOn(iface, 'emit').and.callThrough();
 
                 _player.emit('ready', _player);
             });
@@ -133,7 +133,7 @@ define(['app', 'services'], function(appModule, servicesModule) {
 
             describe('and when the player fires "play"', function() {
                 beforeEach(function() {
-                    spyOn(_player, 'getDuration').andCallThrough();
+                    spyOn(_player, 'getDuration').and.callThrough();
 
                     _player.emit('play', _player);
                 });
@@ -195,8 +195,8 @@ define(['app', 'services'], function(appModule, servicesModule) {
             beforeEach(function() {
                 _player = VPAIDService.createPlayer();
 
-                spyOn(VPAIDService, 'createPlayer').andReturn(_player);
-                spyOn(_player, 'on').andCallThrough();
+                spyOn(VPAIDService, 'createPlayer').and.returnValue(_player);
+                spyOn(_player, 'on').and.callThrough();
 
                 $scope.$on('playerAdd', function(event, playerInterface) {
                     iface = playerInterface;
@@ -226,13 +226,13 @@ define(['app', 'services'], function(appModule, servicesModule) {
                     it('should throw an error cuz you can\'t set the time on VPAID ads', function() {
                         expect(function() {
                             iface.currentTime = 3;
-                        }).toThrow('setting a property that has only a getter');
+                        }).toThrow(new TypeError('setting a property that has only a getter'));
 
                         _player.emit('ready', _player);
 
                         expect(function() {
                             iface.currentTime = 3;
-                        }).toThrow('setting a property that has only a getter');
+                        }).toThrow(new TypeError('setting a property that has only a getter'));
                     });
                 });
             });
@@ -257,7 +257,7 @@ define(['app', 'services'], function(appModule, servicesModule) {
                     it('should throw an error cuz you can\'t set the duration on VPAID ads', function() {
                         expect(function() {
                             iface.duration = 3;
-                        }).toThrow('setting a property that has only a getter');
+                        }).toThrow(new TypeError('setting a property that has only a getter'));
                     });
                 });
             });
@@ -280,7 +280,7 @@ define(['app', 'services'], function(appModule, servicesModule) {
                     it('should throw an error cuz it\'s not publicly accessible', function() {
                         expect(function() {
                             iface.paused = true;
-                        }).toThrow('setting a property that has only a getter');
+                        }).toThrow(new TypeError('setting a property that has only a getter'));
                     });
                 });
             });
@@ -305,7 +305,7 @@ define(['app', 'services'], function(appModule, servicesModule) {
                     it('should throw an error cuz it\'s not publicly accessible', function() {
                         expect(function() {
                             iface.ended = true;
-                        }).toThrow('setting a property that has only a getter');
+                        }).toThrow(new TypeError('setting a property that has only a getter'));
                     });
                 });
             });
@@ -342,7 +342,7 @@ define(['app', 'services'], function(appModule, servicesModule) {
             describe('play', function() {
                 beforeEach(function() {
                     _player.emit('ready', _player);
-                    spyOn(iface, 'loadAd').andCallThrough();
+                    spyOn(iface, 'loadAd').and.callThrough();
                     iface.play();
                 });
 
@@ -366,7 +366,7 @@ define(['app', 'services'], function(appModule, servicesModule) {
                     iface.play();
                     iface.play();
                     iface.play();
-                    expect(iface.loadAd.callCount).toBe(1);
+                    expect(iface.loadAd.calls.count()).toBe(1);
                 });
             });
 

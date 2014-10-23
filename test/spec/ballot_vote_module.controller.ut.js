@@ -27,12 +27,12 @@ define(['minireel','modules/ballot'], function(minireelModule, ballotModule) {
                     var self = this;
 
                     this.getBallot = jasmine.createSpy('BallotService.getBallot()')
-                        .andCallFake(function() {
+                        .and.callFake(function() {
                             return self._.getBallotDeferred.promise;
                         });
 
                     this.vote = jasmine.createSpy('BallotService.vote()')
-                        .andReturn($q.defer().promise);
+                        .and.returnValue($q.defer().promise);
 
                     this._ = {
                         getBallotDeferred: $q.defer()
@@ -69,7 +69,7 @@ define(['minireel','modules/ballot'], function(minireelModule, ballotModule) {
             describe('methods', function() {
                 describe('vote(index, ballot)', function() {
                     beforeEach(function() {
-                        spyOn($scope, '$emit').andCallThrough();
+                        spyOn($scope, '$emit').and.callThrough();
                     });
 
                     it('should set $scope.vote to the provided value', function() {

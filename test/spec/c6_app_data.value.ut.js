@@ -70,14 +70,14 @@ define(['app','c6uilib'], function(appModule, c6uilibModule) {
                     this.$get = function($q) {
                         function Cinema6() {
                             this.getAppData = jasmine.createSpy('cinema6.getAppData()')
-                                .andCallFake(function() {
+                                .and.callFake(function() {
                                     deferreds.getAppData = $q.defer();
 
                                     return deferreds.getAppData.promise;
                                 });
 
                             this.getSession = jasmine.createSpy('cinema6.getSession()')
-                                .andCallFake(function() {
+                                .and.callFake(function() {
                                     deferreds.getSession = $q.defer();
 
                                     return deferreds.getSession.promise;
@@ -236,7 +236,7 @@ define(['app','c6uilib'], function(appModule, c6uilibModule) {
                     deferreds.getSession.resolve(session);
                 });
 
-                callback = session.on.calls[0].args[1];
+                callback = session.on.calls.argsFor(0)[1];
 
                 callback({data:'foo'});
 

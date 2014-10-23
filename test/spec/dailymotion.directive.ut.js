@@ -34,7 +34,7 @@
                 });
                 module(dailymotionModule.name, function($provide) {
                     dailymotion.createPlayer = jasmine.createSpy('dm.createPlayer')
-                    .andCallFake(function(playerId,config,$parentElement){
+                    .and.callFake(function(playerId,config,$parentElement){
                         var mockPlayer = {
                             on              : jasmine.createSpy('dmPlayer.on'),
                             once            : jasmine.createSpy('dmPlayer.once'),
@@ -53,28 +53,28 @@
                             _removes        : {}
                         }
 
-                        mockPlayer.on.andCallFake(function(eventName,handler){
+                        mockPlayer.on.and.callFake(function(eventName,handler){
                             if (mockPlayer._on[eventName] === undefined){
                                 mockPlayer._on[eventName] = [];
                             }
                             mockPlayer._on[eventName].push(handler);
                         });
 
-                        mockPlayer.once.andCallFake(function(eventName,handler){
+                        mockPlayer.once.and.callFake(function(eventName,handler){
                             if (mockPlayer._once[eventName] === undefined){
                                 mockPlayer._once[eventName] = [];
                             }
                             mockPlayer._once[eventName].push(handler);
                         });
 
-                        mockPlayer.removeListener.andCallFake(function(eventName,listener){
+                        mockPlayer.removeListener.and.callFake(function(eventName,listener){
                             if (mockPlayer._removes[eventName] === undefined){
                                 mockPlayer._removes[eventName] = [];
                             }
                             mockPlayer._removes[eventName].push(listener);
                         });
 
-                        mockPlayer.getPlayerId.andReturn('x1bx4ir');
+                        mockPlayer.getPlayerId.and.returnValue('x1bx4ir');
 
                         mockPlayers.push(mockPlayer);
                         return mockPlayer;
@@ -89,7 +89,7 @@
                     $log        = $injector.get('$log');
                     
                     $log.context = jasmine.createSpy('$log.context');
-                    $log.context.andCallFake(function() { return $log; });
+                    $log.context.and.callFake(function() { return $log; });
 
                     $rootScope.config = {};
                     $scope = $rootScope.$new();
@@ -112,7 +112,7 @@
                         $scope.$apply(function() {
                             $compile('<dailymotion-card></dailymotion-card>')($scope);
                         });
-                    }).toThrow('<dailymotion-card> requires the videoid attribute to be set.');
+                    }).toThrow(new SyntaxError('<dailymotion-card> requires the videoid attribute to be set.'));
                 });
 
                 it('will create a player',function(){
@@ -122,8 +122,8 @@
                     $timeout.flush();
                     expect($log.context).toHaveBeenCalledWith('<dailymotion-card>');
                     expect(mockPlayers.length).toEqual(1);
-                    expect(dailymotion.createPlayer.calls[0].args[0]).toEqual('dm_abc123');
-                    expect(dailymotion.createPlayer.calls[0].args[1]).toEqual({
+                    expect(dailymotion.createPlayer.calls.argsFor(0)[0]).toEqual('dm_abc123');
+                    expect(dailymotion.createPlayer.calls.argsFor(0)[1]).toEqual({
                         videoId: 'abc123',
                         width: '1',
                         height: '2',
@@ -156,7 +156,7 @@
                 beforeEach(function(){
                     iface = null, addSpy = null;
                     addSpy = jasmine.createSpy('playerAdd');
-                    addSpy.andCallFake(function(event,playerInterface){
+                    addSpy.and.callFake(function(event,playerInterface){
                         iface = playerInterface;
                     });
 
@@ -443,7 +443,7 @@
                     it('should regenerate the player', function() {
                         $timeout.flush();
                         expect(mockPlayers.length).toEqual(2);
-                        expect(mockPlayers[0].destroy.callCount).toEqual(1);
+                        expect(mockPlayers[0].destroy.calls.count()).toEqual(1);
                         expect(iface.isReady()).toEqual(false);
                     });
                 });
@@ -662,10 +662,10 @@
 
                             player._on.playing[0](player);
                             expect(iface.emit).toHaveBeenCalledWith('play', iface);
-                            callCount = iface.emit.callCount;
+                            callCount = iface.emit.calls.count();
 
                             player._on.playing[0](player);
-                            expect(iface.emit.callCount).toBe(callCount + 1);
+                            expect(iface.emit.calls.count()).toBe(callCount + 1);
                         });
                     });
                 });
@@ -706,10 +706,10 @@
                         expect(iface.emit).toHaveBeenCalledWith('timeupdate', iface);
 
                         mockPlayers[0]._on.timeupdate[0](mockPlayers[0], { time: '20' });
-                        expect(iface.emit.callCount).toBe(2);
+                        expect(iface.emit.calls.count()).toBe(2);
 
                         mockPlayers[0]._on.timeupdate[0](mockPlayers[0], { time: '30' });
-                        expect(iface.emit.callCount).toBe(3);
+                        expect(iface.emit.calls.count()).toBe(3);
                     });
                 });
 
@@ -741,13 +741,13 @@
                         $timeout.flush();
                         expect(mockPlayers.length).toEqual(1);
                         expect(iface.isReady()).toEqual(true);
-                        expect(mockPlayers[0].destroy.callCount).toEqual(0);
+                        expect(mockPlayers[0].destroy.calls.count()).toEqual(0);
 
                         //simulate the firing of the ended event
                         mockPlayers[0]._on.ended[0](mockPlayers[0]);
                         expect(function(){$timeout.flush();}).toThrow();
                         expect(mockPlayers.length).toEqual(1);
-                        expect(mockPlayers[0].destroy.callCount).toEqual(0);
+                        expect(mockPlayers[0].destroy.calls.count()).toEqual(0);
                         expect(iface.isReady()).toEqual(true);
                     });
 
@@ -761,13 +761,13 @@
                         $timeout.flush();
                         expect(mockPlayers.length).toEqual(1);
                         expect(iface.isReady()).toEqual(true);
-                        expect(mockPlayers[0].destroy.callCount).toEqual(0);
+                        expect(mockPlayers[0].destroy.calls.count()).toEqual(0);
 
                         //simulate the firing of the ended event
                         mockPlayers[0]._on.ended[0](mockPlayers[0]);
                         $timeout.flush();
                         expect(mockPlayers.length).toEqual(2);
-                        expect(mockPlayers[0].destroy.callCount).toEqual(1);
+                        expect(mockPlayers[0].destroy.calls.count()).toEqual(1);
                         expect(iface.isReady()).toEqual(false);
                     });
                 });

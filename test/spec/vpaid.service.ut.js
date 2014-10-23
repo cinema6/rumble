@@ -29,7 +29,7 @@ define(['services', 'angular'], function(servicesModule, angular) {
             this.resumeAd = jasmine.createSpy('player.resumeAd()');
             this.stopAd = jasmine.createSpy('player.resumeAd()');
             this.isCinema6player = function() { return isCinema6playerMock; };
-            this.getAdProperties = jasmine.createSpy('player.getAdProperties()').andReturn({
+            this.getAdProperties = jasmine.createSpy('player.getAdProperties()').and.returnValue({
                 width: 640,
                 height: 360,
                 adLinear: true,
@@ -54,7 +54,7 @@ define(['services', 'angular'], function(servicesModule, angular) {
                 $window = $injector.get('$window');
                 $timeout = $injector.get('$timeout');
                 $interval = $injector.get('$interval');
-                spyOn($window.Date, 'now').andReturn(Date.now());
+                spyOn($window.Date, 'now').and.returnValue(Date.now());
                 $log = $injector.get('$log');
                 $log.context = function() { return $log; };
                 $httpBackend = $injector.get('$httpBackend');
@@ -116,13 +116,13 @@ define(['services', 'angular'], function(servicesModule, angular) {
                         mockFlashPlayer = new MockFlashPlayer();
                         parentElementMock.prepend = jasmine.createSpy('$parentElement.prepend()');
                         playerElementMock.prepend = jasmine.createSpy('element$.prepend()');
-                        playerElementMock.find = jasmine.createSpy('element$.find()').andReturn([mockFlashPlayer]);
+                        playerElementMock.find = jasmine.createSpy('element$.find()').and.returnValue([mockFlashPlayer]);
 
-                        spyOn(angular, 'element').andCallFake(function(el) {
+                        spyOn(angular, 'element').and.callFake(function(el) {
                             return playerElementMock;
                         });
 
-                        spyOn($window, 'addEventListener').andCallFake(function(event, listener) {
+                        spyOn($window, 'addEventListener').and.callFake(function(event, listener) {
                             messageHandler = listener;
                         });
                     });
@@ -135,7 +135,7 @@ define(['services', 'angular'], function(servicesModule, angular) {
                     it('should fail without parentElement', function() {
                         expect(function() {
                             VPAIDService.createPlayer('testId',{})
-                        }).toThrow('Parent element is required for vpaid.createPlayer');
+                        }).toThrow(new Error('Parent element is required for vpaid.createPlayer'));
                     });
 
                     it('should succeed when passed a parentElement', function() {
@@ -259,7 +259,7 @@ define(['services', 'angular'], function(servicesModule, angular) {
                                 messageHandler(message2);
                                 messageHandler(message3);
 
-                                mockFlashPlayer.getAdProperties.andReturn({adCurrentTime:0});
+                                mockFlashPlayer.getAdProperties.and.returnValue({adCurrentTime:0});
 
                                 player.startAd().then(successSpy, failureSpy);
 
@@ -438,7 +438,7 @@ define(['services', 'angular'], function(servicesModule, angular) {
 
                         describe('isC6VpaidPlayer()', function() {
                             it('should call isCinema6player() on the flash object', function() {
-                                spyOn(mockFlashPlayer, 'isCinema6player').andCallThrough();
+                                spyOn(mockFlashPlayer, 'isCinema6player').and.callThrough();
                                 player.isC6VpaidPlayer();
                                 expect(mockFlashPlayer.isCinema6player).toHaveBeenCalled();
                             });
@@ -466,7 +466,7 @@ define(['services', 'angular'], function(servicesModule, angular) {
 
                         beforeEach(function() {
                             player = VPAIDService.createPlayer('testId',{},parentElementMock);
-                            spyOn(player, 'emit').andCallThrough();
+                            spyOn(player, 'emit').and.callThrough();
                         });
 
                         describe('ready', function() {
@@ -480,18 +480,18 @@ define(['services', 'angular'], function(servicesModule, angular) {
                                     }, 100);
                                 };
 
-                                jasmine.Clock.useMock();
+                                jasmine.clock().install();
 
                                 isCinema6playerMock = false;
 
                                 emitReady();
                                 expect(player.emit).not.toHaveBeenCalledWith('ready', player);
 
-                                jasmine.Clock.tick(110);
+                                jasmine.clock().tick(110);
                                 expect(player.emit).not.toHaveBeenCalledWith('ready', player);
 
                                 isCinema6playerMock = true;
-                                jasmine.Clock.tick(210);
+                                jasmine.clock().tick(210);
                                 expect(player.emit).toHaveBeenCalledWith('ready', player);
                             });
 

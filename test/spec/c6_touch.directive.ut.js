@@ -25,7 +25,7 @@ define(['app'], function(appModule) {
 
                 $scope = $rootScope.$new();
                 $scope.spy = jasmine.createSpy('$scope.spy()')
-                    .andCallFake(function(event) {
+                    .and.callFake(function(event) {
                         expect(event.isDefaultPrevented()).toBe(true);
                         expect(function() { $rootScope.$digest(); }).toThrow();
                     });

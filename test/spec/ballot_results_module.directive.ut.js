@@ -32,9 +32,6 @@ define(['app','modules/ballot'], function(appModule, ballotModule) {
                 $compile = $injector.get('$compile');
                 $animate = $injector.get('$animate');
 
-                spyOn($animate, 'addClass');
-                spyOn($animate, 'removeClass');
-
                 $scope = $rootScope.$new();
             });
         });
@@ -52,8 +49,7 @@ define(['app','modules/ballot'], function(appModule, ballotModule) {
 
                 describe('when it is not active', function() {
                     it('should add the "ng-hide" class', function() {
-                        expect($animate.addClass).toHaveBeenCalledWith(jasmine.any(Object), 'ng-hide');
-                        expect($animate.addClass.mostRecentCall.args[0][0]).toBe(ballot$[0]);
+                        expect(ballot$.hasClass('ng-hide')).toBe(true);
                     });
                 });
 
@@ -65,8 +61,7 @@ define(['app','modules/ballot'], function(appModule, ballotModule) {
                     });
 
                     it('should remove the "ng-hide" class', function() {
-                        expect($animate.removeClass).toHaveBeenCalledWith(jasmine.any(Object), 'ng-hide');
-                        expect($animate.removeClass.mostRecentCall.args[0][0]).toBe(ballot$[0]);
+                        expect(ballot$.hasClass('ng-hide')).toBe(false);
                     });
                 });
             });

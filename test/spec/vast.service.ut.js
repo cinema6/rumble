@@ -187,7 +187,7 @@ define(['services'], function(servicesModule) {
                 $q = $injector.get('$q');
                 $httpBackend = $injector.get('$httpBackend');
                 $window = $injector.get('$window');
-                spyOn($window.Date, 'now').andReturn(Date.now());
+                spyOn($window.Date, 'now').and.returnValue(Date.now());
                 c6ImagePreloader = $injector.get('c6ImagePreloader');
                 c6VideoService = $injector.get('c6VideoService');
                 compileAdTag = $injector.get('compileAdTag');
@@ -250,8 +250,8 @@ define(['services'], function(servicesModule) {
                                 mediaFiles: []
                             };
 
-                            spyOn(_service, 'getXML').andCallThrough();
-                            spyOn(_service, 'VAST').andReturn(vast);
+                            spyOn(_service, 'getXML').and.callThrough();
+                            spyOn(_service, 'VAST').and.returnValue(vast);
 
                             _provider.adTags = {
                                 cinema6: 'http://u-ads.adap.tv/a/h/jSmRYUB6OAinZ1YEc6FP2ey+WPdagwFmCGZaBkvRjnc=?cb={cachebreaker}&pageUrl={pageUrl}&eov=eov',
@@ -261,7 +261,7 @@ define(['services'], function(servicesModule) {
 
                         describe('if a wrapper is returned', function() {
                             beforeEach(function() {
-                                spyOn(VASTService, 'getVAST').andCallThrough();
+                                spyOn(VASTService, 'getVAST').and.callThrough();
 
                                 $httpBackend.expectGET(compileAdTag('http://u-ads.adap.tv/a/h/jSmRYUB6OAinZ1YEc6FP2ey+WPdagwFmCGZaBkvRjnc=?cb={cachebreaker}&pageUrl={pageUrl}&eov=eov'))
                                     .respond(200, wrapperXML);
@@ -277,7 +277,7 @@ define(['services'], function(servicesModule) {
 
                                 $httpBackend.flush();
 
-                                expect(_service.VAST.callCount).toBe(1);
+                                expect(_service.VAST.calls.count()).toBe(1);
 
                                 expect(spy).toHaveBeenCalledWith(vast);
                             });
@@ -402,7 +402,7 @@ define(['services'], function(servicesModule) {
 
                                     beforeEach(function() {
                                         spyOn(c6VideoService, 'bestFormat')
-                                            .andReturn('video/mp4');
+                                            .and.returnValue('video/mp4');
 
                                         result = vast.getVideoSrc();
                                     });
@@ -417,7 +417,7 @@ define(['services'], function(servicesModule) {
 
                                     describe('if no best format is provided', function() {
                                         beforeEach(function() {
-                                            c6VideoService.bestFormat.andReturn(undefined);
+                                            c6VideoService.bestFormat.and.returnValue(undefined);
                                             result = vast.getVideoSrc();
                                         });
 
@@ -442,11 +442,11 @@ define(['services'], function(servicesModule) {
 
                             describe('firePixels()', function() {
                                 beforeEach(function() {
-                                    spyOn(c6ImagePreloader, 'load').andReturn(true);
+                                    spyOn(c6ImagePreloader, 'load').and.returnValue(true);
                                 });
                                 it('should call the c6ImagePreloader with an array of pixels', function() {
                                     vast.firePixels('start');
-                                    expect(c6ImagePreloader.load.callCount).toBe(1);
+                                    expect(c6ImagePreloader.load.calls.count()).toBe(1);
                                     expect(c6ImagePreloader.load).toHaveBeenCalledWith(vast.pixels.start);
 
                                     vast.firePixels('errorPixel');
@@ -476,10 +476,10 @@ define(['services'], function(servicesModule) {
                             xmlDOM = {};
                             parser = {
                                 parseFromString: jasmine.createSpy('parser.parseFromString()')
-                                    .andReturn(xmlDOM)
+                                    .and.returnValue(xmlDOM)
                             };
 
-                            spyOn($window, 'DOMParser').andCallFake(function() {
+                            spyOn($window, 'DOMParser').and.callFake(function() {
                                 return parser;
                             });
                         });
