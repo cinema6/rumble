@@ -3,242 +3,136 @@ function( angular ) {
     'use strict';
 
     return angular.module('c6.rumble.cards.adUnit', [])
-        .controller('AdUnitCardController', ['$rootScope','$scope','$log','$interval','ModuleService','EventService','c6AppData','compileAdTag','c6ImagePreloader',
-        function                            ( $rootScope , $scope , $log , $interval , ModuleService , EventService , c6AppData , compileAdTag , c6ImagePreloader ) {
+        .controller('AdUnitCardController', ['$scope','c6ImagePreloader','compileAdTag',
+                                             '$interval',
+        function                            ( $scope , c6ImagePreloader , compileAdTag ,
+                                              $interval ) {
             var self = this,
-                profile = $scope.profile,
                 config = $scope.config,
+                profile = $scope.profile,
                 data = config.data,
-                _data = config._data = config._data || {
-                    playerEvents: {},
+                _data = config._data || (config._data = {
+                    hasPlayed: false,
                     modules: {
                         displayAd: {
                             active: false
                         }
                     }
-                },
-                hasStarted = !data.autoplay,
-                adHasBeenCalledFor = false,
-                shouldGoForward = false,
-                shouldLoadAd = false,
-                shouldPlay = false,
-                player;
+                });
 
+            function playerReady(player) {
+                self.player = player;
 
-            function goForward() {
-                $scope.$emit('<mr-card>:contentEnd', config.meta || config);
-            }
-
-            function resetState() {
-                _data.playerEvents.play.emitCount = 0;
-                hasStarted = !data.autoplay;
-                adHasBeenCalledFor = false;
-                shouldGoForward = false;
-                shouldLoadAd = false;
-                shouldPlay = false;
-            }
-
-            function handleIface(event, iface) {
-                function controlNavigation(controller) {
-                    var autoplay = data.autoplay,
-                        mustWatchEntireAd = data.skip === false,
-                        canSkipAnyTime = !data.skip || data.skip === true,
-                        waitTime;
-
-                    function getWaitTime() {
-                        return mustWatchEntireAd ?
-                            (iface.duration || 0) : data.skip;
-                    }
-
-                    function cleanup() {
-                        controller.enabled(true);
-                        iface.removeListener('timeupdate', tickNav);
-                    }
+                function controlNav(NavController) {
+                    var canSkipAnytime = data.skip === true,
+                        mustWatchEntireVideo = data.skip === false;
 
                     function tickNav() {
-                        var remaining;
+                        var remaining = Math.max((data.skip || player.duration) - player.currentTime, 0);
 
-                        if (!waitTime) {
-                            if (!(waitTime = getWaitTime())) {
-                                return;
-                            }
-                        }
-
-                        remaining = Math.max((waitTime - iface.currentTime), 0);
-
-                        controller.tick(remaining);
+                        NavController.tick(remaining);
 
                         if (!remaining) {
-                            cleanup();
+                            NavController.enabled(true);
+                            player.removeListener('timeupdate', tickNav);
                         }
                     }
 
-                    if (canSkipAnyTime) { return; }
+                    if (canSkipAnytime) { return; }
 
-                    waitTime = getWaitTime();
-                    controller.enabled(false);
+                    NavController.enabled(false)
+                        .tick(data.skip || player.duration);
 
-                    if (waitTime) {
-                        controller.tick(waitTime);
-                    }
-
-                    if (mustWatchEntireAd) {
-                        iface
-                            .on('timeupdate', tickNav)
-                            .once('ended', cleanup);
-
-                        return;
-                    }
-
-                    if (autoplay) {
-                        // there are no timeupdates coming from the VPAID player! ARRGHHH
-                        // return iface.on('timeupdate', tickNav);
+                    if (data.autoplay || mustWatchEntireVideo) {
+                        return player.on('timeupdate', tickNav)
+                            .once('ended', function() {
+                                NavController.enabled(true);
+                                player.removeListener('timeupdate', tickNav);
+                            });
                     }
 
                     $interval(function() {
-                        controller.tick(--waitTime);
+                        NavController.tick(--data.skip);
 
-                        if (!waitTime) {
-                            controller.enabled(true);
+                        if (!data.skip) {
+                            NavController.enabled(true);
                         }
-                    }, 1000, waitTime);
+                    }, 1000, data.skip);
                 }
 
-                player = iface;
-
-                _data.playerEvents = EventService.trackEvents(iface, ['play']);
-
-                player.on('ready', function() {
-                    if ($scope.adType === 'vpaid' && shouldLoadAd) {
-                        player.load();
-                    }
-                    if (shouldPlay) {
-                        player.play();
-                    }
-                });
-
-                player.on('ended', function() {
-                    if ($scope.active) {
-                        goForward();
-                    } else {
-                        shouldGoForward = true;
-                    }
-                });
-
-                player.on('error', function() {
-                    if ($scope.active) {
-                        goForward();
-                    } else {
-                        shouldGoForward = true;
-                    }
-                });
-
-                player.on('play', function() {
-                    hasStarted = true;
-                    if (!$scope.active || !shouldPlay) {
-                        player.pause();
-                    }
-                });
-
-                player.on('canplay', function() {
-                    // not coming through from VPAID
-                });
-
-                player.on('timeupdate', function() {
-                    // not coming through from VPAID
-                });
-
-                player.on('companionsReady', function() {
-                    var companions = player.getCompanions();
-
-                    angular.forEach(companions, function(val) {
-                        if (parseInt(val.width) === 300 && parseInt(val.height) === 250) {
-                            self.companion = val;
-                        }
-                    });
-                });
-
-                $scope.$watch('active', function(active, wasActive) {
-                    if (!active && !wasActive) { return; }
-
-                    if (active) {
-                        if (shouldGoForward) {
-                            goForward();
-                            return;
-                        }
-
-                        if (player.ended || _data.playerEvents.play.emitCount < 1) {
-                            if (player.ended) {
-                                resetState();
-                            }
-                            $scope.$emit('<mr-card>:init', controlNavigation);
-                            if (data.autoplay) {
-                                adHasBeenCalledFor = true;
-                                shouldPlay = true;
-                                player.play();
-                            }
-                        }
-                    } else {
-                        shouldPlay = false;
-                        player.pause();
-                    }
-                });
-            }
-
-            Object.defineProperties(this, {
-                showPlay: {
-                    get: function() {
-                        return !!player && player.paused && hasStarted;
-                    }
-                }
-            });
-
-            this.enablePlayButton = !$scope.profile.touch;
-
-            this.playVideo = function() {
-                player.play();
-            };
-
-            $scope.adType = profile.flash ? 'vpaid' : 'vast';
-            $scope.adTag = compileAdTag(config.data[$scope.adType]);
-
-            $scope.$watch('onDeck', function(onDeck) {
-                if (onDeck) {
-                    if (!adHasBeenCalledFor) {
-                        adHasBeenCalledFor = true;
-
-                        if (player && player.load) {
-                            player.load();
-                        } else {
-                            shouldLoadAd = true;
-                        }
-                    }
+                function prepareCard() {
+                    player.load();
 
                     if (config.thumbs) {
                         c6ImagePreloader.load([config.thumbs.large]);
                     }
                 }
+
+                function activateCard() {
+                    if (data.autoplay) {
+                        player.play();
+                    }
+
+                    if (!_data.hasPlayed) {
+                        $scope.$emit('<mr-card>:init', controlNav);
+                    }
+                }
+
+                function deactivateCard() {
+                    player.pause();
+                }
+
+                player.once('play', function() {
+                    _data.hasPlayed = true;
+                });
+
+                $scope.$watch('onDeck', function(onDeck) {
+                    if (onDeck) {
+                        prepareCard();
+                    }
+                });
+
+                $scope.$watch('active', function(active, wasActive) {
+                    if (active) {
+                        activateCard();
+                    } else if (wasActive) {
+                        deactivateCard();
+                    }
+                });
+            }
+
+            function playerInit($event, player) {
+                player.once('ready', function() {
+                    playerReady(player);
+                });
+            }
+
+            this.player = null;
+            this.adType = (profile.flash && !!data.vpaid) ? 'vpaid' : 'vast';
+            this.adTag = compileAdTag(data[this.adType]);
+            this.enablePlay = !profile.touch;
+            Object.defineProperties(this, {
+                showPlay: {
+                    get: function() {
+                        return !!this.player && (_data.hasPlayed || !data.autoplay) && this.player.paused;
+                    }
+                }
             });
 
-            $scope.$on('<vpaid-player>:init', handleIface);
-            $scope.$on('<vast-player>:init', handleIface);
-
-            $scope.$on('$destroy', function() {
-                if (c6AppData.experience.data.mode === 'lightbox') {
-                    $rootScope.$broadcast('resize');
-                }
+            ['<vpaid-player>:init', '<vast-player>:init'].forEach(function($event) {
+                $scope.$on($event, playerInit);
             });
         }])
 
-        .directive('adUnitCard',['$log','assetFilter',
-        function                ( $log , assetFilter ) {
-            $log = $log.context('<ad-unit-card>');
+        .directive('adUnitCard',[function() {
 
             return {
                 restrict: 'E',
                 controller: 'AdUnitCardController',
                 controllerAs: 'Ctrl',
-                templateUrl: assetFilter('directives/ad_unit_card.html', 'views')
+                template: [
+                    '<ng-include src="config.templateUrl || (\'directives/ad_unit_card.html\' | asset:\'views\')"></ng-include>'
+                ].join('\n')
             };
         }]);
 
