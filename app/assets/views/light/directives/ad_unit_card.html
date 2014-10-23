@@ -1,0 +1,51 @@
+<article class="slide__group">
+    <div class="player__group player__height">
+        <button ng-if="Ctrl.enablePlay" ng-show="Ctrl.showPlay" ng-click="Ctrl.player.play()" class="player__play-btn">
+            <div class="player__play-icon">
+                <span class="ir">Play Video</span>
+            </div>
+        </button>
+        <div ng-class="{'mr-player--fly-away': Ctrl.flyAway}" class="mr-player" ng-switch="Ctrl.adType">
+            <vpaid-player ng-switch-when="vpaid" ad-tag="{{Ctrl.adTag}}" videoid="{{config.id}}"></vpaid-player>
+            <vast-player ng-switch-when="vast" ad-tag="{{Ctrl.adTag}}" videoid="{{config.id}}"></vast-player>
+        </div>
+        <div ng-show="Ctrl.flyAway" class="player__thumbnail c6-height-limiter"
+            ng-style="{'background-image':config.thumbs.large ? 'url(' + config.thumbs.large + ')' : ''}">
+            <span class="ir"><img ng-src="{{config.thumbs.large}}"></span>
+        </div>
+    </div>
+
+    <div class="card__copy" c6-alias="!!(config.collateral.logo || config.social.length > 0 || config.params.sponsor) as hasSponsorship">
+        <h1 ng-if="!hasSponsorship" class="card__title tk--hdr">
+            {{config.title}}
+            <span ng-if="!config.data.hideSource" ng-show="!!config.source" class="card__attributes">via <a ng-href="{{Ctrl.videoUrl}}" target="_blank" title="{{config.source}}">{{config.source}}</a></span>
+        </h1>
+
+        <div class="sponsorProfile__group clearfix" ng-if="hasSponsorship">
+            <a ng-if="!!config.collateral.logo" ng-href="{{config.links.Website}}" target="_blank" title="Sponsor link" class="sponsorProfile__imgBox">
+                <img ng-src="{{config.collateral.logo}}" class="sponsorProfile__img">
+            </a>
+            <div class="sponsorProfile__copy">
+                <h1 class="card__title tk--hdr">
+                    {{config.title}}
+                    <span ng-if="!!config.params.sponsor" class="card__attributes sponsorProfile__tag">
+                        Sponsored by 
+                        <a ng-href="{{config.links.Website}}" title="{{config.params.sponsor}}">{{config.params.sponsor}}</a>
+                    </span>
+                </h1>
+                
+                <div class="sponsorProfile__links" ng-if="config.social.length > 0">
+                    <a ng-repeat="link in config.social"
+                        ng-href="{{link.href}}"
+                        target="_blank"
+                        title="{{link.label}}"
+                        class="sponsorProfile__link sprite__social socialIcons socialIcons--{{link.type}}">
+                        <span class="ir">{{link.label}}</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="card__desc" ng-bind-html="config.note"></div>
+    </div>
+</article>
