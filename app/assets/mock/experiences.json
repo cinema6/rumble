@@ -112,20 +112,19 @@
                     "data": {}
                 },
                 {
-                    "id": "rc-22119a8cf9f755",
+                    "id": "rc-a82fa7b6cd8820",
                     "type": "adUnit",
-                    "title": "Epic Sax Guy Ad Card",
-                    "note": "He's back, and saxier than ever. Donec nec justo eget felis facilisis fermentum. Aliquam porttitor mauris sit amet orci. Aenean dignissim pellentesque felis. Morbi in sem quis dui pla. Donec nec justo eget felis facilisis fermentum. Aliquam porttitor mauris sit amet orci. Aenean dignissim pellentesque felis. Morbi in sem quis dui pla. Donec nec justo eget felis facilisis fermentum. Aliquam porttitor mauris sit amet orci. Aenean dignissim pellentesque felis. Morbi in sem quis dui pla. Donec nec justo eget felis facilisis fermentum. Aliquam porttitor mauris sit amet orci. Aenean dignissim pellentesque felis. Morbi in sem quis dui pla.",
+                    "title": "JCVD FTW",
+                    "note": "A mind that can master the most epic of splits.",
                     "source": "YouTube",
                     "modules": [
-                        "ballot",
-                        "comments"
+                        "ballot"
                     ],
                     "ballot": {
                         "prompt": "What did you think of this video?",
                         "choices": [
-                            "Catchy",
-                            "Painful"
+                            "FTW",
+                            "FML"
                         ]
                     },
                     "links": {
@@ -144,17 +143,19 @@
                             "type": "button"
                         }
                     },
+                    "thumbs": {
+                        "small": "http://s.wsj.net/public/resources/images/BN-AK656_jcvd_G_20131115105610.jpg",
+                        "large": "http://s.wsj.net/public/resources/images/BN-AK656_jcvd_G_20131115105610.jpg"
+                    },
                     "collateral": {
                         "logo": "http://cinema6.com/assets/img/c6-logo@2x.png"
                     },
                     "data": {
                         "autoplay": true,
-                        "skip": 6,
-                        "videoid": "gy1B3agGNxwuyt",
+                        "skip": false,
                         "vast": "http://u-ads.adap.tv/a/h/DCQzzI0K2rv1k0TZythPvTfWmlP8j6NQnxBMIgFJa80=?cb={cachebreaker}&pageUrl={pageUrl}&eov=eov",
                         "vpaid": "http://u-ads.adap.tv/a/h/DCQzzI0K2rv1k0TZythPvYyD60pQS_90o8grI6Qm2PI=?cb={cachebreaker}&pageUrl={pageUrl}&eov=eov"
-                    },
-                    "conversationId": "rcv-f9efca48d85143"
+                    }
                 },
                 {
                     "id": "rc-22119a8cf9f755",
