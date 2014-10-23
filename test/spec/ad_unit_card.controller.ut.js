@@ -326,6 +326,18 @@ define(['minireel', 'services'], function(minireelModule, servicesModule) {
                         expect(AdUnitCardCtrl.player).not.toBe(iface);
                     });
 
+                    describe('when the video ends', function() {
+                        beforeEach(function() {
+                            expect($scope.$emit).not.toHaveBeenCalledWith('<mr-card>:contentEnd', jasmine.any(Object));
+
+                            iface.emit('ended');
+                        });
+
+                        it('should $emit the <mr-card>:contentEnd event', function() {
+                            expect($scope.$emit).toHaveBeenCalledWith('<mr-card>:contentEnd', $scope.config);
+                        });
+                    });
+
                     describe('when the iface is ready', function() {
                         beforeEach(function() {
                             $scope.$apply(function() {

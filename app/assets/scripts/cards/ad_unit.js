@@ -70,6 +70,7 @@ function( angular ) {
 
                 function activateCard() {
                     if (data.autoplay) {
+                        console.log('PLAY');
                         player.play();
                     }
 
@@ -102,9 +103,13 @@ function( angular ) {
             }
 
             function playerInit($event, player) {
-                player.once('ready', function() {
-                    playerReady(player);
-                });
+                player
+                    .once('ready', function() {
+                        playerReady(player);
+                    })
+                    .on('ended', function() {
+                        $scope.$emit('<mr-card>:contentEnd', $scope.config);
+                    });
             }
 
             this.player = null;
