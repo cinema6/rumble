@@ -1,18 +1,3 @@
-/*  ================================================
-    transform transitions
-    ================================================ */
-    .MiniReel__closeBtn .sprite--close {
-        -webkit-transition: -webkit-transform 0.3s ease; 
-        transition: transform 0.3s ease;
-    }
-
-        .MiniReel__closeBtn:hover .sprite--close {
-            -webkit-transform: scale(1.25);
-            transform: scale(1.25);
-        }
-
-
-
 /*  ==========================================================================
     .mr-pager__group classes
     ========================================================================== */
@@ -40,12 +25,11 @@
             background:#d94040 no-repeat 50% 50%;
         }
 
-    
     .mr-pages__preview-img {
-        -webkit-transition: -webkit-transform 0.3s ease; 
-        -moz-transition: -moz-transform 0.3s ease; 
-        -o-transition: -o-transform 0.3s ease; 
-        transition: transform 0.3s ease;
+        -webkit-transition: -webkit-transform 0.5s ease; 
+        -moz-transition: -moz-transform 0.5s ease; 
+        -o-transition: -o-transform 0.5s ease; 
+        transition: transform 0.5s ease;
     }
     .mr-pages__page:hover .mr-pages__preview-img {
         -webkit-transform: scale(1.25);

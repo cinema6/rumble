@@ -1,0 +1,8 @@
+<div ng-show="active" class="mr-adDisplay__group">
+    <span class="mr-adDisplay__label">advertisement</span>
+    <div ng-switch="adType" ng-show="active">
+        <div class="mr-adDisplay__view" ng-switch-when="iframe"><iframe ng-src="{{fileURI}}" scrolling="no"></iframe></div>
+        <div class="mr-adDisplay__view" ng-switch-when="image"><img ng-src="{{fileURI}}" /></div>
+        <div class="mr-adDisplay__view" ng-switch-when="html" ng-bind-html="fileURI"></div>
+    </div>
+</div>

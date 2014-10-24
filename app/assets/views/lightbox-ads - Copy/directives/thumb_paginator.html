@@ -1,0 +1,39 @@
+<div class="adSkip__group c6-fade" ng-show="disableNextWhen() && disablePrevWhen()">Skip this ad in {{countdown()}}</div>
+<button thumb-paginator-button
+    ng-style="{width: Ctrl.buttonWidth}"
+    ng-click="onPrev()"
+    ng-class="{'mr-pager__btn--disabled': disablePrevWhen()}"
+    ng-disabled="disablePrevWhen()"
+    class="mr-pager__btn mr-pager__prev"
+    type="button"
+    title="Previous Page">
+    <span class="mr-pager__activator">&nbsp;</span>
+    <svg class="mr-pager__icon mr-pager__icon-prev" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+     viewBox="0 0 27.213 45.941" enable-background="new 0 0 27.213 45.941" xml:space="preserve">
+        <path class="mr-pager__icon-path" fill-rule="evenodd" clip-rule="evenodd" d="M22.971,0L0,22.971l22.971,22.97l4.243-4.243L8.485,22.971
+            L27.213,4.243L22.971,0z"/>
+    </svg>
+    <span class="mr-pager__label">Prev</span>
+    <span class="ir">Previous Page</span>
+</button>
+<button thumb-paginator-button
+    ng-style="{width: Ctrl.buttonWidth}"
+    ng-click="onNext()"
+    ng-class="{'mr-pager__btn--disabled': disableNextWhen()}"
+    ng-disabled="disableNextWhen()"
+    class="mr-pager__btn mr-pager__next"
+    type="button"
+    title="Next Page">
+    <span class="mr-pager__activator">&nbsp;</span>
+    <svg class="mr-pager__icon mr-pager__icon-next" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+     viewBox="0 0 27.213 45.941" enable-background="new 0 0 27.213 45.941" xml:space="preserve">
+        <path class="mr-pager__icon-path" fill-rule="evenodd" clip-rule="evenodd" d="M4.243,0l22.971,22.971L4.243,45.941L0,41.699l18.728-18.728L0,4.243
+        L4.243,0z"/>
+    </svg>
+    <span class="mr-pager__label">Next</span>
+    <span class="ir">Next Page</span>
+</button>
+
+<div ng-style="{left: Ctrl.thumbsOffset, right: Ctrl.thumbsOffset}" class="mr-pages__group">
+    <div ng-style="{left: (page * -100) + '%'}" class="mr-pages__scroller" ng-transclude></div>
+</div>

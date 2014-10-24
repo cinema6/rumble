@@ -1,0 +1,16 @@
+<button class="mr-pages__page" ng-disabled="disableWhen()" ng-click="onSelect();" type="button" 
+	title="Video {{index + 1}} : {{card.title}}"
+	ng-class="{
+		'mr-pages__page--active': active,
+		'mr-pages__page--ad' : card.params.ad
+	}">
+	<span class="mr-pages__current-indicator css-promote">
+		<span class="ir">Current Page</span>
+	</span>
+	<span class="mr-pages__label">{{index + 1}}</span>
+	<span class="mr-pages__fader css-promote">&nbsp;</span>
+	<span class="mr-pages__preview-img css-promote"
+        ng-style="{ backgroundImage: thumb }">
+        <span class="ir">Video {{index + 1}} : {{card.title}}</span>
+    </span>
+</button>

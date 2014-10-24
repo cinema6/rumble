@@ -1,0 +1,20 @@
+<ul ng-repeat="deck in DeckCtrl.decks"
+    class="mr-cards__list"
+    ng-class="{
+        inactive: !deck.active
+    }">
+    <li class="mr-cards__item slides__item"
+        ng-repeat="item in (deck.cards | deck:deck.index:1)"
+        ng-class="{
+            inactive: ($index !== deck.index || !deck.active)
+        }">
+        <mr-card
+            x-number="{{tocCards.indexOf(item) + 1}}"
+            x-total="{{tocCards.length}}"
+            x-config="item"
+            x-profile="deviceProfile"
+            x-active="($index === deck.index) && deck.active"
+            x-on-deck="($index === (deck.index + 1))">
+        </mr-card>
+    </li>
+</ul>

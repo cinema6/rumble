@@ -1,12 +1,9 @@
-<div class="experience__group" ng-class="app.data.experience.data.theme">
-        
-    <div class="MiniReel__group">
-
-        <button class="MiniReel__closeBtn ui__btn" ng-click="RumbleCtrl.setPosition(-1);" type="button">
-            <span class="sprite sprite--close"><span class="ir">Close</span></span>
-        </button><!--^this is the x button in the upper right corner-->
-        <h1 class="mr-title tk--hdr">{{app.data.experience.data.title}}</h1> <!--this is title at the very top--> 
-
+<div class="mr-experience" ng-class="app.data.experience.data.theme">
+    <button class="mr-ui__close" ng-click="RumbleCtrl.setPosition(-1);" type="button">
+        <span class="sprite mr-icons__close"><span class="ir">Close</span></span>
+    </button><!--^this is the x button in the upper right corner-->
+    <h1 class="mr-title tk--hdr">{{app.data.experience.data.title}}</h1> <!--this is title at the very top--> 
+    <div class="mr-card__container">
         <div class="mr-pub-logo-box">&nbsp;</div>
 
         <div class="mr-card__video-container">
@@ -63,7 +60,7 @@
     </div>
 </div><!--.mr-experience-->
 
-<div class="overlay">&nbsp;</div>
+<div class="mr-overlay">&nbsp;</div>
 
 <article id="card" class="mr-container" ng-class="app.data.experience.data.theme">
     <ng-switch on="app.state">
