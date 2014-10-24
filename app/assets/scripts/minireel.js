@@ -637,7 +637,7 @@ function( angular , c6Defines  , tracker ,
 
                 if (isAd(card)) { continue; }
 
-                return (card || null) && card.thumbs.small;
+                return (card || null) && (card.thumbs || {}).small || null;
             }
 
             return null;
@@ -652,7 +652,7 @@ function( angular , c6Defines  , tracker ,
 
                 if (isAd(card)) { continue; }
 
-                return (card || null) && card.thumbs.small;
+                return (card || null) && (card.thumbs || {}).small || null;
             }
 
             return null;

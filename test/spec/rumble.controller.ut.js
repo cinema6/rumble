@@ -396,6 +396,19 @@ define(['c6uilib', 'services', 'minireel', 'angular'], function(c6uilibModule, s
                 });
                 expect($scope.prevThumb).toBe('vid1.jpg');
             });
+
+            describe('if the next card has no thumbs', function() {
+                beforeEach(function() {
+                    $scope.deck[2].thumbs = null;
+                    $scope.$apply(function() {
+                        $scope.currentIndex = 3;
+                    });
+                });
+
+                it('should be null', function() {
+                    expect($scope.prevThumb).toBeNull();
+                });
+            });
         });
 
         describe('$scope.nextThumb', function() {
@@ -422,6 +435,19 @@ define(['c6uilib', 'services', 'minireel', 'angular'], function(c6uilibModule, s
                     $scope.currentIndex = 2;
                 });
                 expect($scope.nextThumb).toBe('ad2.jpg');
+            });
+
+            describe('if the next card has no thumbs', function() {
+                beforeEach(function() {
+                    $scope.deck[0].thumbs = null;
+                    $scope.$apply(function() {
+                        $scope.currentIndex = -1;
+                    });
+                });
+
+                it('should be null', function() {
+                    expect($scope.nextThumb).toBeNull();
+                });
             });
 
             it('should skip non-sponsored ads and go to the next thumb', function() {
