@@ -11,9 +11,9 @@
             &nbsp;
         </div>
         <h1 class="titleBar__title"
-        ng-class="{'titleBar__title--brandedMR' : true}">
+        ng-class="{'titleBar__title--brandedMR' : false}">
             <span class="brandedMR__tagline"
-            ng-show="true">
+            ng-show="false">
                 <a href="#" target="_blank" title="!!!!BRAND NAME!!!!"
                 class="brandedMR__taglineBrand">!!!!BRAND NAME!!!!</a> 
                 Presents
@@ -23,7 +23,7 @@
                 {{app.data.experience.data.title}}
             </span>
         </h1>
-        <div class="brandProfile__group">
+        <div class="brandProfile__group" ng-show="false">
             <a href="#" title="!!!!BRAND NAME!!!!" target="_blank"
             class="brandProfile__logoBox">
                 <img class="brandProfile__logo" alt="!!!!BRAND NAME!!!!"

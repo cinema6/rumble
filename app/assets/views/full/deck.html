@@ -27,7 +27,8 @@ ng-show="nav.enabled"
 class="slideNav__btn slideNav__btn--prev c6-fade"
 ng-class="{
     'slideNav__btn--small': currentCard.title.length + currentCard.note.length <= 100 || currentCard.ad,
-    'slideNav__btn--med': currentCard.title.length + currentCard.note.length > 100 && currentCard.title.length + currentCard.note.length <= 200
+    'slideNav__btn--med': currentCard.title.length + currentCard.note.length > 100 && currentCard.title.length + currentCard.note.length <= 200,
+    'slideNav__btn--displayAdCard' : false
 }"
 type="button"
 title="Previous Page"
@@ -45,7 +46,8 @@ ng-show="nav.enabled"
 class="slideNav__btn slideNav__btn--next c6-fade"
 ng-class="{
     'slideNav__btn--small': currentCard.title.length + currentCard.note.length <= 100 || currentCard.ad,
-    'slideNav__btn--med': currentCard.title.length + currentCard.note.length > 100 && currentCard.title.length + currentCard.note.length <= 200
+    'slideNav__btn--med': currentCard.title.length + currentCard.note.length > 100 && currentCard.title.length + currentCard.note.length <= 200,
+    'slideNav__btn--displayAdCard' : false
 }"
 type="button"
 title="Next Page"
