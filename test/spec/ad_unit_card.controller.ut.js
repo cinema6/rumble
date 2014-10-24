@@ -302,6 +302,64 @@ define(['minireel', 'services'], function(minireelModule, servicesModule) {
                 });
             });
 
+            describe('flyAway', function() {
+                describe('if the card is not active', function() {
+                    beforeEach(function() {
+                        $scope.$apply(function() {
+                            $scope.active = false;
+                        });
+                    });
+
+                    it('should be true', function() {
+                        expect(AdUnitCardCtrl.flyAway).toBe(true);
+                    });
+                });
+
+                describe('if the card is active', function() {
+                    beforeEach(function() {
+                        $scope.$apply(function() {
+                            $scope.active = true;
+                        });
+                    });
+
+                    describe('if the post module is not present', function() {
+                        beforeEach(function() {
+                            $scope.config.modules = ['displayAd'];
+                        });
+
+                        [true, false].forEach(function(bool) {
+                            describe('if postModuleActive is ' + bool, function() {
+                                beforeEach(function() {
+                                    AdUnitCardCtrl.postModuleActive = bool;
+                                });
+
+                                it('should be false', function() {
+                                    expect(AdUnitCardCtrl.flyAway).toBe(false);
+                                });
+                            });
+                        });
+                    });
+
+                    describe('if the post module is present', function() {
+                        beforeEach(function() {
+                            $scope.config.modules = ['displayAd', 'post'];
+                        });
+
+                        [true, false].forEach(function(bool) {
+                            describe('if postModuleActive is ' + bool, function() {
+                                beforeEach(function() {
+                                    AdUnitCardCtrl.postModuleActive = bool;
+                                });
+
+                                it('should be ' + bool, function() {
+                                    expect(AdUnitCardCtrl.flyAway).toBe(bool);
+                                });
+                            });
+                        });
+                    });
+                });
+            });
+
             describe('enablePlay', function() {
                 [true, false].forEach(function(bool) {
                     describe('if touch is ' + bool, function() {

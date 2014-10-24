@@ -128,6 +128,11 @@ function( angular ) {
                     get: function() {
                         return !!this.player && (_data.hasPlayed || !data.autoplay) && this.player.paused;
                     }
+                },
+                flyAway: {
+                    get: function() {
+                        return !$scope.active || ($scope.hasModule('post') && this.postModuleActive);
+                    }
                 }
             });
 
