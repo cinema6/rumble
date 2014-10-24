@@ -49,7 +49,7 @@
             "blacklist": ["solo", "solo-ads"]
         },
         "modules/companion_ad": {
-            "blacklist": ["solo", "solo-ads"]
+            "blacklist": ["solo"]
         },
         "modules/display_ad": {
             "blacklist": ["solo"]

@@ -127,7 +127,7 @@ define(['minireel', 'services'], function(minireelModule, servicesModule) {
                 it('should create some data', function() {
                     expect($scope.config._data).toEqual({
                         hasPlayed: false,
-                        companion: undefined,
+                        companion: null,
                         modules: {
                             displayAd: {
                                 active: false
@@ -457,7 +457,6 @@ define(['minireel', 'services'], function(minireelModule, servicesModule) {
 
                         describe('if there are no companions', function() {
                             beforeEach(function() {
-                                $scope.config._data.companion = undefined;
                                 iface.getCompanions.and.returnValue(null);
                                 $scope.$emit($event, iface);
                                 iface.emit('companionsReady');

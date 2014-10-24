@@ -13,7 +13,7 @@ function( angular ) {
                 data = config.data,
                 _data = config._data || (config._data = {
                     hasPlayed: false,
-                    companion: undefined,
+                    companion: null,
                     modules: {
                         displayAd: {
                             active: false

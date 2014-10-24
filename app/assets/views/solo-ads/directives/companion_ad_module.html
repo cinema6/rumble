@@ -1,0 +1,8 @@
+<div ng-show="active" class="companionAd__group">
+    <h1 class="companionAd__label">Advertisement</h1>
+    <div ng-switch="adType" ng-show="active">
+        <div class="companionAd" ng-switch-when="iframe"><iframe ng-src="{{fileURI}}" scrolling="no"></iframe></div>
+        <div class="companionAd" ng-switch-when="image"><img ng-src="{{fileURI}}" /></div>
+        <div class="companionAd" ng-switch-when="html" ng-bind-html="fileURI"></div>
+    </div>
+</div>
