@@ -5,6 +5,8 @@
     Solo players are MRs with a single video card.
   * [FEATURE]: Allow for display ads, card autoplaying, and card
     autoadvancing to be overridden on a card-by-card basis
+  * [FEATURE]: Add ```<ad-unit-card>``` for playing back ad units as
+    content
 
 ## v1.3.0 (October 16, 2014)
 * *[v1.3.0.rc1]*
