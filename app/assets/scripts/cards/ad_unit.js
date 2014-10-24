@@ -106,8 +106,15 @@ function( angular ) {
                     .once('ready', function() {
                         playerReady(player);
                     })
+                    .on('play', function() {
+                        self.postModuleActive = false;
+                    })
                     .on('ended', function() {
-                        $scope.$emit('<mr-card>:contentEnd', $scope.config);
+                        self.postModuleActive = true;
+
+                        if (!$scope.hasModule('post')) {
+                            $scope.$emit('<mr-card>:contentEnd', $scope.config);
+                        }
                     });
             }
 
@@ -115,6 +122,7 @@ function( angular ) {
             this.adType = (profile.flash && !!data.vpaid) ? 'vpaid' : 'vast';
             this.adTag = compileAdTag(data[this.adType]);
             this.enablePlay = !profile.touch;
+            this.postModuleActive = false;
             Object.defineProperties(this, {
                 showPlay: {
                     get: function() {

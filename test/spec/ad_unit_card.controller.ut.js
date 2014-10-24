@@ -1,7 +1,7 @@
 define(['minireel', 'services'], function(minireelModule, servicesModule) {
     'use strict';
 
-    describe('AdUnitCardController', function() {
+    ddescribe('AdUnitCardController', function() {
         var $rootScope,
             $scope,
             $controller,
@@ -78,6 +78,9 @@ define(['minireel', 'services'], function(minireelModule, servicesModule) {
                 c6AppData = $injector.get('c6AppData');
 
                 $scope = $rootScope.$new();
+                $scope.hasModule = function(module) {
+                    return $scope.config.modules.indexOf(module) > -1;
+                };
                 $scope.config = {
                     modules: ['displayAd'],
                     data: {
@@ -136,6 +139,12 @@ define(['minireel', 'services'], function(minireelModule, servicesModule) {
             describe('player', function() {
                 it('should be null', function() {
                     expect(AdUnitCardCtrl.player).toBeNull();
+                });
+            });
+
+            describe('postModuleActive', function() {
+                it('should be false', function() {
+                    expect(AdUnitCardCtrl.postModuleActive).toBe(false);
                 });
             });
 
@@ -333,8 +342,46 @@ define(['minireel', 'services'], function(minireelModule, servicesModule) {
                             iface.emit('ended');
                         });
 
-                        it('should $emit the <mr-card>:contentEnd event', function() {
-                            expect($scope.$emit).toHaveBeenCalledWith('<mr-card>:contentEnd', $scope.config);
+                        describe('if the post module is present', function() {
+                            beforeEach(function() {
+                                $scope.config.modules = ['post'];
+                                $scope.$emit.calls.reset();
+
+                                iface.emit('ended');
+                            });
+
+                            it('should not emit <mr-card>:contentEnd', function() {
+                                expect($scope.$emit).not.toHaveBeenCalledWith('<mr-card>:contentEnd', $scope.config);
+                            });
+                        });
+
+                        describe('if the post module is not present', function() {
+                            beforeEach(function() {
+                                $scope.config.modules = ['displayAd'];
+                                $scope.$emit.calls.reset();
+
+                                iface.emit('ended');
+                            });
+
+                            it('should $emit the <mr-card>:contentEnd event', function() {
+                                expect($scope.$emit).toHaveBeenCalledWith('<mr-card>:contentEnd', $scope.config);
+                            });
+                        });
+
+                        it('should set postModuleActive to true', function() {
+                            expect(AdUnitCardCtrl.postModuleActive).toBe(true);
+                        });
+                    });
+
+                    describe('when the video plays', function() {
+                        beforeEach(function() {
+                            AdUnitCardCtrl.postModuleActive = true;
+
+                            iface.emit('play');
+                        });
+
+                        it('should disable the postModule', function() {
+                            expect(AdUnitCardCtrl.postModuleActive).toBe(false);
                         });
                     });
 

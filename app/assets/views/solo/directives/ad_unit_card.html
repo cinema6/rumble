@@ -1,7 +1,7 @@
 <article class="slide__group">
     <post-module ng-if="hasModule('post')"
         active="Ctrl.postModuleActive"
-        on-replay="Ctrl.playVideo()"
+        on-replay="Ctrl.player.play()"
         on-dismiss="Ctrl.postModuleActive = false"
         sponsor-href="{{config.links.Website}}">
     </post-module>
