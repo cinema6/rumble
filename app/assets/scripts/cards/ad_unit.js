@@ -13,6 +13,7 @@ function( angular ) {
                 data = config.data,
                 _data = config._data || (config._data = {
                     hasPlayed: false,
+                    companion: undefined,
                     modules: {
                         displayAd: {
                             active: false
@@ -105,6 +106,11 @@ function( angular ) {
                 player
                     .once('ready', function() {
                         playerReady(player);
+                    })
+                    .once('companionsReady', function() {
+                        var companions = player.getCompanions(300, 250);
+
+                        _data.companion = companions && companions[0];
                     })
                     .on('play', function() {
                         self.postModuleActive = false;

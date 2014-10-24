@@ -26,6 +26,8 @@ define(['minireel', 'services'], function(minireelModule, servicesModule) {
             this.play = jasmine.createSpy('iface.play()');
             this.pause = jasmine.createSpy('iface.pause()');
             this.load = jasmine.createSpy('iface.load()');
+            this.getCompanions = jasmine.createSpy('iface.getCompanions()')
+                .and.returnValue(null);
 
             this.paused = true;
             this.currentTime = 0;
@@ -125,6 +127,7 @@ define(['minireel', 'services'], function(minireelModule, servicesModule) {
                 it('should create some data', function() {
                     expect($scope.config._data).toEqual({
                         hasPlayed: false,
+                        companion: undefined,
                         modules: {
                             displayAd: {
                                 active: false
@@ -440,6 +443,49 @@ define(['minireel', 'services'], function(minireelModule, servicesModule) {
 
                         it('should disable the postModule', function() {
                             expect(AdUnitCardCtrl.postModuleActive).toBe(false);
+                        });
+                    });
+
+                    describe('when the companions are ready', function() {
+                        beforeEach(function() {
+                            iface.emit('companionsReady');
+                        });
+
+                        it('should get a 300x250 companion', function() {
+                            expect(iface.getCompanions).toHaveBeenCalledWith(300, 250);
+                        });
+
+                        describe('if there are no companions', function() {
+                            beforeEach(function() {
+                                $scope.config._data.companion = undefined;
+                                iface.getCompanions.and.returnValue(null);
+                                $scope.$emit($event, iface);
+                                iface.emit('companionsReady');
+                            });
+
+                            it('should set the _data.companion to null', function() {
+                                expect($scope.config._data.companion).toBeNull();
+                            });
+                        });
+
+                        describe('if there is a companion', function() {
+                            var companions;
+
+                            beforeEach(function() {
+                                companions = [
+                                    {
+                                        width: 300,
+                                        height: 250
+                                    }
+                                ];
+                                iface.getCompanions.and.returnValue(companions);
+                                $scope.$emit($event, iface);
+                                iface.emit('companionsReady');
+                            });
+
+                            it('should set the _data.companion to the returned companion', function() {
+                                expect($scope.config._data.companion).toBe(companions[0]);
+                            });
                         });
                     });
 
