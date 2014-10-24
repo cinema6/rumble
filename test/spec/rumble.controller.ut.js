@@ -31,14 +31,14 @@ define(['c6uilib', 'services', 'minireel', 'angular'], function(c6uilibModule, s
                 trackPage   : jasmine.createSpy('tracker.trackPage'),
                 trackEvent  : jasmine.createSpy('tracker.trackEvent')
             };
-            trackerServiceSpy = jasmine.createSpy('trackerService').andReturn(trackerSpy);
+            trackerServiceSpy = jasmine.createSpy('trackerService').and.returnValue(trackerSpy);
 
             MiniReelService = {
                 createDeck: jasmine.createSpy('MiniReelService.createDeck()')
-                    .andCallFake(function(data) {
+                    .and.callFake(function(data) {
                         var playlist = angular.copy(data.deck);
 
-                        MiniReelService.createDeck.mostRecentCall.result = playlist;
+                        MiniReelService.createDeck.calls.mostRecent().result = playlist;
 
                         playlist.forEach(function(video) {
                             video.player = null;
@@ -178,7 +178,7 @@ define(['c6uilib', 'services', 'minireel', 'angular'], function(c6uilibModule, s
             module(servicesModule.name, function($provide) {
                 $provide.value('ControlsService', {
                     init: jasmine.createSpy('ControlsService.init()')
-                        .andReturn({})
+                        .and.returnValue({})
                 });
             });
             module(minireelModule.name, function($provide) {
@@ -202,7 +202,7 @@ define(['c6uilib', 'services', 'minireel', 'angular'], function(c6uilibModule, s
                     getVideoId      : jasmine.createSpy('player.getVideoId'),
                     isReady         : jasmine.createSpy('player.isReady'),
                 });
-                spyOn(mockPlayer, 'on').andCallThrough();
+                spyOn(mockPlayer, 'on').and.callThrough();
 
                 $scope      = $rootScope.$new();
 
@@ -211,7 +211,7 @@ define(['c6uilib', 'services', 'minireel', 'angular'], function(c6uilibModule, s
                 };
                 $scope.AppCtrl = {};
 
-                spyOn(cinema6, 'getSession').andCallFake(function() {
+                spyOn(cinema6, 'getSession').and.callFake(function() {
                     sessionDeferred = $q.defer();
                     return sessionDeferred.promise;
                 });
@@ -238,7 +238,7 @@ define(['c6uilib', 'services', 'minireel', 'angular'], function(c6uilibModule, s
                     $scope.app.data.experience.data.deck = [{id: 'foo'},{id: 'bar'},{id: 'baz'},{id:'biz'},{id:'buzz'},{id:'fub'}];
                     $scope.AppCtrl = {};
 
-                    spyOn($scope, '$broadcast').andCallThrough();
+                    spyOn($scope, '$broadcast').and.callThrough();
 
                     initController();
                 };
@@ -252,7 +252,7 @@ define(['c6uilib', 'services', 'minireel', 'angular'], function(c6uilibModule, s
                 expect(RumbleCtrl).toBeDefined();
                 expect($scope.deviceProfile).toBe(appData.profile);
 
-                expect($scope.deck).toBe(MiniReelService.createDeck.mostRecentCall.result);
+                expect($scope.deck).toBe(MiniReelService.createDeck.calls.mostRecent().result);
                 expect($scope.currentIndex).toEqual(-1);
                 expect($scope.currentCard).toBeNull();
                 expect($scope.atHead).toBeNull();
@@ -282,7 +282,7 @@ define(['c6uilib', 'services', 'minireel', 'angular'], function(c6uilibModule, s
                     });
                 });
 
-                expect(BallotService.init.callCount).toBe(1);
+                expect(BallotService.init.calls.count()).toBe(1);
             });
 
             it('should initialize the google analytics', function(){
@@ -396,6 +396,19 @@ define(['c6uilib', 'services', 'minireel', 'angular'], function(c6uilibModule, s
                 });
                 expect($scope.prevThumb).toBe('vid1.jpg');
             });
+
+            describe('if the next card has no thumbs', function() {
+                beforeEach(function() {
+                    $scope.deck[2].thumbs = null;
+                    $scope.$apply(function() {
+                        $scope.currentIndex = 3;
+                    });
+                });
+
+                it('should be null', function() {
+                    expect($scope.prevThumb).toBeNull();
+                });
+            });
         });
 
         describe('$scope.nextThumb', function() {
@@ -422,6 +435,19 @@ define(['c6uilib', 'services', 'minireel', 'angular'], function(c6uilibModule, s
                     $scope.currentIndex = 2;
                 });
                 expect($scope.nextThumb).toBe('ad2.jpg');
+            });
+
+            describe('if the next card has no thumbs', function() {
+                beforeEach(function() {
+                    $scope.deck[0].thumbs = null;
+                    $scope.$apply(function() {
+                        $scope.currentIndex = -1;
+                    });
+                });
+
+                it('should be null', function() {
+                    expect($scope.nextThumb).toBeNull();
+                });
             });
 
             it('should skip non-sponsored ads and go to the next thumb', function() {
@@ -946,9 +972,9 @@ define(['c6uilib', 'services', 'minireel', 'angular'], function(c6uilibModule, s
                         play    : jasmine.createSpy('item'+index+'.play'),
                         pause   : jasmine.createSpy('item'+index+'.pause')
                     };
-                    item.player.isReady.andReturn(true);
+                    item.player.isReady.and.returnValue(true);
                 });
-                spyOn($scope, '$emit').andCallThrough();
+                spyOn($scope, '$emit').and.callThrough();
             });
 
             describe('splicing ads', function() {
@@ -990,26 +1016,26 @@ define(['c6uilib', 'services', 'minireel', 'angular'], function(c6uilibModule, s
 
             describe('loading ads', function() {
                 beforeEach(function() {
-                    spyOn($scope, '$broadcast').andCallThrough();
+                    spyOn($scope, '$broadcast').and.callThrough();
                 });
 
                 it('should broadcast adOnDeck when a static ad is in the next position', function() {
                     RumbleCtrl.setPosition(0); // video 1
                     expect($scope.$broadcast).toHaveBeenCalledWith('adOnDeck',jasmine.any(Object));
-                    expect($scope.$broadcast.mostRecentCall.args[1].id).toBe('rc-advertisement1');
+                    expect($scope.$broadcast.calls.mostRecent().args[1].id).toBe('rc-advertisement1');
 
                     RumbleCtrl.setPosition(1); // shows static ad
                     RumbleCtrl.setPosition(2); // video 2
                     RumbleCtrl.setPosition(3); // shows other static ad
 
-                    expect($scope.$broadcast.callCount).toBe(2);
-                    expect($scope.$broadcast.mostRecentCall.args[1].id).toBe('rc-advertisement2');
+                    expect($scope.$broadcast.calls.count()).toBe(2);
+                    expect($scope.$broadcast.calls.mostRecent().args[1].id).toBe('rc-advertisement2');
                 });
 
                 it('should broadcast adOnDeck if a static ad is jumped to directly', function() {
                     RumbleCtrl.setPosition(1);
                     expect($scope.$broadcast).toHaveBeenCalledWith('adOnDeck',jasmine.any(Object));
-                    expect($scope.$broadcast.mostRecentCall.args[1].id).toBe('rc-advertisement1');
+                    expect($scope.$broadcast.calls.mostRecent().args[1].id).toBe('rc-advertisement1');
                 });
 
                 it('should broadcast adOnDeck when dynamic ad should play in the next position', function() {
@@ -1019,15 +1045,15 @@ define(['c6uilib', 'services', 'minireel', 'angular'], function(c6uilibModule, s
 
                     RumbleCtrl.setPosition(0);
                     expect($scope.$broadcast).toHaveBeenCalledWith('adOnDeck',jasmine.any(Object));
-                    expect($scope.$broadcast.mostRecentCall.args[1].id).toBe('rc-advertisement1');
+                    expect($scope.$broadcast.calls.mostRecent().args[1].id).toBe('rc-advertisement1');
 
                     RumbleCtrl.setPosition(1); // shows ad
                     RumbleCtrl.setPosition(2); // video #1
                     RumbleCtrl.setPosition(3); // video #2
                     RumbleCtrl.setPosition(4); // video #3, ad should show after 3rd video, so it's loaded now
 
-                    expect($scope.$broadcast.callCount).toBe(2);
-                    expect($scope.$broadcast.mostRecentCall.args[1].id).toBe('rc-advertisement2');
+                    expect($scope.$broadcast.calls.count()).toBe(2);
+                    expect($scope.$broadcast.calls.mostRecent().args[1].id).toBe('rc-advertisement2');
                 });
 
                 it('should only happen once if frequency is set to 0', function() {
@@ -1035,14 +1061,14 @@ define(['c6uilib', 'services', 'minireel', 'angular'], function(c6uilibModule, s
 
                     RumbleCtrl.setPosition(0);
                     expect($scope.$broadcast).toHaveBeenCalledWith('adOnDeck',jasmine.any(Object));
-                    expect($scope.$broadcast.mostRecentCall.args[1].id).toBe('rc-advertisement1');
+                    expect($scope.$broadcast.calls.mostRecent().args[1].id).toBe('rc-advertisement1');
 
                     RumbleCtrl.setPosition(1); // shows ad
                     RumbleCtrl.setPosition(2); // video #1
                     RumbleCtrl.setPosition(3); // video #2
                     RumbleCtrl.setPosition(4); // video #3
 
-                    expect($scope.$broadcast.callCount).toBe(1);
+                    expect($scope.$broadcast.calls.count()).toBe(1);
                 });
 
                 it('should not occur if firstPLacement is set to -1', function() {
@@ -1063,7 +1089,7 @@ define(['c6uilib', 'services', 'minireel', 'angular'], function(c6uilibModule, s
 
                     RumbleCtrl.setPosition(0);
                     expect($scope.$broadcast).toHaveBeenCalledWith('adOnDeck',jasmine.any(Object));
-                    expect($scope.$broadcast.mostRecentCall.args[1].id).toBe('rc-advertisement1');
+                    expect($scope.$broadcast.calls.mostRecent().args[1].id).toBe('rc-advertisement1');
 
                     RumbleCtrl.setPosition(4); // shows ad
                     expect($scope.currentCard.ad).toBe(true);
@@ -1072,15 +1098,15 @@ define(['c6uilib', 'services', 'minireel', 'angular'], function(c6uilibModule, s
                     RumbleCtrl.setPosition(0); // video #2
                     RumbleCtrl.setPosition(2); // video #3, ad should show after 3rd video, so it's loaded now
 
-                    expect($scope.$broadcast.callCount).toBe(2);
-                    expect($scope.$broadcast.mostRecentCall.args[1].id).toBe('rc-advertisement2');
+                    expect($scope.$broadcast.calls.count()).toBe(2);
+                    expect($scope.$broadcast.calls.mostRecent().args[1].id).toBe('rc-advertisement2');
                 });
             });
 
             describe('showing ads', function() {
                 beforeEach(function() {
-                    spyOn(RumbleCtrl, 'setPosition').andCallThrough();
-                    spyOn($scope, '$broadcast').andCallThrough();
+                    spyOn(RumbleCtrl, 'setPosition').and.callThrough();
+                    spyOn($scope, '$broadcast').and.callThrough();
                 });
 
                 describe('when static ads are in the deck', function(){
@@ -1123,9 +1149,9 @@ define(['c6uilib', 'services', 'minireel', 'angular'], function(c6uilibModule, s
                         expect($scope.currentCard.ad).toBe(true);
                         expect($scope.$broadcast).toHaveBeenCalledWith('adOnDeck',jasmine.any(Object));
 
-                        expect($scope.$broadcast.callCount).toBe(2);
-                        expect($scope.$broadcast.calls[0].args[0]).toBe('adOnDeck');
-                        expect($scope.$broadcast.calls[1].args[0]).toBe('adOnDeck');
+                        expect($scope.$broadcast.calls.count()).toBe(2);
+                        expect($scope.$broadcast.calls.argsFor(0)[0]).toBe('adOnDeck');
+                        expect($scope.$broadcast.calls.argsFor(1)[0]).toBe('adOnDeck');
                     });
                 });
 
@@ -1301,7 +1327,7 @@ define(['c6uilib', 'services', 'minireel', 'angular'], function(c6uilibModule, s
             });
 
             it('handles moving forward',function(){
-                trackerSpy.trackPage.reset();
+                trackerSpy.trackPage.calls.reset();
                 $scope.currentIndex = 0;
                 $scope.currentCard  = $scope.deck[0];
                 RumbleCtrl.goForward();
@@ -1311,8 +1337,8 @@ define(['c6uilib', 'services', 'minireel', 'angular'], function(c6uilibModule, s
                 expect($scope.atHead).toEqual(false);
                 expect($scope.atTail).toEqual(false);
                 expect($scope.$emit).toHaveBeenCalledWith('reelMove');
-                expect($scope.$emit.callCount).toBe(3); // positionWillChange, positionDidChange, reelMove
-                expect(trackerSpy.trackPage.callCount).toEqual(1);
+                expect($scope.$emit.calls.count()).toBe(3); // positionWillChange, positionDidChange, reelMove
+                expect(trackerSpy.trackPage.calls.count()).toEqual(1);
                 expect(trackerSpy.trackPage).toHaveBeenCalledWith({
                     page : '/mr/e-722bd3c4942331/ad1',
                     title : 'my title - ad',
@@ -1323,16 +1349,16 @@ define(['c6uilib', 'services', 'minireel', 'angular'], function(c6uilibModule, s
             });
 
             it('sends ga event if moving forward from control', function(){
-                trackerSpy.trackPage.reset();
-                trackerSpy.trackEvent.reset();
+                trackerSpy.trackPage.calls.reset();
+                trackerSpy.trackEvent.calls.reset();
                 $scope.currentIndex = 0;
                 $scope.currentCard  = $scope.deck[0];
                 RumbleCtrl.goForward('test');
 
                 expect($scope.currentIndex).toEqual(1);
                 expect($scope.currentCard).toBe($scope.deck[1]);
-                expect(trackerSpy.trackPage.callCount).toEqual(1);
-                expect(trackerSpy.trackEvent.callCount).toEqual(1);
+                expect(trackerSpy.trackPage.calls.count()).toEqual(1);
+                expect(trackerSpy.trackEvent.calls.count()).toEqual(1);
                 expect(trackerSpy.trackPage).toHaveBeenCalledWith({
                     page : '/mr/e-722bd3c4942331/ad1',
                     title : 'my title - ad',
@@ -1353,8 +1379,8 @@ define(['c6uilib', 'services', 'minireel', 'angular'], function(c6uilibModule, s
 
 
             it('handles moving backward',function(){
-                trackerSpy.trackPage.reset();
-                trackerSpy.trackEvent.reset();
+                trackerSpy.trackPage.calls.reset();
+                trackerSpy.trackEvent.calls.reset();
                 $scope.currentIndex = 2;
                 $scope.currentCard  = $scope.deck[2];
                 RumbleCtrl.goBack();
@@ -1364,9 +1390,9 @@ define(['c6uilib', 'services', 'minireel', 'angular'], function(c6uilibModule, s
                 expect($scope.atHead).toEqual(false);
                 expect($scope.atTail).toEqual(false);
                 expect($scope.$emit).toHaveBeenCalledWith('reelMove');
-                expect($scope.$emit.callCount).toBe(3); // positionWillChange, positionDidChange, reelMove
-                expect(trackerSpy.trackPage.callCount).toEqual(1);
-                expect(trackerSpy.trackEvent.callCount).toEqual(1);
+                expect($scope.$emit.calls.count()).toBe(3); // positionWillChange, positionDidChange, reelMove
+                expect(trackerSpy.trackPage.calls.count()).toEqual(1);
+                expect(trackerSpy.trackEvent.calls.count()).toEqual(1);
                 expect(trackerSpy.trackPage).toHaveBeenCalledWith({
                     page : '/mr/e-722bd3c4942331/ad1',
                     title : 'my title - ad',
@@ -1395,16 +1421,16 @@ define(['c6uilib', 'services', 'minireel', 'angular'], function(c6uilibModule, s
             });
 
             it('sends ga event if moving backward from control', function(){
-                trackerSpy.trackPage.reset();
-                trackerSpy.trackEvent.reset();
+                trackerSpy.trackPage.calls.reset();
+                trackerSpy.trackEvent.calls.reset();
                 $scope.currentIndex = 2;
                 $scope.currentCard  = $scope.deck[2];
                 RumbleCtrl.goBack('test');
 
                 expect($scope.currentIndex).toEqual(1);
                 expect($scope.currentCard).toBe($scope.deck[1]);
-                expect(trackerSpy.trackPage.callCount).toEqual(1);
-                expect(trackerSpy.trackEvent.callCount).toEqual(1);
+                expect(trackerSpy.trackPage.calls.count()).toEqual(1);
+                expect(trackerSpy.trackEvent.calls.count()).toEqual(1);
                 expect(trackerSpy.trackPage).toHaveBeenCalledWith({
                     page : '/mr/e-722bd3c4942331/ad1',
                     title : 'my title - ad',
@@ -1426,8 +1452,8 @@ define(['c6uilib', 'services', 'minireel', 'angular'], function(c6uilibModule, s
             });
 
             it('handles goTo', function(){
-                trackerSpy.trackPage.reset();
-                trackerSpy.trackEvent.reset();
+                trackerSpy.trackPage.calls.reset();
+                trackerSpy.trackEvent.calls.reset();
                 $scope.deck.forEach(function(card) {
                     if (card.ad) { card.visited = true; }
                 });
@@ -1441,9 +1467,9 @@ define(['c6uilib', 'services', 'minireel', 'angular'], function(c6uilibModule, s
                 expect($scope.atHead).toEqual(false);
                 expect($scope.atTail).toEqual(false);
                 expect($scope.$emit).toHaveBeenCalledWith('reelMove');
-                expect($scope.$emit.callCount).toBe(3); // positionWillChange, positionDidChange, reelMove
-                expect(trackerSpy.trackPage.callCount).toEqual(1);
-                expect(trackerSpy.trackEvent.callCount).toEqual(1);
+                expect($scope.$emit.calls.count()).toBe(3); // positionWillChange, positionDidChange, reelMove
+                expect(trackerSpy.trackPage.calls.count()).toEqual(1);
+                expect(trackerSpy.trackEvent.calls.count()).toEqual(1);
                 expect(trackerSpy.trackPage).toHaveBeenCalledWith({
                     page : '/mr/e-722bd3c4942331/vid2',
                     title : 'my title - vid2 caption',
@@ -1464,8 +1490,8 @@ define(['c6uilib', 'services', 'minireel', 'angular'], function(c6uilibModule, s
             });
 
             it('sends ga event if going to from control', function(){
-                trackerSpy.trackPage.reset();
-                trackerSpy.trackEvent.reset();
+                trackerSpy.trackPage.calls.reset();
+                trackerSpy.trackEvent.calls.reset();
                 $scope.deck.forEach(function(card) {
                     if (card.ad) { card.visited = true; }
                 });
@@ -1476,8 +1502,8 @@ define(['c6uilib', 'services', 'minireel', 'angular'], function(c6uilibModule, s
 
                 expect($scope.currentIndex).toEqual(2);
                 expect($scope.currentCard).toBe($scope.deck[2]);
-                expect(trackerSpy.trackPage.callCount).toEqual(1);
-                expect(trackerSpy.trackEvent.callCount).toEqual(1);
+                expect(trackerSpy.trackPage.calls.count()).toEqual(1);
+                expect(trackerSpy.trackEvent.calls.count()).toEqual(1);
                 expect(trackerSpy.trackPage).toHaveBeenCalledWith({
                     page : '/mr/e-722bd3c4942331/vid2',
                     title : 'my title - vid2 caption',
@@ -1505,7 +1531,7 @@ define(['c6uilib', 'services', 'minireel', 'angular'], function(c6uilibModule, s
                     $scope.$apply(function() {
                         $scope.$emit(event, provideNavController);
                     });
-                    navController = provideNavController.mostRecentCall.args[0];
+                    navController = provideNavController.calls.mostRecent().args[0];
                     spyOn(navController, 'enabled');
 
                     RumbleCtrl.setPosition(1);
@@ -1517,9 +1543,9 @@ define(['c6uilib', 'services', 'minireel', 'angular'], function(c6uilibModule, s
         describe('starting the mini reel', function() {
             describe('google analytics',function(){
                 beforeEach(function(){
-                    trackerSpy.trackPage.reset();
-                    trackerSpy.trackEvent.reset();
-                    spyOn($scope, '$emit').andCallThrough();
+                    trackerSpy.trackPage.calls.reset();
+                    trackerSpy.trackEvent.calls.reset();
+                    spyOn($scope, '$emit').and.callThrough();
                     RumbleCtrl.start();
                 });
                 it('does not send an event for the launch',function(){
@@ -1540,7 +1566,7 @@ define(['c6uilib', 'services', 'minireel', 'angular'], function(c6uilibModule, s
 
             describe('if the behavior allows fullscreen', function() {
                 beforeEach(function() {
-                    spyOn($scope, '$emit').andCallThrough();
+                    spyOn($scope, '$emit').and.callThrough();
                     appData.behaviors.fullscreen = true;
 
                     RumbleCtrl.start();
@@ -1557,7 +1583,7 @@ define(['c6uilib', 'services', 'minireel', 'angular'], function(c6uilibModule, s
 
             describe('if the behavior does not allow fullscreen', function() {
                 beforeEach(function() {
-                    spyOn($scope, '$emit').andCallThrough();
+                    spyOn($scope, '$emit').and.callThrough();
                     appData.behaviors.fullscreen = false;
 
                     RumbleCtrl.start();
@@ -1576,7 +1602,7 @@ define(['c6uilib', 'services', 'minireel', 'angular'], function(c6uilibModule, s
                 it('should start and end at the same time', function() {
                     $scope.deck = [{ id: 'foo', type: 'recap' }];
 
-                    spyOn($scope, '$emit').andCallThrough();
+                    spyOn($scope, '$emit').and.callThrough();
 
                     RumbleCtrl.start();
 
@@ -1600,9 +1626,9 @@ define(['c6uilib', 'services', 'minireel', 'angular'], function(c6uilibModule, s
 
         describe('event',function(){
             beforeEach(function(){
-                mockPlayer.getType.andReturn('vimeo');
-                mockPlayer.getVideoId.andReturn('vid2video');
-                mockPlayer.isReady.andReturn(false);
+                mockPlayer.getType.and.returnValue('vimeo');
+                mockPlayer.getVideoId.and.returnValue('vid2video');
+                mockPlayer.isReady.and.returnValue(false);
             });
 
             describe('deckControllerReady', function() {
@@ -1612,8 +1638,8 @@ define(['c6uilib', 'services', 'minireel', 'angular'], function(c6uilibModule, s
                     $scope.$emit('deckControllerReady');
 
                     expect($scope.$broadcast).toHaveBeenCalledWith('adOnDeck',jasmine.any(Object));
-                    expect($scope.$broadcast.mostRecentCall.args[1].id).toBe('rc-advertisement1');
-                    expect($scope.$broadcast.callCount).toBe(1);
+                    expect($scope.$broadcast.calls.mostRecent().args[1].id).toBe('rc-advertisement1');
+                    expect($scope.$broadcast.calls.count()).toBe(1);
                 });
 
                 it('should not broadcast adOnDeck if first card is not an ad', function() {
@@ -1634,7 +1660,7 @@ define(['c6uilib', 'services', 'minireel', 'angular'], function(c6uilibModule, s
                         "data"   : {}
                     });
 
-                    spyOn($scope, '$broadcast').andCallThrough();
+                    spyOn($scope, '$broadcast').and.callThrough();
 
                     $scope.$emit('deckControllerReady');
 
@@ -1674,7 +1700,7 @@ define(['c6uilib', 'services', 'minireel', 'angular'], function(c6uilibModule, s
                     expect($scope.deck[2].player).toBeNull();
                     $scope.$emit('playerAdd',mockPlayer);
                     expect($scope.deck[2].player).toBe(mockPlayer);
-                    expect(mockPlayer.on.callCount).toEqual(3);
+                    expect(mockPlayer.on.calls.count()).toEqual(3);
                 });
             });
 
@@ -1697,7 +1723,7 @@ define(['c6uilib', 'services', 'minireel', 'angular'], function(c6uilibModule, s
                     var navController;
 
                     beforeEach(function() {
-                        navController = provideController.mostRecentCall.args[0];
+                        navController = provideController.calls.mostRecent().args[0];
                     });
 
                     describe('methods', function() {
@@ -1845,10 +1871,10 @@ define(['c6uilib', 'services', 'minireel', 'angular'], function(c6uilibModule, s
 
                 session = c6EventEmitter({
                     request: jasmine.createSpy('session.request()')
-                        .andReturn(request.promise)
+                        .and.returnValue(request.promise)
                 });
 
-                spyOn(session, 'on').andCallThrough();
+                spyOn(session, 'on').and.callThrough();
                 spyOn($scope, '$emit');
                 spyOn(RumbleCtrl, 'jumpTo');
 
@@ -1862,10 +1888,10 @@ define(['c6uilib', 'services', 'minireel', 'angular'], function(c6uilibModule, s
             });
 
             it('should register three handlers', function() {
-                expect(session.on.callCount).toEqual(3);
-                expect(session.on.calls[0].args[0]).toEqual('mrPreview:updateExperience');
-                expect(session.on.calls[1].args[0]).toEqual('mrPreview:jumpToCard');
-                expect(session.on.calls[2].args[0]).toEqual('mrPreview:reset');
+                expect(session.on.calls.count()).toEqual(3);
+                expect(session.on.calls.argsFor(0)[0]).toEqual('mrPreview:updateExperience');
+                expect(session.on.calls.argsFor(1)[0]).toEqual('mrPreview:jumpToCard');
+                expect(session.on.calls.argsFor(2)[0]).toEqual('mrPreview:reset');
             });
 
             it('should request a card', function() {

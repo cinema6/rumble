@@ -84,7 +84,7 @@ define(['app', 'minireel', 'cards/recap', 'services'], function(appModule, minir
             module(minireelModule.name, function($provide) {
                 $provide.service('MiniReelService', function() {
                     this.createDeck = jasmine.createSpy('MiniReelService.createDeck()')
-                        .andCallFake(function() {
+                        .and.callFake(function() {
                             return c6AppData.experience.data.deck;
                         });
                 });
@@ -96,7 +96,7 @@ define(['app', 'minireel', 'cards/recap', 'services'], function(appModule, minir
                         deferred.resolve([{votes:0.60},{votes:0.40}]);
                     };
                     this.getBallot = jasmine.createSpy('BallotService.getBallot()')
-                        .andCallFake(function() {
+                        .and.callFake(function() {
                             return deferred.promise;
                         });
                 });
@@ -197,7 +197,7 @@ define(['app', 'minireel', 'cards/recap', 'services'], function(appModule, minir
 
                     it('should get the ballot results for each card with a ballot module', function() {
                         expect(BallotService.getBallot).toHaveBeenCalledWith(c6AppData.experience.data.deck[0].id);
-                        expect(BallotService.getBallot.callCount).toBe(1);
+                        expect(BallotService.getBallot.calls.count()).toBe(1);
                     });
 
                     it('should not add ballot results to cards without a ballot module', function() {
@@ -220,7 +220,7 @@ define(['app', 'minireel', 'cards/recap', 'services'], function(appModule, minir
                         $scope.$apply(function() {
                             $scope.active = true;
                         });
-                        spyOn($scope, '$emit').andReturn(undefined);
+                        spyOn($scope, '$emit').and.returnValue(undefined);
 
                         RecapCardCtrl.jumpTo(RecapCardCtrl.deck[1]);
                         expect($scope.$emit).toHaveBeenCalledWith('<recap-card>:jumpTo',2);
@@ -232,7 +232,7 @@ define(['app', 'minireel', 'cards/recap', 'services'], function(appModule, minir
 
                 describe('hasModule(module)', function() {
                     it('should call ModuleService.hasModule() with the configured modules and the provided module', function() {
-                        spyOn(ModuleService, 'hasModule').andCallThrough();
+                        spyOn(ModuleService, 'hasModule').and.callThrough();
                         RecapCardCtrl = $controller('RecapCardController', { $scope: $scope });
                         RecapCardCtrl.hasModule('displayAd');
                         expect(ModuleService.hasModule).toHaveBeenCalledWith($scope.config.modules, 'displayAd');

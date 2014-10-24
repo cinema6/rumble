@@ -33,10 +33,14 @@
 
     <ng-include ng-controller="DeckController as DeckCtrl" src="'deck.html' | asset:'views'"></ng-include>
     
-
-    <display-ad-module config="currentCard"
-        active="true">
+    <display-ad-module ng-if="currentCard._data.companion === undefined"
+        config="currentCard"
+        active="currentIndex > -1">
     </display-ad-module>
+    <companion-ad-module ng-if="currentCard._data.companion !== undefined"
+        companion="currentCard._data.companion"
+        active="!!currentCard._data.companion">
+    </companion-ad-module>
 
 </div><!--.MiniReel-->
 

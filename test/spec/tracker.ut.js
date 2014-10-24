@@ -114,9 +114,9 @@ define(['tracker'], function(trackerModule) {
                     it('proxies call to underlying api create',function(){
                         var tc = new TrackerContext('tt');
                         tc.create('param1','param2');
-                        expect($window._c6_.argsForCall[0])
+                        expect($window._c6_.calls.argsFor(0))
                             .toEqual(['create','param1','param2']);
-                        expect($window._c6_.argsForCall[1])
+                        expect($window._c6_.calls.argsFor(1))
                             .toEqual(['tt.require','displayfeatures']);
                     });
 

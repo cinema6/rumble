@@ -20,11 +20,11 @@ define(['cards/vast', 'services', 'angular'], function(vastModule, servicesModul
             var self = this;
 
             this.play = jasmine.createSpy('iface.play()')
-                .andCallFake(function() {
+                .and.callFake(function() {
                     self.emit('play', self);
                 });
             this.pause = jasmine.createSpy('iface.pause()')
-                .andCallFake(function() {
+                .and.callFake(function() {
                     self.emit('pause', self);
                 });
 
@@ -43,16 +43,16 @@ define(['cards/vast', 'services', 'angular'], function(vastModule, servicesModul
                 },
                 clickThrough : ['http://www.advertiser.com'],
                 companions : [],
-                firePixels : jasmine.createSpy('firePixels()').andReturn(undefined),
-                getVideoSrc : jasmine.createSpy('getVideoSrc()').andReturn('http://www.videos.com/video.mp4'),
-                getCompanion : jasmine.createSpy('getCompanion()').andReturn({adType:'iframe', fileURI: '//ads.adap.tv/c/companion?cck=cck&creativeId=110497&melaveId=42657&key=tribal360llc&adSourceId=208567&bidId=&afppId=159224&exSId=639284&cb=9874983758324475&pageUrl=http%3A%2F%2Fcinema6.com&eov=eov'}),
+                firePixels : jasmine.createSpy('firePixels()').and.returnValue(undefined),
+                getVideoSrc : jasmine.createSpy('getVideoSrc()').and.returnValue('http://www.videos.com/video.mp4'),
+                getCompanion : jasmine.createSpy('getCompanion()').and.returnValue({adType:'iframe', fileURI: '//ads.adap.tv/c/companion?cck=cck&creativeId=110497&melaveId=42657&key=tribal360llc&adSourceId=208567&bidId=&afppId=159224&exSId=639284&cb=9874983758324475&pageUrl=http%3A%2F%2Fcinema6.com&eov=eov'}),
             };
 
             module(servicesModule.name, function($provide) {
-                $provide.provider('VASTService', function() {
+                $provide.provider('RumbleVASTService', function() {
                     this.$get = function($q) {
                         return {
-                            getVAST : jasmine.createSpy('getVAST()').andReturn($q.when(vast))
+                            getVAST : jasmine.createSpy('getVAST()').and.returnValue($q.when(vast))
                         };
                     };
 
@@ -74,7 +74,7 @@ define(['cards/vast', 'services', 'angular'], function(vastModule, servicesModul
                 c6EventEmitter = $injector.get('c6EventEmitter');
                 $q = $injector.get('$q');
 
-                VASTService = $injector.get('VASTService');
+                VASTService = $injector.get('RumbleVASTService');
                 ModuleService = $injector.get('ModuleService');
 
                 $scope = $rootScope.$new();
@@ -330,7 +330,7 @@ define(['cards/vast', 'services', 'angular'], function(vastModule, servicesModul
                         $scope.onDeck = true;
                     });
 
-                    spyOn($window, 'open').andReturn(true);
+                    spyOn($window, 'open').and.returnValue(true);
 
                     iface.paused = false;
 
@@ -377,7 +377,7 @@ define(['cards/vast', 'services', 'angular'], function(vastModule, servicesModul
 
             describe('ended', function() {
                 beforeEach(function() {
-                    spyOn($scope, '$emit').andCallThrough();
+                    spyOn($scope, '$emit').and.callThrough();
                 });
 
                 xdescribe('if there is a companion', function() {
@@ -440,7 +440,7 @@ define(['cards/vast', 'services', 'angular'], function(vastModule, servicesModul
 
                 describe('if the ad has finished and the displayAd module is present', function() {
                     it('should activate the displayAd', function() {
-                        VastCardCtrl.hasModule.andReturn(true);
+                        VastCardCtrl.hasModule.and.returnValue(true);
 
                         $scope.$apply(function() {
                             iface.ended = true;
@@ -454,7 +454,7 @@ define(['cards/vast', 'services', 'angular'], function(vastModule, servicesModul
 
                 describe('if the ad has finished but the displayAd module is not present', function() {
                     it('should not activate the displayAd', function() {
-                        VastCardCtrl.hasModule.andReturn(false);
+                        VastCardCtrl.hasModule.and.returnValue(false);
 
                         $scope.$apply(function() {
                             iface.ended = true;
@@ -468,7 +468,7 @@ define(['cards/vast', 'services', 'angular'], function(vastModule, servicesModul
 
                 describe('if the ad has not finished and the displayAd module is present', function() {
                     it('should not activate the displayAd', function() {
-                        VastCardCtrl.hasModule.andReturn(true);
+                        VastCardCtrl.hasModule.and.returnValue(true);
 
                         $scope.$apply(function() {
                             iface.ended = false;
@@ -482,7 +482,7 @@ define(['cards/vast', 'services', 'angular'], function(vastModule, servicesModul
 
                 describe('if the ad has not finished and the displayAd module is not present', function() {
                     it('should not activate the displayAd', function() {
-                        VastCardCtrl.hasModule.andReturn(false);
+                        VastCardCtrl.hasModule.and.returnValue(false);
 
                         $scope.$apply(function() {
                             iface.ended = false;
@@ -531,7 +531,7 @@ define(['cards/vast', 'services', 'angular'], function(vastModule, servicesModul
                         expect(vast.firePixels).toHaveBeenCalledWith('impression');
                         iface.emit('pause', iface);
                         iface.emit('play', iface);
-                        expect(vast.firePixels.mostRecentCall.args[0]).toEqual('pause');
+                        expect(vast.firePixels.calls.mostRecent().args[0]).toEqual('pause');
                     });
                 });
             });
@@ -553,7 +553,7 @@ define(['cards/vast', 'services', 'angular'], function(vastModule, servicesModul
                         iface.currentTime = 5;
                         iface.duration = 20;
                         iface.emit('timeupdate', iface);
-                        expect(vast.firePixels.calls.length).toEqual(1);
+                        expect(vast.firePixels.calls.all().length).toEqual(1);
                     });
 
                     it('should fire the "midpoint" pixel', function() {
@@ -565,7 +565,7 @@ define(['cards/vast', 'services', 'angular'], function(vastModule, servicesModul
                         iface.currentTime = 10;
                         iface.duration = 20;
                         iface.emit('timeupdate', iface);
-                        expect(vast.firePixels.calls.length).toEqual(1);
+                        expect(vast.firePixels.calls.all().length).toEqual(1);
                     });
 
                     it('should fire the "thirdQuartile" pixel', function() {
@@ -577,7 +577,7 @@ define(['cards/vast', 'services', 'angular'], function(vastModule, servicesModul
                         iface.currentTime = 15;
                         iface.duration = 20;
                         iface.emit('timeupdate', iface);
-                        expect(vast.firePixels.calls.length).toEqual(1);
+                        expect(vast.firePixels.calls.all().length).toEqual(1);
                     });
                 });
             });
@@ -650,7 +650,7 @@ define(['cards/vast', 'services', 'angular'], function(vastModule, servicesModul
                                 $scope.active = true;
                             });
 
-                            expect(VASTService.getVAST.callCount).toBe(1);
+                            expect(VASTService.getVAST.calls.count()).toBe(1);
                         });
 
                         describe('the ad timer', function() {
@@ -659,7 +659,7 @@ define(['cards/vast', 'services', 'angular'], function(vastModule, servicesModul
                             beforeEach(function() {
                                 delay = $q.defer();
                                 spyOn($scope, '$emit');
-                                VASTService.getVAST.andReturn($q.when(delay.promise));
+                                VASTService.getVAST.and.returnValue($q.when(delay.promise));
 
                                 $scope.$apply(function() {
                                     $scope.active = true;
@@ -669,7 +669,7 @@ define(['cards/vast', 'services', 'angular'], function(vastModule, servicesModul
                             it('should advance to the next card if no videoSrc is found after 3 seconds', function() {
                                 $timeout.flush();
 
-                                expect($scope.$emit.mostRecentCall.args[0]).toBe('<mr-card>:contentEnd');
+                                expect($scope.$emit.calls.mostRecent().args[0]).toBe('<mr-card>:contentEnd');
                             });
 
                             it('should not advance to the next card if a videoSrc is found after 3 seconds', function() {
@@ -677,13 +677,13 @@ define(['cards/vast', 'services', 'angular'], function(vastModule, servicesModul
 
                                 $timeout.flush();
 
-                                expect($scope.$emit.mostRecentCall.args[0]).not.toBe('<mr-card>:contentEnd');
+                                expect($scope.$emit.calls.mostRecent().args[0]).not.toBe('<mr-card>:contentEnd');
                             });
                         });
 
                         describe('if we do not have an ad', function() {
                             it('should emit <mr-card>:contentEnd if we tried to get an ad while onDeck', function() {
-                                VASTService.getVAST.andReturn($q.reject('No ad'));
+                                VASTService.getVAST.and.returnValue($q.reject('No ad'));
                                 spyOn($scope, '$emit');
 
                                 $scope.$apply(function() {
@@ -696,18 +696,18 @@ define(['cards/vast', 'services', 'angular'], function(vastModule, servicesModul
                                     $scope.active = true;
                                 });
 
-                                expect($scope.$emit.mostRecentCall.args[0]).toBe('<mr-card>:contentEnd');
+                                expect($scope.$emit.calls.mostRecent().args[0]).toBe('<mr-card>:contentEnd');
                             });
 
                             it('should emit <mr-card>:contentEnd if onDeck was skipped and we are active', function() {
-                                VASTService.getVAST.andReturn($q.reject('No ad'));
+                                VASTService.getVAST.and.returnValue($q.reject('No ad'));
                                 spyOn($scope, '$emit');
 
                                 $scope.$apply(function() {
                                     $scope.active = true;
                                 });
 
-                                expect($scope.$emit.mostRecentCall.args[0]).toBe('<mr-card>:contentEnd');
+                                expect($scope.$emit.calls.mostRecent().args[0]).toBe('<mr-card>:contentEnd');
                             });
                         });
 
@@ -745,13 +745,13 @@ define(['cards/vast', 'services', 'angular'], function(vastModule, servicesModul
                                     $scope.active = true;
                                 });
 
-                                expect(iface.play.callCount).toBe(1);
+                                expect(iface.play.calls.count()).toBe(1);
                             });
                         });
 
                         describe('in either case', function() {
                             beforeEach(function() {
-                                spyOn($scope, '$emit').andCallThrough();
+                                spyOn($scope, '$emit').and.callThrough();
 
                                 $scope.$apply(function() {
                                     $scope.active = true;
@@ -771,7 +771,7 @@ define(['cards/vast', 'services', 'angular'], function(vastModule, servicesModul
                                     $scope.active = true;
                                 });
 
-                                expect($scope.$emit.callCount).toBe(1);
+                                expect($scope.$emit.calls.count()).toBe(1);
                             });
 
                             describe('when the rumble controller yields control of the navigation', function() {
@@ -784,13 +784,13 @@ define(['cards/vast', 'services', 'angular'], function(vastModule, servicesModul
                                 }
 
                                 beforeEach(function() {
-                                    control = $scope.$emit.mostRecentCall.args[1];
+                                    control = $scope.$emit.calls.mostRecent().args[1];
 
                                     navController = {
                                         enabled: jasmine.createSpy('navController.enabled()')
-                                            .andCallFake(function() { return navController; }),
+                                            .and.callFake(function() { return navController; }),
                                         tick: jasmine.createSpy('navController.tick()')
-                                            .andCallFake(function() { return navController; })
+                                            .and.callFake(function() { return navController; })
                                     };
                                 });
 
@@ -889,7 +889,7 @@ define(['cards/vast', 'services', 'angular'], function(vastModule, servicesModul
                                             expect(navController.enabled).toHaveBeenCalledWith(true);
 
                                             $interval.flush(1000);
-                                            expect(navController.tick.callCount).toBe(12);
+                                            expect(navController.tick.calls.count()).toBe(12);
                                         });
                                     });
 
@@ -920,7 +920,7 @@ define(['cards/vast', 'services', 'angular'], function(vastModule, servicesModul
                                         it('should not tick the navigation below 0', function() {
                                             timeupdate(11.25);
 
-                                            expect(navController.tick.mostRecentCall.args[0]).not.toBeLessThan(0);
+                                            expect(navController.tick.calls.mostRecent().args[0]).not.toBeLessThan(0);
                                         });
 
                                         it('should enable the navigation when the wait time is finished', function() {
@@ -928,7 +928,7 @@ define(['cards/vast', 'services', 'angular'], function(vastModule, servicesModul
                                             expect(navController.enabled).toHaveBeenCalledWith(true);
 
                                             timeupdate(13);
-                                            expect(navController.tick.callCount).toBe(2);
+                                            expect(navController.tick.calls.count()).toBe(2);
                                         });
                                     });
                                 });
@@ -978,7 +978,7 @@ define(['cards/vast', 'services', 'angular'], function(vastModule, servicesModul
                         $scope.$apply(function() {
                             $scope.onDeck = true;
                         });
-                        expect(VASTService.getVAST.callCount).toBe(1);
+                        expect(VASTService.getVAST.calls.count()).toBe(1);
                     });
 
                     // TODO: Fetch displayAd from the ad server
@@ -1006,7 +1006,7 @@ define(['cards/vast', 'services', 'angular'], function(vastModule, servicesModul
                                     VastCardCtrl = $controller('VastCardController', { $scope: $scope });
                                 });
                                 spyOn($scope, '$emit');
-                                vast.getVideoSrc.andReturn(null);
+                                vast.getVideoSrc.and.returnValue(null);
                                 $scope.$apply(function() {
                                     $scope.onDeck = true;
                                 });

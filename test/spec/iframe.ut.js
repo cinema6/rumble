@@ -50,7 +50,7 @@ define(['iframe', 'angular'], function(iframeModule, angular) {
 
             it('should create an iframe element', function(){
                 var mockElt = { tagName : 'iframe' };
-                spyOn(angular, 'element').andCallFake(function(html) {
+                spyOn(angular, 'element').and.callFake(function(html) {
                     return mockElt;
                 });
                 

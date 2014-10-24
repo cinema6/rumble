@@ -60,7 +60,7 @@
         "data": {
             "placementId": "3220650",
             "election": "e-d0e407bb69675b",
-            "mode": "full",
+            "mode": "lightbox",
             "theme": "ed-entertainment",
             "collateral": {
                 "splash": "/collateral/experiences/rumble/splash-6thumb.jpg"
@@ -110,6 +110,51 @@
                         "displayAd"
                     ],
                     "data": {}
+                },
+                {
+                    "id": "rc-a82fa7b6cd8820",
+                    "type": "adUnit",
+                    "title": "JCVD FTW",
+                    "note": "A mind that can master the most epic of splits.",
+                    "source": "YouTube",
+                    "modules": [
+                        "ballot"
+                    ],
+                    "ballot": {
+                        "prompt": "What did you think of this video?",
+                        "choices": [
+                            "FTW",
+                            "FML"
+                        ]
+                    },
+                    "links": {
+                        "Action": "https://portal.cinema6.com/#/apps/minireel/studio/dashboard?filter=all&limit=50&page=1",
+                        "Website": "http://cinema6.com/",
+                        "Facebook": "https://www.facebook.com/Cinema6Video",
+                        "Twitter": "https://twitter.com/Cinema6Video",
+                        "YouTube": "http://www.youtube.com/channel/UCSszI_zUkVVA24WVuTYpHTQ",
+                        "Vimeo": "https://vimeo.com/user27205886"
+                    },
+                    "params": {
+                        "sponsor": "Cinema6",
+                        "ad": true,
+                        "action": {
+                            "label": "OH HAI MARK",
+                            "type": "button"
+                        }
+                    },
+                    "thumbs": {
+                        "small": "http://s.wsj.net/public/resources/images/BN-AK656_jcvd_G_20131115105610.jpg",
+                        "large": "http://s.wsj.net/public/resources/images/BN-AK656_jcvd_G_20131115105610.jpg"
+                    },
+                    "collateral": {
+                        "logo": "http://cinema6.com/assets/img/c6-logo@2x.png"
+                    },
+                    "data": {
+                        "autoplay": true,
+                        "vast": "http://u-ads.adap.tv/a/h/DCQzzI0K2rv1k0TZythPvTfWmlP8j6NQnxBMIgFJa80=?cb={cachebreaker}&pageUrl={pageUrl}&eov=eov",
+                        "vpaid": "http://u-ads.adap.tv/a/h/DCQzzI0K2rv1k0TZythPvYyD60pQS_90o8grI6Qm2PI=?cb={cachebreaker}&pageUrl={pageUrl}&eov=eov"
+                    }
                 },
                 {
                     "id": "rc-22119a8cf9f755",

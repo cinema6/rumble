@@ -28,10 +28,10 @@ define(['app'], function(appModule) {
                 modules: []
             };
 
-            spyOn(ModuleService, 'hasModule').andCallThrough();
+            spyOn(ModuleService, 'hasModule').and.callThrough();
             spyOn(AdTechService, 'loadAd');
 
-            spyOn($rootScope, '$broadcast').andCallThrough();
+            spyOn($rootScope, '$broadcast').and.callThrough();
             $scope.$apply(function() {
                 TextCardCtrl = $controller('TextCardController', { $scope: $scope });
             });

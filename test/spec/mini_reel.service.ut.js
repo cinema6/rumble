@@ -27,7 +27,7 @@ define(['app', 'minireel', 'c6uilib', 'angular'], function(appModule, minireelMo
 
                 $provide.value('VideoThumbService', {
                     getThumbs: jasmine.createSpy('VideoThumbService.getThumb()')
-                        .andCallFake(function() {
+                        .and.callFake(function() {
                             return $q.defer().promise;
                         })
                 });
@@ -176,11 +176,25 @@ define(['app', 'minireel', 'c6uilib', 'angular'], function(appModule, minireelMo
                                     title: 'Recap',
                                     note: null,
                                     data: {}
-                                }
+                                },
+                                {
+                                    id: 'rc-774a0ebe4d56a6',
+                                    type: 'adUnit',
+                                    title: 'Geek cool',
+                                    note: 'Doctor Who #11 meets #4',
+                                    voting: [ 400, 50, 10 ],
+                                    placementId: null,
+                                    thumbs: {},
+                                    data: {
+                                        skip: false,
+                                        autoadvance: true,
+                                        autoplay: null
+                                    }
+                                },
                             ]
                         };
 
-                        VideoThumbService.getThumbs.andCallFake(function(type, id) {
+                        VideoThumbService.getThumbs.and.callFake(function(type, id) {
                             switch (id) {
 
                             case 'jofNR_WkoCE':
@@ -210,10 +224,10 @@ define(['app', 'minireel', 'c6uilib', 'angular'], function(appModule, minireelMo
                             }
                         });
 
-                        spyOn(angular, 'copy').andCallFake(function(value) {
+                        spyOn(angular, 'copy').and.callFake(function(value) {
                             var result = copy(value);
 
-                            angular.copy.mostRecentCall.result = result;
+                            angular.copy.calls.mostRecent().result = result;
 
                             return result;
                         });
@@ -223,7 +237,7 @@ define(['app', 'minireel', 'c6uilib', 'angular'], function(appModule, minireelMo
 
                     it('should return a copy of the deck', function() {
                         expect(angular.copy).toHaveBeenCalledWith(mrData.deck);
-                        expect(result).toBe(angular.copy.mostRecentCall.result);
+                        expect(result).toBe(angular.copy.calls.mostRecent().result);
                     });
 
                     it('should give each video a player', function() {
@@ -289,7 +303,7 @@ define(['app', 'minireel', 'c6uilib', 'angular'], function(appModule, minireelMo
                         }
 
                         function isVideo(card) {
-                            return (/^(youtube|vimeo|dailymotion)$/).test(card.type);
+                            return (/^(youtube|vimeo|dailymotion|adUnit)$/).test(card.type);
                         }
 
                         function isSet(object, prop) {
@@ -509,7 +523,7 @@ define(['app', 'minireel', 'c6uilib', 'angular'], function(appModule, minireelMo
                     describe('getting thumbnails', function() {
                         it('should make every thumbnail null at first', function() {
                             result.filter(function(card) {
-                                return !(/^(recap|text|displayAd)$/).test(card.type);
+                                return !(/^(recap|text|displayAd|adUnit)$/).test(card.type);
                             }).forEach(function(card) {
                                 expect(card.thumbs).toBeNull('card:' + card.id);
                             });
@@ -517,7 +531,7 @@ define(['app', 'minireel', 'c6uilib', 'angular'], function(appModule, minireelMo
 
                         it('should get a thumbnail for every video', function() {
                             result.filter(function(card) {
-                                return !(/^(recap|text|displayAd)$/).test(card.type);
+                                return !(/^(recap|text|displayAd|adUnit)$/).test(card.type);
                             }).forEach(function(card) {
                                 expect(VideoThumbService.getThumbs).toHaveBeenCalledWith(card.type, card.data.videoid);
                             });
@@ -548,7 +562,7 @@ define(['app', 'minireel', 'c6uilib', 'angular'], function(appModule, minireelMo
                         it('should preload all of the small images', function() {
                             $rootScope.$digest();
 
-                            expect(c6ImagePreloader.load.callCount).toBe(4);
+                            expect(c6ImagePreloader.load.calls.count()).toBe(4);
 
                             expect(c6ImagePreloader.load).toHaveBeenCalledWith(['http://img.youtube.com/vi/gy1B3agGNxw/2.jpg']);
                             expect(c6ImagePreloader.load).toHaveBeenCalledWith(['http://s2.dmcdn.net/Dm9Np/x120-6Xz.jpg']);
@@ -590,7 +604,7 @@ define(['app', 'minireel', 'c6uilib', 'angular'], function(appModule, minireelMo
                                             splash: '/collateral/mysplash.jpg'
                                         };
 
-                                        spyOn(Date, 'now').andReturn(now);
+                                        spyOn(Date, 'now').and.returnValue(now);
 
                                         result = MiniReelService.createDeck(mrData);
                                     });
@@ -630,6 +644,12 @@ define(['app', 'minireel', 'c6uilib', 'angular'], function(appModule, minireelMo
                             });
                         });
 
+                        describe('for a adUnit card', function() {
+                            it('should have the thumbs it already had', function() {
+                                expect(result[8].thumbs).toEqual(mrData.deck[8].thumbs);
+                            });
+                        });
+
                         describe('for the recap card', function() {
                             describe('if there are no collateral assets', function() {
                                 it('should be null', function() {
@@ -645,7 +665,7 @@ define(['app', 'minireel', 'c6uilib', 'angular'], function(appModule, minireelMo
                                     nowMethod = Date.now;
                                     now = Date.now();
 
-                                    spyOn(Date, 'now').andReturn(now);
+                                    spyOn(Date, 'now').and.returnValue(now);
 
                                     mrData.collateral = {
                                         splash: '/collateral/mysplash.jpg'

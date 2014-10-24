@@ -30,23 +30,23 @@ define(['app','c6uilib','angular'], function(appModule, c6uilibModule, angular) 
                 create  : jasmine.createSpy('tracker.create'),
                 set     : jasmine.createSpy('tracker.set')
             };
-            trackerServiceSpy = jasmine.createSpy('trackerService').andReturn(trackerSpy);
+            trackerServiceSpy = jasmine.createSpy('trackerService').and.returnValue(trackerSpy);
 
             module(c6uilibModule.name, function($provide) {
                 $provide.factory('cinema6', function($q) {
                     cinema6 = {
-                        init: jasmine.createSpy('cinema6.init()').andCallFake(function() {
+                        init: jasmine.createSpy('cinema6.init()').and.callFake(function() {
                             return session;
                         }),
-                        getSession: jasmine.createSpy('cinema6.getSiteSession()').andCallFake(function() {
+                        getSession: jasmine.createSpy('cinema6.getSiteSession()').and.callFake(function() {
                             return cinema6._.getSessionResult.promise;
                         }),
-                        requestTransitionState: jasmine.createSpy('cinema6.requestTransitionState()').andCallFake(function() {
+                        requestTransitionState: jasmine.createSpy('cinema6.requestTransitionState()').and.callFake(function() {
                             return cinema6._.requestTransitionStateResult.promise;
                         }),
                         fullscreen: jasmine.createSpy('cinema6.fullscreen()'),
                         getAppData: jasmine.createSpy('cinema6.getAppData()')
-                            .andReturn($q.defer().promise),
+                            .and.returnValue($q.defer().promise),
                         _: {
                             getSessionResult: $q.defer(),
                             requestTransitionStateResult: $q.defer()
@@ -79,7 +79,7 @@ define(['app','c6uilib','angular'], function(appModule, c6uilibModule, angular) 
                 session = c6EventEmitter({
                     ping: jasmine.createSpy('session.ping()')
                 });
-                spyOn(session, 'on').andCallThrough();
+                spyOn(session, 'on').and.callThrough();
 
 
                 $window = {
@@ -97,7 +97,7 @@ define(['app','c6uilib','angular'], function(appModule, c6uilibModule, angular) 
                 c6Defines.kAppVersion   = 'testAppVersion';
 
                 $document = $injector.get('$document');
-                spyOn($document, 'height').andReturn(600);
+                spyOn($document, 'height').and.returnValue(600);
                 myFrame$ = $injector.get('myFrame$');
                 $animate = $injector.get('$animate');
                 spyOn($animate, 'enabled');
@@ -205,11 +205,11 @@ define(['app','c6uilib','angular'], function(appModule, c6uilibModule, angular) 
         describe('google analytics initialization',function(){
             it('app will look for initAnalytics',function(){
                 expect(cinema6.init).toHaveBeenCalled();
-                expect(session.on.calls[0].args[0]).toEqual('initAnalytics');
+                expect(session.on.calls.argsFor(0)[0]).toEqual('initAnalytics');
             });
 
             it('will use initAnalytics cb to init ga',function(){
-                var cb = session.on.calls[0].args[1];
+                var cb = session.on.calls.argsFor(0)[1];
                 $window.location.hostname = 'test';
                 cb({
                     accountId : 'abc',
@@ -235,7 +235,7 @@ define(['app','c6uilib','angular'], function(appModule, c6uilibModule, angular) 
                         hostname : 'parent.host'
                      }
                 };
-                var cb = session.on.calls[0].args[1];
+                var cb = session.on.calls.argsFor(0)[1];
                 cb({
                     accountId : 'abc',
                     clientId  : '123'
@@ -253,7 +253,7 @@ define(['app','c6uilib','angular'], function(appModule, c6uilibModule, angular) 
                         hostname : 'parent.host'
                      }
                 };
-                var cb = session.on.calls[0].args[1];
+                var cb = session.on.calls.argsFor(0)[1];
                 cb({
                     accountId : 'abc',
                     clientId  : '123'
@@ -268,7 +268,7 @@ define(['app','c6uilib','angular'], function(appModule, c6uilibModule, angular) 
             it('will work if win.hostname is null + win.parent is undefined',function(){
                 $window.location.hostname = null;
                 delete $window.parent;
-                var cb = session.on.calls[0].args[1];
+                var cb = session.on.calls.argsFor(0)[1];
                 cb({
                     accountId : 'abc',
                     clientId  : '123'
@@ -285,8 +285,8 @@ define(['app','c6uilib','angular'], function(appModule, c6uilibModule, angular) 
             });
 
             it('should refresh the page when the callback is called', function() {
-                var cb = session.on.calls[1].args[1];
-                spyOn($window.location, 'reload').andReturn(undefined);
+                var cb = session.on.calls.argsFor(1)[1];
+                spyOn($window.location, 'reload').and.returnValue(undefined);
                 cb();
                 expect($window.location.reload).toHaveBeenCalled();
             });

@@ -1,11 +1,12 @@
 define (['angular','c6_defines','tracker',
          'cards/ad','cards/dailymotion','cards/recap','cards/vast','cards/vimeo','cards/vpaid',
-         'cards/youtube','cards/text','cards/display_ad',
+         'cards/youtube','cards/text','cards/display_ad','cards/ad_unit',
          'modules/ballot','modules/companion_ad','modules/display_ad','modules/post'],
 function( angular , c6Defines  , tracker ,
           adCard   , dailymotionCard   , recapCard   , vastCard   , vimeoCard   , vpaidCard   ,
-          youtubeCard   , textCard   , displayAdCard    ,
+          youtubeCard   , textCard   , displayAdCard    , adUnitCard     ,
           ballotModule   , companionAdModule    , displayAdModule    , postModule   ) {
+
     'use strict';
 
     var forEach = angular.forEach,
@@ -23,6 +24,7 @@ function( angular , c6Defines  , tracker ,
         youtubeCard.name,
         textCard.name,
         displayAdCard.name,
+        adUnitCard.name,
         // Modules
         ballotModule.name,
         companionAdModule.name,
@@ -102,8 +104,10 @@ function( angular , c6Defines  , tracker ,
 
             function fetchThumb(card) {
                 switch (card.type) {
-                case 'text':
                 case 'displayAd':
+                case 'adUnit':
+                    break;
+                case 'text':
                 case 'recap':
                     (function() {
                         var splash = (data.collateral || {}).splash ?
@@ -168,7 +172,7 @@ function( angular , c6Defines  , tracker ,
             }
 
             function setVideoDefaults(card) {
-                if (!(/^(youtube|vimeo|dailymotion)$/).test(card.type)) { return; }
+                if (!(/^(youtube|vimeo|dailymotion|adUnit)$/).test(card.type)) { return; }
 
                 [
                     {
@@ -635,7 +639,7 @@ function( angular , c6Defines  , tracker ,
 
                 if (isAd(card)) { continue; }
 
-                return (card || null) && card.thumbs.small;
+                return (card || null) && (card.thumbs || {}).small || null;
             }
 
             return null;
@@ -650,7 +654,7 @@ function( angular , c6Defines  , tracker ,
 
                 if (isAd(card)) { continue; }
 
-                return (card || null) && card.thumbs.small;
+                return (card || null) && (card.thumbs || {}).small || null;
             }
 
             return null;
@@ -1309,7 +1313,9 @@ function( angular , c6Defines  , tracker ,
                         /* If there is a separate view for text, and if that mode is active: */
                         (behaviors.separateTextView && _data.textMode) ||
                         /* If this is a click-to-play minireel, it hasn't been played yet and the play button is enabled */
-                        (!config.data.autoplay && !(_data.playerEvents.play || {}).emitCount && this.enablePlayButton);
+                        (!config.data.autoplay && !(_data.playerEvents.play || {}).emitCount && this.enablePlayButton) ||
+                        /* If the post module is present and it is being shown */
+                        ($scope.hasModule('post') && this.postModuleActive);
                 }
             },
             showPlay: {

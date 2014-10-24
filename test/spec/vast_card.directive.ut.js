@@ -25,10 +25,10 @@ define(['app', 'c6uilib'], function(appModule, c6uilibModule) {
             this.fullscreen = jasmine.createSpy('c6Video.fullscreen()');
 
             this.bufferedPercent = jasmine.createSpy('c6Video.bufferedPercent()')
-                .andReturn(0);
+                .and.returnValue(0);
 
             this.on = jasmine.createSpy('c6Video.on()')
-                .andCallFake(function(event, handler) {
+                .and.callFake(function(event, handler) {
                     var handlers = eventHandlers[event] = (eventHandlers[event] || []);
 
                     handlers.push(handler);
@@ -37,7 +37,7 @@ define(['app', 'c6uilib'], function(appModule, c6uilibModule) {
                 });
 
             this.off = jasmine.createSpy('c6Video.off()')
-                .andCallFake(function(event, handler) {
+                .and.callFake(function(event, handler) {
                     var handlers = (eventHandlers[event] || []);
 
                     handlers.splice(handlers.indexOf(handler), 1);
@@ -89,7 +89,7 @@ define(['app', 'c6uilib'], function(appModule, c6uilibModule) {
 
         describe('initialization', function() {
             beforeEach(function() {
-                spyOn($scope, '$emit').andCallThrough();
+                spyOn($scope, '$emit').and.callThrough();
 
                 $scope.$apply(function() {
                     $compile('<vast-card></vast-card>')($scope);
@@ -113,7 +113,7 @@ define(['app', 'c6uilib'], function(appModule, c6uilibModule) {
                     $compile('<vast-card></vast-card>')($scope);
                 });
 
-                spyOn(iface, 'emit').andCallThrough();
+                spyOn(iface, 'emit').and.callThrough();
 
                 expect(iface.isReady()).not.toBe(true);
                 expect(iface.emit).not.toHaveBeenCalled();
@@ -495,8 +495,8 @@ define(['app', 'c6uilib'], function(appModule, c6uilibModule) {
                         });
 
                         it('should resolve the promise if bufferedPercent is 1', function() {
-                            c6Video.bufferedPercent.andReturn(1);
-                            spyOn($timeout, 'cancel').andCallThrough();
+                            c6Video.bufferedPercent.and.returnValue(1);
+                            spyOn($timeout, 'cancel').and.callThrough();
 
                             $scope.$apply(function() {
                                 iface.twerk().then(success);
@@ -504,7 +504,7 @@ define(['app', 'c6uilib'], function(appModule, c6uilibModule) {
 
                             expect(success).toHaveBeenCalledWith(iface);
                             expect($timeout.cancel).toHaveBeenCalledWith(jasmine.any(Object));
-                            expect(c6Video.off).toHaveBeenCalledWith('progress', c6Video.on.mostRecentCall.args[1]);
+                            expect(c6Video.off).toHaveBeenCalledWith('progress', c6Video.on.calls.mostRecent().args[1]);
                         });
 
                         it('should listen for the "progress" event', function() {
@@ -515,7 +515,7 @@ define(['app', 'c6uilib'], function(appModule, c6uilibModule) {
 
                         describe('when "progress" is emitted', function() {
                             beforeEach(function() {
-                                spyOn($timeout, 'cancel').andCallThrough();
+                                spyOn($timeout, 'cancel').and.callThrough();
 
                                 iface.twerk().then(success);
 
@@ -534,11 +534,11 @@ define(['app', 'c6uilib'], function(appModule, c6uilibModule) {
                                 iface.twerk(0);
                                 c6Video.trigger('progress');
 
-                                expect($timeout.cancel.callCount).toBe(1);
+                                expect($timeout.cancel.calls.count()).toBe(1);
                             });
 
                             it('should stop listening for "progress"', function() {
-                                expect(c6Video.off).toHaveBeenCalledWith('progress', c6Video.on.mostRecentCall.args[1]);
+                                expect(c6Video.off).toHaveBeenCalledWith('progress', c6Video.on.calls.mostRecent().args[1]);
                             });
                         });
 
@@ -552,7 +552,7 @@ define(['app', 'c6uilib'], function(appModule, c6uilibModule) {
                             });
 
                             it('should remove the "progress" listener', function() {
-                                expect(c6Video.off).toHaveBeenCalledWith('progress', c6Video.on.mostRecentCall.args[1]);
+                                expect(c6Video.off).toHaveBeenCalledWith('progress', c6Video.on.calls.mostRecent().args[1]);
                             });
 
                             it('should reject the promise', function() {
@@ -578,7 +578,7 @@ define(['app', 'c6uilib'], function(appModule, c6uilibModule) {
                                 iface.twerk();
                                 c6Video.trigger('progress');
 
-                                onCallCount = c6Video.on.callCount;
+                                onCallCount = c6Video.on.calls.count();
 
                                 $scope.$apply(function() {
                                     iface.twerk().catch(failure);
@@ -588,8 +588,8 @@ define(['app', 'c6uilib'], function(appModule, c6uilibModule) {
                             it('should reject the promise', function() {
                                 expect(failure).toHaveBeenCalledWith('Video has already been twerked.');
 
-                                expect(c6Video.player.load.callCount).toBe(1);
-                                expect(c6Video.on.callCount).toBe(onCallCount);
+                                expect(c6Video.player.load.calls.count()).toBe(1);
+                                expect(c6Video.on.calls.count()).toBe(onCallCount);
                                 expect(function() {
                                     $timeout.flush();
                                 }).toThrow();
@@ -603,7 +603,7 @@ define(['app', 'c6uilib'], function(appModule, c6uilibModule) {
                 var c6Video;
 
                 beforeEach(function() {
-                    spyOn(iface, 'emit').andCallThrough();
+                    spyOn(iface, 'emit').and.callThrough();
 
                     c6Video = new C6Video();
 
@@ -648,13 +648,13 @@ define(['app', 'c6uilib'], function(appModule, c6uilibModule) {
                         c6Video.trigger('timeupdate');
                         expect(iface.emit).toHaveBeenCalledWith('timeupdate', iface);
 
-                        calls = iface.emit.callCount;
+                        calls = iface.emit.calls.count();
 
                         c6Video.trigger('timeupdate');
-                        expect(iface.emit.callCount).toBe(calls + 1);
+                        expect(iface.emit.calls.count()).toBe(calls + 1);
 
                         c6Video.trigger('timeupdate');
-                        expect(iface.emit.callCount).toBe(calls + 2);
+                        expect(iface.emit.calls.count()).toBe(calls + 2);
                     });
                 });
             });
