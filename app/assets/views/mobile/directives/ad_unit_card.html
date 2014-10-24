@@ -7,7 +7,7 @@
                 <p ng-if="!config.data.hideSource" class="mr-card__attributes">via <a ng-href="{{Ctrl.videoUrl}}" target="_blank" title="YouTube">{{config.source}}</a></p>
             </div>
             <div ng-class="{'mr-player--fly-away': Ctrl.flyAway}" class="mr-player">
-                <vast-player ad-tag="{{Ctrl.adTag}}" videoid="{{config.id}}"></vast-player>
+                <vast-player ad-tag="{{Ctrl.adTag}}" videoid="{{config.id}}" controls></vast-player>
             </div>
             <div ng-show="Ctrl.flyAway" c6-touch="Ctrl.playVideo()" class="mr-player__thumbnail" 
                 ng-style="{'background-image':config.thumbs.large ? 'url(' + config.thumbs.large + ')' : ''}">

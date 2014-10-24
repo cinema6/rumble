@@ -13,7 +13,7 @@
         </button>
         <div ng-class="{'mr-player--fly-away': Ctrl.flyAway}" class="mr-player" ng-switch="Ctrl.adType">
             <vpaid-player ng-switch-when="vpaid" ad-tag="{{Ctrl.adTag}}" videoid="{{config.id}}"></vpaid-player>
-            <vast-player ng-switch-when="vast" ad-tag="{{Ctrl.adTag}}" videoid="{{config.id}}"></vast-player>
+            <vast-player ng-switch-when="vast" ad-tag="{{Ctrl.adTag}}" videoid="{{config.id}}" controls></vast-player>
         </div>
         <div ng-show="Ctrl.flyAway" class="player__thumbnail c6-height-limiter"
             ng-style="{'background-image':config.thumbs.large ? 'url(' + config.thumbs.large + ')' : ''}">
