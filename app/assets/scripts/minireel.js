@@ -172,7 +172,7 @@ function( angular , c6Defines  , tracker ,
             }
 
             function setVideoDefaults(card) {
-                if (!(/^(youtube|vimeo|dailymotion)$/).test(card.type)) { return; }
+                if (!(/^(youtube|vimeo|dailymotion|adUnit)$/).test(card.type)) { return; }
 
                 [
                     {
