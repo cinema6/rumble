@@ -1,7 +1,7 @@
 define(['minireel', 'services'], function(minireelModule, servicesModule) {
     'use strict';
 
-    ddescribe('AdUnitCardController', function() {
+    describe('AdUnitCardController', function() {
         var $rootScope,
             $scope,
             $controller,

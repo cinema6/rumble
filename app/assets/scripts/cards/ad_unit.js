@@ -70,7 +70,6 @@ function( angular ) {
 
                 function activateCard() {
                     if (data.autoplay) {
-                        console.log('PLAY');
                         player.play();
                     }
 
