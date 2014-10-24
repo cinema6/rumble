@@ -66,6 +66,9 @@ define(['minireel', 'c6uilib', 'services'], function(minireelModule, c6uilibModu
                     touch: false
                 };
                 $scope = $rootScope.$new();
+                $scope.hasModule = function(module) {
+                    return $scope.config.modules.indexOf(module) > -1;
+                };
                 VideoEmbedCardCtrl = $controller('VideoEmbedCardController', { $scope: $scope });
             });
         });
@@ -966,6 +969,50 @@ define(['minireel', 'c6uilib', 'services'], function(minireelModule, c6uilibModu
                 });
 
                 describe('flyAway', function() {
+                    describe('if the card is active', function() {
+                        beforeEach(function() {
+                            $scope.$apply(function() {
+                                $scope.active = true;
+                            });
+                        });
+
+                        describe('if post module is enabled', function() {
+                            beforeEach(function() {
+                                $scope.config.modules = ['post'];
+                            });
+
+                            [true, false].forEach(function(bool) {
+                                describe('if postModuleActive is ' + bool, function() {
+                                    beforeEach(function() {
+                                        VideoEmbedCardCtrl.postModuleActive = bool;
+                                    });
+
+                                    it('should be ' + bool, function() {
+                                        expect(VideoEmbedCardCtrl.flyAway).toBe(bool);
+                                    });
+                                });
+                            });
+                        });
+
+                        describe('if post module is not enabled', function() {
+                            beforeEach(function() {
+                                $scope.config.modules = ['ballot'];
+                            });
+
+                            [true, false].forEach(function(bool) {
+                                describe('if postModuleActive is ' + bool, function() {
+                                    beforeEach(function() {
+                                        VideoEmbedCardCtrl.postModuleActive = bool;
+                                    });
+
+                                    it('should be false', function() {
+                                        expect(VideoEmbedCardCtrl.flyAway).toBe(false);
+                                    });
+                                });
+                            });
+                        });
+                    });
+
                     describe('if the ballot module is not enabled', function() {
                         beforeEach(function() {
                             spyOn(VideoEmbedCardCtrl, 'hasModule').and.callFake(function(module) {

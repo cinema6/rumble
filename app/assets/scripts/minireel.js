@@ -1311,7 +1311,9 @@ function( angular , c6Defines  , tracker ,
                         /* If there is a separate view for text, and if that mode is active: */
                         (behaviors.separateTextView && _data.textMode) ||
                         /* If this is a click-to-play minireel, it hasn't been played yet and the play button is enabled */
-                        (!config.data.autoplay && !(_data.playerEvents.play || {}).emitCount && this.enablePlayButton);
+                        (!config.data.autoplay && !(_data.playerEvents.play || {}).emitCount && this.enablePlayButton) ||
+                        /* If the post module is present and it is being shown */
+                        ($scope.hasModule('post') && this.postModuleActive);
                 }
             },
             showPlay: {
