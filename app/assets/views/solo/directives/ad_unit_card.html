@@ -1,0 +1,59 @@
+<article class="slide__group">
+    <post-module ng-if="hasModule('post')"
+        active="Ctrl.postModuleActive"
+        on-replay="Ctrl.playVideo()"
+        on-dismiss="Ctrl.postModuleActive = false"
+        sponsor-href="{{config.links.Website}}">
+    </post-module>
+    <div class="player__group player__height">
+        <button ng-if="Ctrl.enablePlay" ng-show="Ctrl.showPlay" ng-click="Ctrl.player.play()" class="player__play-btn">
+            <div class="player__play-icon">
+                <span class="ir">Play Video</span>
+            </div>
+        </button>
+        <div ng-class="{'mr-player--fly-away': Ctrl.flyAway}" class="mr-player" ng-switch="Ctrl.adType">
+            <vpaid-player ng-switch-when="vpaid" ad-tag="{{Ctrl.adTag}}" videoid="{{config.id}}"></vpaid-player>
+            <vast-player ng-switch-when="vast" ad-tag="{{Ctrl.adTag}}" videoid="{{config.id}}"></vast-player>
+        </div>
+        <div ng-show="Ctrl.flyAway" class="player__thumbnail c6-height-limiter"
+            ng-style="{'background-image':config.thumbs.large ? 'url(' + config.thumbs.large + ')' : ''}">
+            <span class="ir"><img ng-src="{{config.thumbs.large}}"></span>
+        </div>
+    </div>
+
+    <div class="card__copyBox">
+        
+        <a ng-if="!!config.collateral.logo" ng-href="{{config.links.Website}}" target="_blank" title="Sponsor link" class="brandProfile__imgBox">
+            <img ng-src="{{config.collateral.logo}}" class="brandProfile__img">
+        </a>
+
+        <div class="brand__links">
+            <a ng-repeat="link in config.social"
+                ng-href="{{link.href}}"
+                target="_blank"
+                title="{{link.label}}"
+                class="brand__link">
+                <span class="sprite socialIcons socialIcons--{{link.type}}">
+                    <span class="ir">{{link.label}}</span>
+                </span>
+            </a>
+        </div>
+
+        <div class="card__copy">
+            <h1 class="card__title tk--hdr">
+                {{config.title}}
+                <span ng-show="!!config.source" class="card__attributes">via <a ng-href="{{Ctrl.videoUrl}}" target="_blank" title="{{config.source}}">{{config.source}}</a></span>
+            </h1>
+
+            <div class="card__desc" ng-bind-html="config.note"></div>
+
+            <div ng-if="!!config.params.action" ng-switch="config.params.action.type" c6-alias="config.params.action as action" class="card__desc brand__actions">
+                <a ng-switch-when="text" ng-href="{{config.links.Action}}" target="_blank">{{action.label}}</a>
+                <a ng-switch-when="button" ng-href="{{config.links.Action}}" target="_blank" class="brand__goBtn actionBtn" title="{{action.label}}">
+                    <span class="actionBtn__label">{{action.label}}</span>
+                </a>
+            </div>
+
+        </div>
+    </div>
+</article>
