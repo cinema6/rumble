@@ -49,6 +49,8 @@
 
     </div>
     <div class="mr-ad__med-rect">
-        <display-ad-module active="active" config="config"></display-ad-module>
+        <companion-ad-module active="!!config._data.companion"
+            companion="config._data.companion">
+        </companion-ad-module>
     </div>
 </article>
