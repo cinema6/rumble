@@ -104,8 +104,10 @@ function( angular , c6Defines  , tracker ,
 
             function fetchThumb(card) {
                 switch (card.type) {
-                case 'text':
                 case 'displayAd':
+                case 'adUnit':
+                    break;
+                case 'text':
                 case 'recap':
                     (function() {
                         var splash = (data.collateral || {}).splash ?

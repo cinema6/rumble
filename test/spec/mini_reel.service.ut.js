@@ -176,7 +176,21 @@ define(['app', 'minireel', 'c6uilib', 'angular'], function(appModule, minireelMo
                                     title: 'Recap',
                                     note: null,
                                     data: {}
-                                }
+                                },
+                                {
+                                    id: 'rc-774a0ebe4d56a6',
+                                    type: 'adUnit',
+                                    title: 'Geek cool',
+                                    note: 'Doctor Who #11 meets #4',
+                                    voting: [ 400, 50, 10 ],
+                                    placementId: null,
+                                    thumbs: {},
+                                    data: {
+                                        skip: false,
+                                        autoadvance: true,
+                                        autoplay: null
+                                    }
+                                },
                             ]
                         };
 
@@ -509,7 +523,7 @@ define(['app', 'minireel', 'c6uilib', 'angular'], function(appModule, minireelMo
                     describe('getting thumbnails', function() {
                         it('should make every thumbnail null at first', function() {
                             result.filter(function(card) {
-                                return !(/^(recap|text|displayAd)$/).test(card.type);
+                                return !(/^(recap|text|displayAd|adUnit)$/).test(card.type);
                             }).forEach(function(card) {
                                 expect(card.thumbs).toBeNull('card:' + card.id);
                             });
@@ -517,7 +531,7 @@ define(['app', 'minireel', 'c6uilib', 'angular'], function(appModule, minireelMo
 
                         it('should get a thumbnail for every video', function() {
                             result.filter(function(card) {
-                                return !(/^(recap|text|displayAd)$/).test(card.type);
+                                return !(/^(recap|text|displayAd|adUnit)$/).test(card.type);
                             }).forEach(function(card) {
                                 expect(VideoThumbService.getThumbs).toHaveBeenCalledWith(card.type, card.data.videoid);
                             });
@@ -627,6 +641,12 @@ define(['app', 'minireel', 'c6uilib', 'angular'], function(appModule, minireelMo
                         describe('for a displayAd card', function() {
                             it('should have the thumbs it already had', function() {
                                 expect(result[6].thumbs).toEqual(mrData.deck[6].thumbs);
+                            });
+                        });
+
+                        describe('for a adUnit card', function() {
+                            it('should have the thumbs it already had', function() {
+                                expect(result[8].thumbs).toEqual(mrData.deck[8].thumbs);
                             });
                         });
 
