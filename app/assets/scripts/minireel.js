@@ -89,9 +89,9 @@ function( angular , c6Defines  , tracker ,
             }
         };
     }])
-    .service('MiniReelService', ['InflectorService','VideoThumbService',
+    .service('MiniReelService', ['InflectorService','VideoThumbService','$q',
                                  'c6ImagePreloader','envrootFilter',
-    function                    ( InflectorService , VideoThumbService ,
+    function                    ( InflectorService , VideoThumbService , $q ,
                                   c6ImagePreloader , envrootFilter ) {
         function isSet(value) {
             return isDefined(value) && value !== null;
@@ -104,9 +104,6 @@ function( angular , c6Defines  , tracker ,
 
             function fetchThumb(card) {
                 switch (card.type) {
-                case 'displayAd':
-                case 'adUnit':
-                    break;
                 case 'text':
                 case 'recap':
                     (function() {
@@ -123,13 +120,17 @@ function( angular , c6Defines  , tracker ,
                     }());
                     break;
                 default:
-                    card.thumbs = null;
+                    card.thumbs = card.thumbs || null;
 
-                    VideoThumbService.getThumbs(card.type, card.data.videoid)
-                        .then(function(thumbs) {
-                            card.thumbs = thumbs;
+                    $q.when(
+                        card.thumbs || VideoThumbService.getThumbs(card.type, card.data.videoid)
+                    ).then(function(thumbs) {
+                        card.thumbs = thumbs;
+
+                        if (thumbs.small) {
                             c6ImagePreloader.load([thumbs.small]);
-                        });
+                        }
+                    });
                     break;
                 }
             }

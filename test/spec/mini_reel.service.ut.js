@@ -148,6 +148,10 @@ define(['app', 'minireel', 'c6uilib', 'angular'], function(appModule, minireelMo
                                     note: 'Doctor Who #11 meets #4',
                                     voting: [ 400, 50, 10 ],
                                     placementId: null,
+                                    thumbs: {
+                                        small: 'matt-smith--small.jpg',
+                                        large: 'matt-smith--large.jpg'
+                                    },
                                     data: {
                                         skip: false,
                                         autoadvance: true,
@@ -522,16 +526,16 @@ define(['app', 'minireel', 'c6uilib', 'angular'], function(appModule, minireelMo
 
                     describe('getting thumbnails', function() {
                         it('should make every thumbnail null at first', function() {
-                            result.filter(function(card) {
-                                return !(/^(recap|text|displayAd|adUnit)$/).test(card.type);
-                            }).forEach(function(card) {
-                                expect(card.thumbs).toBeNull('card:' + card.id);
+                            mrData.deck.filter(function(card) {
+                                return !card.thumbs && !(/^(text|recap)$/).test(card.type);
+                            }).forEach(function(card, index) {
+                                expect(result[mrData.deck.indexOf(card)].thumbs).toBeNull('card:' + card.id);
                             });
                         });
 
                         it('should get a thumbnail for every video', function() {
-                            result.filter(function(card) {
-                                return !(/^(recap|text|displayAd|adUnit)$/).test(card.type);
+                            mrData.deck.filter(function(card) {
+                                return !card.thumbs && !(/^(text|recap)$/).test(card.type);
                             }).forEach(function(card) {
                                 expect(VideoThumbService.getThumbs).toHaveBeenCalledWith(card.type, card.data.videoid);
                             });
@@ -553,21 +557,19 @@ define(['app', 'minireel', 'c6uilib', 'angular'], function(appModule, minireelMo
                                 small: 'http://b.vimeocdn.com/ts/462/944/462944068_100.jpg',
                                 large: 'http://b.vimeocdn.com/ts/462/944/462944068_600.jpg'
                             });
-                            expect(result[5].thumbs).toEqual({
-                                small: 'http://img.youtube.com/vi/Cn9yJrrm2tk/2.jpg',
-                                large: 'http://img.youtube.com/vi/Cn9yJrrm2tk/0.jpg'
-                            });
+                            expect(result[5].thumbs).toEqual(mrData.deck[5].thumbs);
                         });
 
                         it('should preload all of the small images', function() {
                             $rootScope.$digest();
 
-                            expect(c6ImagePreloader.load.calls.count()).toBe(4);
+                            expect(c6ImagePreloader.load.calls.count()).toBe(5);
 
                             expect(c6ImagePreloader.load).toHaveBeenCalledWith(['http://img.youtube.com/vi/gy1B3agGNxw/2.jpg']);
                             expect(c6ImagePreloader.load).toHaveBeenCalledWith(['http://s2.dmcdn.net/Dm9Np/x120-6Xz.jpg']);
                             expect(c6ImagePreloader.load).toHaveBeenCalledWith(['http://b.vimeocdn.com/ts/462/944/462944068_100.jpg']);
-                            expect(c6ImagePreloader.load).toHaveBeenCalledWith(['http://img.youtube.com/vi/Cn9yJrrm2tk/2.jpg']);
+                            expect(c6ImagePreloader.load).toHaveBeenCalledWith(['matt-smith--small.jpg']);
+                            expect(c6ImagePreloader.load).toHaveBeenCalledWith(['http://upload.wikimedia.org/wikipedia/en/8/8c/Ubisoft.png']);
                         });
 
                         describe('for a text card', function() {
