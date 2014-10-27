@@ -7,6 +7,7 @@
     autoadvancing to be overridden on a card-by-card basis
   * [FEATURE]: Add ```<ad-unit-card>``` for playing back ad units as
     content
+  * [FEATURE]: Allow custom thumbnails for all card types
 
 ## v1.3.0 (October 16, 2014)
 * *[v1.3.0.rc1]*
