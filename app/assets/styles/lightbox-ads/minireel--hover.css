@@ -1,15 +1,61 @@
 /*  ================================================
-    transform transitions
+    background transitions
     ================================================ */
-    .MiniReel__closeBtn .sprite--close {
-        -webkit-transition: -webkit-transform 0.3s ease; 
-        transition: transform 0.3s ease;
+    .MiniReel__closeBtn,
+    .btnPrimary {
+        -webkit-transition:background 0.3s; transition:background 0.3s;
     }
 
-        .MiniReel__closeBtn:hover .sprite--close {
-            -webkit-transform: scale(1.25);
-            transform: scale(1.25);
+        .MiniReel__closeBtn:hover {
+            background:#d94040;
         }
+        .btnPrimary:hover {
+            background:#fff;
+        }
+
+
+/*  ================================================
+    color transitions
+    ================================================ */
+    .titleBar__titleText,
+    .btnLabel {
+        -webkit-transition:color 0.3s; transition:color 0.3s;
+    }
+
+        .titleBar__titleText:hover,
+        .btnPrimary:hover .btn__label {
+            color:#d94040;
+        }
+
+
+
+/*  ================================================
+    opacity transitions
+    ================================================ */
+    .textOnly__imgBox:after {
+        -webkit-transition:opacity 0.3s; transition:opacity 0.3s;
+    }
+
+        .textOnly__imgBox:hover:after {
+            opacity:0.5;
+        }
+
+
+/*  ================================================
+    misc transitions
+    ================================================ */
+    .textLink:hover {
+        border-bottom:1px dotted #d94040;
+    }
+
+    .textOnly__imgBox:after {
+        position:absolute;
+        top:0; left:0;
+        width:100%; height:100%;
+        content:'';
+        background:#d94040;
+        opacity:0;
+    }
 
 
 

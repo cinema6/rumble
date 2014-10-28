@@ -1,19 +1,17 @@
-<article class="mr-textCard__group">
-    <div class="mr-player__group">
-        <!--<div class="mr-player__thumbnail" ng-style="{'background-image':config.thumbs.large ? 'url(' + config.thumbs.large + ')' : ''}">
-            <span class="ir"><img ng-src="{{config.thumbs.large}}"></span>
-        </div>-->
-        <div class="mr-textCard__copy">
-            <h1 class="mr-card__title tk--hdr">{{config.title}}</h1>
-            <div class="mr-card__desc" ng-bind-html="config.note"></div>
-            <button class="mr-textCard__goBtn" ng-click="$emit('<mr-card>:contentEnd', config)">Begin</button>
-        </div>
+<div class="textOnly__group">
+    
+    <div class="textOnly__copy">
+        <h1 class="card__title tk--hdr">{{config.title}}</h1>
+        <div class="card__desc" ng-bind-html="config.note"></div>
+        <button class="textOnly__goBtn btnPrimary" ng-click="$emit('<mr-card>:contentEnd', config)">
+            <span class="btn__label">Begin</span>
+        </button>
     </div>
 
-    <button class="mr-textCard__goImg"
+    <button class="textOnly__imgBox"
         ng-style="{'background-image':config.thumbs.large ? 'url(' + config.thumbs.large + ')' : ''}"
         ng-click="$emit('<mr-card>:contentEnd', config)"
         type="button">
         &nbsp;
     </button>
-</article>
+</div>

@@ -39,7 +39,7 @@
     c6 copy classes : general type and color styles
     ================================================ */        
     .tk--hdr {
-        font-family: 'museo-sans', 'Open Sans', Arial, Helvetica, sans-serif; 
+        font-family: 'Roboto Condensed', 'Open Sans', Arial, Helvetica, sans-serif; 
         font-weight:300;
     }
     a {

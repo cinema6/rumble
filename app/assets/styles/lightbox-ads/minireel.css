@@ -13,9 +13,8 @@
         font-size: 16px; 
         font-family: 'Open Sans', Arial, Helvetica, sans-serif; 
         font-weight:300; 
-        color:#545454; 
+        color:#444; 
         line-height: 1.5;
-
         background:#fff; 
         margin:0;
     }
@@ -44,9 +43,9 @@
 
 /*  ================================================
     c6 copy classes : general type and color styles
-    ================================================ */        
+    ================================================ */
     .tk--hdr {
-        font-family: 'museo-sans', 'Open Sans', Arial, Helvetica, sans-serif; 
+        font-family: 'Roboto Condensed', 'Open Sans', Arial, Helvetica, sans-serif; 
         font-weight:300;
     }
     a {
@@ -100,7 +99,7 @@
 
         .sprite--close {
             width:1.125rem; height:1.125rem;
-            background-position:-5.625rem -7.875rem;
+            background-position:-5.625rem -10.125rem;
             display: inline-block;
         }
 
@@ -134,11 +133,33 @@
             width:1.5rem; height:1.5rem;
             position: absolute;
             top: 0; right: 0;
-            border:0; padding:0; margin:1em;
-            cursor: pointer;
-            background-position:-87px -51px;
         }
 
+
+    .textLink {
+        border:0;
+    }
+
+
+    .btnPrimary,
+    .btnPrimary:active,
+    .btnPrimary:focus {
+        border:3px solid #d94040;
+        background:#d94040;
+        line-height: 1;
+    }
+        .btnPrimary .btn__label {
+            font-family: 'Roboto Condensed', 'Open Sans', Arial, Helvetica, sans-serif;
+            font-size:0.875em;
+            color:#fff;
+            font-weight:bold;
+            text-transform:uppercase;
+        }
+
+
+    .btnSecondary {
+
+    }
 
 
 
@@ -166,7 +187,7 @@
     ================================================ */
     .experience__group {
         position:absolute; z-index: 2;
-        top:4em; right:4em; bottom:4em; left:4em;
+        top:3.5em; right:3.5em; bottom:3.5em; left:3.5em;
         min-height:20em;
     }
 
@@ -175,14 +196,210 @@
         background:#fff;
         border-radius:3px;
         padding:0.5em;
+        position: absolute;
+        width:100%; height:100%;
+        min-height:20em;
     }
 
-        .MiniReel__closeBtn {
+        .MiniReel__closeBtn,
+        .MiniReel__closeBtn:active,
+        .MiniReel__closeBtn:focus {
             width:2.5em; height:2.5em;
-            padding:0.6875em;
+            padding:0.5em;
             position:absolute; z-index: 5;
-            top:0; right:0;
+            top:-1.25em; right:-1.25em;
+            background:#000; border-radius:50%;
+            border:3px solid #fff;
+            -webkit-box-shadow: 0 5px 5px 0 rgba(0,0,0,0.5);
+            box-shadow: 0 5px 5px 0 rgba(0,0,0,0.5);
         }
+            .MiniReel__closeBtn:active {
+                top:-1.125em;
+            }
+
             .MiniReel__closeBtn .sprite--close {
                 display: block;
             }
+
+
+
+
+
+/*  ================================================
+    titleBar classes
+    ================================================ */
+    .titleBar__group {
+        position: relative;
+    }
+
+        .titleBar__disabler {
+            position:absolute;
+            z-index: 2;
+            width:100%; height:100%;
+        }
+
+
+        .brandProfile__logoBox {
+            width:2.5em; height:2.5em;
+            display: block;
+            float:left;
+        }
+            .brandProfile__logo {
+                display: block;
+                width:2.5em; height:2.5em;
+            }
+
+
+        .titleBar__title {
+            margin:0 0 0 0.5rem;
+            font-size:1.0625em;
+            line-height: 1;
+            font-weight:normal;
+            float:left;
+            width:100%;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+            .brandedMR__tagline {
+                font-size:0.75em;
+                color:#999;
+                display: block;
+                margin:0.25em 0;
+            }
+                .brandedMR__taglineBrand {
+                    font-weight:bold;
+                }
+
+            .titleBar__titleText {
+                color:#000;
+                cursor:pointer;
+            }
+
+
+            /* this is the container for publisher logos. by default it is 
+            hidden. override this via external publisher css file*/
+            .publisherProfile__logoBox {
+                display:none;
+            }
+
+
+
+
+
+/*  ================================================
+    cards classes
+    ================================================ */
+    .cards__group {
+        position:absolute;
+        top:1px; right:0.5em; bottom:3.75em; left:0.5em;
+    }
+
+    .cards__list {
+        list-style:none;
+        margin:0; padding:0;
+    }
+
+    .cards__item {
+        margin:0; padding:0;
+    }
+
+    .card__title {
+        color:#000;
+    }
+
+
+
+
+
+/*  ================================================
+    text only card classes
+    ================================================ */
+    .textOnly__group {
+
+    }
+
+    .textOnly__copy {
+        overflow-x:hidden;
+        overflow-y:auto;
+        position:absolute;
+        right:0; left:19em; top:0; bottom:0;
+        min-height:10em;
+        padding:3em 4em 4em 2em;
+    }
+        .textOnly__copy .card__title {
+            margin:0.25em 0 0.90625em 0; 
+            font-size:2em; 
+            line-height: 1;
+        }
+
+        .textOnly__copy .card__desc {
+            margin:0;
+            font-size:0.8125em;
+            line-height: 1.25rem;
+        }
+
+        .textOnly__goBtn {
+            padding:0.5em 2em;
+            margin:1.1875em 0 0 0;
+        }
+
+    .textOnly__imgBox {
+        width:18.75em; height:100%;
+        position:absolute;
+        left:0; top:0;
+        background:50% 50% / cover no-repeat;
+    }
+
+
+
+
+/*  ================================================
+    playlist classes
+    ================================================ */
+    .playlistNav__group {
+        height:3em;
+    }
+
+
+
+
+
+/*  ================================================
+    branded MR classes
+    ================================================ */
+    .experience__group--brandedMR .MiniReel__group {
+        height:calc(100% - 1.8125em);
+        min-height:18em;
+    }
+
+    .experience__group--brandedMR .titleBar__group {
+        height:2.75em;
+    }
+        .experience__group--brandedMR .titleBar__title {
+            width:calc(100% - 3em);
+        }
+
+
+    .experience__group--brandedMR .cards__group {
+        top:3.25em;
+    }
+
+
+
+
+
+/*  ================================================
+    publisher branding classes 
+    - external stylesheet for when publisher logos are needed
+    ================================================ */
+    .experience__group--brandedMR .titleBar__title {
+        width:calc(100% - 14em);
+    }
+    .publisherProfile__logoBox {
+        width:9.375em; height:1.5em;
+        margin:0 1em 0 0;
+        background: url('../../img/_publisherLogo--wide@2x.png') 50% 50% / cover no-repeat;
+        float:right;
+        display:block;
+    }

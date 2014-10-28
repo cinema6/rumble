@@ -1,9 +1,9 @@
 <ul ng-repeat="deck in DeckCtrl.decks"
-    class="mr-cards__list"
+    class="cards__list"
     ng-class="{
         inactive: !deck.active
     }">
-    <li class="mr-cards__item slides__item"
+    <li class="cards__item"
         ng-repeat="item in (deck.cards | deck:deck.index:1)"
         ng-class="{
             inactive: ($index !== deck.index || !deck.active)
