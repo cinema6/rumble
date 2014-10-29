@@ -44,7 +44,7 @@ function( angular ) {
                     NavController.enabled(false)
                         .tick(data.skip || player.duration);
 
-                    if (data.autoplay || mustWatchEntireVideo) {
+                    if (mustWatchEntireVideo) {
                         return player.on('timeupdate', tickNav)
                             .once('ended', function() {
                                 NavController.enabled(true);

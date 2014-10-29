@@ -417,72 +417,23 @@ define(['minireel', 'c6uilib', 'services'], function(minireelModule, c6uilibModu
                                     expect(navController.enabled).toHaveBeenCalledWith(false);
                                 });
 
-                                describe('if the video is autoplay', function() {
-                                    beforeEach(function() {
-                                        $scope.config.data.autoplay = true;
-                                        passNavController();
-                                    });
+                                it('should count down via a $interval', function() {
+                                    $interval.flush(1000);
+                                    expect(navController.tick).toHaveBeenCalledWith(6);
 
-                                    it('should not count via $interval', function() {
-                                        $interval.flush(1000);
-                                        expect(navController.tick).not.toHaveBeenCalledWith(5);
-                                    });
+                                    $interval.flush(1000);
+                                    expect(navController.tick).toHaveBeenCalledWith(5);
 
-                                    it('should tick the nav controller as the video plays', function() {
-                                        timeupdate(0.2);
-                                        expect(navController.tick).toHaveBeenCalledWith(5.8);
-
-                                        timeupdate(1);
-                                        expect(navController.tick).toHaveBeenCalledWith(5);
-
-                                        timeupdate(6.1);
-                                        expect(navController.tick).toHaveBeenCalledWith(0);
-                                    });
-
-                                    it('should enable the nav when the video has played enough', function() {
-                                        timeupdate(3);
-                                        expect(navController.enabled).not.toHaveBeenCalledWith(true);
-
-                                        timeupdate(6.4);
-                                        expect(navController.enabled).toHaveBeenCalledWith(true);
-                                    });
-
-                                    it('should remove the timeupdate listener after the nav has been enabled', function() {
-                                        var callCount;
-
-                                        timeupdate(6);
-                                        callCount = navController.tick.calls.count();
-
-                                        timeupdate(7);
-                                        expect(navController.tick.calls.count()).toBe(callCount);
-                                    });
+                                    $interval.flush(1000);
+                                    expect(navController.tick).toHaveBeenCalledWith(4);
                                 });
 
-                                describe('if the video is not autoplay', function() {
-                                    beforeEach(function() {
-                                        $scope.config.data.autoplay = false;
-                                        iface.removeAllListeners();
-                                        passNavController();
-                                    });
+                                it('should enable the nav after the countdown', function() {
+                                    $interval.flush(1000);
+                                    expect(navController.enabled).not.toHaveBeenCalledWith(true);
 
-                                    it('should count down via a $interval', function() {
-                                        $interval.flush(1000);
-                                        expect(navController.tick).toHaveBeenCalledWith(6);
-
-                                        $interval.flush(1000);
-                                        expect(navController.tick).toHaveBeenCalledWith(5);
-
-                                        $interval.flush(1000);
-                                        expect(navController.tick).toHaveBeenCalledWith(4);
-                                    });
-
-                                    it('should enable the nav after the countdown', function() {
-                                        $interval.flush(1000);
-                                        expect(navController.enabled).not.toHaveBeenCalledWith(true);
-
-                                        $interval.flush(5000);
-                                        expect(navController.enabled).toHaveBeenCalledWith(true);
-                                    });
+                                    $interval.flush(5000);
+                                    expect(navController.enabled).toHaveBeenCalledWith(true);
                                 });
                             });
                         });
