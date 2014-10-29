@@ -1443,7 +1443,7 @@ function( angular , c6Defines  , tracker ,
                             navController.tick(skip)
                                 .enabled(false);
 
-                            if (config.data.autoplay || config.data.skip === false) {
+                            if (config.data.skip === false) {
                                 return iface.on('timeupdate', handleTimeUpdate)
                                     .once('ended', function() {
                                         navController.enabled(true);
