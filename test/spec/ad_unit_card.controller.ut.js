@@ -707,107 +707,52 @@ define(['minireel', 'services'], function(minireelModule, servicesModule) {
                                             describe('if the card can be skiped after some time', function() {
                                                 beforeEach(function() {
                                                     $scope.config.data.skip = 6;
-                                                });
 
-                                                describe('if the card autoplays', function() {
-                                                    beforeEach(function() {
-                                                        $scope.config.data.autoplay = true;
-
-                                                        $scope.$apply(function() {
-                                                            passNavController(NavController);
-                                                        });
-                                                    });
-
-                                                    it('should disable the nav', function() {
-                                                        expect(NavController.enabled).toHaveBeenCalledWith(false);
-                                                    });
-
-                                                    it('should tick the nav with the wait time', function() {
-                                                        expect(NavController.tick).toHaveBeenCalledWith($scope.config.data.skip);
-                                                    });
-
-                                                    describe('as timeupdates occur', function() {
-                                                        it('should tick the nav', function() {
-                                                            timeupdate(1);
-                                                            expect(NavController.tick).toHaveBeenCalledWith(5);
-
-                                                            timeupdate(2);
-                                                            expect(NavController.tick).toHaveBeenCalledWith(4);
-
-                                                            timeupdate(7);
-                                                            expect(NavController.tick).toHaveBeenCalledWith(0);
-                                                        });
-
-                                                        describe('when the current time exceeds the skip time', function() {
-                                                            beforeEach(function() {
-                                                                timeupdate(3);
-                                                                expect(NavController.enabled).not.toHaveBeenCalledWith(true);
-
-                                                                timeupdate(6.1);
-                                                                NavController.tick.calls.reset();
-                                                            });
-
-                                                            it('should enable the nav', function() {
-                                                                expect(NavController.enabled).toHaveBeenCalledWith(true);
-                                                            });
-
-                                                            it('should not tick the nav anymore', function() {
-                                                                timeupdate(7);
-                                                                expect(NavController.tick).not.toHaveBeenCalled();
-                                                            });
-                                                        });
+                                                    $scope.$apply(function() {
+                                                        passNavController(NavController);
                                                     });
                                                 });
 
-                                                describe('if the card does not autoplay', function() {
+                                                it('should disable the nav', function() {
+                                                    expect(NavController.enabled).toHaveBeenCalledWith(false);
+                                                });
+
+                                                it('should tick the nav with the wait time', function() {
+                                                    expect(NavController.tick).toHaveBeenCalledWith($scope.config.data.skip);
+                                                });
+
+                                                it('should ignore timeupdates', function() {
+                                                    NavController.tick.calls.reset();
+
+                                                    timeupdate(1);
+                                                    expect(NavController.tick).not.toHaveBeenCalled();
+                                                });
+
+                                                it('should count down using a $interval', function() {
+                                                    $interval.flush(1000);
+                                                    expect(NavController.tick).toHaveBeenCalledWith(6);
+
+                                                    $interval.flush(1000);
+                                                    expect(NavController.tick).toHaveBeenCalledWith(5);
+
+                                                    $interval.flush(1000);
+                                                    expect(NavController.tick).toHaveBeenCalledWith(4);
+                                                });
+
+                                                describe('after the interval counts down', function() {
                                                     beforeEach(function() {
-                                                        $scope.config.data.autoplay = false;
-                                                        $scope.$apply(function() {
-                                                            passNavController(NavController);
-                                                        });
+                                                        $interval.flush(6000);
                                                     });
 
-                                                    it('should disable the nav', function() {
-                                                        expect(NavController.enabled).toHaveBeenCalledWith(false);
+                                                    it('should enable the nav', function() {
+                                                        expect(NavController.enabled).toHaveBeenCalledWith(true);
                                                     });
 
-                                                    it('should tick the nav with the wait time', function() {
-                                                        expect(NavController.tick).toHaveBeenCalledWith($scope.config.data.skip);
-                                                    });
-
-                                                    it('should ignore timeupdates', function() {
+                                                    it('should not tick the nav anymore', function() {
                                                         NavController.tick.calls.reset();
+                                                        $interval.flush(1000);
 
-                                                        timeupdate(1);
                                                         expect(NavController.tick).not.toHaveBeenCalled();
-                                                    });
-
-                                                    it('should count down using a $interval', function() {
-                                                        $interval.flush(1000);
-                                                        expect(NavController.tick).toHaveBeenCalledWith(6);
-
-                                                        $interval.flush(1000);
-                                                        expect(NavController.tick).toHaveBeenCalledWith(5);
-
-                                                        $interval.flush(1000);
-                                                        expect(NavController.tick).toHaveBeenCalledWith(4);
-                                                    });
-
-                                                    describe('after the interval counts down', function() {
-                                                        beforeEach(function() {
-                                                            $interval.flush(6000);
-                                                        });
-
-                                                        it('should enable the nav', function() {
-                                                            expect(NavController.enabled).toHaveBeenCalledWith(true);
-                                                        });
-
-                                                        it('should not tick the nav anymore', function() {
-                                                            NavController.tick.calls.reset();
-                                                            $interval.flush(1000);
-
-                                                            expect(NavController.tick).not.toHaveBeenCalled();
-                                                        });
                                                     });
                                                 });
                                             });
