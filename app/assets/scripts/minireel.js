@@ -151,7 +151,7 @@ function( angular , c6Defines  , tracker ,
             }
 
             function setSocial(card) {
-                var social = ['Facebook', 'Twitter', 'YouTube', 'Vimeo'];
+                var social = ['Facebook', 'Pinterest', 'Twitter', 'YouTube', 'Vimeo'];
 
                 card.social = Object.keys(card.links || {})
                     .filter(function(label) {

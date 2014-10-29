@@ -2,6 +2,7 @@
 
 ## v1.4.0 (October 29, 2014)
 * *[v1.4.0.rc2]*
+  * [FEATURE]: Added support for Pinterest social links
   * Content card skip controls are no longer linked to the amount of the
     video that was watched, the are linked to the amount of time the user
     spends on the card
