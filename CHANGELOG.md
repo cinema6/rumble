@@ -6,6 +6,7 @@
   * Content card skip controls are no longer linked to the amount of the
     video that was watched, the are linked to the amount of time the user
     spends on the card
+* *[/v1.4.0.rc2]*
 
 * *[v1.4.0.rc1]*
   * [FEATURE]: Solo player templates and styles, with and without ads, added. 
