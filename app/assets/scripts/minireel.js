@@ -28,8 +28,8 @@ function( angular , c6Defines  , tracker ,
         companionAdModule.name,
         displayAdModule.name
     ])
-    .animation('.slides__item',['$log', function($log){
-        $log = $log.context('.slides__item');
+    .animation('.cards__item',['$log', function($log){
+        $log = $log.context('.cards__item');
         return {
             beforeAddClass: function(element,className,done) {
                 $log.log('addClass setup:',className);
@@ -49,7 +49,7 @@ function( angular , c6Defines  , tracker ,
                 $log.info('removeClass start',className);
                 element.delay(50).animate({
                     opacity: 1
-                }, 400, function() {
+                }, 300, function() {
                     $log.info('removeClass end',className);
                     done();
                 });

@@ -2,43 +2,142 @@
     background transitions
     ================================================ */
     .MiniReel__closeBtn,
-    .btnPrimary {
+    .btnPrimary,
+    .brandProfile__linksBox .socialIconsBe:before {
         -webkit-transition:background 0.3s; transition:background 0.3s;
     }
 
-        .MiniReel__closeBtn:hover {
-            background:#d94040;
-        }
-        .btnPrimary:hover {
-            background:#fff;
-        }
+    .MiniReel__closeBtn:hover {
+        background:#d94040;
+    }
+    .btnPrimary:hover {
+        background:#fff;
+    }
+    .brandProfile__linksBox .socialIconsBe__light--youtube:hover:before {
+        background-position:-1.125rem -3.375rem;
+    }
+    .brandProfile__linksBox .socialIconsBe__light--vimeo:hover:before {
+        background-position:-3.375rem -3.375rem;
+    }
+    .brandProfile__linksBox .socialIconsBe__light--facebook:hover:before {
+        background-position:-5.625rem -3.375rem;
+    }
+    .brandProfile__linksBox .socialIconsBe__light--twitter:hover:before {
+        background-position:-7.875rem -3.375rem;
+    }
+    .brandProfile__linksBox .socialIconsBe__light--pinterest:hover:before {
+        background-position:-10.125rem -3.375rem;
+    }
+
+
+
 
 
 /*  ================================================
     color transitions
     ================================================ */
     .titleBar__titleText,
-    .btnLabel {
+    .btnLabel,
+    .brandProfile__link {
         -webkit-transition:color 0.3s; transition:color 0.3s;
     }
 
-        .titleBar__titleText:hover,
-        .btnPrimary:hover .btn__label {
-            color:#d94040;
-        }
+    .titleBar__titleText:hover,
+    .btnPrimary:hover .btn__label,
+    .brandProfile__link:hover {
+        color:#d94040;
+    }
+    .brandProfile__linksBox .tk--youtube:hover {
+        color:#e22d24;
+    }
+    .brandProfile__linksBox .tk--vimeo:hover {
+        color:#6b859f;
+    }
+    .brandProfile__linksBox .tk--facebook:hover {
+        color:#6281c3;
+    }
+    .brandProfile__linksBox .tk--twitter:hover {
+        color:#00b0ed;
+    }
+    .brandProfile__linksBox .tk--pinterest:hover {
+        color:#cb2027;
+    }
+
+
 
 
 
 /*  ================================================
     opacity transitions
     ================================================ */
-    .textOnly__imgBox:after {
+    .textOnly__imgBox:after,
+    .page__previewImg:before {
         -webkit-transition:opacity 0.3s; transition:opacity 0.3s;
     }
 
-        .textOnly__imgBox:hover:after {
-            opacity:0.5;
+    .textOnly__imgBox:hover:after {
+        opacity:0.5;
+    }
+
+    .page__previewImg:hover:before {
+        opacity:0;
+    }
+
+
+
+
+/*  ================================================
+    fill transitions
+    ================================================ */
+    .pagerNav__btnIconPath {
+        -webkit-transition:fill 0.3s; transition:fill 0.3s;
+    }
+
+    .pagerNav__btn:hover .pagerNav__btnIconPath {
+        fill:#d94040;
+    }
+
+
+
+
+
+/*  ================================================
+    position transitions
+    ================================================ */
+    .pagerNav__btnIcon {
+        -webkit-transition:left 0.2s, right 0.2s, top 0.2s, bottom 0.2s; 
+        transition:left 0.2s, right 0.2s, top 0.2s, bottom 0.2s; 
+    }
+
+    .pagerNav__btn:hover .pagerNav__btnIcon--prev {
+        left:8%;
+    }
+    .pagerNav__btn:hover .pagerNav__btnIcon--next {
+        right:8%;
+    }
+
+
+
+
+
+/*  ================================================
+    transform transitions
+    ================================================ */
+    .someClass {
+        -webkit-transition: -webkit-transform 0.3s ease; 
+        transition: transform 0.3s ease;
+    }
+
+    .page__btn:hover .page__previewImg {
+        -webkit-transform: scale(1.25);
+        transform: scale(1.25);
+    }
+        .page__btn--active:hover .page__previewImg {
+            -webkit-transform: scale(1.12);
+            transform: scale(1.12);
         }
+
+
 
 
 /*  ================================================

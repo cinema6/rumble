@@ -73,7 +73,8 @@
 /*  ================================================
     helper / ui classes
     ================================================ */
-    .ir {
+    .ir,
+    .ui-banish {
         background-color: transparent;
         border: 0; width:0; height:0;
         overflow: hidden; display: block; position:absolute;
@@ -92,7 +93,9 @@
 
 
 
-    .sprite {
+    .sprite,
+    .spriteAf:after,
+    .spriteBe:before {
         background:url('../../img/sprite--alpha@2x.png') 0 0 / 18.75rem 18.75rem no-repeat;
     }
 
@@ -103,24 +106,59 @@
             display: inline-block;
         }
 
-        .socialIcons {
+        .socialIconsBe:before {
+            content:'';
             width:1.125rem; height:1.125rem;
             display: inline-block;
+            vertical-align: middle;
         }
-            .socialIcons--youtube {
+
+            .socialIconsBe--youtube:before {
+                background-position:-1.125rem -3.375rem;
+            }
+            .socialIconsBe--vimeo:before {
+                background-position: -3.375rem -3.375rem;
+            }
+            .socialIconsBe--facebook:before {
+                background-position: -5.625rem -3.375rem;
+            }
+            .socialIconsBe--twitter:before {
+                background-position: -7.875rem -3.375rem;
+            }
+            .socialIconsBe--pinterest:before {
+                background-position: -10.125rem -3.375rem;
+            }
+
+            .socialIconsBe__dark--youtube:before {
                 background-position:-1.125rem -1.125rem;
             }
-            .socialIcons--vimeo {
+            .socialIconsBe__dark--vimeo:before {
                 background-position: -3.375rem -1.125rem;
             }
-            .socialIcons--facebook {
+            .socialIconsBe__dark--facebook:before {
                 background-position: -5.625rem -1.125rem;
             }
-            .socialIcons--twitter {
+            .socialIconsBe__dark--twitter:before {
                 background-position: -7.875rem -1.125rem;
             }
-            .socialIcons--pinterest {
+            .socialIconsBe__dark--pinterest:before {
                 background-position: -10.125rem -1.125rem;
+            }
+
+            .socialIconsBe__light--youtube:before {
+                background-position:-1.125rem -5.625rem;
+            }
+            .socialIconsBe__light--vimeo:before {
+                background-position: -3.375rem -5.625rem;
+            }
+            .socialIconsBe__light--facebook:before {
+                background-position: -5.625rem -5.625rem;
+            }
+            .socialIconsBe__light--twitter:before {
+                background-position: -7.875rem -5.625rem;
+            }
+            .socialIconsBe__light--pinterest:before {
+                background-position: -10.125rem -5.625rem;
             }
 
 
@@ -187,17 +225,38 @@
     ================================================ */
     .experience__group {
         position:absolute; z-index: 2;
-        top:3.5em; right:3.5em; bottom:3.5em; left:3.5em;
-        min-height:20em;
+        top:0; left:0;
+        height:100%; width:100%;
+        text-align: center;
+        white-space: nowrap;
+        overflow: auto;
     }
+        .experience__group:before {
+            content: ' ';
+            display: inline-block;
+            vertical-align: middle;
+            height: 100%;
+            /* MR min height threshold to trigger scrollbars */
+            min-height:500px;
+        }
+        .experience {
+            display: inline-block;
+            vertical-align: middle;
+            text-align: left;
+            white-space: normal;
+            position:relative;
+            width:90%;
+            /* MR min width threshold to trigger scrollbars */
+            min-width:600px;
+        }
 
 
     .MiniReel__group {
         background:#fff;
         border-radius:3px;
-        padding:0.5em;
-        position: absolute;
-        width:100%; height:100%;
+        padding:0.5em 0.5em 50% 0.5em; margin:1.25em 0;
+        position: relative;
+        width:100%; height: 0;
         min-height:20em;
     }
 
@@ -299,9 +358,13 @@
         list-style:none;
         margin:0; padding:0;
     }
+        .cards__item {
+            margin:0; padding:0;
+        }
 
-    .cards__item {
-        margin:0; padding:0;
+
+    .card__group {
+
     }
 
     .card__title {
@@ -315,17 +378,12 @@
 /*  ================================================
     text only card classes
     ================================================ */
-    .textOnly__group {
-
-    }
-
     .textOnly__copy {
         overflow-x:hidden;
         overflow-y:auto;
         position:absolute;
         right:0; left:19em; top:0; bottom:0;
-        min-height:10em;
-        padding:3em 4em 4em 2em;
+        padding:3em 4em 1em 2em;
     }
         .textOnly__copy .card__title {
             margin:0.25em 0 0.90625em 0; 
@@ -355,11 +413,145 @@
 
 
 /*  ================================================
-    playlist classes
+    pagerNav classes
     ================================================ */
-    .playlistNav__group {
+    .pagerNav__group {
         height:3em;
+        position:absolute;
+        bottom:0.5em; left:0.5em; right:0.5em;
+        display: block;
     }
+
+    .pagerNav__btn {
+        min-width:6em;/*96px*/ 
+        height:3em;/*48px*/ 
+        position:absolute;
+        left:0;
+    }
+        .pagerNav__btn--next {
+            right:0; left:auto;
+        }
+
+        .pagerNav__btn--disabled {
+            opacity:0.25; cursor:default;
+        }
+            .pagerNav__btn--disabled .btn__label {
+                color:#000;
+            }
+
+
+        .pagerNav__btnIcon {
+            display:block; 
+            width:0.75rem;/*12px*/ 
+            height:100%;
+            position:absolute; z-index:1;
+            top:0; left:12.5%; margin:0;
+        }
+            .pagerNav__btnIcon--next {
+                right:12.5%; left:auto;
+            }
+
+            .pagerNav__btnIconPath {
+                fill:#fff;
+            }
+
+        .pagerNav__btnLabel {
+            font-weight:bold; 
+            color:#fff; 
+            line-height:1; 
+            font-size:0.875rem;
+            display: block;
+            position:absolute; z-index: 1; 
+            top:1em; left:40%;
+        }
+            .pagerNav__btn--next .pagerNav__btnLabel {
+                right:40%; left:auto;
+            }
+
+
+    .adSkip__group {
+        background:#000; background:rgba(0,0,0,0.75);
+        text-transform: uppercase; text-align: center; 
+        font-weight:bold; font-size:0.875em; color:#fff;
+        position:absolute; z-index: 4;
+        width:100%; height:100%;
+        box-sizing:border-box;
+        padding-top:1em;
+    }
+
+
+    .pages__group {
+        position:absolute; 
+        left:1.5625rem;/*25px*/ 
+        right:1.5625rem;/*25px*/
+        height:100%; overflow: hidden; 
+        margin: 0 2px;
+    }
+        .pages__scroller {
+            position: relative; left: 0;
+            -webkit-transition: 0.3s left; transition: 0.3s left;
+        }
+            .pages__list {
+                margin:0; padding:0; list-style: none;
+                width:12000%; background:green;
+            }
+
+                .pages__item {
+                    float:left; margin:0 0.125rem 0 0;
+                }
+                    .page__btn {
+                        width:4.5625rem;/*73px*/ height:3rem;/*48px*/
+                        margin:0; padding:0; border:0;
+                        position:relative; overflow: hidden;
+                        cursor: pointer;
+                        background:black url('../../img/default_square.jpg') 50% 50% / cover no-repeat;
+                    }
+                        .page__btn:after {
+                            content:'';
+                            opacity:0; 
+                            display: block; 
+                            width:100%; height:0.25em;
+                            position: absolute; z-index: 2; 
+                            bottom:0; left:0;
+                            border-top:1px solid #fff;
+                            background:#d94040;
+                            -webkit-transition:opacity 0.3s; transition:opacity 0.3s;
+                        }
+                        .page__btn--active:after {
+                            opacity:1;
+                        }
+                        .page__btn--ad:before {
+                            content:'Ad';
+                            position: absolute;
+                            top:2px; left:2px;
+                            background:#000; color:#fff;
+                            padding:0 2px;
+                            font-size:0.625rem; font-weight:bold;
+                            z-index: 2;
+                        }
+
+                        .page__previewImg {
+                            position:absolute; top:0;
+                            width:100%; height:100%; display: block;
+                            background:no-repeat 50% 50% / 114%;
+                            -webkit-transition: -webkit-transform 0.3s ease; 
+                            transition: transform 0.3s ease;
+                        }
+                            .page__previewImg:before {
+                                content:'';
+                                position: absolute;
+                                top:0; left:0;
+                                width:100%; height:100%;
+                                background:#000;
+                                opacity:0.5;
+                            }
+                            .page__btn--active .page__previewImg:before {
+                                opacity:0;
+                            }
+                            .page__btn--active .page__previewImg {
+                                -webkit-transform: scale(1.12);
+                                transform: scale(1.12);
+                            }
 
 
 
@@ -369,8 +561,7 @@
     branded MR classes
     ================================================ */
     .experience__group--brandedMR .MiniReel__group {
-        height:calc(100% - 1.8125em);
-        min-height:18em;
+        margin-bottom:2.8125em;
     }
 
     .experience__group--brandedMR .titleBar__group {
@@ -383,6 +574,46 @@
 
     .experience__group--brandedMR .cards__group {
         top:3.25em;
+    }
+
+    
+    .brandProfile__linksBox {
+        position: absolute;
+        bottom:1.375em;
+        text-align: center;
+        width:100%;
+    }
+        .brandProfile__link {
+            padding:0 0.5em;
+            font-size:0.75em;
+            display: inline-block;
+            color:#fff;
+        }
+        .brandProfile__link .socialIcons,
+        .brandProfile__linkLabel {
+            vertical-align: middle;
+        }
+        .brandProfile__linkLabel {
+            padding-left:0.25em;
+        }
+
+
+
+
+
+
+
+/*  ==========================================================================
+    Splash Screen classes
+    ========================================================================== */
+    .splash__start {
+        position:absolute; z-index: 20;
+        top:0; left: 0; bottom:0; right:0;
+        border:0; margin:0; padding:0;
+        background:#000;
+        width:100%; height:100%;
+        cursor:pointer; 
+        color:#fff; text-align: center; font-weight:bold;
     }
 
 
