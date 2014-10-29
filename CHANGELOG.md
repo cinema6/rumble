@@ -1,6 +1,9 @@
 # MiniReel Player
 
 ## v1.4.0 (October 29, 2014)
+* *[v1.4.0.rc2]*
+  * [FEATURE]: Added support for Pinterest social links
+
 * *[v1.4.0.rc1]*
   * [FEATURE]: Solo player templates and styles, with and without ads, added. 
     Solo players are MRs with a single video card.

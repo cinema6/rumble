@@ -130,7 +130,8 @@ define(['app', 'minireel', 'c6uilib', 'angular'], function(appModule, minireelMo
                                         'Facebook': 'facebook.html',
                                         'Twitter': 'twitter.html',
                                         'YouTube': 'yt.html',
-                                        'Vimeo': 'vimeo.html'
+                                        'Vimeo': 'vimeo.html',
+                                        'Pinterest': 'pinit.html'
                                     },
                                     data: {
                                         skip: true,
@@ -287,6 +288,11 @@ define(['app', 'minireel', 'c6uilib', 'angular'], function(appModule, minireelMo
                                     label: 'Vimeo',
                                     type: 'vimeo',
                                     href: 'vimeo.html'
+                                },
+                                {
+                                    label: 'Pinterest',
+                                    type: 'pinterest',
+                                    href: 'pinit.html'
                                 }
                             ]);
                             expect(result[5].social).toEqual([]);
