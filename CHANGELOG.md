@@ -1,5 +1,6 @@
 # MiniReel Player
 
+## v1.4.0 (October 29, 2014)
 * *[v1.4.0.rc1]*
   * [FEATURE]: Solo player templates and styles, with and without ads, added. 
     Solo players are MRs with a single video card.
@@ -8,6 +9,7 @@
   * [FEATURE]: Add ```<ad-unit-card>``` for playing back ad units as
     content
   * [FEATURE]: Allow custom thumbnails for all card types
+* *[/v1.4.0.rc1]*
 
 ## v1.3.0 (October 16, 2014)
 * *[v1.3.0.rc1]*
