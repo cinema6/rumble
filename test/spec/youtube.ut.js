@@ -49,11 +49,11 @@ define(['cards/youtube', 'angular', 'youtube'], function(youtubeModule, angular,
                 angularElementMock.remove      = jasmine.createSpy('elt.remove');
                 angularElementMock.attr        = function (name) { return name; };
                 
-                spyOn(angular,'element').andCallFake(function(elt){
+                spyOn(angular,'element').and.callFake(function(elt){
                     return angularElementMock; 
                 });
 
-                spyOn($window,'addEventListener').andCallFake(function(ename,listener){
+                spyOn($window,'addEventListener').and.callFake(function(ename,listener){
                     msgListener = listener;       
                 });
 
@@ -73,14 +73,14 @@ define(['cards/youtube', 'angular', 'youtube'], function(youtubeModule, angular,
                             height: 100,
                             videoId: 'xyz'
                         });
-                    }).toThrow('Parent element is required for youtube.createPlayer');
+                    }).toThrow(new Error('Parent element is required for youtube.createPlayer'));
                 });
 
             });
             
             describe('should succeed',function(){
                 beforeEach(function(){
-                    spyOn(YT,'Player').andCallFake(function(videoId,params){
+                    spyOn(YT,'Player').and.callFake(function(videoId,params){
                         return { };
                     });
                 });
@@ -89,7 +89,7 @@ define(['cards/youtube', 'angular', 'youtube'], function(youtubeModule, angular,
                     var result;
 
                     spyOn(youtube, 'formatPlayerSrc')
-                        .andCallFake(function(videoId,params){
+                        .and.callFake(function(videoId,params){
                             return 'http://www.youtube.com/embed/x123?enablejsapi=1';
                         });
 
@@ -99,13 +99,13 @@ define(['cards/youtube', 'angular', 'youtube'], function(youtubeModule, angular,
 
                     expect(youtube.formatPlayerSrc)
                         .toHaveBeenCalledWith('x123',undefined);
-                    expect(angular.element.calls[0].args[0]).toEqual('<iframe id="player1" src="http://www.youtube.com/embed/x123?enablejsapi=1"></iframe>');
-                    expect(angular.element.calls[1].args[0]).toEqual(angularElementMock);
+                    expect(angular.element.calls.argsFor(0)[0]).toEqual('<iframe id="player1" src="http://www.youtube.com/embed/x123?enablejsapi=1"></iframe>');
+                    expect(angular.element.calls.argsFor(1)[0]).toEqual(angularElementMock);
 
                     expect(angularElementMock.prepend)
                         .toHaveBeenCalledWith(angularElementMock);
 
-                    expect(YT.Player.calls[0].args[0]).toEqual('player1');
+                    expect(YT.Player.calls.argsFor(0)[0]).toEqual('player1');
                 });
             });
 
@@ -117,9 +117,9 @@ define(['cards/youtube', 'angular', 'youtube'], function(youtubeModule, angular,
                         pauseVideo  : jasmine.createSpy('YT.pauseVideo'),
                         destroy     : jasmine.createSpy('YT.destroy'),
                         setSize     : jasmine.createSpy('YT.setSize'),
-                        getDuration : jasmine.createSpy('YT.getDuration').andReturn(10)
+                        getDuration : jasmine.createSpy('YT.getDuration').and.returnValue(10)
                     };
-                    spyOn(YT,'Player').andCallFake(function(videoId,params){
+                    spyOn(YT,'Player').and.callFake(function(videoId,params){
                         ytPlayerSpy.events = params.events;
                         return ytPlayerSpy;
                     });
@@ -212,9 +212,9 @@ define(['cards/youtube', 'angular', 'youtube'], function(youtubeModule, angular,
                         player.on('error',errorSpy);
                         ytPlayerSpy.events.onError( { target : player, data : 2 });
                         expect(errorSpy).toHaveBeenCalled();
-                        expect(errorSpy.mostRecentCall.args[0]).toBe(player);
-                        expect(errorSpy.mostRecentCall.args[1].code).toEqual(2);
-                        expect(errorSpy.mostRecentCall.args[1].message)
+                        expect(errorSpy.calls.mostRecent().args[0]).toBe(player);
+                        expect(errorSpy.calls.mostRecent().args[1].code).toEqual(2);
+                        expect(errorSpy.calls.mostRecent().args[1].message)
                             .toEqual('Invalid request parameter.');
                     });
                     it('error - unknown',function(){
@@ -223,9 +223,9 @@ define(['cards/youtube', 'angular', 'youtube'], function(youtubeModule, angular,
                         player.on('error',errorSpy);
                         ytPlayerSpy.events.onError( { target : player, data : 999 });
                         expect(errorSpy).toHaveBeenCalled();
-                        expect(errorSpy.mostRecentCall.args[0]).toBe(player);
-                        expect(errorSpy.mostRecentCall.args[1].code).toEqual(999);
-                        expect(errorSpy.mostRecentCall.args[1].message)
+                        expect(errorSpy.calls.mostRecent().args[0]).toBe(player);
+                        expect(errorSpy.calls.mostRecent().args[1].code).toEqual(999);
+                        expect(errorSpy.calls.mostRecent().args[1].message)
                             .toEqual('Unknown error.');
                     });
                 });

@@ -1,11 +1,12 @@
 define (['angular','c6_defines','tracker',
          'cards/ad','cards/dailymotion','cards/recap','cards/vast','cards/vimeo','cards/vpaid',
-         'cards/youtube','cards/text','cards/display_ad',
-         'modules/ballot','modules/companion_ad','modules/display_ad'],
+         'cards/youtube','cards/text','cards/display_ad','cards/ad_unit',
+         'modules/ballot','modules/companion_ad','modules/display_ad','modules/post'],
 function( angular , c6Defines  , tracker ,
           adCard   , dailymotionCard   , recapCard   , vastCard   , vimeoCard   , vpaidCard   ,
-          youtubeCard   , textCard   , displayAdCard    ,
-          ballotModule   , companionAdModule    , displayAdModule ) {
+          youtubeCard   , textCard   , displayAdCard    , adUnitCard     ,
+          ballotModule   , companionAdModule    , displayAdModule    , postModule   ) {
+
     'use strict';
 
     var forEach = angular.forEach,
@@ -23,10 +24,12 @@ function( angular , c6Defines  , tracker ,
         youtubeCard.name,
         textCard.name,
         displayAdCard.name,
+        adUnitCard.name,
         // Modules
         ballotModule.name,
         companionAdModule.name,
-        displayAdModule.name
+        displayAdModule.name,
+        postModule.name
     ])
     .animation('.js-cardItem',['$log', function($log){
         $log = $log.context('.js-cardItem');
@@ -86,9 +89,9 @@ function( angular , c6Defines  , tracker ,
             }
         };
     }])
-    .service('MiniReelService', ['InflectorService','VideoThumbService',
+    .service('MiniReelService', ['InflectorService','VideoThumbService','$q',
                                  'c6ImagePreloader','envrootFilter',
-    function                    ( InflectorService , VideoThumbService ,
+    function                    ( InflectorService , VideoThumbService , $q ,
                                   c6ImagePreloader , envrootFilter ) {
         function isSet(value) {
             return isDefined(value) && value !== null;
@@ -102,7 +105,6 @@ function( angular , c6Defines  , tracker ,
             function fetchThumb(card) {
                 switch (card.type) {
                 case 'text':
-                case 'displayAd':
                 case 'recap':
                     (function() {
                         var splash = (data.collateral || {}).splash ?
@@ -118,13 +120,17 @@ function( angular , c6Defines  , tracker ,
                     }());
                     break;
                 default:
-                    card.thumbs = null;
+                    card.thumbs = card.thumbs || null;
 
-                    VideoThumbService.getThumbs(card.type, card.data.videoid)
-                        .then(function(thumbs) {
-                            card.thumbs = thumbs;
+                    $q.when(
+                        card.thumbs || VideoThumbService.getThumbs(card.type, card.data.videoid)
+                    ).then(function(thumbs) {
+                        card.thumbs = thumbs;
+
+                        if (thumbs.small) {
                             c6ImagePreloader.load([thumbs.small]);
-                        });
+                        }
+                    });
                     break;
                 }
             }
@@ -145,7 +151,7 @@ function( angular , c6Defines  , tracker ,
             }
 
             function setSocial(card) {
-                var social = ['Facebook', 'Twitter', 'YouTube', 'Vimeo'];
+                var social = ['Facebook', 'Pinterest', 'Twitter', 'YouTube', 'Vimeo'];
 
                 card.social = Object.keys(card.links || {})
                     .filter(function(label) {
@@ -167,12 +173,16 @@ function( angular , c6Defines  , tracker ,
             }
 
             function setVideoDefaults(card) {
-                if (!(/^(youtube|vimeo|dailymotion)$/).test(card.type)) { return; }
+                if (!(/^(youtube|vimeo|dailymotion|adUnit)$/).test(card.type)) { return; }
 
                 [
                     {
                         prop: 'autoplay',
                         default: autoplay
+                    },
+                    {
+                        prop: 'skip',
+                        default: true
                     }
                 ].forEach(function(config) {
                     var prop = config.prop;
@@ -585,10 +595,6 @@ function( angular , c6Defines  , tracker ,
             return (card || null) && (card.ad && !card.sponsored);
         }
 
-        function handleAdInit(event, provideNavController) {
-            provideNavController(navController = new NavController($scope.nav));
-        }
-
         $log = $log.context('RumbleCtrl');
 
         $scope.deviceProfile    = appData.profile;
@@ -634,7 +640,7 @@ function( angular , c6Defines  , tracker ,
 
                 if (isAd(card)) { continue; }
 
-                return (card || null) && card.thumbs.small;
+                return (card || null) && (card.thumbs || {}).small || null;
             }
 
             return null;
@@ -649,7 +655,7 @@ function( angular , c6Defines  , tracker ,
 
                 if (isAd(card)) { continue; }
 
-                return (card || null) && card.thumbs.small;
+                return (card || null) && (card.thumbs || {}).small || null;
             }
 
             return null;
@@ -721,8 +727,9 @@ function( angular , c6Defines  , tracker ,
             }
         });
 
-        $scope.$on('<vast-card>:init', handleAdInit);
-        $scope.$on('<vpaid-card>:init', handleAdInit);
+        $scope.$on('<mr-card>:init', function($event, provideNavController) {
+            provideNavController(navController = new NavController($scope.nav));
+        });
 
         $scope.$on('<recap-card>:jumpTo', function(event, index) {
             self.setPosition(index);
@@ -956,6 +963,8 @@ function( angular , c6Defines  , tracker ,
 
         this.setPosition = function(i){
             var toCard = MasterDeckCtrl.convertToCard(i);
+
+            if (toCard.currentIndex > $scope.deck.length - 1) { return; }
 
             $log.info('setPosition: %1', toCard.currentIndex);
 
@@ -1268,8 +1277,8 @@ function( angular , c6Defines  , tracker ,
             }
         };
     }])
-    .controller('VideoEmbedCardController', ['$scope','ModuleService','EventService','c6AppData','c6ImagePreloader',
-    function                                ( $scope , ModuleService , EventService , c6AppData , c6ImagePreloader ) {
+    .controller('VideoEmbedCardController', ['$scope','ModuleService','EventService','c6AppData','c6ImagePreloader','$interval',
+    function                                ( $scope , ModuleService , EventService , c6AppData , c6ImagePreloader , $interval ) {
         var self = this,
             config = $scope.config,
             profile = $scope.profile,
@@ -1305,7 +1314,9 @@ function( angular , c6Defines  , tracker ,
                         /* If there is a separate view for text, and if that mode is active: */
                         (behaviors.separateTextView && _data.textMode) ||
                         /* If this is a click-to-play minireel, it hasn't been played yet and the play button is enabled */
-                        (!config.data.autoplay && !(_data.playerEvents.play || {}).emitCount && this.enablePlayButton);
+                        (!config.data.autoplay && !(_data.playerEvents.play || {}).emitCount && this.enablePlayButton) ||
+                        /* If the post module is present and it is being shown */
+                        ($scope.hasModule('post') && this.postModuleActive);
                 }
             },
             showPlay: {
@@ -1322,6 +1333,8 @@ function( angular , c6Defines  , tracker ,
         this.videoUrl = null;
 
         this.experienceTitle = c6AppData.experience.data.title;
+
+        this.postModuleActive = false;
 
         this.hasModule = ModuleService.hasModule.bind(ModuleService, config.modules);
 
@@ -1391,8 +1404,13 @@ function( angular , c6Defines  , tracker ,
                 .once('play', function() {
                     _data.modules.displayAd.active = true;
                 })
+                .on('play', function() {
+                    self.postModuleActive = false;
+                })
                 .on('ended', function() {
-                    if (!self.hasModule('ballot')) {
+                    self.postModuleActive = true;
+
+                    if (!self.hasModule('ballot') && !self.hasModule('post')) {
                         $scope.$emit('<mr-card>:contentEnd', config.meta || config);
                     }
                 });
@@ -1401,6 +1419,48 @@ function( angular , c6Defines  , tracker ,
                 if ((active === wasActive) && (wasActive === false)){ return; }
 
                 if (active) {
+                    if (_data.playerEvents.play.emitCount < 1) {
+                        $scope.$emit('<mr-card>:init', function(navController) {
+                            var skip = config.data.skip || iface.duration,
+                                canSkipAnyTime = skip === true;
+
+                            function handleTimeUpdate() {
+                                var remaining = Math.max(
+                                    skip - iface.currentTime,
+                                    0
+                                );
+
+                                navController.tick(remaining);
+
+                                if (!remaining) {
+                                    navController.enabled(true);
+                                    iface.removeListener('timeupdate', handleTimeUpdate);
+                                }
+                            }
+
+                            if (canSkipAnyTime) { return; }
+
+                            navController.tick(skip)
+                                .enabled(false);
+
+                            if (config.data.skip === false) {
+                                return iface.on('timeupdate', handleTimeUpdate)
+                                    .once('ended', function() {
+                                        navController.enabled(true);
+                                        iface.removeListener('timeupdate', handleTimeUpdate);
+                                    });
+                            }
+
+                            $interval(function() {
+                                navController.tick(--skip);
+
+                                if (!skip) {
+                                    navController.enabled(true);
+                                }
+                            }, 1000, skip);
+                        });
+                    }
+
                     if (c6AppData.behaviors.canAutoplay &&
                         c6AppData.profile.autoplay &&
                         config.data.autoplay) {
@@ -1469,6 +1529,10 @@ function( angular , c6Defines  , tracker ,
             $log.info('link:',scope);
 
             scope.title = c6AppData.experience.data.title;
+
+            scope.hasModule = function(module) {
+                return scope.config.modules.indexOf(module) > -1;
+            };
 
             var inner = '<' + dasherize(type) + '-card';
             for (var key in data){

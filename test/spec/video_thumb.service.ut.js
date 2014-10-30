@@ -9,6 +9,8 @@ define(['app', 'c6_defines'], function(appModule, c6Defines) {
             _private;
 
         beforeEach(function() {
+            c6Defines.kProtocol = 'http:';
+
             module(appModule.name);
 
             inject(function($injector) {
@@ -221,9 +223,9 @@ define(['app', 'c6_defines'], function(appModule, c6Defines) {
                         vimeoPromise = $q.defer().promise;
                         dailymotionPromise = $q.defer().promise;
 
-                        spyOn(_private, 'getFromYoutube').andReturn(youtubePromise);
-                        spyOn(_private, 'getFromVimeo').andReturn(vimeoPromise);
-                        spyOn(_private, 'getFromDailymotion').andReturn(dailymotionPromise);
+                        spyOn(_private, 'getFromYoutube').and.returnValue(youtubePromise);
+                        spyOn(_private, 'getFromVimeo').and.returnValue(vimeoPromise);
+                        spyOn(_private, 'getFromDailymotion').and.returnValue(dailymotionPromise);
                     });
 
                     it('should delegate to the appropriate private method', function() {

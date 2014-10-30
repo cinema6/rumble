@@ -1,10 +1,22 @@
 # MiniReel Player
 
+## v1.4.0 (October 29, 2014)
+* *[v1.4.0.rc2]*
+  * [FEATURE]: Added support for Pinterest social links
+  * Content card skip controls are no longer linked to the amount of the
+    video that was watched, the are linked to the amount of time the user
+    spends on the card
+* *[/v1.4.0.rc2]*
+
 * *[v1.4.0.rc1]*
   * [FEATURE]: Solo player templates and styles, with and without ads, added. 
     Solo players are MRs with a single video card.
   * [FEATURE]: Allow for display ads, card autoplaying, and card
     autoadvancing to be overridden on a card-by-card basis
+  * [FEATURE]: Add ```<ad-unit-card>``` for playing back ad units as
+    content
+  * [FEATURE]: Allow custom thumbnails for all card types
+* *[/v1.4.0.rc1]*
 
 ## v1.3.0 (October 16, 2014)
 * *[v1.3.0.rc1]*

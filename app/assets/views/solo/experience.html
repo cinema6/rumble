@@ -6,8 +6,8 @@
     <header class="mr-titleBar__group clearfix">
         <div class="mr-titleBar__disabler" ng-show="!nav.enabled">&nbsp;</div>
         <h1 class="mr-titleBar__title"
-        ng-show="true">
-            Sponsored by <a href="#" title="Ubisoft"><strong>Ubisoft</strong></a>
+            ng-if="!!currentCard.params.sponsor">
+            Sponsored by <a ng-href="{{currentCard.links.Website}}" target="_blank" title="{{currentCard.params.sponsor}}"><strong>{{currentCard.params.sponsor}}</strong></a>
         </h1>
     </header>
 

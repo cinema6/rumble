@@ -49,7 +49,7 @@ define(['app','minireel'], function(appModule, minireelModule) {
             $scope.deck = [];
             $scope.currentCard = null;
 
-            spyOn($scope, '$emit').andCallThrough();
+            spyOn($scope, '$emit').and.callThrough();
 
             $scope.$apply(function() {
                 DeckCtrl = $controller('DeckController', { $scope: $scope });
@@ -148,7 +148,7 @@ define(['app','minireel'], function(appModule, minireelModule) {
 
                         expect(item.cards.length).toBe(1);
                         expect(item.cards).toEqual([
-                            {
+                            jasmine.objectContaining({
                                 id: 'rc-advertisement2',
                                 type: 'ad',
                                 ad: true,
@@ -160,7 +160,7 @@ define(['app','minireel'], function(appModule, minireelModule) {
                                     skip: c6AppData.experience.data.adConfig.video.skip,
                                     source: c6AppData.experience.data.adConfig.video.waterfall
                                 }
-                            }
+                            })
                         ]);
                         expect(item.index).toBe(0);
 
@@ -169,7 +169,7 @@ define(['app','minireel'], function(appModule, minireelModule) {
                         $scope.$emit('adOnDeck', new AdCard(3));
                         item.moveTo(item.cards[1]);
                         expect(item.cards).toEqual([
-                            {
+                            jasmine.objectContaining({
                                 id: 'rc-advertisement3',
                                 type: 'ad',
                                 ad: true,
@@ -181,7 +181,7 @@ define(['app','minireel'], function(appModule, minireelModule) {
                                     skip: c6AppData.experience.data.adConfig.video.skip,
                                     source: c6AppData.experience.data.adConfig.video.waterfall
                                 }
-                            }
+                            })
                         ]);
                         expect(item.index).toBe(0);
                     });
@@ -193,7 +193,7 @@ define(['app','minireel'], function(appModule, minireelModule) {
 
                         expect(item.cards.length).toBe(1);
 
-                        expect(item.cards[0]).toEqual({
+                        expect(item.cards[0]).toEqual(jasmine.objectContaining({
                             id: 'rc-advertisement1',
                             type: 'ad',
                             ad: true,
@@ -205,13 +205,13 @@ define(['app','minireel'], function(appModule, minireelModule) {
                                 skip: c6AppData.experience.data.adConfig.video.skip,
                                 source: c6AppData.experience.data.adConfig.video.waterfall
                             }
-                        });
+                        }));
 
                         $scope.$emit('adOnDeck', new AdCard(2));
 
                         expect(item.cards.length).toBe(2);
 
-                        expect(item.cards[1]).toEqual({
+                        expect(item.cards[1]).toEqual(jasmine.objectContaining({
                             id: 'rc-advertisement2',
                             type: 'ad',
                             ad: true,
@@ -223,8 +223,7 @@ define(['app','minireel'], function(appModule, minireelModule) {
                                 skip: c6AppData.experience.data.adConfig.video.skip,
                                 source: c6AppData.experience.data.adConfig.video.waterfall
                             }
-                        });
-
+                        }));
                     });
 
                     describe('methods', function() {
@@ -360,7 +359,7 @@ define(['app','minireel'], function(appModule, minireelModule) {
 
                                 it('should only emit activate if it goes from active to not active', function() {
                                     item.activate();
-                                    expect(activate.callCount).toBe(1);
+                                    expect(activate.calls.count()).toBe(1);
                                 });
 
                                 it('should return itself', function() {
@@ -390,7 +389,7 @@ define(['app','minireel'], function(appModule, minireelModule) {
 
                                 it('should only emit deactivate if it goes from active to not active', function() {
                                     item.deactivate();
-                                    expect(deactivate.callCount).toBe(1);
+                                    expect(deactivate.calls.count()).toBe(1);
                                 });
 
                                 it('should return itself', function() {
@@ -724,7 +723,7 @@ define(['app','minireel'], function(appModule, minireelModule) {
 
                     DeckCtrl.decks.forEach(function(deck) {
                         ['activate', 'deactivate', 'moveTo'].forEach(function(method) {
-                            spyOn(deck, method).andCallThrough();
+                            spyOn(deck, method).and.callThrough();
                         });
                     });
                 });
@@ -759,7 +758,7 @@ define(['app','minireel'], function(appModule, minireelModule) {
                     setCurrentCard(null);
 
                     expect(videoDeck.deactivate).toHaveBeenCalled();
-                    expect(adDeck.deactivate.callCount).toBe(2);
+                    expect(adDeck.deactivate.calls.count()).toBe(2);
                     expect(videoDeck.moveTo).toHaveBeenCalledWith(null);
                     expect(adDeck.moveTo).not.toHaveBeenCalled();
                 });
@@ -767,7 +766,7 @@ define(['app','minireel'], function(appModule, minireelModule) {
 
             describe('deck', function() {
                 beforeEach(function() {
-                    spyOn(DeckCtrl.decks[0], 'update').andCallThrough();
+                    spyOn(DeckCtrl.decks[0], 'update').and.callThrough();
 
                     $scope.$apply(function() {
                         $scope.deck = [

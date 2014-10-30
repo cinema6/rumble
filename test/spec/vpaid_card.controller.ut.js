@@ -20,11 +20,11 @@ define(['services', 'cards/vpaid', 'app'], function(servicesModule, vpaidModule,
             var self = this;
 
             this.play = jasmine.createSpy('iface.play()')
-                .andCallFake(function() {
+                .and.callFake(function() {
                     self.emit('play', self);
                 });
             this.pause = jasmine.createSpy('iface.pause()')
-                .andCallFake(function() {
+                .and.callFake(function() {
                     self.emit('pause', self);
                 });
             this.loadAd = jasmine.createSpy('iface.loadAd()');
@@ -116,7 +116,7 @@ define(['services', 'cards/vpaid', 'app'], function(servicesModule, vpaidModule,
 
         describe('when the scope is $destroyed', function() {
             beforeEach(function() {
-                spyOn($rootScope, '$broadcast').andCallThrough();
+                spyOn($rootScope, '$broadcast').and.callThrough();
             });
 
             describe('if the mode is "lightbox"', function() {
@@ -311,7 +311,7 @@ define(['services', 'cards/vpaid', 'app'], function(servicesModule, vpaidModule,
                     $scope.$emit('playerAdd', iface);
                 });
 
-                spyOn($scope, '$emit').andCallThrough();
+                spyOn($scope, '$emit').and.callThrough();
             });
 
             describe('ended', function() {
@@ -366,7 +366,7 @@ define(['services', 'cards/vpaid', 'app'], function(servicesModule, vpaidModule,
             describe('pause', function() {
                 describe('if the ad has finished and the displayAd module is present', function() {
                     it('should activate the displayAd', function() {
-                        ModuleService.hasModule.andReturn(true);
+                        ModuleService.hasModule.and.returnValue(true);
 
                         $scope.$apply(function() {
                             iface.ended = true;
@@ -380,7 +380,7 @@ define(['services', 'cards/vpaid', 'app'], function(servicesModule, vpaidModule,
 
                 describe('if the ad has finished but the displayAd module is not present', function() {
                     it('should not activate the displayAd', function() {
-                        ModuleService.hasModule.andReturn(false);
+                        ModuleService.hasModule.and.returnValue(false);
 
                         $scope.$apply(function() {
                             iface.ended = true;
@@ -394,7 +394,7 @@ define(['services', 'cards/vpaid', 'app'], function(servicesModule, vpaidModule,
 
                 describe('if the ad has not finished and the displayAd module is present', function() {
                     it('should not activate the displayAd', function() {
-                        ModuleService.hasModule.andReturn(true);
+                        ModuleService.hasModule.and.returnValue(true);
 
                         $scope.$apply(function() {
                             iface.ended = false;
@@ -408,7 +408,7 @@ define(['services', 'cards/vpaid', 'app'], function(servicesModule, vpaidModule,
 
                 describe('if the ad has not finished and the displayAd module is not present', function() {
                     it('should not activate the displayAd', function() {
-                        ModuleService.hasModule.andReturn(false);
+                        ModuleService.hasModule.and.returnValue(false);
 
                         $scope.$apply(function() {
                             iface.ended = false;
@@ -451,7 +451,7 @@ define(['services', 'cards/vpaid', 'app'], function(servicesModule, vpaidModule,
 
                     deferred = $q.defer();
 
-                    iface.play.andReturn(deferred.promise);
+                    iface.play.and.returnValue(deferred.promise);
 
                     $scope.$apply(function() {
                         $scope.$emit('playerAdd', iface);
@@ -468,7 +468,7 @@ define(['services', 'cards/vpaid', 'app'], function(servicesModule, vpaidModule,
                     beforeEach(function() {
                         c6AppData.experience.data.mode = 'lightbox';
 
-                        spyOn($rootScope, '$broadcast').andCallThrough();
+                        spyOn($rootScope, '$broadcast').and.callThrough();
                     });
 
                     [true, false].forEach(function(bool) {
@@ -493,7 +493,7 @@ define(['services', 'cards/vpaid', 'app'], function(servicesModule, vpaidModule,
                     describe('when the mode is "' + mode + '"', function() {
                         beforeEach(function() {
                             c6AppData.experience.data.mode = mode;
-                            spyOn($rootScope, '$broadcast').andCallThrough();
+                            spyOn($rootScope, '$broadcast').and.callThrough();
                         });
 
                         [true, false].forEach(function(bool) {
@@ -514,7 +514,7 @@ define(['services', 'cards/vpaid', 'app'], function(servicesModule, vpaidModule,
 
                 describe('when true', function() {
                     beforeEach(function() {
-                        spyOn($scope,'$emit').andCallThrough();
+                        spyOn($scope,'$emit').and.callThrough();
 
                         $scope.$apply(function() {
                             $scope.active = true;
@@ -533,7 +533,7 @@ define(['services', 'cards/vpaid', 'app'], function(servicesModule, vpaidModule,
                                 $scope.active = true;
                             });
 
-                            expect($scope.$emit.mostRecentCall.args[0]).toBe('<mr-card>:contentEnd');
+                            expect($scope.$emit.calls.mostRecent().args[0]).toBe('<mr-card>:contentEnd');
                         });
                     });
 
@@ -541,11 +541,11 @@ define(['services', 'cards/vpaid', 'app'], function(servicesModule, vpaidModule,
                         expect(iface.play).toHaveBeenCalled();
                     });
 
-                    it('should $emit <vpaid-card>:init', function() {
-                        expect($scope.$emit).toHaveBeenCalledWith('<vpaid-card>:init', jasmine.any(Function));
+                    it('should $emit <mr-card>:init', function() {
+                        expect($scope.$emit).toHaveBeenCalledWith('<mr-card>:init', jasmine.any(Function));
                     });
 
-                    it('should only $emit <vpaid-card>:init if it has not played yet', function() {
+                    it('should only $emit <mr-card>:init if it has not played yet', function() {
                         $scope.$apply(function() {
                             $scope.active = false;
                         });
@@ -554,14 +554,14 @@ define(['services', 'cards/vpaid', 'app'], function(servicesModule, vpaidModule,
                             $scope.active = true;
                         });
 
-                        expect($scope.$emit.callCount).toBe(1);
+                        expect($scope.$emit.calls.count()).toBe(1);
                     });
 
                     it('should skip the card if the play promise is rejected', function() {
                         $scope.$apply(function() {
                             deferred.reject();
                         });
-                        expect($scope.$emit.mostRecentCall.args[0]).toBe('<mr-card>:contentEnd');
+                        expect($scope.$emit.calls.mostRecent().args[0]).toBe('<mr-card>:contentEnd');
                     });
 
                     it('should tell the player to pause when skipping in case an ad is loaded after we skip', function() {
@@ -575,13 +575,13 @@ define(['services', 'cards/vpaid', 'app'], function(servicesModule, vpaidModule,
                         var control, navController;
 
                         beforeEach(function() {
-                            control = $scope.$emit.mostRecentCall.args[1];
+                            control = $scope.$emit.calls.mostRecent().args[1];
 
                             navController = {
                                 enabled: jasmine.createSpy('navController.enabled()')
-                                    .andCallFake(function() { return navController; }),
+                                    .and.callFake(function() { return navController; }),
                                 tick: jasmine.createSpy('navController.tick()')
-                                    .andCallFake(function() { return navController; })
+                                    .and.callFake(function() { return navController; })
                             };
                         });
 
@@ -684,7 +684,7 @@ define(['services', 'cards/vpaid', 'app'], function(servicesModule, vpaidModule,
                                     expect(navController.enabled).toHaveBeenCalledWith(true);
 
                                     $interval.flush(1000);
-                                    expect(navController.tick.callCount).toBe(7);
+                                    expect(navController.tick.calls.count()).toBe(7);
                                 });
                             });
 
@@ -724,7 +724,7 @@ define(['services', 'cards/vpaid', 'app'], function(servicesModule, vpaidModule,
                                     iface.currentTime = 7.25;
                                     $interval.flush(1000);
 
-                                    expect(navController.tick.mostRecentCall.args[0]).not.toBeLessThan(0);
+                                    expect(navController.tick.calls.mostRecent().args[0]).not.toBeLessThan(0);
                                 });
 
                                 it('should enable the navigation when the wait time is finished', function() {
@@ -734,7 +734,7 @@ define(['services', 'cards/vpaid', 'app'], function(servicesModule, vpaidModule,
 
                                     iface.currentTime = 8.35;
                                     $interval.flush(1500);
-                                    expect(navController.tick.callCount).toBe(2);
+                                    expect(navController.tick.calls.count()).toBe(2);
                                 });
                             });
                         });
@@ -807,7 +807,7 @@ define(['services', 'cards/vpaid', 'app'], function(servicesModule, vpaidModule,
                             $scope.onDeck = true;
                         });
 
-                        expect(iface.loadAd.callCount).toBe(1);
+                        expect(iface.loadAd.calls.count()).toBe(1);
                     });
                 });
             });

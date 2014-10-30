@@ -84,7 +84,7 @@ define(['app'], function(appModule) {
                 BallotService.vote('abc', 'Too Far').catch(fail);
             });
 
-            expect(fail.callCount).toBe(3);
+            expect(fail.calls.count()).toBe(3);
         });
 
         describe('@public', function() {
@@ -280,7 +280,7 @@ define(['app'], function(appModule) {
                                 { name : 'Cute', votes: 0.5},
                                 { name : 'Ugly', votes: 0.5} 
                             ]);
-                            success.reset();
+                            success.calls.reset();
 
                             $rootScope.$apply(function() {
                                 BallotService.getBallot('rc-99b87ea709d7ac')
@@ -351,7 +351,7 @@ define(['app'], function(appModule) {
                                 { name : 'Ugly', votes: 0.5} 
                             ]);
 
-                            success.reset();
+                            success.calls.reset();
                             $rootScope.$apply(function() {
                                 BallotService.getBallot('rc-99b87ea709d7ac')
                                     .then(success, failure);

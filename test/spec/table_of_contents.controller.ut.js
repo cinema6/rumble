@@ -41,15 +41,15 @@ define(['app'], function(appModule) {
                     it('should call onSelect(), providing the card and call onExit()', function() {
                         TableOfContentsCtrl.select(card2);
                         expect(onSelect).toHaveBeenCalledWith({ card: card2 });
-                        expect(onExit.callCount).toBe(1);
+                        expect(onExit.calls.count()).toBe(1);
 
                         TableOfContentsCtrl.select(card3);
                         expect(onSelect).toHaveBeenCalledWith({ card: card3 });
-                        expect(onExit.callCount).toBe(2);
+                        expect(onExit.calls.count()).toBe(2);
 
                         TableOfContentsCtrl.select(card1);
                         expect(onSelect).toHaveBeenCalledWith({ card: card1 });
-                        expect(onExit.callCount).toBe(3);
+                        expect(onExit.calls.count()).toBe(3);
                     });
                 });
             });

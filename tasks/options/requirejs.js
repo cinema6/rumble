@@ -21,7 +21,7 @@ module.exports = {
                 angularAnimate: 'empty:',
                 angularSanitize: 'empty:',
                 angularTouch: 'empty:',
-                c6ui: 'empty:',
+                c6uilib: 'empty:',
                 c6log: 'empty:',
                 adtech: 'empty:'
             },

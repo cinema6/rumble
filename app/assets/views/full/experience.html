@@ -74,7 +74,7 @@
     <div class="playlist__group"
         ng-hide="currentCard.type === 'recap'"
         ng-class="{
-            'playlist__group--noAds': !RumbleCtrl.moduleActive('displayAd')
+            'playlist__group--noAds': (!RumbleCtrl.moduleActive('displayAd') && !currentCard._data.companion)
         }">
         <div class="playlist__disabler c6-fade" ng-show="!nav.enabled">&nbsp;</div>
         
@@ -129,6 +129,10 @@
         config="currentCard"
         active="RumbleCtrl.moduleActive('displayAd')">
     </display-ad-module>
+    <companion-ad-module ng-if="currentCard._data.companion !== undefined"
+        companion="currentCard._data.companion"
+        active="!!currentCard._data.companion">
+    </companion-ad-module>
 
 </div><!--.MiniReel-->
 

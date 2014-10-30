@@ -5,6 +5,7 @@ define(['minireel', 'c6uilib', 'services'], function(minireelModule, c6uilibModu
         var $rootScope,
             $scope,
             $controller,
+            $interval,
             c6EventEmitter,
             VideoEmbedCardCtrl;
 
@@ -41,10 +42,11 @@ define(['minireel', 'c6uilib', 'services'], function(minireelModule, c6uilibModu
             inject(function($injector) {
                 $rootScope = $injector.get('$rootScope');
                 $controller = $injector.get('$controller');
+                $interval = $injector.get('$interval');
                 c6EventEmitter = $injector.get('c6EventEmitter');
 
                 ModuleService = $injector.get('ModuleService');
-                spyOn(ModuleService, 'hasModule').andCallThrough();
+                spyOn(ModuleService, 'hasModule').and.callThrough();
                 c6ImagePreloader = $injector.get('c6ImagePreloader');
                 c6AppData = $injector.get('c6AppData');
 
@@ -64,6 +66,9 @@ define(['minireel', 'c6uilib', 'services'], function(minireelModule, c6uilibModu
                     touch: false
                 };
                 $scope = $rootScope.$new();
+                $scope.hasModule = function(module) {
+                    return $scope.config.modules.indexOf(module) > -1;
+                };
                 VideoEmbedCardCtrl = $controller('VideoEmbedCardController', { $scope: $scope });
             });
         });
@@ -132,10 +137,10 @@ define(['minireel', 'c6uilib', 'services'], function(minireelModule, c6uilibModu
                         expect(VideoEmbedCardCtrl.dismissBallot).toHaveBeenCalled();
 
                         set(true);
-                        expect(VideoEmbedCardCtrl.dismissBallot.callCount).toBe(2);
+                        expect(VideoEmbedCardCtrl.dismissBallot.calls.count()).toBe(2);
 
                         set(false);
-                        expect(VideoEmbedCardCtrl.dismissBallot.callCount).toBe(3);
+                        expect(VideoEmbedCardCtrl.dismissBallot.calls.count()).toBe(3);
                     });
                 });
             });
@@ -184,7 +189,7 @@ define(['minireel', 'c6uilib', 'services'], function(minireelModule, c6uilibModu
                             $scope.onDeck = true;
                         });
 
-                        expect(c6ImagePreloader.load.callCount).toBe(1);
+                        expect(c6ImagePreloader.load.calls.count()).toBe(1);
                     });
                 });
 
@@ -293,6 +298,166 @@ define(['minireel', 'c6uilib', 'services'], function(minireelModule, c6uilibModu
                         });
                     });
 
+                    describe('if the video has never played before', function() {
+                        beforeEach(function() {
+                            $scope.$apply(function() {
+                                $scope.active = false;
+                            });
+
+                            $scope.config._data.playerEvents.play.emitCount = 0;
+                            spyOn($scope, '$emit').and.callThrough();
+
+                            $scope.$apply(function() {
+                                $scope.active = true;
+                            });
+                        });
+
+                        it('should $emit <mr-card>:init', function() {
+                            expect($scope.$emit).toHaveBeenCalledWith('<mr-card>:init', jasmine.any(Function));
+                        });
+
+                        describe('when the passed function is called back', function() {
+                            var navController;
+
+                            function passNavController() {
+                                $scope.$emit.calls.mostRecent().args[1](navController);
+                            }
+
+                            function timeupdate(time) {
+                                iface.currentTime = time;
+                                iface.emit('timeupdate');
+                            }
+
+                            beforeEach(function() {
+                                navController = {
+                                    tick: jasmine.createSpy('NavController.tick()')
+                                        .and.callFake(function() { return this; }),
+                                    enabled: jasmine.createSpy('NavController.enabled()')
+                                        .and.callFake(function() { return this; })
+                                };
+                            });
+
+                            describe('if the card can be skipped any time', function() {
+                                beforeEach(function() {
+                                    $scope.config.data.skip = true;
+                                    passNavController();
+                                });
+
+                                it('should not disable the nav', function() {
+                                    expect(navController.enabled).not.toHaveBeenCalled();
+                                    expect(navController.tick).not.toHaveBeenCalled();
+                                });
+                            });
+
+                            describe('if the card can never be skipped', function() {
+                                beforeEach(function() {
+                                    $scope.config.data.skip = false;
+                                });
+
+                                [true, false].forEach(function(autoplay) {
+                                    describe('if autoplay is ' + autoplay, function() {
+                                        beforeEach(function() {
+                                            iface.duration = 60;
+                                            $scope.config.data.autoplay = autoplay;
+                                            passNavController();
+                                        });
+
+                                        it('should tick the nav with the video\'s duration', function() {
+                                            expect(navController.tick).toHaveBeenCalledWith(60);
+                                        });
+
+                                        it('should disable the nav', function() {
+                                            expect(navController.enabled).toHaveBeenCalledWith(false);
+                                        });
+
+                                        it('should decrement the time as the video progresses', function() {
+                                            timeupdate(0.5);
+                                            expect(navController.tick).toHaveBeenCalledWith(59.5);
+
+                                            timeupdate(2);
+                                            expect(navController.tick).toHaveBeenCalledWith(58);
+                                        });
+
+                                        describe('when the video ends', function() {
+                                            var tickCount, enabledCount;
+
+                                            beforeEach(function() {
+                                                iface.emit('ended');
+                                                tickCount = navController.tick.calls.count();
+                                                enabledCount = navController.enabled.calls.count();
+                                            });
+
+                                            it('should enable the nav', function() {
+                                                expect(navController.enabled).toHaveBeenCalledWith(true);
+                                            });
+
+                                            it('should not interact with the nav controller again', function() {
+                                                iface.emit('timeupdate');
+                                                expect(navController.tick.calls.count()).toBe(tickCount, 'called tick');
+
+                                                iface.emit('ended');
+                                                expect(navController.enabled.calls.count()).toBe(enabledCount, 'called enabled');
+                                            });
+                                        });
+                                    });
+                                });
+                            });
+
+                            describe('if the card can be skipped after a certain amount of time', function() {
+                                beforeEach(function() {
+                                    $scope.config.data.skip = 6;
+                                    passNavController();
+                                });
+
+                                it('should tick the controller with the amount of time remaining', function() {
+                                    expect(navController.tick).toHaveBeenCalledWith(6);
+                                });
+
+                                it('should disable the nav', function() {
+                                    expect(navController.enabled).toHaveBeenCalledWith(false);
+                                });
+
+                                it('should count down via a $interval', function() {
+                                    $interval.flush(1000);
+                                    expect(navController.tick).toHaveBeenCalledWith(6);
+
+                                    $interval.flush(1000);
+                                    expect(navController.tick).toHaveBeenCalledWith(5);
+
+                                    $interval.flush(1000);
+                                    expect(navController.tick).toHaveBeenCalledWith(4);
+                                });
+
+                                it('should enable the nav after the countdown', function() {
+                                    $interval.flush(1000);
+                                    expect(navController.enabled).not.toHaveBeenCalledWith(true);
+
+                                    $interval.flush(5000);
+                                    expect(navController.enabled).toHaveBeenCalledWith(true);
+                                });
+                            });
+                        });
+                    });
+
+                    describe('if the video has played', function() {
+                        beforeEach(function() {
+                            $scope.$apply(function() {
+                                $scope.active = false;
+                            });
+
+                            $scope.config._data.playerEvents.play.emitCount = 1;
+                            spyOn($scope, '$emit').and.callThrough();
+
+                            $scope.$apply(function() {
+                                $scope.active = true;
+                            });
+                        });
+
+                        it('should not $emit <mr-card>:init', function() {
+                            expect($scope.$emit).not.toHaveBeenCalled();
+                        });
+                    });
+
                     it('should dismiss the ballot and results', function() {
                         expect(VideoEmbedCardCtrl.dismissBallot).toHaveBeenCalled();
                         expect(VideoEmbedCardCtrl.dismissBallotResults).toHaveBeenCalled();
@@ -308,7 +473,7 @@ define(['minireel', 'c6uilib', 'services'], function(minireelModule, c6uilibModu
                         var currentPlayCalls;
 
                         beforeEach(function() {
-                            currentPlayCalls = iface.play.callCount;
+                            currentPlayCalls = iface.play.calls.count();
 
                             $scope.config.data.autoplay = false;
 
@@ -321,7 +486,7 @@ define(['minireel', 'c6uilib', 'services'], function(minireelModule, c6uilibModu
                         });
 
                         it('should not play the video', function() {
-                            expect(iface.play.callCount).toBe(currentPlayCalls);
+                            expect(iface.play.calls.count()).toBe(currentPlayCalls);
                         });
                     });
 
@@ -329,7 +494,7 @@ define(['minireel', 'c6uilib', 'services'], function(minireelModule, c6uilibModu
                         var currentPlayCalls;
 
                         beforeEach(function() {
-                            currentPlayCalls = iface.play.callCount;
+                            currentPlayCalls = iface.play.calls.count();
 
                             c6AppData.profile.autoplay = false;
 
@@ -342,7 +507,7 @@ define(['minireel', 'c6uilib', 'services'], function(minireelModule, c6uilibModu
                         });
 
                         it('should not play the video', function() {
-                            expect(iface.play.callCount).toBe(currentPlayCalls);
+                            expect(iface.play.calls.count()).toBe(currentPlayCalls);
                         });
                     });
 
@@ -350,7 +515,7 @@ define(['minireel', 'c6uilib', 'services'], function(minireelModule, c6uilibModu
                         var currentPlayCalls;
 
                         beforeEach(function() {
-                            currentPlayCalls = iface.play.callCount;
+                            currentPlayCalls = iface.play.calls.count();
 
                             c6AppData.behaviors.canAutoplay = false;
 
@@ -363,7 +528,7 @@ define(['minireel', 'c6uilib', 'services'], function(minireelModule, c6uilibModu
                         });
 
                         it('should not play the video', function() {
-                            expect(iface.play.callCount).toBe(currentPlayCalls);
+                            expect(iface.play.calls.count()).toBe(currentPlayCalls);
                         });
                     });
                 });
@@ -380,7 +545,7 @@ define(['minireel', 'c6uilib', 'services'], function(minireelModule, c6uilibModu
                         play: jasmine.createSpy('iface.play()'),
                         pause: jasmine.createSpy('iface.pause()')
                     });
-                    spyOn(iface, 'once').andCallThrough();
+                    spyOn(iface, 'once').and.callThrough();
 
                     $scope.$emit('playerAdd', iface);
                 });
@@ -393,7 +558,14 @@ define(['minireel', 'c6uilib', 'services'], function(minireelModule, c6uilibModu
 
                 describe('when "play" is emitted', function() {
                     beforeEach(function() {
+                        VideoEmbedCardCtrl.postModuleActive = true;
                         iface.emit('play', iface);
+                        VideoEmbedCardCtrl.postModuleActive = true;
+                        iface.emit('play', iface);
+                    });
+
+                    it('should set "postModuleActive" to false', function() {
+                        expect(VideoEmbedCardCtrl.postModuleActive).toBe(false);
                     });
 
                     it('should set _data.modules.displayAd.active to true', function() {
@@ -403,7 +575,15 @@ define(['minireel', 'c6uilib', 'services'], function(minireelModule, c6uilibModu
 
                 describe('when "ended" is emitted', function() {
                     beforeEach(function() {
-                        spyOn($scope, '$emit').andCallThrough();
+                        spyOn($scope, '$emit').and.callThrough();
+                    });
+
+                    it('should set postModuleActive to true', function() {
+                        $scope.$apply(function() {
+                            iface.emit('ended');
+                        });
+
+                        expect(VideoEmbedCardCtrl.postModuleActive).toBe(true);
                     });
 
                     describe('if the ballot module is present', function() {
@@ -413,6 +593,21 @@ define(['minireel', 'c6uilib', 'services'], function(minireelModule, c6uilibModu
 
                             $scope.$apply(function() {
                                 iface.emit('ended', iface);
+                            });
+                        });
+
+                        it('should not $emit the <mr-card>:contentEnd event', function() {
+                            expect($scope.$emit).not.toHaveBeenCalled();
+                        });
+                    });
+
+                    describe('if the post module is present', function() {
+                        beforeEach(function() {
+                            $scope.config.modules.length = 0;
+                            $scope.config.modules.push('post');
+
+                            $scope.$apply(function() {
+                                iface.emit('ended');
                             });
                         });
 
@@ -620,6 +815,12 @@ define(['minireel', 'c6uilib', 'services'], function(minireelModule, c6uilibModu
 
         describe('@public', function() {
             describe('properties', function() {
+                describe('postModuleActive', function() {
+                    it('should be false', function() {
+                        expect(VideoEmbedCardCtrl.postModuleActive).toBe(false);
+                    });
+                });
+
                 describe('experienceTitle', function() {
                     it('should come from the c6AppData experience', function() {
                         expect(VideoEmbedCardCtrl.experienceTitle).toBe('Foo');
@@ -719,9 +920,53 @@ define(['minireel', 'c6uilib', 'services'], function(minireelModule, c6uilibModu
                 });
 
                 describe('flyAway', function() {
+                    describe('if the card is active', function() {
+                        beforeEach(function() {
+                            $scope.$apply(function() {
+                                $scope.active = true;
+                            });
+                        });
+
+                        describe('if post module is enabled', function() {
+                            beforeEach(function() {
+                                $scope.config.modules = ['post'];
+                            });
+
+                            [true, false].forEach(function(bool) {
+                                describe('if postModuleActive is ' + bool, function() {
+                                    beforeEach(function() {
+                                        VideoEmbedCardCtrl.postModuleActive = bool;
+                                    });
+
+                                    it('should be ' + bool, function() {
+                                        expect(VideoEmbedCardCtrl.flyAway).toBe(bool);
+                                    });
+                                });
+                            });
+                        });
+
+                        describe('if post module is not enabled', function() {
+                            beforeEach(function() {
+                                $scope.config.modules = ['ballot'];
+                            });
+
+                            [true, false].forEach(function(bool) {
+                                describe('if postModuleActive is ' + bool, function() {
+                                    beforeEach(function() {
+                                        VideoEmbedCardCtrl.postModuleActive = bool;
+                                    });
+
+                                    it('should be false', function() {
+                                        expect(VideoEmbedCardCtrl.flyAway).toBe(false);
+                                    });
+                                });
+                            });
+                        });
+                    });
+
                     describe('if the ballot module is not enabled', function() {
                         beforeEach(function() {
-                            spyOn(VideoEmbedCardCtrl, 'hasModule').andCallFake(function(module) {
+                            spyOn(VideoEmbedCardCtrl, 'hasModule').and.callFake(function(module) {
                                 if (module === 'ballot') {
                                     return false;
                                 }
@@ -744,7 +989,7 @@ define(['minireel', 'c6uilib', 'services'], function(minireelModule, c6uilibModu
 
                     describe(', if the ballot module is enabled,', function() {
                         beforeEach(function() {
-                            spyOn(VideoEmbedCardCtrl, 'hasModule').andCallFake(function(module) {
+                            spyOn(VideoEmbedCardCtrl, 'hasModule').and.callFake(function(module) {
                                 if (module === 'ballot') {
                                     return true;
                                 }
@@ -786,7 +1031,7 @@ define(['minireel', 'c6uilib', 'services'], function(minireelModule, c6uilibModu
 
                     describe('if the app has a separate text view', function() {
                         beforeEach(function() {
-                            spyOn(VideoEmbedCardCtrl, 'hasModule').andReturn(false);
+                            spyOn(VideoEmbedCardCtrl, 'hasModule').and.returnValue(false);
 
                             $scope.active = true;
                             c6AppData.behaviors.separateTextView = true;
@@ -807,7 +1052,7 @@ define(['minireel', 'c6uilib', 'services'], function(minireelModule, c6uilibModu
 
                     describe('if the experience is click to play', function() {
                         beforeEach(function() {
-                            spyOn(VideoEmbedCardCtrl, 'hasModule').andReturn(false);
+                            spyOn(VideoEmbedCardCtrl, 'hasModule').and.returnValue(false);
                             $scope.config.data.autoplay = false;
 
                             $scope.active = true;
@@ -914,7 +1159,7 @@ define(['minireel', 'c6uilib', 'services'], function(minireelModule, c6uilibModu
                             $rootScope.profile.autoplay = false;
 
                             VideoEmbedCardCtrl.hideText();
-                            expect(iface.play.callCount).toBe(1);
+                            expect(iface.play.calls.count()).toBe(1);
                         });
                     });
                 });

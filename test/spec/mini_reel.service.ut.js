@@ -27,7 +27,7 @@ define(['app', 'minireel', 'c6uilib', 'angular'], function(appModule, minireelMo
 
                 $provide.value('VideoThumbService', {
                     getThumbs: jasmine.createSpy('VideoThumbService.getThumb()')
-                        .andCallFake(function() {
+                        .and.callFake(function() {
                             return $q.defer().promise;
                         })
                 });
@@ -76,6 +76,7 @@ define(['app', 'minireel', 'c6uilib', 'angular'], function(appModule, minireelMo
                                     placementId: null,
                                     data: {
                                         autoadvance: false,
+                                        skip: 6,
                                         videoid: 'jofNR_WkoCE',
                                         start: 10,
                                         end: 20,
@@ -111,6 +112,7 @@ define(['app', 'minireel', 'c6uilib', 'angular'], function(appModule, minireelMo
                                         'Twitter': 'twitter.html'
                                     },
                                     data: {
+                                        skip: null,
                                         autoadvance: null,
                                         autoplay: false,
                                         videoid: 'x18b09a',
@@ -128,9 +130,11 @@ define(['app', 'minireel', 'c6uilib', 'angular'], function(appModule, minireelMo
                                         'Facebook': 'facebook.html',
                                         'Twitter': 'twitter.html',
                                         'YouTube': 'yt.html',
-                                        'Vimeo': 'vimeo.html'
+                                        'Vimeo': 'vimeo.html',
+                                        'Pinterest': 'pinit.html'
                                     },
                                     data: {
+                                        skip: true,
                                         autoplay: true,
                                         type: 'vimeo',
                                         videoid: '81766071',
@@ -145,7 +149,12 @@ define(['app', 'minireel', 'c6uilib', 'angular'], function(appModule, minireelMo
                                     note: 'Doctor Who #11 meets #4',
                                     voting: [ 400, 50, 10 ],
                                     placementId: null,
+                                    thumbs: {
+                                        small: 'matt-smith--small.jpg',
+                                        large: 'matt-smith--large.jpg'
+                                    },
                                     data: {
+                                        skip: false,
                                         autoadvance: true,
                                         autoplay: null,
                                         videoid: 'Cn9yJrrm2tk',
@@ -172,11 +181,25 @@ define(['app', 'minireel', 'c6uilib', 'angular'], function(appModule, minireelMo
                                     title: 'Recap',
                                     note: null,
                                     data: {}
-                                }
+                                },
+                                {
+                                    id: 'rc-774a0ebe4d56a6',
+                                    type: 'adUnit',
+                                    title: 'Geek cool',
+                                    note: 'Doctor Who #11 meets #4',
+                                    voting: [ 400, 50, 10 ],
+                                    placementId: null,
+                                    thumbs: {},
+                                    data: {
+                                        skip: false,
+                                        autoadvance: true,
+                                        autoplay: null
+                                    }
+                                },
                             ]
                         };
 
-                        VideoThumbService.getThumbs.andCallFake(function(type, id) {
+                        VideoThumbService.getThumbs.and.callFake(function(type, id) {
                             switch (id) {
 
                             case 'jofNR_WkoCE':
@@ -206,10 +229,10 @@ define(['app', 'minireel', 'c6uilib', 'angular'], function(appModule, minireelMo
                             }
                         });
 
-                        spyOn(angular, 'copy').andCallFake(function(value) {
+                        spyOn(angular, 'copy').and.callFake(function(value) {
                             var result = copy(value);
 
-                            angular.copy.mostRecentCall.result = result;
+                            angular.copy.calls.mostRecent().result = result;
 
                             return result;
                         });
@@ -219,7 +242,7 @@ define(['app', 'minireel', 'c6uilib', 'angular'], function(appModule, minireelMo
 
                     it('should return a copy of the deck', function() {
                         expect(angular.copy).toHaveBeenCalledWith(mrData.deck);
-                        expect(result).toBe(angular.copy.mostRecentCall.result);
+                        expect(result).toBe(angular.copy.calls.mostRecent().result);
                     });
 
                     it('should give each video a player', function() {
@@ -265,6 +288,11 @@ define(['app', 'minireel', 'c6uilib', 'angular'], function(appModule, minireelMo
                                     label: 'Vimeo',
                                     type: 'vimeo',
                                     href: 'vimeo.html'
+                                },
+                                {
+                                    label: 'Pinterest',
+                                    type: 'pinterest',
+                                    href: 'pinit.html'
                                 }
                             ]);
                             expect(result[5].social).toEqual([]);
@@ -285,7 +313,7 @@ define(['app', 'minireel', 'c6uilib', 'angular'], function(appModule, minireelMo
                         }
 
                         function isVideo(card) {
-                            return (/^(youtube|vimeo|dailymotion)$/).test(card.type);
+                            return (/^(youtube|vimeo|dailymotion|adUnit)$/).test(card.type);
                         }
 
                         function isSet(object, prop) {
@@ -402,6 +430,35 @@ define(['app', 'minireel', 'c6uilib', 'angular'], function(appModule, minireelMo
                             });
                         });
 
+                        describe('skip', function() {
+                            var indicesOfSkipCards,
+                                indicesOfSkiplessCards;
+
+                            beforeEach(function() {
+                                indicesOfSkiplessCards = indicesWhere(function(card) {
+                                    return isVideo(card) && !isSet(card.data, 'skip');
+                                });
+                                expect(indicesOfSkiplessCards.length).toBeGreaterThan(0);
+
+                                indicesOfSkipCards = indicesWhere(function(card, index) {
+                                    return indicesOfSkiplessCards.indexOf(index) < 0;
+                                });
+                                expect(indicesOfSkipCards.length).toBeGreaterThan(0);
+                            });
+
+                            it('should not change the value if set', function() {
+                                indicesOfSkipCards.forEach(function(index) {
+                                    expect(result[index].data.skip).toBe(mrData.deck[index].data.skip);
+                                });
+                            });
+
+                            it('should be true if the value is not set', function() {
+                                indicesOfSkiplessCards.forEach(function(index) {
+                                    expect(result[index].data.skip).toBe(true);
+                                });
+                            });
+                        });
+
                         describe('placementId', function() {
                             var indicesOfPlacementIdlessCards,
                                 indicesOfPlacementIdCards;
@@ -475,16 +532,16 @@ define(['app', 'minireel', 'c6uilib', 'angular'], function(appModule, minireelMo
 
                     describe('getting thumbnails', function() {
                         it('should make every thumbnail null at first', function() {
-                            result.filter(function(card) {
-                                return !(/^(recap|text|displayAd)$/).test(card.type);
-                            }).forEach(function(card) {
-                                expect(card.thumbs).toBeNull('card:' + card.id);
+                            mrData.deck.filter(function(card) {
+                                return !card.thumbs && !(/^(text|recap)$/).test(card.type);
+                            }).forEach(function(card, index) {
+                                expect(result[mrData.deck.indexOf(card)].thumbs).toBeNull('card:' + card.id);
                             });
                         });
 
                         it('should get a thumbnail for every video', function() {
-                            result.filter(function(card) {
-                                return !(/^(recap|text|displayAd)$/).test(card.type);
+                            mrData.deck.filter(function(card) {
+                                return !card.thumbs && !(/^(text|recap)$/).test(card.type);
                             }).forEach(function(card) {
                                 expect(VideoThumbService.getThumbs).toHaveBeenCalledWith(card.type, card.data.videoid);
                             });
@@ -506,21 +563,19 @@ define(['app', 'minireel', 'c6uilib', 'angular'], function(appModule, minireelMo
                                 small: 'http://b.vimeocdn.com/ts/462/944/462944068_100.jpg',
                                 large: 'http://b.vimeocdn.com/ts/462/944/462944068_600.jpg'
                             });
-                            expect(result[5].thumbs).toEqual({
-                                small: 'http://img.youtube.com/vi/Cn9yJrrm2tk/2.jpg',
-                                large: 'http://img.youtube.com/vi/Cn9yJrrm2tk/0.jpg'
-                            });
+                            expect(result[5].thumbs).toEqual(mrData.deck[5].thumbs);
                         });
 
                         it('should preload all of the small images', function() {
                             $rootScope.$digest();
 
-                            expect(c6ImagePreloader.load.callCount).toBe(4);
+                            expect(c6ImagePreloader.load.calls.count()).toBe(5);
 
                             expect(c6ImagePreloader.load).toHaveBeenCalledWith(['http://img.youtube.com/vi/gy1B3agGNxw/2.jpg']);
                             expect(c6ImagePreloader.load).toHaveBeenCalledWith(['http://s2.dmcdn.net/Dm9Np/x120-6Xz.jpg']);
                             expect(c6ImagePreloader.load).toHaveBeenCalledWith(['http://b.vimeocdn.com/ts/462/944/462944068_100.jpg']);
-                            expect(c6ImagePreloader.load).toHaveBeenCalledWith(['http://img.youtube.com/vi/Cn9yJrrm2tk/2.jpg']);
+                            expect(c6ImagePreloader.load).toHaveBeenCalledWith(['matt-smith--small.jpg']);
+                            expect(c6ImagePreloader.load).toHaveBeenCalledWith(['http://upload.wikimedia.org/wikipedia/en/8/8c/Ubisoft.png']);
                         });
 
                         describe('for a text card', function() {
@@ -557,7 +612,7 @@ define(['app', 'minireel', 'c6uilib', 'angular'], function(appModule, minireelMo
                                             splash: '/collateral/mysplash.jpg'
                                         };
 
-                                        spyOn(Date, 'now').andReturn(now);
+                                        spyOn(Date, 'now').and.returnValue(now);
 
                                         result = MiniReelService.createDeck(mrData);
                                     });
@@ -597,6 +652,12 @@ define(['app', 'minireel', 'c6uilib', 'angular'], function(appModule, minireelMo
                             });
                         });
 
+                        describe('for a adUnit card', function() {
+                            it('should have the thumbs it already had', function() {
+                                expect(result[8].thumbs).toEqual(mrData.deck[8].thumbs);
+                            });
+                        });
+
                         describe('for the recap card', function() {
                             describe('if there are no collateral assets', function() {
                                 it('should be null', function() {
@@ -612,7 +673,7 @@ define(['app', 'minireel', 'c6uilib', 'angular'], function(appModule, minireelMo
                                     nowMethod = Date.now;
                                     now = Date.now();
 
-                                    spyOn(Date, 'now').andReturn(now);
+                                    spyOn(Date, 'now').and.returnValue(now);
 
                                     mrData.collateral = {
                                         splash: '/collateral/mysplash.jpg'

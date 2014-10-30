@@ -73,7 +73,7 @@ define(['services', 'adtech', 'c6_defines'], function(servicesModule, adtech, c6
                 });
 
                 it('should resolve the promise when complete', function() {
-                    adtech.loadAd.mostRecentCall.args[0].complete();
+                    adtech.loadAd.calls.mostRecent().args[0].complete();
 
                     expect(adLoadThenSpy).toHaveBeenCalled();
                 });
@@ -83,7 +83,7 @@ define(['services', 'adtech', 'c6_defines'], function(servicesModule, adtech, c6
 
                     AdTechService.loadAd({id: 'container', placementId: '222222'});
 
-                    expect(adtech.loadAd.mostRecentCall.args[0]).toEqual({
+                    expect(adtech.loadAd.calls.mostRecent().args[0]).toEqual({
                         secure: true,
                         network: '5473.1',
                         server: 'adserver.adtechus.com',
@@ -103,7 +103,7 @@ define(['services', 'adtech', 'c6_defines'], function(servicesModule, adtech, c6
 
                     AdTechService.loadAd({id: 'container', placementId: '1234567'});
 
-                    expect(adtech.loadAd.mostRecentCall.args[0]).toEqual({
+                    expect(adtech.loadAd.calls.mostRecent().args[0]).toEqual({
                         secure: false,
                         network: '5473.1',
                         server: 'adserver.adtechus.com',

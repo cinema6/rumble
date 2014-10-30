@@ -36,7 +36,7 @@ define(['app', 'services', 'angular'], function(appModule, servicesModule, angul
                 });
 
                 youtube.createPlayer = jasmine.createSpy('youtube.createPlayer')
-                .andCallFake(function(playerId,config,$parentElement){
+                .and.callFake(function(playerId,config,$parentElement){
                     var mockPlayer = {
                         on              : jasmine.createSpy('youtubePlayer.on'),
                         once            : jasmine.createSpy('youtubePlayer.once'),
@@ -57,42 +57,42 @@ define(['app', 'services', 'angular'], function(appModule, servicesModule, angul
                         _removes        : {}
                     }
 
-                    mockPlayer.getCurrentTime.andCallFake(function(){
+                    mockPlayer.getCurrentTime.and.callFake(function(){
                         return 0;
                     });
 
-                    mockPlayer.on.andCallFake(function(eventName,handler){
+                    mockPlayer.on.and.callFake(function(eventName,handler){
                         if (mockPlayer._on[eventName] === undefined){
                             mockPlayer._on[eventName] = [];
                         }
                         mockPlayer._on[eventName].push(handler);
                     });
 
-                    mockPlayer.once.andCallFake(function(eventName,handler){
+                    mockPlayer.once.and.callFake(function(eventName,handler){
                         if (mockPlayer._once[eventName] === undefined){
                             mockPlayer._once[eventName] = [];
                         }
                         mockPlayer._once[eventName].push(handler);
                     });
 
-                    mockPlayer.removeListener.andCallFake(function(eventName,listener){
+                    mockPlayer.removeListener.and.callFake(function(eventName,listener){
                         if (mockPlayer._removes[eventName] === undefined){
                             mockPlayer._removes[eventName] = [];
                         }
                         mockPlayer._removes[eventName].push(listener);
                     });
 
-                    mockPlayer.isPlaying.andReturn(false);
+                    mockPlayer.isPlaying.and.returnValue(false);
 
-                    mockPlayer.pause.andCallFake(function() {
-                        mockPlayer.isPlaying.andReturn(false);
+                    mockPlayer.pause.and.callFake(function() {
+                        mockPlayer.isPlaying.and.returnValue(false);
                     });
 
-                    mockPlayer.play.andCallFake(function() {
-                        mockPlayer.isPlaying.andReturn(true);
+                    mockPlayer.play.and.callFake(function() {
+                        mockPlayer.isPlaying.and.returnValue(true);
                     });
 
-                    mockPlayer.getPlayerId.andReturn('gy1B3agGNxw');
+                    mockPlayer.getPlayerId.and.returnValue('gy1B3agGNxw');
 
                     mockPlayers.push(mockPlayer);
                     return mockPlayer;
@@ -109,7 +109,7 @@ define(['app', 'services', 'angular'], function(appModule, servicesModule, angul
                 $q          = $injector.get('$q');
 
                 $log.context = jasmine.createSpy('$log.context');
-                $log.context.andCallFake(function() { return $log; });
+                $log.context.and.callFake(function() { return $log; });
 
                 $rootScope.config = {};
 
@@ -132,7 +132,7 @@ define(['app', 'services', 'angular'], function(appModule, servicesModule, angul
                     $scope.$apply(function() {
                         $compile('<youtube-card></youtube-card>')($scope);
                     });
-                }).toThrow('<youtube-card> requires the videoid attribute to be set.');
+                }).toThrow(new SyntaxError('<youtube-card> requires the videoid attribute to be set.'));
             });
 
             it('will create a player',function(){
@@ -164,7 +164,7 @@ define(['app', 'services', 'angular'], function(appModule, servicesModule, angul
             beforeEach(function(){
                 iface = null, addSpy = null;
                 addSpy = jasmine.createSpy('playerAdd');
-                addSpy.andCallFake(function(event,playerInterface){
+                addSpy.and.callFake(function(event,playerInterface){
                     iface = playerInterface;
                 });
 
@@ -312,16 +312,16 @@ define(['app', 'services', 'angular'], function(appModule, servicesModule, angul
 
                     describe('getting', function() {
                         it('should proxy to player.getCurrentTime()', function() {
-                            player.getCurrentTime.andReturn(10);
+                            player.getCurrentTime.and.returnValue(10);
                             expect(iface.currentTime).toBe(10);
 
-                            player.getCurrentTime.andReturn(20);
+                            player.getCurrentTime.and.returnValue(20);
                             expect(iface.currentTime).toBe(20);
 
-                            player.getCurrentTime.andReturn(30);
+                            player.getCurrentTime.and.returnValue(30);
                             expect(iface.currentTime).toBe(30);
 
-                            expect(player.getCurrentTime.callCount).toBe(3);
+                            expect(player.getCurrentTime.calls.count()).toBe(3);
                         });
                     });
 
@@ -351,22 +351,22 @@ define(['app', 'services', 'angular'], function(appModule, servicesModule, angul
 
                             player._on.ready[0]({},player);
                             $timeout.flush();
-                            player.getCurrentTime.andReturn(10);
+                            player.getCurrentTime.and.returnValue(10);
                         });
 
                         describe('getting', function() {
                             it('should subtract the start time in its calculation', function() {
                                 expect(iface.currentTime).toBe(0);
 
-                                player.getCurrentTime.andReturn(20);
+                                player.getCurrentTime.and.returnValue(20);
                                 expect(iface.currentTime).toBe(10);
 
-                                player.getCurrentTime.andReturn(30);
+                                player.getCurrentTime.and.returnValue(30);
                                 expect(iface.currentTime).toBe(20);
                             });
 
                             it('should never go below 0', function() {
-                                player.getCurrentTime.andReturn(5);
+                                player.getCurrentTime.and.returnValue(5);
 
                                 expect(iface.currentTime).toBe(0);
                             });
@@ -462,7 +462,7 @@ define(['app', 'services', 'angular'], function(appModule, servicesModule, angul
                                 $timeout.flush();
 
                                 player = mockPlayers[mockPlayers.length - 1];
-                                player.getDuration.andReturn(30);
+                                player.getDuration.and.returnValue(30);
 
                                 player._on.ready[0]({},player);
                                 $timeout.flush();
@@ -478,7 +478,7 @@ define(['app', 'services', 'angular'], function(appModule, servicesModule, angul
 
                                 $scope.$apply(function() {
                                     $scope.start = 30;
-                                    player.getDuration.andReturn(40);
+                                    player.getDuration.and.returnValue(40);
                                 });
                                 expect(iface.duration).toBe(10);
                             });
@@ -496,7 +496,7 @@ define(['app', 'services', 'angular'], function(appModule, servicesModule, angul
                                 $timeout.flush();
 
                                 player = mockPlayers[mockPlayers.length - 1];
-                                player.getDuration.andReturn(30);
+                                player.getDuration.and.returnValue(30);
 
                                 player._on.ready[0]({},player);
                                 $timeout.flush();
@@ -527,7 +527,7 @@ define(['app', 'services', 'angular'], function(appModule, servicesModule, angul
                                 $timeout.flush();
 
                                 player = mockPlayers[mockPlayers.length - 1];
-                                player.getDuration.andReturn(30);
+                                player.getDuration.and.returnValue(30);
 
                                 player._on.ready[0]({},player);
                                 $timeout.flush();
@@ -536,7 +536,7 @@ define(['app', 'services', 'angular'], function(appModule, servicesModule, angul
                             it('should return the duration of the player', function() {
                                 expect(iface.duration).toBe(30);
 
-                                player.getDuration.andReturn(24);
+                                player.getDuration.and.returnValue(24);
                                 expect(iface.duration).toBe(24);
                             });
                         });
@@ -548,7 +548,7 @@ define(['app', 'services', 'angular'], function(appModule, servicesModule, angul
                                     $scope.end = undefined;
                                 });
 
-                                player.getDuration.andReturn(0);
+                                player.getDuration.and.returnValue(0);
                             });
 
                             it('should be NaN', function() {
@@ -698,7 +698,7 @@ define(['app', 'services', 'angular'], function(appModule, servicesModule, angul
                                 '<youtube-card videoid="abc123" width="1" height="2" twerk="1"></youtube-card>'
                             )($scope);
                         });
-                        spyOn(iface, 'twerk').andCallFake(function() {
+                        spyOn(iface, 'twerk').and.callFake(function() {
                             return twerkDeferred.promise;
                         });
                         $timeout.flush();
@@ -752,7 +752,7 @@ define(['app', 'services', 'angular'], function(appModule, servicesModule, angul
             describe('method',function(){
                 var resolveSpy, rejectSpy;
                 beforeEach(function(){
-                    spyOn($interval, 'cancel').andCallThrough();
+                    spyOn($interval, 'cancel').and.callThrough();
 
                     resolveSpy = jasmine.createSpy('twerk.resolve');
                     rejectSpy  = jasmine.createSpy('twerk.reject');
@@ -794,9 +794,7 @@ define(['app', 'services', 'angular'], function(appModule, servicesModule, angul
                     iface.twerk().then(resolveSpy,rejectSpy);
                     $scope.$digest();
                     expect(resolveSpy).not.toHaveBeenCalled();
-                    expect(rejectSpy).toHaveBeenCalledWith({
-                        message : 'Player is not ready to twerk'
-                    });
+                    expect(rejectSpy).toHaveBeenCalledWith(new Error('Player is not ready to twerk'));
                     expect(iface.twerked).toBe(false);
                 });
 
@@ -831,9 +829,7 @@ define(['app', 'services', 'angular'], function(appModule, servicesModule, angul
                     
                     $timeout.flush(1000);
                     expect(resolveSpy).not.toHaveBeenCalled();
-                    expect(rejectSpy).toHaveBeenCalledWith({
-                        message : 'Player twerk timed out'
-                    });
+                    expect(rejectSpy).toHaveBeenCalledWith(new Error('Player twerk timed out'));
                     expect(iface.twerked).toBe(false);
                 });
 
@@ -848,9 +844,7 @@ define(['app', 'services', 'angular'], function(appModule, servicesModule, angul
                     
                     $timeout.flush(5000);
                     expect(resolveSpy).not.toHaveBeenCalled();
-                    expect(rejectSpy).toHaveBeenCalledWith({
-                        message : 'Player twerk timed out'
-                    });
+                    expect(rejectSpy).toHaveBeenCalledWith(new Error('Player twerk timed out'));
                     expect(iface.twerked).toBe(false);
                 });
 
@@ -866,11 +860,9 @@ define(['app', 'services', 'angular'], function(appModule, servicesModule, angul
                     $scope.$apply(function() {
                         iface.twerk().then(resolveSpy, rejectSpy);
                     });
-                    expect(rejectSpy).toHaveBeenCalledWith({
-                        message: 'Player has already been twerked'
-                    });
-                    expect(mockPlayers[0].play.callCount).toBe(1);
-                    expect($interval.cancel.callCount).toBe(1);
+                    expect(rejectSpy).toHaveBeenCalledWith(new Error('Player has already been twerked'));
+                    expect(mockPlayers[0].play.calls.count()).toBe(1);
+                    expect($interval.cancel.calls.count()).toBe(1);
                 });
 
                 it('will not timeout if timeout passed is 0',function(){
@@ -897,7 +889,7 @@ define(['app', 'services', 'angular'], function(appModule, servicesModule, angul
                     });
 
                     it('will setup the $interval again', function() {
-                        player.getCurrentTime.andReturn(10);
+                        player.getCurrentTime.and.returnValue(10);
                         $interval.flush(500);
                         expect(iface.emit).toHaveBeenCalledWith('timeupdate', iface);
                     });
@@ -929,7 +921,7 @@ define(['app', 'services', 'angular'], function(appModule, servicesModule, angul
                     });
 
                     it('will setup the $interval again', function() {
-                        player.getCurrentTime.andReturn(10);
+                        player.getCurrentTime.and.returnValue(10);
                         $interval.flush(500);
                         expect(iface.emit).toHaveBeenCalledWith('timeupdate', iface);
                     });
@@ -1017,10 +1009,10 @@ define(['app', 'services', 'angular'], function(appModule, servicesModule, angul
 
                         player._on.playing[0](player);
                         expect(iface.emit).toHaveBeenCalledWith('play', iface);
-                        callCount = iface.emit.callCount;
+                        callCount = iface.emit.calls.count();
 
                         player._on.playing[0](player);
-                        expect(iface.emit.callCount).toBe(callCount + 1);
+                        expect(iface.emit.calls.count()).toBe(callCount + 1);
                     });
                 });
             });
@@ -1045,13 +1037,13 @@ define(['app', 'services', 'angular'], function(appModule, servicesModule, angul
                     $interval.flush(500);
                     expect(player.seekTo).not.toHaveBeenCalled();
 
-                    player.isPlaying.andReturn(true);
+                    player.isPlaying.and.returnValue(true);
                     $interval.flush(500);
                     expect(player.seekTo).toHaveBeenCalledWith(10);
-                    player.getCurrentTime.andReturn(11);
+                    player.getCurrentTime.and.returnValue(11);
 
                     $interval.flush(1000);
-                    expect(player.seekTo.callCount).toBe(1);
+                    expect(player.seekTo.calls.count()).toBe(1);
                 });
             });
 
@@ -1074,20 +1066,20 @@ define(['app', 'services', 'angular'], function(appModule, servicesModule, angul
                 it('should emit timeupdate when the currenttime changes', function() {
                     var player = mockPlayers[0];
 
-                    player.getCurrentTime.andReturn(0);
+                    player.getCurrentTime.and.returnValue(0);
                     $interval.flush(500);
                     expect(iface.emit).not.toHaveBeenCalled();
 
-                    player.getCurrentTime.andReturn(10);
+                    player.getCurrentTime.and.returnValue(10);
                     $interval.flush(1000);
                     expect(iface.emit).toHaveBeenCalledWith('timeupdate', iface);
 
                     $interval.flush(1000);
-                    expect(iface.emit.callCount).toBe(1);
+                    expect(iface.emit.calls.count()).toBe(1);
 
-                    player.getCurrentTime.andReturn(20);
+                    player.getCurrentTime.and.returnValue(20);
                     $interval.flush(1000);
-                    expect(iface.emit.callCount).toBe(2);
+                    expect(iface.emit.calls.count()).toBe(2);
                 });
             });
 
@@ -1136,27 +1128,27 @@ define(['app', 'services', 'angular'], function(appModule, servicesModule, angul
                     expect(mockPlayers[0].pause).not.toHaveBeenCalled();
                     expect(mockPlayers[0].emit).not.toHaveBeenCalled();
 
-                    mockPlayers[0].getCurrentTime.andCallFake(function(){
+                    mockPlayers[0].getCurrentTime.and.callFake(function(){
                         return 5;
                     });
                     $interval.flush(500);
                     expect(mockPlayers[0].pause).not.toHaveBeenCalled();
                     expect(mockPlayers[0].emit).not.toHaveBeenCalled();
 
-                    mockPlayers[0].getCurrentTime.andCallFake(function(){
+                    mockPlayers[0].getCurrentTime.and.callFake(function(){
                         return 10;
                     });
                     $interval.flush(500);
 
                     expect(mockPlayers[0].pause).toHaveBeenCalled();
-                    expect(mockPlayers[0].emit.mostRecentCall.args[0]).toEqual('ended');
+                    expect(mockPlayers[0].emit.calls.mostRecent().args[0]).toEqual('ended');
 
                     // Make sure nobody tries to access the player after this
-                    expect(mockPlayers[0].isPlaying.callCount).toBe(3);
-                    expect(mockPlayers[0].getCurrentTime.callCount).toBe(3);
+                    expect(mockPlayers[0].isPlaying.calls.count()).toBe(3);
+                    expect(mockPlayers[0].getCurrentTime.calls.count()).toBe(3);
 
                     $interval.flush(500);
-                    expect(mockPlayers[0].emit.callCount).toBe(1);
+                    expect(mockPlayers[0].emit.calls.count()).toBe(1);
                 });
 
                 it('will not regenerate the player by default', function(){
@@ -1172,13 +1164,13 @@ define(['app', 'services', 'angular'], function(appModule, servicesModule, angul
                     $timeout.flush();
                     expect(mockPlayers.length).toEqual(1);
                     expect(iface.isReady()).toEqual(true);
-                    expect(mockPlayers[0].destroy.callCount).toEqual(0);
+                    expect(mockPlayers[0].destroy.calls.count()).toEqual(0);
 
                     //simulate the firing of the finish event
                     mockPlayers[0]._on.ended[0](mockPlayers[0]);
                     expect(function(){$timeout.flush();}).toThrow();
                     expect(mockPlayers.length).toEqual(1);
-                    expect(mockPlayers[0].destroy.callCount).toEqual(0);
+                    expect(mockPlayers[0].destroy.calls.count()).toEqual(0);
                     expect(iface.isReady()).toEqual(true);
                 });
 
@@ -1196,13 +1188,13 @@ define(['app', 'services', 'angular'], function(appModule, servicesModule, angul
 
                     expect(mockPlayers.length).toEqual(1);
                     expect(iface.isReady()).toEqual(true);
-                    expect(mockPlayers[0].destroy.callCount).toEqual(0);
+                    expect(mockPlayers[0].destroy.calls.count()).toEqual(0);
 
                     //simulate the firing of the finish event
                     mockPlayers[0]._on.ended[0](mockPlayers[0]);
                     $timeout.flush();
                     expect(mockPlayers.length).toEqual(2);
-                    expect(mockPlayers[0].destroy.callCount).toEqual(1);
+                    expect(mockPlayers[0].destroy.calls.count()).toEqual(1);
                     expect(iface.isReady()).toEqual(false);
                     expect($interval.cancel).toHaveBeenCalled();
                 });

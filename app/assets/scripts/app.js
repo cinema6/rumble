@@ -41,15 +41,18 @@ function( angular , angularAnimate , angularSanitize , c6uilib , c6log , c6Defin
             c6UrlMakerProvider.location(c6Defines.kProtocol + '/', 'protocol');
             c6UrlMakerProvider.location(c6Defines.kEnvUrlRoot,'envroot');
         }])
-        .config(['VASTServiceProvider','VPAIDServiceProvider',
-        function( VASTServiceProvider , VPAIDServiceProvider ) {
-            VASTServiceProvider.adTags({
+        .config(['VPAIDServiceProvider', function(VPAIDServiceProvider) {
+            VPAIDServiceProvider.swfUrl(c6Defines.kProtocol + '//lib.cinema6.com/c6ui/v3.1.0-0-g58b71cd/videos/swf/player.swf');
+        }])
+        .config(['RumbleVASTServiceProvider','RumbleVPAIDServiceProvider',
+        function( RumbleVASTServiceProvider , RumbleVPAIDServiceProvider ) {
+            RumbleVASTServiceProvider.adTags({
                 cinema6: 'http://u-ads.adap.tv/a/h/DCQzzI0K2rv1k0TZythPvTfWmlP8j6NQnxBMIgFJa80=?cb={cachebreaker}&pageUrl={pageUrl}&eov=eov',
                 publisher: 'http://u-ads.adap.tv/a/h/DCQzzI0K2runZ1YEc6FP2ey+WPdagwFmdz7a2uK_A_c=?cb={cachebreaker}&pageUrl={pageUrl}&eov=eov',
                 'cinema6-publisher': 'http://u-ads.adap.tv/a/h/DCQzzI0K2rv1k0TZythPvadnVgRzoU_Z7L5Y91qDAWYoGast41+eSw==?cb={cachebreaker}&pageUrl={pageUrl}&eov=eov',
                 'publisher-cinema6': 'http://u-ads.adap.tv/a/h/DCQzzI0K2runZ1YEc6FP2fCQPSbU6FwIZz5J5C0Fsw29iCueyXx8iw==?cb={cachebreaker}&pageUrl={pageUrl}&eov=eov'
             });
-            VPAIDServiceProvider.adTags({
+            RumbleVPAIDServiceProvider.adTags({
                 cinema6: 'http://u-ads.adap.tv/a/h/DCQzzI0K2rv1k0TZythPvYyD60pQS_90o8grI6Qm2PI=?cb={cachebreaker}&pageUrl={pageUrl}&eov=eov',
                 publisher: 'http://u-ads.adap.tv/a/h/DCQzzI0K2runZ1YEc6FP2T65tHqs_Nwo9+XmsX4pnb4=?cb={cachebreaker}&pageUrl={pageUrl}&eov=eov',
                 'cinema6-publisher': 'http://u-ads.adap.tv/a/h/DCQzzI0K2rv1k0TZythPvadnVgRzoU_ZPrm0eqz83CjfbcCg1uJO3w==?cb={cachebreaker}&pageUrl={pageUrl}&eov=eov',
@@ -211,11 +214,11 @@ function( angular , angularAnimate , angularSanitize , c6uilib , c6log , c6Defin
                 }
 
                 obj.behaviors = {
-                    canAutoplay: isMode('full', 'light', 'lightbox', 'lightbox-ads'),
+                    canAutoplay: isMode('full', 'light', 'lightbox', 'lightbox-ads', 'solo', 'solo-ads'),
                     inlineVoteResults: isMode('mobile'),
                     separateTextView: false,
-                    fullscreen: isMode('full', 'mobile', 'lightbox', 'lightbox-ads'),
-                    showsCompanionWithVideoAd: isMode('full-ads', 'lightbox', 'lightbox-ads')
+                    fullscreen: isMode('full', 'mobile', 'lightbox', 'lightbox-ads', 'solo', 'solo-ads'),
+                    showsCompanionWithVideoAd: isMode('lightbox', 'lightbox-ads')
                 };
             }
 

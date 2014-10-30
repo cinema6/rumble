@@ -28,7 +28,7 @@ define(['services'], function(servicesModule) {
                     beforeEach(function() {
                         emitter = c6EventEmitter({});
 
-                        spyOn(emitter, 'on').andCallThrough();
+                        spyOn(emitter, 'on').and.callThrough();
                     });
 
                     it('should attach a listener for every event', function() {
