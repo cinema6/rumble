@@ -594,7 +594,8 @@
             right:0; left:auto;
         }
 
-        .pagerNav__btn--disabled {
+        .pagerNav__btn--disabled,
+        .pagerNav__btn--disabled:active{
             opacity:0.25; cursor:default;
             background:#999;
             border-color:#999;
