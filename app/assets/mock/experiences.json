@@ -65,6 +65,7 @@
                     "source": "YouTube",
                     "modules": [
                         "ballot",
+                        "displayAd",
                         "comments"
                     ],
                     "ballot": {

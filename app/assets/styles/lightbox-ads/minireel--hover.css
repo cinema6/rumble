@@ -3,30 +3,38 @@
     ================================================ */
     .MiniReel__closeBtn,
     .btnPrimary,
-    .brandProfile__linksBox .socialIconsBe:before {
+    .brandProfile__linksBox .socialIconsBe:before,
+    .ballot__btn0:before,
+    .ballot__btn1:before {
         -webkit-transition:background 0.3s; transition:background 0.3s;
     }
 
-    .MiniReel__closeBtn:hover {
+    .MiniReel__closeBtn:hover,
+    .ballot__btn0:hover:before {
         background:#d94040;
     }
+    .ballot__btn1:hover:before {
+        background:#1789cb;
+    }
+
+
     .btnPrimary:hover {
         background:#fff;
     }
     .brandProfile__linksBox .socialIconsBe__light--youtube:hover:before {
-        background-position:-1.125rem -3.375rem;
+        background-position:-1rem -3rem;
     }
     .brandProfile__linksBox .socialIconsBe__light--vimeo:hover:before {
-        background-position:-3.375rem -3.375rem;
+        background-position:-3rem -3rem;
     }
     .brandProfile__linksBox .socialIconsBe__light--facebook:hover:before {
-        background-position:-5.625rem -3.375rem;
+        background-position:-5rem -3rem;
     }
     .brandProfile__linksBox .socialIconsBe__light--twitter:hover:before {
-        background-position:-7.875rem -3.375rem;
+        background-position:-7rem -3rem;
     }
     .brandProfile__linksBox .socialIconsBe__light--pinterest:hover:before {
-        background-position:-10.125rem -3.375rem;
+        background-position:-9rem -3rem;
     }
 
 
@@ -46,6 +54,9 @@
     .btnPrimary:hover .btn__label,
     .brandProfile__link:hover {
         color:#d94040;
+    }
+    .ballot__btn1:hover .ballot__btnLabel {
+        color:#1789cb;
     }
     .brandProfile__linksBox .tk--youtube:hover {
         color:#e22d24;
@@ -68,6 +79,37 @@
 
 
 /*  ================================================
+    border transitions
+    ================================================ */
+    .sponsorProfile__imgBox {
+        -webkit-transition: border 0.3s ease; 
+        transition: border 0.3s ease;
+    }
+
+    .sponsorProfile__imgBox:hover {
+        border-color:#d94040;
+    }
+
+
+
+
+
+/*  ================================================
+    fill transitions
+    ================================================ */
+    .pagerNav__btnIconPath {
+        -webkit-transition:fill 0.3s; transition:fill 0.3s;
+    }
+
+    .pagerNav__btn:hover .pagerNav__btnIconPath {
+        fill:#d94040;
+    }
+
+
+
+
+
+/*  ================================================
     opacity transitions
     ================================================ */
     .textOnly__imgBox:after,
@@ -83,19 +125,6 @@
         opacity:0;
     }
 
-
-
-
-/*  ================================================
-    fill transitions
-    ================================================ */
-    .pagerNav__btnIconPath {
-        -webkit-transition:fill 0.3s; transition:fill 0.3s;
-    }
-
-    .pagerNav__btn:hover .pagerNav__btnIconPath {
-        fill:#d94040;
-    }
 
 
 
@@ -145,6 +174,10 @@
     ================================================ */
     .textLink:hover {
         border-bottom:1px dotted #d94040;
+    }
+
+    .btnPrimary:hover .btn__label {
+        text-shadow: none;
     }
 
     .textOnly__imgBox:after {

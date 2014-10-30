@@ -28,8 +28,8 @@ function( angular , c6Defines  , tracker ,
         companionAdModule.name,
         displayAdModule.name
     ])
-    .animation('.cards__item',['$log', function($log){
-        $log = $log.context('.cards__item');
+    .animation('.js-cardItem',['$log', function($log){
+        $log = $log.context('.js-cardItem');
         return {
             beforeAddClass: function(element,className,done) {
                 $log.log('addClass setup:',className);
