@@ -36,7 +36,7 @@ ng-class=" {
                 
                 <ng-include src="'deck.html' | asset:'views'" ng-controller="DeckController as DeckCtrl"></ng-include> <!--this brings in the video player-->
                 
-                <button ng-click="RumbleCtrl.goBack('nav')"
+                <!--<button ng-click="RumbleCtrl.goBack('nav')"
                     ng-show="nav.enabled"
                     class="mr-nav__btn mr-nav__prev c6-fade"
                     type="button"
@@ -48,8 +48,8 @@ ng-class=" {
                             L27.213,4.243L22.971,0z"/>
                     </svg>
                     <span class="ir">Previous Page</span>
-                </button><!--^This is the go back button over the video on the left side-->
-                <button ng-click="RumbleCtrl.goForward('nav')"
+                </button>^This is the go back button over the video on the left side-->
+                <!--<button ng-click="RumbleCtrl.goForward('nav')"
                     ng-show="nav.enabled"
                     class="mr-nav__btn mr-nav__next c6-fade"
                     type="button"
@@ -61,7 +61,7 @@ ng-class=" {
                         L4.243,0z"/>
                     </svg>
                     <span class="ir">Next Page</span>
-                </button><!--^This is the go forward button over the video on the right side-->
+                </button>^This is the go forward button over the video on the right side-->
 
             </article>
             <thumb-paginator active="tocIndex"

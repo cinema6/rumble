@@ -37,6 +37,10 @@
         background-position:-9rem -3rem;
     }
 
+    .pagerNav__btn--disabled:hover {
+        background:#999;
+    }
+
 
 
 
@@ -75,6 +79,9 @@
     }
 
 
+    .pagerNav__btn--disabled:hover .btn__label {
+        color:#fff;
+    }
 
 
 
@@ -103,6 +110,10 @@
 
     .pagerNav__btn:hover .pagerNav__btnIconPath {
         fill:#d94040;
+    }
+
+    .pagerNav__btn--disabled:hover .pagerNav__btnIconPath {
+        fill:#fff;
     }
 
 
@@ -143,6 +154,13 @@
     }
     .pagerNav__btn:hover .pagerNav__btnIcon--next {
         right:8%;
+    }
+
+    .pagerNav__btn--disabled:hover .pagerNav__btnIcon--prev {
+        left:12.5%;
+    }
+    .pagerNav__btn--disabled:hover .pagerNav__btnIcon--next {
+        right:12.5%;
     }
 
 

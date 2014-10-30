@@ -433,6 +433,9 @@
         right:0; top:0; bottom:0;
         overflow: auto;
     }
+        .card__copy--companionAd {
+            bottom:16.5em;
+        }
         .card__title {
             color:#000;
             font-size:1.125em;
@@ -593,9 +596,11 @@
 
         .pagerNav__btn--disabled {
             opacity:0.25; cursor:default;
+            background:#999;
+            border-color:#999;
         }
             .pagerNav__btn--disabled .btn__label {
-                color:#000;
+                text-decoration: none;
             }
 
 
@@ -629,13 +634,16 @@
 
 
     .adSkip__group {
-        background:#000; background:rgba(0,0,0,0.75);
-        text-transform: uppercase; text-align: center; 
-        font-weight:bold; font-size:0.875em; color:#fff;
+        background:#fff; background:rgba(255,255,255,0.7);
+        text-transform: uppercase; 
+        text-align: center; 
+        font-weight:bold; 
+        font-size:0.75em; 
+        color:#000;
         position:absolute; z-index: 4;
         width:100%; height:100%;
         box-sizing:border-box;
-        padding-top:1em;
+        padding-top:1rem;
     }
 
 
