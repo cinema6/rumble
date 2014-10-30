@@ -466,6 +466,12 @@
             margin:0;
             color:#999;
         }
+
+        .videoAd__video {
+            width:100%; height:100%;
+            position:absolute; top:0; left:0;
+        }
+
         .companionAd__group {
             width:18.75em;
             position:absolute;
