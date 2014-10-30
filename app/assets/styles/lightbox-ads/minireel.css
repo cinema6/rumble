@@ -600,7 +600,7 @@
             border-color:#999;
         }
             .pagerNav__btn--disabled .btn__label {
-                text-decoration: none;
+                text-shadow: none;
             }
 
 
