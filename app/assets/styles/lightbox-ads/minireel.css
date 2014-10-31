@@ -380,7 +380,7 @@
     ================================================ */
     .cards__group {
         position:absolute;
-        top:2em; right:0.5em; bottom:3.75em; left:0.5em;
+        top:2em; right:0.5em; bottom:0.5em; left:0.5em;
         overflow: hidden;
     }
 
@@ -398,7 +398,7 @@
     video card classes
     ================================================ */
     .player__group {
-        height:100%;
+        height:calc(100% - 3.25em);
         width:calc(100% - 19em);
         position: absolute;
         overflow: hidden;
@@ -525,8 +525,8 @@
         overflow-x:hidden;
         overflow-y:auto;
         position:absolute;
-        right:0; left:19em; top:0; bottom:0;
-        padding:3em 4em 1em 2em;
+        right:19em; left:0; top:0; bottom:3.25em;
+        padding:3em 2em 1em 4em;
     }
         .textOnly__title {
             margin:0.25em 0 0.90625em 0; 
@@ -542,7 +542,7 @@
     .textOnly__imgBox {
         width:18.75em; height:100%;
         position:absolute;
-        left:0; top:0;
+        right:0; top:0;
         background:50% 50% / cover no-repeat;
     }
 
@@ -601,7 +601,7 @@
         height:22.5em; width:100%;
         position:absolute;
         top:50%;
-        margin:-11.25em 0 0 0;
+        margin:-12.875em 0 0 0;
     }
 
 
@@ -640,7 +640,7 @@
     .recap__list {
         width:100%;
         position: absolute; 
-        top:0; bottom:0;
+        top:0; bottom:3.25em;
         overflow-y:auto; overflow-x:hidden;
         margin:0; padding:0; list-style: none;
         border-bottom:2px solid #333;
@@ -741,9 +741,12 @@
     .pagerNav__group {
         height:3em;
         position:absolute;
-        bottom:0.5em; left:0.5em; right:0.5em;
+        bottom:0.5em; left:0.5em; right:19.5em;
         display: block;
     }
+        .pagerNav__group--full {
+            right:0.5em;
+        }
 
     .pagerNav__btn {
         min-width:6em;/*96px*/ 
@@ -822,7 +825,7 @@
         }
             .pages__list {
                 margin:0; padding:0; list-style: none;
-                width:12000%; background:green;
+                width:12000%;
             }
 
                 .pages__item {

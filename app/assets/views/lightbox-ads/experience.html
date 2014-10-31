@@ -67,6 +67,7 @@ ng-class=" {
             <thumb-paginator active="tocIndex"
             ng-if="currentIndex > -1"
             class="pagerNav__group"
+            ng-class="{'pagerNav__group--full' : currentCard.type === 'displayAd'}"
             disable-prev-when="!nav.enabled"
             disable-next-when="atTail || !nav.enabled"
             on-prev="RumbleCtrl.goBack('thumb')"
