@@ -280,7 +280,7 @@
     .MiniReel__group {
         background:#fff;
         border-radius:3px;
-        padding:0.5em 0.5em 58% 0.5em; margin:1.25em 0;
+        padding:0.5em 0.5em 56% 0.5em; margin:1.25em 0;
         position: relative;
         width:100%; height: 0;
         min-height:20em;
@@ -500,6 +500,7 @@
 
         .displayAd__box {
             width:18.75em; height:15.625em;
+            margin:0 auto;
         }
 
 
@@ -577,6 +578,149 @@
                 border-radius:3px;
                 display:table;
             }
+
+
+
+
+
+/*  ================================================
+    Display Ad Card classes
+    ================================================ */
+    .displayAdCard__group {
+        text-align: center;
+        height:22.5em; width:100%;
+        position:absolute;
+        top:50%;
+        margin:-11.25em 0 0 0;
+    }
+
+
+        .displayAdBrand__tagline {
+            font-size:0.875em;
+            color:#999;
+            margin:0 0 0.8125rem 0;
+        }
+            .displayAdBrand__taglineLink {
+                font-weight:bold;
+            }
+
+
+        .displayAdBrand__linksBox {
+            margin:1.375em 0 0 0;
+        }
+            .displayAdBrand__link {
+                padding:0 0.5em;
+                font-size:0.75em;
+                display: inline-block;
+            }
+                .displayAdBrand__linkLabel {
+                    vertical-align: middle;
+                }
+                .displayAdBrand__linkLabel {
+                    padding-left:0.25em;
+                }
+
+
+
+
+
+/*  ================================================
+    recap card classes
+    ================================================ */
+    .recap__list {
+        width:100%;
+        position: absolute; 
+        top:0; bottom:0;
+        overflow-y:auto; overflow-x:hidden;
+        margin:0; padding:0; list-style: none;
+        border-bottom:2px solid #333;
+        border-top:2px solid #333;
+        counter-reset: recap;
+    }
+        .recap__item {
+            position:relative;
+            padding:0.75em 0 0.75em 0; 
+            border-bottom:1px solid #ddd;
+            cursor:pointer;
+        }
+            .recap__item:last-child {
+                border-bottom:0;
+            }
+
+
+            .recap__imgBox {
+                width:10em; height:7.5em;
+                background:url('../../img/default_square.jpg') 50% 50% / cover no-repeat;
+                float:left;
+                margin:0 0 0 1.875em;
+            }
+                .recap__imgBox:before {
+                    counter-increment: recap;
+                    content:counter(recap);
+                    display:block;
+                    width:2.5em;
+                    font-size:0.75em;
+                    color:#6c6c6c;
+                    margin:0.6875rem 0 0 0;
+                    position: absolute;
+                    left:0;
+                }
+                .recap__imgBox--ad:after {
+                    content:'Ad';
+                    position: absolute;
+                    top:0.875rem; left:2rem;
+                    background:#000; color:#fff;
+                    padding:0 2px;
+                    font-size:0.625rem; font-weight:bold;
+                }
+
+                .recap__img {
+                    width:10em; height:7.5em;
+                    background: 50% 50% / cover no-repeat;
+                }
+            .recap__copyBox {
+                float:right;
+                width:calc(100% - 12.625em);
+            }
+                .recap__title {
+                    font-size:1.5em;/*24px*/
+                    line-height: 1;
+                    margin:0.125em 0 0.5em; padding:0;
+                    color:#333;
+                }
+                    @media screen and (min-width:40.0625rem) and (max-width:58.75rem) {
+                        /* 641px - 940px */
+                        .recap__title {
+                            font-size:1.25em;
+                        }
+                    }
+                    @media screen and (max-width:40rem) {
+                        /* 640px or smaller */
+                        .recap__title {
+                            font-size:1em;
+                        }
+                    }
+                .recap__ballotInfo {
+                    font-size:0.875em;
+                }
+                    .recap__ballotQuestion {
+                        font-size:1em; font-weight:normal;
+                        margin:0;
+                    }
+                        .recap__ballotQuestion strong {
+                            font-style:italic;
+                        }
+                    .recap__ballotResults {
+                        margin:0;
+                    }
+                    .recap__ballotA {
+                        color:#8ac12a;
+                    }
+                    .recap__ballotB {
+                        color:#19cbe6;
+                    } 
+
+
 
 
 

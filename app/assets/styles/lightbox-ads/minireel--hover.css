@@ -5,21 +5,27 @@
     .btnPrimary,
     .brandProfile__linksBox .socialIconsBe:before,
     .ballot__btn0:before,
-    .ballot__btn1:before {
+    .ballot__btn1:before,
+    .recap__item {
         -webkit-transition:background 0.3s; transition:background 0.3s;
     }
 
     .MiniReel__closeBtn:hover,
     .ballot__btn0:hover:before {
-        background:#d94040;
+        background-color:#d94040;
     }
+
+    .recap__item:hover {
+        background-color:#eee;
+    }
+
     .ballot__btn1:hover:before {
-        background:#1789cb;
+        background-color:#1789cb;
     }
 
 
     .btnPrimary:hover {
-        background:#fff;
+        background-color:#fff;
     }
     .brandProfile__linksBox .socialIconsBe__light--youtube:hover:before {
         background-position:-1rem -3rem;
@@ -38,7 +44,7 @@
     }
 
     .pagerNav__btn--disabled:hover {
-        background:#999;
+        background-color:#999;
     }
 
 
@@ -95,6 +101,9 @@
 
     .sponsorProfile__imgBox:hover {
         border-color:#d94040;
+    }
+    .recap__item:hover {
+        border-left:3px solid #d94040;
     }
 
 
