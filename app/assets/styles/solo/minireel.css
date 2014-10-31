@@ -39,7 +39,7 @@
     c6 copy classes : general type and color styles
     ================================================ */        
     .tk--hdr {
-        font-family: 'museo-sans', 'Open Sans', Arial, Helvetica, sans-serif; 
+        font-family: 'Roboto Condensed', 'Open Sans', Arial, Helvetica, sans-serif; 
         font-weight:300;
     }
     a {
@@ -68,30 +68,41 @@
     .hidden {
         visibility: hidden;
     }
-    .sprite {
-        background:url('../../img/sprite--alpha@4x.png') 0 0 / 18.75rem 9.375rem no-repeat;
+    .sprite,
+    .spriteAf:after,
+    .spriteBe:before {
+        background:url('../../img/sprite--alpha@2x.png') 0 0 / 18.75rem 18.75rem no-repeat;
     }
 
+        .sprite--close {
+            width:1rem; height:1rem;
+            background-position:-5rem -9rem;
+            display: inline-block;
+        }
 
-    .socialIcons {
-        width:1.125rem; height:1.125rem;
-        display: inline-block;
-    }
-        .socialIcons--youtube {
-            background-position:-1.125rem -1.125rem;
+        .socialIconsBe:before,
+        .uiIconsBe:before {
+            content:'';
+            width:1rem; height:1rem;
+            display: inline-block;
+            vertical-align: middle;
         }
-        .socialIcons--vimeo {
-            background-position: -3.375rem -1.125rem;
-        }
-        .socialIcons--facebook {
-            background-position: -5.625rem -1.125rem;
-        }
-        .socialIcons--twitter {
-            background-position: -7.875rem -1.125rem;
-        }
-        .socialIcons--pinterest {
-            background-position: -10.125rem -1.125rem;
-        }
+
+            .socialIconsBe--youtube:before {
+                background-position:-1rem -3rem;
+            }
+            .socialIconsBe--vimeo:before {
+                background-position: -3rem -3rem;
+            }
+            .socialIconsBe--facebook:before {
+                background-position: -5rem -3rem;
+            }
+            .socialIconsBe--twitter:before {
+                background-position: -7rem -3rem;
+            }
+            .socialIconsBe--pinterest:before {
+                background-position: -9rem -3rem;
+            }
 
 
     .actionBtn {
@@ -593,18 +604,18 @@
 
 
 
-/*  ==========================================================================
+/*  ================================================
     Splash Screen classes
-    ========================================================================== */
-    .splash__group {
-        position:absolute; z-index: 2; top:0; right:0; left:0; bottom:0;
-        background:#000; 
-    }
+    ================================================ */
     .splash__start {
-        position:absolute; top:0; left: 0; bottom:0; right:0;
+        position:absolute; z-index: 20;
+        top:0; left: 0; bottom:0; right:0;
         border:0; margin:0; padding:0;
-        background:none;
+        background:#000;
         width:100%; height:100%;
         cursor:pointer; 
         color:#fff; text-align: center; font-weight:bold;
     }
+F18 Fighter hello world this is some more text to fit in the title F18 Fighter hello world this isto via YouTube
+
+This guy recorded himself in an F18 fighter jet. dsafdk lasd dsfasd whe dsf asd and what happens when we overlfow the content box here? this is going to be more content than we typically have This gu.

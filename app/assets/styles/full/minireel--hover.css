@@ -73,6 +73,7 @@
         border-left:3px solid #d94040;
     }
 
+    .textLink:hover,
     .displayAdBrand__link:hover .displayAdBrand__linkLabel {
         border-bottom:1px dotted #d94040;
     }
@@ -100,10 +101,6 @@
 /*  ================================================
     misc transitions
     ================================================ */
-    .textLink:hover {
-        border-bottom:1px dotted #d94040;
-    }
-
     .btnPrimary:hover .btn__label {
         text-shadow: none;
     }
