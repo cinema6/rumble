@@ -830,7 +830,7 @@
                     vertical-align: middle;
                 }
                 .displayAdBrand__linkLabel {
-                    padding-left:0.25em;
+                    margin-left:0.25em;
                 }
 
 
@@ -1211,11 +1211,6 @@
 /*  ================================================
     recap card classes
     ================================================ */
-    .recap__group {
-
-    }
-
-
     .recap__list {
         width:100%;
         position: absolute; 
@@ -1240,7 +1235,7 @@
                 width:10em; height:7.5em;
                 background:url('../../img/default_square.jpg') 50% 50% / cover no-repeat;
                 float:left;
-                margin:0 0 0 1.875em;
+                margin:0 0 0 2.875em;
             }
                 .recap__imgBox:before {
                     counter-increment: recap;
@@ -1251,12 +1246,12 @@
                     color:#6c6c6c;
                     margin:0.6875rem 0 0 0;
                     position: absolute;
-                    left:0;
+                    left:1em;
                 }
                 .recap__imgBox--ad:after {
                     content:'Ad';
                     position: absolute;
-                    top:0.875rem; left:2rem;
+                    top:0.875rem; left:3rem;
                     background:#000; color:#fff;
                     padding:0 2px;
                     font-size:0.625rem; font-weight:bold;
@@ -1268,7 +1263,7 @@
                 }
             .recap__copyBox {
                 float:right;
-                width:calc(100% - 12.625em);
+                width:calc(100% - 13.625em);
             }
                 .recap__title {
                     font-size:1.5em;/*24px*/

@@ -11,13 +11,14 @@
                     {{card.title}}
                     <span ng-if="!card.data.hideSource" ng-show="!!card.source" class="card__attributes">via 
                         <a ng-href="{{card.webHref}}" target="_blank" 
-                        title="{{card.source}}"
+                        title="{{card.source}}" class="textLink"
                         ng-click="$event.stopPropagation()">{{card.source}}</a>
                     </span>
                     <span ng-if="!!card.params.sponsor" class="card__attributes card__attributes--sponsor">sponsored by  
                         <a ng-href="{{card.links.Website}}"
                             target="_blank"
                             title="{{card.params.sponsor}}"
+                            class="textLink"
                             ng-click="$event.stopPropagation()">
                             {{card.params.sponsor}}
                         </a>

@@ -1,7 +1,8 @@
 /*  ================================================
     background transitions
     ================================================ */
-    .btnPrimary {
+    .btnPrimary,
+    .recap__item {
         -webkit-transition:background 0.3s; 
         transition:background 0.3s;
     }
@@ -9,7 +10,8 @@
     .btnPrimary:hover {
         background-color:#fff;
     }
-    .playlist__item:hover {
+    .playlist__item:hover,
+    .recap__item:hover {
         background-color:#eee;
     }
     .playlist__item--current:hover {
@@ -67,6 +69,28 @@
     .brandProfile__logoBox:hover {
         border:1px solid #d94040;
     }
+    .recap__item:hover {
+        border-left:3px solid #d94040;
+    }
+
+    .displayAdBrand__link:hover .displayAdBrand__linkLabel {
+        border-bottom:1px dotted #d94040;
+    }
+        .tk--youtube:hover .displayAdBrand__linkLabel {
+            border-color:#e22d24;
+        }
+        .tk--vimeo:hover .displayAdBrand__linkLabel {
+            border-color:#445566;
+        }
+        .tk--facebook:hover .displayAdBrand__linkLabel {
+            border-color:#3b5998;
+        }
+        .tk--twitter:hover .displayAdBrand__linkLabel {
+            border-color:#00b0ed;
+        }
+        .tk--pinterest:hover .displayAdBrand__linkLabel {
+            border-color:#c92228;
+        }
 
 
 
