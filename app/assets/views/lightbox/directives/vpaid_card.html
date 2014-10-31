@@ -1,6 +1,7 @@
 <div class="mr-ad__group">
     <div class="mr-adVideo__group">
-        <div ng-style="{visibility: Ctrl.showVideo ? 'visible' : 'hidden'}" class="mr-player"></div>
+        <div ng-style="{visibility: Ctrl.showVideo ? 'visible' : 'hidden'}" 
+        class="mr-player js-playerBox"></div>
         <p class="mr-adVideo__label tk--hdr">Advertisement</p>
         <button style="z-index:2;" ng-if="Ctrl.enablePlayButton" ng-show="Ctrl.showPlay" ng-click="Ctrl.playVideo()" class="mr-player__play-btn">
             <div class="mr-player__play-icon">

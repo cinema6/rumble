@@ -29,8 +29,7 @@
         ng-style="{'background-image':config.thumbs.large ? 'url(' + config.thumbs.large + ')' : ''}">&nbsp;</div>
     </div>
 
-    <div class="card__copy"
-    ng-class="{'card__copy--companionAd' : hasModule('displayAd')}">
+    <div class="card__copy">
         <h1 class="card__title tk--hdr">{{config.title}}</h1>
 
         <div class="sponsorProfile__group clearfix" ng-if="!!(config.collateral.logo || config.social.length > 0 || config.params.sponsor)">

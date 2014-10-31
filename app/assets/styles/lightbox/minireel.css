@@ -25,7 +25,8 @@
     c6-copy classes : general type & color styles
     ========================================================================== */
     .tk--hdr {
-        font-family: 'Georgia', 'Times New Roman', serif; font-weight:300;
+        font-family: 'Roboto Condensed', 'Open Sans', Arial, Helvetica, sans-serif; 
+        font-weight:300;
     }
     a {
         text-decoration: none; color:#d94040;
@@ -1083,36 +1084,15 @@
                     } 
 
 
-/*  ==========================================================================
+/*  ================================================
     Splash Screen classes
-    ========================================================================== */
-    .mr-splash__group {
-        width:100%; height:8.125rem;/*130px*/ padding:0 0 63% 0;
-        position: absolute; top:0; z-index:5; min-width:18.75rem;/*300px*/ 
-        overflow:hidden;
-        background:black url('../../img/default_square.jpg') 50% 50% / cover no-repeat;
-    }
-        .mr-splash__start, .mr-splash__img {
-            position:absolute; width:100%; height:100%; top:0; left: 0; min-height: 20.625rem;/*350px*/
-            background: transparent 50% 50% / cover no-repeat;
-            border:0; margin:0; padding:0;
-        }
-            .mr-splash__start {
-                cursor:pointer;
-            }
-        .mr-splash__copy, .mr-splash__loading {
-            display:block; width: 100%; height: 0; padding: 0 0 13.5%;
-            position:absolute; top: 50%; margin-top: -7%; z-index:2;
-            border-top: #fff 4px solid; border-bottom: #fff 4px solid;
-        }
-            .mr-splash__copy {
-                background:#252626 url('../../img/click-to-start.svg') 50% 50% / 55% auto no-repeat;
-            }
-            .mr-splash__loading {
-                background:#fff url('../../img/spinner-dots.gif') 50% 50% / 2rem auto no-repeat;
-            }
-    @media screen and (max-width: 20rem) { /*320px*/
-        .mr-splash__group {
-            padding: 0 0.625em; height: 20.625rem;/*330px*/
-        }
+    ================================================ */
+    .splash__start {
+        position:absolute; z-index: 20;
+        top:0; left: 0; bottom:0; right:0;
+        border:0; margin:0; padding:0;
+        background:#000;
+        width:100%; height:100%;
+        cursor:pointer; 
+        color:#fff; text-align: center; font-weight:bold;
     }
