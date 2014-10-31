@@ -128,7 +128,7 @@
             .socialIconsBe--pinterest:before {
                 background-position: -9rem -3rem;
             }
-
+            /*
             .socialIconsBe__dark--youtube:before {
                 background-position:-1rem -1rem;
             }
@@ -144,7 +144,7 @@
             .socialIconsBe__dark--pinterest:before {
                 background-position: -9rem -1rem;
             }
-
+            */
             .socialIconsBe__light--youtube:before {
                 background-position:-1rem -5rem;
             }
@@ -415,8 +415,11 @@
         }
 
         .player__playBtn {
-            width: 6.375rem;/*68px*/ height: 5.4375rem;/*58px*/
-            padding: 0; margin: -3.875rem 0 0 -3.1875rem; border: 0; 
+            width: 6.375rem;/*68px*/ 
+            height: 5.4375rem;/*58px*/
+            padding: 0; 
+            margin: -3.875rem 0 0 -3.1875rem; 
+            border: 0; 
             cursor: pointer;
             background: rgba(0,0,0,0.8);
             position: absolute; left: 50%; top: 50%; z-index:1;
@@ -518,7 +521,7 @@
         right:0; left:19em; top:0; bottom:0;
         padding:3em 4em 1em 2em;
     }
-        .textOnly__copy .card__title {
+        .textOnly__title {
             margin:0.25em 0 0.90625em 0; 
             font-size:2em; 
             line-height: 1;

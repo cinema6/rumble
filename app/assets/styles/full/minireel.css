@@ -34,6 +34,13 @@
     img {
         border:0; max-width:100%;
     }
+    button {
+        font-size:1rem;
+        margin:0; border:0; padding:0;
+        display: inline-block;
+        cursor:pointer;
+        background:none;
+    }
 
 /*  ================================================
     c6 copy classes : general type and color styles
@@ -83,44 +90,138 @@
     .hidden {
         visibility: hidden;
     }
-    .sprite {
-        background:url('../../img/sprite--alpha@4x.png') 0 0 / 18.75rem 9.375rem no-repeat;
+    .sprite,
+    .spriteAf:after,
+    .spriteBe:before {
+        background:url('../../img/sprite--alpha@2x.png') 0 0 / 18.75rem 18.75rem no-repeat;
     }
 
 
-    .socialIcons {
-        width:1.125rem; height:1.125rem;
-        display: inline-block;
-    }
-        .socialIcons--youtube {
-            background-position:-1.125rem -1.125rem;
+        .sprite--close {
+            width:1rem; height:1rem;
+            background-position:-5rem -9rem;
+            display: inline-block;
         }
-        .socialIcons--vimeo {
-            background-position: -3.375rem -1.125rem;
+
+        .socialIconsBe:before,
+        .uiIconsBe:before {
+            content:'';
+            width:1rem; height:1rem;
+            display: inline-block;
+            vertical-align: middle;
         }
-        .socialIcons--facebook {
-            background-position: -5.625rem -1.125rem;
-        }
-        .socialIcons--twitter {
-            background-position: -7.875rem -1.125rem;
-        }
-        .socialIcons--pinterest {
-            background-position: -10.125rem -1.125rem;
-        }
+
+            .socialIconsBe--youtube:before {
+                background-position:-1rem -3rem;
+            }
+            .socialIconsBe--vimeo:before {
+                background-position: -3rem -3rem;
+            }
+            .socialIconsBe--facebook:before {
+                background-position: -5rem -3rem;
+            }
+            .socialIconsBe--twitter:before {
+                background-position: -7rem -3rem;
+            }
+            .socialIconsBe--pinterest:before {
+                background-position: -9rem -3rem;
+            }
+            /*
+            .socialIconsBe__dark--youtube:before {
+                background-position:-1rem -1rem;
+            }
+            .socialIconsBe__dark--vimeo:before {
+                background-position: -3rem -1rem;
+            }
+            .socialIconsBe__dark--facebook:before {
+                background-position: -5rem -1rem;
+            }
+            .socialIconsBe__dark--twitter:before {
+                background-position: -7rem -1rem;
+            }
+            .socialIconsBe__dark--pinterest:before {
+                background-position: -9rem -1rem;
+            }
+            */
+            .socialIconsBe__light--youtube:before {
+                background-position:-1rem -5rem;
+            }
+            .socialIconsBe__light--vimeo:before {
+                background-position: -3rem -5rem;
+            }
+            .socialIconsBe__light--facebook:before {
+                background-position: -5rem -5rem;
+            }
+            .socialIconsBe__light--twitter:before {
+                background-position: -7rem -5rem;
+            }
+            .socialIconsBe__light--pinterest:before {
+                background-position: -9rem -5rem;
+            }
+
+
+
+            .uiIconsBe--replay:before {
+                background-position:-1rem -9rem;
+            }
+            .uiIconsBe__dark--replay:before {
+                background-position:-1rem -7rem;
+            }
 
 
     .overlay {
         background:rgb(0,0,0); background:rgba(0,0,0,0.8);
-        position:absolute; width:100%; height:100%; z-index: 1; left:0;
+        position:absolute; z-index: 1;
+        left:0;
+        width:100%; height:100%; 
     }
         .overlay__closeBtn {
-            width:1.5rem; height:1.5rem;
+            width:1.125em; height:1.125em;
             position: absolute;
-            top: 0; right: 0;
-            border:0; padding:0; margin:1em;
-            cursor: pointer;
-            background-position:-87px -51px;
+            top:1em; right:1em;
         }
+
+
+    .textLink {
+        border:0;
+    }
+
+
+    .btnPrimary,
+    .btnPrimary:active,
+    .btnPrimary:focus {
+        border:3px solid #d94040;
+        background:#d94040;
+        line-height: 1;
+        text-align: center;
+        font-size: 1rem;
+    }
+        .btnPrimary .btn__label {
+            font-family: 'Roboto Condensed', 'Open Sans', Arial, Helvetica, sans-serif;
+            font-size:0.875em;
+            color:#fff;
+            font-weight:bold;
+            text-transform:uppercase;
+            text-shadow: 0 1px 1px rgba(0,0,0,0.44);
+        }
+
+
+    .btnSecondary,
+    .btnSecondary:active,
+    .btnSecondary:focus {
+        background:#d94040; 
+        color:#fff; font-weight:bold;
+        border-radius:3px;
+        display:table;
+        text-align: center; 
+        line-height:1;
+    }
+
+
+    .ui-offscreen {
+        left:-500%; top:0;
+        position: absolute;
+    }
 
 
 
@@ -243,8 +344,8 @@
                 border-bottom:1px solid #ddd;
                 cursor:pointer;
                 position: relative;
-                -webkit-transition:background 0.25s; 
-                transition:background 0.25s;
+                -webkit-transition:background 0.3s; 
+                transition:background 0.3s;
             }
                 .playlist__item:last-child {
                     border-bottom:1px solid #fff;
@@ -388,133 +489,137 @@
 
 
 /*  ================================================
-    MiniReel Cards classes
+    cards classes
     ================================================ */
-    .slides__list, .slides__item,
-    .slide__group {
+    .cards__list, .cards__item,
+    .card__group {
         margin:0; padding:0; list-style:none;
     }
-    .slides__list {
+    .cards__list {
         position: absolute;
         top:3.75em; right:20.25em; bottom:0.75em; left:0.75em;
         overflow: hidden;
     }
         @media screen and (min-width:40.0625rem) and (max-width:58.75rem) {
             /* 641px - 940px */
-            .slides__list--noAds {
+            .cards__list--noAds {
                 right:10em;
             }
         }
         @media screen and (max-width:40rem) {
             /* 640px or smaller */
-            .slides__list--noAds {
+            .cards__list--noAds {
                 right:8em;
             }
         }
 
-        .slides__list--fullWidth {
+        .cards__list--fullWidth {
             right:0.75em;
         }
 
-        .slides__item.hidden,
-        .slides__list.hidden {
+        .cards__item.hidden,
+        .cards__list.hidden {
             height:0; overflow:hidden;
         }
-        .slides__item.ng-animate {
+        .cards__item.ng-animate {
             top: 0;
         }
-        .slide__group {
+        .card__group {
             position:absolute;
             width:100%; height:100%;
         }
 
 
-        .player__group {
-            margin:0; padding:0;
-            width:100%;  position:relative;
-            background:black url('../../img/default_square.jpg') 50% 50% / cover no-repeat;
+
+
+
+/*  ================================================
+    video card classes
+    ================================================ */
+    .player__group {
+        margin:0; padding:0;
+        width:100%;  position:relative;
+        background:black url('../../img/default_square.jpg') 50% 50% / cover no-repeat;
+    }
+        
+        .player, .player__thumbnail {
+            position:absolute; width:100%; height:100%;
         }
-            
-            .player__play-btn {
-                width: 6.375rem;/*68px*/ 
-                height: 5.4375rem;/*58px*/
-                padding: 0; 
-                margin: -3.875rem 0 0 -3.1875rem; 
-                border: 0; 
-                cursor: pointer;
-                background: rgba(0,0,0,0.8);
-                position: absolute; z-index:1;
-                left: 50%; top: 50%; 
+            .player iframe {
+                width:100%; height:100%; position:absolute;
             }
-                .player__play-icon {
-                    height: 45%; width: 100%;
-                    background: url('../../img/play-icon.svg') 50% 50% / contain no-repeat;
-                }
-            .mr-player, .player__thumbnail {
-                position:absolute; width:100%; height:100%;
-            }
-                .mr-player iframe {
-                    width:100%; height:100%; position:absolute;
-                }
-                .mr-player--fly-away {
-                    left:-500%;
-                }
-            .player__thumbnail {
-                background:50% 50% / 112% auto no-repeat;
+        .player__thumbnail {
+            background:50% 50% / 112% auto no-repeat;
+        }
+
+        .player__playBtn {
+            width: 6.375rem;/*68px*/ 
+            height: 5.4375rem;/*58px*/
+            padding: 0; 
+            margin: -3.875rem 0 0 -3.1875rem; 
+            border: 0; 
+            cursor: pointer;
+            background: rgba(0,0,0,0.8);
+            position: absolute; z-index:1;
+            left: 50%; top: 50%; 
+        }
+            .player__playIcon {
+                height: 45%; width: 100%;
+                background: url('../../img/play-icon.svg') 50% 50% / contain no-repeat;
             }
 
-        .card__copy { 
-            margin:0.75em 6.75em 0;
-            overflow-y: auto; overflow-x:hidden;
-            -webkit-transition:height 0.25s; transition:height 0.25s;
+    .card__copy { 
+        margin:0.75em 6.75em 0;
+        overflow-y: auto; overflow-x:hidden;
+        -webkit-transition:height 0.25s; transition:height 0.25s;
+    }
+        .text--low .card__copy {
+            height:3.75em;
         }
-            .text--low .card__copy {
-                height:3.75em;
+        .text--med .card__copy {
+            height:5em;
+        }
+        .text--high .card__copy {
+            height:7.5em;
+        }
+
+        .card__title {
+            font-size:1.5em;/*24px*/ color:#333;
+            padding:0; margin:0.125rem 0 0.8125rem 0; line-height:1;
+        }
+        .card__attributes {
+            color:#6c6c6c; font-size:0.8125rem;/*13px*/
+        }
+        .card__desc {
+            margin:0; 
+            font-size:0.8125rem;/*13px*/ 
+            line-height:1.125rem;
+        }
+            @media screen and (min-width:40.0625rem) and (max-width:58.75rem) {
+                /* 641px - 860px */
+                .card__title {
+                    font-size:1.25em;/*20px*/
+                }
             }
-            .text--med .card__copy {
-                height:5em;
-            }
-            .text--high .card__copy {
-                height:7.5em;
+            @media screen and (max-width:40rem) {
+                /* 640px or smaller */
+                .card__title {
+                    font-size:1em;/*16px*/
+                }
             }
 
-            .card__title {
-                font-size:1.5em;/*24px*/ color:#333;
-                padding:0; margin:0.125rem 0 0.8125rem 0; line-height:1;
-            }
-            .card__attributes {
-                color:#6c6c6c; font-size:0.8125rem;/*13px*/
-            }
-            .card__desc {
-                margin:0; 
-                font-size:0.8125rem;/*13px*/ 
-                line-height:1.125rem;
-            }
-                @media screen and (min-width:40.0625rem) and (max-width:58.75rem) {
-                    /* 641px - 860px */
-                    .card__title {
-                        font-size:1.25em;/*20px*/
-                    }
-                }
-                @media screen and (max-width:40rem) {
-                    /* 640px or smaller */
-                    .card__title {
-                        font-size:1em;/*16px*/
-                    }
-                }
-
-        .player__height {
-            -webkit-transition:height 0.25s; transition:height 0.25s;
+    .player__height {
+        -webkit-transition:height 0.25s; transition:height 0.25s;
+    }
+        .text--low .player__height {
+            height:calc(100% - 4.5em);
         }
-            .text--low .player__height {
-                height:calc(100% - 4.5em);
-            }
-            .text--med .player__height {
-                height:calc(100% - 5.75em);
-            }
-            .text--high .player__height {
-                height:calc(100% - 8.25em);
-            }
+        .text--med .player__height {
+            height:calc(100% - 5.75em);
+        }
+        .text--high .player__height {
+            height:calc(100% - 8.25em);
+        }
 
 
 
@@ -677,7 +782,7 @@
                 background:#d94040; 
                 color:#fff; font-weight:bold;
                 margin:0 0 1em 0; padding:0.75em 0.5em;
-                border:0; border-radius:3px;
+                border-radius:3px;
                 display: table;
                 text-align: center; line-height:1;
             }
@@ -784,6 +889,7 @@
             }
             .brandProfile__link {
                 margin:0 0 0 0.25rem;
+                display: inline-block;
             }
 
 
@@ -808,24 +914,10 @@
                     margin-top:2.5rem;
                 }
             }
-        .textOnly__desc {
-            font-size:0.875em;
-            margin:0.75rem 0;
+        .textOnly__goBtn {
+            padding:0.5em 2em;
+            margin:1.1875em 0 0 0;
         }
-        .textOnly__btn {
-            background:#d94040; color:#fff;
-            font-size:1em; font-weight:700;
-            padding:0.75em 1.75em; margin:2em 0 3em 0;
-            display: block; border:4px solid #d94040;
-            cursor:pointer;
-            -webkit-transition:background 0.25s;
-            transition:background 0.25s;
-        }
-            .textOnly__btn:active {
-                border:4px solid #d94040;
-                background:#d94040;
-                color:#fff;
-            }
 
 
 
@@ -1020,7 +1112,7 @@
 /*  ================================================
     Ad Styles
     ================================================ */
-    .ad__group .player__play-btn {
+    .ad__group .player__playBtn {
         margin-top:-2.71875rem;
     }
     .adSkip__group {
@@ -1217,17 +1309,14 @@
                     } 
 
 
-/*  ==========================================================================
+/*  ================================================
     Splash Screen classes
-    ========================================================================== */
-    .splash__group {
-        position:absolute; z-index: 2; top:0; right:0; left:0; bottom:0;
-        background:#000; 
-    }
+    ================================================ */
     .splash__start {
-        position:absolute; top:0; left: 0; bottom:0; right:0;
+        position:absolute; z-index: 20;
+        top:0; left: 0; bottom:0; right:0;
         border:0; margin:0; padding:0;
-        background:none;
+        background:#000;
         width:100%; height:100%;
         cursor:pointer; 
         color:#fff; text-align: center; font-weight:bold;

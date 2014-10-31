@@ -1,10 +1,10 @@
-<ul class="slides__list" ng-repeat="deck in DeckCtrl.decks"
+<ul class="cards__list" ng-repeat="deck in DeckCtrl.decks"
 ng-class="{
     hidden : !deck.active,
-    'slides__list--fullWidth' : currentCard.type === 'recap',
-    'slides__list--noAds' : (!RumbleCtrl.moduleActive('displayAd') && !currentCard._data.companion)
+    'cards__list--fullWidth' : currentCard.type === 'recap',
+    'cards__list--noAds' : (!RumbleCtrl.moduleActive('displayAd') && !currentCard._data.companion)
 }">
-    <li class="slides__item" ng-repeat="item in (deck.cards | deck:deck.index:1)"
+    <li class="cards__item" ng-repeat="item in (deck.cards | deck:deck.index:1)"
         ng-class="{
             hidden : ($index !== deck.index || !deck.active),
             'text--low': item.title.length + item.note.length <= 100,
@@ -24,7 +24,7 @@ ng-class="{
 
 <button ng-click="RumbleCtrl.goBack('nav')"
 ng-show="nav.enabled"
-class="slideNav__btn slideNav__btn--prev c6-fade"
+class="btnPrimary slideNav__btn slideNav__btn--prev c6-fade"
 ng-class="{
     'slideNav__btn--small': currentCard.title.length + currentCard.note.length <= 100 || currentCard.ad,
     'slideNav__btn--med': currentCard.title.length + currentCard.note.length > 100 && currentCard.title.length + currentCard.note.length <= 200,
@@ -39,11 +39,11 @@ ng-hide="currentCard.type === 'text'">
         <path class="slideNav__iconPath" fill-rule="evenodd" clip-rule="evenodd" d="M22.971,0L0,22.971l22.971,22.97l4.243-4.243L8.485,22.971
             L27.213,4.243L22.971,0z"/>
     </svg>
-    <span class="slideNav__label">Prev</span>
+    <span class="slideNav__label btn__label">Prev</span>
 </button>
 <button ng-click="RumbleCtrl.goForward('nav')"
 ng-show="nav.enabled"
-class="slideNav__btn slideNav__btn--next c6-fade"
+class="btnPrimary slideNav__btn slideNav__btn--next c6-fade"
 ng-class="{
     'slideNav__btn--small': currentCard.title.length + currentCard.note.length <= 100 || currentCard.ad,
     'slideNav__btn--med': currentCard.title.length + currentCard.note.length > 100 && currentCard.title.length + currentCard.note.length <= 200,
@@ -57,7 +57,7 @@ ng-hide="atTail || currentCard.type === 'text'">
         <path class="slideNav__iconPath" fill-rule="evenodd" clip-rule="evenodd" d="M4.243,0l22.971,22.971L4.243,45.941L0,41.699l18.728-18.728L0,4.243
         L4.243,0z"/>
     </svg>
-    <span class="slideNav__label slideNav__label--next">Next</span>
+    <span class="slideNav__label slideNav__label--next btn__label">Next</span>
 </button>
 
 <div class="adSkip__group c6-fade" ng-show="!nav.enabled">

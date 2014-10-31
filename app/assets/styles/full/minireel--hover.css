@@ -1,8 +1,16 @@
 /*  ================================================
-    .playlist__group classes
+    background transitions
     ================================================ */
+    .btnPrimary {
+        -webkit-transition:background 0.3s; 
+        transition:background 0.3s;
+    }
+
+    .btnPrimary:hover {
+        background-color:#fff;
+    }
     .playlist__item:hover {
-        background-color:#efefef;
+        background-color:#eee;
     }
     .playlist__item--current:hover {
         background-color:#d94040;
@@ -10,8 +18,45 @@
 
 
 
+
 /*  ================================================
-    sponsored card styles
+    color transitions
+    ================================================ */
+    .titleBar__titleText,
+    .btnPrimary .btnLabel {
+        -webkit-transition:color 0.3s; transition:color 0.3s;
+    }
+
+    .titleBar__titleText:hover,
+    .btnPrimary:hover .btn__label {
+        color:#d94040;
+    }
+
+
+
+
+
+/*  ================================================
+    fill transitions
+    ================================================ */
+    .slideNav__iconPath {
+        -webkit-transition:fill 0.3s; transition:fill 0.3s;
+    }
+
+    .slideNav__btn:hover .slideNav__iconPath {
+        fill:#d94040;
+    }
+
+    .slideNav__btn--disabled:hover .slideNav__iconPath {
+        fill:#fff;
+    }
+
+
+
+
+
+/*  ================================================
+    border transitions
     ================================================ */
     .sponsorProfile__imgBox,
     .brandProfile__logoBox {
@@ -22,33 +67,19 @@
     .brandProfile__logoBox:hover {
         border:1px solid #d94040;
     }
-    .sponsor__goBtn:hover {
-        color:#fff;
-    }
+
+
+
 
 
 
 /*  ================================================
-    button styles 
+    misc transitions
     ================================================ */
-    .textOnly__btn:hover,
-    .slideNav__btn:hover {
-        background-color:#fff;
-        color:#d94040;
+    .textLink:hover {
+        border-bottom:1px dotted #d94040;
     }
-        .slideNav__btn:hover .slideNav__iconPath {
-            fill:#d94040;
-        }
 
-    .slideNav__btn:disabled:hover {
-        background:#ddd; color:#fff;
-        border:4px solid #ddd;
-    }
-        .slideNav__btn:disabled:hover .slideNav__iconPath {
-            fill:#fff;
-        }
-
-
-    .titleBar__titleText:hover {
-        color:#d94040;
+    .btnPrimary:hover .btn__label {
+        text-shadow: none;
     }
