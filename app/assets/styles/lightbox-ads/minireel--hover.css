@@ -6,16 +6,19 @@
     .brandProfile__linksBox .socialIconsBe:before,
     .ballot__btn0:before,
     .ballot__btn1:before,
-    .recap__item {
+    .recap__item,
+    .playlist__item {
         -webkit-transition:background 0.3s; transition:background 0.3s;
     }
 
     .MiniReel__closeBtn:hover,
-    .ballot__btn0:hover:before {
+    .ballot__btn0:hover:before,
+    .playlist__item.playlist__item--current:hover {
         background-color:#d94040;
     }
 
-    .recap__item:hover {
+    .recap__item:hover,
+    .playlist__item:hover {
         background-color:#eee;
     }
 
@@ -85,7 +88,7 @@
     }
 
 
-    .pagerNav__btn--disabled:hover .btn__label {
+    .nav__btn[disabled]:hover .btn__label {
         color:#fff;
     }
 
@@ -132,15 +135,15 @@
 /*  ================================================
     fill transitions
     ================================================ */
-    .pagerNav__btnIconPath {
+    .nav__btnPath {
         -webkit-transition:fill 0.3s; transition:fill 0.3s;
     }
 
-    .pagerNav__btn:hover .pagerNav__btnIconPath {
+    .nav__btn:hover .nav__btnPath {
         fill:#d94040;
     }
 
-    .pagerNav__btn--disabled:hover .pagerNav__btnIconPath {
+    .nav__btn[disabled]:hover .nav__btnPath {
         fill:#fff;
     }
 
@@ -172,23 +175,30 @@
 /*  ================================================
     position transitions
     ================================================ */
-    .pagerNav__btnIcon {
+    .nav__btnIcon {
         -webkit-transition:left 0.2s, right 0.2s, top 0.2s, bottom 0.2s; 
         transition:left 0.2s, right 0.2s, top 0.2s, bottom 0.2s; 
     }
 
-    .pagerNav__btn:hover .pagerNav__btnIcon--prev {
+    .nav__btn:hover .nav__btnIcon--prev {
+        left:44%;
+    }
+    .nav__btn:hover .nav__btnIcon--next {
+        left:56%;
+    }
+
+    .nav__btn--condensed:hover .nav__btnIcon--prev {
         left:8%;
     }
-    .pagerNav__btn:hover .pagerNav__btnIcon--next {
+    .nav__btn--condensed:hover .nav__btnIcon--next {
         right:8%;
     }
 
-    .pagerNav__btn--disabled:hover .pagerNav__btnIcon--prev {
-        left:12.5%;
+    .nav__btn--disabled:hover .nav__btnIcon--prev {
+        left:50%;
     }
-    .pagerNav__btn--disabled:hover .pagerNav__btnIcon--next {
-        right:12.5%;
+    .nav__btn--disabled:hover .nav__btnIcon--next {
+        left:50%;
     }
 
 
