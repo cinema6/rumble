@@ -1,10 +1,14 @@
-<div ng-hide="currentIndex < 0" ng-class="app.data.experience.data.theme">
+<div ng-hide="currentIndex < 0" ng-class="app.data.experience.data.theme" c6-alias="app.data.experience.data as minireel">
     <div ng-hide="showTOC" class="ui-nav-left--landscape c6-slide-bar--left css-promote">
         <div class="publisher__branding-logo">&nbsp;</div>
-        <a href="#" title="!!!!BRAND NAME!!!!" target="_blank"
-        class="brandProfile__logoBox" ng-show="false">
-            <img class="brandProfile__logo" alt="!!!!BRAND NAME!!!!"
-            src="http://images.gs-cdn.net/static/broadcasts/120_19470543-1402723544.jpg">
+        <a ng-if="!!minireel.collateral.logo"
+            href="{{minireel.links.Website}}"
+            title="{{minireel.params.sponsor}}"
+            target="_blank"
+            class="brandProfile__logoBox">
+            <img class="brandProfile__logo"
+                alt="{{minireel.params.sponsor}}"
+                ng-src="{{minireel.collateral.logo}}">
         </a>
         <button class="ui-nav__prev" title="Previous Video" type="button" c6-touch="RumbleCtrl.goBack('landscape')" ng-disabled="!nav.enabled || (app.data.standalone && tocIndex < 1)">
             <span class="ui-nav__label ui-nav__label-prev">
@@ -22,7 +26,7 @@
             <span class="sprite ui-icon__close">&nbsp;</span>
             <span class="ui-control__activator">&nbsp;</span>
         </button>
-    </div><!--.ui-nav-left--landscape-->
+    </div><!--.ui-nav-left-landscape-->
 
     <div class="ui-nav-right--landscape c6-side-bar--right css-promote">
         <button ng-class="{'ui-nav__view-list--open': showTOC}" class="ui-nav__view-list" c6-touch="showTOC = !showTOC;" title="View List Pane" type="button" ng-disabled="!nav.enabled">
@@ -44,13 +48,17 @@
         <h2 ng-hide="showTOC || tocIndex < 0" class="ui-nav__counter">
             {{tocIndex + 1}} of {{tocCards.length}}
         </h2>
-    </div><!--.ui-nav-right--landscape-->
+    </div><!--.ui-nav-right-landscape-->
 
     <div ng-hide="showTOC" class="ui-context--portrait c6-slide-bar--top css-promote">
-        <a href="#" title="!!!!BRAND NAME!!!!" target="_blank"
-        class="brandProfile__logoBox" ng-show="false">
-            <img class="brandProfile__logo" alt="!!!!BRAND NAME!!!!"
-            src="http://images.gs-cdn.net/static/broadcasts/120_19470543-1402723544.jpg">
+        <a ng-if="!!minireel.collateral.logo"
+            href="{{minireel.links.Website}}"
+            title="{{minireel.params.sponsor}}"
+            target="_blank"
+            class="brandProfile__logoBox">
+            <img class="brandProfile__logo"
+                alt="{{minireel.params.sponsor}}"
+                ng-src="{{minireel.collateral.logo}}">
         </a>
         <div class="publisher__branding-logo">&nbsp;</div>
         <button ng-click="RumbleCtrl.setPosition(-1);" ng-if="!app.data.standalone" class="ui-context__close" title="Close" type="button">
@@ -94,46 +102,24 @@
     </div><!--.ui-control-->
 </div><!-- end of the ng-hide div-->
 
-<article class="mr-container"  ng-class="app.data.experience.data.theme">
+<article class="mr-container"  ng-class="app.data.experience.data.theme" c6-alias="app.data.experience.data as minireel">
     <h3 class="mr-title tk--hdr">
-        <span class="brandedMR__tagline tk--copy"
-        ng-show="false"> 
-            <a href="#" target="_blank" title="!!!!BRAND NAME!!!!"
-            class="brandedMR__taglineBrand textLink">!!!!BRAND NAME!!!!</a> 
-                Presents
+        <span ng-if="!!minireel.params.sponsor" class="brandedMR__tagline tk--copy">
+            <a ng-href="{{minireel.links.Website}}"
+                target="_blank"
+                title="{{minireel.params.sponsor}}"
+                class="brandedMR__taglineBrand textLink">{{minireel.params.sponsor}}</a>
+                 Presents
         </span>
-        <span class="condensed">{{app.data.experience.data.title}}</span>
+        <span class="condensed">{{minireel.title}}</span>
     </h3>
-    <div class="brandProfile__linksBox" ng-show="false">
-        <a href="!!!!BRAND SOCIAL LINK!!!!"
-        title="YouTube" target="_blank"
-        class="brandProfile__link tk--youtube 
-        sprite__socialBe socialIconsBe socialIconsBe--youtube">
-            <span class="ir">YouTube</span>
-        </a>
-        <a href="!!!!BRAND SOCIAL LINK!!!!"
-        title="Vimeo" target="_blank"
-        class="brandProfile__link tk--vimeo
-        sprite__socialBe socialIconsBe socialIconsBe--vimeo">
-            <span class="ir">Vimeo</span>
-        </a>
-        <a href="!!!!BRAND SOCIAL LINK!!!!"
-        title="Facebook" target="_blank"
-        class="brandProfile__link tk--facebook
-        sprite__socialBe socialIconsBe socialIconsBe--facebook">
-            <span class="ir">Facebook</span>
-        </a>
-        <a href="!!!!BRAND SOCIAL LINK!!!!"
-        title="Twitter" target="_blank"
-        class="brandProfile__link tk--twitter
-        sprite__socialBe socialIconsBe socialIconsBe--twitter">
-            <span class="ir">Twitter</span>
-        </a>
-        <a href="!!!!BRAND SOCIAL LINK!!!!"
-        title="Pinterest" target="_blank"
-        class="brandProfile__link tk--pinterest
-        sprite__socialBe socialIconsBe socialIconsBe--pinterest">
-            <span class="ir">Pinterest</span>
+    <div ng-if="minireel.social.length > 0" class="brandProfile__linksBox">
+        <a ng-repeat="link in minireel.social"
+            ng-href="{{link.href}}"
+            title="{{link.label}}"
+            target="_blank"
+            class="brandProfile__link tk--{{link.type}} sprite__socialBe socialIconsBe socialIconsBe--{{link.type}}">
+            <span class="ir">{{link.label}}</span>
         </a>
     </div>
     <ng-include ng-controller="DeckController as DeckCtrl" src="'deck.html' | asset:'views'"></ng-include>
