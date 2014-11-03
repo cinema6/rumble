@@ -34,7 +34,7 @@
         <h1 class="card__title tk--hdr" ng-if="!config.data.hideSource">
             {{config.title}}
             <span ng-show="!!config.source" 
-            class="card__attributes">
+            class="card__attributes tk--copy">
                 via 
                 <a ng-href="{{Ctrl.videoUrl}}" target="_blank" class="textLink" 
                 title="{{config.source}}">{{config.source}}</a>
@@ -43,16 +43,19 @@
 
         <div class="sponsorProfile__group clearfix" ng-if="!!(config.collateral.logo || config.social.length > 0 || config.params.sponsor)">
             <a ng-if="!!config.collateral.logo" ng-href="{{config.links.Website}}" 
-            target="_blank" title="Sponsor link" class="sponsorProfile__imgBox">
+            target="_blank" title="{{link.label}}" class="sponsorProfile__imgBox">
                 <img ng-src="{{config.collateral.logo}}" class="sponsorProfile__img">
             </a>
             <div class="sponsorProfile__copy" ng-if="!!(config.params.sponsor || config.social.length > 0)">
-                <h1 class="card__title tk--hdr">{{config.title}}</h1>
-                <p class="sponsorProfile__tag" ng-if="!!config.params.sponsor">
+                <h1 class="card__title tk--hdr">
+                    {{config.title}}
+                </h1>
+                <div class="card__attributes sponsorProfile__tag" 
+                ng-if="!!config.params.sponsor">
                     Sponsored by 
                     <a ng-href="{{config.links.Website}}" target="_blank" 
                     title="{{config.params.sponsor}}" class="textLink">{{config.params.sponsor}}</a>
-                </p>
+                </div>
                 <div class="sponsorProfile__links" ng-if="config.social.length > 0">
                     <a ng-repeat="link in config.social"
                         title="{{link.label}}"
@@ -62,8 +65,6 @@
                         <span class="ir">{{link.label}}</span>
                     </a>
                 </div>
-                    
-            
             </div>
         </div>
 

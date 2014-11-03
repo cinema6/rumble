@@ -1,5 +1,5 @@
 <section class="ballot__box">
-    <h2 class="ballot__title tk--hdr">Voting Results:</h2>
+    <h2 class="ballot__title ballot__title--results tk--hdr">Voting Results:</h2>
 
     <ul class="ballotResults__list">
         <li class="ballotResults__item ballotResults__item{{$index}}" ng-repeat="choice in Ctrl.ballot">
@@ -11,11 +11,12 @@
         <div class="ballotResults__bar1" ng-style="{width: (Ctrl.ballot[0].votes | percent)}">&nbsp;</div>
     </div>
 
-    <a ng-click="onDismiss()" title="Watch Video Again" 
-    class="ballot__textLink ballot__textLink--replay textLink
-    spriteBe spriteBe--small uiIconsBe uiIconsBe--replay">
-        <span class="textLink__label">Watch Video Again</span>
-    </a>
+    <div class="ballot__textLinks">
+        <a ng-click="onDismiss()" title="Watch Video Again" 
+        class="ballot__textLink ballot__textLink--replay textLink
+        spriteBe spriteBe--small uiIconsBe uiIconsBe--replay">
+            <span class="textLink__label">Watch Video Again</span></a>
+    </div>
 </section>
 
 <div class="overlay" ng-click="onDismiss()">

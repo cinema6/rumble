@@ -8,34 +8,53 @@
                     <div class="recap__img" style="background-image:url({{card.thumbs.large}});">&nbsp;</div>
                 </div>
                 <div class="recap__copyBox">
-                    <h1 class="card__title tk--hdr">{{card.title}}</h1>
-                    <p ng-if="!card.data.hideSource" ng-show="!!card.source" 
-                    class="card__attributes">
-                        via 
-                        <a ng-href="{{card.webHref}}" target="_blank" 
-                        class="textLink" title="{{card.source}}">
-                            {{card.source}}
+                    <h1 class="card__title tk--hdr" 
+                    ng-if="!(card.collateral.logo || card.social.length > 0 || card.params.sponsor)">
+                        {{card.title}}
+                        <span ng-show="!!card.source" 
+                        class="card__attributes tk--copy">
+                            via 
+                            <a ng-href="{{Ctrl.videoUrl}}" target="_blank" class="textLink" 
+                            title="{{card.source}}" ng-click="$event.stopPropagation()">
+                                {{card.source}}
+                            </a>
+                        </span>
+                    </h1>
+                    
+                    <div class="sponsorProfile__group clearfix"
+                    ng-if="!!(card.collateral.logo || card.social.length > 0 || card.params.sponsor)">
+                        <a ng-if="!!card.collateral.logo" ng-href="{{card.links.Website}}" 
+                        target="_blank" title="{{link.label}}" class="sponsorProfile__imgBox"
+                        ng-click="$event.stopPropagation()">
+                            <img ng-src="{{card.collateral.logo}}" class="sponsorProfile__img">
                         </a>
-                    </p>
-                    <p ng-if="!!card.params.sponsor" class="card__attributes card__attributes--sponsor">Sponsored by  
-                        <a ng-href="{{card.links.Website}}"
-                            target="_blank" class="textLink"
-                            title="{{card.params.sponsor}}"
-                            ng-click="$event.stopPropagation()">
-                            {{card.params.sponsor}}
-                        </a>
-                    </p>
-                    <div class="recap__ballotInfo" ng-show="card.hasModule('ballot')">
-                        <h3 class="recap__ballotQuestion">Questionnaire: <strong>{{card.ballot.prompt}}</strong></h3>
-                        <p class="recap__ballotResults">
-                            <span class="recap__ballotA">
-                                {{card.ballot.choices[0]}} <strong>{{card.ballot.results[0].votes | percent}}</strong>
-                            </span> &nbsp;&nbsp;|&nbsp;&nbsp;
-                            <span class="recap__ballotB">
-                                {{card.ballot.choices[1]}} <strong>{{card.ballot.results[1].votes | percent}}</strong>
-                            </span>
-                        </p>
+                        <div class="sponsorProfile__copy" ng-if="!!(card.params.sponsor || card.social.length > 0)">
+                            <h1 class="card__title tk--hdr">
+                                {{card.title}}
+                            </h1>
+                            <div class="card__attributes sponsorProfile__tag" 
+                            ng-if="!!card.params.sponsor">
+                                Sponsored by 
+                                <a ng-href="{{card.links.Website}}" target="_blank" 
+                                title="{{card.params.sponsor}}" class="textLink"
+                                ng-click="$event.stopPropagation()">
+                                    {{card.params.sponsor}}
+                                </a>
+                            </div>
+                            <div class="sponsorProfile__links" ng-if="card.social.length > 0">
+                                <a ng-repeat="link in card.social"
+                                    title="{{link.label}}"
+                                    ng-href="{{link.href}}"
+                                    target="_blank"
+                                    ng-click="$event.stopPropagation()"
+                                    class="sponsorProfile__link spriteBe socialIconsBe socialIconsBe--{{link.type}}">
+                                    <span class="ir">{{link.label}}</span>
+                                </a>
+                            </div>
+                        </div>
                     </div>
+
+                    <div class="card__desc card__desc--recapCard" ng-bind-html="card.note"></div>
                 </div>
             </li>
         </ul>

@@ -10,15 +10,15 @@
         </li>
     </ul>
 
-    <a ng-click="onDismiss()" title="Watch Video Again" 
-    class="ballot__textLink ballot__textLink--replay textLink
-    spriteBe spriteBe--small uiIconsBe uiIconsBe--replay">
-        <span class="textLink__label">Watch Video Again</span>
-    </a>
-    <a ng-click="Ctrl.pass()" title="Show Voting Results" 
-    class="ballot__textLink ballot__textLink--results textLink">
-        <span class="textLink__label">Show Voting Results</span>
-    </a>
+    <div class="ballot__textLinks">
+        <a ng-click="onDismiss()" title="Watch Video Again" 
+        class="ballot__textLink ballot__textLink--replay textLink
+        spriteBe spriteBe--small uiIconsBe uiIconsBe--replay">
+            <span class="textLink__label">Watch Video Again</span></a>
+        <a ng-click="Ctrl.pass()" title="Show Voting Results" 
+        class="ballot__textLink ballot__textLink--results textLink">
+            <span class="textLink__label">Show Voting Results</span></a>
+    </div>
 </section>
 
 <div class="overlay" ng-click="onDismiss()">

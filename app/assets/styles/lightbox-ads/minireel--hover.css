@@ -7,13 +7,15 @@
     .ballot__btn0:before,
     .ballot__btn1:before,
     .recap__item,
-    .playlist__item {
+    .playlist__item,
+    .player__playBtn {
         -webkit-transition:background 0.3s; transition:background 0.3s;
     }
 
     .MiniReel__closeBtn:hover,
     .ballot__btn0:hover:before,
-    .playlist__item.playlist__item--current:hover {
+    .playlist__item.playlist__item--current:hover,
+    .player__playBtn:hover {
         background-color:#d94040;
     }
 
