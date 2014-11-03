@@ -1,19 +1,26 @@
-<section class="mr-results__group" ng-click="onDismiss()">
-    <h2 class="mr-results__title tk--hdr">Voting Results:</h2>
+<section class="ballot__box">
+    <h2 class="ballot__title ballot__title--results tk--hdr">Voting Results:</h2>
 
-    <ul class="mr-results__list">
-        <li class="mr-results__item mr-results__item{{$index}}" ng-repeat="choice in Ctrl.ballot">
-            <p class="mr-results__option">{{choice.name}}</p>
-            <p class="mr-results__tally">{{choice.votes | percent}}</p>
+    <ul class="ballotResults__list">
+        <li class="ballotResults__item ballotResults__item{{$index}}" ng-repeat="choice in Ctrl.ballot">
+            <p class="ballotResults__option">{{choice.name}}</p>
+            <p class="ballotResults__tally">{{choice.votes | percent}}</p>
         </li>
     </ul>
-    <div class="mr-results__meter">
-        <div class="mr-results__bar1" ng-style="{width: (Ctrl.ballot[0].votes | percent)}">&nbsp;</div>
+    <div class="ballotResults__meter">
+        <div class="ballotResults__bar1" ng-style="{width: (Ctrl.ballot[0].votes | percent)}">&nbsp;</div>
     </div>
 
-    <p class="mr-results__watch-again">
-        <a ng-click="onDismiss()" title="Watch Video Again">Watch Video Again</a>
-    </p>
-
-    <button ng-click="onDismiss()" class="sprite mr-results__close"><span class="ir">Close</span></button>
+    <div class="ballot__textLinks">
+        <a ng-click="onDismiss()" title="Watch Video Again" 
+        class="ballot__textLink ballot__textLink--replay textLink
+        spriteBe spriteBe--small uiIconsBe uiIconsBe--replay">
+            <span class="textLink__label">Watch Video Again</span></a>
+    </div>
 </section>
+
+<div class="overlay" ng-click="onDismiss()">
+    <button class="sprite sprite--close overlay__closeBtn">
+        <span class="ir">Close</span>
+    </button>
+</div>
