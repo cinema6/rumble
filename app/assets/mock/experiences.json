@@ -8,10 +8,11 @@
         "data": {
             "placementId": "3220650",
             "election": "e-d0e407bb69675b",
-            "mode": "lightbox-ads",
+            "mode": "lightbox",
             "theme": "ed-entertainment",
             "collateral": {
-                "splash": "/collateral/experiences/rumble/splash-6thumb.jpg"
+                "splash": "/collateral/experiences/rumble/splash-6thumb.jpg",
+                "logo": "http://cinema6.com/assets/img/c6-logo@2x.png"
             },
             "title": "Rumble Video",
             "conversations": [
@@ -48,6 +49,17 @@
                 }
             ],
             "autoplay": true,
+            "links": {
+                "Action": "https://portal.cinema6.com/#/apps/minireel/studio/dashboard?filter=all&limit=50&page=1",
+                "Website": "http://cinema6.com/",
+                "Facebook": "https://www.facebook.com/Cinema6Video",
+                "Twitter": "https://twitter.com/Cinema6Video",
+                "YouTube": "http://www.youtube.com/channel/UCSszI_zUkVVA24WVuTYpHTQ",
+                "Vimeo": "https://vimeo.com/user27205886"
+            },
+            "params": {
+                "sponsor": "Cinema6"
+            },
             "deck": [
                 {
                     "id": "rc-c539bacdb79a14",
@@ -214,7 +226,11 @@
                         "small": "http://upload.wikimedia.org/wikipedia/en/8/8c/Ubisoft.png",
                         "large": "http://upload.wikimedia.org/wikipedia/en/8/8c/Ubisoft.png"
                     },
+                    "params": {
+                        "sponsor": "Ubisoft"
+                    },
                     "links": {
+                        "Website": "https://www.ubisoft.com/en-US/",
                         "Facebook": "https://www.facebook.com/ubisoftus",
                         "Twitter": "https://twitter.com/Ubisoft"
                     },
@@ -608,7 +624,7 @@
         "data": {
             "election": "e-ad5c74dcb1f638",
             "title": "The 15 Most Amazing GoPro Videos Ever Recorded",
-            "mode": "lightbox-ads",
+            "mode": "lightbox",
             "theme": "ed-videos",
             "branding": "digitaljournal",
             "collateral": {
@@ -1011,7 +1027,7 @@
         "data": {
             "election": "e-5fd1f0451a0eb8",
             "title": "The 15 Most Amazing GoPro Videos Ever Recorded",
-            "mode": "lightbox-ads",
+            "mode": "lightbox",
             "placementId": "3220650",
             "theme": "ed-videos",
             "branding": "digitaljournal",
