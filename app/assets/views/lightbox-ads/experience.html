@@ -39,7 +39,7 @@ ng-class=" {
             <div class="playlist__group"
             ng-hide="currentCard.type === 'recap'"
             ng-class="{
-                'playlist__group--companionAd': RumbleCtrl.hasModule('displayAd'),
+                'playlist__group--companionAd': !!RumbleCtrl.moduleActive('displayAd'),
                 'playlist__group--videoAd' : false
             }">
                 <div class="playlist__disabler c6-fade" ng-show="!nav.enabled">&nbsp;</div>
