@@ -1,7 +1,8 @@
 <div class="experience__group"
-ng-class=" {
-    'experience__group--brandedMR' : false
-}">
+    c6-alias="app.data.experience.data as minireel"
+    ng-class=" {
+        'experience__group--brandedMR': !!minireel.params.sponsor
+    }">
     <div class="experience">
             
         <div class="MiniReel__group">
@@ -12,21 +13,28 @@ ng-class=" {
             
             <div class="titleBar__group clearfix">
                 <div class="titleBar__disabler" ng-show="!nav.enabled">&nbsp;</div>
-                <a href="#" title="!!!!BRAND NAME!!!!" target="_blank"
-                class="brandProfile__logoBox" ng-show="false">
-                    <img class="brandProfile__logo" alt="!!!!BRAND NAME!!!!"
-                    src="http://images.gs-cdn.net/static/broadcasts/120_19470543-1402723544.jpg">
+                <a ng-if="!!minireel.collateral.logo"
+                    ng-href="{{minireel.links.Website}}"
+                    title="{{minireel.params.sponsor}}"
+                    target="_blank"
+                    class="brandProfile__logoBox">
+                    <img class="brandProfile__logo"
+                        alt="{{minireel.params.sponsor}}"
+                        ng-src="{{minireel.collateral.logo}}">
                 </a>
                 <h1 class="titleBar__title">
-                    <span class="brandedMR__tagline"
-                    ng-show="false">
-                        <a href="#" target="_blank" title="!!!!BRAND NAME!!!!"
-                        class="brandedMR__taglineBrand textLink">!!!!BRAND NAME!!!!</a> 
+                    <span ng-if="!!minireel.params.sponsor" class="brandedMR__tagline">
+                        <a ng-href="{{minireel.links.Website}}"
+                            target="_blank"
+                            title="{{minireel.params.sponsor}}"
+                            class="brandedMR__taglineBrand textLink">
+                            {{minireel.params.sponsor}}
+                        </a>
                         Presents
                     </span>
-                    <span ng-click="RumbleCtrl.jumpTo(tocCards[0])" 
-                    class="titleBar__titleText tk--hdr">
-                        {{app.data.experience.data.title}}
+                    <span ng-click="RumbleCtrl.jumpTo(tocCards[0])"
+                        class="titleBar__titleText tk--hdr">
+                        {{minireel.title}}
                     </span>
                 </h1>
                 <div class="publisherProfile__logoBox">&nbsp;</div>
@@ -92,41 +100,20 @@ ng-class=" {
             
         </div><!--.MiniReel__group-->
 
-        <div class="brandProfile__linksBox" ng-show="false">
-            <a href="!!!!BRAND OFFICIAL LINK!!!!"
-            title="!!!!BRAND NAME!!!! - Official Website"
-            target="_blank" class="brandProfile__link">
+        <div ng-if="minireel.social.length > 0 || !!minireel.links.Website" class="brandProfile__linksBox">
+            <a ng-if="!!minireel.links.Website"
+                ng-href="{{minireel.links.Website}}"
+                title="{{minireel.params.sponsor}} - Official Website"
+                target="_blank"
+                class="brandProfile__link">
                 <span class="brandProfile__linkLabel">Official Website</span>
             </a>
-            <a href="!!!!BRAND SOCIAL LINK!!!!"
-            title="YouTube" target="_blank"
-            class="brandProfile__link tk--youtube 
-            spriteBe socialIconsBe socialIconsBe__light--youtube">
-                <span class="brandProfile__linkLabel">YouTube</span>
-            </a>
-            <a href="!!!!BRAND SOCIAL LINK!!!!"
-            title="Vimeo" target="_blank"
-            class="brandProfile__link tk--vimeo
-            spriteBe socialIconsBe socialIconsBe__light--vimeo">
-                <span class="brandProfile__linkLabel">Vimeo</span>
-            </a>
-            <a href="!!!!BRAND SOCIAL LINK!!!!"
-            title="Facebook" target="_blank"
-            class="brandProfile__link tk--facebook
-            spriteBe socialIconsBe socialIconsBe__light--facebook">
-                <span class="brandProfile__linkLabel">Facebook</span>
-            </a>
-            <a href="!!!!BRAND SOCIAL LINK!!!!"
-            title="Twitter" target="_blank"
-            class="brandProfile__link tk--twitter
-            spriteBe socialIconsBe socialIconsBe__light--twitter">
-                <span class="brandProfile__linkLabel">Twitter</span>
-            </a>
-            <a href="!!!!BRAND SOCIAL LINK!!!!"
-            title="Pinterest" target="_blank"
-            class="brandProfile__link tk--pinterest
-            spriteBe socialIconsBe socialIconsBe__light--pinterest">
-                <span class="brandProfile__linkLabel">Pinterest</span>
+            <a ng-repeat="link in minireel.social"
+                ng-href="{{link.href}}"
+                title="{{link.label}}"
+                target="_blank"
+                class="brandProfile__link tk--{{link.type}} spriteBe socialIconsBe socialIconsBe__light--{{link.type}}">
+                <span class="brandProfile__linkLabel">{{link.label}}</span>
             </a>
         </div>
 
