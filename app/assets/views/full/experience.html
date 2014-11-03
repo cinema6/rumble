@@ -1,4 +1,7 @@
-<div class="MiniReel" ng-class="app.data.experience.data.theme">
+<div class="MiniReel"
+ng-class=" {
+    'MiniReel__group--brandedMR' : false
+}">
     
 
     <header class="titleBar__group clearfix">
@@ -8,8 +11,7 @@
         c6-bg-img="{{app.data.experience.data.collateral.splash | envroot}}">
             &nbsp;
         </div>
-        <h1 class="titleBar__title"
-        ng-class="{'titleBar__title--brandedMR' : false}">
+        <h1 class="titleBar__title">
             <span class="brandedMR__tagline"
             ng-show="false">
                 <a href="#" target="_blank" title="!!!!BRAND NAME!!!!"

@@ -481,15 +481,8 @@
         .companionAd__group {
             width:18.75em;
             position:absolute;
-            right:0; bottom:0; top:auto;
+            right:0; bottom:0.75em;
         }
-            .companionAd__group--videoAd {
-                top:0; bottom:auto;
-            }
-            .companionAd__group--videoAd .displayAd__label {
-                position:absolute;
-                top:15.625rem;
-            }
 
 
         .adSkip__group {
@@ -666,8 +659,8 @@
         top:0; bottom:3.25em;
         overflow-y:auto; overflow-x:hidden;
         margin:0; padding:0; list-style: none;
-        border-bottom:4px solid #333;
-        border-top:4px solid #333;
+        border-bottom:3px solid #333;
+        border-top:3px solid #333;
         counter-reset: recap;
     }
         .recap__item {
@@ -742,9 +735,6 @@
     }
         .playlist__group--companionAd {
             bottom:17.25em;
-        }
-        .playlist__group--videoAd {
-            top:18em;
         }
 
 

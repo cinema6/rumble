@@ -49,6 +49,9 @@
         font-family: 'Roboto Condensed', 'Open Sans', Arial, Helvetica, sans-serif; 
         font-weight:300;
     }
+    .tk--copy {
+        font-family: 'Open Sans', Arial, Helvetica, sans-serif;
+    }
     a {
         text-decoration: none; color:#d94040;
     }
@@ -250,12 +253,12 @@
         -webkit-box-shadow: 0 1px 3px 0 rgba(0,0,0,0.5);
         box-shadow: 0 1px 3px 0 rgba(0,0,0,0.5);
         background:#fff;
-        height:3.75em;
-        position:absolute; z-index:10;
+        height:4em;
+        position:absolute; z-index:5;
         top:0; left:0; right:0;
     }
         .titleBar__splashImg {
-            margin:0.375em 0.75em 0.375em 0.375em;
+            margin:0.5em;
             width:4em; height:3em;
             background:50% 50% / cover no-repeat;
             float:left;
@@ -264,7 +267,7 @@
         .titleBar__title {
             margin:0.875em 0 0 0;
             float:left;
-            width:calc(100% - 5.125em);
+            width:calc(100% - 5em);
             text-overflow: ellipsis;
             white-space: nowrap;
             overflow: hidden;
@@ -273,8 +276,10 @@
             .titleBar__titleText {
                 cursor:pointer;
                 font-size:1.25em;
-                -webkit-transition:color 0.25s; transition:color 0.25s;
-                color:#333;
+                color:#000;
+                display:inline-block;
+                margin:0.1em 0 0 0;
+                line-height:1.2;
             }
 
         .titleBar__disabler {
@@ -300,18 +305,6 @@
         .playlist__group--noAds {
             bottom:0.75em;
         }
-        @media screen and (min-width:40.0625rem) and (max-width:58.75rem) {
-            /* 641px - 940px */
-            .playlist__group--noAds {
-                width:8.5em;
-            }
-        }
-        @media screen and (max-width:40rem) {
-            /* 640px or smaller */
-            .playlist__group--noAds {
-                width:6.5em;
-            }
-        }
 
 
         .playlistHead__group {
@@ -320,7 +313,7 @@
         }
             .playlistHead__title {
                 font-size:0.8125em; font-weight:700;
-                color:#333;
+                color:#000;
                 margin:0;
                 float:left;
             }
@@ -359,30 +352,30 @@
                 .playlist__thumbHolder,
                 .playlist__thumb {
                     background:50% 50% / cover no-repeat;
-                    width:5em; height:3.75em;
+                    width:4em; height:3em;
                     display: block;
                 }
                     .playlist__thumbHolder {
                         background-image:url('../../img/default_square.jpg');
                         float:left;
-                        margin:0.375em 0.625em 0.3125em 1.875em;
+                        margin:0.5em 0.5em 0.5em 1.75em;
                     }
                         .playlist__thumbHolder:before {
                             counter-increment: playlist;
                             content:counter(playlist);
                             display:block;
-                            width:2.4em;
+                            width:2em;
                             font-size:0.625em;
                             text-align: right;
                             color:#6c6c6c;
-                            margin:0.7em 0 0 0;
+                            margin:0.5em 0 0 0;
                             position: absolute;
                             left:0;
                         }
                         .playlist__thumbHolder--ad:after {
                             content:'Ad';
                             position: absolute;
-                            top:0.5rem; left:2rem;
+                            top:1em; left:3em;
                             background:#000; color:#fff;
                             padding:0 2px;
                             font-size:0.625rem; font-weight:bold;
@@ -391,52 +384,20 @@
                                 color:#fff;
                             }
                         
-                        @media screen and (min-width:40.0625rem) and (max-width:58.75rem) {
-                            /* 641px - 940px */
-                            .playlist__group--noAds .playlist__thumbHolder {
-                                float:none;
-                                margin:0.375em 0 0.3125em 1.875em;
-                            }
-                        }
-                        @media screen and (max-width:40rem) {
-                            /* 640px or smaller */
-                            .playlist__group--noAds .playlist__thumbHolder {
-                                float:none;
-                                margin:0.375em auto 0.3125em auto;
-                            }
-                            .playlist__group--noAds .playlist__thumbHolder:before {
-                                display: none;
-                            }
-                        }
-                        
                         
 
                 .playlist__copy {
                     float:left;
-                    width:calc(100% - 7.5em);
+                    width:calc(100% - 6.25em);
                 }
-                    @media screen and (min-width:40.0625rem) and (max-width:58.75rem) {
-                        /* 641px - 940px */
-                        .playlist__group--noAds .playlist__copy {
-                            float:none;
-                            width:auto;
-                            margin:0.75em;
-                        }
-                    }
-                    @media screen and (max-width:40rem) {
-                        /* 640px or smaller */
-                        .playlist__group--noAds .playlist__copy {
-                            display:none;
-                        }
-                    }
                     .playlist__title {
-                        color:#333;
-                        font-size:0.8125em;
+                        color:#000;
+                        font-size:0.875em;
                         line-height: 1rem;
                         margin:0.6875rem 0 1px 0;
                     }
                         .playlist__link {
-                            color:#333;
+                            color:#000;
                         }
                             .playlist__item--current .playlist__link {
                                 color:#fff;
@@ -458,7 +419,8 @@
         .playlist__disabler {
             background:#fff; background:rgba(255,255,255,0.85);
             position:absolute; z-index: 1;
-            width:100%; height:100%;
+            top:0; bottom:-2px;
+            width:100%;
         }
 
 
@@ -470,19 +432,26 @@
     Companion Ad classes
     ================================================ */
     .companionAd__group {
-        width:300px;
+        width:18.75em;
         position:absolute;
-        right:0.75em; bottom:0;
+        right:0.75em; bottom:0.75em;
     }
-        .companionAd {
-            width:300px; height:250px;
-            background:#ccc;
-        } 
-        .companionAd__label {
-            color:#ccc;
-            font-size:0.6875em; text-align: center;
-            margin:0;
+        .displayAd__label {
+            font-size:0.625em;
+            color:#999;
+            text-align: center;
+            width:100%;
+            display: block;
         }
+
+        .displayAd__box {
+            width:18.75em; height:15.625em;
+            margin:0 auto;
+        }
+            .displayAd__box iframe {
+                width:100%; height:100%;
+                border:0;
+            }
 
 
 
@@ -497,7 +466,7 @@
     }
     .cards__list {
         position: absolute;
-        top:3.75em; right:20.25em; bottom:0.75em; left:0.75em;
+        top:4em; right:20.25em; bottom:0.75em; left:0.75em;
         overflow: hidden;
     }
         @media screen and (min-width:40.0625rem) and (max-width:58.75rem) {
@@ -584,11 +553,14 @@
         }
 
         .card__title {
-            font-size:1.5em;/*24px*/ color:#333;
-            padding:0; margin:0.125rem 0 0.8125rem 0; line-height:1;
+            font-size:1.5em;/*24px*/ 
+            color:#000;
+            padding:0; margin:0.125rem 0 0 0; 
+            line-height:1;
         }
         .card__attributes {
-            color:#6c6c6c; font-size:0.8125rem;/*13px*/
+            color:#999; 
+            font-size:0.8125rem;/*13px*/
         }
         .card__desc {
             margin:0; 
@@ -746,7 +718,7 @@
     sponsored card styles
     ================================================ */
     .sponsorProfile__group {
-        margin:0.6875em 0;
+        margin:0;
     }
 
 
@@ -764,27 +736,34 @@
             }
 
 
-        .sponsorProfile__tag {
-            font-size:0.75em; color:#999;
-            margin:0.125rem 0 0.25rem 0;
+        .sponsorProfile__copy {
+            float:left;
+            width:calc(100% - 3.625em);
         }
-        
-        .sponsorProfile__link {
-            border:0;
-            margin:0 0.25rem 0 0;
+
+        .sponsorProfile__links {
+            line-height: 1;
+            margin:0;
         }
+            .sponsorProfile__tag {
+                margin:0.125rem 0.5rem 0 0;
+                float:left;
+            }
+            .sponsorProfile__link {
+                border:0;
+                float:left;
+                padding: 0 0.125em;
+            }
 
 
         .sponsor__actions {
             margin:1em 0;
         }
             .sponsor__goBtn {
-                background:#d94040; 
-                color:#fff; font-weight:bold;
-                margin:0 0 1em 0; padding:0.75em 0.5em;
+                margin:0 0 1em 0;
+                padding:0.25em 1em;
                 border-radius:3px;
-                display: table;
-                text-align: center; line-height:1;
+                display:table;
             }
 
 
@@ -840,8 +819,8 @@
 /*  ================================================
     Branded MR classes
     ================================================ */
-    .titleBar__title--brandedMR {
-        margin:0.6875em 0 0 0;
+    .MiniReel__group--brandedMR .titleBar__title {
+        margin:0.8125em 0 0 0;
         width:calc(100% - 24em);
     }
 
@@ -860,36 +839,36 @@
 
     .brandProfile__group {
         float:right;
-        width:300px;
+        width:18.75em;
         margin:0;
         position:relative;
     }
 
         .brandProfile__logoBox {
-            width:50px; height:50px;
+            width:3em; height:3em;
             border:1px solid #ddd;
             display: block;
             position:absolute;
-            top:5px; right:5px;
+            top:0.5em; right:0.5em;
         }
             .brandProfile__logo {
-                width:48px; height:48px;
+                width:2.875em; height:2.875em;
                 display: block;
             }
 
 
         .brandProfile__linksBox {
             position:absolute;
-            top:0.375em; right:68px;
-            text-align: right;
+            top:0.375em; right:4.25em;
         }
 
             .brandProfile__brandURL {
                 font-weight:bold; font-size:0.8125em;
             }
             .brandProfile__link {
-                margin:0 0 0 0.25rem;
-                display: inline-block;
+                padding:0 0.25rem;
+                float:right;
+                line-height:1;
             }
 
 
@@ -904,7 +883,7 @@
         overflow-y: auto; overflow-x:hidden;
     }
         .textOnly__title {
-            color:#333; 
+            color:#000; 
             font-size:2.25em; line-height:1;
             margin:5.5625rem 0 1.5rem 0;
         }
@@ -1232,76 +1211,47 @@
 
 
             .recap__imgBox {
-                width:10em; height:7.5em;
+                width:8em; height:5em;
                 background:url('../../img/default_square.jpg') 50% 50% / cover no-repeat;
                 float:left;
-                margin:0 0 0 2.875em;
+                margin:0 1em 0 3em;
             }
                 .recap__imgBox:before {
                     counter-increment: recap;
                     content:counter(recap);
                     display:block;
-                    width:2.5em;
+                    width:2em;
                     font-size:0.75em;
+                    text-align: right;
                     color:#6c6c6c;
-                    margin:0.6875rem 0 0 0;
+                    margin:7px 0 0 0;
                     position: absolute;
-                    left:1em;
+                    left:0.5rem;
                 }
-                .recap__imgBox--ad:after {
+                .recap__item--ad .recap__imgBox:after {
                     content:'Ad';
                     position: absolute;
-                    top:0.875rem; left:3rem;
+                    top:1.8em; left:5em;
                     background:#000; color:#fff;
                     padding:0 2px;
                     font-size:0.625rem; font-weight:bold;
                 }
 
                 .recap__img {
-                    width:10em; height:7.5em;
+                    width:8em; height:5em;
+                    display: block;
                     background: 50% 50% / cover no-repeat;
                 }
             .recap__copyBox {
-                float:right;
-                width:calc(100% - 13.625em);
+                float:left;
+                width:calc(100% - 13em);
             }
-                .recap__title {
-                    font-size:1.5em;/*24px*/
-                    line-height: 1;
-                    margin:0.125em 0 0.5em; padding:0;
-                    color:#333;
+                .card__desc--recapCard {
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    margin-top:0.25rem;
                 }
-                    @media screen and (min-width:40.0625rem) and (max-width:58.75rem) {
-                        /* 641px - 940px */
-                        .recap__title {
-                            font-size:1.25em;
-                        }
-                    }
-                    @media screen and (max-width:40rem) {
-                        /* 640px or smaller */
-                        .recap__title {
-                            font-size:1em;
-                        }
-                    }
-                .recap__ballotInfo {
-                    font-size:0.875em;
-                }
-                    .recap__ballotQuestion {
-                        font-size:1em; font-weight:normal;
-                        margin:0;
-                    }
-                        .recap__ballotQuestion strong {
-                            font-style:italic;
-                        }
-                    .recap__ballotResults {
-                        margin:0;
-                    }
-                    .recap__ballotA {
-                        color:#8ac12a;
-                    }
-                    .recap__ballotB {
-                        color:#19cbe6;
-                    } 
 
 
 /*  ================================================

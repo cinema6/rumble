@@ -32,14 +32,13 @@
     </div>
 
     <div class="card__copy">
-        <h1 class="card__title tk--hdr">
+        <h1 class="card__title tk--hdr" ng-if="!config.data.hideSource">
             {{config.title}}
-            <span ng-if="!config.data.hideSource" ng-show="!!config.source" class="card__attributes">
+            <span ng-show="!!config.source" 
+            class="card__attributes tk--copy">
                 via 
-                <a ng-href="{{Ctrl.videoUrl}}" target="_blank" 
-                title="{{config.source}}" class="textLink">
-                    {{config.source}}
-                </a>
+                <a ng-href="{{Ctrl.videoUrl}}" target="_blank" class="textLink" 
+                title="{{config.source}}">{{config.source}}</a>
             </span>
         </h1>
         <div class="sponsorProfile__group clearfix" ng-if="config.collateral.logo || config.social.length > 0 || config.params.sponsor">
@@ -47,13 +46,16 @@
                 <img ng-src="{{config.collateral.logo}}" class="sponsorProfile__img">
             </a>
             <div class="sponsorProfile__copy" ng-if="config.params.sponsor || config.social.length > 0">
-                <p class="sponsorProfile__tag" ng-if="config.params.sponsor">
+                <h1 class="card__title tk--hdr">
+                    {{config.title}}
+                </h1>
+                <div class="card__attributes sponsorProfile__tag" ng-if="config.params.sponsor">
                     Sponsored by 
                     <a ng-href="{{config.links.Website}}" class="textLink"
                     title="{{config.params.sponsor}}" target="_blank">
                         {{config.params.sponsor}}
                     </a>
-                </p>
+                </div>
                 <div class="sponsorProfile__links" ng-if="config.social.length > 0">
                     <a ng-repeat="link in config.social"
                         title="{{link.label}}"
