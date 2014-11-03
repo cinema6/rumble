@@ -1,6 +1,11 @@
 <div ng-hide="currentIndex < 0" ng-class="app.data.experience.data.theme">
     <div ng-hide="showTOC" class="ui-nav-left--landscape c6-slide-bar--left css-promote">
         <div class="publisher__branding-logo">&nbsp;</div>
+        <a href="#" title="!!!!BRAND NAME!!!!" target="_blank"
+        class="brandProfile__logoBox" ng-show="false">
+            <img class="brandProfile__logo" alt="!!!!BRAND NAME!!!!"
+            src="http://images.gs-cdn.net/static/broadcasts/120_19470543-1402723544.jpg">
+        </a>
         <button class="ui-nav__prev" title="Previous Video" type="button" c6-touch="RumbleCtrl.goBack('landscape')" ng-disabled="!nav.enabled || (app.data.standalone && tocIndex < 1)">
             <span class="ui-nav__label ui-nav__label-prev">
                 Prev
@@ -42,6 +47,11 @@
     </div><!--.ui-nav-right--landscape-->
 
     <div ng-hide="showTOC" class="ui-context--portrait c6-slide-bar--top css-promote">
+        <a href="#" title="!!!!BRAND NAME!!!!" target="_blank"
+        class="brandProfile__logoBox" ng-show="false">
+            <img class="brandProfile__logo" alt="!!!!BRAND NAME!!!!"
+            src="http://images.gs-cdn.net/static/broadcasts/120_19470543-1402723544.jpg">
+        </a>
         <div class="publisher__branding-logo">&nbsp;</div>
         <button ng-click="RumbleCtrl.setPosition(-1);" ng-if="!app.data.standalone" class="ui-context__close" title="Close" type="button">
             <span class="ui-context__label ui-context__label-close">
@@ -85,6 +95,47 @@
 </div><!-- end of the ng-hide div-->
 
 <article class="mr-container"  ng-class="app.data.experience.data.theme">
+    <h3 class="mr-title tk--hdr">
+        <span class="brandedMR__tagline tk--copy"
+        ng-show="false"> 
+            <a href="#" target="_blank" title="!!!!BRAND NAME!!!!"
+            class="brandedMR__taglineBrand textLink">!!!!BRAND NAME!!!!</a> 
+                Presents
+        </span>
+        <span class="condensed">{{app.data.experience.data.title}}</span>
+    </h3>
+    <div class="brandProfile__linksBox" ng-show="false">
+        <a href="!!!!BRAND SOCIAL LINK!!!!"
+        title="YouTube" target="_blank"
+        class="brandProfile__link tk--youtube 
+        sprite__socialBe socialIconsBe socialIconsBe--youtube">
+            <span class="ir">YouTube</span>
+        </a>
+        <a href="!!!!BRAND SOCIAL LINK!!!!"
+        title="Vimeo" target="_blank"
+        class="brandProfile__link tk--vimeo
+        sprite__socialBe socialIconsBe socialIconsBe--vimeo">
+            <span class="ir">Vimeo</span>
+        </a>
+        <a href="!!!!BRAND SOCIAL LINK!!!!"
+        title="Facebook" target="_blank"
+        class="brandProfile__link tk--facebook
+        sprite__socialBe socialIconsBe socialIconsBe--facebook">
+            <span class="ir">Facebook</span>
+        </a>
+        <a href="!!!!BRAND SOCIAL LINK!!!!"
+        title="Twitter" target="_blank"
+        class="brandProfile__link tk--twitter
+        sprite__socialBe socialIconsBe socialIconsBe--twitter">
+            <span class="ir">Twitter</span>
+        </a>
+        <a href="!!!!BRAND SOCIAL LINK!!!!"
+        title="Pinterest" target="_blank"
+        class="brandProfile__link tk--pinterest
+        sprite__socialBe socialIconsBe socialIconsBe--pinterest">
+            <span class="ir">Pinterest</span>
+        </a>
+    </div>
     <ng-include ng-controller="DeckController as DeckCtrl" src="'deck.html' | asset:'views'"></ng-include>
     <ng-switch on="app.state">
         <div class="splash-screen" ng-switch-when="splash">

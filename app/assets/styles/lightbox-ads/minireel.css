@@ -330,15 +330,6 @@
         }
 
 
-        .brandProfile__logoBox {
-            width:2.5em; height:2.5em;
-            display: block;
-            float:left;
-        }
-            .brandProfile__logo {
-                display: block;
-                width:2.5em; height:2.5em;
-            }
 
 
         .titleBar__title {
@@ -1073,6 +1064,16 @@
                 .brandedMR__taglineBrand {
                     font-weight:bold;
                 }
+
+        .brandProfile__logoBox {
+            width:2.5em; height:2.5em;
+            display: block;
+            float:left;
+        }
+            .brandProfile__logo {
+                display: block;
+                width:2.5em; height:2.5em;
+            }
 
 
     .experience__group--brandedMR .cards__group {
