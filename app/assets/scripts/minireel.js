@@ -93,9 +93,27 @@ function( angular , c6Defines  , tracker ,
                                  'c6ImagePreloader','envrootFilter',
     function                    ( InflectorService , VideoThumbService , $q ,
                                   c6ImagePreloader , envrootFilter ) {
+        var MiniReelService = this;
+
         function isSet(value) {
             return isDefined(value) && value !== null;
         }
+
+        this.createSocialLinks = function(links) {
+            var social = ['Facebook', 'Pinterest', 'Twitter', 'YouTube', 'Vimeo'];
+
+            return Object.keys(links || {})
+                .filter(function(label) {
+                    return social.indexOf(label) > -1;
+                })
+                .map(function(label) {
+                    return {
+                        label: label,
+                        type: label.toLowerCase(),
+                        href: links[label]
+                    };
+                });
+        };
 
         this.createDeck = function(data) {
             var playlist = angular.copy(data.deck),
@@ -151,19 +169,7 @@ function( angular , c6Defines  , tracker ,
             }
 
             function setSocial(card) {
-                var social = ['Facebook', 'Pinterest', 'Twitter', 'YouTube', 'Vimeo'];
-
-                card.social = Object.keys(card.links || {})
-                    .filter(function(label) {
-                        return social.indexOf(label) > -1;
-                    })
-                    .map(function(label) {
-                        return {
-                            label: label,
-                            type: label.toLowerCase(),
-                            href: card.links[label]
-                        };
-                    });
+                card.social = MiniReelService.createSocialLinks(card.links);
             }
 
             function setDefaults(card) {
@@ -354,6 +360,7 @@ function( angular , c6Defines  , tracker ,
                                      c6Computed , cinema6 , MiniReelService , trackerService ) {
         var self = this,
             appData = $scope.app.data,
+            experience = appData.experience,
             election = appData.experience.data.election,
             c = c6Computed($scope),
             tracker = trackerService('c6mr'),
@@ -598,9 +605,10 @@ function( angular , c6Defines  , tracker ,
         $log = $log.context('RumbleCtrl');
 
         $scope.deviceProfile    = appData.profile;
-        $scope.title            = appData.experience.data.title;
+        $scope.title            = experience.data.title;
 
-        $scope.deck             = MiniReelService.createDeck(appData.experience.data);
+        $scope.deck             = MiniReelService.createDeck(experience.data);
+        experience.data.social = MiniReelService.createSocialLinks(experience.data.links);
 
         MasterDeckCtrl = new MasterDeckController();
 
