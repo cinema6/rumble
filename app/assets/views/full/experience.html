@@ -1,8 +1,8 @@
 <div class="MiniReel"
-ng-class=" {
-    'MiniReel__group--brandedMR' : false
-}">
-    
+    c6-alias="app.data.experience.data as minireel"
+    ng-class=" {
+        'MiniReel__group--brandedMR': !!minireel.params.sponsor
+    }">
 
     <header class="titleBar__group clearfix">
         <div class="titleBar__disabler" ng-show="!nav.enabled">&nbsp;</div>
@@ -13,9 +13,9 @@ ng-class=" {
         </div>
         <h1 class="titleBar__title">
             <span class="brandedMR__tagline"
-            ng-show="false">
-                <a href="#" target="_blank" title="!!!!BRAND NAME!!!!"
-                class="brandedMR__taglineBrand">!!!!BRAND NAME!!!!</a> 
+                ng-if="!!minireel.params.sponsor">
+                <a ng-href="{{minireel.links.Website}}" target="_blank" title="{{minireel.params.sponsor}}"
+                class="brandedMR__taglineBrand">{{minireel.params.sponsor}}</a> 
                 Presents
             </span>
             <span ng-click="RumbleCtrl.jumpTo(tocCards[0])" 
@@ -23,47 +23,28 @@ ng-class=" {
                 {{app.data.experience.data.title}}
             </span>
         </h1>
-        <div class="brandProfile__group" ng-show="false">
-            <a href="#" title="!!!!BRAND NAME!!!!" target="_blank"
-            class="brandProfile__logoBox">
-                <img class="brandProfile__logo" alt="!!!!BRAND NAME!!!!"
-                src="http://images.gs-cdn.net/static/broadcasts/120_19470543-1402723544.jpg">
+        <div class="brandProfile__group" ng-if="!!minireel.params.sponsor || minireel.social.length > 0 || !!minireel.collateral.logo">
+            <a ng-if="!!minireel.collateral.logo"
+                ng-href="{{minireel.links.Website}}"
+                title="{{minireel.params.sponsor}}"
+                target="_blank"
+                class="brandProfile__logoBox">
+                <img class="brandProfile__logo" alt="{{minireel.params.sponsor}}" ng-src="{{minireel.collateral.logo}}">
             </a>
             <div class="brandProfile__linksBox">
-                <a href="!!!!BRAND SITE URL!!!!" title="!!!!BRAND NAME!!!!"
-                target="_blank" class="brandProfile__brandURL">
-                    !!!!BRAND NAME!!!!
+                <a ng-if="!!minireel.params.sponsor"
+                    ng-href="{{minireel.links.Website}}"
+                    title="{{minireel.params.sponsor}}"
+                    target="_blank"
+                    class="brandProfile__brandURL">
+                    {{minireel.params.sponsor}}
                 </a>
-                <div class="brandProfile__links">
-                    <a href="!!!!BRAND SOCIAL LINK!!!!"
-                    title="YouTube" target="_blank"
-                    class="brandProfile__link 
-                    spriteBe socialIconsBe socialIconsBe--youtube">
-                        <span class="ir">YouTube</span>
-                    </a>
-                    <a href="!!!!BRAND SOCIAL LINK!!!!"
-                    title="Vimeo" target="_blank"
-                    class="brandProfile__link
-                    spriteBe socialIconsBe socialIconsBe--vimeo">
-                        <span class="ir">Vimeo</span>
-                    </a>
-                    <a href="!!!!BRAND SOCIAL LINK!!!!"
-                    title="Facebook" target="_blank"
-                    class="brandProfile__link
-                    spriteBe socialIconsBe socialIconsBe--facebook">
-                        <span class="ir">Facebook</span>
-                    </a>
-                    <a href="!!!!BRAND SOCIAL LINK!!!!"
-                    title="Twitter" target="_blank"
-                    class="brandProfile__link
-                    spriteBe socialIconsBe socialIconsBe--twitter">
-                        <span class="ir">Twitter</span>
-                    </a>
-                    <a href="!!!!BRAND SOCIAL LINK!!!!"
-                    title="Pinterest" target="_blank"
-                    class="brandProfile__link
-                    spriteBe socialIconsBe socialIconsBe--pinterest">
-                        <span class="ir">Pinterest</span>
+                <div ng-if="minireel.social.length > 0" class="brandProfile__links">
+                    <a ng-repeat="link in minireel.social"
+                        ng-href="{{link.href}}"
+                        title="{{link.label}}" target="_blank"
+                        class="brandProfile__link spriteBe socialIconsBe socialIconsBe--{{link.type}}">
+                        <span class="ir">{{link.label}}</span>
                     </a>
                 </div>
             </div>
