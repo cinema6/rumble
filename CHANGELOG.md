@@ -1,5 +1,8 @@
 # MiniReel Player
 
+* *[v1.5.0.rc1]*
+  * [FEATURE]: added styles for branded MiniReels in mobile, lightbox, and full templates
+
 ## v1.4.0 (October 29, 2014)
 * *[v1.4.0.rc2]*
   * [FEATURE]: Added support for Pinterest social links
