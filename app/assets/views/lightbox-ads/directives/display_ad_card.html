@@ -1,50 +1,32 @@
 <div class="displayAdCard__group">
-    <p class="displayAdBrand__tagline">Presented by
-        <a href="!!!!BRAND LINK!!!!" target="_blank" 
-        class="displayAdBrand__taglineLink textLink"
-        title="!!!!BRAND NAME!!!!">
-            !!!!BRAND NAME!!!!
+    <p ng-if="!!config.params.sponsor"
+        class="displayAdBrand__tagline">
+        Presented by
+        <a ng-href="{{config.links.Website}}"
+            target="_blank"
+            class="displayAdBrand__taglineLink textLink"
+            title="{{config.params.sponsor}}">
+            {{config.params.sponsor}}
         </a>
     </p>
     <display-ad-module active="active"
         class="displayAdCard__adModule"
         config="config">
     </display-ad-module>
-    <div class="displayAdBrand__linksBox" ng-show="true">
-        <a href="!!!!BRAND OFFICIAL LINK!!!!"
-        title="!!!!BRAND NAME!!!! - Official Website"
-        target="_blank" class="displayAdBrand__link">
+    <div ng-if="!!config.links.Website || config.social.length > 0" class="displayAdBrand__linksBox">
+        <a ng-if="!!config.links.Website"
+            ng-href="{{config.links.Website}}"
+            title="{{config.params.sponsor}} - Official Website"
+            target="_blank"
+            class="displayAdBrand__link">
             <span class="displayAdBrand__linkLabel">Official Website</span>
         </a>
-        <a href="!!!!BRAND SOCIAL LINK!!!!"
-        title="YouTube" target="_blank"
-        class="displayAdBrand__link tk--youtube
-        spriteBe socialIconsBe socialIconsBe--youtube">
-            <span class="displayAdBrand__linkLabel">YouTube</span>
-        </a>
-        <a href="!!!!BRAND SOCIAL LINK!!!!"
-        title="Vimeo" target="_blank"
-        class="displayAdBrand__link tk--vimeo
-        spriteBe socialIconsBe socialIconsBe--vimeo">
-            <span class="displayAdBrand__linkLabel">Vimeo</span>
-        </a>
-        <a href="!!!!BRAND SOCIAL LINK!!!!"
-        title="Facebook" target="_blank"
-        class="displayAdBrand__link tk--facebook
-        spriteBe socialIconsBe socialIconsBe--facebook">
-            <span class="displayAdBrand__linkLabel">Facebook</span>
-        </a>
-        <a href="!!!!BRAND SOCIAL LINK!!!!"
-        title="Twitter" target="_blank"
-        class="displayAdBrand__link tk--twitter
-        spriteBe socialIconsBe socialIconsBe--twitter">
-            <span class="displayAdBrand__linkLabel">Twitter</span>
-        </a>
-        <a href="!!!!BRAND SOCIAL LINK!!!!"
-        title="Pinterest" target="_blank"
-        class="displayAdBrand__link tk--pinterest
-        spriteBe socialIconsBe socialIconsBe--pinterest">
-            <span class="displayAdBrand__linkLabel">Pinterest</span>
+        <a ng-repeat="link in config.social"
+            ng-href="{{link.href}}"
+            title="{{link.label}}"
+            target="_blank"
+            class="displayAdBrand__link tk--{{link.type}} spriteBe socialIconsBe socialIconsBe--{{link.type}}">
+            <span class="displayAdBrand__linkLabel">{{link.label}}</span>
         </a>
     </div>
 </div>
