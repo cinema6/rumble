@@ -1,66 +1,128 @@
-<div class="mr-experience" ng-class="app.data.experience.data.theme">
-    <button class="mr-ui__close" ng-click="RumbleCtrl.setPosition(-1);" type="button">
-        <span class="sprite mr-icons__close"><span class="ir">Close</span></span>
-    </button>
-    <h1 class="mr-title tk--hdr">{{app.data.experience.data.title}}</h1>
-    <div class="mr-card__container" ng-class="{'mr-card__container--ad': currentCard.type === 'ad'}">
-        <ng-include ng-controller="DeckController as DeckCtrl" src="'deck.html' | asset:'views'"></ng-include>
-        <button ng-click="RumbleCtrl.goBack('nav')"
-            ng-show="nav.enabled"
-            class="mr-nav__btn mr-nav__prev c6-fade"
-            type="button"
-            title="Previous Page"
-            ng-hide="currentCard.type === 'recap' || currentCard.type === 'text'">
-            <svg class="mr-nav__icon mr-nav__icon-prev" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-             viewBox="0 0 27.213 45.941" enable-background="new 0 0 27.213 45.941" xml:space="preserve">
-                <path class="mr-nav__icon-path" fill-rule="evenodd" clip-rule="evenodd" d="M22.971,0L0,22.971l22.971,22.97l4.243-4.243L8.485,22.971
-                    L27.213,4.243L22.971,0z"/>
-            </svg>
-            <span class="ir">Previous Page</span>
-        </button>
-        <button ng-click="RumbleCtrl.goForward('nav')"
-            ng-show="nav.enabled"
-            class="mr-nav__btn mr-nav__next c6-fade"
-            type="button"
-            title="Next Page"
-            ng-hide="atTail || currentCard.type === 'recap' || currentCard.type === 'text'">
-            <svg class="mr-nav__icon mr-nav__icon-next" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-             viewBox="0 0 27.213 45.941" enable-background="new 0 0 27.213 45.941" xml:space="preserve">
-                <path class="mr-nav__icon-path" fill-rule="evenodd" clip-rule="evenodd" d="M4.243,0l22.971,22.971L4.243,45.941L0,41.699l18.728-18.728L0,4.243
-                L4.243,0z"/>
-            </svg>
-            <span class="ir">Next Page</span>
-        </button>
+<div class="experience__group"
+    c6-alias="app.data.experience.data as minireel"
+    ng-class=" {
+        'experience__group--brandedMR': !!minireel.params.sponsor
+    }">
+    <div class="experience">
+            
+        <div class="MiniReel__group">
 
-        <thumb-paginator active="tocIndex"
-            ng-if="currentIndex > -1"
-            class="mr-pager__group"
+            <button class="MiniReel__closeBtn ui__btn" ng-click="RumbleCtrl.setPosition(-1);" type="button">
+                <span class="sprite sprite--close"><span class="ir">Close</span></span>
+            </button><!--^this is the x button in the upper right corner-->
+            
+            <div class="titleBar__group clearfix">
+                <div class="titleBar__disabler" ng-show="!nav.enabled">&nbsp;</div>
+                <a ng-if="!!minireel.collateral.logo"
+                    ng-href="{{minireel.links.Website}}"
+                    title="{{minireel.params.sponsor}}"
+                    target="_blank"
+                    class="brandProfile__logoBox">
+                    <img class="brandProfile__logo"
+                        alt="{{minireel.params.sponsor}}"
+                        ng-src="{{minireel.collateral.logo}}">
+                </a>
+                <h1 class="titleBar__title">
+                    <span ng-if="!!minireel.params.sponsor" class="brandedMR__tagline">
+                        <a ng-href="{{minireel.links.Website}}"
+                            target="_blank"
+                            title="{{minireel.params.sponsor}}"
+                            class="brandedMR__taglineBrand textLink">
+                            {{minireel.params.sponsor}}
+                        </a>
+                        Presents
+                    </span>
+                    <span ng-click="RumbleCtrl.jumpTo(tocCards[0])"
+                        class="titleBar__titleText tk--hdr">
+                        {{minireel.title}}
+                    </span>
+                </h1>
+                <div class="publisherProfile__logoBox">&nbsp;</div>
+            </div>
+
+            <article class="cards__group">
+                <ng-include src="'deck.html' | asset:'views'" ng-controller="DeckController as DeckCtrl"></ng-include> <!--this brings in the video player-->
+            </article>
+
+            <div class="playlist__group"
+            ng-hide="currentCard.type === 'recap'"
             ng-class="{
-                'mr-pager__group--fullWidth' : currentCard.type === 'recap' || currentCard.type === 'text',
-                'mr-pager__group--adWidth' : currentCard.type === 'ad'
-            }"
-            disable-prev-when="!nav.enabled"
-            disable-next-when="atTail || !nav.enabled"
-            on-prev="RumbleCtrl.goBack('thumb')"
-            on-next="RumbleCtrl.goForward('thumb')"
-            countdown="nav.wait">
-            <ul class="mr-pages__list">
-                <li thumb-paginator-item ng-repeat="this in tocCards" class="mr-pages__item">
-                    <navbar-button index="$index"
-                        current-index="tocIndex"
-                        card="this"
-                        on-select="RumbleCtrl.goTo(deck.indexOf(this),'thumb');"
-                        disable-when="!nav.enabled">
-                    </navbar-button>
-                </li>
-            </ul>
-        </thumb-paginator><!--.mr-pager__group-->
-    </div>
-</div><!--.mr-experience-->
+                'playlist__group--companionAd': !!RumbleCtrl.moduleActive('displayAd')
+            }">
+                <div class="playlist__disabler c6-fade" ng-show="!nav.enabled">&nbsp;</div>
+                
+                <header class="playlistHead__group clearfix">
+                    <h2 class="playlistHead__title tk--hdr">Playlist</h2>
+                    <span class="playlistHead__pageCount"
+                    ng-show="tocIndex > -1">
+                        {{tocIndex + 1}} of {{tocCards.length}}
+                    </span>
+                </header>
 
-<div class="mr-overlay">&nbsp;</div>
+                <ul class="playlist">
+                    <li class="playlist__item clearfix"
+                    ng-repeat="item in tocCards"
+                    ng-click="RumbleCtrl.jumpTo(item)"
+                    ng-class="{'playlist__item--current' : item === currentCard}">
+                        <div class="playlist__thumbHolder"
+                        ng-class="{'playlist__thumbHolder--ad' : item.params.ad}">
+                            <div class="playlist__thumb"
+                            title="{{item.title}}"
+                            c6-bg-img="{{item.thumbs.small}}">
+                                &nbsp;
+                            </div>
+                        </div>
+                        <div class="playlist__copy">
+                            <h3 class="playlist__title tk--hdr">
+                                <span class="playlist__link"
+                                title="{{item.title}}">
+                                    {{item.title}}
+                                </span>
+                            </h3>
+                            <p ng-if="!item.data.hideSource" class="playlist__source" ng-show="!!item.source">via 
+                                <a href="{{item.webHref}}" 
+                                ng-click="$event.stopPropagation()"
+                                title="{{item.source}}"
+                                class="playlist__sourceLink textLink"
+                                target="_blank">{{item.source}}</a>
+                            </p>
+                            <p ng-if="!!item.params.sponsor" class="playlist__source">Sponsored by 
+                                <a ng-href="{{item.links.Website}}" 
+                                ng-click="$event.stopPropagation()"
+                                title="{{item.params.sponsor}}"
+                                class="playlist__sourceLink textLink"
+                                target="_blank">{{item.params.sponsor}}</a>
+                            </p>
+                        </div>
+                    </li>
+                </ul>
+            </div><!--.playlist__group-->
+            
+        </div><!--.MiniReel__group-->
 
-<article id="card" class="mr-container" ng-class="app.data.experience.data.theme">
+        <div ng-if="minireel.social.length > 0 || !!minireel.links.Website" class="brandProfile__linksBox">
+            <a ng-if="!!minireel.links.Website"
+                ng-href="{{minireel.links.Website}}"
+                title="{{minireel.params.sponsor}} - Official Website"
+                target="_blank"
+                class="brandProfile__link">
+                <span class="brandProfile__linkLabel">Official Website</span>
+            </a>
+            <a ng-repeat="link in minireel.social"
+                ng-href="{{link.href}}"
+                title="{{link.label}}"
+                target="_blank"
+                class="brandProfile__link tk--{{link.type}} spriteBe socialIconsBe socialIconsBe__light--{{link.type}}">
+                <span class="brandProfile__linkLabel">{{link.label}}</span>
+            </a>
+        </div>
+
+    </div><!--.experience-->
+</div>
+
+<div class="overlay">&nbsp;</div>
+
+<article id="card" class="container" ng-class="app.data.experience.data.theme">
     <ng-switch on="app.state">
         <div class="splash-screen" ng-switch-when="splash">
             <ng-include ng-if="app.data.version < 1" src="'splash.html' | asset:'views'"></ng-include>

@@ -1,4 +1,4 @@
-define(['c6uilib', 'services', 'minireel', 'angular'], function(c6uilibModule, servicesModule, minireelModule, angular) {
+define(['c6uilib', 'services', 'app', 'angular'], function(c6uilibModule, servicesModule, appModule, angular) {
     'use strict';
 
     describe('RumbleController', function() {
@@ -32,26 +32,6 @@ define(['c6uilib', 'services', 'minireel', 'angular'], function(c6uilibModule, s
                 trackEvent  : jasmine.createSpy('tracker.trackEvent')
             };
             trackerServiceSpy = jasmine.createSpy('trackerService').and.returnValue(trackerSpy);
-
-            MiniReelService = {
-                createDeck: jasmine.createSpy('MiniReelService.createDeck()')
-                    .and.callFake(function(data) {
-                        var playlist = angular.copy(data.deck);
-
-                        MiniReelService.createDeck.calls.mostRecent().result = playlist;
-
-                        playlist.forEach(function(video) {
-                            video.player = null;
-                            video.state = {
-                                twerked: false,
-                                vote: -1,
-                                view: 'video'
-                            };
-                        });
-
-                        return playlist;
-                    })
-            };
 
             cinema6 = {
                 fullscreen: jasmine.createSpy('cinema6.fullscreen'),
@@ -153,6 +133,10 @@ define(['c6uilib', 'services', 'minireel', 'angular'], function(c6uilibModule, s
                     data : {
                         title : 'my title',
                         election: 'el-a30a5954440d66',
+                        links: {
+                            'YouTube': 'youtube.com/032845trf43d',
+                            'Twitter': 'twitter.com/38rhd32e3'
+                        },
                         deck : deck,
                         mode : 'testMode',
                         adConfig : {
@@ -181,9 +165,7 @@ define(['c6uilib', 'services', 'minireel', 'angular'], function(c6uilibModule, s
                         .and.returnValue({})
                 });
             });
-            module(minireelModule.name, function($provide) {
-                $provide.value('MiniReelService', MiniReelService);
-            });
+            module(appModule.name);
 
             inject(function($injector) {
                 $timeout    = $injector.get('$timeout');
@@ -196,6 +178,26 @@ define(['c6uilib', 'services', 'minireel', 'angular'], function(c6uilibModule, s
                 c6EventEmitter = $injector.get('c6EventEmitter');
                 BallotService = $injector.get('BallotService');
                 ControlsService = $injector.get('ControlsService');
+                MiniReelService = $injector.get('MiniReelService');
+
+                spyOn(MiniReelService, 'createDeck')
+                    .and.callFake(function(data) {
+                        var playlist = angular.copy(data.deck);
+
+                        MiniReelService.createDeck.calls.mostRecent().result = playlist;
+
+                        playlist.forEach(function(video) {
+                            video.player = null;
+                            video.state = {
+                                twerked: false,
+                                vote: -1,
+                                view: 'video'
+                            };
+                        });
+
+                        return playlist;
+                    });
+                spyOn(MiniReelService, 'createSocialLinks').and.callThrough();
 
                 mockPlayer = c6EventEmitter({
                     getType         : jasmine.createSpy('player.getType'),
@@ -266,6 +268,11 @@ define(['c6uilib', 'services', 'minireel', 'angular'], function(c6uilibModule, s
 
             it('should initialize BallotService with the id', function() {
                 expect(BallotService.init).toHaveBeenCalledWith(appData.experience.data.election,{});
+            });
+
+            it('should decorate the minireel with social links', function() {
+                expect(MiniReelService.createSocialLinks).toHaveBeenCalledWith(appData.experience.data.links);
+                expect(appData.experience.data.social).toEqual(MiniReelService.createSocialLinks(appData.experience.data.links));
             });
 
             it('should not initialize the BallotService if there is no election', function() {

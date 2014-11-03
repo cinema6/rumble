@@ -1,20 +1,23 @@
-<div class="mr-ad__group">
-    <div ng-style="{visibility: Ctrl.showVideo ? 'visible' : 'hidden'}" class="mr-adVideo__group">
-        <h1 class="mr-adVideo__label tk--hdr">Advertisement</h1>
-        <div class="mr-adVideo__videoHolder">
-            <video class="mr-adVideo__video" ng-click="Ctrl.clickThrough()"
-                c6-video id="{{config.id}}" c6-src="Ctrl.videoSrc">
-            </video>
-        </div>
-        <button style="z-index:2;" ng-if="Ctrl.enablePlayButton" ng-show="Ctrl.showPlay" ng-click="Ctrl.playVideo()" class="mr-player__play-btn">
-            <div class="mr-player__play-icon">
+<!-- html5 video -->
+<div class="card__group">
+    <div
+    class="player__group">
+        <h1 class="videoAd__label">Advertisement</h1>
+        <video class="videoAd__video" ng-click="Ctrl.clickThrough()"
+            c6-video id="{{config.id}}" c6-src="Ctrl.videoSrc">
+        </video>
+        <button style="z-index:2;" ng-if="Ctrl.enablePlayButton" ng-show="Ctrl.showPlay" 
+        ng-click="Ctrl.playVideo()" class="player__playBtn">
+            <div class="player__playIcon">
                 <span class="ir">Play Video</span>
             </div>
         </button>
     </div>
+    <section class="companionAd__group">
+        <companion-ad-module ng-if="Ctrl.hasModule('displayAd')"
+            active="true"
+            ad-src="{{config.displayAd}}"
+            companion="Ctrl.companion">
+        </companion-ad-module>
+    </section>
 </div>
-<companion-ad-module ng-if="Ctrl.hasModule('displayAd')"
-    active="true"
-    ad-src="{{config.displayAd}}"
-    companion="Ctrl.companion">
-</companion-ad-module>

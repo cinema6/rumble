@@ -23,7 +23,7 @@
                 <span class="ir">Play Video</span>
             </div>
         </button>
-        <div ng-class="{'mr-player--fly-away': Ctrl.flyAway}" class="mr-player"><!-- actual player will be inserted into this container --></div>
+        <div ng-class="{'mr-player--fly-away': Ctrl.flyAway}" class="mr-player js-playerBox"><!-- actual player will be inserted into this container --></div>
         <div ng-show="Ctrl.flyAway" class="player__thumbnail c6-height-limiter"
             ng-style="{'background-image':config.thumbs.large ? 'url(' + config.thumbs.large + ')' : ''}">
             <span class="ir"><img ng-src="{{config.thumbs.large}}"></span>
