@@ -1293,6 +1293,10 @@ function( angular , c6Defines  , tracker ,
             _data = config._data = config._data || {
                 playerEvents: {},
                 textMode: true,
+                tracking: {
+                    clickFired: false,
+                    countFired: false
+                },
                 modules: {
                     ballot: {
                         ballotActive: false,
@@ -1304,6 +1308,8 @@ function( angular , c6Defines  , tracker ,
                     }
                 }
             },
+            lastTime = null,
+            elapsedTime = 0,
             player = null,
             shouldPlay = false,
             ballotTargetPlays = 0,
@@ -1372,8 +1378,6 @@ function( angular , c6Defines  , tracker ,
         };
 
         $scope.$on('playerAdd', function(event, iface) {
-            self.lastTime = null;
-            self.elapsedTime = 0;
             player = iface;
 
             _data.playerEvents = EventService.trackEvents(iface, ['play']);
@@ -1425,31 +1429,45 @@ function( angular , c6Defines  , tracker ,
                     }
                 });
 
-            if (config.sponsored === true && config.campaign && config.campaign.countUrl &&
-                                             config.campaign.minViewTime && !_data.pixelFired) {
-                console.log('ASDF: setting up timeupdate listener');
-                iface.on('timeupdate', function fireMinViewPixel() {
-                    if (self.lastTime === null) {
-                        self.lastTime = iface.currentTime;
-                        console.log('ASDF: initially setting lastTime to ' + self.lastTime); //TODO: remove all console.logs here
-                        return;
-                    }
-
-                    // if increment/decrement > 1 sec, it's probably a skip, and don't incr elapsed
-                    if (Math.abs(iface.currentTime - self.lastTime) < 1) {
-                        self.elapsedTime += iface.currentTime - self.lastTime;
-                    } else console.log('ASDF: skip!');
-                    self.lastTime = iface.currentTime;
-                    console.log('ASDF: elapsed = ' + self.elapsedTime);
-                    
-                    if (self.elapsedTime >= config.campaign.minViewTime && !_data.pixelFired) {
-                        _data.pixelFired = true;
-                        console.log('ASDF: ' + self.elapsedTime + ' > ' + config.campaign.minViewTime + ', firing pixel');
+            // If it's a sponsored card, set up handlers to fire AdCount and Click pixels
+            if (config.sponsored === true && config.campaign) {
+                // Fire the Click pixel after the first play
+                if (config.campaign.clickUrl && !_data.tracking.clickFired) {
+                    iface.once('play', function() {
+                        _data.tracking.clickFired = true;
+                        console.log('ASDF: firing click pixel on first play for ' + config.title);
                         var img = document.createElement('img');
-                        img.setAttribute('src', config.campaign.countUrl);
-                        iface.removeListener('timeupdate', fireMinViewPixel);
-                    }
-                });
+                        img.setAttribute('src', config.campaign.clickUrl);
+                    });
+                }
+                
+                // Fire the AdCount pixel after minViewTime, by tracking the elapsed time
+                if (config.campaign.countUrl && config.campaign.minViewTime &&
+                                                !_data.tracking.countFired) {
+                    console.log('ASDF: setting up timeupdate listener');
+                    iface.on('timeupdate', function fireMinViewPixel() {
+                        if (lastTime === null) {
+                            lastTime = iface.currentTime;
+                            console.log('ASDF: initially setting lastTime to ' + lastTime); //TODO: remove all console.logs here
+                            return;
+                        }
+
+                        // if diff > 1 sec, it's probably a skip, and don't increment elapsed
+                        if (Math.abs(iface.currentTime - lastTime) < 1) {
+                            elapsedTime += iface.currentTime - lastTime;
+                        } else console.log('ASDF: skip!');
+                        lastTime = iface.currentTime;
+                        console.log('ASDF: elapsed = ' + elapsedTime);
+                        
+                        if (elapsedTime >= config.campaign.minViewTime && !_data.tracking.countFired) {
+                            _data.tracking.countFired = true;
+                            console.log('ASDF: ' + elapsedTime + ' > ' + config.campaign.minViewTime + ', firing pixel');
+                            var img = document.createElement('img');
+                            img.setAttribute('src', config.campaign.countUrl);
+                            iface.removeListener('timeupdate', fireMinViewPixel);
+                        }
+                    });
+                }
             }
 
             $scope.$watch('active', function(active, wasActive) {
