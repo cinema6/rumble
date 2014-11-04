@@ -216,11 +216,6 @@
 /*  ================================================
     transform transitions
     ================================================ */
-    .someClass {
-        -webkit-transition: -webkit-transform 0.3s ease; 
-        transition: transform 0.3s ease;
-    }
-
     .page__btn:hover .page__previewImg {
         -webkit-transform: scale(1.25);
         transform: scale(1.25);
