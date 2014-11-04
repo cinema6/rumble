@@ -1372,6 +1372,8 @@ function( angular , c6Defines  , tracker ,
         };
 
         $scope.$on('playerAdd', function(event, iface) {
+            self.lastTime = null;
+            self.elapsedTime = 0;
             player = iface;
 
             _data.playerEvents = EventService.trackEvents(iface, ['play']);
@@ -1422,6 +1424,33 @@ function( angular , c6Defines  , tracker ,
                         $scope.$emit('<mr-card>:contentEnd', config.meta || config);
                     }
                 });
+
+            if (config.sponsored === true && config.campaign && config.campaign.countUrl &&
+                                             config.campaign.minViewTime && !_data.pixelFired) {
+                console.log('ASDF: setting up timeupdate listener');
+                iface.on('timeupdate', function fireMinViewPixel() {
+                    if (self.lastTime === null) {
+                        self.lastTime = iface.currentTime;
+                        console.log('ASDF: initially setting lastTime to ' + self.lastTime); //TODO: remove all console.logs here
+                        return;
+                    }
+
+                    // if increment/decrement > 1 sec, it's probably a skip, and don't incr elapsed
+                    if (Math.abs(iface.currentTime - self.lastTime) < 1) {
+                        self.elapsedTime += iface.currentTime - self.lastTime;
+                    } else console.log('ASDF: skip!');
+                    self.lastTime = iface.currentTime;
+                    console.log('ASDF: elapsed = ' + self.elapsedTime);
+                    
+                    if (self.elapsedTime >= config.campaign.minViewTime && !_data.pixelFired) {
+                        _data.pixelFired = true;
+                        console.log('ASDF: ' + self.elapsedTime + ' > ' + config.campaign.minViewTime + ', firing pixel');
+                        var img = document.createElement('img');
+                        img.setAttribute('src', config.campaign.countUrl);
+                        iface.removeListener('timeupdate', fireMinViewPixel);
+                    }
+                });
+            }
 
             $scope.$watch('active', function(active, wasActive) {
                 if ((active === wasActive) && (wasActive === false)){ return; }
