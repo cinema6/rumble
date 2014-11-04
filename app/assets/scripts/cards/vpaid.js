@@ -310,7 +310,8 @@ function( angular ) {
                     scope.$emit('playerAdd', iface);
 
                     function createPlayer() {
-                        player = RumbleVPAIDService.createPlayer(scope.config.id, scope.config, $element.find('.mr-player'));
+
+                        player = RumbleVPAIDService.createPlayer(scope.config.id, scope.config, $element.find('.js-playerBox'));
 
                         player.on('ready', function() {
                             // this fires when the flash object exists and responds to isCinema6player()

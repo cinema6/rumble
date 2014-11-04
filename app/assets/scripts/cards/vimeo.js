@@ -431,7 +431,7 @@ function( angular , c6uilib , iframe ) {
                     height      : $attr.height,
                     frameborder : 0,
                     params      : vparams
-                },$element.find('.mr-player'));
+                },$element.find('.js-playerBox'));
 
                 player.on('ready',function(p){
                     $log.info('[%1] - I am ready',p);

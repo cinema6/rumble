@@ -64,7 +64,7 @@
             "whitelist": ["mobile"]
         },
         "ui/thumb_paginator": {
-            "blacklist": ["mobile", "full", "solo", "solo-ads"]
+            "whitelist": ["light"]
         }
     }
 }

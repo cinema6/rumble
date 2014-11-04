@@ -1,18 +1,19 @@
-<article class="mr-textCard__group">
-    <button class="mr-textCard__goImg"
+<div class="textOnly__group">
+    <div class="textOnly__copy">
+        <h1 class="card__title textOnly__title tk--hdr">{{config.title}}</h1>
+        <div class="card__desc" ng-bind-html="config.note"></div>
+        <button class="textOnly__goBtn btnPrimary" type="button"
+        ng-click="$emit('<mr-card>:contentEnd', config)" title="Begin">
+            <span class="btn__label">Begin</span>
+        </button>
+    </div>
+    <button class="textOnly__imgBox"
         ng-style="{'background-image':config.thumbs.large ? 'url(' + config.thumbs.large + ')' : ''}"
         ng-click="$emit('<mr-card>:contentEnd', config)"
-        type="button">
+        type="button" title="Begin">
         &nbsp;
     </button>
-    <div class="mr-pub-logo-box">&nbsp;</div>
-    <div class="mr-textCard__copy">
-        <p class="mr-card__counter">{{number}} of {{total}}</p>
-        <h1 class="mr-card__title tk--hdr">{{config.title}}</h1>
-        <div class="mr-card__desc" ng-bind-html="config.note"></div>
-        <button ng-click="$emit('<mr-card>:contentEnd', config)" class="mr-textCard__goBtn">Begin</button>
-    </div>
-    
-    <div class="mr-card__fader">&nbsp;</div>
-    <div class="mr-card__fader mr-card__fader--top">&nbsp;</div>
-</article>
+    <!--<div class="companionAd__group" ng-if="hasModule('displayAd')">
+        <display-ad-module active="active" config="config"></display-ad-module>
+    </div>-->
+</div>

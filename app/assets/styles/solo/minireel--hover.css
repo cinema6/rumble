@@ -8,6 +8,9 @@
     .brandProfile__imgBox:hover {
         border:3px solid #d94040;
     }
+    .textLink:hover {
+        border-bottom:1px dotted #d94040;
+    }
 
 
 

@@ -1,19 +1,54 @@
-<script src="//use.typekit.net/xuz8gem.js"></script>
-<script>try{Typekit.load();}catch(e){}</script>
-<div class="MiniReel" ng-class="app.data.experience.data.theme">
-    
+<div class="MiniReel"
+    c6-alias="app.data.experience.data as minireel"
+    ng-class=" {
+        'MiniReel__group--brandedMR': !!minireel.params.sponsor
+    }">
 
-    <header class="mr-titleBar__group clearfix">
-        <div class="mr-titleBar__disabler" ng-show="!nav.enabled">&nbsp;</div>
-        <div class="mr-titleBar__splashImg"
+    <header class="titleBar__group clearfix">
+        <div class="titleBar__disabler" ng-show="!nav.enabled">&nbsp;</div>
+        <div class="titleBar__splashImg"
         ng-click="RumbleCtrl.jumpTo(tocCards[0])"
         c6-bg-img="{{app.data.experience.data.collateral.splash | envroot}}">
             &nbsp;
         </div>
-        <h1 class="mr-titleBar__title tk--hdr"
-        ng-click="RumbleCtrl.jumpTo(tocCards[0])">
-            {{app.data.experience.data.title}}
+        <h1 class="titleBar__title">
+            <span class="brandedMR__tagline"
+                ng-if="!!minireel.params.sponsor">
+                <a ng-href="{{minireel.links.Website}}" target="_blank" title="{{minireel.params.sponsor}}"
+                class="brandedMR__taglineBrand">{{minireel.params.sponsor}}</a> 
+                Presents
+            </span>
+            <span ng-click="RumbleCtrl.jumpTo(tocCards[0])" 
+            class="titleBar__titleText tk--hdr">
+                {{app.data.experience.data.title}}
+            </span>
         </h1>
+        <div class="brandProfile__group" ng-if="!!minireel.params.sponsor || minireel.social.length > 0 || !!minireel.collateral.logo">
+            <a ng-if="!!minireel.collateral.logo"
+                ng-href="{{minireel.links.Website}}"
+                title="{{minireel.params.sponsor}}"
+                target="_blank"
+                class="brandProfile__logoBox">
+                <img class="brandProfile__logo" alt="{{minireel.params.sponsor}}" ng-src="{{minireel.collateral.logo}}">
+            </a>
+            <div class="brandProfile__linksBox">
+                <a ng-if="!!minireel.params.sponsor"
+                    ng-href="{{minireel.links.Website}}"
+                    title="{{minireel.params.sponsor}}"
+                    target="_blank"
+                    class="brandProfile__brandURL">
+                    {{minireel.params.sponsor}}
+                </a>
+                <div ng-if="minireel.social.length > 0" class="brandProfile__links">
+                    <a ng-repeat="link in minireel.social"
+                        ng-href="{{link.href}}"
+                        title="{{link.label}}" target="_blank"
+                        class="brandProfile__link spriteBe socialIconsBe socialIconsBe--{{link.type}}">
+                        <span class="ir">{{link.label}}</span>
+                    </a>
+                </div>
+            </div>
+        </div>
     </header>
 
     <ng-include ng-controller="DeckController as DeckCtrl" src="'deck.html' | asset:'views'"></ng-include>
@@ -42,7 +77,7 @@
                 <div class="playlist__thumbHolder"
                 ng-class="{'playlist__thumbHolder--ad' : item.params.ad}">
                     <div class="playlist__thumb"
-                    title="This is the Best Video Title Ever!!!"
+                    title="{{item.title}}"
                     c6-bg-img="{{item.thumbs.small}}">
                         &nbsp;
                     </div>
@@ -58,14 +93,14 @@
                         <a href="{{item.webHref}}" 
                         ng-click="$event.stopPropagation()"
                         title="{{item.source}}"
-                        class="playlist__sourceLink"
+                        class="playlist__sourceLink textLink"
                         target="_blank">{{item.source}}</a>
                     </p>
                     <p ng-if="!!item.params.sponsor" class="playlist__source">Sponsored by 
                         <a ng-href="{{item.links.Website}}" 
                         ng-click="$event.stopPropagation()"
                         title="{{item.params.sponsor}}"
-                        class="playlist__sourceLink"
+                        class="playlist__sourceLink textLink"
                         target="_blank">{{item.params.sponsor}}</a>
                     </p>
                 </div>

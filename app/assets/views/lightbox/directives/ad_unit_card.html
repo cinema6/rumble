@@ -15,41 +15,42 @@
         </div>
     </div>
 
-    <div class="mr-card__copy-container">
-        <div class="mr-card__copy">
-            <p class="mr-card__counter">{{number}} of {{total}}</p>
-            <h1 class="mr-card__title tk--hdr">{{config.title}}</h1>
+    <div class="mr-card__copy">
+        <h1 class="mr-card__title tk--hdr">{{config.title}}</h1>
 
-            <div class="mr-sponsorProfile__group clearfix" ng-if="!!(config.collateral.logo || config.social.length > 0 || config.params.sponsor)">
-                <a ng-if="!!config.collateral.logo" ng-href="{{config.links.Website}}" target="_blank" title="Sponsor link" class="mr-sponsorProfile__imgBox">
-                    <img ng-src="{{config.collateral.logo}}" class="mr-sponsorProfile__img">
-                </a>
-                <div class="mr-sponsorProfile__copy" ng-if="!!(config.params.sponsor || config.social.length > 0)">
-                    <p class="mr-sponsorProfile__tag" ng-if="!!config.params.sponsor">
-                        Sponsored by 
-                        <a ng-href="{{config.links.Website}}" target="_blank" title="{{config.params.sponsor}}">{{config.params.sponsor}}</a>
-                    </p>
-                    <div class="mr-sponsorProfile__links" ng-if="config.social.length > 0">
-                        <a ng-repeat="link in config.social"
-                            ng-href="{{link.href}}"
-                            target="_blank"
-                            title="{{link.label}}"
-                            class="mr-sponsorProfile__link sprite__social mr-socialIcons mr-socialIcons--{{link.type}}">
-                            <span class="ir">{{link.label}}</span>
-                        </a>
-                    </div>
+        <div class="mr-sponsorProfile__group clearfix" ng-if="!!(config.collateral.logo || config.social.length > 0 || config.params.sponsor)">
+            <a ng-if="!!config.collateral.logo" ng-href="{{config.links.Website}}" target="_blank" title="Sponsor link" class="mr-sponsorProfile__imgBox">
+                <img ng-src="{{config.collateral.logo}}" class="mr-sponsorProfile__img">
+            </a>
+            <div class="mr-sponsorProfile__copy" ng-if="!!(config.params.sponsor || config.social.length > 0)">
+                <p class="mr-sponsorProfile__tag" ng-if="!!config.params.sponsor">
+                    Sponsored by 
+                    <a ng-href="{{config.links.Website}}" target="_blank" title="{{config.params.sponsor}}">{{config.params.sponsor}}</a>
+                </p>
+                <div class="mr-sponsorProfile__links" ng-if="config.social.length > 0">
+                    <a ng-repeat="link in config.social"
+                        title="{{link.label}}"
+                        ng-href="{{link.href}}"
+                        target="_blank"
+                        class="mr-sponsorProfile__link sprite__social mr-socialIcons mr-socialIcons--{{link.type}}">
+                        <span class="ir">{{link.label}}</span>
+                    </a>
                 </div>
             </div>
-
-            <p ng-if="!config.data.hideSource" ng-show="!!config.source" class="mr-card__attributes">via <a ng-href="{{Ctrl.videoUrl}}" target="_blank" title="YouTube">{{config.source}}</a></p> 
-            <div class="mr-card__desc" ng-bind-html="config.note"></div>
-
-            <div class="mr-card__desc sponsor__actions" ng-if="!!config.links.Action" ng-switch="config.params.action.type" c6-alias="config.params.action as action">
-                <a ng-switch-when="text" ng-href="{{config.links.Action}}" target="_blank">{{action.label}}</a>
-                <a ng-switch-when="button" ng-href="{{config.links.Action}}" target="_blank" class="mr-sponsor__goBtn" title="{{action.label}}">{{action.label}}</a>
-            </div>
-
         </div>
-        <div class="mr-pub-logo-box">&nbsp;</div>
+
+        <p ng-if="!config.data.hideSource" ng-show="!!config.source" class="mr-card__attributes">via <a ng-href="{{Ctrl.videoUrl}}" target="_blank" title="YouTube">{{config.source}}</a></p>
+        <div class="mr-card__desc" ng-bind-html="config.note"></div>
+        
+        <div class="mr-card__desc sponsor__actions" ng-if="!!config.links.Action" ng-switch="config.params.action.type" c6-alias="config.params.action as action">
+            <a ng-switch-when="text" ng-href="{{config.links.Action}}">{{action.label}}</a>
+            <a ng-switch-when="button" ng-href="{{config.links.Action}}" class="mr-sponsor__goBtn" title="{{action.label}}">{{action.label}}</a>
+        </div>
+
+    </div>
+    <div class="mr-ad__med-rect">
+        <companion-ad-module active="!!config._data.companion"
+            companion="config._data.companion">
+        </companion-ad-module>
     </div>
 </article>

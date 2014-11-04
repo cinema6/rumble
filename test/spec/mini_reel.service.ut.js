@@ -51,6 +51,58 @@ define(['app', 'minireel', 'c6uilib', 'angular'], function(appModule, minireelMo
 
         describe('@public', function() {
             describe('methods: ', function() {
+                describe('createSocialLinks(links)', function() {
+                    var links, result;
+
+                    beforeEach(function() {
+                        links = {
+                            'Website': 'http://www.cinema6.com',
+                            'Facebook': 'http://facebook.com/387r9hd3',
+                            'Twitter': 'http://www.twitter.com/938r9df',
+                            'Pinterest': 'http://www.pinterest.com/38rh94',
+                            'Custom': 'custom.html',
+                            'YouTube': 'http://www.youtube.com/839rhfi3',
+                            'Vimeo': 'http://www.vimeo.com/0398rhd3'
+                        };
+
+                        result = MiniReelService.createSocialLinks(links);
+                    });
+
+                    it('should be an array of results', function() {
+                        expect(result).toEqual([
+                            {
+                                type: 'facebook',
+                                label: 'Facebook',
+                                href: links.Facebook
+                            },
+                            {
+                                type: 'twitter',
+                                label: 'Twitter',
+                                href: links.Twitter
+                            },
+                            {
+                                type: 'pinterest',
+                                label: 'Pinterest',
+                                href: links.Pinterest
+                            },
+                            {
+                                type: 'youtube',
+                                label: 'YouTube',
+                                href: links.YouTube
+                            },
+                            {
+                                type: 'vimeo',
+                                label: 'Vimeo',
+                                href: links.Vimeo
+                            }
+                        ]);
+                    });
+
+                    it('should return an empty array if called with a non-object', function() {
+                        expect(MiniReelService.createSocialLinks(undefined)).toEqual([]);
+                    });
+                });
+
                 describe('createDeck(mrData)', function() {
                     var mrData,
                         result;
@@ -534,7 +586,7 @@ define(['app', 'minireel', 'c6uilib', 'angular'], function(appModule, minireelMo
                         it('should make every thumbnail null at first', function() {
                             mrData.deck.filter(function(card) {
                                 return !card.thumbs && !(/^(text|recap)$/).test(card.type);
-                            }).forEach(function(card, index) {
+                            }).forEach(function(card) {
                                 expect(result[mrData.deck.indexOf(card)].thumbs).toBeNull('card:' + card.id);
                             });
                         });

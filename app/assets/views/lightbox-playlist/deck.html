@@ -1,0 +1,59 @@
+<ul ng-repeat="deck in DeckCtrl.decks"
+    class="cards__list"
+    ng-class="{
+        'ui-offscreen' : !deck.active
+    }">
+    <li class="cards__item js-cardItem"
+        ng-repeat="item in (deck.cards | deck:deck.index:1)"
+        ng-class="{
+            'ui-offscreen' : ($index !== deck.index || !deck.active)
+        }">
+        <mr-card
+            x-number="{{tocCards.indexOf(item) + 1}}"
+            x-total="{{tocCards.length}}"
+            x-config="item"
+            x-profile="deviceProfile"
+            x-active="($index === deck.index) && deck.active"
+            x-on-deck="($index === (deck.index + 1))">
+        </mr-card>
+    </li>
+</ul>
+
+<button ng-click="RumbleCtrl.goBack('nav')"
+ng-show="nav.enabled"
+class="btnPrimary nav__btn nav__btn--prev c6-fade"
+ng-class="{
+    'nav__btn--condensed'   : currentCard.type === 'recap',
+    'nav__btn--centered'    : currentCard.type === 'displayAd'
+}"
+type="button"
+title="Previous Page"
+ng-hide="currentCard.type === 'text'">
+    <svg class="nav__btnIcon nav__btnIcon--prev" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+     viewBox="0 0 27.213 45.941" enable-background="new 0 0 27.213 45.941" xml:space="preserve">
+        <path class="nav__btnPath" fill-rule="evenodd" clip-rule="evenodd" d="M22.971,0L0,22.971l22.971,22.97l4.243-4.243L8.485,22.971
+            L27.213,4.243L22.971,0z"/>
+    </svg>
+    <span class="btn__label nav__btnLabel nav__btnLabel--prev">Prev</span>
+</button><!--^This is the go back button over the video on the left side-->
+<button ng-click="RumbleCtrl.goForward('nav')"
+ng-show="nav.enabled"
+class=" btnPrimary nav__btn nav__btn--next c6-fade"
+ng-class="{
+    'nav__btn--condensed'   : currentCard.type === 'recap',
+    'nav__btn--centered'    : currentCard.type === 'displayAd'
+}"
+type="button"
+title="Next Page"
+ng-hide="atTail || currentCard.type === 'text'">
+    <svg class="nav__btnIcon nav__btnIcon--next" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+     viewBox="0 0 27.213 45.941" enable-background="new 0 0 27.213 45.941" xml:space="preserve">
+        <path class="nav__btnPath" fill-rule="evenodd" clip-rule="evenodd" d="M4.243,0l22.971,22.971L4.243,45.941L0,41.699l18.728-18.728L0,4.243
+        L4.243,0z"/>
+    </svg>
+    <span class="btn__label nav__btnLabel nav__btnLabel--next">Next</span>
+</button><!--^This is the go forward button over the video on the right side-->
+
+<div class="adSkip__group c6-fade" ng-show="!nav.enabled">
+    <p class="adSkip__message">Skip this ad in <strong>{{nav.wait}}</strong></p>
+</div>

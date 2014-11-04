@@ -1,0 +1,32 @@
+<div class="MiniReel__group" ng-class="app.data.experience.data.theme">
+    
+    <ng-include ng-controller="DeckController as DeckCtrl" src="'deck.html' | asset:'views'"></ng-include>
+    
+    <thumb-paginator active="tocIndex"
+        ng-if="currentIndex > -1"
+        class="pager__group"
+        disable-prev-when="!nav.enabled"
+        disable-next-when="atTail || !nav.enabled"
+        on-prev="RumbleCtrl.goBack('thumb')"
+        on-next="RumbleCtrl.goForward('thumb')"
+        countdown="nav.wait">
+        <ul class="pages__list">
+            <li thumb-paginator-item ng-repeat="this in tocCards" class="pages__item">
+                <navbar-button index="$index"
+                    current-index="tocIndex"
+                    card="this"
+                    class="pages__navBtn"
+                    on-select="RumbleCtrl.goTo(deck.indexOf(this),'thumb');"
+                    disable-when="!nav.enabled">
+                </navbar-button>
+            </li>
+        </ul>
+    </thumb-paginator><!--.pager__group-->
+</div><!--.MiniReel__group-->
+
+
+<ng-switch on="app.state">
+    <div class="splash__group" ng-switch-when="splash">
+        <ng-include ng-if="app.data.version < 1"  src="'splash.html' | asset:'views'"></ng-include>
+    </div>
+</ng-switch>

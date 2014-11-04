@@ -1,6 +1,15 @@
-<div ng-hide="currentIndex < 0" ng-class="app.data.experience.data.theme">
+<div ng-hide="currentIndex < 0" ng-class="app.data.experience.data.theme" c6-alias="app.data.experience.data as minireel">
     <div ng-hide="showTOC" class="ui-nav-left--landscape c6-slide-bar--left css-promote">
         <div class="publisher__branding-logo">&nbsp;</div>
+        <a ng-if="!!minireel.collateral.logo"
+            href="{{minireel.links.Website}}"
+            title="{{minireel.params.sponsor}}"
+            target="_blank"
+            class="brandProfile__logoBox">
+            <img class="brandProfile__logo"
+                alt="{{minireel.params.sponsor}}"
+                ng-src="{{minireel.collateral.logo}}">
+        </a>
         <button class="ui-nav__prev" title="Previous Video" type="button" c6-touch="RumbleCtrl.goBack('landscape')" ng-disabled="!nav.enabled || (app.data.standalone && tocIndex < 1)">
             <span class="ui-nav__label ui-nav__label-prev">
                 Prev
@@ -17,7 +26,7 @@
             <span class="sprite ui-icon__close">&nbsp;</span>
             <span class="ui-control__activator">&nbsp;</span>
         </button>
-    </div><!--.ui-nav-left--landscape-->
+    </div><!--.ui-nav-left-landscape-->
 
     <div class="ui-nav-right--landscape c6-side-bar--right css-promote">
         <button ng-class="{'ui-nav__view-list--open': showTOC}" class="ui-nav__view-list" c6-touch="showTOC = !showTOC;" title="View List Pane" type="button" ng-disabled="!nav.enabled">
@@ -39,9 +48,18 @@
         <h2 ng-hide="showTOC || tocIndex < 0" class="ui-nav__counter">
             {{tocIndex + 1}} of {{tocCards.length}}
         </h2>
-    </div><!--.ui-nav-right--landscape-->
+    </div><!--.ui-nav-right-landscape-->
 
     <div ng-hide="showTOC" class="ui-context--portrait c6-slide-bar--top css-promote">
+        <a ng-if="!!minireel.collateral.logo"
+            href="{{minireel.links.Website}}"
+            title="{{minireel.params.sponsor}}"
+            target="_blank"
+            class="brandProfile__logoBox">
+            <img class="brandProfile__logo"
+                alt="{{minireel.params.sponsor}}"
+                ng-src="{{minireel.collateral.logo}}">
+        </a>
         <div class="publisher__branding-logo">&nbsp;</div>
         <button ng-click="RumbleCtrl.setPosition(-1);" ng-if="!app.data.standalone" class="ui-context__close" title="Close" type="button">
             <span class="ui-context__label ui-context__label-close">
@@ -84,7 +102,26 @@
     </div><!--.ui-control-->
 </div><!-- end of the ng-hide div-->
 
-<article class="mr-container"  ng-class="app.data.experience.data.theme">
+<article class="mr-container"  ng-class="app.data.experience.data.theme" c6-alias="app.data.experience.data as minireel">
+    <h3 class="mr-title tk--hdr">
+        <span ng-if="!!minireel.params.sponsor" class="brandedMR__tagline tk--copy">
+            <a ng-href="{{minireel.links.Website}}"
+                target="_blank"
+                title="{{minireel.params.sponsor}}"
+                class="brandedMR__taglineBrand textLink">{{minireel.params.sponsor}}</a>
+                 Presents
+        </span>
+        <span class="condensed">{{minireel.title}}</span>
+    </h3>
+    <div ng-if="minireel.social.length > 0" class="brandProfile__linksBox">
+        <a ng-repeat="link in minireel.social"
+            ng-href="{{link.href}}"
+            title="{{link.label}}"
+            target="_blank"
+            class="brandProfile__link tk--{{link.type}} sprite__socialBe socialIconsBe socialIconsBe--{{link.type}}">
+            <span class="ir">{{link.label}}</span>
+        </a>
+    </div>
     <ng-include ng-controller="DeckController as DeckCtrl" src="'deck.html' | asset:'views'"></ng-include>
     <ng-switch on="app.state">
         <div class="splash-screen" ng-switch-when="splash">
