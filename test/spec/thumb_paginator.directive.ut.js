@@ -192,8 +192,8 @@ define(['app'], function(appModule) {
                     '</ul>'
                 ].join('\n'));
 
-                expect($pager.find('.pager__prev').width()).toBe(62);
-                expect($pager.find('.pager__next').width()).toBe(62);
+                expect($pager.find('.pager__prev').width()).toBe(61);
+                expect($pager.find('.pager__next').width()).toBe(61);
             });
 
             it('should take the minimum width of the buttons into account', function() {
@@ -205,8 +205,8 @@ define(['app'], function(appModule) {
                     '</ul>'
                 ].join('\n'));
 
-                expect($pager.find('.pager__prev').width()).toBe(62);
-                expect($pager.find('.pager__next').width()).toBe(62);
+                expect($pager.find('.pager__prev').width()).toBe(61);
+                expect($pager.find('.pager__next').width()).toBe(61);
             });
 
             it('should re-fetch the minimum width of the buttons when the window resizes', function() {
@@ -222,8 +222,8 @@ define(['app'], function(appModule) {
                 $($window).trigger('resize');
                 $timeout.flush();
 
-                expect($pager.find('.pager__prev').width()).toBe(112);
-                expect($pager.find('.pager__next').width()).toBe(112);
+                expect($pager.find('.pager__prev').width()).toBe(111);
+                expect($pager.find('.pager__next').width()).toBe(111);
             });
 
             it('should update the width of the thumbnails when the window resizes', function() {
@@ -239,8 +239,8 @@ define(['app'], function(appModule) {
                 $($window).trigger('resize');
                 $timeout.flush();
 
-                expect($pager.find('.pager__prev').width()).toBe(74);
-                expect($pager.find('.pager__next').width()).toBe(74);
+                expect($pager.find('.pager__prev').width()).toBe(73);
+                expect($pager.find('.pager__next').width()).toBe(73);
             });
 
             it('should not impose a width if all the buttons fit on one page', function() {
