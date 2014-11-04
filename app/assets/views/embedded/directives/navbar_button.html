@@ -1,0 +1,9 @@
+<button class="pages__page" ng-disabled="disableWhen()" ng-click="onSelect();" 
+type="button" title="#{{index + 1}} : {{card.title}}"
+ng-class="{
+    'pages__page--active': active,
+    'pages__page--ad' : card.params.ad
+}">
+    <span class="pages__previewImg"
+    ng-style="{ backgroundImage: thumb }">&nbsp;</span>
+</button>

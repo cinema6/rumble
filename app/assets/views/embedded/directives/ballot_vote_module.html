@@ -1,0 +1,19 @@
+<section class="ballot__group">
+    <h2 class="ballot__title tk--hdr" ng-click="onDismiss()">{{ballot.prompt}}</h2>
+    <ul class="ballot__list" ng-click="onDismiss()">
+        <li class="ballot__item ballot__item{{$index}}" ng-repeat="choice in ballot.choices">
+            <button class="ballot__btn ballot__btn{{$index}}" ng-click="Ctrl.vote($index)"><span class="ballot__btn-label">{{choice}}</span></button>
+        </li>
+    </ul>
+    <p class="ballot__textlink ballot__results">
+        <a ng-click="Ctrl.pass()" title="Show Voting Results">Show Voting Results</a>
+    </p>
+    <p class="ballot__textlink ballot__watch-again">
+        <a ng-click="onDismiss()" title="Watch Video Again">Watch Video Again</a>
+    </p>
+    <div class="mr-ballot__closer" ng-click="onDismiss()">&nbsp;</div>
+</section>
+
+<div class="overlay" ng-click="onDismiss()">
+    <button class="sprite ballot__close"><span class="ir">Close</span></button>
+</div>
