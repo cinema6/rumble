@@ -1,10 +1,10 @@
 define (['angular','c6_defines','tracker',
          'cards/ad','cards/dailymotion','cards/recap','cards/vast','cards/vimeo','cards/vpaid',
-         'cards/youtube','cards/text','cards/display_ad','cards/ad_unit',
+         'cards/youtube','cards/text','cards/display_ad','cards/ad_unit','cards/video',
          'modules/ballot','modules/companion_ad','modules/display_ad','modules/post'],
 function( angular , c6Defines  , tracker ,
           adCard   , dailymotionCard   , recapCard   , vastCard   , vimeoCard   , vpaidCard   ,
-          youtubeCard   , textCard   , displayAdCard    , adUnitCard     ,
+          youtubeCard   , textCard   , displayAdCard    , adUnitCard     , videoCard  ,
           ballotModule   , companionAdModule    , displayAdModule    , postModule   ) {
 
     'use strict';
@@ -25,6 +25,7 @@ function( angular , c6Defines  , tracker ,
         textCard.name,
         displayAdCard.name,
         adUnitCard.name,
+        videoCard.name,
         // Modules
         ballotModule.name,
         companionAdModule.name,
