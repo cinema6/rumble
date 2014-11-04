@@ -129,7 +129,12 @@ define(['minireel', 'services'], function(minireelModule, servicesModule) {
                         hasPlayed: false,
                         companion: null,
                         modules: {
-                            displayAd: {
+                            ballot: {
+                                ballotActive: false,
+                                resultsActive: false,
+                                vote: null
+                            },
+                            post: {
                                 active: false
                             }
                         }
@@ -142,12 +147,6 @@ define(['minireel', 'services'], function(minireelModule, servicesModule) {
             describe('player', function() {
                 it('should be null', function() {
                     expect(VideoCardCtrl.player).toBeNull();
-                });
-            });
-
-            describe('postModuleActive', function() {
-                it('should be false', function() {
-                    expect(VideoCardCtrl.postModuleActive).toBe(false);
                 });
             });
 
@@ -306,23 +305,19 @@ define(['minireel', 'services'], function(minireelModule, servicesModule) {
             });
 
             describe('flyAway', function() {
-                describe('if the card is not active', function() {
-                    beforeEach(function() {
-                        $scope.$apply(function() {
-                            $scope.active = false;
-                        });
-                    });
-
-                    it('should be true', function() {
-                        expect(VideoCardCtrl.flyAway).toBe(true);
+                beforeEach(function() {
+                    $scope.$apply(function() {
+                        $scope.active = true;
                     });
                 });
 
-                describe('if the card is active', function() {
+                describe('if the video has played', function() {
                     beforeEach(function() {
-                        $scope.$apply(function() {
-                            $scope.active = true;
-                        });
+                        var player = new Player();
+
+                        $scope.$emit('<vpaid-player>:init', player);
+                        player.emit('ready');
+                        player.emit('play');
                     });
 
                     describe('if the post module is not present', function() {
@@ -331,13 +326,25 @@ define(['minireel', 'services'], function(minireelModule, servicesModule) {
                         });
 
                         [true, false].forEach(function(bool) {
-                            describe('if postModuleActive is ' + bool, function() {
+                            describe('if $scope.config._data.modules.post.active is ' + bool, function() {
                                 beforeEach(function() {
-                                    VideoCardCtrl.postModuleActive = bool;
+                                    $scope.config._data.modules.post.active = bool;
                                 });
 
                                 it('should be false', function() {
                                     expect(VideoCardCtrl.flyAway).toBe(false);
+                                });
+
+                                describe('if active is false', function() {
+                                    beforeEach(function() {
+                                        $scope.$apply(function() {
+                                            $scope.active = false;
+                                        });
+                                    });
+
+                                    it('should be true', function() {
+                                        expect(VideoCardCtrl.flyAway).toBe(true);
+                                    });
                                 });
                             });
                         });
@@ -349,13 +356,185 @@ define(['minireel', 'services'], function(minireelModule, servicesModule) {
                         });
 
                         [true, false].forEach(function(bool) {
-                            describe('if postModuleActive is ' + bool, function() {
+                            describe('if $scope.config._data.modules.post.active is ' + bool, function() {
                                 beforeEach(function() {
-                                    VideoCardCtrl.postModuleActive = bool;
+                                    $scope.config._data.modules.post.active = bool;
                                 });
 
                                 it('should be ' + bool, function() {
                                     expect(VideoCardCtrl.flyAway).toBe(bool);
+                                });
+
+                                describe('if active is false', function() {
+                                    beforeEach(function() {
+                                        $scope.$apply(function() {
+                                            $scope.active = false;
+                                        });
+                                    });
+
+                                    it('should be true', function() {
+                                        expect(VideoCardCtrl.flyAway).toBe(true);
+                                    });
+                                });
+                            });
+                        });
+                    });
+
+                    describe('if the ballot module is not present', function() {
+                        beforeEach(function() {
+                            $scope.config.modules = ['displayAd'];
+                        });
+
+                        [true, false].forEach(function(bool) {
+                            describe('if _data.modules.ballot.ballotActive is ' + bool, function() {
+                                beforeEach(function() {
+                                    $scope.config._data.modules.ballot.ballotActive = bool;
+                                });
+
+                                it('should be false', function() {
+                                    expect(VideoCardCtrl.flyAway).toBe(false);
+                                });
+
+                                describe('if active is false', function() {
+                                    beforeEach(function() {
+                                        $scope.$apply(function() {
+                                            $scope.active = false;
+                                        });
+                                    });
+
+                                    it('should be true', function() {
+                                        expect(VideoCardCtrl.flyAway).toBe(true);
+                                    });
+                                });
+                            });
+                        });
+
+                        [true, false].forEach(function(bool) {
+                            describe('if _data.modules.ballot.resultsActive is ' + bool, function() {
+                                beforeEach(function() {
+                                    $scope.config._data.modules.ballot.resultsActive = bool;
+                                });
+
+                                [true, false].forEach(function(inlineVoteResults) {
+                                    describe('if c6AppData.behaviors.inlineVoteResults is ' + inlineVoteResults, function() {
+                                        beforeEach(function() {
+                                            c6AppData.behaviors.inlineVoteResults = inlineVoteResults;
+                                        });
+
+                                        it('should be false', function() {
+                                            expect(VideoCardCtrl.flyAway).toBe(false);
+                                        });
+
+                                        describe('if active is false', function() {
+                                            beforeEach(function() {
+                                                $scope.$apply(function() {
+                                                    $scope.active = false;
+                                                });
+                                            });
+
+                                            it('should be true', function() {
+                                                expect(VideoCardCtrl.flyAway).toBe(true);
+                                            });
+                                        });
+                                    });
+                                });
+                            });
+                        });
+                    });
+
+                    describe('if the ballot module is present', function() {
+                        beforeEach(function() {
+                            $scope.config.modules = ['displayAd', 'ballot'];
+                        });
+
+                        [true, false].forEach(function(bool) {
+                            describe('if _data.modules.ballot.ballotActive is ' + bool, function() {
+                                beforeEach(function() {
+                                    $scope.config._data.modules.ballot.ballotActive = bool;
+                                });
+
+                                it('should be ' + bool, function() {
+                                    expect(VideoCardCtrl.flyAway).toBe(bool);
+                                });
+
+                                describe('if active is false', function() {
+                                    beforeEach(function() {
+                                        $scope.$apply(function() {
+                                            $scope.active = false;
+                                        });
+                                    });
+
+                                    it('should be true', function() {
+                                        expect(VideoCardCtrl.flyAway).toBe(true);
+                                    });
+                                });
+                            });
+                        });
+
+                        [true, false].forEach(function(bool) {
+                            describe('if _data.modules.ballot.resultsActive is ' + bool, function() {
+                                beforeEach(function() {
+                                    $scope.config._data.modules.ballot.resultsActive = bool;
+                                });
+
+                                [true, false].forEach(function(inlineVoteResults) {
+                                    describe('if c6AppData.behaviors.inlineVoteResults is ' + inlineVoteResults, function() {
+                                        beforeEach(function() {
+                                            c6AppData.behaviors.inlineVoteResults = inlineVoteResults;
+                                        });
+
+                                        it('should be ' + (bool && !inlineVoteResults), function() {
+                                            expect(VideoCardCtrl.flyAway).toBe(bool && !inlineVoteResults);
+                                        });
+
+                                        describe('if active is false', function() {
+                                            beforeEach(function() {
+                                                $scope.$apply(function() {
+                                                    $scope.active = false;
+                                                });
+                                            });
+
+                                            it('should be true', function() {
+                                                expect(VideoCardCtrl.flyAway).toBe(true);
+                                            });
+                                        });
+                                    });
+                                });
+                            });
+                        });
+                    });
+                });
+
+                [true, false].forEach(function(autoplay) {
+                    describe('if config.data.autoplay is ' + autoplay, function() {
+                        beforeEach(function() {
+                            $scope.config.data.autoplay = autoplay;
+                        });
+
+                        [true, false].forEach(function(enablePlay) {
+                            describe('if enablePlay is ' + enablePlay, function() {
+                                beforeEach(function() {
+                                    VideoCardCtrl.enablePlay = enablePlay;
+                                });
+
+                                describe('if the video has played', function() {
+                                    beforeEach(function() {
+                                        var player = new Player();
+
+                                        $scope.$emit('<vpaid-player>:init', player);
+                                        player.emit('ready');
+                                        player.emit('play');
+                                    });
+
+                                    it('should be false', function() {
+                                        expect(VideoCardCtrl.flyAway).toBe(false);
+                                    });
+                                });
+
+                                describe('if the video has not played', function() {
+                                    it('should be ' + (!autoplay && enablePlay), function() {
+                                        expect(VideoCardCtrl.flyAway).toBe(!autoplay && enablePlay);
+                                    });
                                 });
                             });
                         });
@@ -374,13 +553,78 @@ define(['minireel', 'services'], function(minireelModule, servicesModule) {
                         it('should be ' + !bool, function() {
                             expect(VideoCardCtrl.enablePlay).toBe(!bool);
                         });
+
+                        describe('if the type is "dailymotion"', function() {
+                            beforeEach(function() {
+                                $scope.config.type = 'dailymotion';
+                                instantiate();
+                            });
+
+                            it('should be false', function() {
+                                expect(VideoCardCtrl.enablePlay).toBe(false);
+                            });
+                        });
                     });
                 });
             });
         });
 
+        describe('methods', function() {
+            describe('closeBallot()', function() {
+                beforeEach(function() {
+                    ['ballotActive'].forEach(function(prop) {
+                        $scope.config._data.modules.ballot[prop] = true;
+                    });
+
+                    VideoCardCtrl.closeBallot();
+                });
+
+                it('should the ballot', function() {
+                    ['ballotActive'].forEach(function(prop) {
+                        expect($scope.config._data.modules.ballot[prop]).toBe(false);
+                    });
+                });
+            });
+
+            describe('closeBallotResults()', function() {
+                beforeEach(function() {
+                    $scope.config._data.modules.ballot.resultsActive = true;
+
+                    VideoCardCtrl.closeBallotResults();
+                });
+
+                it('should the ballot results', function() {
+                    expect($scope.config._data.modules.ballot.resultsActive).toBe(false);
+                });
+            });
+        });
+
         describe('$events', function() {
-            ['<vast-player>:init', '<vpaid-player>:init'].forEach(function($event) {
+            describe('<ballot-vote-module>:vote', function() {
+                beforeEach(function() {
+                    spyOn(VideoCardCtrl, 'closeBallot').and.callThrough();
+                    $scope.config._data.modules.ballot.resultsActive = false;
+
+                    $scope.$emit('<ballot-vote-module>:vote', 0);
+                });
+
+                it('should close the ballot', function() {
+                    expect(VideoCardCtrl.closeBallot).toHaveBeenCalled();
+                });
+
+                it('should show the results', function() {
+                    expect($scope.config._data.modules.ballot.resultsActive).toBe(true);
+                });
+            });
+
+            [
+                '<vast-player>:init',
+                '<vpaid-player>:init',
+                '<youtube-player>:init',
+                '<vimeo-player>:init',
+                '<dailymotion-player>:init',
+                '<embedded-player>:init'
+            ].forEach(function($event) {
                 describe($event, function() {
                     var iface;
 
@@ -396,98 +640,6 @@ define(['minireel', 'services'], function(minireelModule, servicesModule) {
                         expect(VideoCardCtrl.player).not.toBe(iface);
                     });
 
-                    describe('when the video ends', function() {
-                        beforeEach(function() {
-                            expect($scope.$emit).not.toHaveBeenCalledWith('<mr-card>:contentEnd', jasmine.any(Object));
-
-                            iface.emit('ended');
-                        });
-
-                        describe('if the post module is present', function() {
-                            beforeEach(function() {
-                                $scope.config.modules = ['post'];
-                                $scope.$emit.calls.reset();
-
-                                iface.emit('ended');
-                            });
-
-                            it('should not emit <mr-card>:contentEnd', function() {
-                                expect($scope.$emit).not.toHaveBeenCalledWith('<mr-card>:contentEnd', $scope.config);
-                            });
-                        });
-
-                        describe('if the post module is not present', function() {
-                            beforeEach(function() {
-                                $scope.config.modules = ['displayAd'];
-                                $scope.$emit.calls.reset();
-
-                                iface.emit('ended');
-                            });
-
-                            it('should $emit the <mr-card>:contentEnd event', function() {
-                                expect($scope.$emit).toHaveBeenCalledWith('<mr-card>:contentEnd', $scope.config);
-                            });
-                        });
-
-                        it('should set postModuleActive to true', function() {
-                            expect(VideoCardCtrl.postModuleActive).toBe(true);
-                        });
-                    });
-
-                    describe('when the video plays', function() {
-                        beforeEach(function() {
-                            VideoCardCtrl.postModuleActive = true;
-
-                            iface.emit('play');
-                        });
-
-                        it('should disable the postModule', function() {
-                            expect(VideoCardCtrl.postModuleActive).toBe(false);
-                        });
-                    });
-
-                    describe('when the companions are ready', function() {
-                        beforeEach(function() {
-                            iface.emit('companionsReady');
-                        });
-
-                        it('should get a 300x250 companion', function() {
-                            expect(iface.getCompanions).toHaveBeenCalledWith(300, 250);
-                        });
-
-                        describe('if there are no companions', function() {
-                            beforeEach(function() {
-                                iface.getCompanions.and.returnValue(null);
-                                $scope.$emit($event, iface);
-                                iface.emit('companionsReady');
-                            });
-
-                            it('should set the _data.companion to null', function() {
-                                expect($scope.config._data.companion).toBeNull();
-                            });
-                        });
-
-                        describe('if there is a companion', function() {
-                            var companions;
-
-                            beforeEach(function() {
-                                companions = [
-                                    {
-                                        width: 300,
-                                        height: 250
-                                    }
-                                ];
-                                iface.getCompanions.and.returnValue(companions);
-                                $scope.$emit($event, iface);
-                                iface.emit('companionsReady');
-                            });
-
-                            it('should set the _data.companion to the returned companion', function() {
-                                expect($scope.config._data.companion).toBe(companions[0]);
-                            });
-                        });
-                    });
-
                     describe('when the iface is ready', function() {
                         beforeEach(function() {
                             $scope.$apply(function() {
@@ -497,6 +649,136 @@ define(['minireel', 'services'], function(minireelModule, servicesModule) {
 
                         it('should out the player on the controller', function() {
                             expect(VideoCardCtrl.player).toBe(iface);
+                        });
+
+                        describe('when the video ends', function() {
+                            beforeEach(function() {
+                                expect($scope.$emit).not.toHaveBeenCalledWith('<mr-card>:contentEnd', jasmine.any(Object));
+
+                                iface.emit('ended');
+                            });
+
+                            ['post', 'ballot'].forEach(function(module) {
+                                describe('if the ' + module + ' module is present', function() {
+                                    beforeEach(function() {
+                                        $scope.config.modules = [module, 'displayAd'];
+                                        $scope.$emit.calls.reset();
+
+                                        iface.emit('ended');
+                                    });
+
+                                    it('should not emit <mr-card>:contentEnd', function() {
+                                        expect($scope.$emit).not.toHaveBeenCalledWith('<mr-card>:contentEnd', $scope.config);
+                                    });
+                                });
+
+                                describe('if the ' + module + ' module is not present', function() {
+                                    beforeEach(function() {
+                                        $scope.config.modules = ['displayAd'];
+                                        $scope.$emit.calls.reset();
+
+                                        iface.emit('ended');
+                                    });
+
+                                    it('should $emit the <mr-card>:contentEnd event', function() {
+                                        expect($scope.$emit).toHaveBeenCalledWith('<mr-card>:contentEnd', $scope.config);
+                                    });
+                                });
+                            });
+
+                            it('should set $scope.config._data.modules.post.active to true', function() {
+                                expect($scope.config._data.modules.post.active).toBe(true);
+                            });
+                        });
+
+                        describe('when the video pauses', function() {
+                            beforeEach(function() {
+                                ['ballotActive', 'resultsActive'].forEach(function(prop) {
+                                    $scope.config._data.modules.ballot[prop] = false;
+                                });
+                            });
+
+                            describe('if the user has not voted', function() {
+                                beforeEach(function() {
+                                    $scope.config._data.modules.ballot.vote = null;
+
+                                    iface.emit('pause');
+                                });
+
+                                it('should activate the ballot', function() {
+                                    expect($scope.config._data.modules.ballot.resultsActive).toBe(false);
+                                    expect($scope.config._data.modules.ballot.ballotActive).toBe(true);
+                                });
+                            });
+
+                            describe('if the user has voted', function() {
+                                beforeEach(function() {
+                                    $scope.config._data.modules.ballot.vote = 0;
+
+                                    iface.emit('pause');
+                                });
+
+                                it('should activate the results', function() {
+                                    expect($scope.config._data.modules.ballot.resultsActive).toBe(true);
+                                    expect($scope.config._data.modules.ballot.ballotActive).toBe(false);
+                                });
+                            });
+                        });
+
+                        describe('when the video plays', function() {
+                            beforeEach(function() {
+                                $scope.config._data.modules.post.active = true;
+
+                                iface.emit('play');
+                            });
+
+                            it('should disable the postModule', function() {
+                                expect($scope.config._data.modules.post.active).toBe(false);
+                            });
+                        });
+
+                        describe('when the companions are ready', function() {
+                            beforeEach(function() {
+                                iface.emit('companionsReady');
+                            });
+
+                            it('should get a 300x250 companion', function() {
+                                expect(iface.getCompanions).toHaveBeenCalledWith(300, 250);
+                            });
+
+                            describe('if there are no companions', function() {
+                                beforeEach(function() {
+                                    iface.getCompanions.and.returnValue(null);
+                                    $scope.$emit($event, iface);
+                                    iface.emit('ready');
+                                    iface.emit('companionsReady');
+                                });
+
+                                it('should set the _data.companion to null', function() {
+                                    expect($scope.config._data.companion).toBeNull();
+                                });
+                            });
+
+                            describe('if there is a companion', function() {
+                                var companions;
+
+                                beforeEach(function() {
+                                    companions = [
+                                        {
+                                            width: 300,
+                                            height: 250
+                                        }
+                                    ];
+                                    iface.getCompanions.and.returnValue(companions);
+                                    $scope.$emit($event, iface);
+                                    iface.emit('ready');
+                                    iface.emit('companionsReady');
+                                });
+
+                                it('should set the _data.companion to the returned companion', function() {
+                                    expect($scope.config._data.companion).toBe(companions[0]);
+                                });
+                            });
                         });
 
                         describe('$watchers', function() {
@@ -557,14 +839,34 @@ define(['minireel', 'services'], function(minireelModule, servicesModule) {
                                     describe('if the card should be autoplayed', function() {
                                         beforeEach(function() {
                                             $scope.config.data.autoplay = true;
+                                        });
 
-                                            $scope.$apply(function() {
-                                                $scope.active = true;
+                                        describe('if the device can be autoplayed', function() {
+                                            beforeEach(function() {
+                                                c6AppData.profile.autoplay = true;
+
+                                                $scope.$apply(function() {
+                                                    $scope.active = true;
+                                                });
+                                            });
+
+                                            it('should play the video', function() {
+                                                expect(iface.play).toHaveBeenCalled();
                                             });
                                         });
 
-                                        it('should play the video', function() {
-                                            expect(iface.play).toHaveBeenCalled();
+                                        describe('if the device can\'t be autoplayed', function() {
+                                            beforeEach(function() {
+                                                c6AppData.profile.autoplay = false;
+
+                                                $scope.$apply(function() {
+                                                    $scope.active = true;
+                                                });
+                                            });
+
+                                            it('should not play the video', function() {
+                                                expect(iface.play).not.toHaveBeenCalled();
+                                            });
                                         });
                                     });
 
@@ -761,9 +1063,30 @@ define(['minireel', 'services'], function(minireelModule, servicesModule) {
                                 });
 
                                 describe('when false', function() {
+                                    beforeEach(function() {
+                                        $scope.$apply(function() {
+                                            $scope.active = true;
+                                        });
+
+                                        ['closeBallot', 'closeBallotResults'].forEach(function(method) {
+                                            spyOn(VideoCardCtrl, method).and.callThrough();
+                                        });
+                                        $scope.$apply(function() {
+                                            $scope.active = false;
+                                        });
+                                    });
+
+                                    it('should close the ballot', function() {
+                                        ['closeBallot', 'closeBallotResults'].forEach(function(method) {
+                                            expect(VideoCardCtrl[method]).toHaveBeenCalled();
+                                        });
+                                    });
+
                                     [true, false].forEach(function(bool) {
                                         describe('if the card\'s autoplay property is ' + bool, function() {
                                             beforeEach(function() {
+                                                iface.pause.calls.reset();
+
                                                 $scope.$apply(function() {
                                                     $scope.active = true;
                                                 });

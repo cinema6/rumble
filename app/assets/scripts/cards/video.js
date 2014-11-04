@@ -4,10 +4,11 @@ function( angular ) {
 
     return angular.module('c6.rumble.cards.video', [])
         .controller('VideoCardController', ['$scope','c6ImagePreloader','compileAdTag',
-                                             '$interval',
+                                             '$interval','c6AppData',
         function                            ( $scope , c6ImagePreloader , compileAdTag ,
-                                              $interval ) {
-            var self = this,
+                                              $interval , c6AppData ) {
+            var VideoCardCtrl = this,
+                behaviors = c6AppData.behaviors,
                 config = $scope.config,
                 profile = $scope.profile,
                 data = config.data,
@@ -15,14 +16,19 @@ function( angular ) {
                     hasPlayed: false,
                     companion: null,
                     modules: {
-                        displayAd: {
+                        ballot: {
+                            ballotActive: false,
+                            resultsActive: false,
+                            vote: null
+                        },
+                        post: {
                             active: false
                         }
                     }
                 });
 
             function playerReady(player) {
-                self.player = player;
+                VideoCardCtrl.player = player;
 
                 function controlNav(NavController) {
                     var canSkipAnytime = data.skip === true,
@@ -70,7 +76,7 @@ function( angular ) {
                 }
 
                 function activateCard() {
-                    if (data.autoplay) {
+                    if (data.autoplay && c6AppData.profile.autoplay) {
                         player.play();
                     }
 
@@ -81,11 +87,41 @@ function( angular ) {
 
                 function deactivateCard() {
                     player.pause();
+
+                    ['closeBallot', 'closeBallotResults'].forEach(function(method) {
+                        VideoCardCtrl[method]();
+                    });
                 }
 
-                player.once('play', function() {
-                    _data.hasPlayed = true;
-                });
+                player
+                    .once('companionsReady', function() {
+                        var companions = player.getCompanions(300, 250);
+
+                        _data.companion = companions && companions[0];
+                    })
+                    .on('play', function() {
+                        _data.modules.post.active = false;
+                    })
+                    .on('pause', function() {
+                        var ballot = _data.modules.ballot,
+                            hasVoted = ballot.vote !== null;
+
+                        if (hasVoted) {
+                            ballot.resultsActive = true;
+                        } else {
+                            ballot.ballotActive = true;
+                        }
+                    })
+                    .on('ended', function() {
+                        _data.modules.post.active = true;
+
+                        if (!$scope.hasModule('post') && !$scope.hasModule('ballot')) {
+                            $scope.$emit('<mr-card>:contentEnd', $scope.config);
+                        }
+                    })
+                    .once('play', function() {
+                        _data.hasPlayed = true;
+                    });
 
                 $scope.$watch('onDeck', function(onDeck) {
                     if (onDeck) {
@@ -103,32 +139,15 @@ function( angular ) {
             }
 
             function playerInit($event, player) {
-                player
-                    .once('ready', function() {
-                        playerReady(player);
-                    })
-                    .once('companionsReady', function() {
-                        var companions = player.getCompanions(300, 250);
-
-                        _data.companion = companions && companions[0];
-                    })
-                    .on('play', function() {
-                        self.postModuleActive = false;
-                    })
-                    .on('ended', function() {
-                        self.postModuleActive = true;
-
-                        if (!$scope.hasModule('post')) {
-                            $scope.$emit('<mr-card>:contentEnd', $scope.config);
-                        }
-                    });
+                player.once('ready', function() {
+                    playerReady(player);
+                });
             }
 
             this.player = null;
             this.adType = (profile.flash && !!data.vpaid) ? 'vpaid' : 'vast';
             this.adTag = compileAdTag(data[this.adType]);
-            this.enablePlay = !profile.touch;
-            this.postModuleActive = false;
+            this.enablePlay = !profile.touch && (config.type !== 'dailymotion');
             Object.defineProperties(this, {
                 showPlay: {
                     get: function() {
@@ -137,13 +156,47 @@ function( angular ) {
                 },
                 flyAway: {
                     get: function() {
-                        return !$scope.active || ($scope.hasModule('post') && this.postModuleActive);
+                        var modules = _data.modules,
+                            postModule = modules.post,
+                            ballotModule = modules.ballot;
+
+                        return !$scope.active ||
+                            (
+                                $scope.hasModule('post') && postModule.active
+                            ) || (
+                                $scope.hasModule('ballot') &&
+                                    (
+                                        ballotModule.ballotActive ||
+                                            (ballotModule.resultsActive && !behaviors.inlineVoteResults)
+                                    )
+                            ) || (
+                                !data.autoplay && !_data.hasPlayed && this.enablePlay
+                            );
                     }
                 }
             });
 
-            ['<vpaid-player>:init', '<vast-player>:init'].forEach(function($event) {
+            this.closeBallot = function() {
+                _data.modules.ballot.ballotActive = false;
+            };
+            this.closeBallotResults = function() {
+                _data.modules.ballot.resultsActive = false;
+            };
+
+            [
+                '<vast-player>:init',
+                '<vpaid-player>:init',
+                '<youtube-player>:init',
+                '<vimeo-player>:init',
+                '<dailymotion-player>:init',
+                '<embedded-player>:init'
+            ].forEach(function($event) {
                 $scope.$on($event, playerInit);
+            });
+
+            $scope.$on('<ballot-vote-module>:vote', function() {
+                VideoCardCtrl.closeBallot();
+                _data.modules.ballot.resultsActive = true;
             });
         }])
 
