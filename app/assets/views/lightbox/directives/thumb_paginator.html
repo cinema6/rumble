@@ -1,0 +1,36 @@
+<div class="adSkip__group c6-fade" ng-show="disableNextWhen() && disablePrevWhen()">
+    <p class="adSkip__message">Skip this Ad in <strong>{{countdown()}}</strong></p>
+</div>
+<button thumb-paginator-button
+ng-style="{width: Ctrl.buttonWidth}"
+ng-click="onPrev()"
+ng-disabled="disablePrevWhen()"
+class="btnPrimary pager__btn pager__btn--prev"
+type="button"
+title="Previous Page">
+    <svg class="pager__btnIcon pager__btnIcon--prev" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+     viewBox="0 0 27.213 45.941" enable-background="new 0 0 27.213 45.941" xml:space="preserve">
+        <path class="pager__btnIconPath pager__btnIconPath--prev" fill-rule="evenodd" clip-rule="evenodd" d="M22.971,0L0,22.971l22.971,22.97l4.243-4.243L8.485,22.971
+            L27.213,4.243L22.971,0z"/>
+    </svg>
+    <span class="pager__label btn__label">Prev</span>
+</button>
+<button thumb-paginator-button
+ng-style="{width: Ctrl.buttonWidth}"
+ng-click="onNext()"
+ng-disabled="disableNextWhen()"
+class="btnPrimary pager__btn pager__btn--next"
+type="button"
+title="Next Page">
+    <svg class="pager__btnIcon pager__btnIcon--next" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+     viewBox="0 0 27.213 45.941" enable-background="new 0 0 27.213 45.941" xml:space="preserve">
+        <path class="pager__btnIconPath pager__btnIconPath--next" fill-rule="evenodd" clip-rule="evenodd" d="M4.243,0l22.971,22.971L4.243,45.941L0,41.699l18.728-18.728L0,4.243
+        L4.243,0z"/>
+    </svg>
+    <span class="pager__label btn__label">Next</span>
+</button>
+
+<div ng-style="{left: Ctrl.thumbsOffset, right: Ctrl.thumbsOffset}" 
+class="pages__group">
+    <div ng-style="{transform: 'translateX(' + (page * -100) + '%)'}" class="pages__scroller" ng-transclude></div>
+</div>

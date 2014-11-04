@@ -1,0 +1,1128 @@
+/*  ================================================
+    global / reset styles
+    ================================================ */
+    /*  apply a natural box layout model to all elements, 
+        but allowing components to change */
+        html {
+          box-sizing: border-box;
+        }
+        *, *:before, *:after {
+          box-sizing: inherit;
+        }
+    body {
+        font-size: 16px; 
+        font-family: 'Open Sans', Arial, Helvetica, sans-serif; 
+        font-weight:300; 
+        color:#444; 
+        line-height: 1.5;
+        background:#fff; 
+        margin:0;
+    }
+    ::-moz-selection {
+        background: #e900a4; text-shadow: none; color:#fff;
+    }
+    ::selection {
+        background: #e900a4; text-shadow: none; color:#fff;
+    }
+    p {
+        margin: 0.75em 0;
+    }
+    textarea {
+        resize: vertical;
+    }
+    img {
+        border:0; max-width:100%;
+    }
+    button {
+        font-size:1rem;
+        margin:0; border:0; padding:0;
+        display: inline-block;
+        cursor:pointer;
+        background:none;
+    }
+
+/*  ================================================
+    c6 copy classes : general type and color styles
+    ================================================ */
+    .tk--hdr {
+        font-family: 'Roboto Condensed', 'Open Sans', Arial, Helvetica, sans-serif; 
+        font-weight:300;
+    }
+    .tk--copy {
+        font-family: 'Open Sans', Arial, Helvetica, sans-serif;
+    }
+    a {
+        text-decoration: none; color:#d94040;
+    }
+    a:focus, button:focus, input:focus, textarea:focus {
+        outline:none; border:0;
+    }
+    .tk--youtube {
+        color:#e22d24;
+    }
+    .tk--vimeo {
+        color:#445566;
+    }
+    .tk--facebook {
+        color:#3b5998;
+    }
+    .tk--twitter {
+        color:#00b0ed;
+    }
+    .tk--pinterest {
+        color:#cb2027;
+    }
+
+/*  ================================================
+    helper / ui classes
+    ================================================ */
+    .ir {
+        background-color: transparent;
+        border: 0; width:0; height:0;
+        overflow: hidden; display: block; position:absolute;
+    }
+    .clearfix:before,
+    .clearfix:after {
+        content: ' ';
+        display: table;
+    }
+    .clearfix:after {
+        clear: both;
+    }
+    .hidden {
+        visibility: hidden;
+    }
+
+
+
+    .sprite,
+    .spriteAf:after,
+    .spriteBe:before {
+        background:url('../../img/sprite--alpha@2x.png') 0 0 / 18.75rem 18.75rem no-repeat;
+    }
+
+
+        .sprite--close {
+            width:1rem; height:1rem;
+            background-position:-5rem -9rem;
+            display: inline-block;
+        }
+
+        .socialIconsBe:before,
+        .uiIconsBe:before {
+            content:'';
+            width:1rem; height:1rem;
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+            .socialIconsBe--youtube:before {
+                background-position:-1rem -3rem;
+            }
+            .socialIconsBe--vimeo:before {
+                background-position: -3rem -3rem;
+            }
+            .socialIconsBe--facebook:before {
+                background-position: -5rem -3rem;
+            }
+            .socialIconsBe--twitter:before {
+                background-position: -7rem -3rem;
+            }
+            .socialIconsBe--pinterest:before {
+                background-position: -9rem -3rem;
+            }
+
+            .socialIconsBe__light--youtube:before {
+                background-position:-1rem -5rem;
+            }
+            .socialIconsBe__light--vimeo:before {
+                background-position: -3rem -5rem;
+            }
+            .socialIconsBe__light--facebook:before {
+                background-position: -5rem -5rem;
+            }
+            .socialIconsBe__light--twitter:before {
+                background-position: -7rem -5rem;
+            }
+            .socialIconsBe__light--pinterest:before {
+                background-position: -9rem -5rem;
+            }
+
+
+
+            .uiIconsBe--replay:before {
+                background-position:-1rem -9rem;
+            }
+            .uiIconsBe__dark--replay:before {
+                background-position:-1rem -7rem;
+            }
+
+
+    .overlay {
+        background:rgb(0,0,0); background:rgba(0,0,0,0.8);
+        position:absolute; z-index: 1;
+        left:0;
+        width:100%; height:100%; 
+    }
+        .overlay__closeBtn {
+            width:1.125em; height:1.125em;
+            position: absolute;
+            top:1em; right:1em;
+        }
+
+
+    .textLink {
+        border:0;
+    }
+
+
+    .btnPrimary,
+    .btnPrimary:active,
+    .btnPrimary:focus {
+        border:3px solid #d94040;
+        background:#d94040;
+        line-height: 1;
+        text-align: center;
+        font-size: 1rem;
+    }
+        .btnPrimary .btn__label {
+            font-family: 'Roboto Condensed', 'Open Sans', Arial, Helvetica, sans-serif;
+            font-size:0.875em;
+            color:#fff;
+            font-weight:bold;
+            text-transform:uppercase;
+            text-shadow: 0 1px 1px rgba(0,0,0,0.44);
+        }
+        .btnPrimary[disabled],
+        .btnPrimary[disabled]:active,
+        .btnPrimary[disabled]:hover {
+            cursor:default;
+            background:#ccc;
+            border-color:#ccc;
+        }
+            .btnPrimary[disabled] .btn__label,
+            .btnPrimary[disabled]:active .btn__label,
+            .btnPrimary[disabled]:hover .btn__label {
+                text-shadow:none;
+                color:#fff;
+            }
+
+
+    .btnSecondary,
+    .btnSecondary:active,
+    .btnSecondary:focus {
+        background:rgba(0,0,0,0.6); 
+        color:#fff; font-weight:bold;
+        border-radius:3px;
+        display:table;
+        text-align: center; 
+        line-height:1;
+    }
+
+
+    .ui-offscreen {
+        left:-5000%;
+        position: absolute;
+        height:100%; width:100%;
+    }
+
+
+
+
+/*  ================================================
+    ng-animate classes
+    ================================================ */
+    .c6-fade {
+        -webkit-transition:0.3s linear opacity;
+        transition:0.3s linear opacity;
+    }
+    .c6-fade.ng-hide-add, .c6-fade.ng-hide-remove {
+        display:block !important;
+    }
+    .c6-fade.ng-hide {
+        opacity: 0;
+    }
+
+
+
+
+
+/*  ================================================
+    experience classes
+    ================================================ */
+    .experience__group {
+        position:absolute; z-index: 2;
+        top:0; left:0;
+        height:100%; width:100%;
+        text-align: center;
+        white-space: nowrap;
+        overflow: auto;
+    }
+        .experience__group:before {
+            content: ' ';
+            display: inline-block;
+            vertical-align: middle;
+            height: 100%;
+            /* MR min height threshold to trigger scrollbars */
+            min-height:400px;
+        }
+        .experience {
+            display: inline-block;
+            vertical-align: middle;
+            text-align: left;
+            white-space: normal;
+            position:relative;
+            width:90%;
+            /* MR min width threshold to trigger scrollbars */
+            min-width:600px;
+        }
+
+
+    .MiniReel__group {
+        background:#fff;
+        border-radius:3px;
+        padding:0.5em 0.5em 56% 0.5em; margin:1.25em 0;
+        position: relative;
+        width:100%; height: 0;
+        min-height:20em;
+    }
+
+        .MiniReel__closeBtn,
+        .MiniReel__closeBtn:active,
+        .MiniReel__closeBtn:focus {
+            width:2.5em; height:2.5em;
+            padding:0;
+            position:absolute; z-index: 5;
+            top:-1.25em; right:-1.25em;
+            background:#000; border-radius:50%;
+            border:3px solid #fff;
+            -webkit-box-shadow: 0 5px 5px 0 rgba(0,0,0,0.5);
+            box-shadow: 0 5px 5px 0 rgba(0,0,0,0.5);
+        }
+            .MiniReel__closeBtn:active {
+                top:-1.125em;
+            }
+
+            .MiniReel__closeBtn .sprite--close {
+                display: block;
+                margin:0 auto;
+            }
+
+
+
+
+
+/*  ================================================
+    titleBar classes
+    ================================================ */
+    .titleBar__group {
+        position: relative;
+        height:1.25em;
+    }
+
+        .titleBar__disabler {
+            position:absolute;
+            z-index: 2;
+            width:100%; height:100%;
+        }
+
+
+
+
+        .titleBar__title {
+            margin:0;
+            font-size:1em;
+            line-height: 1;
+            font-weight:normal;
+            float:left;
+            width:100%;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+
+            .titleBar__titleText {
+                color:#000;
+                cursor:pointer;
+            }
+
+
+            /* this is the container for publisher logos. by default it is 
+            hidden. override this via external publisher css file*/
+            .publisherProfile__logoBox {
+                display:none;
+            }
+
+
+
+
+
+/*  ================================================
+    cards classes
+    ================================================ */
+    .cards__group {
+        position:absolute;
+        top:2em; right:0.5em; bottom:0.5em; left:0.5em;
+        overflow: hidden;
+    }
+
+    .cards__list {
+        list-style:none;
+        margin:0; padding:0;
+    }
+        .cards__item {
+            margin:0; padding:0;
+        }
+
+
+
+/*  ================================================
+    video card classes
+    ================================================ */
+    .player__group {
+        height:calc(100% - 3.25em);
+        position: absolute;
+        left:0; right:19em;
+        overflow: hidden;
+        background-color: #000;
+    }
+        .playerHeight {
+            height:calc(100% - 3.25em);
+        }
+
+        .player, .player__thumbnail {
+            position:absolute; width:100%; height:100%;
+        }
+            .player iframe {
+                width:100%; height:100%; position:absolute;
+            }
+        
+        .player__thumbnail {
+            background:50% 50% / cover no-repeat;
+        }
+
+        .player__playBtn {
+            width: 8em;
+            height: 8em;
+            padding: 0;
+            margin: -4em 0 0 -4em;
+            border: 4px solid #fff;
+            border-radius:50%;
+            cursor: pointer;
+            background: rgba(0,0,0,0.7);
+            position: absolute; left: 50%; top: 50%; z-index:1;
+        }
+            .player__playIcon {
+                height: 45%; width: 100%;
+                background: url('../../img/play-icon.svg') 56% 50% / contain no-repeat;
+            }
+
+
+    .card__copy {
+        position:absolute;
+        right:0; top:0; bottom:0;
+        width:18.5em;
+        overflow: auto;
+    }
+        .card__copy--companionAd {
+            bottom:16.5em;
+        }
+        .card__title {
+            color:#000;
+            font-size:1.375em;
+            line-height: 1.5rem;
+            margin:0;
+        }
+        .card__attributes {
+            color:#999; 
+            font-size:0.75rem;/*12px*/
+        }
+        .card__desc {
+            margin:0.375rem 0 0;
+            font-size:0.8125em;
+            line-height: 1.125rem;
+        }
+
+
+
+    /*  video ad card classes
+        ================================================ */
+        .videoAd__label {
+            text-align: center;
+            font-size:0.75em;
+            position: absolute; z-index:1;
+            top:0.125rem;
+            width:100%;
+            margin:0;
+            color:#999;
+        }
+
+
+        .videoAd__video {
+            width:100%; height:100%;
+            position:absolute; top:0; left:0;
+            min-height:10em;
+        }
+
+
+        .companionAd__group {
+            width:18.75em;
+            position:absolute;
+            right:0; bottom:0;
+        }
+
+
+        .adSkip__group {
+            background:rgba(256,256,256,0.8);
+            position:absolute; z-index: 1;
+            bottom:0; left:0; right:0;
+            height:3em;
+        }
+            .adSkip__message {
+                text-align: center;
+                font-size:0.8125em;
+                margin-top:0.9375rem;
+                color:#000;
+            }
+
+
+
+    /*  display ad module classes
+        ================================================ */
+        .displayAd__label {
+            font-size:0.625em;
+            color:#999;
+            text-align: center;
+            width:100%;
+            display: block;
+            background:#fff;
+        }
+
+        .displayAd__box {
+            width:18.75em; height:15.625em;
+            margin:0 auto;
+        }
+            .displayAd__box iframe {
+                width:100%; height:100%;
+                border:0;
+            }
+
+
+
+
+
+
+/*  ================================================
+    text only card classes
+    ================================================ */
+    .textOnly__copy {
+        overflow-x:hidden;
+        overflow-y:auto;
+        position:absolute;
+        right:19em; left:0; top:0; bottom:3.25em;
+        padding:3em 2em 1em 4em;
+    }
+        .textOnly__title {
+            margin:0.25em 0 0.90625em 0; 
+            font-size:2em; 
+            line-height: 1;
+        }
+
+        .textOnly__goBtn {
+            padding:0.5em 2em;
+            margin:1.1875em 0 0 0;
+        }
+
+    .textOnly__imgBox {
+        width:18.75em; height:calc(100% - 3.25em);
+        position:absolute;
+        right:0; top:0;
+        background:50% 50% / cover no-repeat;
+    }
+
+
+
+/*  ================================================
+    sponsored card styles
+    ================================================ */
+    .sponsorProfile__group {
+        margin:0;
+    }
+
+
+        .sponsorProfile__imgBox {
+            width:2.75em; height:2.75em;
+            float:left;
+            border:1px solid #ddd;
+            margin:0 0.5em 0 0;
+            display: block;
+            text-decoration: none;
+        }
+            .sponsorProfile__img {
+                width:2.625em; height:2.625em;
+                display: block;
+            }
+
+        .sponsorProfile__copy {
+            float:left;
+            width:calc(100% - 3.25em);
+        }
+        
+
+        .sponsorProfile__links {
+            line-height: 1;
+            margin:0;
+        }
+            .sponsorProfile__tag {
+                margin:0.125rem 0.5rem 0 0;
+                float:left;
+            }
+            .sponsorProfile__link {
+                border:0;
+                float:left;
+                padding: 0 0.125em;
+            }
+
+            .sponsor__actions {
+                margin:1em 0;
+            }
+                .sponsor__goBtn {
+                    margin:0 0 1em 0;
+                    padding:0.25em 1em;
+                    border-radius:3px;
+                    display:table;
+                }
+
+
+
+
+
+/*  ================================================
+    Display Ad Card classes
+    ================================================ */
+    .displayAdCard__group {
+        text-align: center;
+        height:22.5em;
+        position:absolute;
+        top:50%; left:0; right:0;
+        margin:-12.5em 0 0 0;
+    }
+
+
+        .displayAdBrand__tagline {
+            font-size:0.875em;
+            color:#999;
+            margin:0 0 0.8125rem 0;
+        }
+            .displayAdBrand__taglineLink {
+                font-weight:bold;
+            }
+
+
+        .displayAdBrand__linksBox {
+            margin:1.375em 0 0 0;
+        }
+            .displayAdBrand__link {
+                padding:0 0.5em;
+                font-size:0.75em;
+                display: inline-block;
+            }
+                .displayAdBrand__linkLabel {
+                    vertical-align: middle;
+                }
+                .displayAdBrand__linkLabel {
+                    margin-left:0.25em;
+                }
+
+
+
+
+
+/*  ================================================
+    recap card classes
+    ================================================ */
+    .recap__list {
+        width:100%;
+        position: absolute; 
+        top:0; bottom:3.25em;
+        overflow-y:auto; overflow-x:hidden;
+        margin:0; padding:0; list-style: none;
+        border-bottom:3px solid #333;
+        border-top:3px solid #333;
+        counter-reset: recap;
+    }
+        .recap__item {
+            position:relative;
+            padding:1em 0; 
+            border-bottom:1px solid #ddd;
+            cursor:pointer;
+        }
+            .recap__item:last-child {
+                border-bottom:0;
+            }
+
+
+            .recap__imgBox {
+                width:8em; height:5em;
+                background:url('../../img/default_square.jpg') 50% 50% / cover no-repeat;
+                float:left;
+                margin:0 1em 0 3em;
+            }
+                .recap__imgBox:before {
+                    counter-increment: recap;
+                    content:counter(recap);
+                    display:block;
+                    width:2em;
+                    font-size:0.75em;
+                    text-align: right;
+                    color:#6c6c6c;
+                    margin:7px 0 0 0;
+                    position: absolute;
+                    left:0.5rem;
+                }
+                .recap__item--ad .recap__imgBox:after {
+                    content:'Ad';
+                    position: absolute;
+                    top:1.8em; left:5em;
+                    background:#000; color:#fff;
+                    padding:0 2px;
+                    font-size:0.625rem; font-weight:bold;
+                }
+
+                .recap__img {
+                    width:8em; height:5em;
+                    display: block;
+                    background: 50% 50% / cover no-repeat;
+                }
+
+
+            .recap__copyBox {
+                float:left;
+                width:calc(100% - 13em);
+            }
+                .card__desc--recapCard {
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    margin-top:0.25rem;
+                }
+
+
+
+
+
+/*  ================================================
+    Pager Nav classes
+    ================================================ */ 
+    .pager__group {
+        height:3em;/*48px*/
+        margin:0; display: block; 
+        position: absolute; z-index: 1;
+        left:0.5em; right:19.5em; bottom:0.5em;/*8px*/
+    }
+        .pager__group--fullWidth {
+            right:0.5em;
+        }
+
+
+    .pager__btn {
+        min-width:6em; height:3em; 
+        position:absolute;
+        background:#d94040;
+    }
+
+        .pager__btn--prev {
+            left:0;
+        }
+        .pager__btn--next {
+            right:0;
+        }
+            .pager__group--recap .pager__btn--next {
+                display: none;
+            }
+
+        .pager__btnIcon {
+            display:block;
+            width:0.8125em; height:1.5em;
+            position:absolute;
+            top:0.5625em; left:12.5%;
+            margin:0;
+        }
+            .pager__btnIcon--next {
+                right:12.5%; left:auto;
+            }
+                .pager__btnIconPath {
+                    fill: #fff;
+                }
+
+        .pager__label {
+            position:absolute; z-index: 1; 
+            top:1em; left:40%;
+        }
+            .pager__btn--next .pager__label {
+                right:40%; left:auto;
+            }
+
+
+    /* pages styles */
+    .pages__group {
+        position:absolute;
+        height:3em; overflow: hidden; 
+        margin:0;
+    }
+        .pager__group--recap .pages__group {
+            display: none;
+        }
+        .pages__scroller {
+            position: relative; left: 0;
+            -webkit-transition: -webkit-transform 0.5s ease; 
+            transition: 0.5s transform;
+        }
+            .pages__list {
+                margin:0; padding:0; 
+                list-style: none;
+                width:12000%;
+            }
+                .pages__item {
+                    float:left;
+                    width:5em; height:3em;
+                    margin:0 1px; padding:0;
+                    position:relative;
+                    overflow: hidden;
+                    border:0;
+                }
+                    .pages__navBtn,
+                    .page__btn {
+                        display: block;
+                        width:100%; height:100%;
+                        margin:0; border:0; padding:0;
+                    }
+                    .page__btn {
+                        cursor: pointer;
+                        background:black url('../../img/default_square.jpg') 50% 50% / cover no-repeat;
+                    }
+                        .page__btn:before {
+                            content:'';
+                            position:absolute;
+                            z-index: 2;
+                            bottom:-4px; left:0;
+                            width:100%; height:3px;
+                            background:#d94040;
+                            border-top:1px solid #fff;
+                            -webkit-transition:bottom 0.2s; 
+                            transition:bottom 0.2s; 
+                        }
+                        .page__btn--ad:after {
+                            content:'Ad';
+                            position: absolute;
+                            top:2px; left:2px;
+                            background:#000; color:#fff;
+                            padding:0 2px;
+                            font-size:0.625rem; font-weight:bold;
+                        }
+                        .page__btn.page__btn--active:before {
+                            bottom:0;
+                        }
+
+                        
+                        .page__previewImg {
+                            position:absolute; top:0;
+                            width:100%; height:100%; display: block;
+                            background:no-repeat 50% 50% / 100%;
+                            -webkit-transition: -webkit-transform 0.3s ease; 
+                            transition: 0.3s transform;
+                        }
+
+                            .page__previewImg:before {
+                                content:'';
+                                background:#000;
+                                position:absolute;
+                                top:0; left:0;
+                                width:100%; height:100%;
+                                opacity:0.4;
+                                -webkit-transition:opacity 0.3s; 
+                                transition:opacity 0.3s;
+                            }
+                                .page__btn--active .page__previewImg:before {
+                                    opacity:0;
+                                }
+                            
+
+
+
+
+
+/*  ================================================
+    nav button classes
+    ================================================ */
+    .nav__btn {
+        width:3em; height:3em;
+        position:absolute;
+        top:50%; 
+        margin:-3.125em 0 0 0;
+        border-radius:0;
+    }
+        .nav__btn--prev {
+            left:0;
+        }
+        .nav__btn--next {
+            right:19em;
+        }
+
+        .nav__btnIcon {
+            position: absolute;
+            width:1em; height:1.5em;
+            top:0.75em;
+            margin:0 0 0 -0.5em;
+        }
+            .nav__btnIcon--prev {
+                left:48%;
+            }
+            .nav__btnIcon--next {
+                left:52%;
+            }
+
+            .nav__btnPath {
+                fill:#fff;
+            }
+
+
+        .nav__btn--centered {
+            top:50%; margin-top:-3em;
+        }
+            .nav__btn--centered.nav__btn--next {
+                right:0;
+            }
+
+
+        .nav__btn--condensed {
+            height:3em;
+        }
+            .nav__btn--condensed .nav__btnIcon {
+                top:0.5em; left:auto; right:auto;
+                width:1em; height:1.5em;
+                margin:0;
+            }
+                .nav__btn--condensed .nav__btnIcon--prev {
+                    left:12.5%;
+                }
+                .nav__btn--condensed .nav__btnIcon--next {
+                    right:12.5%;
+                }
+            .nav__btn--condensed .nav__btnLabel {
+                bottom:1em;
+                left:auto; right:auto;
+                width:auto;
+            }
+                .nav__btn--condensed .nav__btnLabel--prev {
+                    left:46%;
+                }
+                .nav__btn--condensed .nav__btnLabel--next {
+                    right:46%;
+                }
+
+
+
+
+
+/*  ================================================
+    ballot classes
+    ================================================ */
+    .ballot__group {
+        position:absolute; z-index:2;
+        top:0; left:0; right:19em;
+    }
+    .ballot__box {
+        position:absolute; z-index:2;
+        top:45%; left:50%; 
+        width:33em;
+        margin:-4.5em 0 0 -16.5em;
+        border-radius:3px;
+        background:#fff;
+        text-align: center;
+    }
+
+        .ballot__intro {
+            font-size:0.8125em;
+            color:#999;
+            display: block;
+            margin:1.125rem 0 0 0;
+        }
+        .ballot__title {
+            color:#000;
+            font-size:1.25em;
+            line-height: 1.5rem;
+            margin:-1px 0 0 0;
+        }
+            .ballot__title--results {
+                margin-top:1em;
+            }
+
+        .ballot__list {
+            list-style: none;
+            margin:1.25em 0 0 0; padding:0;
+            height:4em;
+        }
+            .ballot__item {
+                position:absolute;
+            }
+                .ballot__item0 {
+                    right:50%;
+                    margin:0 1.5em 0 0;
+                }
+                    .ballot__item0:after {
+                        content:'OR';
+                        position:absolute;
+                        left:100%; top:0.6875rem;
+                        width:3rem;
+                        color:#999;
+                        font-size:0.8125em;
+                    }
+                .ballot__item1 {
+                    left:50%;
+                    margin:0 0 0 1.5em;
+                }
+
+            .ballot__btn {
+                height:2.5em;
+                padding:0 1em 0 3.5em;
+            }
+                .ballot__btn:before {
+                    font-weight:bold;
+                    color:#fff;
+                    text-shadow: 0 1px 1px rgba(0,0,0,0.44);
+                    position: absolute;
+                    top:0; left:0;
+                    width:2.5em; height:2.5em;
+                    padding:0.75em 0 0 0;
+                    background:rgba(0,0,0,0.2);
+                }
+                    .ballot__btn0:before {
+                        content:'A';
+                    }
+                    .ballot__btn1:before {
+                        content:'B';
+                    }
+                .ballot__btn1 {
+                    background:#1789cb;
+                    border-color:#1789cb;
+                }
+
+                .ballot__btnLabel {
+                    color:#fff;
+                    font-weight:bold;
+                    text-shadow: 0 1px 1px rgba(0,0,0,0.44);
+                }
+                    .ballot__btn .ballot__btnLabel {
+                        text-transform: none;
+                        font-size:1em;
+                    }
+
+
+        .ballot__textLinks {
+            text-align: center;
+            position: absolute;
+            bottom:-2.25em;
+            width:100%;
+        }
+        .ballot__textLink {
+            cursor:pointer;
+            color:#fff;
+            margin:0 0.5em;
+        }
+            .ballot__textLink .textLink__label {
+                font-weight:bold;
+                font-size:0.875em;
+                vertical-align: middle;
+                line-height: 1;
+            }
+
+
+
+
+
+/*  ================================================
+    branded MR classes
+    ================================================ */
+    .experience__group--brandedMR .MiniReel__group {
+        margin-bottom:2.8125em;
+    }
+
+    .experience__group--brandedMR .titleBar__group {
+        height:2.75em;
+    }
+        .experience__group--brandedMR .titleBar__title {
+            width:calc(100% - 3em);
+            margin:0 0 0 0.5rem;
+        }
+            .brandedMR__tagline {
+                font-size:0.75em;
+                color:#999;
+                display: block;
+                margin:0.25em 0;
+            }
+                .brandedMR__taglineBrand {
+                    font-weight:bold;
+                }
+
+        .brandProfile__logoBox {
+            width:2.5em; height:2.5em;
+            display: block;
+            float:left;
+        }
+            .brandProfile__logo {
+                display: block;
+                width:2.5em; height:2.5em;
+            }
+
+
+    .experience__group--brandedMR .cards__group {
+        top:3.25em;
+    }
+
+    .experience__group--brandedMR .playlist__group {
+        top:2.5em;
+    }
+        .experience__group--brandedMR .playlist__group--videoAd {
+            top:19em;
+        }
+
+    
+    .brandProfile__linksBox {
+        position: absolute;
+        bottom:1.375em;
+        text-align: center;
+        width:100%;
+    }
+        .brandProfile__link {
+            padding:0 0.5em;
+            font-size:0.75em;
+            display: inline-block;
+            color:#fff;
+        }
+        .brandProfile__link .socialIcons,
+        .brandProfile__linkLabel {
+            vertical-align: middle;
+        }
+        .brandProfile__linkLabel {
+            padding-left:0.25em;
+        }
+
+
+
+
+
+
+
+/*  ================================================
+    Splash Screen classes
+    ================================================ */
+    .splash__start {
+        position:absolute; z-index: 20;
+        top:0; left: 0; bottom:0; right:0;
+        border:0; margin:0; padding:0;
+        background:#000;
+        width:100%; height:100%;
+        cursor:pointer; 
+        color:#fff; text-align: center; font-weight:bold;
+    }
