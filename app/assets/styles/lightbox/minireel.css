@@ -602,17 +602,17 @@
     ================================================ */
     .displayAdCard__group {
         text-align: center;
-        height:22.5em;
+        height:19.5em;
         position:absolute;
         top:50%; left:0; right:0;
-        margin:-12.5em 0 0 0;
+        margin:-9.75em 0 0 0;
     }
-
 
         .displayAdBrand__tagline {
             font-size:0.875em;
+            line-height: 1;
             color:#999;
-            margin:0 0 0.8125rem 0;
+            margin:0 0 0.25rem;
         }
             .displayAdBrand__taglineLink {
                 font-weight:bold;
@@ -620,7 +620,7 @@
 
 
         .displayAdBrand__linksBox {
-            margin:1.375em 0 0 0;
+            margin:0.125em 0 0 0;
         }
             .displayAdBrand__link {
                 padding:0 0.5em;
@@ -720,7 +720,8 @@
         position: absolute; z-index: 1;
         left:0.5em; right:19.5em; bottom:0.5em;/*8px*/
     }
-        .pager__group--fullWidth {
+        .pager__group--fullWidth,
+        .pager__group--recap {
             right:0.5em;
         }
 
@@ -737,9 +738,6 @@
         .pager__btn--next {
             right:0;
         }
-            .pager__group--recap .pager__btn--next {
-                display: none;
-            }
 
         .pager__btnIcon {
             display:block;
@@ -931,6 +929,7 @@
     .ballot__group {
         position:absolute; z-index:2;
         top:0; left:0; right:19em;
+        overflow: hidden;
     }
     .ballot__box {
         position:absolute; z-index:2;
