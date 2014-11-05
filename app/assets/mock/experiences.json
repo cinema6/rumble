@@ -8,7 +8,7 @@
         "data": {
             "placementId": "3220650",
             "election": "e-d0e407bb69675b",
-            "mode": "lightbox",
+            "mode": "full",
             "theme": "ed-entertainment",
             "collateral": {
                 "splash": "/collateral/experiences/rumble/splash-6thumb.jpg",
@@ -115,19 +115,6 @@
                         "modestbranding": 1
                     },
                     "conversationId": "rcv-f9efca48d85143"
-                },
-                {
-                    "id": "rc-2d46a04b21b073",
-                    "type": "ad",
-                    "ad": true,
-                    "modules": [
-                        "displayAd"
-                    ],
-                    "data": {
-                        "autoplay": true,
-                        "skip": 6,
-                        "source": "cinema6"
-                    }
                 },
                 {
                     "id": "rc-4770a2d7f85ce0",
