@@ -1,15 +1,13 @@
 <section class="ballot__box">
     <h2 class="ballot__title ballot__title--results tk--hdr">Voting Results:</h2>
 
-    <ul class="ballotResults__list">
-        <li class="ballotResults__item ballotResults__item{{$index}}" ng-repeat="choice in Ctrl.ballot">
-            <p class="ballotResults__option">{{choice.name}}</p>
-            <p class="ballotResults__tally">{{choice.votes | percent}}</p>
+    <ul class="ballot__list">
+        <li class="ballot__resultsItem ballot__item{{$index}}" ng-repeat="choice in Ctrl.ballot">
+            <div class="ballot__result ballot__result{{$index}}">
+                <span class="ballot__btnLabel btn__label tk--action">{{choice.name}} : {{choice.votes | percent}}</span>
+            </div>
         </li>
     </ul>
-    <div class="ballotResults__meter">
-        <div class="ballotResults__bar1" ng-style="{width: (Ctrl.ballot[0].votes | percent)}">&nbsp;</div>
-    </div>
 
     <div class="ballot__textLinks">
         <a ng-click="onDismiss()" title="Watch Video Again" 

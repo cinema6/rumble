@@ -2,7 +2,8 @@
     background transitions
     ================================================ */
     .btnPrimary,
-    .recap__item {
+    .recap__item,
+    .ballot__btn:before {
         -webkit-transition:background 0.3s; 
         transition:background 0.3s;
     }
@@ -14,8 +15,13 @@
     .recap__item:hover {
         background-color:#eee;
     }
+    .ballot__btn:hover:before,
     .playlist__item--current:hover {
         background-color:#d94040;
+    }
+
+    .ballot__btn1:hover:before {
+        background-color:#1789cb;
     }
 
 
@@ -34,6 +40,10 @@
         color:#d94040;
     }
 
+    .ballot__btn1:hover .ballot__btnLabel {
+        color:#1789cb;
+    }
+
 
 
 
@@ -49,7 +59,7 @@
         fill:#d94040;
     }
 
-    .slideNav__btn--disabled:hover .slideNav__iconPath {
+    .slideNav__btn[disabled]:hover .slideNav__iconPath {
         fill:#fff;
     }
 

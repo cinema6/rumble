@@ -3,7 +3,7 @@
     ================================================ */
     .btnPrimary, .btnSecondary,
     .brandProfile__linksBox .socialIconsBe:before,
-    .ballot__btn0:before, .ballot__btn1:before,
+    .ballot__btn:before,
     .recap__item,
     .MiniReel__closeBtn,
     .playlist__item,
@@ -234,13 +234,4 @@
     ================================================ */
     .btnPrimary:hover .btn__label {
         text-shadow: none;
-    }
-
-    .textOnly__imgBox:after {
-        position:absolute;
-        top:0; left:0;
-        width:100%; height:100%;
-        content:'';
-        background:#d94040;
-        opacity:0;
     }
