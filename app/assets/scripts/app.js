@@ -204,21 +204,25 @@ function( angular , angularAnimate , angularSanitize , c6uilib , c6log , c6Defin
 
             function setBehaviors(obj, mode) {
                 function isMode() {
-                    var result = false;
+                    return Array.prototype.slice.call(arguments)
+                        .some(function(value) {
+                            return value === mode;
+                        });
+                }
 
-                    angular.forEach(Array.prototype.slice.call(arguments), function(val) {
-                        if(mode === val) { result = true; }
-                    });
-
-                    return result;
+                function isNotMode() {
+                    return Array.prototype.slice.call(arguments)
+                        .every(function(value) {
+                            return value !== mode;
+                        });
                 }
 
                 obj.behaviors = {
-                    canAutoplay: isMode('full', 'light', 'lightbox', 'lightbox-ads', 'solo', 'solo-ads'),
+                    canAutoplay: isNotMode('mobile'),
                     inlineVoteResults: isMode('mobile'),
                     separateTextView: false,
-                    fullscreen: isMode('full', 'mobile', 'lightbox', 'lightbox-ads', 'solo', 'solo-ads'),
-                    showsCompanionWithVideoAd: isMode('lightbox', 'lightbox-ads')
+                    fullscreen: isNotMode('light'),
+                    showsCompanionWithVideoAd: isMode('lightbox', 'lightbox-playlist', 'solo-ads')
                 };
             }
 
