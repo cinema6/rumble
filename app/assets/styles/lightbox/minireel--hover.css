@@ -5,6 +5,7 @@
     .brandProfile__linksBox .socialIconsBe:before,
     .ballot__btn0:before, .ballot__btn1:before,
     .recap__item,
+    .MiniReel__closeBtn,
     .playlist__item,
     .player__playBtn {
         -webkit-transition:background 0.3s; transition:background 0.3s;
