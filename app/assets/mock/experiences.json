@@ -8,7 +8,7 @@
         "data": {
             "placementId": "3220650",
             "election": "e-d0e407bb69675b",
-            "mode": "embedded",
+            "mode": "lightbox-playlist",
             "theme": "ed-entertainment",
             "collateral": {
                 "splash": "/collateral/experiences/rumble/splash-6thumb.jpg",
@@ -66,7 +66,41 @@
                     "type": "text",
                     "title": "2014 Was The Year Of The GoPro",
                     "note": "Blah blah blah blah. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec odio. Quisque volutpat mattis eros. Nullam malesuada erat ut turpis. Suspendisse urna nibh, viverra non, semper suscipit, posuere a, pede. Donec nec justo eget felis facilisis fermentum. Aliquam porttitor mauris sit amet orci. Aenean dignissim pellentesque felis.Morbi in sem quis dui placerat ornare. Pellentesque odio nisi, euismod in, pharetra a, ultricies in, diam. Sed arcu. Cras consequat.Praesent dapibus, neque id cursus faucibus, tortor neque egestas augue, eu vulputate magna eros eu erat. Aliquam erat volutpat. Nam dui mi, tincidunt quis, accumsan porttitor, facilisis luctus, metus.",
+                    "modules": [
+                        "displayAd"
+                    ],
                     "data": {}
+                },
+                {
+                    "id": "rc-6b35f48684d1ef",
+                    "type": "adUnit",
+                    "title": "JCVD FTW",
+                    "note": "And a mind to master the most epic of splits.",
+                    "modules": [],
+                    "links": {
+                        "Action": "https://portal.cinema6.com/#/apps/minireel/studio/dashboard?filter=all&limit=50&page=1",
+                        "Website": "http://cinema6.com/",
+                        "Facebook": "https://www.facebook.com/Cinema6Video",
+                        "Twitter": "https://twitter.com/Cinema6Video",
+                        "YouTube": "http://www.youtube.com/channel/UCSszI_zUkVVA24WVuTYpHTQ",
+                        "Vimeo": "https://vimeo.com/user27205886"
+                    },
+                    "params": {
+                        "sponsor": "Cinema6",
+                        "ad": true,
+                        "action": {
+                            "label": "OH HAI MARK",
+                            "type": "button"
+                        }
+                    },
+                    "collateral": {
+                        "logo": "http://cinema6.com/assets/img/c6-logo@2x.png"
+                    },
+                    "data": {
+                        "hideSource": true,
+                        "vpaid": "http://u-ads.adap.tv/a/h/DCQzzI0K2rv1k0TZythPvYyD60pQS_90o8grI6Qm2PI=?cb={cachebreaker}&pageUrl={pageUrl}&eov=eov",
+                        "vast": "http://u-ads.adap.tv/a/h/DCQzzI0K2rv1k0TZythPvTfWmlP8j6NQnxBMIgFJa80=?cb={cachebreaker}&pageUrl={pageUrl}&eov=eov"
+                    }
                 },
                 {
                     "id": "rc-22119a8cf9f755",
@@ -114,19 +148,6 @@
                         "modestbranding": 1
                     },
                     "conversationId": "rcv-f9efca48d85143"
-                },
-                {
-                    "id": "rc-2d46a04b21b073",
-                    "type": "ad",
-                    "ad": true,
-                    "modules": [
-                        "displayAd"
-                    ],
-                    "data": {
-                        "autoplay": true,
-                        "skip": 6,
-                        "source": "cinema6"
-                    }
                 },
                 {
                     "id": "rc-4770a2d7f85ce0",
@@ -241,6 +262,52 @@
                     "title": "Recap of Rumble Video",
                     "modules": [],
                     "data": {}
+                }
+            ]
+        }
+    },
+    {
+        "id": "e-29cedac9c69877",
+        "uri": "rumble",
+        "appUriPrefix": "<%= settings.appUrl %>",
+        "appUri": "rumble",
+        "title": "JCVD FTW",
+        "subtitle": "",
+        "summary": "",
+        "data": {
+            "title": "JCVD FTW",
+            "mode": "solo-ads",
+            "deck": [
+                {
+                    "id": "rc-6b35f48684d1ef",
+                    "type": "adUnit",
+                    "title": "JCVD FTW",
+                    "note": "And a mind to master the most epic of splits.",
+                    "modules": [],
+                    "links": {
+                        "Action": "https://portal.cinema6.com/#/apps/minireel/studio/dashboard?filter=all&limit=50&page=1",
+                        "Website": "http://cinema6.com/",
+                        "Facebook": "https://www.facebook.com/Cinema6Video",
+                        "Twitter": "https://twitter.com/Cinema6Video",
+                        "YouTube": "http://www.youtube.com/channel/UCSszI_zUkVVA24WVuTYpHTQ",
+                        "Vimeo": "https://vimeo.com/user27205886"
+                    },
+                    "params": {
+                        "sponsor": "Cinema6",
+                        "ad": true,
+                        "action": {
+                            "label": "OH HAI MARK",
+                            "type": "button"
+                        }
+                    },
+                    "collateral": {
+                        "logo": "http://cinema6.com/assets/img/c6-logo@2x.png"
+                    },
+                    "data": {
+                        "hideSource": true,
+                        "vpaid": "http://u-ads.adap.tv/a/h/DCQzzI0K2rv1k0TZythPvYyD60pQS_90o8grI6Qm2PI=?cb={cachebreaker}&pageUrl={pageUrl}&eov=eov",
+                        "vast": "http://u-ads.adap.tv/a/h/DCQzzI0K2rv1k0TZythPvTfWmlP8j6NQnxBMIgFJa80=?cb={cachebreaker}&pageUrl={pageUrl}&eov=eov"
+                    }
                 }
             ]
         }

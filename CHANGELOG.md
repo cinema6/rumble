@@ -2,6 +2,8 @@
 
 * *[v1.5.0.rc1]*
   * [FEATURE]: added styles for branded MiniReels in mobile, lightbox, and full templates
+  * [FIX]: lightbox-playlist template updated for companion ad fixes
+  * [FIX]: ad unit card styling added
 
 ## v1.4.0 (October 29, 2014)
 * *[v1.4.0.rc2]*

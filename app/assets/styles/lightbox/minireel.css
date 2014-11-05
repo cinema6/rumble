@@ -213,7 +213,6 @@
     .btnSecondary:focus {
         background:rgba(0,0,0,0.6); 
         color:#fff; font-weight:bold;
-        border-radius:3px;
         display:table;
         text-align: center; 
         line-height:1;
@@ -858,7 +857,6 @@
         position:absolute;
         top:50%; 
         margin:-3.125em 0 0 0;
-        border-radius:0;
     }
         .nav__btn--prev {
             left:0;
