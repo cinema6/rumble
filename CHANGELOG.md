@@ -1,6 +1,11 @@
 # MiniReel Player
 
 ## v1.5.0 (November 5, 2014)
+* *[v1.5.0.rc2]*
+  * [FIX]: Fix for an issue that caused the page navigation not to
+    appear in the lightbox mode
+* *[/v1.5.0.rc2]*
+
 * *[v1.5.0.rc1]*
   * [FEATURE]: added styles for branded MiniReels in mobile, lightbox, and full templates
   * [FIX]: lightbox-playlist template updated for companion ad fixes
