@@ -64,7 +64,7 @@
             "whitelist": ["mobile"]
         },
         "ui/thumb_paginator": {
-            "whitelist": ["light"]
+            "whitelist": ["light", "lightbox"]
         }
     }
 }
