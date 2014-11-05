@@ -125,6 +125,7 @@ define(['cards/vast', 'services', 'angular'], function(vastModule, servicesModul
                         playerEvents: {},
                         vastEvents: {},
                         vastData: {},
+                        companion: null,
                         modules: {
                             ballot: {
                                 active: false,
@@ -625,6 +626,20 @@ define(['cards/vast', 'services', 'angular'], function(vastModule, servicesModul
                     });
 
                     describe('when true', function() {
+                        describe('if there is a meta object', function() {
+                            beforeEach(function() {
+                                $scope.config.meta = {};
+
+                                $scope.$apply(function() {
+                                    $scope.active = true;
+                                });
+                            });
+
+                            it('should set the _data object on the meta object', function() {
+                                expect($scope.config.meta._data).toBe($scope.config._data);
+                            });
+                        });
+
                         it('should call the VASTService', function() {
                             $scope.$apply(function() {
                                 $scope.active = true;
@@ -991,6 +1006,7 @@ define(['cards/vast', 'services', 'angular'], function(vastModule, servicesModul
                             expect(vast.getVideoSrc).toHaveBeenCalledWith();
                             expect(VastCardCtrl.videoSrc).toBe('http://www.videos.com/video.mp4');
                             expect(VastCardCtrl.companion).toEqual({adType:'iframe', fileURI: '//ads.adap.tv/c/companion?cck=cck&creativeId=110497&melaveId=42657&key=tribal360llc&adSourceId=208567&bidId=&afppId=159224&exSId=639284&cb=9874983758324475&pageUrl=http%3A%2F%2Fcinema6.com&eov=eov'});
+                            expect($scope.config._data.companion).toBe(VastCardCtrl.companion);
                         });
 
                         describe('if a src is not returned', function() {
