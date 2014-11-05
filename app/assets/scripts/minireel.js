@@ -430,7 +430,7 @@ function( angular , c6Defines  , tracker ,
                 this.id = 'rc-advertisement' + (++adId);
                 this.type = 'ad';
                 this.ad = true;
-                this.modules = ['displayAd'];
+                this.modules = [];
                 this.data = {
                     autoplay: true,
                     autoadvance: true,
