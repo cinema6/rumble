@@ -1,9 +1,10 @@
 <div class="experience__group {{app.data.experience.data.theme}}"
     c6-alias="app.data.experience.data as minireel"
     ng-class=" {
-        'experience__group--brandedMR': !!minireel.params.sponsor
+        'experience__group--brandedMR': !!minireel.params.sponsor,
+        'experience__group--soloMR': minireel.deck.length < 2
     }">
-    <div class="experience">
+    <div class="experience" c6-alias="minireel.deck.length < 2 as isSolo">
             
         <div class="MiniReel__group">
 
@@ -22,7 +23,7 @@
                         alt="{{minireel.params.sponsor}}"
                         ng-src="{{minireel.collateral.logo}}">
                 </a>
-                <h1 class="titleBar__title">
+                <h1 class="titleBar__title" ng-if="!isSolo">
                     <span ng-if="!!minireel.params.sponsor" class="brandedMR__tagline">
                         <a ng-href="{{minireel.links.Website}}"
                             target="_blank"
@@ -45,7 +46,7 @@
             </article>
 
             <thumb-paginator active="tocIndex"
-            ng-if="currentIndex > -1"
+            ng-if="currentIndex > -1 && !isSolo"
             ng-class="{
                 'pager__group--fullWidth': currentCard.type === 'text' || currentCard.type === 'displayAd',
                 'pager__group--recap' : currentCard.type === 'recap'
