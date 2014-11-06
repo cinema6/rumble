@@ -4,8 +4,7 @@
     .MiniReel__closeBtn,
     .btnPrimary,
     .brandProfile__linksBox .socialIconsBe:before,
-    .ballot__btn0:before,
-    .ballot__btn1:before,
+    .ballot__btn:before,
     .recap__item,
     .playlist__item,
     .player__playBtn {
@@ -13,9 +12,9 @@
     }
 
     .MiniReel__closeBtn:hover,
-    .ballot__btn0:hover:before,
     .playlist__item.playlist__item--current:hover,
-    .player__playBtn:hover {
+    .player__playBtn:hover,
+    .ballot__btn:hover:before {
         background-color:#d94040;
     }
 
@@ -232,13 +231,4 @@
     ================================================ */
     .btnPrimary:hover .btn__label {
         text-shadow: none;
-    }
-
-    .textOnly__imgBox:after {
-        position:absolute;
-        top:0; left:0;
-        width:100%; height:100%;
-        content:'';
-        background:#d94040;
-        opacity:0;
     }
