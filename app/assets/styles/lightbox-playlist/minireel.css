@@ -213,6 +213,19 @@
             text-shadow: 0 1px 1px rgba(0,0,0,0.44);
         }
 
+        @media screen and (min-width:75rem) and (max-width:106rem) {
+            /* 1200px -  1696px*/
+            .btnPrimary .btn__label {
+                font-size:1em;
+            }
+        }
+        @media screen and (min-width:106.0625rem) {
+            /* 1697px ++ */
+            .btnPrimary .btn__label {
+                font-size:1.125em;
+            }
+        }
+
 
     .btnSecondary,
     .btnSecondary:active,
@@ -278,7 +291,7 @@
             text-align: left;
             white-space: normal;
             position:relative;
-            width:90%;
+            width:84%;
             /* MR min width threshold to trigger scrollbars */
             min-width:600px;
         }
@@ -386,14 +399,29 @@
     video card classes
     ================================================ */
     .player__group {
-        height:calc(100% - 6em);
         position: absolute;
         left:0; right:19em;
         overflow: hidden;
         background-color: #000;
     }
+        .player__group,
         .playerHeight {
             height:calc(100% - 6em);
+        }
+
+        @media screen and (min-width:75rem) and (max-width:106rem) {
+            /* 1200px -  1696px*/
+            .player__group, 
+            .playerHeight {
+                height:calc(100% - 7em);
+            }
+        }
+        @media screen and (min-width:106.0625rem) {
+            /* 1697px ++ */
+            .player__group, 
+            .playerHeight {
+                height:calc(100% - 8em);
+            }
         }
 
         .player, .player__thumbnail {
@@ -449,6 +477,43 @@
             font-size:0.8125em;
             line-height: 1.125rem;
         }
+
+            @media screen and (min-width:75rem) and (max-width:106rem) {
+                /* 1200px -  1696px*/
+                .card__copy {
+                    height:6.75em;
+                    left:6.25em; right:25.25em; 
+                }
+                .card__title {
+                    font-size:1.625em;
+                    line-height:1.75rem;
+                }
+                .card__attributes {
+                    font-size:0.8125rem;
+                }
+                .card__desc {
+                    font-size:0.875em;
+                    line-height:1.375rem;
+                }
+            }
+            @media screen and (min-width:106.0625rem) {
+                /* 1697px ++ */
+                .card__copy {
+                    height:7.75em;
+                    left:6.25em; right:25.25em; 
+                }
+                .card__title {
+                    font-size:1.75em;
+                    line-height:1.875rem;
+                }
+                .card__attributes {
+                    font-size:1rem;
+                }
+                .card__desc {
+                    font-size:1em;
+                    line-height:1.5rem;
+                }
+            }
 
 
 
@@ -540,19 +605,20 @@
             margin:1.1875em 0 0 0;
         }
 
-    .textOnly__imgBox {
-        width:18.75em; height:100%;
-        position:absolute;
-        right:0; top:0;
-        background:50% 50% / cover no-repeat;
-    }
-        .textOnly__imgBox:after {
-            position:absolute;
-            top:0; left:0;
-            width:100%; height:100%;
-            content:'';
-            background:#d94040;
-            opacity:0;
+        @media screen and (min-width:75rem) and (max-width:106rem) {
+            /* 1200px -  1696px*/
+            .textOnly__title {
+                font-size:2.25em;
+            }
+        }
+        @media screen and (min-width:106.0625rem) {
+            /* 1697px ++ */
+            .textOnly__copy {
+                padding:6em 4em 2em 6em;
+            }
+            .textOnly__title {
+                font-size:2.5em;
+            }
         }
 
 
@@ -607,6 +673,40 @@
                     border-radius:3px;
                     display:table;
                 }
+
+        @media screen and (min-width:75rem) and (max-width:106rem) {
+            /* 1200px -  1696px*/
+            .sponsorProfile__imgBox {
+                width:3em; height:3em;
+            }
+                .sponsorProfile__img {
+                    width:2.875em; height:2.875em;
+                    display: block;
+                }
+            .sponsor__goBtn {
+                padding:0.5em 1.25em;
+            }
+        }
+        @media screen and (min-width:106.0625rem) {
+            /* 1697px ++ */
+            .sponsorProfile__imgBox {
+                width:3.5em; height:3.5em;
+                border:2px solid #ddd;
+            }
+                .sponsorProfile__img {
+                    width:3.25em; height:3.25em;
+                    display: block;
+                }
+            .sponsorProfile__copy {
+                width:calc(100% - 4.25em);
+            }
+            .sponsorProfile__links {
+                margin:0.25em 0 0 0;
+            }
+            .sponsor__goBtn {
+                padding:0.5em 1.25em;
+            }
+        }
 
 
 
@@ -907,7 +1007,7 @@
 
 
         .nav__btn--condensed {
-            height:3em;
+            height:3em; width:6em;
         }
             .nav__btn--condensed .nav__btnIcon {
                 top:0.5em; left:auto; right:auto;
@@ -931,6 +1031,30 @@
                 .nav__btn--condensed .nav__btnLabel--next {
                     right:46%;
                 }
+
+        @media screen and (min-width:75rem) {
+            /* 1200px ++*/
+            .nav__btn {
+                height:6.75em;
+                width:6em;
+            }
+            .nav__btn--condensed {
+                width:7em; height:3em;
+            }
+                .nav__btn--condensed .nav__btnLabel {
+                    bottom:0.8125em;
+                }
+        }
+        @media screen and (min-width:106.0625rem) {
+            /* 1697px ++ */
+            .nav__btn {
+                height:7.75em;
+                width:6em;
+            }
+            .nav__btn--condensed {
+                width:7em; height:3em;
+            }
+        }
 
 
 
@@ -969,6 +1093,14 @@
             .ballot__title--results {
                 margin-top:1em;
             }
+
+        @media screen and (min-width:75rem) {
+            /* 1200px++*/
+            .ballot__title {
+                font-size:1.5em;
+                line-height: 1.75rem;
+            }
+        }
 
         .ballot__list {
             list-style: none;

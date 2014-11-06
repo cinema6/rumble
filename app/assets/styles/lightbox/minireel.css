@@ -196,6 +196,19 @@
             text-transform:uppercase;
             text-shadow: 0 1px 1px rgba(0,0,0,0.44);
         }
+            @media screen and (min-width:75rem) and (max-width:106rem) {
+                /* 1200px -  1696px*/
+                .btnPrimary .btn__label {
+                    font-size:1em;
+                }
+            }
+            @media screen and (min-width:106.0625rem) {
+                /* 1697px ++ */
+                .btnPrimary .btn__label {
+                    font-size:1.125em;
+                }
+            }
+
         .btnPrimary[disabled],
         .btnPrimary[disabled]:active,
         .btnPrimary[disabled]:hover {
@@ -274,16 +287,10 @@
             text-align: left;
             white-space: normal;
             position:relative;
-            width:90%;
+            width:84%;
             /* MR min width threshold to trigger scrollbars */
             min-width:600px;
         }
-
-            @media screen and (min-height:700px) {
-                .experience {
-                    width:80%;
-                }
-            }
 
 
 
@@ -389,15 +396,29 @@
     video card classes
     ================================================ */
     .player__group {
-        height:calc(100% - 3.25em);
         position: absolute;
         left:0; right:19em;
         overflow: hidden;
         background-color: #000;
     }
+        .player__group,
         .playerHeight {
             height:calc(100% - 3.25em);
         }
+            @media screen and (min-width:75rem) and (max-width:106rem) {
+                /* 1200px -  1696px*/
+                .player__group, 
+                .playerHeight {
+                    height:calc(100% - 4.25em);
+                }
+            }
+            @media screen and (min-width:106.0625rem) {
+                /* 1697px ++ */
+                .player__group, 
+                .playerHeight {
+                    height:calc(100% - 5.25em);
+                }
+            }
 
         .player, .player__thumbnail {
             position:absolute; width:100%; height:100%;
@@ -452,6 +473,35 @@
             line-height: 1.125rem;
         }
 
+            @media screen and (min-width:75rem) and (max-width:106rem) {
+                /* 1200px -  1696px*/
+                .card__title {
+                    font-size:1.625em;
+                    line-height:1.75rem;
+                }
+                .card__attributes {
+                    font-size:0.8125rem;
+                }
+                .card__desc {
+                    font-size:0.875em;
+                    line-height:1.375rem;
+                }
+            }
+            @media screen and (min-width:106.0625rem) {
+                /* 1697px ++ */
+                .card__title {
+                    font-size:1.75em;
+                    line-height:1.875rem;
+                }
+                .card__attributes {
+                    font-size:1rem;
+                }
+                .card__desc {
+                    font-size:1em;
+                    line-height:1.5rem;
+                }
+            }
+
 
 
     /*  video ad card classes
@@ -485,12 +535,15 @@
             background:rgba(256,256,256,0.8);
             position:absolute; z-index: 1;
             bottom:0; left:0; right:0;
-            height:3em;
+            height:100%;
         }
             .adSkip__message {
-                text-align: center;
+                position:absolute;
+                top:50%; width:100%;
                 font-size:0.8125em;
-                margin-top:0.9375rem;
+                line-height: 1;
+                text-align: center;
+                margin:-0.375rem 0 0 0;
                 color:#000;
             }
 
@@ -558,6 +611,29 @@
         }
 
 
+        @media screen and (min-width:75rem) and (max-width:106rem) {
+            /* 1200px -  1696px*/
+            .textOnly__title {
+                font-size:2.25em;
+            }
+            .textOnly__imgBox {
+                height:calc(100% - 4.25em);
+            }
+        }
+        @media screen and (min-width:106.0625rem) {
+            /* 1697px ++ */
+            .textOnly__copy {
+                padding:6em 4em 2em 6em;
+            }
+            .textOnly__title {
+                font-size:2.5em;
+            }
+            .textOnly__imgBox {
+                height:calc(100% - 5.25em);
+            }
+        }
+
+
 
 /*  ================================================
     sponsored card styles
@@ -609,6 +685,26 @@
                     border-radius:3px;
                     display:table;
                 }
+
+
+        @media screen and (min-width:75rem) {
+            /* 1200px++*/
+            .sponsor__goBtn {
+                padding:0.5em 1.25em;
+            }
+            .sponsorProfile__tag {
+                float:none;
+            }
+                .recap__copyBox .sponsorProfile__tag {
+                    float:left;
+                }
+            .sponsorProfile__links {
+                margin:0.25em 0 1.5em 0;
+            }
+                .recap__copyBox .sponsorProfile__links {
+                    margin:0;
+                }
+        }
 
 
 
@@ -668,6 +764,18 @@
         border-top:3px solid #333;
         counter-reset: recap;
     }
+        @media screen and (min-width:75rem) and (max-width:106rem) {
+            /* 1200px -  1696px*/
+            .recap__list {
+                bottom:4.25em;
+            }
+        }
+        @media screen and (min-width:106.0625rem) {
+                /* 1697px ++ */
+            .recap__list {
+                bottom:5.25em;
+            }
+        }
         .recap__item {
             position:relative;
             padding:1em 0; 
@@ -760,8 +868,8 @@
             display:block;
             width:0.8125em; height:1.5em;
             position:absolute;
-            top:0.5625em; left:12.5%;
-            margin:0;
+            top:50%; left:12.5%;
+            margin:-0.75em 0 0 0;
         }
             .pager__btnIcon--next {
                 right:12.5%; left:auto;
@@ -772,11 +880,58 @@
 
         .pager__label {
             position:absolute; z-index: 1; 
-            top:1em; left:40%;
+            top:50%; left:40%;
+            margin-top:-0.4375rem;
         }
             .pager__btn--next .pager__label {
                 right:40%; left:auto;
             }
+
+
+        @media screen and (min-width:75rem) and (max-width:106rem) {
+            /* 1200px -  1696px*/
+            .pager__group,
+            .pager__btn {
+                height:4em;
+                min-width:7em;
+            }
+            .pager__btnIcon {
+                left:18.5%;
+            }
+                .pager__btnIcon--next {
+                    right:18.5%; left:auto;
+                }
+            .pager__label {
+                margin-top:-0.5rem;
+                left:46%;
+            }
+            .pager__btn--next .pager__label {
+                right:46%; left:auto;
+            }
+        }
+        @media screen and (min-width:106.0625rem) {
+            /* 1697px ++ */
+            .pager__group,
+            .pager__btn {
+                height:5em;
+                min-width:8em;
+            }
+            .pager__btnIcon {
+                width:1.5em; height:2em;
+                margin-top:-1em;
+                left:18.5%;
+            }
+                .pager__btnIcon--next {
+                    right:18.5%; left:auto;
+                }
+            .pager__label {
+                margin-top:-0.5625rem;
+                left:46%;
+            }
+            .pager__btn--next .pager__label {
+                right:46%; left:auto;
+            }
+        }
 
 
     /* pages styles */
@@ -806,6 +961,7 @@
                     overflow: hidden;
                     border:0;
                 }
+
                     .pages__navBtn,
                     .page__btn {
                         display: block;
@@ -861,7 +1017,33 @@
                                 .page__btn--active .page__previewImg:before {
                                     opacity:0;
                                 }
-                            
+                
+                @media screen and (min-width:75rem) and (max-width:106rem) {
+                    /* 1200px -  1696px*/
+                    .pages__group {
+                        height:4em;
+                    }
+                    .pages__item {
+                        width:6.625em; height:4em;
+                    }
+                    .page__btn:before {
+                        bottom:-5px;
+                        height:4px;
+                    }
+                }
+                @media screen and (min-width:106.0625rem) {
+                    /* 1697px ++ */
+                    .pages__group {
+                        height:5em;
+                    }
+                    .pages__item {
+                        width:8.25em; height:5em;
+                    }
+                    .page__btn:before {
+                        bottom:-7px;
+                        height:6px;
+                    }
+                }
 
 
 
@@ -886,8 +1068,8 @@
         .nav__btnIcon {
             position: absolute;
             width:1em; height:1.5em;
-            top:0.75em;
-            margin:0 0 0 -0.5em;
+            top:50%;
+            margin:-0.75em 0 0 -0.5em;
         }
             .nav__btnIcon--prev {
                 left:48%;
@@ -971,6 +1153,14 @@
         }
             .ballot__title--results {
                 margin-top:1em;
+            }
+
+            @media screen and (min-width:75rem) {
+                /* 1200px++*/
+                .ballot__title {
+                    font-size:1.5em;
+                    line-height: 1.75rem;
+                }
             }
 
         .ballot__list {
