@@ -401,20 +401,17 @@
         overflow: hidden;
         background-color: #000;
     }
-        .player__group,
         .playerHeight {
             height:calc(100% - 3.25em);
         }
             @media screen and (min-width:75rem) and (max-width:106rem) {
                 /* 1200px -  1696px*/
-                .player__group, 
                 .playerHeight {
                     height:calc(100% - 4.25em);
                 }
             }
             @media screen and (min-width:106.0625rem) {
-                /* 1697px ++ */
-                .player__group, 
+                /* 1697px ++ */ 
                 .playerHeight {
                     height:calc(100% - 5.25em);
                 }
@@ -1330,6 +1327,20 @@
             padding-left:0.25em;
         }
 
+
+
+
+
+/*  ================================================
+    solo MR classes
+    ================================================ */
+    .experience__group--soloMR .playerHeight {
+        height:100%;
+    }
+
+    .experience__group--soloMR .cards__group {
+        top:0.5em;
+    }
 
 
 

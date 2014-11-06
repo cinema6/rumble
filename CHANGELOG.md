@@ -1,6 +1,8 @@
 # MiniReel Player
-
 ## v1.5.0 (November 5, 2014)
+* *[v1.5.0.rc4]*
+  * [FEATURE]: lightbox soloMR support added
+
 * *[v1.5.0.rc3]*
   * [FIX]: ballot results styles added
   * [FIX]: Media queries for large screens added for lightbox, lightbox-playlist, and full
