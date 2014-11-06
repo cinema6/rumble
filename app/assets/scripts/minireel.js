@@ -1433,10 +1433,8 @@ function( angular , c6Defines  , tracker ,
             if (config.campaign) {
                 // Fire the Click pixel after the first play
                 if (config.campaign.clickUrl && !_data.tracking.clickFired) {
-                    // console.log('ASDF: setting up play listener for clickUrl');
                     iface.once('play', function() {
                         _data.tracking.clickFired = true;
-                        // console.log('ASDF: firing click pixel on first play for ' + config.title);
                         c6ImagePreloader.load([config.campaign.clickUrl]);
                     });
                 }
@@ -1444,24 +1442,20 @@ function( angular , c6Defines  , tracker ,
                 // Fire the AdCount pixel after minViewTime, by tracking the elapsed time
                 if (config.campaign.countUrl && config.campaign.minViewTime &&
                                                 !_data.tracking.countFired) {
-                    // console.log('ASDF: setting up timeupdate listener');
                     iface.on('timeupdate', function fireMinViewPixel() {
                         if (lastTime === null) {
                             lastTime = iface.currentTime;
-                            // console.log('ASDF: initially setting lastTime to ' + lastTime); //TODO: remove all console.logs here
                             return;
                         }
 
                         // if diff > 1 sec, it's probably a skip, and don't increment elapsed
                         if (Math.abs(iface.currentTime - lastTime) <= 1) {
                             elapsedTime += iface.currentTime - lastTime;
-                        }// else console.log('ASDF: skip!');
+                        }
                         lastTime = iface.currentTime;
-                        //console.log('ASDF: elapsed = ' + elapsedTime);
                         
                         if (elapsedTime >= config.campaign.minViewTime && !_data.tracking.countFired) {
                             _data.tracking.countFired = true;
-                            // console.log('ASDF: ' + elapsedTime + ' > ' + config.campaign.minViewTime + ', firing pixel');
                             c6ImagePreloader.load([config.campaign.countUrl]);
                             iface.removeListener('timeupdate', fireMinViewPixel);
                         }
