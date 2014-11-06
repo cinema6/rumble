@@ -270,11 +270,6 @@ define(['c6uilib', 'services', 'app', 'angular'], function(c6uilibModule, servic
                 expect(BallotService.init).toHaveBeenCalledWith(appData.experience.data.election,{});
             });
 
-            it('should decorate the minireel with social links', function() {
-                expect(MiniReelService.createSocialLinks).toHaveBeenCalledWith(appData.experience.data.links);
-                expect(appData.experience.data.social).toEqual(MiniReelService.createSocialLinks(appData.experience.data.links));
-            });
-
             it('should not initialize the BallotService if there is no election', function() {
                 $rootScope.$apply(function() {
                     $scope = $rootScope.$new();
