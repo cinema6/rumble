@@ -1293,6 +1293,10 @@ function( angular , c6Defines  , tracker ,
             _data = config._data = config._data || {
                 playerEvents: {},
                 textMode: true,
+                tracking: {
+                    clickFired: false,
+                    countFired: false
+                },
                 modules: {
                     ballot: {
                         ballotActive: false,
@@ -1304,6 +1308,8 @@ function( angular , c6Defines  , tracker ,
                     }
                 }
             },
+            lastTime = null,
+            elapsedTime = 0,
             player = null,
             shouldPlay = false,
             ballotTargetPlays = 0,
@@ -1422,6 +1428,40 @@ function( angular , c6Defines  , tracker ,
                         $scope.$emit('<mr-card>:contentEnd', config.meta || config);
                     }
                 });
+                
+            // If it's a sponsored card, set up handlers to fire AdCount and Click pixels
+            if (config.campaign) {
+                // Fire the Click pixel after the first play
+                if (config.campaign.clickUrl && !_data.tracking.clickFired) {
+                    iface.once('play', function() {
+                        _data.tracking.clickFired = true;
+                        c6ImagePreloader.load([config.campaign.clickUrl]);
+                    });
+                }
+                
+                // Fire the AdCount pixel after minViewTime, by tracking the elapsed time
+                if (config.campaign.countUrl && config.campaign.minViewTime &&
+                                                !_data.tracking.countFired) {
+                    iface.on('timeupdate', function fireMinViewPixel() {
+                        if (lastTime === null) {
+                            lastTime = iface.currentTime;
+                            return;
+                        }
+
+                        // if diff > 1 sec, it's probably a skip, and don't increment elapsed
+                        if (Math.abs(iface.currentTime - lastTime) <= 1) {
+                            elapsedTime += iface.currentTime - lastTime;
+                        }
+                        lastTime = iface.currentTime;
+                        
+                        if (elapsedTime >= config.campaign.minViewTime && !_data.tracking.countFired) {
+                            _data.tracking.countFired = true;
+                            c6ImagePreloader.load([config.campaign.countUrl]);
+                            iface.removeListener('timeupdate', fireMinViewPixel);
+                        }
+                    });
+                }
+            }
 
             $scope.$watch('active', function(active, wasActive) {
                 if ((active === wasActive) && (wasActive === false)){ return; }
