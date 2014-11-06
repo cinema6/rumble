@@ -13,6 +13,7 @@ function( angular , services ) {
                     playerEvents: {},
                     vastEvents: {},
                     vastData: {},
+                    companion: null,
                     modules: {
                         ballot: {
                             active: false,
@@ -110,7 +111,7 @@ function( angular , services ) {
 
                             _data.vastData = vast;
                             self.videoSrc = src;
-                            self.companion = vast.getCompanion();
+                            self.companion = _data.companion = vast.getCompanion();
                         }, function() {
                             if ($scope.active) {
                                 goForward();
@@ -240,6 +241,10 @@ function( angular , services ) {
                     if (!active && !wasActive) { return; }
 
                     if (active) {
+                        if (config.meta) {
+                            config.meta._data = _data;
+                        }
+
                         if(shouldGoForward) {
                             goForward();
                         } else {

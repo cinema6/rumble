@@ -271,7 +271,7 @@ define(['app','c6uilib'], function(appModule, c6uilibModule) {
                     expect(c6AppData('mobile').behaviors.canAutoplay).toBe(false);
                     expect(c6AppData('light').behaviors.canAutoplay).toBe(true);
                     expect(c6AppData('lightbox').behaviors.canAutoplay).toBe(true);
-                    expect(c6AppData('lightbox-ads').behaviors.canAutoplay).toBe(true);
+                    expect(c6AppData('lightbox-playlist').behaviors.canAutoplay).toBe(true);
                 });
             });
 
@@ -281,7 +281,7 @@ define(['app','c6uilib'], function(appModule, c6uilibModule) {
                     expect(c6AppData('mobile').behaviors.inlineVoteResults).toBe(true);
                     expect(c6AppData('light').behaviors.inlineVoteResults).toBe(false);
                     expect(c6AppData('lightbox').behaviors.inlineVoteResults).toBe(false);
-                    expect(c6AppData('lightbox-ads').behaviors.inlineVoteResults).toBe(false);
+                    expect(c6AppData('lightbox-playlist').behaviors.inlineVoteResults).toBe(false);
                 });
             });
 
@@ -291,7 +291,7 @@ define(['app','c6uilib'], function(appModule, c6uilibModule) {
                     expect(c6AppData('mobile').behaviors.separateTextView).toBe(false);
                     expect(c6AppData('light').behaviors.separateTextView).toBe(false);
                     expect(c6AppData('lightbox').behaviors.separateTextView).toBe(false);
-                    expect(c6AppData('lightbox-ads').behaviors.separateTextView).toBe(false);
+                    expect(c6AppData('lightbox-playlist').behaviors.separateTextView).toBe(false);
                 });
             });
 
@@ -301,7 +301,7 @@ define(['app','c6uilib'], function(appModule, c6uilibModule) {
                     expect(c6AppData('mobile').behaviors.fullscreen).toBe(true);
                     expect(c6AppData('light').behaviors.fullscreen).toBe(false);
                     expect(c6AppData('lightbox').behaviors.fullscreen).toBe(true);
-                    expect(c6AppData('lightbox-ads').behaviors.fullscreen).toBe(true);
+                    expect(c6AppData('lightbox-playlist').behaviors.fullscreen).toBe(true);
                 });
             });
 
@@ -310,7 +310,7 @@ define(['app','c6uilib'], function(appModule, c6uilibModule) {
                     ['full', 'mobile', 'light'].forEach(function(mode) {
                         expect(c6AppData(mode).behaviors.showsCompanionWithVideoAd).toBe(false);
                     });
-                    ['lightbox', 'lightbox-ads'].forEach(function(mode) {
+                    ['lightbox', 'lightbox-playlist', 'solo-ads'].forEach(function(mode) {
                         expect(c6AppData(mode).behaviors.showsCompanionWithVideoAd).toBe(true);
                     });
                 });

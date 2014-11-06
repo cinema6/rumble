@@ -56,7 +56,7 @@
             </div>
         </div>
 
-        <div class="mr-card__desc" ng-bind-html="config.note"></div>
+        <div class="card__desc" ng-bind-html="config.note"></div>
         
         <div class="card__desc sponsor__actions" ng-if="!!config.links.Action" 
         ng-switch="config.params.action.type" 
@@ -67,7 +67,7 @@
             </a>
             <a ng-switch-when="button" ng-href="{{config.links.Action}}" 
             class="sponsor__goBtn btnPrimary" title="{{action.label}}">
-                <span class="btn__label">{{action.label}}</span>
+                <span class="btn__label tk--action">{{action.label}}</span>
             </a>
         </div>
 

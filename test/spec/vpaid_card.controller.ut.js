@@ -104,6 +104,7 @@ define(['services', 'cards/vpaid', 'app'], function(servicesModule, vpaidModule,
                 it('should create some data', function() {
                     expect($scope.config._data).toEqual({
                         playerEvents: {},
+                        companion: null,
                         modules: {
                             displayAd: {
                                 active: false
@@ -437,6 +438,7 @@ define(['services', 'cards/vpaid', 'app'], function(servicesModule, vpaidModule,
                     iface.emit('getCompanions', player);
 
                     expect(VpaidCardController.companion).toBe(companionObject);
+                    expect($scope.config._data.companion).toBe(companionObject);
                 });
             });
         });
@@ -534,6 +536,24 @@ define(['services', 'cards/vpaid', 'app'], function(servicesModule, vpaidModule,
                             });
 
                             expect($scope.$emit.calls.mostRecent().args[0]).toBe('<mr-card>:contentEnd');
+                        });
+                    });
+
+                    describe('if there is a meta object', function() {
+                        beforeEach(function() {
+                            $scope.$apply(function() {
+                                $scope.active = false;
+                            });
+
+                            $scope.config.meta = {};
+
+                            $scope.$apply(function() {
+                                $scope.active = true;
+                            });
+                        });
+
+                        it('should put the _data on the meta object', function() {
+                            expect($scope.config.meta._data).toBe($scope.config._data);
                         });
                     });
 

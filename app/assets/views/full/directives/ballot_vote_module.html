@@ -1,19 +1,29 @@
-<section class="ballot__group">
-    <h2 class="ballot__title tk--hdr" ng-click="onDismiss()">{{ballot.prompt}}</h2>
-    <ul class="ballot__list" ng-click="onDismiss()">
+<section class="ballot__box">
+    <span class="ballot__intro">Please answer the following:</span>
+    <h2 class="ballot__title tk--hdr">{{ballot.prompt}}</h2>
+    <ul class="ballot__list">
         <li class="ballot__item ballot__item{{$index}}" ng-repeat="choice in ballot.choices">
-            <button class="ballot__btn ballot__btn{{$index}}" ng-click="Ctrl.vote($index)"><span class="ballot__btn-label">{{choice}}</span></button>
+            <button class="ballot__btn btnPrimary ballot__btn{{$index}}"
+            ng-click="Ctrl.vote($index)"
+            type="button" title="{{choice}}">
+                <span class="ballot__btnLabel btn__label tk--action">{{choice}}</span>
+            </button>
         </li>
     </ul>
-    <p class="ballot__textlink ballot__results">
-        <a ng-click="Ctrl.pass()" title="Show Voting Results">Show Voting Results</a>
-    </p>
-    <p class="ballot__textlink ballot__watch-again">
-        <a ng-click="onDismiss()" title="Watch Video Again">Watch Video Again</a>
-    </p>
-    <div class="mr-ballot__closer" ng-click="onDismiss()">&nbsp;</div>
+
+    <div class="ballot__textLinks">
+        <a ng-click="onDismiss()" title="Watch Video Again" 
+        class="ballot__textLink ballot__textLink--replay textLink
+        spriteBe spriteBe--small uiIconsBe uiIconsBe--replay">
+            <span class="textLink__label">Watch Video Again</span></a>
+        <a ng-click="Ctrl.pass()" title="Show Voting Results" 
+        class="ballot__textLink ballot__textLink--results textLink">
+            <span class="textLink__label">Show Voting Results</span></a>
+    </div>
 </section>
 
 <div class="overlay" ng-click="onDismiss()">
-    <button class="sprite sprite--close overlay__closeBtn"><span class="ir">Close</span></button>
+    <button class="sprite sprite--close overlay__closeBtn">
+        <span class="ir">Close</span>
+    </button>
 </div>

@@ -1,6 +1,6 @@
 <article class="card__group">
     <ballot-vote-module 
-        class="ballot-module player__height"
+        class="ballot__group player__height"
         ng-if="Ctrl.hasModule('ballot')"
         active="config._data.modules.ballot.ballotActive && active"
         vote="config._data.modules.ballot.vote"
@@ -9,7 +9,7 @@
         on-dismiss="Ctrl.dismissBallot()">
     </ballot-vote-module>
     <ballot-results-module ng-if="Ctrl.hasModule('ballot')"
-        class="results-module player__height"
+        class="ballot__group player__height"
         active="config._data.modules.ballot.resultsActive && active"
         vote="config._data.modules.ballot.vote"
         card-id="{{config.id}}"
@@ -76,7 +76,7 @@
                 {{action.label}}
             </a>
             <a ng-href="{{config.links.Action}}" target="_blank" ng-switch-when="button" class="sponsor__goBtn btnPrimary" title="{{action.label}}">
-                <span class="btn__label">{{action.label}}</span>
+                <span class="btn__label tk--action">{{action.label}}</span>
             </a>
         </div>
 

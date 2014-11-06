@@ -4,8 +4,9 @@
     <ul class="ballot__list">
         <li class="ballot__item ballot__item{{$index}}" ng-repeat="choice in ballot.choices">
             <button class="ballot__btn btnPrimary ballot__btn{{$index}}"
-            ng-click="Ctrl.vote($index)">
-                <span class="ballot__btnLabel btn__label">{{choice}}</span>
+            ng-click="Ctrl.vote($index)"
+            type="button" title="{{choice}}">
+                <span class="ballot__btnLabel btn__label tk--action">{{choice}}</span>
             </button>
         </li>
     </ul>
