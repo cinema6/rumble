@@ -849,6 +849,12 @@ define(['minireel', 'services'], function(minireelModule, servicesModule) {
                     expect(iface.listeners('timeupdate')).toEqual([]);
                 });
                 
+                it('should not set up a timeupdate handler if there is no minViewTime', function() {
+                    $scope.config.campaign = { countUrl: 'count.me' };
+                    iface.emit('ready');
+                    expect(iface.listeners('timeupdate')).toEqual([]);
+                });
+                
                 describe('sets up a timeupdate handler that', function() {
                     beforeEach(function() {
                         iface.emit('ready');

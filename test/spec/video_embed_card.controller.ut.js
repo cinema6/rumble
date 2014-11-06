@@ -1220,6 +1220,12 @@ define(['minireel', 'c6uilib', 'services'], function(minireelModule, c6uilibModu
                     $scope.$emit('playerAdd', iface);
                     expect(iface.listeners('timeupdate')).toEqual([]);
                 });
+
+                it('should not set up a timeupdate handler if there is no minViewTime', function() {
+                    $scope.config.campaign = { countUrl: 'count.me' };
+                    iface.emit('ready');
+                    expect(iface.listeners('timeupdate')).toEqual([]);
+                });
                 
                 describe('sets up a timeupdate handler that', function() {
                     beforeEach(function() {
