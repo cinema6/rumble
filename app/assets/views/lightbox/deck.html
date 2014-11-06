@@ -21,6 +21,7 @@
 
 <button ng-click="RumbleCtrl.goBack('nav')"
 ng-show="nav.enabled"
+ng-if="!isSolo"
 class="btnSecondary nav__btn nav__btn--prev c6-fade"
 ng-class="{
     'nav__btn--condensed'   : currentCard.type === 'recap',

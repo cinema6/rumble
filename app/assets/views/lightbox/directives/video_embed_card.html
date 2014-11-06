@@ -34,9 +34,9 @@
         'card__copy--companionAd': !!hasModule('displayAd')
     }">
 
-        <h1 class="card__title tk--hdr" ng-if="!config.data.hideSource">
+        <h1 class="card__title tk--hdr">
             {{config.title}}
-            <span ng-show="!!config.source" 
+            <span ng-show="!!config.source" ng-if="!config.data.hideSource"
             class="card__attributes tk--copy">
                 via&nbsp;<a ng-href="{{Ctrl.videoUrl}}" target="_blank" class="textLink" 
                 title="{{config.source}}">{{config.source}}</a>
@@ -49,9 +49,6 @@
                 <img ng-src="{{config.collateral.logo}}" class="sponsorProfile__img">
             </a>
             <div class="sponsorProfile__copy" ng-if="!!(config.params.sponsor || config.social.length > 0)">
-                <h1 class="card__title tk--hdr">
-                    {{config.title}}
-                </h1>
                 <div class="card__attributes sponsorProfile__tag" 
                 ng-if="!!config.params.sponsor">
                     Sponsored by 

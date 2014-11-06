@@ -18,12 +18,6 @@
         background:#fff; 
         margin:0;
     }
-    ::-moz-selection {
-        background: #e900a4; text-shadow: none; color:#fff;
-    }
-    ::selection {
-        background: #e900a4; text-shadow: none; color:#fff;
-    }
     p {
         margin: 0.75em 0;
     }
@@ -196,18 +190,18 @@
             text-transform:uppercase;
             text-shadow: 0 1px 1px rgba(0,0,0,0.44);
         }
-            @media screen and (min-width:75rem) and (max-width:106rem) {
-                /* 1200px -  1696px*/
-                .btnPrimary .btn__label {
-                    font-size:1em;
-                }
+        @media screen and (min-width:75rem) and (max-width:106rem) {
+            /* 1200px -  1696px*/
+            .btnPrimary .btn__label {
+                font-size:1em;
             }
-            @media screen and (min-width:106.0625rem) {
-                /* 1697px ++ */
-                .btnPrimary .btn__label {
-                    font-size:1.125em;
-                }
+        }
+        @media screen and (min-width:106.0625rem) {
+            /* 1697px ++ */
+            .btnPrimary .btn__label {
+                font-size:1.125em;
             }
+        }
 
         .btnPrimary[disabled],
         .btnPrimary[disabled]:active,
@@ -342,9 +336,6 @@
             width:100%; height:100%;
         }
 
-
-
-
         .titleBar__title {
             margin:0;
             font-size:1em;
@@ -360,6 +351,10 @@
             .titleBar__titleText {
                 color:#000;
                 cursor:pointer;
+                font-size:1.3125em;
+                margin:0;
+                font-style:italic;
+                font-weight:bold;
             }
 
 
@@ -429,10 +424,10 @@
         }
 
         .player__playBtn {
-            width: 8em;
-            height: 8em;
+            width: 6em;
+            height: 6em;
             padding: 0;
-            margin: -4em 0 0 -4em;
+            margin: -3em 0 0 -3em;
             border: 4px solid #fff;
             border-radius:50%;
             cursor: pointer;
@@ -456,46 +451,43 @@
         }
         .card__title {
             color:#000;
-            font-size:1.375em;
-            line-height: 1.5rem;
-            margin:0;
+            font-size:1.9375em;
+            line-height:1.1;
+            margin:0 0 0.25em 0;
         }
         .card__attributes {
             color:#999; 
-            font-size:0.75rem;/*12px*/
+            font-size:0.8125rem;/*13px*/
+            line-height: 1;
         }
         .card__desc {
-            margin:0.375rem 0 0;
-            font-size:0.8125em;
-            line-height: 1.125rem;
+            margin:0.75rem 0 0;
+            font-size:0.875em;
+            line-height:1.5;
         }
 
             @media screen and (min-width:75rem) and (max-width:106rem) {
                 /* 1200px -  1696px*/
                 .card__title {
-                    font-size:1.625em;
-                    line-height:1.75rem;
+                    font-size:2.25em;
                 }
                 .card__attributes {
                     font-size:0.8125rem;
                 }
                 .card__desc {
-                    font-size:0.875em;
-                    line-height:1.375rem;
+                    font-size:1em;
                 }
             }
             @media screen and (min-width:106.0625rem) {
                 /* 1697px ++ */
                 .card__title {
-                    font-size:1.75em;
-                    line-height:1.875rem;
+                    font-size:2.5em;
                 }
                 .card__attributes {
                     font-size:1rem;
                 }
                 .card__desc {
-                    font-size:1em;
-                    line-height:1.5rem;
+                    font-size:1.125em;
                 }
             }
 
@@ -529,7 +521,7 @@
 
 
         .adSkip__group {
-            background:rgba(256,256,256,0.8);
+            background:rgba(256,256,256,0.84);
             position:absolute; z-index: 1;
             bottom:0; left:0; right:0;
             height:100%;
@@ -537,7 +529,7 @@
             .adSkip__message {
                 position:absolute;
                 top:50%; width:100%;
-                font-size:0.8125em;
+                font-size:1em;
                 line-height: 1;
                 text-align: center;
                 margin:-0.375rem 0 0 0;
@@ -661,11 +653,10 @@
 
         .sponsorProfile__links {
             line-height: 1;
-            margin:0;
+            margin:0.25em 0 1.5em 0;
         }
             .sponsorProfile__tag {
-                margin:0.125rem 0.5rem 0 0;
-                float:left;
+                margin:0.125rem 0 0 0;
             }
             .sponsorProfile__link {
                 border:0;
@@ -695,12 +686,10 @@
                 .recap__copyBox .sponsorProfile__tag {
                     float:left;
                 }
-            .sponsorProfile__links {
-                margin:0.25em 0 1.5em 0;
+
+            .recap__copyBox .sponsorProfile__links {
+                margin:0;
             }
-                .recap__copyBox .sponsorProfile__links {
-                    margin:0;
-                }
         }
 
 
@@ -1264,58 +1253,52 @@
     branded MR classes
     ================================================ */
     .experience__group--brandedMR .MiniReel__group {
-        margin-bottom:2.8125em;
+        margin-bottom:2.125em;
     }
 
     .experience__group--brandedMR .titleBar__group {
-        height:2.75em;
+        height:3em;
     }
         .experience__group--brandedMR .titleBar__title {
-            width:calc(100% - 3em);
+            width:calc(100% - 3.5em);
             margin:0 0 0 0.5rem;
         }
             .brandedMR__tagline {
-                font-size:0.75em;
+                font-size:0.875em;
                 color:#999;
                 display: block;
-                margin:0.25em 0;
+                margin:0.125rem 0 0.25rem 0;
             }
                 .brandedMR__taglineBrand {
                     font-weight:bold;
                 }
 
         .brandProfile__logoBox {
-            width:2.5em; height:2.5em;
+            width:2.75em; height:2.75em;
             display: block;
+            border:1px solid #ddd;
             float:left;
         }
             .brandProfile__logo {
                 display: block;
-                width:2.5em; height:2.5em;
+                width:2.625em; height:2.625em;
             }
 
 
     .experience__group--brandedMR .cards__group {
-        top:3.25em;
+        top:3.5em;
     }
-
-    .experience__group--brandedMR .playlist__group {
-        top:2.5em;
-    }
-        .experience__group--brandedMR .playlist__group--videoAd {
-            top:19em;
-        }
 
     
     .brandProfile__linksBox {
         position: absolute;
-        bottom:1.375em;
+        bottom:0.25em;
         text-align: center;
         width:100%;
     }
         .brandProfile__link {
             padding:0 0.5em;
-            font-size:0.75em;
+            font-size:0.875em;
             display: inline-block;
             color:#fff;
         }

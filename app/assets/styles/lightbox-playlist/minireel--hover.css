@@ -98,12 +98,14 @@
 /*  ================================================
     border transitions
     ================================================ */
-    .sponsorProfile__imgBox {
+    .sponsorProfile__imgBox,
+    .brandProfile__logoBox {
         -webkit-transition: border 0.3s ease; 
         transition: border 0.3s ease;
     }
 
-    .sponsorProfile__imgBox:hover {
+    .sponsorProfile__imgBox:hover,
+    .brandProfile__logoBox:hover {
         border-color:#d94040;
     }
     .recap__item:hover {

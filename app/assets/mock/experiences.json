@@ -8,9 +8,8 @@
         "data": {
             "placementId": "3220650",
             "election": "e-d0e407bb69675b",
-            "mode": "lightbox",
-            "branding": "digitaljournal",
-            "theme": "ed-entertainment",
+            "mode": "lightbox-playlist",
+            "branding": "digitaljournal2",
             "collateral": {
                 "splash": "/collateral/experiences/rumble/splash-6thumb.jpg",
                 "logo": "http://cinema6.com/assets/img/c6-logo@2x.png"
@@ -277,7 +276,7 @@
         "summary": "",
         "data": {
             "title": "JCVD FTW",
-            "mode": "solo-ads",
+            "mode": "lightbox",
             "deck": [
                 {
                     "id": "rc-6b35f48684d1ef",
