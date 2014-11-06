@@ -277,14 +277,14 @@
         "summary": "",
         "data": {
             "title": "JCVD FTW",
-            "mode": "solo-ads",
+            "mode": "lightbox",
             "deck": [
                 {
                     "id": "rc-6b35f48684d1ef",
                     "type": "adUnit",
                     "title": "JCVD FTW",
                     "note": "And a mind to master the most epic of splits.",
-                    "modules": [],
+                    "modules": ["post"],
                     "links": {
                         "Action": "https://portal.cinema6.com/#/apps/minireel/studio/dashboard?filter=all&limit=50&page=1",
                         "Website": "http://cinema6.com/",

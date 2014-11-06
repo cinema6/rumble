@@ -1,4 +1,10 @@
 <article class="card__group">
+    <post-module ng-if="hasModule('post')"
+        active="Ctrl.postModuleActive"
+        on-replay="Ctrl.player.play()"
+        on-dismiss="Ctrl.postModuleActive = false"
+        sponsor-href="{{config.links.Website}}">
+    </post-module>
     <div class="player__group playerHeight">
         <button ng-if="Ctrl.enablePlay" ng-show="Ctrl.showPlay" 
         ng-click="Ctrl.playVideo()" class="player__playBtn">
