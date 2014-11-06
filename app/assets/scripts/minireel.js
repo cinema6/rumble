@@ -608,7 +608,6 @@ function( angular , c6Defines  , tracker ,
         $scope.title            = experience.data.title;
 
         $scope.deck             = MiniReelService.createDeck(experience.data);
-        experience.data.social = MiniReelService.createSocialLinks(experience.data.links);
 
         MasterDeckCtrl = new MasterDeckController();
 
