@@ -280,7 +280,7 @@
             "deck": [
                 {
                     "id": "rc-6b35f48684d1ef",
-                    "type": "adUnit",
+                    "type": "youtube",
                     "title": "JCVD FTW",
                     "note": "And a mind to master the most epic of splits.",
                     "modules": ["post"],
@@ -304,9 +304,10 @@
                         "logo": "http://cinema6.com/assets/img/c6-logo@2x.png"
                     },
                     "data": {
-                        "hideSource": true,
-                        "vpaid": "http://u-ads.adap.tv/a/h/DCQzzI0K2rv1k0TZythPvYyD60pQS_90o8grI6Qm2PI=?cb={cachebreaker}&pageUrl={pageUrl}&eov=eov",
-                        "vast": "http://u-ads.adap.tv/a/h/DCQzzI0K2rv1k0TZythPvTfWmlP8j6NQnxBMIgFJa80=?cb={cachebreaker}&pageUrl={pageUrl}&eov=eov"
+                        "videoid": "e4RDZ66FpMo",
+                        "hideSource" : true,
+                        "rel": 0,
+                        "modestbranding": 1
                     }
                 }
             ]

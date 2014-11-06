@@ -336,7 +336,7 @@
     ================================================ */
     .titleBar__group {
         position: relative;
-        height:1.25em;
+        height:1.5em;
     }
 
         .titleBar__disabler {
@@ -363,6 +363,10 @@
             .titleBar__titleText {
                 color:#000;
                 cursor:pointer;
+                font-size:1.3125em;
+                margin:0;
+                font-style:italic;
+                font-weight:bold;
             }
 
 
@@ -436,10 +440,10 @@
         }
 
         .player__playBtn {
-            width: 8em;
-            height: 8em;
+            width: 6em;
+            height: 6em;
             padding: 0;
-            margin: -4em 0 0 -4em;
+            margin: -3em 0 0 -3em;
             border: 4px solid #fff;
             border-radius:50%;
             cursor: pointer;
@@ -1206,58 +1210,56 @@
     branded MR classes
     ================================================ */
     .experience__group--brandedMR .MiniReel__group {
-        margin-bottom:2.8125em;
+        margin-bottom:2.125em;
     }
 
     .experience__group--brandedMR .titleBar__group {
-        height:2.75em;
+        height:3em;
     }
         .experience__group--brandedMR .titleBar__title {
-            width:calc(100% - 3em);
+            width:calc(100% - 3.5em);
             margin:0 0 0 0.5rem;
         }
             .brandedMR__tagline {
-                font-size:0.75em;
+                font-size:0.875em;
                 color:#999;
                 display: block;
-                margin:0.25em 0;
+                margin:0.125rem 0 0.25rem 0;
             }
                 .brandedMR__taglineBrand {
                     font-weight:bold;
                 }
 
         .brandProfile__logoBox {
-            width:2.5em; height:2.5em;
+            width:2.75em; height:2.75em;
             display: block;
+            border:1px solid #ddd;
             float:left;
         }
             .brandProfile__logo {
                 display: block;
-                width:2.5em; height:2.5em;
+                width:2.625em; height:2.625em;
             }
 
 
     .experience__group--brandedMR .cards__group {
-        top:3.25em;
+        top:3.5em;
     }
 
     .experience__group--brandedMR .playlist__group {
-        top:2.5em;
+        top:2.75em;
     }
-        .experience__group--brandedMR .playlist__group--videoAd {
-            top:19em;
-        }
 
     
     .brandProfile__linksBox {
         position: absolute;
-        bottom:1.375em;
+        bottom:0.25em;
         text-align: center;
         width:100%;
     }
         .brandProfile__link {
             padding:0 0.5em;
-            font-size:0.75em;
+            font-size:0.875em;
             display: inline-block;
             color:#fff;
         }
