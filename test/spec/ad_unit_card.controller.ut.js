@@ -128,6 +128,10 @@ define(['minireel', 'services'], function(minireelModule, servicesModule) {
                     expect($scope.config._data).toEqual({
                         hasPlayed: false,
                         companion: null,
+                        tracking: {
+                            clickFired: false,
+                            countFired: false
+                        },
                         modules: {
                             displayAd: {
                                 active: false
@@ -788,6 +792,121 @@ define(['minireel', 'services'], function(minireelModule, servicesModule) {
                                 });
                             });
                         });
+                    });
+                });
+            });
+        });
+        
+        describe('if the card is sponsored', function() {
+            var iface;
+            beforeEach(function() {
+                iface = new Player();
+                $scope.$apply(function() {
+                    $scope.$emit('<vast-player>:init', iface);
+                });
+            });
+
+            describe('with a clickUrl', function() {
+                beforeEach(function() {
+                    $scope.$apply(function() {
+                        $scope.config.campaign = { clickUrl: 'click.me' };
+                    });
+                });
+                
+                it('should setup a one-time handler for the play event', function() {
+                    iface.emit('ready');
+                    iface.emit('play');
+                    expect(c6ImagePreloader.load).toHaveBeenCalledWith(['click.me']);
+                    expect($scope.config._data.tracking.clickFired).toBe(true);
+                    iface.emit('play');
+                    expect(c6ImagePreloader.load.calls.count()).toBe(1);
+                });
+                
+                it('should not setup a play handler if the click has been fired', function() {
+                    $scope.config._data.tracking.clickFired = true;
+                    iface.emit('ready');
+                    iface.emit('play');
+                    expect(c6ImagePreloader.load).not.toHaveBeenCalled();
+                    expect($scope.config._data.tracking.clickFired).toBe(true);
+                });
+            });
+            
+            describe('with a countUrl', function() {
+                beforeEach(function() {
+                    $scope.$apply(function() {
+                        $scope.config.campaign = { countUrl: 'count.me', minViewTime: 5 };
+                    });
+                });
+                
+                it('should set up a timeupdate handler', function() {
+                    iface.emit('ready');
+                    expect(iface.listeners('timeupdate')).toEqual([jasmine.any(Function)]);
+                });
+                
+                it('should not set up a timeupdate handler if the countUrl has been fired', function() {
+                    $scope.config._data.tracking.countFired = true;
+                    iface.emit('ready');
+                    expect(iface.listeners('timeupdate')).toEqual([]);
+                });
+                
+                it('should not set up a timeupdate handler if there is no minViewTime', function() {
+                    $scope.config.campaign = { countUrl: 'count.me' };
+                    iface.emit('ready');
+                    expect(iface.listeners('timeupdate')).toEqual([]);
+                });
+                
+                describe('sets up a timeupdate handler that', function() {
+                    beforeEach(function() {
+                        iface.emit('ready');
+                    });
+                    
+                    it('should fire the AdCount pixel after minViewTime', function() {
+                        for (var i = 0; i < 6; i++) {
+                            iface.currentTime = i;
+                            iface.emit('timeupdate');
+                            if (i < 5) {
+                                expect(c6ImagePreloader.load).not.toHaveBeenCalled();
+                            } else {
+                                expect(c6ImagePreloader.load).toHaveBeenCalledWith(['count.me']);
+                                expect(iface.listeners('timeupdate')).toEqual([]);
+                                expect($scope.config._data.tracking.countFired).toBe(true);
+                            }
+                        }
+                    });
+                    
+                    it('should not fire the AdCount pixel if it was already fired', function() {
+                        for (var i = 0; i < 6; i++) {
+                            iface.currentTime = i;
+                            if (i < 5) {
+                                iface.emit('timeupdate');
+                            } else {
+                                iface.emit('timeupdate'), iface.emit('timeupdate');
+                                expect(c6ImagePreloader.load.calls.count()).toBe(1);
+                            }
+                        }
+                    });
+
+                    it('should ignore large time jumps forward or backward', function() {
+                        iface.currentTime = -1;
+                        for (var i = 0; i < 6; i++) {
+                            iface.currentTime++;
+                            iface.emit('timeupdate');
+                            if (i < 5) {
+                                expect(c6ImagePreloader.load).not.toHaveBeenCalled();
+                                if (i === 2) {
+                                    iface.currentTime += 10;
+                                    iface.emit('timeupdate');
+                                }
+                                if (i === 4) {
+                                    iface.currentTime -= 5;
+                                    iface.emit('timeupdate');
+                                }
+                            } else {
+                                expect(c6ImagePreloader.load).toHaveBeenCalledWith(['count.me']);
+                                expect(iface.listeners('timeupdate')).toEqual([]);
+                                expect($scope.config._data.tracking.countFired).toBe(true);
+                            }
+                        }
                     });
                 });
             });
