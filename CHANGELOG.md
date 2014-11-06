@@ -1,6 +1,11 @@
 # MiniReel Player
 
 ## v1.5.0 (November 5, 2014)
+* *[v1.5.0.rc3]*
+  * [FIX]: ballot results styles added
+  * [FIX]: Media queries for large screens added for lightbox, lightbox-playlist, and full
+* *[/v1.5.0.rc3]*
+
 * *[v1.5.0.rc2]*
   * [FIX]: Fix for an issue that caused the page navigation not to
     appear in the lightbox mode
