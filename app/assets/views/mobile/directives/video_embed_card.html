@@ -7,6 +7,12 @@
     ballot="config.ballot"
     on-dismiss="Ctrl.dismissBallot()">
 </ballot-vote-module>
+<post-module ng-if="hasModule('post')"
+    active="Ctrl.postModuleActive"
+    on-replay="Ctrl.playVideo()"
+    on-dismiss="Ctrl.postModuleActive = false"
+    sponsor-href="{{config.links.Website}}">
+</post-module>
 <article>
     <div class="mr-card mr-card-shadow">
         <div class="clearfix">

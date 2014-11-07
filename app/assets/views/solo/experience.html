@@ -1,11 +1,11 @@
-<div class="MiniReel {{app.data.experience.data.theme}}">
+<div class="MiniReel {{app.data.experience.data.theme}}"
+ng-class="{'MiniReel--brandedMR' : !!currentCard.params.sponsor}">
     
 
-    <header class="mr-titleBar__group clearfix">
-        <div class="mr-titleBar__disabler" ng-show="!nav.enabled">&nbsp;</div>
-        <h1 class="mr-titleBar__title"
-            ng-if="!!currentCard.params.sponsor">
-            Sponsored by 
+    <header class="titleBar__group clearfix">
+        <div class="titleBar__disabler" ng-show="!nav.enabled">&nbsp;</div>
+        <h1 class="brandedMR__tagline" ng-if="!!currentCard.params.sponsor">
+            Presented by
             <a ng-href="{{currentCard.links.Website}}" target="_blank" 
             title="{{currentCard.params.sponsor}}" class="textLink">
                 <strong>{{currentCard.params.sponsor}}</strong>
@@ -15,10 +15,22 @@
 
     <ng-include ng-controller="DeckController as DeckCtrl" src="'deck.html' | asset:'views'"></ng-include>
 
-    <!--<display-ad-module ng-if="RumbleCtrl.moduleActive('displayAd')"
-        config="currentCard"
-        active="RumbleCtrl.moduleActive('displayAd')">
-    </display-ad-module>-->
+    <div ng-if="currentCard.social.length > 0 || !!currentCard.links.Website" class="brandProfile__linksBox">
+        <a ng-if="!!currentCard.links.Website"
+            ng-href="{{currentCard.links.Website}}"
+            title="{{currentCard.params.sponsor}} &mdash; Official Website"
+            target="_blank"
+            class="brandProfile__link">
+            <span class="brandProfile__linkLabel">{{currentCard.params.sponsor}} {{minireel.params.sponsor}} Website</span>
+        </a>
+        <a ng-repeat="link in currentCard.social"
+            ng-href="{{link.href}}"
+            title="{{link.label}}"
+            target="_blank"
+            class="brandProfile__link tk--{{link.type}} spriteBe socialIconsBe socialIconsBe--{{link.type}}">
+            <span class="brandProfile__linkLabel">{{link.label}}</span>
+        </a>
+    </div>
 
 </div><!--.MiniReel-->
 

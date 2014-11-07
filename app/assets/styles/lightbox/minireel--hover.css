@@ -7,12 +7,14 @@
     .recap__item,
     .MiniReel__closeBtn,
     .playlist__item,
-    .player__playBtn {
+    .player__playBtn,
+    .actionsModal__btn:after {
         -webkit-transition:background 0.3s; transition:background 0.3s;
     }
 
     .MiniReel__closeBtn:hover,
     .ballot__btn0:hover:before,
+    .actionsModal__btn:hover:after,
     .playlist__item.playlist__item--current:hover,
     .player__playBtn:hover,
     .btnSecondary:hover {
@@ -219,7 +221,12 @@
 /*  ================================================
     transform transitions
     ================================================ */
-    .page__btn:hover .page__previewImg {
+    .actionsModal__btn:before {
+        -webkit-transition: -webkit-transform 0.3s ease; 
+        transition: 0.3s transform;
+    }
+    .page__btn:hover .page__previewImg,
+    .actionsModal__btn:hover:before {
         -webkit-transform: scale(1.25);
         transform: scale(1.25);
     }

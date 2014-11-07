@@ -1,4 +1,10 @@
 <article>
+    <post-module ng-if="hasModule('post')"
+        active="Ctrl.postModuleActive"
+        on-replay="Ctrl.player.play()"
+        on-dismiss="Ctrl.postModuleActive = false"
+        sponsor-href="{{config.links.Website}}">
+    </post-module>
     <h3 class="mr-title"><em class="condensed">{{Ctrl.experienceTitle}}</em></h3>
     <div class="mr-card mr-card-shadow">
         <div class="clearfix">

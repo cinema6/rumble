@@ -8,7 +8,7 @@
         "data": {
             "placementId": "3220650",
             "election": "e-d0e407bb69675b",
-            "mode": "lightbox-playlist",
+            "mode": "lightbox",
             "branding": "digitaljournal2",
             "collateral": {
                 "splash": "/collateral/experiences/rumble/splash-6thumb.jpg",
@@ -276,7 +276,7 @@
         "summary": "",
         "data": {
             "title": "JCVD FTW",
-            "mode": "lightbox",
+            "mode": "solo",
             "deck": [
                 {
                     "id": "rc-6b35f48684d1ef",
@@ -296,7 +296,7 @@
                         "sponsor": "Cinema6",
                         "ad": true,
                         "action": {
-                            "label": "OH HAI MARK",
+                            "label": "Learn More",
                             "type": "button"
                         }
                     },
@@ -304,7 +304,7 @@
                         "logo": "http://cinema6.com/assets/img/c6-logo@2x.png"
                     },
                     "data": {
-                        "videoid": "e4RDZ66FpMo",
+                        "videoid": "owGykVbfgUE",
                         "hideSource" : true,
                         "rel": 0,
                         "modestbranding": 1

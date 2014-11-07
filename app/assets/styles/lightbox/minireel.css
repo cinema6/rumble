@@ -151,8 +151,9 @@
             .uiIconsBe--replay:before {
                 background-position:-1rem -9rem;
             }
-            .uiIconsBe__dark--replay:before {
-                background-position:-1rem -7rem;
+            .uiIconsBe--link:before {
+                background-position:-3rem -9rem;
+                width:1.25rem;
             }
 
 
@@ -182,6 +183,7 @@
         line-height: 1;
         text-align: center;
         font-size: 1rem;
+        display:inline-table;
     }
         .btnPrimary .btn__label {
             font-size:0.875em;
@@ -189,6 +191,8 @@
             font-weight:bold;
             text-transform:uppercase;
             text-shadow: 0 1px 1px rgba(0,0,0,0.44);
+            display:table-cell;
+            vertical-align: middle;
         }
         @media screen and (min-width:75rem) and (max-width:106rem) {
             /* 1200px -  1696px*/
@@ -229,7 +233,7 @@
     }
 
 
-    .ui-offscreen {
+    .ui--offscreen {
         left:-5000%;
         position: absolute;
         height:100%; width:100%;
@@ -1102,6 +1106,63 @@
                 .nav__btn--condensed .nav__btnLabel--next {
                     right:46%;
                 }
+
+
+
+
+/*  ================================================
+    actionsModal__group styles
+    ================================================ */
+    .actionsModal__group {
+        position:absolute; z-index: 2;
+        top:0; left:0; right:19em; bottom:0;
+    }
+    .actionsModal__list {
+        position:absolute; z-index: 2;
+        top:50%; left:50%;
+        width:32.5em;
+        margin:-1.5em 0 0 -16.25em;
+        padding:0;
+        text-align: center;
+        list-style: none;
+    }
+        .actionsModal__item {
+            position:relative;
+            display: inline-block;
+            margin:0 0.5em;
+        }
+        .actionsModal__btn {
+            padding:0 1em 0 4em;
+            height:3em;
+            text-align: center;
+        }
+
+            .actionsModal__btn:before {
+                position:absolute;
+                top:1em; left:1em;
+                z-index: 3;
+                content:'';
+            }
+            .actionsModal__btn:after {
+                content:'';
+                position: absolute;
+                top:0; left:0;
+                z-index: 2;
+                width:3rem; height:3rem;
+                background-color:rgba(0,0,0,0.2);
+                display: block;
+            }
+
+        @media screen and (max-width:58rem) {
+            /*max 928px*/
+            .actionsModal__list {
+                margin:-3.75em 0 0 -7.125em;
+                width:14.25em;
+            }
+            .actionsModal__item {
+                margin:0 0 1.5em 0;
+            }
+        }
 
 
 
