@@ -180,13 +180,14 @@
         }
         @media screen and (min-width:75rem) and (max-width:106rem) and (min-height:45rem) {
             /*  w: 1200px -  1696px
-                h: 720px ++ */
+            /   h: 720px ++ */
             .btnPrimary .btn__label {
                 font-size:1em;
             }
         }
-        @media screen and (min-width:106.0625rem) {
-            /* 1697px ++ */
+        @media screen and (min-width:106.0625rem) and (min-height:45rem) {
+            /*  w: 1697px ++ 
+            /   h: 720px ++ */
             .btnPrimary .btn__label {
                 font-size:1.125em;
             }
@@ -259,7 +260,7 @@
     }
     @media screen and (min-width:75rem) and (min-height:45rem) {
         /*  w: 1200px ++
-            h: 720px ++ */
+        /   h: 720px ++ */
         .titleBar__group {
             height:3em;
         }
@@ -320,20 +321,20 @@
             background:black url('../../img/default_square.jpg') 50% 50% / cover no-repeat;
         }
             
-            .player__play-btn {
-                width: 6.375rem;/*68px*/ 
-                height: 5.4375rem;/*58px*/
-                padding: 0; 
-                margin: -3.875rem 0 0 -3.1875rem; 
-                border: 0; 
+            .player__playBtn {
+                width: 6em;
+                height: 6em;
+                padding: 0;
+                margin: -3em 0 0 -3em;
+                border: 4px solid #fff;
+                border-radius:50%;
                 cursor: pointer;
-                background: rgba(0,0,0,0.8);
-                position: absolute; z-index:1;
-                left: 50%; top: 50%; 
+                background: rgba(0,0,0,0.7);
+                position: absolute; left: 50%; top: 50%; z-index:1;
             }
-                .player__play-icon {
+                .player__playIcon {
                     height: 45%; width: 100%;
-                    background: url('../../img/play-icon.svg') 50% 50% / contain no-repeat;
+                    background: url('../../img/play-icon.svg') 56% 50% / contain no-repeat;
                 }
             .player, .player__thumbnail {
                 position:absolute; width:100%; height:100%;
@@ -392,7 +393,7 @@
             }
             @media screen and (min-width:75rem) and (max-width:106rem) and (min-height:45rem) {
                 /*  w: 1200px -  1696px
-                    h: 720px ++ */
+                /   h: 720px ++ */
                 .card__copyBox {
                     max-width:74em;
                 }
@@ -420,8 +421,9 @@
                     height:calc(100% - 10.75em);
                 }
             }
-            @media screen and (min-width:106.0625rem) {
-                /* 1697px ++ */
+            @media screen and (min-width:106.0625rem) and (min-height:45rem) {
+                /*  w: 1697px ++ 
+                /   h: 720px ++ */
                 .card__copyBox {
                     max-width:88em;
                 }
@@ -498,7 +500,7 @@
 
     @media screen and (min-width:75rem) and (min-height:45rem) {
         /*  w: 1200px ++
-            h: 720px ++ */
+        /   h: 720px ++ */
         .MiniReel--brandedMR .slides__list {
             bottom:3em;
         }
@@ -512,8 +514,9 @@
 
     }
 
-    @media screen and (min-width:106.0625rem) {
-        /* 1697px ++ */
+    @media screen and (min-width:106.0625rem) and (min-height:45rem) {
+        /*  w: 1697px ++ 
+        /   h: 720px ++ */
         .MiniReel--brandedMR .slides__list {
             bottom:3.5em;
         }

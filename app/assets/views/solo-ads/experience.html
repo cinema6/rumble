@@ -1,20 +1,22 @@
 <div class="MiniReel {{app.data.experience.data.theme}}"
     c6-alias="(!!currentCard.params.sponsor || !!currentCard.collateral.logo || !!currentCard.social.length > 0) as hasSponsorship"
     ng-class="{
-        'MiniReel--noBrandProfile' : !hasSponsorship
+        'MiniReel--brandedMR' : hasSponsorship
     }">
 
-    <header class="mr-titleBar__group clearfix"
+    <header class="titleBar__group clearfix"
         ng-show="hasSponsorship">
-        <div class="mr-titleBar__disabler" ng-show="!nav.enabled">&nbsp;</div>
+        <div class="titleBar__disabler" ng-show="!nav.enabled">&nbsp;</div>
         <div class="brandProfile__group clearfix">
-            <a ng-if="!!currentCard.collateral.logo" ng-href="{{currentCard.links.Website}}" target="_blank" title="Sponsor link" class="brandProfile__imgBox">
-                <img ng-src="{{currentCard.collateral.logo}}" class="brandProfile__img">
+            <a ng-if="!!currentCard.collateral.logo" ng-href="{{currentCard.links.Website}}" target="_blank" title="Sponsor link" class="brandProfile__logoBox">
+                <img ng-src="{{currentCard.collateral.logo}}" class="brandProfile__logo">
             </a>
             <div ng-if="!!currentCard.params.sponsor || currentCard.social.length > 0" class="brandProfile__copy">
                 <p ng-if="!!currentCard.params.sponsor" class="brandProfile__tag">
                     Sponsored by 
-                    <a ng-href="{{currentCard.links.Website}}" target="_blank" title="{{currentCard.params.sponsor}}">{{currentCard.params.sponsor}}</a>
+                    <a ng-href="{{currentCard.links.Website}}" 
+                    class="textLink"
+                    target="_blank" title="{{currentCard.params.sponsor}}">{{currentCard.params.sponsor}}</a>
                 </p>
                 <div ng-if="currentCard.social.length > 0" class="brandProfile__links">
                     <a ng-repeat="link in currentCard.social"
@@ -27,6 +29,15 @@
                     </a>
                 </div>
             </div>
+        </div>
+        <div ng-if="!!currentCard.params.action" 
+        ng-switch="currentCard.params.action.type" 
+        c6-alias="currentCard.params.action as action" 
+        class="brand__actions">
+            <a ng-switch-when="text" ng-href="{{currentCard.links.Action}}" target="_blank">{{action.label}}</a>
+            <a ng-switch-when="button" ng-href="{{currentCard.links.Action}}" target="_blank" class="brand__goBtn btnPrimary" title="{{action.label}}">
+                <span class="btn__label tk--action">{{action.label}}</span>
+            </a>
         </div>
     </header>
 

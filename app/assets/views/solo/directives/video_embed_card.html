@@ -13,7 +13,7 @@
                 </div>
             </button>
             <div ng-class="{'ui--offscreen': Ctrl.flyAway}" class="player js-playerBox"><!-- actual player will be inserted into this container --></div>
-            <div ng-show="Ctrl.flyAway" class="player__thumbnail c6-height-limiter"
+            <div ng-show="Ctrl.flyAway" class="player__thumbnail"
                 ng-style="{'background-image':config.thumbs.large ? 'url(' + config.thumbs.large + ')' : ''}">
                 <span class="ir"><img ng-src="{{config.thumbs.large}}"></span>
             </div>
@@ -44,9 +44,8 @@
             <h1 class="card__title tk--hdr">
                 {{config.title}}
                 <span ng-show="!!config.source" class="card__attributes">
-                    via 
-                    <a ng-href="{{Ctrl.videoUrl}}" target="_blank" 
-                    class="textLink" title="{{config.source}}">
+                    via&nbsp;<a ng-href="{{Ctrl.videoUrl}}" 
+                    target="_blank" class="textLink" title="{{config.source}}">
                         {{config.source}}
                     </a>
                 </span>
