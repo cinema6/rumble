@@ -356,7 +356,8 @@
             position: absolute;
             top:0; right:0; bottom:17.25em;
             overflow-y: auto; overflow-x:hidden;
-            -webkit-transition:height 0.25s; transition:height 0.25s;
+            -webkit-transition:height 0.25s; 
+            transition:height 0.25s;
         }
             .slides__list--noAds .card__copy {
                 bottom:0;
