@@ -1552,6 +1552,38 @@
                     }
                 },
                 {
+                    "id": "rc-6b35f48684d1ef",
+                    "type": "adUnit",
+                    "title": "JCVD FTW",
+                    "note": "And a mind to master the most epic of splits.",
+                    "modules": [],
+                    "links": {
+                        "Action": "https://portal.cinema6.com/#/apps/minireel/studio/dashboard?filter=all&limit=50&page=1",
+                        "Website": "http://cinema6.com/",
+                        "Facebook": "https://www.facebook.com/Cinema6Video",
+                        "Twitter": "https://twitter.com/Cinema6Video",
+                        "YouTube": "http://www.youtube.com/channel/UCSszI_zUkVVA24WVuTYpHTQ",
+                        "Vimeo": "https://vimeo.com/user27205886"
+                    },
+                    "params": {
+                        "sponsor": "Cinema6",
+                        "ad": true,
+                        "action": {
+                            "label": "OH HAI MARK",
+                            "type": "button"
+                        }
+                    },
+                    "collateral": {
+                        "logo": "http://cinema6.com/assets/img/c6-logo@2x.png"
+                    },
+                    "data": {
+                        "hideSource": true,
+                        "vpaid": "http://u-ads.adap.tv/a/h/DCQzzI0K2rv1k0TZythPvYyD60pQS_90o8grI6Qm2PI=?cb={cachebreaker}&pageUrl={pageUrl}&eov=eov",
+                        "vast": "http://u-ads.adap.tv/a/h/DCQzzI0K2rv1k0TZythPvTfWmlP8j6NQnxBMIgFJa80=?cb={cachebreaker}&pageUrl={pageUrl}&eov=eov",
+                        "skip": 6
+                    }
+                },
+                {
                     "id": "rc-4f9cb78c41dcd9",
                     "type": "youtube",
                     "title": "John Riggins Scores On 4th And 1",

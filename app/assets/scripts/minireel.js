@@ -1622,6 +1622,7 @@ function( angular , c6Defines  , tracker ,
                 profile : '=',
                 active  : '=',
                 onDeck  : '=',
+                nav     : '=',
                 number  : '@',
                 total   : '@'
             }

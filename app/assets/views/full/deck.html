@@ -17,7 +17,8 @@ ng-class="{
             x-config="item"
             x-profile="deviceProfile"
             x-active="($index === deck.index) && deck.active"
-            x-on-deck="($index === (deck.index + 1))">
+            x-on-deck="($index === (deck.index + 1))"
+            x-nav="nav">
         </mr-card>
     </li>
 </ul>
@@ -60,6 +61,6 @@ ng-hide="atTail || currentCard.type === 'text'">
     <span class="slideNav__label slideNav__label--next btn__label tk--action">Next</span>
 </button>
 
-<div class="adSkip__group c6-fade" ng-show="!nav.enabled">
+<div class="adSkip__group c6-fade" ng-show="!nav.enabled && currentCard.type !== 'adUnit'">
     <p class="adSkip__message">Skip in <strong>{{nav.wait}}</strong></p>
 </div>
