@@ -1,4 +1,7 @@
 <article class="card__group">
+    <div class="adSkip__group--sponsored c6-fade" ng-show="!nav.enabled">
+        <p class="adSkip__message">Skip in <strong>{{nav.wait}}</strong></p>
+    </div>
     <ballot-vote-module 
         class="ballot__group playerHeight c6-fade"
         ng-if="Ctrl.hasModule('ballot')"

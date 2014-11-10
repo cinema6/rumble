@@ -10,7 +10,7 @@
     }
 
     .ballot__btn:hover:before,
-    .playlist__item--current:hover,
+    .playlist__item.playlist__item--current:hover,
     .player__playBtn:hover {
         background-color:#d94040;
     }
