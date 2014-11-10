@@ -130,6 +130,12 @@
     .slideNav__btn[disabled]:hover .slideNav__icon--next {
         right:50%; left:auto;
     }
+    .slideNav__btn--small[disabled]:hover .slideNav__icon--prev {
+        left:25%;
+    }
+    .slideNav__btn--small[disabled]:hover .slideNav__icon--next {
+        right:25%; left:auto;
+    }
     @media screen and (min-width:75rem) and (min-height:45rem) {
         /*  w: 1200px ++
         /   h: 720px ++ */

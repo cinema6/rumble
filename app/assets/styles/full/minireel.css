@@ -762,10 +762,10 @@
                 left:auto; right:25%;
             }
         .slideNav__btn--small .slideNav__label {
-            margin:-0.5rem 0 0 25%; 
+            margin:-0.5em 0 0 25%; 
         }
             .slideNav__btn--small .slideNav__label--next {
-                margin:-0.5rem 25% 0 0; 
+                margin:-0.5em 25% 0 0; 
             }
 
 
