@@ -197,11 +197,11 @@
         right:8%;
     }
 
-    .nav__btn--disabled:hover .nav__btnIcon--prev {
-        left:50%;
+    .nav__btn[disabled]:hover .nav__btnIcon--prev {
+        left:48%;
     }
-    .nav__btn--disabled:hover .nav__btnIcon--next {
-        left:50%;
+    .nav__btn[disabled]:hover .nav__btnIcon--next {
+        left:52%;
     }
 
 

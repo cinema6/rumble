@@ -226,6 +226,20 @@
             }
         }
 
+        .btnPrimary[disabled],
+        .btnPrimary[disabled]:active,
+        .btnPrimary[disabled]:hover {
+            cursor:default;
+            background:#ccc;
+            border-color:#ccc;
+        }
+            .btnPrimary[disabled] .btn__label,
+            .btnPrimary[disabled]:active .btn__label,
+            .btnPrimary[disabled]:hover .btn__label {
+                text-shadow:none;
+                color:#fff;
+            }
+
 
     .btnSecondary,
     .btnSecondary:active,
