@@ -24,7 +24,6 @@ ng-class="{
 </ul>
 
 <button ng-click="RumbleCtrl.goBack('nav')"
-ng-disabled="!nav.enabled"
 class="btnPrimary slideNav__btn slideNav__btn--prev c6-fade"
 ng-class="{
     'slideNav__btn--small': currentCard.title.length + currentCard.note.length <= 100 || currentCard.ad,
@@ -33,7 +32,7 @@ ng-class="{
 }"
 type="button"
 title="Previous Page"
-ng-disabled="app.data.standalone && tocIndex < 1"
+ng-disabled="!nav.enabled || (app.data.standalone && tocIndex < 1)"
 ng-hide="currentCard.type === 'text'">
     <svg class="slideNav__icon slideNav__icon--prev" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
      viewBox="0 0 27.213 45.941" enable-background="new 0 0 27.213 45.941" xml:space="preserve">
