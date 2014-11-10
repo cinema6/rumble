@@ -1,0 +1,24 @@
+<div class="postModule player__height" ng-show="active">
+    <section class="actionsModal__group">
+        <button class="btnPrimary actionsModal__btn actionsModal__btn--watchAgain
+        spriteBe uiIconsBe uiIconsBe--replay"
+            type="button" title="Watch Video Again"
+            ng-click="onReplay()">
+            <span class="actionsModal__btnLabel btn__label tk--action">Watch Video Again</span>
+        </button>
+        <a ng-if="!!sponsorHref"
+            class="btnPrimary actionsModal__btn actionsModal__btn--visitLink
+            spriteBe uiIconsBe uiIconsBe--link"
+            type="button" title="Visit Sponsor Site"
+            ng-href="{{sponsorHref}}" type="button"
+            target="_blank">
+            <span class="actionsModal__btnLabel btn__label tk--action">Visit Sponsor Site</span>
+        </a>
+    </section>
+
+    <div class="overlay" ng-click="onDismiss()">
+        <button class="sprite sprite--close overlay__closeBtn">
+            <span class="ir">Close</span>
+        </button>
+    </div>
+</div>

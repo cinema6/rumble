@@ -75,10 +75,10 @@
         <div ng-if="minireel.social.length > 0 || !!minireel.links.Website" class="brandProfile__linksBox">
             <a ng-if="!!minireel.links.Website"
                 ng-href="{{minireel.links.Website}}"
-                title="{{minireel.params.sponsor}} - Official Website"
+                title="{{minireel.params.sponsor}} &mdash; Official Website"
                 target="_blank"
                 class="brandProfile__link">
-                <span class="brandProfile__linkLabel">Official Website</span>
+                <span class="brandProfile__linkLabel">{{minireel.params.sponsor}} Website</span>
             </a>
             <a ng-repeat="link in minireel.social"
                 ng-href="{{link.href}}"

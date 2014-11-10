@@ -1,22 +1,28 @@
-<div class="postModule player__height" ng-show="active">
-    <section class="endActions__group">
-        <button class="endActions__watchAgain sprite actionBtn"
-            type="button"
+<div class="actionsModal__group player__height" ng-show="active">
+    <ul class="actionsModal__list">
+        <li class="actionsModal__item">
+            <button class="btnPrimary actionsModal__btn
+            spriteBe uiIconsBe uiIconsBe--replay"
+            type="button" title="Watch Video Again"
             ng-click="onReplay()">
-            <span class="actionBtn__iconBox sprite">&nbsp;</span>
-            <span class="actionBtn__label">Watch Video Again</span>
-        </button>
-        <a ng-if="!!sponsorHref"
-            class="endActions__visitLink actionBtn"
-            type="button"
-            ng-href="{{sponsorHref}}"
+                <span class="actionsModal__btnLabel btn__label tk--action">Watch Video Again</span>
+            </button>
+        </li>
+        <li class="actionsModal__item">
+            <a ng-if="!!sponsorHref"
+            class="btnPrimary actionsModal__btn
+            spriteBe uiIconsBe uiIconsBe--link"
+            type="button" title="Visit Sponsor Site"
+            ng-href="{{sponsorHref}}" type="button"
             target="_blank">
-            <span class="actionBtn__iconBox sprite">&nbsp;</span>
-            <span class="actionBtn__label">Visit Sponsor Site</span>
-        </a>
-    </section>
+                <span class="actionsModal__btnLabel btn__label tk--action">Visit Sponsor Site</span>
+            </a>
+        </li>
+    </ul>
 
     <div class="overlay" ng-click="onDismiss()">
-        <button class="sprite overlay__closeBtn"><span class="ir">Close</span></button>
+        <button class="sprite sprite--close overlay__closeBtn">
+            <span class="ir">Close</span>
+        </button>
     </div>
 </div>

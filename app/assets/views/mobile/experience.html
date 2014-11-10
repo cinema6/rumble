@@ -1,5 +1,4 @@
-<div ng-hide="currentIndex < 0" class="{{app.data.experience.data.theme}}" 
-c6-alias="app.data.experience.data as minireel">
+<div ng-hide="currentIndex < 0 || deck.length < 2" ng-class="app.data.experience.data.theme">
     <div ng-hide="showTOC" class="ui-nav-left--landscape c6-slide-bar--left css-promote">
         <div class="publisher__branding-logo">&nbsp;</div>
         <a ng-if="!!minireel.collateral.logo"
@@ -27,7 +26,7 @@ c6-alias="app.data.experience.data as minireel">
             <span class="sprite ui-icon__close">&nbsp;</span>
             <span class="ui-control__activator">&nbsp;</span>
         </button>
-    </div><!--.ui-nav-left-landscape-->
+    </div><!--.ui-nav-left--landscape-->
 
     <div class="ui-nav-right--landscape c6-side-bar--right css-promote">
         <button ng-class="{'ui-nav__view-list--open': showTOC}" class="ui-nav__view-list" c6-touch="showTOC = !showTOC;" title="View List Pane" type="button" ng-disabled="!nav.enabled">
@@ -49,9 +48,10 @@ c6-alias="app.data.experience.data as minireel">
         <h2 ng-hide="showTOC || tocIndex < 0" class="ui-nav__counter">
             {{tocIndex + 1}} of {{tocCards.length}}
         </h2>
-    </div><!--.ui-nav-right-landscape-->
+    </div><!--.ui-nav-right--landscape-->
 
     <div ng-hide="showTOC" class="ui-context--portrait c6-slide-bar--top css-promote">
+        <div class="publisher__branding-logo">&nbsp;</div>
         <a ng-if="!!minireel.collateral.logo"
             href="{{minireel.links.Website}}"
             title="{{minireel.params.sponsor}}"
@@ -61,7 +61,6 @@ c6-alias="app.data.experience.data as minireel">
                 alt="{{minireel.params.sponsor}}"
                 ng-src="{{minireel.collateral.logo}}">
         </a>
-        <div class="publisher__branding-logo">&nbsp;</div>
         <button ng-click="RumbleCtrl.setPosition(-1);" ng-if="!app.data.standalone" class="ui-context__close" title="Close" type="button">
             <span class="ui-context__label ui-context__label-close">
                 Close
@@ -103,7 +102,8 @@ c6-alias="app.data.experience.data as minireel">
     </div><!--.ui-control-->
 </div><!-- end of the ng-hide div-->
 
-<article class="mr-container"  ng-class="app.data.experience.data.theme" c6-alias="app.data.experience.data as minireel">
+<article class="mr-container {{app.data.experience.data.theme}}" 
+ng-class="{'mr-container--solo' : deck.length < 2}" c6-alias="app.data.experience.data as minireel">
     <h3 class="mr-title tk--hdr">
         <span ng-if="!!minireel.params.sponsor" class="brandedMR__tagline tk--copy">
             <a ng-href="{{minireel.links.Website}}"

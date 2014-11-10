@@ -14,13 +14,14 @@
             x-config="item"
             x-profile="deviceProfile"
             x-active="($index === deck.index) && deck.active"
-            x-on-deck="($index === (deck.index + 1))">
+            x-on-deck="($index === (deck.index + 1))"
+            x-nav="nav">
         </mr-card>
     </li>
 </ul>
 
 <button ng-click="RumbleCtrl.goBack('nav')"
-ng-show="nav.enabled"
+ng-disabled="!nav.enabled"
 class="btnPrimary nav__btn nav__btn--prev c6-fade"
 ng-class="{
     'nav__btn--condensed'   : currentCard.type === 'recap',
@@ -37,7 +38,7 @@ ng-hide="currentCard.type === 'text'">
     <span class="btn__label nav__btnLabel nav__btnLabel--prev tk--action">Prev</span>
 </button><!--^This is the go back button over the video on the left side-->
 <button ng-click="RumbleCtrl.goForward('nav')"
-ng-show="nav.enabled"
+ng-disabled="!nav.enabled"
 class=" btnPrimary nav__btn nav__btn--next c6-fade"
 ng-class="{
     'nav__btn--condensed'   : currentCard.type === 'recap',
@@ -54,6 +55,6 @@ ng-hide="atTail || currentCard.type === 'text'">
     <span class="btn__label nav__btnLabel nav__btnLabel--next tk--action">Next</span>
 </button><!--^This is the go forward button over the video on the right side-->
 
-<div class="adSkip__group c6-fade" ng-show="!nav.enabled">
-    <p class="adSkip__message">Skip this ad in <strong>{{nav.wait}}</strong></p>
+<div class="adSkip__group c6-fade" ng-show="!nav.enabled && currentCard.type !== 'adUnit'">
+    <p class="adSkip__message">Skip in <strong>{{nav.wait}}</strong></p>
 </div>

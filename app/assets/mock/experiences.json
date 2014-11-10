@@ -8,9 +8,8 @@
         "data": {
             "placementId": "3220650",
             "election": "e-d0e407bb69675b",
-            "mode": "lightbox",
-            "branding": "digitaljournal",
-            "theme": "ed-entertainment",
+            "mode": "full",
+            "branding": "digitaljournal2",
             "collateral": {
                 "splash": "/collateral/experiences/rumble/splash-6thumb.jpg",
                 "logo": "http://cinema6.com/assets/img/c6-logo@2x.png"
@@ -66,7 +65,7 @@
                     "id": "rc-22119a8cf9f755",
                     "type": "youtube",
                     "title": "Epic Sax Guy",
-                    "note": "He's back, and saxier than ever. Donec nec justo eget felis facilisis fermentum. Aliquam porttitor mauris sit amet orci. Aenean dignissim pellentesque felis. Morbi in sem quis dui pla. Donec nec justo eget felis facilisis fermentum. Aliquam porttitor mauris sit amet orci. Aenean dignissim pellentesque felis. Morbi in sem quis dui pla. Donec nec justo eget felis facilisis fermentum. Aliquam porttitor mauris sit amet orci. Aenean dignissim pellentesque felis. Morbi in sem quis dui pla. Donec nec justo eget felis facilisis fermentum. Aliquam porttitor mauris sit amet orci. Aenean dignissim pellentesque felis. Morbi in sem quis dui pla.",
+                    "note": "He's back, and saxier than ever. Donec nec justo eget felis facilisis fermentum. Aliquam porttitor mauris sit amet orci.",
                     "source": "YouTube",
                     "modules": [
                         "ballot",
@@ -113,7 +112,7 @@
                     "id": "rc-c539bacdb79a14",
                     "type": "text",
                     "title": "2014 Was The Year Of The GoPro",
-                    "note": "Blah blah blah blah. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec odio. Quisque volutpat mattis eros. Nullam malesuada erat ut turpis. Suspendisse urna nibh, viverra non, semper suscipit, posuere a, pede. Donec nec justo eget felis facilisis fermentum. Aliquam porttitor mauris sit amet orci. Aenean dignissim pellentesque felis.Morbi in sem quis dui placerat ornare. Pellentesque odio nisi, euismod in, pharetra a, ultricies in, diam. Sed arcu. Cras consequat.Praesent dapibus, neque id cursus faucibus, tortor neque egestas augue, eu vulputate magna eros eu erat. Aliquam erat volutpat. Nam dui mi, tincidunt quis, accumsan porttitor, facilisis luctus, metus.",
+                    "note": "Blah blah blah blah. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec odio. Quisque volutpat mattis eros. Nullam malesuada erat ut turpis. Suspendisse urna nibh, viverra non, semper suscipit, posuere a, pede. Donec nec justo eget felis facilisis fermentum. Aliquam porttitor mauris sit amet orci. Aenean dignissim pellentesque felis.Morbi in sem quis dui placerat ornare. Pellentesque odio nisi, euismod in, pharetra a, ultricies in, diam. Sed arcu. Cras consequat.Praesent dapibus, neque id cursus faucibus, tortor neque egestas augue, eu vulputate magna eros eu erat. Aliquam erat volutpat. Nam dui mi, tincidunt quis, accumsan porttitor, facilisis luctus, metus. Aenean dignissim pellentesque felis. Morbi in sem quis dui pla. Donec nec justo eget felis facilisis fermentum. Aliquam porttitor mauris sit amet orci. Aenean dignissim pellentesque felis. Morbi in sem quis dui pla. Donec nec justo eget felis facilisis fermentum. Aliquam porttitor mauris sit amet orci. Aenean dignissim pellentesque felis. Morbi in sem quis dui pla. Donec nec justo eget felis facilisis fermentum. Aliquam porttitor mauris sit amet orci. Aenean dignissim pellentesque felis. Morbi in sem quis dui pla.",
                     "modules": [
                         "displayAd"
                     ],
@@ -147,7 +146,8 @@
                     "data": {
                         "hideSource": true,
                         "vpaid": "http://u-ads.adap.tv/a/h/DCQzzI0K2rv1k0TZythPvYyD60pQS_90o8grI6Qm2PI=?cb={cachebreaker}&pageUrl={pageUrl}&eov=eov",
-                        "vast": "http://u-ads.adap.tv/a/h/DCQzzI0K2rv1k0TZythPvTfWmlP8j6NQnxBMIgFJa80=?cb={cachebreaker}&pageUrl={pageUrl}&eov=eov"
+                        "vast": "http://u-ads.adap.tv/a/h/DCQzzI0K2rv1k0TZythPvTfWmlP8j6NQnxBMIgFJa80=?cb={cachebreaker}&pageUrl={pageUrl}&eov=eov",
+                        "skip": 6
                     }
                 },
                 {
@@ -281,10 +281,10 @@
             "deck": [
                 {
                     "id": "rc-6b35f48684d1ef",
-                    "type": "adUnit",
+                    "type": "youtube",
                     "title": "JCVD FTW",
                     "note": "And a mind to master the most epic of splits.",
-                    "modules": [],
+                    "modules": ["post"],
                     "links": {
                         "Action": "https://portal.cinema6.com/#/apps/minireel/studio/dashboard?filter=all&limit=50&page=1",
                         "Website": "http://cinema6.com/",
@@ -297,7 +297,7 @@
                         "sponsor": "Cinema6",
                         "ad": true,
                         "action": {
-                            "label": "OH HAI MARK",
+                            "label": "Learn More",
                             "type": "button"
                         }
                     },
@@ -305,9 +305,11 @@
                         "logo": "http://cinema6.com/assets/img/c6-logo@2x.png"
                     },
                     "data": {
-                        "hideSource": true,
-                        "vpaid": "http://u-ads.adap.tv/a/h/DCQzzI0K2rv1k0TZythPvYyD60pQS_90o8grI6Qm2PI=?cb={cachebreaker}&pageUrl={pageUrl}&eov=eov",
-                        "vast": "http://u-ads.adap.tv/a/h/DCQzzI0K2rv1k0TZythPvTfWmlP8j6NQnxBMIgFJa80=?cb={cachebreaker}&pageUrl={pageUrl}&eov=eov"
+                        "videoid": "owGykVbfgUE",
+                        "hideSource" : true,
+                        "rel": 0,
+                        "skip": 6,
+                        "modestbranding": 1
                     }
                 }
             ]

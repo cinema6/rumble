@@ -1,5 +1,9 @@
 # MiniReel Player
-## v1.5.0 (November 5, 2014)
+## v1.5.0
+* *[v1.5.0.rc5]*
+  * [FIX]: Responsive adjustments for templates added
+  * [FIX]: On mobile, removed nav when player is solo
+
 * *[v1.5.0.rc4]*
   * [FEATURE]: lightbox soloMR support added
   * [FEATURE]: Fire clickUrl and countUrl for sponsored cards

@@ -1,39 +1,78 @@
 /*  ================================================
-    Brand Profile styles
+    background transitions
     ================================================ */
-    .brandProfile__imgBox {
-        -webkit-transition:border 0.5s;
-        transition:border 0.5s;
+    .btnPrimary,
+    .actionsModal__btn:after {
+        -webkit-transition:background 0.3s; 
+        transition:background 0.3s;
     }
-    .brandProfile__imgBox:hover {
-        border:3px solid #d94040;
+
+    .actionsModal__btn:hover:after {
+        background-color:#d94040;
     }
-    .textLink:hover {
+    .btnPrimary:hover {
+        background-color:#fff;
+    }
+
+
+
+
+/*  ================================================
+    color transitions
+    ================================================ */
+    .btnLabel,
+    .brandProfile__link {
+        -webkit-transition:color 0.3s; 
+        transition:color 0.3s;
+    }
+
+    .btnPrimary:hover .btn__label,
+    .brandProfile__link:hover {
+        color:#d94040;
+    }
+
+
+
+
+/*  ================================================
+    border transitions
+    ================================================ */
+    .brandProfile__logoBox {
+        -webkit-transition: border 0.3s ease; 
+        transition: border 0.3s ease;
+    }
+
+    .brandProfile__logoBox:hover {
+        border-color:#d94040;
+    }
+
+    .textLink:hover,
+    .brandProfile__link:hover .brandProfile__linkLabel {
         border-bottom:1px dotted #d94040;
     }
 
 
 
+
 /*  ================================================
-    button styles 
+    transform transitions
     ================================================ */
-    .actionBtn:hover {
-        background:#fff;
-        color:#d94040;
-        text-shadow:none;
+    .actionsModal__btn:before {
+        -webkit-transition: -webkit-transform 0.3s ease; 
+        transition: 0.3s transform;
     }
-        .actionBtn:hover:before {
-            content:'';
-            position:absolute;
-            border:2px solid #d94040;
-            border-radius:3px;
-            width:100%; height:100%;
-            top:0; left:0;
-        }
-        
-        .endActions__group .actionBtn:hover:before {
-            display: none;
-        }
-        .endActions__group .actionBtn:hover .actionBtn__iconBox {
-            background-color:#d94040;
-        }
+    .actionsModal__btn:hover:before {
+        -webkit-transform: scale(1.25);
+        transform: scale(1.25);
+    }
+
+
+
+
+
+/*  ================================================
+    misc transitions
+    ================================================ */
+    .btnPrimary:hover .btn__label {
+        text-shadow: none;
+    }
