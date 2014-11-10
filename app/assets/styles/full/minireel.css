@@ -732,7 +732,9 @@
             margin:-2.25rem 0 0 -0.875rem;
         }
             .slideNav__icon--next {
-                margin-left:-0.625rem;
+                margin-right:-0.875rem;
+                margin-left:0;
+                right:50%; left:auto;
             }
             .slideNav__iconPath {
                 fill: #fff;
@@ -753,17 +755,17 @@
             width:0.75rem;
             height:1.25rem;
             margin:-0.625rem 0 0 0;
-            left:0.75rem; right:auto;
+            left:25%;
         }
             .slideNav__btn--small .slideNav__icon--next {
-                right:0.75rem; left:auto;
+                margin:-0.625rem 0 0 0;
+                left:auto; right:25%;
             }
         .slideNav__btn--small .slideNav__label {
-            margin:-0.5rem 0 0 0; 
-            right:1rem; left:auto;
+            margin:-0.5rem 0 0 25%; 
         }
             .slideNav__btn--small .slideNav__label--next {
-                left:1rem; right:auto;
+                margin:-0.5rem 25% 0 0; 
             }
 
 
@@ -776,7 +778,8 @@
             margin:-1.5rem 0 0 -0.6875rem;
         }
             .slideNav__btn--med .slideNav__icon--next {
-                margin-left:-0.4375rem;
+                margin-left:0;
+                margin-right:-0.6875rem;
             }
         .slideNav__btn--med .slideNav__label {
             margin:0.8125rem 0 0 0;
@@ -808,7 +811,27 @@
         .slideNav__btn--med {
             height:6.375em;
         }
-        
+    }
+    @media screen and (min-width:75rem) and (min-height:45rem) {
+        /*  w: 1200px ++
+        /   h: 720px ++ */
+        .slideNav__btn--med .slideNav__icon {
+            margin:-1em 0 0 0;
+            left:25%;
+        }
+            .slideNav__btn--med .slideNav__icon--next {
+                left:auto; right:25%;
+            }
+        .slideNav__btn--med .slideNav__label {
+            margin-top:-0.5em;
+        }
+            .slideNav__btn--med .slideNav__label--prev {
+                margin-left:25%;
+            }
+            .slideNav__btn--med .slideNav__label--next {
+                margin-right:25%;
+            }
+
     }
     @media screen and (min-width:106.0625rem) and (min-height:45rem) {
         /*  w: 1697px ++ 
@@ -1470,7 +1493,7 @@
                 .recap__item--ad .recap__imgBox:after {
                     content:'Ad';
                     position: absolute;
-                    top:1.8em; left:5em;
+                    top:1.4em; left:5em;
                     background:#000; color:#fff;
                     padding:0 2px;
                     font-size:0.625rem; font-weight:bold;

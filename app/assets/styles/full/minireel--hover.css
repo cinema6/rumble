@@ -108,6 +108,41 @@
 
 
 
+/*  ================================================
+    position transitions
+    ================================================ */
+    .slideNav__icon {
+        -webkit-transition:left 0.2s, right 0.2s, top 0.2s, bottom 0.2s; 
+        transition:left 0.2s, right 0.2s, top 0.2s, bottom 0.2s; 
+    }
+
+    .slideNav__btn:hover .slideNav__icon--prev {
+        left:16%;
+    }
+    .slideNav__btn:hover .slideNav__icon--next {
+        right:16%; left:auto;
+    }
+
+
+    .slideNav__btn[disabled]:hover .slideNav__icon--prev {
+        left:50%;
+    }
+    .slideNav__btn[disabled]:hover .slideNav__icon--next {
+        right:50%; left:auto;
+    }
+    @media screen and (min-width:75rem) and (min-height:45rem) {
+        /*  w: 1200px ++
+        /   h: 720px ++ */
+        .slideNav__btn[disabled]:hover .slideNav__icon--prev {
+            left:25%;
+        }
+        .slideNav__btn[disabled]:hover .slideNav__icon--next {
+            right:25%; left:auto;
+        }
+    }
+
+
+
 
 
 /*  ================================================
