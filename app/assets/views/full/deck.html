@@ -24,7 +24,7 @@ ng-class="{
 </ul>
 
 <button ng-click="RumbleCtrl.goBack('nav')"
-ng-show="nav.enabled"
+ng-disabled="!nav.enabled"
 class="btnPrimary slideNav__btn slideNav__btn--prev c6-fade"
 ng-class="{
     'slideNav__btn--small': currentCard.title.length + currentCard.note.length <= 100 || currentCard.ad,
@@ -43,7 +43,7 @@ ng-hide="currentCard.type === 'text'">
     <span class="slideNav__label slideNav__label--prev btn__label tk--action">Prev</span>
 </button>
 <button ng-click="RumbleCtrl.goForward('nav')"
-ng-show="nav.enabled"
+ng-disabled="!nav.enabled"
 class="btnPrimary slideNav__btn slideNav__btn--next c6-fade"
 ng-class="{
     'slideNav__btn--small': currentCard.title.length + currentCard.note.length <= 100 || currentCard.ad,
