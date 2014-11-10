@@ -26,7 +26,7 @@ function( angular ) {
                 }),
                 lastTime = null,
                 elapsedTime = 0;
-                
+
             function playerReady(player) {
                 self.player = player;
 
@@ -106,7 +106,7 @@ function( angular ) {
                         deactivateCard();
                     }
                 });
-                
+
                 // If it's a sponsored card, set up handlers to fire AdCount and Click pixels
                 if (config.campaign) {
                     // Fire the Click pixel after the first play
@@ -116,7 +116,7 @@ function( angular ) {
                             c6ImagePreloader.load([config.campaign.clickUrl]);
                         });
                     }
-                    
+
                     // Fire the AdCount pixel after minViewTime, by tracking the elapsed time
                     if (config.campaign.countUrl && config.campaign.minViewTime &&
                                                     !_data.tracking.countFired) {
@@ -131,7 +131,7 @@ function( angular ) {
                                 elapsedTime += player.currentTime - lastTime;
                             }
                             lastTime = player.currentTime;
-                            
+
                             if (elapsedTime >= config.campaign.minViewTime && !_data.tracking.countFired) {
                                 _data.tracking.countFired = true;
                                 c6ImagePreloader.load([config.campaign.countUrl]);
