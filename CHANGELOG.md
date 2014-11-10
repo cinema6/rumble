@@ -1,14 +1,17 @@
 # MiniReel Player
-## v1.5.0
+
+## v1.5.0 (November 10, 2014)
 * *[v1.5.0.rc5]*
   * [FIX]: Responsive adjustments for templates added
   * [FIX]: On mobile, removed nav when player is solo
+* *[/v1.5.0.rc5]*
 
 * *[v1.5.0.rc4]*
   * [FEATURE]: lightbox soloMR support added
   * [FEATURE]: Fire clickUrl and countUrl for sponsored cards
   * [FIX]: Fix for an issue that caused Sponsored MiniReel social links
     not to appear in the MR Studio preview
+* *[/v1.5.0.rc4]*
 
 * *[v1.5.0.rc3]*
   * [FIX]: ballot results styles added
