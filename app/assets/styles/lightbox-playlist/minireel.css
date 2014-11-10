@@ -776,7 +776,7 @@
 
         .adSkip__group--sponsored {
             position:absolute; z-index: 2;
-            top:0; width:100%;
+            top:0; left:5em; right:24em;
             height:1.5em;
             text-align: center;
         }
