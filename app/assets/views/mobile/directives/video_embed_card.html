@@ -54,12 +54,12 @@
                 </div>
             </div>
 
-            <div class="mr-card__copy" ng-bind-html="config.note"></div>
-
             <div class="mr-card__copy sponsor__actions" ng-if="!!config.links.Action" ng-switch="config.params.action.type" c6-alias="config.params.action as action">
                 <a ng-switch-when="text" ng-href="{{config.links.Action}}" target="_blank">{{action.label}}</a>
                 <a ng-switch-when="button" ng-href="{{config.links.Action}}" target="_blank" class="mr-sponsor__goBtn" title="{{action.label}}">{{action.label}}</a>
             </div>
+            
+            <div class="mr-card__copy" ng-bind-html="config.note"></div>
         </div>
         
     </div><!--.mr-card-->

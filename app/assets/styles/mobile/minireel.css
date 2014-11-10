@@ -699,7 +699,7 @@
         .mr-sponsor__goBtn {
             background:#d94040; 
             color:#fff; font-weight:bold;
-            margin:0 0 1em 0; padding:0.75em 0.5em;
+            margin:0; padding:0.75em 0.5em;
             border:0; border-radius:3px;
             display: inline-block;
             text-align: center; line-height:1;
