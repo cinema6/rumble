@@ -3,21 +3,23 @@
     ================================================ */
     .btnPrimary,
     .recap__item,
-    .ballot__btn:before {
+    .ballot__btn:before,
+    .player__playBtn {
         -webkit-transition:background 0.3s; 
         transition:background 0.3s;
     }
 
+    .ballot__btn:hover:before,
+    .playlist__item--current:hover,
+    .player__playBtn:hover {
+        background-color:#d94040;
+    }
     .btnPrimary:hover {
         background-color:#fff;
     }
     .playlist__item:hover,
     .recap__item:hover {
         background-color:#eee;
-    }
-    .ballot__btn:hover:before,
-    .playlist__item--current:hover {
-        background-color:#d94040;
     }
 
     .ballot__btn1:hover:before {
