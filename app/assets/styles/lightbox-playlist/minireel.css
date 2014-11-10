@@ -694,11 +694,12 @@
             }
 
             .sponsor__actions {
-                margin:1em 0;
+                margin:0;
+                float:left;
             }
                 .sponsor__goBtn {
-                    margin:0 0 1em 0;
-                    padding:0.25em 1em;
+                    margin:0.25em 0 0.25em -4px;
+                    padding:0.25em 0.5em;
                     border-radius:3px;
                     display:table;
                 }
@@ -706,6 +707,10 @@
         @media screen and (min-width:75rem) and (max-width:106rem) and (min-height:45rem) {
             /*  w: 1200px -  1696px
             /   h: 720px ++ */
+            .sponsorProfile__copy--hasActions {
+                width:calc(100% - 11.75em);
+            }
+
             .sponsorProfile__imgBox {
                 width:3em; height:3em;
             }
@@ -713,8 +718,14 @@
                     width:2.875em; height:2.875em;
                     display: block;
                 }
+
+            .sponsor__actions {
+                width:8.5rem;
+            }
             .sponsor__goBtn {
-                padding:0.5em 1.25em;
+                width:100%;
+                margin:0;
+                padding:0.5em;
             }
         }
         @media screen and (min-width:106.0625rem) and (min-height:45rem) {
@@ -731,13 +742,33 @@
             .sponsorProfile__copy {
                 width:calc(100% - 4.25em);
             }
+                .sponsorProfile__copy--hasActions {
+                    width:calc(100% - 15.25em);
+                }
             .sponsorProfile__links {
                 margin:0.25em 0 0 0;
             }
+
+            .sponsor__actions {
+                width:11.5rem;
+            }
             .sponsor__goBtn {
-                padding:0.5em 1.25em;
+                padding:0.5em;
+                width:100%;
+                margin:0;
             }
         }
+
+
+        .adSkip__group--sponsored {
+            position:absolute; z-index: 2;
+            top:0; left:5em; right:24em;
+            height:1.5em;
+        }
+            .adSkip__group--sponsored .adSkip__message {
+                font-size:0.875em;
+                color:#ccc;
+            }
 
 
 
