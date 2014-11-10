@@ -21,7 +21,7 @@
 </ul>
 
 <button ng-click="RumbleCtrl.goBack('nav')"
-ng-show="nav.enabled"
+ng-disabled="!nav.enabled"
 class="btnPrimary nav__btn nav__btn--prev c6-fade"
 ng-class="{
     'nav__btn--condensed'   : currentCard.type === 'recap',
@@ -38,7 +38,7 @@ ng-hide="currentCard.type === 'text'">
     <span class="btn__label nav__btnLabel nav__btnLabel--prev tk--action">Prev</span>
 </button><!--^This is the go back button over the video on the left side-->
 <button ng-click="RumbleCtrl.goForward('nav')"
-ng-show="nav.enabled"
+ng-disabled="!nav.enabled"
 class=" btnPrimary nav__btn nav__btn--next c6-fade"
 ng-class="{
     'nav__btn--condensed'   : currentCard.type === 'recap',
