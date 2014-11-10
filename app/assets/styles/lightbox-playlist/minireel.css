@@ -778,10 +778,15 @@
             position:absolute; z-index: 2;
             top:0; left:5em; right:24em;
             height:1.5em;
+            text-align: center;
         }
             .adSkip__group--sponsored .adSkip__message {
                 font-size:0.875em;
                 color:#ccc;
+                position:static;
+                display: inline-block;
+                background:rgba(0,0,0,0.8);
+                padding:0.25em;
             }
 
 

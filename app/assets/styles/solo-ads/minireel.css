@@ -464,57 +464,6 @@
 
 
 
-
-/*  ================================================
-    end actions styles
-    ================================================ */
-    .endActions__group {
-        position:absolute; z-index: 2;
-        top:50%; left:50%;
-        width:32.5em;
-        margin:-1.5em 0 0 -16.25em;
-        text-align: center;
-    }
-
-        .endActions__group .actionBtn {
-            display: inline-block;
-            width:14.25em;
-            padding:1em 0 0.875em 3em;
-            margin:0 0.75em;
-            position:relative;
-        }
-            .endActions__group .actionBtn__iconBox {
-                width:3em; height:3em;
-                background-color:rgba(0,0,0,0.2);
-                position: absolute;
-                top:0; left:0;
-                -webkit-transition:background 0.3s; transition:background 0.3s;
-            }
-            .endActions__group .actionBtn__label {
-                font-size:1rem;
-            }
-
-            .endActions__watchAgain .sprite {
-                background-position:-0.1875rem -2.4375rem;
-            }
-            .endActions__visitLink .sprite {
-                background-position:-2.4375rem -2.5rem;
-            }
-
-        @media screen and (max-width:54rem) {
-            /*max 864px*/
-            .endActions__group {
-                margin:-3.75em 0 0 -114px;
-                width:228px;
-            }
-            .endActions__group .actionBtn {
-                margin:0 0 24px 0;
-            }
-        }
-
-
-
-
 /*  ================================================
     ballot module styles
     ================================================ */
@@ -705,6 +654,7 @@
     .actionsModal__group {
         position:absolute; z-index: 2;
         top:0; left:0; right:19.875em; bottom:0;
+        overflow: hidden;
     }
     .actionsModal__list {
         position:absolute; z-index: 2;
@@ -742,8 +692,8 @@
                 display: block;
             }
 
-        @media screen and (max-width:3.3rem) {
-            /*max 528px*/
+        @media screen and (max-width:52rem) {
+            /*max 832px*/
             .actionsModal__list {
                 margin:-3.75em 0 0 -7.125em;
                 width:14.25em;
