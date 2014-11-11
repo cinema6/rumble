@@ -1553,26 +1553,18 @@ function( angular , c6Defines  , tracker ,
     function            ( $log , $compile , $window , c6UserAgent , InflectorService , c6AppData ){
         $log = $log.context('<mr-card>');
         function fnLink(scope,$element){
-            var canTwerk = false,/*(function() {
-                    if ((c6UserAgent.app.name !== 'chrome') &&
-                        (c6UserAgent.app.name !== 'firefox') &&
-                        (c6UserAgent.app.name !== 'safari')) {
-
-                        $log.warn('Twerking not supported on ' + c6UserAgent.app.name);
-                        return false;
-                    }
-
-                    if (!scope.profile.multiPlayer || !scope.profile.autoplay){
-                        $log.warn('Item cannot be twerked, device not multiplayer or autoplayable.');
-                        return false;
-                    }
-
-                    return true;
-                }()),*/
-                type = scope.config.type,
-                data = scope.config.data;
-
-            var dasherize = InflectorService.dasherize.bind(InflectorService);
+            var type = (function() {
+                switch (scope.config.type) {
+                case 'youtube':
+                case 'vimeo':
+                case 'dailymotion':
+                case 'adUnit':
+                case 'embedded':
+                    return 'video';
+                default:
+                    return InflectorService.dasherize(scope.config.type);
+                }
+            }() + '-card');
 
             $log.info('link:',scope);
 
@@ -1582,36 +1574,7 @@ function( angular , c6Defines  , tracker ,
                 return scope.config.modules.indexOf(module) > -1;
             };
 
-            var inner = '<' + dasherize(type) + '-card';
-            for (var key in data){
-                if ((key !== 'type') && (data.hasOwnProperty(key))){
-                    inner += ' ' + key.toLowerCase() + '="' + data[key] + '"';
-                }
-            }
-
-            if (!scope.profile.inlineVideo){
-                $log.info('Will need to regenerate the player');
-                inner += ' regenerate="1"';
-            }
-
-            if (canTwerk) {
-                $log.info('DAYUM! ' + c6UserAgent.app.name + ' can tweeeerrrrrk!');
-                inner += ' twerk="1"';
-            }
-
-            if (scope.profile.autoplay){
-                $log.info(c6UserAgent.app.name + ' can autoplay videos.');
-                inner += ' autoplay="1"';
-            }
-
-            if (scope.profile.device === 'phone') {
-                $log.info(c6UserAgent.device.name + ' is a phone. Using embeded controls.');
-                inner += ' controls="1"';
-            }
-
-            inner += '></'  + dasherize(type) + '-card' + '>';
-
-            $element.append($compile(inner)(scope));
+            $element.append($compile(['<', type, '></', type, '>'].join(''))(scope));
         }
 
         return {
