@@ -584,6 +584,17 @@ define(['minireel', 'services'], function(minireelModule, servicesModule) {
                                 expect(VideoCardCtrl.enablePlay).toBe(false);
                             });
                         });
+
+                        describe('if the type is "embedded"', function() {
+                            beforeEach(function() {
+                                $scope.config.type = 'embedded';
+                                instantiate();
+                            });
+
+                            it('should be false', function() {
+                                expect(VideoCardCtrl.enablePlay).toBe(false);
+                            });
+                        });
                     });
                 });
             });

@@ -205,7 +205,7 @@ function( angular ) {
             this.player = null;
             this.adType = (profile.flash && !!data.vpaid) ? 'vpaid' : 'vast';
             this.adTag = compileAdTag(data[this.adType]) || null;
-            this.enablePlay = !profile.touch && (config.type !== 'dailymotion');
+            this.enablePlay = !profile.touch && !(/^(dailymotion|embedded)$/).test(config.type);
             Object.defineProperties(this, {
                 showPlay: {
                     get: function() {
