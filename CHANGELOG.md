@@ -1,6 +1,10 @@
 # MiniReel Player
 
-## v1.5.0 (November 10, 2014)
+## v1.5.0
+* *[v1.5.0.rc6]*
+  * [FIX]: Ensure Ad Skip countdown doesn't cover card text and features below video
+* *[/v1.5.0.rc6]*
+
 * *[v1.5.0.rc5]*
   * [FIX]: Responsive adjustments for templates added
   * [FIX]: On mobile, removed nav when player is solo
