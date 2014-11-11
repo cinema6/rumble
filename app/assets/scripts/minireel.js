@@ -1,10 +1,10 @@
 define (['angular','c6_defines','tracker',
-         'cards/ad','cards/dailymotion','cards/recap','cards/vast','cards/vimeo','cards/vpaid',
-         'cards/youtube','cards/text','cards/display_ad','cards/ad_unit','cards/video',
+         'cards/ad','cards/recap','cards/vast','cards/vpaid','cards/text','cards/display_ad',
+         'cards/video',
          'modules/ballot','modules/companion_ad','modules/display_ad','modules/post'],
 function( angular , c6Defines  , tracker ,
-          adCard   , dailymotionCard   , recapCard   , vastCard   , vimeoCard   , vpaidCard   ,
-          youtubeCard   , textCard   , displayAdCard    , adUnitCard     , videoCard  ,
+          adCard   , recapCard   , vastCard    , vpaidCard  , textCard   , displayAdCard    ,
+          videoCard   ,
           ballotModule   , companionAdModule    , displayAdModule    , postModule   ) {
 
     'use strict';
@@ -16,15 +16,11 @@ function( angular , c6Defines  , tracker ,
         tracker.name,
         // Cards
         adCard.name,
-        dailymotionCard.name,
         recapCard.name,
         vastCard.name,
-        vimeoCard.name,
         vpaidCard.name,
-        youtubeCard.name,
         textCard.name,
         displayAdCard.name,
-        adUnitCard.name,
         videoCard.name,
         // Modules
         ballotModule.name,
@@ -1285,270 +1281,7 @@ function( angular , c6Defines  , tracker ,
             }
         };
     }])
-    .controller('VideoEmbedCardController', ['$scope','ModuleService','EventService','c6AppData','c6ImagePreloader','$interval',
-    function                                ( $scope , ModuleService , EventService , c6AppData , c6ImagePreloader , $interval ) {
-        var self = this,
-            config = $scope.config,
-            profile = $scope.profile,
-            _data = config._data = config._data || {
-                playerEvents: {},
-                textMode: true,
-                tracking: {
-                    clickFired: false,
-                    countFired: false
-                },
-                modules: {
-                    ballot: {
-                        ballotActive: false,
-                        resultsActive: false,
-                        vote: null
-                    },
-                    displayAd: {
-                        active: false
-                    }
-                }
-            },
-            lastTime = null,
-            elapsedTime = 0,
-            player = null,
-            shouldPlay = false,
-            ballotTargetPlays = 0,
-            resultsTargetPlays = 0;
 
-        Object.defineProperties(this, {
-            flyAway: {
-                get: function() {
-                    var ballot = $scope.config._data.modules.ballot,
-                        behaviors = c6AppData.behaviors;
-
-                    if (!$scope.active) { return true; }
-
-                            /* If we have a ballot:  If the ballot is being show.   If the results are a modal and they're being shown. */
-                    return (this.hasModule('ballot') && (ballot.ballotActive || (ballot.resultsActive && !behaviors.inlineVoteResults))) ||
-                        /* If there is a separate view for text, and if that mode is active: */
-                        (behaviors.separateTextView && _data.textMode) ||
-                        /* If this is a click-to-play minireel, it hasn't been played yet and the play button is enabled */
-                        (!config.data.autoplay && !(_data.playerEvents.play || {}).emitCount && this.enablePlayButton) ||
-                        /* If the post module is present and it is being shown */
-                        ($scope.hasModule('post') && this.postModuleActive);
-                }
-            },
-            showPlay: {
-                get: function() {
-                    return !!player && player.paused;
-                }
-            }
-        });
-
-        this.enablePlayButton = (config.type !== 'dailymotion') &&
-            !profile.touch &&
-            !config.data.autoplay;
-
-        this.videoUrl = null;
-
-        this.experienceTitle = c6AppData.experience.data.title;
-
-        this.postModuleActive = false;
-
-        this.hasModule = ModuleService.hasModule.bind(ModuleService, config.modules);
-
-        this.playVideo = function() {
-            player.play();
-        };
-
-        this.dismissBallot = function() {
-            ballotTargetPlays = _data.playerEvents.play.emitCount;
-        };
-
-        this.dismissBallotResults = function() {
-            resultsTargetPlays = _data.playerEvents.play.emitCount;
-        };
-
-        this.showText = function() {
-            player.pause();
-            _data.textMode = true;
-        };
-
-        this.hideText = function() {
-            if (profile.autoplay) {
-                player.play();
-            }
-
-            _data.textMode = false;
-        };
-
-        $scope.$on('playerAdd', function(event, iface) {
-            player = iface;
-
-            _data.playerEvents = EventService.trackEvents(iface, ['play']);
-
-            Object.defineProperties(_data.modules.ballot, {
-                ballotActive: {
-                    configurable: true,
-                    get: function() {
-                        var playing = (!iface.paused && !iface.ended),
-                            voted = angular.isNumber(_data.modules.ballot.vote),
-                            hasPlayed = _data.playerEvents.play.emitCount > ballotTargetPlays;
-
-                        return !voted && !playing && hasPlayed;
-                    }
-                },
-                resultsActive: {
-                    get: function() {
-                        var playing = (!iface.paused && !iface.ended),
-                            voted = angular.isNumber(this.vote),
-                            hasPlayed = _data.playerEvents.play.emitCount > resultsTargetPlays;
-
-                        if (c6AppData.behaviors.inlineVoteResults) {
-                            return voted;
-                        }
-
-                        return voted && !playing && hasPlayed;
-                    }
-                }
-            });
-
-            iface
-                .once('ready', function() {
-                    self.videoUrl = player.webHref;
-                    if (shouldPlay){
-                        iface.play();
-                    }
-                })
-                .once('play', function() {
-                    _data.modules.displayAd.active = true;
-                })
-                .on('play', function() {
-                    self.postModuleActive = false;
-                })
-                .on('ended', function() {
-                    self.postModuleActive = true;
-
-                    if (!self.hasModule('ballot') && !self.hasModule('post')) {
-                        $scope.$emit('<mr-card>:contentEnd', config.meta || config);
-                    }
-                });
-                
-            // If it's a sponsored card, set up handlers to fire AdCount and Click pixels
-            if (config.campaign) {
-                // Fire the Click pixel after the first play
-                if (config.campaign.clickUrl && !_data.tracking.clickFired) {
-                    iface.once('play', function() {
-                        _data.tracking.clickFired = true;
-                        c6ImagePreloader.load([config.campaign.clickUrl]);
-                    });
-                }
-                
-                // Fire the AdCount pixel after minViewTime, by tracking the elapsed time
-                if (config.campaign.countUrl && config.campaign.minViewTime &&
-                                                !_data.tracking.countFired) {
-                    iface.on('timeupdate', function fireMinViewPixel() {
-                        if (lastTime === null) {
-                            lastTime = iface.currentTime;
-                            return;
-                        }
-
-                        // if diff > 1 sec, it's probably a skip, and don't increment elapsed
-                        if (Math.abs(iface.currentTime - lastTime) <= 1) {
-                            elapsedTime += iface.currentTime - lastTime;
-                        }
-                        lastTime = iface.currentTime;
-                        
-                        if (elapsedTime >= config.campaign.minViewTime && !_data.tracking.countFired) {
-                            _data.tracking.countFired = true;
-                            c6ImagePreloader.load([config.campaign.countUrl]);
-                            iface.removeListener('timeupdate', fireMinViewPixel);
-                        }
-                    });
-                }
-            }
-
-            $scope.$watch('active', function(active, wasActive) {
-                if ((active === wasActive) && (wasActive === false)){ return; }
-
-                if (active) {
-                    if (_data.playerEvents.play.emitCount < 1) {
-                        $scope.$emit('<mr-card>:init', function(navController) {
-                            var skip = config.data.skip || iface.duration,
-                                canSkipAnyTime = skip === true;
-
-                            function handleTimeUpdate() {
-                                var remaining = Math.max(
-                                    skip - iface.currentTime,
-                                    0
-                                );
-
-                                navController.tick(remaining);
-
-                                if (!remaining) {
-                                    navController.enabled(true);
-                                    iface.removeListener('timeupdate', handleTimeUpdate);
-                                }
-                            }
-
-                            if (canSkipAnyTime) { return; }
-
-                            navController.tick(skip)
-                                .enabled(false);
-
-                            if (config.data.skip === false) {
-                                return iface.on('timeupdate', handleTimeUpdate)
-                                    .once('ended', function() {
-                                        navController.enabled(true);
-                                        iface.removeListener('timeupdate', handleTimeUpdate);
-                                    });
-                            }
-
-                            $interval(function() {
-                                navController.tick(--skip);
-
-                                if (!skip) {
-                                    navController.enabled(true);
-                                }
-                            }, 1000, skip);
-                        });
-                    }
-
-                    if (c6AppData.behaviors.canAutoplay &&
-                        c6AppData.profile.autoplay &&
-                        config.data.autoplay) {
-
-                        shouldPlay = true;
-                        iface.play();
-                    }
-
-                    self.dismissBallot();
-                    self.dismissBallotResults();
-                } else {
-                    if (_data.modules.ballot.ballotActive) {
-                        _data.modules.ballot.vote = -1;
-                    }
-
-                    shouldPlay = false;
-                    iface.pause();
-                }
-            });
-
-        });
-
-        $scope.$watch('onDeck', function(onDeck) {
-            if (onDeck && config.thumbs) {
-                c6ImagePreloader.load([config.thumbs.large]);
-            }
-        });
-
-        $scope.$watch('config._data.modules.ballot.vote', function(vote, prevVote) {
-            if (vote === prevVote) { return; }
-
-            self.showText();
-        });
-
-        $scope.$watch('config._data.textMode', function(textMode, wasTextMode) {
-            if (textMode === wasTextMode) { return; }
-
-            self.dismissBallot();
-        });
-    }])
     .directive('mrCard',['$log','$compile','$window','c6UserAgent','InflectorService','c6AppData',
     function            ( $log , $compile , $window , c6UserAgent , InflectorService , c6AppData ){
         $log = $log.context('<mr-card>');
@@ -1593,6 +1326,4 @@ function( angular , c6Defines  , tracker ,
         };
 
     }]);
-
-
 });
