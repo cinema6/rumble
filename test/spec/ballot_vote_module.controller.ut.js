@@ -99,11 +99,20 @@ define(['minireel','modules/ballot'], function(minireelModule, ballotModule) {
                 });
 
                 describe('pass()', function() {
+                    beforeEach(function() {
+                        spyOn($scope, '$emit').and.callThrough();
+                    });
+
                     it('should set the vote to -1', function() {
                         expect($scope.vote).not.toBe(-1);
 
                         BallotVoteModuleCtrl.pass();
                         expect($scope.vote).toBe(-1);
+                    });
+
+                    it('should emit "<ballot-vote-module>:vote"', function() {
+                        BallotVoteModuleCtrl.pass();
+                        expect($scope.$emit).toHaveBeenCalledWith('<ballot-vote-module>:vote', -1);
                     });
                 });
             });
