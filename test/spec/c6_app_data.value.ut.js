@@ -4,6 +4,8 @@ define(['app','c6uilib'], function(appModule, c6uilibModule) {
     describe('c6AppData', function() {
         var $injector,
             $rootScope,
+            c6EventEmitter,
+            MiniReelService,
             c6AppDataProvider;
 
         var cinema6,
@@ -14,11 +16,6 @@ define(['app','c6uilib'], function(appModule, c6uilibModule) {
             session;
 
         beforeEach(function() {
-            session = {
-                ping: jasmine.createSpy('session.ping()'),
-                on: jasmine.createSpy('session.on()')
-            };
-
             responsive = {
                 full: {
                     width: '50%',
@@ -46,7 +43,13 @@ define(['app','c6uilib'], function(appModule, c6uilibModule) {
                 experience: {
                     id: 'foo',
                     data: {
-                        adConfig: {}
+                        adConfig: {},
+                        deck: [],
+                        links: {
+                            'YouTube': 'yt.com/w938ryfh4',
+                            'Facebook': 'facebook.com/0238rhf4',
+                            'Action': 'f9032rfe4.com'
+                        }
                     }
                 },
                 profile: {
@@ -98,9 +101,18 @@ define(['app','c6uilib'], function(appModule, c6uilibModule) {
 
                 $rootScope = $injector.get('$rootScope');
                 $httpBackend = $injector.get('$httpBackend');
+                c6EventEmitter = $injector.get('c6EventEmitter');
+                MiniReelService = $injector.get('MiniReelService');
+
+                spyOn(MiniReelService, 'createSocialLinks').and.callThrough();
 
                 cinema6 = $injector.get('cinema6');
             });
+
+            session = c6EventEmitter({
+                ping: jasmine.createSpy('session.ping()')
+            });
+            spyOn(session, 'on').and.callThrough();
 
             $httpBackend.expectGET('config/responsive-0.json')
                 .respond(200, responsive);
@@ -119,6 +131,8 @@ define(['app','c6uilib'], function(appModule, c6uilibModule) {
             $rootScope.$apply(function() {
                 deferreds.getAppData.resolve(appData);
             });
+
+            delete c6AppData.experience.data.social;
 
             expect(c6AppData).toEqual(jasmine.objectContaining(appData));
         }));
@@ -141,6 +155,15 @@ define(['app','c6uilib'], function(appModule, c6uilibModule) {
                   waterfall: 'cinema6'
                 }
             });
+        }));
+
+        it('should create social links for the minireel', inject(function(c6AppData) {
+            $rootScope.$apply(function() {
+                deferreds.getAppData.resolve(appData);
+            });
+
+            expect(MiniReelService.createSocialLinks).toHaveBeenCalledWith(appData.experience.data.links);
+            expect(c6AppData.experience.data.social).toEqual(MiniReelService.createSocialLinks(appData.experience.data.links));
         }));
 
         it('should set the version to 0 if there is none', inject(function(c6AppData) {
@@ -225,8 +248,21 @@ define(['app','c6uilib'], function(appModule, c6uilibModule) {
         });
 
         describe('updating the experience', function() {
-            it('should change the c6AppData.experience', inject(function(c6AppData) {
-                var callback;
+            var c6AppData,
+                newExperience;
+
+            beforeEach(inject(function(_c6AppData_) {
+                c6AppData = _c6AppData_;
+
+                newExperience = {
+                    data: {
+                        links: {
+                            'Pinterest': 'f049rt3r4.ciwhef3',
+                            'Twitter': '3r8f243'
+                        },
+                        deck: []
+                    }
+                };
 
                 $rootScope.$apply(function() {
                     deferreds.getAppData.resolve(appData);
@@ -236,13 +272,19 @@ define(['app','c6uilib'], function(appModule, c6uilibModule) {
                     deferreds.getSession.resolve(session);
                 });
 
-                callback = session.on.calls.argsFor(0)[1];
+                MiniReelService.createSocialLinks.calls.reset();
 
-                callback({data:'foo'});
-
-                expect(session.on).toHaveBeenCalled();
-                expect(c6AppData.experience).toEqual({data:'foo'});
+                session.emit('mrPreview:updateExperience', newExperience);
             }));
+
+            it('should change the c6AppData.experience', function() {
+                expect(c6AppData.experience).toBe(newExperience);
+            });
+
+            it('should give the new experience social links', function() {
+                expect(MiniReelService.createSocialLinks).toHaveBeenCalledWith(newExperience.data.links);
+                expect(c6AppData.experience.data.social).toEqual(MiniReelService.createSocialLinks(newExperience.data.links));
+            });
         });
 
         describe('behaviors', function() {
@@ -271,7 +313,7 @@ define(['app','c6uilib'], function(appModule, c6uilibModule) {
                     expect(c6AppData('mobile').behaviors.canAutoplay).toBe(false);
                     expect(c6AppData('light').behaviors.canAutoplay).toBe(true);
                     expect(c6AppData('lightbox').behaviors.canAutoplay).toBe(true);
-                    expect(c6AppData('lightbox-ads').behaviors.canAutoplay).toBe(true);
+                    expect(c6AppData('lightbox-playlist').behaviors.canAutoplay).toBe(true);
                 });
             });
 
@@ -281,7 +323,7 @@ define(['app','c6uilib'], function(appModule, c6uilibModule) {
                     expect(c6AppData('mobile').behaviors.inlineVoteResults).toBe(true);
                     expect(c6AppData('light').behaviors.inlineVoteResults).toBe(false);
                     expect(c6AppData('lightbox').behaviors.inlineVoteResults).toBe(false);
-                    expect(c6AppData('lightbox-ads').behaviors.inlineVoteResults).toBe(false);
+                    expect(c6AppData('lightbox-playlist').behaviors.inlineVoteResults).toBe(false);
                 });
             });
 
@@ -291,7 +333,7 @@ define(['app','c6uilib'], function(appModule, c6uilibModule) {
                     expect(c6AppData('mobile').behaviors.separateTextView).toBe(false);
                     expect(c6AppData('light').behaviors.separateTextView).toBe(false);
                     expect(c6AppData('lightbox').behaviors.separateTextView).toBe(false);
-                    expect(c6AppData('lightbox-ads').behaviors.separateTextView).toBe(false);
+                    expect(c6AppData('lightbox-playlist').behaviors.separateTextView).toBe(false);
                 });
             });
 
@@ -301,7 +343,7 @@ define(['app','c6uilib'], function(appModule, c6uilibModule) {
                     expect(c6AppData('mobile').behaviors.fullscreen).toBe(true);
                     expect(c6AppData('light').behaviors.fullscreen).toBe(false);
                     expect(c6AppData('lightbox').behaviors.fullscreen).toBe(true);
-                    expect(c6AppData('lightbox-ads').behaviors.fullscreen).toBe(true);
+                    expect(c6AppData('lightbox-playlist').behaviors.fullscreen).toBe(true);
                 });
             });
 
@@ -310,7 +352,7 @@ define(['app','c6uilib'], function(appModule, c6uilibModule) {
                     ['full', 'mobile', 'light'].forEach(function(mode) {
                         expect(c6AppData(mode).behaviors.showsCompanionWithVideoAd).toBe(false);
                     });
-                    ['lightbox', 'lightbox-ads'].forEach(function(mode) {
+                    ['lightbox', 'lightbox-playlist', 'solo-ads'].forEach(function(mode) {
                         expect(c6AppData(mode).behaviors.showsCompanionWithVideoAd).toBe(true);
                     });
                 });

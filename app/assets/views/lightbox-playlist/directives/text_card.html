@@ -1,0 +1,13 @@
+<div class="textOnly__group">
+    <div class="textOnly__copy">
+        <h1 class="card__title textOnly__title tk--hdr">{{config.title}}</h1>
+        <div class="card__desc" ng-bind-html="config.note"></div>
+        <button class="textOnly__goBtn btnPrimary" type="button"
+        ng-click="$emit('<mr-card>:contentEnd', config)" title="Begin">
+            <span class="btn__label tk--action">Begin</span>
+        </button>
+    </div>
+    <div class="companionAd__group" ng-if="hasModule('displayAd')">
+        <display-ad-module active="active" config="config"></display-ad-module>
+    </div>
+</div>

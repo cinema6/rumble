@@ -436,7 +436,7 @@ function( angular , c6uilib , iframe , youtube ) {
                     height      : $attr.height,
                     frameborder : 0,
                     params      : vparams
-                },$element.find('.mr-player'));
+                },$element.find('.js-playerBox'));
 
                 scope.$emit('createdPlayer',player);
 

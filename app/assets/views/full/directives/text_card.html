@@ -1,11 +1,10 @@
-<article class="textOnly__group">
+<div class="textOnly__group">
     <div class="textOnly__copy">
-        <h1 class="textOnly__title tk--hdr">{{config.title}}</h1>
-        <div class="textOnly__desc" ng-bind-html="config.note"></div>
-        <button class="textOnly__btn" title="Begin"
-        ng-click="$emit('<mr-card>:contentEnd', config)"
-        type="button">
-            Begin
+        <h1 class="card__title textOnly__title tk--hdr">{{config.title}}</h1>
+        <div class="card__desc" ng-bind-html="config.note"></div>
+        <button class="textOnly__goBtn btnPrimary" type="button"
+        ng-click="$emit('<mr-card>:contentEnd', config)" title="Begin">
+            <span class="btn__label tk--action">Begin</span>
         </button>
     </div>
-</article>
+</div>

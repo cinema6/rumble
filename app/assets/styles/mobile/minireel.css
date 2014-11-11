@@ -1,70 +1,15 @@
 /*  ==========================================================================
     global styles
     ========================================================================== */
+    html {
+        -webkit-text-size-adjust: 100%;
+    }
     body {
-        font-size: 1em; font-family: 'MuseoSans', Arial, Helvetica, sans-serif; font-weight:300; color:#545454; line-height: 1.5;
+        font-family: 'Open Sans', Arial, Helvetica, sans-serif; 
+        font-weight:300; color:#545454; line-height: 1.5;
         background:transparent; margin:0;
     }
-    @font-face {
-        font-family: 'MuseoSans';
-        src: url('museosans-300-webfont.eot');
-        src: url('museosans-300-webfont.eot?#iefix') format('embedded-opentype'),
-             url('museosans-300-webfont.woff') format('woff'),
-             url('museosans-300-webfont.svg#museo_sans300') format('svg'),
-             url('museosans-300-webfont.ttf') format('truetype');
-        font-weight: 300;
-        font-style: normal;
-    }
-    @font-face {
-        font-family: 'MuseoSans';
-        src: url('museosans-300italic-webfont.eot');
-        src: url('museosans-300italic-webfont.eot?#iefix') format('embedded-opentype'),
-             url('museosans-300italic-webfont.woff') format('woff'),
-             url('museosans-300italic-webfont.svg#museo_sans300_italic') format('svg'),
-             url('museosans-300italic-webfont.ttf') format('truetype');
-        font-weight: 300;
-        font-style: italic;
-    }
-    @font-face {
-        font-family: 'MuseoSans';
-        src: url('museosans_700-webfont.eot');
-        src: url('museosans_700-webfont.eot?#iefix') format('embedded-opentype'),
-             url('museosans_700-webfont.woff') format('woff'),
-             url('museosans_700-webfont.svg#museo_sans700') format('svg'),
-             url('museosans_700-webfont.ttf') format('truetype');
-        font-weight: 700;
-        font-style: normal;
-    }
-    @font-face {
-        font-family: 'MuseoSans';
-        src: url('museosans-700italic-webfont.eot');
-        src: url('museosans-700italic-webfont.eot?#iefix') format('embedded-opentype'),
-             url('museosans-700italic-webfont.woff') format('woff'),
-             url('museosans-700italic-webfont.svg#museo_sans700_italic') format('svg'),
-             url('museosans-700italic-webfont.ttf') format('truetype');
-        font-weight: 700;
-        font-style: italic;
-    }
-    @font-face {
-        font-family: 'MuseoSans';
-        src: url('museosans_900-webfont.eot');
-        src: url('museosans_900-webfont.eot?#iefix') format('embedded-opentype'),
-             url('museosans_900-webfont.woff') format('woff'),
-             url('museosans_900-webfont.svg#museo_sans900') format('svg'),
-             url('museosans_900-webfont.ttf') format('truetype');
-        font-weight: 900;
-        font-style: normal;
-    }
-    @font-face {
-        font-family: 'MuseoSans';
-        src: url('museosans-900italic-webfont.eot');
-        src: url('museosans-900italic-webfont.eot?#iefix') format('embedded-opentype'),
-             url('museosans-900italic-webfont.woff') format('woff'),
-             url('museosans-900italic-webfont.svg#museo_sans900_italic') format('svg'),
-             url('museosans-900italic-webfont.ttf') format('truetype');
-        font-weight: 900;
-        font-style: italic;
-    }
+    
     ::-moz-selection {
         background: #e900a4; text-shadow: none; color:#fff;
     }
@@ -80,20 +25,45 @@
     img {
         border:0; max-width:100%;
     }
+    button {
+        font-size:1rem;
+        margin:0; border:0; padding:0;
+        display: inline-block;
+        cursor:pointer;
+        background:none;
+    }
         
 /*  ==========================================================================
     c6-copy classes : general type & color styles
     ========================================================================== */
     .tk--hdr {
-        font-family: 'MuseoSans', 'Open Sans', Arial, Helvetica, sans-serif; font-weight:300;
+        font-family: 'Roboto Condensed', 'Open Sans', Arial, Helvetica, sans-serif; 
+        font-weight:300;
+    }
+    .tk--copy {
+        font-family: 'Open Sans', Arial, Helvetica, sans-serif;
     }
     a {
-        text-decoration: none; color:#d94040; border-bottom:1px dotted #d94040;
+        text-decoration: none; color:#d94040;
     }
     a:focus, button:focus, input:focus, textarea:focus {
         outline:none; border:0;
     }
-
+    .tk--youtube {
+        color:#e22d24;
+    }
+    .tk--vimeo {
+        color:#445566;
+    }
+    .tk--facebook {
+        color:#3b5998;
+    }
+    .tk--twitter {
+        color:#00b0ed;
+    }
+    .tk--pinterest {
+        color:#cb2027;
+    }
     .mr-comments__post-btn {
         background:#d94040;
     }
@@ -117,12 +87,37 @@
     .hidden {
         visibility: hidden;
     }
-    .sprite__social {
-        background:url('../../img/sprite__social@2x.png') 0 0 / 10rem 1rem no-repeat;
+    .sprite__social,
+    .sprite__socialAf:after,
+    .sprite__socialBe:before {
+        background:url('../../img/sprite--alpha@2x.png') 0 0 / 18.75rem 18.75rem no-repeat;
     }
     .sprite {
         background-image:url('../../img/sprite.svg'); background-repeat:no-repeat; background-size:18.75em 18.75em;
     }
+    .socialIconsBe:before,
+    .uiIconsBe:before {
+        content:'';
+        width:1rem; height:1rem;
+        display: inline-block;
+        vertical-align: middle;
+    }
+
+        .socialIconsBe--youtube:before {
+            background-position:-1rem -3rem;
+        }
+        .socialIconsBe--vimeo:before {
+            background-position: -3rem -3rem;
+        }
+        .socialIconsBe--facebook:before {
+            background-position: -5rem -3rem;
+        }
+        .socialIconsBe--twitter:before {
+            background-position: -7rem -3rem;
+        }
+        .socialIconsBe--pinterest:before {
+            background-position: -9rem -3rem;
+        }
     .condensed {
         width:100%; display: block;
         white-space: nowrap;
@@ -133,6 +128,9 @@
         overflow-x:auto; overflow-y: scroll; -webkit-overflow-scrolling: touch;
         position: fixed; top:0; bottom:0; left:0; right:0;
     }
+        .mr-container--solo {
+            padding-top:0.5em;
+        }
     .mr-overlay {
         background:rgb(0,0,0); background:rgba(0,0,0,0.8);
         position:absolute; width:100%; height:100%; 
@@ -142,7 +140,8 @@
         -webkit-box-shadow: 0 1px 2px 0 rgba(0,0,0,0.12); box-shadow: 0 1px 2px 0 rgba(0,0,0,0.12);
     }
     .mr-title {
-        font-size:0.875em;/*14px*/ color:#747474; font-weight:300; text-align: center;
+        font-size:1.125em;/*18px*/ color:#747474; font-weight:300; text-align: center;
+        line-height: 1.2;
         margin:0 0 0.5em 0;
     }
     .css-promote {
@@ -530,7 +529,7 @@
         background:#2a2a2a;
     }
         .publisher__branding-logo {
-            display: block; width:2.5em;/*40px*/ height:2.5em;/*40px*/ margin:0 0 0 0.4375em; /*0 0 0 7px*/ border:0; padding:0; font-size:1em;
+            display: none; width:2.5em;/*40px*/ height:2.5em;/*40px*/ margin:0 0 0 0.4375em; /*0 0 0 7px*/ border:0; padding:0; font-size:1em;
             background:transparent 50% 50% no-repeat; background-size:contain;
             position:absolute; top:0; left:0; cursor:pointer;
         }
@@ -626,24 +625,22 @@
         .mr-cards__item.squished {
             height:0; overflow:hidden;
         }
-        .mr-cards__item.ng-animate {
-            top: 3em; left: 0.375em; right: 0.375em; position: absolute !important;
-        }
+        
     .mr-card {
-        background:#fff; border-radius: 3px; padding:0.5em 0;
+        background:#fff; border-radius: 3px; padding:0.5em 0 1em;
     }
         .mr-card__type {
             margin:0.5em 0; text-align: center; color:#b9b9b9;
             font-size:0.75em; font-weight:300;
         }
         .mr-card__title {
-            margin:0 0.5em; 
+            margin:0 0.5em 0.5em; 
             }
             .mr-card__title-h1 {
                 font-size:1.25em; /*20px*/ color:#444; font-weight:300; margin:0; line-height: 1.2;
             }
             .mr-card__attributes {
-                color:#999; font-size:0.75em;/*12px*/ margin:0.16em 0 1em 0;
+                color:#999; font-size:0.75em;/*12px*/ margin:0.16em 0 0 0;
             }
         .mr-card__copy {
             margin:1em 0.5em 0.143em 0.5em; font-size:0.875em;/*14px*/ color:#747474; line-height:1.75;
@@ -698,16 +695,91 @@
         
         .mr-sponsorProfile__link {
             border:0;
+            float:left;
+            padding:0 0.25em;
         }
 
         .mr-sponsor__goBtn {
             background:#d94040; 
             color:#fff; font-weight:bold;
-            margin:0 0 1em 0; padding:0.75em 0.5em;
+            margin:0; padding:0.75em 0.5em;
             border:0; border-radius:3px;
             display: inline-block;
             text-align: center; line-height:1;
         }
+
+
+
+
+/*  ================================================
+    branded MR classes
+    ================================================ */
+    .brandedMR__tagline {
+        font-size:0.75em;
+        line-height: 1;
+    }
+        .brandedMR__taglineBrand {
+            border:0;
+        }
+
+    .brandProfile__logoBox {
+        display: block; width:2.5em;/*40px*/ height:2.5em;/*40px*/ margin:0 0 0 0.4375em; /*0 0 0 7px*/ border:0; padding:0; font-size:1em;
+        position:absolute; top:0; left:0; cursor:pointer;
+    }
+        .brandProfile__logo {
+            display: block;
+            width:2.5em; height:2.5em;
+        }
+
+    .brandProfile__linksBox {
+        text-align: center;
+        width:100%;
+        margin:-0.75em 0 0.5em 0;
+    }
+        .brandProfile__link {
+            padding:0 0.5em;
+            font-size:0.75em; 
+            line-height: 1;
+            display: inline-block;
+            color:#fff;
+            border:0;
+        }
+
+
+
+/*  ================================================
+    Display Ad Card classes
+    ================================================ */
+    .displayAdCard__group {
+        text-align: center;
+    }
+
+
+        .displayAdBrand__tagline {
+            font-size:0.875em;
+            color:#999;
+            margin:0 0 0.8125rem 0;
+        }
+            .displayAdBrand__taglineLink {
+                font-weight:bold;
+            }
+
+
+        .displayAdBrand__linksBox {
+            margin:1.375em 0 0 0;
+        }
+            .displayAdBrand__link {
+                padding:0 0.5em;
+                font-size:0.75em;
+                display: inline-block;
+            }
+                .displayAdBrand__linkLabel {
+                    vertical-align: middle;
+                }
+                .displayAdBrand__linkLabel {
+                    margin-left:0.25em;
+                }
+
 
 
 
@@ -741,9 +813,6 @@
             }
 
     @media screen and (orientation:landscape) {
-        .mr-card {
-            -webkit-text-size-adjust: 100%;
-        }
         .mr-card__title {
             width:23%; float:left; margin-right:0;
         }
@@ -1072,30 +1141,15 @@
                     }
 
 
-/*  ==========================================================================
+/*  ================================================
     Splash Screen classes
-    ========================================================================== */
-    .mr-splash__group {
-        width:100%; height:100%; padding:0;
-        position: absolute; top:0; left:0; z-index:5;
-        background:black url('../../img/default_square.jpg') 50% 50% / cover no-repeat;
-    }
-    .mr-splash__start, .mr-splash__loading {
-        position:absolute; width:100%; height:100%; top:0; left:0;
-        background:url('../../img/splash__desktop.jpg') 50% 50% / cover no-repeat;
+    ================================================ */
+    .splash__start {
+        position:absolute; z-index: 20;
+        top:0; left: 0; bottom:0; right:0;
         border:0; margin:0; padding:0;
-    }
-    .mr-splash__loading {
-        background: url('../../img/spinner-dots.gif') 50% 50% / 1rem auto no-repeat;
-    }
-    .mr-splash__copy {
-        display:block; width: 100%; height: 0; padding: 0 0 13.5%;
-        position:absolute; top: 50%; margin-top: -6.75%; z-index:2;
-        border-top: #fff 4px solid; border-bottom: #fff 4px solid;
-        background:#252626 url('../../img/click-to-start.svg') 50% 50% / 55% auto no-repeat;
-    }
-    @media only screen and (max-width : 320px) {
-        .mr-splash__bar, .mr-splash__copy {
-            padding:0 0 20%; margin-top: -10%;
-        }
+        background:#000;
+        width:100%; height:100%;
+        cursor:pointer; 
+        color:#fff; text-align: center; font-weight:bold;
     }

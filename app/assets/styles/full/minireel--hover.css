@@ -1,52 +1,159 @@
 /*  ================================================
-    .playlist__group classes
+    background transitions
     ================================================ */
-    .playlist__item:hover {
-        background-color:#efefef;
+    .btnPrimary,
+    .recap__item,
+    .ballot__btn:before,
+    .player__playBtn {
+        -webkit-transition:background 0.3s; 
+        transition:background 0.3s;
     }
-    .playlist__item--current:hover {
+
+    .ballot__btn:hover:before,
+    .playlist__item.playlist__item--current:hover,
+    .player__playBtn:hover {
         background-color:#d94040;
     }
+    .btnPrimary:hover {
+        background-color:#fff;
+    }
+    .playlist__item:hover,
+    .recap__item:hover {
+        background-color:#eee;
+    }
+
+    .ballot__btn1:hover:before {
+        background-color:#1789cb;
+    }
+
 
 
 
 /*  ================================================
-    sponsored card styles
+    color transitions
     ================================================ */
-    .sponsorProfile__imgBox {
+    .titleBar__titleText,
+    .btnPrimary .btnLabel {
+        -webkit-transition:color 0.3s; transition:color 0.3s;
+    }
+
+    .titleBar__titleText:hover,
+    .btnPrimary:hover .btn__label {
+        color:#d94040;
+    }
+
+    .ballot__btn1:hover .ballot__btnLabel {
+        color:#1789cb;
+    }
+
+
+
+
+
+/*  ================================================
+    fill transitions
+    ================================================ */
+    .slideNav__iconPath {
+        -webkit-transition:fill 0.3s; transition:fill 0.3s;
+    }
+
+    .slideNav__btn:hover .slideNav__iconPath {
+        fill:#d94040;
+    }
+
+    .slideNav__btn[disabled]:hover .slideNav__iconPath {
+        fill:#fff;
+    }
+
+
+
+
+
+/*  ================================================
+    border transitions
+    ================================================ */
+    .sponsorProfile__imgBox,
+    .brandProfile__logoBox {
         -webkit-transition:border 0.5s;
         transition:border 0.5s;
     }
-    .sponsorProfile__imgBox:hover {
+    .sponsorProfile__imgBox:hover,
+    .brandProfile__logoBox:hover {
         border:1px solid #d94040;
     }
-    .sponsor__goBtn:hover {
-        color:#fff;
+    .recap__item:hover {
+        border-left:3px solid #d94040;
     }
+
+    .textLink:hover,
+    .displayAdBrand__link:hover .displayAdBrand__linkLabel {
+        border-bottom:1px dotted #d94040;
+    }
+        .tk--youtube:hover .displayAdBrand__linkLabel {
+            border-color:#e22d24;
+        }
+        .tk--vimeo:hover .displayAdBrand__linkLabel {
+            border-color:#445566;
+        }
+        .tk--facebook:hover .displayAdBrand__linkLabel {
+            border-color:#3b5998;
+        }
+        .tk--twitter:hover .displayAdBrand__linkLabel {
+            border-color:#00b0ed;
+        }
+        .tk--pinterest:hover .displayAdBrand__linkLabel {
+            border-color:#c92228;
+        }
+
 
 
 
 /*  ================================================
-    button styles 
+    position transitions
     ================================================ */
-    .textOnly__btn:hover,
-    .slideNav__btn:hover {
-        background-color:#fff;
-        color:#d94040;
+    .slideNav__icon {
+        -webkit-transition:left 0.2s, right 0.2s, top 0.2s, bottom 0.2s; 
+        transition:left 0.2s, right 0.2s, top 0.2s, bottom 0.2s; 
     }
-        .slideNav__btn:hover .slideNav__iconPath {
-            fill:#d94040;
-        }
 
-    .slideNav__btn:disabled:hover {
-        background:#ddd; color:#fff;
-        border:4px solid #ddd;
+    .slideNav__btn:hover .slideNav__icon--prev {
+        left:16%;
     }
-        .slideNav__btn:disabled:hover .slideNav__iconPath {
-            fill:#fff;
+    .slideNav__btn:hover .slideNav__icon--next {
+        right:16%; left:auto;
+    }
+
+
+    .slideNav__btn[disabled]:hover .slideNav__icon--prev {
+        left:50%;
+    }
+    .slideNav__btn[disabled]:hover .slideNav__icon--next {
+        right:50%; left:auto;
+    }
+    .slideNav__btn--small[disabled]:hover .slideNav__icon--prev {
+        left:25%;
+    }
+    .slideNav__btn--small[disabled]:hover .slideNav__icon--next {
+        right:25%; left:auto;
+    }
+    @media screen and (min-width:75rem) and (min-height:45rem) {
+        /*  w: 1200px ++
+        /   h: 720px ++ */
+        .slideNav__btn[disabled]:hover .slideNav__icon--prev {
+            left:25%;
         }
+        .slideNav__btn[disabled]:hover .slideNav__icon--next {
+            right:25%; left:auto;
+        }
+    }
 
 
-    .mr-titleBar__title:hover {
-        color:#d94040;
+
+
+
+/*  ================================================
+    misc transitions
+    ================================================ */
+    .btnPrimary:hover .btn__label {
+        text-shadow: none;
     }

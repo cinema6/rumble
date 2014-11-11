@@ -101,7 +101,7 @@ function( angular , c6uilib ) {
             c(this, 'buttonWidth', function() {
                 var pages = this.pagesCount;
 
-                return pages > 1 ? ((calculateRemainingSpace() / 2) + 'px') : '';
+                return pages > 1 ? ((calculateRemainingSpace() / 2 - 1) + 'px') : '';
             }, ['Ctrl.availableWidth','Ctrl.items.@each.width','Ctrl.pagesCount']);
 
             c(this, 'thumbsOffset', function() {

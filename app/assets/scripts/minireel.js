@@ -32,8 +32,8 @@ function( angular , c6Defines  , tracker ,
         displayAdModule.name,
         postModule.name
     ])
-    .animation('.slides__item',['$log', function($log){
-        $log = $log.context('.slides__item');
+    .animation('.js-cardItem',['$log', function($log){
+        $log = $log.context('.js-cardItem');
         return {
             beforeAddClass: function(element,className,done) {
                 $log.log('addClass setup:',className);
@@ -53,7 +53,7 @@ function( angular , c6Defines  , tracker ,
                 $log.info('removeClass start',className);
                 element.delay(50).animate({
                     opacity: 1
-                }, 400, function() {
+                }, 300, function() {
                     $log.info('removeClass end',className);
                     done();
                 });
@@ -94,9 +94,27 @@ function( angular , c6Defines  , tracker ,
                                  'c6ImagePreloader','envrootFilter',
     function                    ( InflectorService , VideoThumbService , $q ,
                                   c6ImagePreloader , envrootFilter ) {
+        var MiniReelService = this;
+
         function isSet(value) {
             return isDefined(value) && value !== null;
         }
+
+        this.createSocialLinks = function(links) {
+            var social = ['Facebook', 'Pinterest', 'Twitter', 'YouTube', 'Vimeo'];
+
+            return Object.keys(links || {})
+                .filter(function(label) {
+                    return social.indexOf(label) > -1;
+                })
+                .map(function(label) {
+                    return {
+                        label: label,
+                        type: label.toLowerCase(),
+                        href: links[label]
+                    };
+                });
+        };
 
         this.createDeck = function(data) {
             var playlist = angular.copy(data.deck),
@@ -152,19 +170,7 @@ function( angular , c6Defines  , tracker ,
             }
 
             function setSocial(card) {
-                var social = ['Facebook', 'Pinterest', 'Twitter', 'YouTube', 'Vimeo'];
-
-                card.social = Object.keys(card.links || {})
-                    .filter(function(label) {
-                        return social.indexOf(label) > -1;
-                    })
-                    .map(function(label) {
-                        return {
-                            label: label,
-                            type: label.toLowerCase(),
-                            href: card.links[label]
-                        };
-                    });
+                card.social = MiniReelService.createSocialLinks(card.links);
             }
 
             function setDefaults(card) {
@@ -355,6 +361,7 @@ function( angular , c6Defines  , tracker ,
                                      c6Computed , cinema6 , MiniReelService , trackerService ) {
         var self = this,
             appData = $scope.app.data,
+            experience = appData.experience,
             election = appData.experience.data.election,
             c = c6Computed($scope),
             tracker = trackerService('c6mr'),
@@ -424,7 +431,7 @@ function( angular , c6Defines  , tracker ,
                 this.id = 'rc-advertisement' + (++adId);
                 this.type = 'ad';
                 this.ad = true;
-                this.modules = ['displayAd'];
+                this.modules = [];
                 this.data = {
                     autoplay: true,
                     autoadvance: true,
@@ -599,9 +606,9 @@ function( angular , c6Defines  , tracker ,
         $log = $log.context('RumbleCtrl');
 
         $scope.deviceProfile    = appData.profile;
-        $scope.title            = appData.experience.data.title;
+        $scope.title            = experience.data.title;
 
-        $scope.deck             = MiniReelService.createDeck(appData.experience.data);
+        $scope.deck             = MiniReelService.createDeck(experience.data);
 
         MasterDeckCtrl = new MasterDeckController();
 
@@ -1286,6 +1293,10 @@ function( angular , c6Defines  , tracker ,
             _data = config._data = config._data || {
                 playerEvents: {},
                 textMode: true,
+                tracking: {
+                    clickFired: false,
+                    countFired: false
+                },
                 modules: {
                     ballot: {
                         ballotActive: false,
@@ -1297,6 +1308,8 @@ function( angular , c6Defines  , tracker ,
                     }
                 }
             },
+            lastTime = null,
+            elapsedTime = 0,
             player = null,
             shouldPlay = false,
             ballotTargetPlays = 0,
@@ -1415,6 +1428,40 @@ function( angular , c6Defines  , tracker ,
                         $scope.$emit('<mr-card>:contentEnd', config.meta || config);
                     }
                 });
+                
+            // If it's a sponsored card, set up handlers to fire AdCount and Click pixels
+            if (config.campaign) {
+                // Fire the Click pixel after the first play
+                if (config.campaign.clickUrl && !_data.tracking.clickFired) {
+                    iface.once('play', function() {
+                        _data.tracking.clickFired = true;
+                        c6ImagePreloader.load([config.campaign.clickUrl]);
+                    });
+                }
+                
+                // Fire the AdCount pixel after minViewTime, by tracking the elapsed time
+                if (config.campaign.countUrl && config.campaign.minViewTime &&
+                                                !_data.tracking.countFired) {
+                    iface.on('timeupdate', function fireMinViewPixel() {
+                        if (lastTime === null) {
+                            lastTime = iface.currentTime;
+                            return;
+                        }
+
+                        // if diff > 1 sec, it's probably a skip, and don't increment elapsed
+                        if (Math.abs(iface.currentTime - lastTime) <= 1) {
+                            elapsedTime += iface.currentTime - lastTime;
+                        }
+                        lastTime = iface.currentTime;
+                        
+                        if (elapsedTime >= config.campaign.minViewTime && !_data.tracking.countFired) {
+                            _data.tracking.countFired = true;
+                            c6ImagePreloader.load([config.campaign.countUrl]);
+                            iface.removeListener('timeupdate', fireMinViewPixel);
+                        }
+                    });
+                }
+            }
 
             $scope.$watch('active', function(active, wasActive) {
                 if ((active === wasActive) && (wasActive === false)){ return; }
@@ -1576,6 +1623,7 @@ function( angular , c6Defines  , tracker ,
                 profile : '=',
                 active  : '=',
                 onDeck  : '=',
+                nav     : '=',
                 number  : '@',
                 total   : '@'
             }

@@ -1,125 +1,246 @@
-/*  ==========================================================================
-    .mr-pager__group classes
-    ========================================================================== */
-    .mr-pages__fader,
-    .mr-pager__activator,
-    .mr-pages__current-indicator {
-        -webkit-transition: opacity 0.5s ease; 
-        -moz-transition: opacity 0.5s ease; 
-        -o-transition: opacity 0.5s ease; 
-        transition: opacity 0.5s ease;
-    }
-    .mr-pager__label {
-        -webkit-transition: color 0.4s ease; 
-        -moz-transition: color 0.4s ease; 
-        -o-transition: color 0.4s ease; 
-        transition: color 0.4s ease;
-    }
-        .mr-pages__page:hover .mr-pages__fader {
-            opacity:0;
-        }
-            .mr-pager__btn:hover .mr-pager__activator {
-                opacity:0.3;
-            }
-        .mr-pager__btn--disabled:hover {
-            background:#d94040 no-repeat 50% 50%;
-        }
-
-    .mr-pages__preview-img {
-        -webkit-transition: -webkit-transform 0.5s ease; 
-        -moz-transition: -moz-transform 0.5s ease; 
-        -o-transition: -o-transform 0.5s ease; 
-        transition: transform 0.5s ease;
-    }
-    .mr-pages__page:hover .mr-pages__preview-img {
-        -webkit-transform: scale(1.25);
-        -moz-transform: scale(1.25);
-        -o-transform: scale(1.25);
-        -ms-transform: scale(1.25);
-        transform: scale(1.25);
-    }
-    .mr-pages__page--active:hover .mr-pages__preview-img {
-        -webkit-transform: scale(1.12);
-        -moz-transform: scale(1.12);
-        -o-transform: scale(1.12);
-        -ms-transform: scale(1.12);
-        transform: scale(1.12);
+/*  ================================================
+    background transitions
+    ================================================ */
+    .btnPrimary, .btnSecondary,
+    .brandProfile__linksBox .socialIconsBe:before,
+    .ballot__btn:before,
+    .recap__item,
+    .MiniReel__closeBtn,
+    .playlist__item,
+    .player__playBtn,
+    .actionsModal__btn:after {
+        -webkit-transition:background 0.3s; transition:background 0.3s;
     }
 
-/*  ==========================================================================
-    .ui-navbar classes
-    ========================================================================== */    
-    .ui-control__preview-img {
-        -webkit-transition:opacity 0.5s; transition:opacity 0.5s;
+    .MiniReel__closeBtn:hover,
+    .ballot__btn0:hover:before,
+    .actionsModal__btn:hover:after,
+    .playlist__item.playlist__item--current:hover,
+    .player__playBtn:hover,
+    .btnSecondary:hover {
+        background-color:#d94040;
     }
-        .ui-nav__prev:hover .ui-control__preview-img, 
-        .ui-nav__next:hover .ui-control__preview-img {
-            opacity:0.76;
-        }
-    .ui-navbar__page, .mr-nav__btn {
-        -webkit-transition:background 0.5s; transition:background 0.5s;
+
+    .recap__item:hover,
+    .playlist__item:hover {
+        background-color:#eee;
     }
-        .mr-nav__btn:hover {
-            background-color:#d94040;
-        }
-        .ui-navbar__page:hover {
-            background:#4c4c4c;
-        }
-        .ui-navbar__page .ui-control__preview-img--active {
-            opacity:1;
-        }
-        .ui-navbar__page:hover .ui-control__preview-img {
-            opacity:1;
-        }
+
+    .ballot__btn1:hover:before {
+        background-color:#1789cb;
+    }
 
 
-/*  ==========================================================================
-    text card classes
-    ========================================================================== */    
-    .mr-textCard__goImg:after {
-        -webkit-transition: opacity 0.5s ease; 
-        -moz-transition: opacity 0.5s ease; 
-        -o-transition: opacity 0.5s ease; 
-        transition: opacity 0.5s ease;
+    .btnPrimary:hover {
+        background-color:#fff;
     }
-        .mr-textCard__goImg:hover:after {
-            opacity:0.3;
-        }
-    .mr-textCard__goBtn {
-        -webkit-transition: background-position 0.2s; 
-        -moz-transition: background-position 0.2s; 
-        -o-transition: background-position 0.2s; 
-        transition: background-position 0.2s;
+    .brandProfile__linksBox .socialIconsBe__light--youtube:hover:before {
+        background-position:-1rem -3rem;
     }
-        .mr-textCard__goBtn:hover {
-            background-position:88% 50%;
-        }
+    .brandProfile__linksBox .socialIconsBe__light--vimeo:hover:before {
+        background-position:-3rem -3rem;
+    }
+    .brandProfile__linksBox .socialIconsBe__light--facebook:hover:before {
+        background-position:-5rem -3rem;
+    }
+    .brandProfile__linksBox .socialIconsBe__light--twitter:hover:before {
+        background-position:-7rem -3rem;
+    }
+    .brandProfile__linksBox .socialIconsBe__light--pinterest:hover:before {
+        background-position:-9rem -3rem;
+    }
+
+
+
 
 
 /*  ================================================
-    sponsored card styles
+    color transitions
     ================================================ */
-    .mr-sponsorProfile__imgBox {
-        -webkit-transition:border 0.5s;
-        transition:border 0.5s;
+    .titleBar__titleText,
+    .btnLabel,
+    .brandProfile__link {
+        -webkit-transition:color 0.3s; transition:color 0.3s;
     }
-    .mr-sponsorProfile__imgBox:hover {
-        border:1px solid #d94040;
+
+    .titleBar__titleText:hover,
+    .btnPrimary:hover .btn__label,
+    .brandProfile__link:hover {
+        color:#d94040;
     }
-    .mr-sponsor__goBtn:hover {
-        color:#fff;
+    .ballot__btn1:hover .ballot__btnLabel {
+        color:#1789cb;
+    }
+    .brandProfile__linksBox .tk--youtube:hover {
+        color:#e22d24;
+    }
+    .brandProfile__linksBox .tk--vimeo:hover {
+        color:#6b859f;
+    }
+    .brandProfile__linksBox .tk--facebook:hover {
+        color:#6281c3;
+    }
+    .brandProfile__linksBox .tk--twitter:hover {
+        color:#00b0ed;
+    }
+    .brandProfile__linksBox .tk--pinterest:hover {
+        color:#cb2027;
     }
 
 
-/*  ==========================================================================
-    Splash Screen classes
-    ========================================================================== */
-    .mr-splash__bar {
-        -webkit-transition: background 0.2s ease; 
-        -moz-transition: background 0.2s ease; 
-        -o-transition: background 0.2s ease; 
-        transition: background 0.2s ease;
+    
+
+
+
+/*  ================================================
+    border transitions
+    ================================================ */
+    .sponsorProfile__imgBox,
+    .brandProfile__logoBox {
+        -webkit-transition: border 0.3s ease; 
+        transition: border 0.3s ease;
     }
-        .mr-splash__start:hover .mr-splash__bar {
-            background-color: #b69823;
+
+    .sponsorProfile__imgBox:hover,
+    .brandProfile__logoBox:hover {
+        border-color:#d94040;
+    }
+    .recap__item:hover {
+        border-left:3px solid #d94040;
+    }
+    .textLink:hover,
+    .displayAdBrand__link:hover .displayAdBrand__linkLabel {
+        border-bottom:1px dotted #d94040;
+    }
+        .tk--youtube:hover .displayAdBrand__linkLabel {
+            border-color:#e22d24;
         }
+        .tk--vimeo:hover .displayAdBrand__linkLabel {
+            border-color:#445566;
+        }
+        .tk--facebook:hover .displayAdBrand__linkLabel {
+            border-color:#3b5998;
+        }
+        .tk--twitter:hover .displayAdBrand__linkLabel {
+            border-color:#00b0ed;
+        }
+        .tk--pinterest:hover .displayAdBrand__linkLabel {
+            border-color:#c92228;
+        }
+
+
+
+
+
+/*  ================================================
+    fill transitions
+    ================================================ */
+    .pager__btnIconPath {
+        -webkit-transition:fill 0.3s; transition:fill 0.3s;
+    }
+
+    .pager__btn:hover .pager__btnIconPath {
+        fill:#d94040;
+    }
+    .pager__btn[disabled]:hover .pager__btnIconPath {
+        fill:#fff;
+    }
+
+
+
+
+
+/*  ================================================
+    opacity transitions
+    ================================================ */
+    .textOnly__imgBox:after {
+        -webkit-transition:opacity 0.3s; transition:opacity 0.3s;
+    }
+
+    .textOnly__imgBox:hover:after {
+        opacity:0.5;
+    }
+
+    .page__previewImg:hover:before {
+        opacity:0;
+    }
+
+
+
+
+
+
+/*  ================================================
+    position transitions
+    ================================================ */
+    .nav__btnIcon,
+    .pager__btnIcon {
+        -webkit-transition:left 0.2s, right 0.2s, top 0.2s, bottom 0.2s; 
+        transition:left 0.2s, right 0.2s, top 0.2s, bottom 0.2s; 
+    }
+
+    .nav__btn:hover .nav__btnIcon--prev {
+        left:44%;
+    }
+    .nav__btn:hover .nav__btnIcon--next {
+        left:56%;
+    }
+
+    .nav__btn--condensed:hover .nav__btnIcon--prev {
+        left:8%;
+    }
+    .nav__btn--condensed:hover .nav__btnIcon--next {
+        right:8%;
+    }
+
+    .nav__btn[disabled]:hover .nav__btnIcon--prev {
+        left:50%;
+    }
+    .nav__btn[disabled]:hover .nav__btnIcon--next {
+        left:50%;
+    }
+
+
+    .pager__btn:hover .pager__btnIcon--prev {
+        left:8%;
+    }
+    .pager__btn:hover .pager__btnIcon--next {
+        right:8%;
+    }
+    .pager__btn[disabled]:hover .pager__btnIcon--prev {
+        left:12.5%;
+    }
+    .pager__btn[disabled]:hover .pager__btnIcon--next {
+        right:12.5%;
+    }
+
+
+
+
+
+/*  ================================================
+    transform transitions
+    ================================================ */
+    .actionsModal__btn:before {
+        -webkit-transition: -webkit-transform 0.3s ease; 
+        transition: 0.3s transform;
+    }
+    .page__btn:hover .page__previewImg,
+    .actionsModal__btn:hover:before {
+        -webkit-transform: scale(1.25);
+        transform: scale(1.25);
+    }
+        .page__btn--active:hover .page__previewImg {
+            -webkit-transform: scale(1.12);
+            transform: scale(1.12);
+        }
+
+
+
+
+/*  ================================================
+    misc transitions
+    ================================================ */
+    .btnPrimary:hover .btn__label {
+        text-shadow: none;
+    }

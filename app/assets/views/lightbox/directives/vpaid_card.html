@@ -1,16 +1,21 @@
-<div class="mr-ad__group">
-    <div class="mr-adVideo__group">
-        <div ng-style="{visibility: Ctrl.showVideo ? 'visible' : 'hidden'}" class="mr-player"></div>
-        <p class="mr-adVideo__label tk--hdr">Advertisement</p>
-        <button style="z-index:2;" ng-if="Ctrl.enablePlayButton" ng-show="Ctrl.showPlay" ng-click="Ctrl.playVideo()" class="mr-player__play-btn">
-            <div class="mr-player__play-icon">
+<!-- flash video -->
+<div class="card__group">
+    <div
+    class="player__group playerHeight">
+        <h1 class="videoAd__label">Advertisement</h1>
+        <div class="js-playerBox"></div>
+        <button style="z-index:2;" ng-if="Ctrl.enablePlayButton" 
+        ng-show="Ctrl.showPlay" ng-click="Ctrl.playVideo()" 
+        class="player__playBtn">
+            <div class="player__playIcon">
                 <span class="ir">Play Video</span>
             </div>
         </button>
     </div>
+    <section class="companionAd__group">
+        <companion-ad-module active="true"
+            ad-src="{{config.displayAd}}"
+            companion="Ctrl.companion">
+        </companion-ad-module>
+    </section>
 </div>
-<companion-ad-module ng-if="Ctrl.hasModule('displayAd')"
-    active="true"
-    ad-src="{{config.displayAd}}"
-    companion="Ctrl.companion">
-</companion-ad-module>

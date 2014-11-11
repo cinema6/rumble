@@ -1,0 +1,236 @@
+/*  ================================================
+    background transitions
+    ================================================ */
+    .MiniReel__closeBtn,
+    .btnPrimary,
+    .brandProfile__linksBox .socialIconsBe:before,
+    .ballot__btn:before,
+    .recap__item,
+    .playlist__item,
+    .player__playBtn {
+        -webkit-transition:background 0.3s; transition:background 0.3s;
+    }
+
+    .MiniReel__closeBtn:hover,
+    .playlist__item.playlist__item--current:hover,
+    .player__playBtn:hover,
+    .ballot__btn:hover:before {
+        background-color:#d94040;
+    }
+
+    .recap__item:hover,
+    .playlist__item:hover {
+        background-color:#eee;
+    }
+
+    .ballot__btn1:hover:before {
+        background-color:#1789cb;
+    }
+
+
+    .btnPrimary:hover {
+        background-color:#fff;
+    }
+    .brandProfile__linksBox .socialIconsBe__light--youtube:hover:before {
+        background-position:-1rem -3rem;
+    }
+    .brandProfile__linksBox .socialIconsBe__light--vimeo:hover:before {
+        background-position:-3rem -3rem;
+    }
+    .brandProfile__linksBox .socialIconsBe__light--facebook:hover:before {
+        background-position:-5rem -3rem;
+    }
+    .brandProfile__linksBox .socialIconsBe__light--twitter:hover:before {
+        background-position:-7rem -3rem;
+    }
+    .brandProfile__linksBox .socialIconsBe__light--pinterest:hover:before {
+        background-position:-9rem -3rem;
+    }
+
+    .pagerNav__btn--disabled:hover {
+        background-color:#999;
+    }
+
+
+
+
+
+/*  ================================================
+    color transitions
+    ================================================ */
+    .titleBar__titleText,
+    .btnLabel,
+    .brandProfile__link {
+        -webkit-transition:color 0.3s; transition:color 0.3s;
+    }
+
+    .titleBar__titleText:hover,
+    .btnPrimary:hover .btn__label,
+    .brandProfile__link:hover {
+        color:#d94040;
+    }
+    .ballot__btn1:hover .ballot__btnLabel {
+        color:#1789cb;
+    }
+    .brandProfile__linksBox .tk--youtube:hover {
+        color:#e22d24;
+    }
+    .brandProfile__linksBox .tk--vimeo:hover {
+        color:#6b859f;
+    }
+    .brandProfile__linksBox .tk--facebook:hover {
+        color:#6281c3;
+    }
+    .brandProfile__linksBox .tk--twitter:hover {
+        color:#00b0ed;
+    }
+    .brandProfile__linksBox .tk--pinterest:hover {
+        color:#cb2027;
+    }
+
+
+    .nav__btn[disabled]:hover .btn__label {
+        color:#fff;
+    }
+
+
+
+/*  ================================================
+    border transitions
+    ================================================ */
+    .sponsorProfile__imgBox,
+    .brandProfile__logoBox {
+        -webkit-transition: border 0.3s ease; 
+        transition: border 0.3s ease;
+    }
+
+    .sponsorProfile__imgBox:hover,
+    .brandProfile__logoBox:hover {
+        border-color:#d94040;
+    }
+    .recap__item:hover {
+        border-left:3px solid #d94040;
+    }
+    .textLink:hover,
+    .displayAdBrand__link:hover .displayAdBrand__linkLabel {
+        border-bottom:1px dotted #d94040;
+    }
+        .tk--youtube:hover .displayAdBrand__linkLabel {
+            border-color:#e22d24;
+        }
+        .tk--vimeo:hover .displayAdBrand__linkLabel {
+            border-color:#445566;
+        }
+        .tk--facebook:hover .displayAdBrand__linkLabel {
+            border-color:#3b5998;
+        }
+        .tk--twitter:hover .displayAdBrand__linkLabel {
+            border-color:#00b0ed;
+        }
+        .tk--pinterest:hover .displayAdBrand__linkLabel {
+            border-color:#c92228;
+        }
+
+
+
+
+
+/*  ================================================
+    fill transitions
+    ================================================ */
+    .nav__btnPath {
+        -webkit-transition:fill 0.3s; transition:fill 0.3s;
+    }
+
+    .nav__btn:hover .nav__btnPath {
+        fill:#d94040;
+    }
+
+    .nav__btn[disabled]:hover .nav__btnPath {
+        fill:#fff;
+    }
+
+
+
+
+
+/*  ================================================
+    opacity transitions
+    ================================================ */
+    .textOnly__imgBox:after,
+    .page__previewImg:before {
+        -webkit-transition:opacity 0.3s; transition:opacity 0.3s;
+    }
+
+    .textOnly__imgBox:hover:after {
+        opacity:0.5;
+    }
+
+    .page__previewImg:hover:before {
+        opacity:0;
+    }
+
+
+
+
+
+
+/*  ================================================
+    position transitions
+    ================================================ */
+    .nav__btnIcon {
+        -webkit-transition:left 0.2s, right 0.2s, top 0.2s, bottom 0.2s; 
+        transition:left 0.2s, right 0.2s, top 0.2s, bottom 0.2s; 
+    }
+
+    .nav__btn:hover .nav__btnIcon--prev {
+        left:44%;
+    }
+    .nav__btn:hover .nav__btnIcon--next {
+        left:56%;
+    }
+
+    .nav__btn--condensed:hover .nav__btnIcon--prev {
+        left:8%;
+    }
+    .nav__btn--condensed:hover .nav__btnIcon--next {
+        right:8%;
+    }
+
+    .nav__btn[disabled]:hover .nav__btnIcon--prev {
+        left:48%;
+    }
+    .nav__btn[disabled]:hover .nav__btnIcon--next {
+        left:52%;
+    }
+
+
+
+
+
+/*  ================================================
+    transform transitions
+    ================================================ */
+    .someClass {
+        -webkit-transition: -webkit-transform 0.3s ease; 
+        transition: transform 0.3s ease;
+    }
+
+    .page__btn:hover .page__previewImg {
+        -webkit-transform: scale(1.25);
+        transform: scale(1.25);
+    }
+        .page__btn--active:hover .page__previewImg {
+            -webkit-transform: scale(1.12);
+            transform: scale(1.12);
+        }
+
+
+
+
+/*  ================================================
+    misc transitions
+    ================================================ */
+    .btnPrimary:hover .btn__label {
+        text-shadow: none;
+    }

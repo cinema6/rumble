@@ -12,6 +12,7 @@ function( angular ) {
                 config = $scope.config,
                 _data = config._data = config._data || {
                     playerEvents: {},
+                    companion: null,
                     modules: {
                         displayAd: {
                             active: false
@@ -177,7 +178,7 @@ function( angular ) {
 
                     angular.forEach(_companions, function(val) {
                         if (parseInt(val.width) === 300 && parseInt(val.height) === 250) {
-                            self.companion = val;
+                            self.companion = _data.companion = val;
                         }
                     });
                 });
@@ -190,6 +191,10 @@ function( angular ) {
                     }
 
                     if (active) {
+                        if (config.meta) {
+                            config.meta._data = _data;
+                        }
+
                         if (shouldGoForward) {
                             goForward();
                         } else if (_data.playerEvents.play.emitCount < 1) {
@@ -310,7 +315,8 @@ function( angular ) {
                     scope.$emit('playerAdd', iface);
 
                     function createPlayer() {
-                        player = RumbleVPAIDService.createPlayer(scope.config.id, scope.config, $element.find('.mr-player'));
+
+                        player = RumbleVPAIDService.createPlayer(scope.config.id, scope.config, $element.find('.js-playerBox'));
 
                         player.on('ready', function() {
                             // this fires when the flash object exists and responds to isCinema6player()

@@ -179,8 +179,8 @@ function( angular , angularAnimate , angularSanitize , c6uilib , c6log , c6Defin
                     );
             };
         }])
-        .factory('c6AppData', ['cinema6','$http','c6UrlMaker','$q',
-        function              ( cinema6 , $http , c6UrlMaker , $q ) {
+        .factory('c6AppData', ['cinema6','$http','c6UrlMaker','$q','MiniReelService',
+        function              ( cinema6 , $http , c6UrlMaker , $q , MiniReelService ) {
             var c6AppData = {
                 mode: null
             };
@@ -204,21 +204,25 @@ function( angular , angularAnimate , angularSanitize , c6uilib , c6log , c6Defin
 
             function setBehaviors(obj, mode) {
                 function isMode() {
-                    var result = false;
+                    return Array.prototype.slice.call(arguments)
+                        .some(function(value) {
+                            return value === mode;
+                        });
+                }
 
-                    angular.forEach(Array.prototype.slice.call(arguments), function(val) {
-                        if(mode === val) { result = true; }
-                    });
-
-                    return result;
+                function isNotMode() {
+                    return Array.prototype.slice.call(arguments)
+                        .every(function(value) {
+                            return value !== mode;
+                        });
                 }
 
                 obj.behaviors = {
-                    canAutoplay: isMode('full', 'light', 'lightbox', 'lightbox-ads', 'solo', 'solo-ads'),
+                    canAutoplay: isNotMode('mobile'),
                     inlineVoteResults: isMode('mobile'),
                     separateTextView: false,
-                    fullscreen: isMode('full', 'mobile', 'lightbox', 'lightbox-ads', 'solo', 'solo-ads'),
-                    showsCompanionWithVideoAd: isMode('lightbox', 'lightbox-ads')
+                    fullscreen: isNotMode('light'),
+                    showsCompanionWithVideoAd: isMode('lightbox', 'lightbox-playlist', 'solo-ads')
                 };
             }
 
@@ -240,6 +244,10 @@ function( angular , angularAnimate , angularSanitize , c6uilib , c6log , c6Defin
                         };
                     }
 
+                    c6AppData.experience.data.social = MiniReelService.createSocialLinks(
+                        appData.experience.data.links
+                    );
+
                     setMode(c6AppData, appData);
                     setBehaviors(c6AppData, c6AppData.mode);
 
@@ -252,6 +260,9 @@ function( angular , angularAnimate , angularSanitize , c6uilib , c6log , c6Defin
 
                     session.ping('responsiveStyles', styles[c6AppData.mode] || null);
                     session.on('mrPreview:updateExperience', function(experience) {
+                        experience.data.social = MiniReelService.createSocialLinks(
+                            experience.data.links
+                        );
                         c6AppData.experience = experience;
                     });
                 });

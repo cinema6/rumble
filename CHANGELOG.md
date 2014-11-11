@@ -1,5 +1,38 @@
 # MiniReel Player
 
+## v1.5.0
+* *[v1.5.0.rc6]*
+  * [FIX]: Ensure Ad Skip countdown doesn't cover card text and features below video
+* *[/v1.5.0.rc6]*
+
+* *[v1.5.0.rc5]*
+  * [FIX]: Responsive adjustments for templates added
+  * [FIX]: On mobile, removed nav when player is solo
+* *[/v1.5.0.rc5]*
+
+* *[v1.5.0.rc4]*
+  * [FEATURE]: lightbox soloMR support added
+  * [FEATURE]: Fire clickUrl and countUrl for sponsored cards
+  * [FIX]: Fix for an issue that caused Sponsored MiniReel social links
+    not to appear in the MR Studio preview
+* *[/v1.5.0.rc4]*
+
+* *[v1.5.0.rc3]*
+  * [FIX]: ballot results styles added
+  * [FIX]: Media queries for large screens added for lightbox, lightbox-playlist, and full
+* *[/v1.5.0.rc3]*
+
+* *[v1.5.0.rc2]*
+  * [FIX]: Fix for an issue that caused the page navigation not to
+    appear in the lightbox mode
+* *[/v1.5.0.rc2]*
+
+* *[v1.5.0.rc1]*
+  * [FEATURE]: added styles for branded MiniReels in mobile, lightbox, and full templates
+  * [FIX]: lightbox-playlist template updated for companion ad fixes
+  * [FIX]: ad unit card styling added
+* *[/v1.5.0.rc1]*
+
 ## v1.4.0 (October 29, 2014)
 * *[v1.4.0.rc2]*
   * [FEATURE]: Added support for Pinterest social links

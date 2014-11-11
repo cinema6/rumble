@@ -1,4 +1,10 @@
 <article>
+    <post-module ng-if="hasModule('post')"
+        active="Ctrl.postModuleActive"
+        on-replay="Ctrl.player.play()"
+        on-dismiss="Ctrl.postModuleActive = false"
+        sponsor-href="{{config.links.Website}}">
+    </post-module>
     <h3 class="mr-title"><em class="condensed">{{Ctrl.experienceTitle}}</em></h3>
     <div class="mr-card mr-card-shadow">
         <div class="clearfix">
@@ -35,12 +41,12 @@
                 </div>
             </div>
 
-            <div class="mr-card__copy" ng-bind-html="config.note"></div>
-
             <div class="mr-card__copy sponsor__actions" ng-if="!!config.links.Action" ng-switch="config.params.action.type" c6-alias="config.params.action as action">
                 <a ng-switch-when="text" ng-href="{{config.links.Action}}" target="_blank">{{action.label}}</a>
                 <a ng-switch-when="button" ng-href="{{config.links.Action}}" target="_blank" class="mr-sponsor__goBtn" title="{{action.label}}">{{action.label}}</a>
             </div>
+            
+            <div class="mr-card__copy" ng-bind-html="config.note"></div>
         </div>
         
     </div><!--.mr-card-->
