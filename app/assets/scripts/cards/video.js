@@ -27,6 +27,12 @@ function( angular ) {
                     }
                 });
 
+            function closeBallot() {
+                ['closeBallot', 'closeBallotResults'].forEach(function(method) {
+                    this[method]();
+                }, VideoCardCtrl);
+            }
+
             function playerReady(player) {
                 VideoCardCtrl.player = player;
 
@@ -86,11 +92,15 @@ function( angular ) {
                 }
 
                 function deactivateCard() {
-                    player.pause();
+                    if (player.pause() instanceof Error) {
+                        player.reload();
+                    }
 
-                    ['closeBallot', 'closeBallotResults'].forEach(function(method) {
-                        VideoCardCtrl[method]();
-                    });
+                    if (_data.modules.ballot.ballotActive) {
+                        _data.modules.ballot.vote = -1;
+                    }
+
+                    closeBallot();
                 }
 
                 player
@@ -101,6 +111,7 @@ function( angular ) {
                     })
                     .on('play', function() {
                         _data.modules.post.active = false;
+                        closeBallot();
                     })
                     .on('pause', function() {
                         var ballot = _data.modules.ballot,
@@ -146,7 +157,7 @@ function( angular ) {
 
             this.player = null;
             this.adType = (profile.flash && !!data.vpaid) ? 'vpaid' : 'vast';
-            this.adTag = compileAdTag(data[this.adType]);
+            this.adTag = compileAdTag(data[this.adType]) || null;
             this.enablePlay = !profile.touch && (config.type !== 'dailymotion');
             Object.defineProperties(this, {
                 showPlay: {
@@ -200,7 +211,7 @@ function( angular ) {
             });
         }])
 
-        .directive('VideoCard',[function() {
+        .directive('videoCard',[function() {
 
             return {
                 restrict: 'E',

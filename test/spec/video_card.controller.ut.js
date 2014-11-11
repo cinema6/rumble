@@ -26,6 +26,7 @@ define(['minireel', 'services'], function(minireelModule, servicesModule) {
             this.play = jasmine.createSpy('iface.play()');
             this.pause = jasmine.createSpy('iface.pause()');
             this.load = jasmine.createSpy('iface.load()');
+            this.reload = jasmine.createSpy('iface.reload()');
             this.getCompanions = jasmine.createSpy('iface.getCompanions()')
                 .and.returnValue(null);
 
@@ -193,6 +194,21 @@ define(['minireel', 'services'], function(minireelModule, servicesModule) {
             });
 
             describe('adTag', function() {
+                describe('if the card is not an adUnit card', function() {
+                    beforeEach(function() {
+                        $scope.config.data = {
+                            service: 'youtube',
+                            videoid: '893rhfn43r'
+                        };
+
+                        instantiate();
+                    });
+
+                    it('should be null', function() {
+                        expect(VideoCardCtrl.adTag).toBeNull();
+                    });
+                });
+
                 describe('if the browser does not support flash', function() {
                     beforeEach(function() {
                         $scope.profile.flash = false;
@@ -728,12 +744,20 @@ define(['minireel', 'services'], function(minireelModule, servicesModule) {
                         describe('when the video plays', function() {
                             beforeEach(function() {
                                 $scope.config._data.modules.post.active = true;
+                                ['closeBallot', 'closeBallotResults'].forEach(function(method) {
+                                    spyOn(VideoCardCtrl, method).and.callThrough();
+                                });
 
                                 iface.emit('play');
                             });
 
                             it('should disable the postModule', function() {
                                 expect($scope.config._data.modules.post.active).toBe(false);
+                            });
+
+                            it('should close the ballot module', function() {
+                                expect(VideoCardCtrl.closeBallot).toHaveBeenCalled();
+                                expect(VideoCardCtrl.closeBallotResults).toHaveBeenCalled();
                             });
                         });
 
@@ -1068,6 +1092,8 @@ define(['minireel', 'services'], function(minireelModule, servicesModule) {
                                             $scope.active = true;
                                         });
 
+                                        $scope.config._data.modules.ballot.ballotActive = false;
+
                                         ['closeBallot', 'closeBallotResults'].forEach(function(method) {
                                             spyOn(VideoCardCtrl, method).and.callThrough();
                                         });
@@ -1079,6 +1105,27 @@ define(['minireel', 'services'], function(minireelModule, servicesModule) {
                                     it('should close the ballot', function() {
                                         ['closeBallot', 'closeBallotResults'].forEach(function(method) {
                                             expect(VideoCardCtrl[method]).toHaveBeenCalled();
+                                        });
+                                    });
+
+                                    it('should not set a vote', function() {
+                                        expect($scope.config._data.modules.ballot.vote).not.toBe(-1);
+                                    });
+
+                                    describe('if the ballot is active', function() {
+                                        beforeEach(function() {
+                                            $scope.config._data.modules.ballot.ballotActive = true;
+
+                                            $scope.$apply(function() {
+                                                $scope.active = true;
+                                            });
+                                            $scope.$apply(function() {
+                                                $scope.active = false;
+                                            });
+                                        });
+
+                                        it('should set the vote to -1', function() {
+                                            expect($scope.config._data.modules.ballot.vote).toBe(-1);
                                         });
                                     });
 
@@ -1105,6 +1152,27 @@ define(['minireel', 'services'], function(minireelModule, servicesModule) {
 
                                             it('should pause the video', function() {
                                                 expect(iface.pause).toHaveBeenCalled();
+                                            });
+
+                                            it('should not calls reload()', function() {
+                                                expect(iface.reload).not.toHaveBeenCalled();
+                                            });
+
+                                            describe('if the pause method returns an error', function() {
+                                                beforeEach(function() {
+                                                    iface.pause.and.returnValue(new Error('I suck.'));
+
+                                                    $scope.$apply(function() {
+                                                        $scope.active = true;
+                                                    });
+                                                    $scope.$apply(function() {
+                                                        $scope.active = false;
+                                                    });
+                                                });
+
+                                                it('should call reload', function() {
+                                                    expect(iface.reload).toHaveBeenCalled();
+                                                });
                                             });
                                         });
                                     });
