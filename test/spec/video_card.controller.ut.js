@@ -705,6 +705,34 @@ define(['minireel', 'services'], function(minireelModule, servicesModule) {
                             it('should set $scope.config._data.modules.post.active to true', function() {
                                 expect($scope.config._data.modules.post.active).toBe(true);
                             });
+
+                            describe('if the browser supports inline video', function() {
+                                beforeEach(function() {
+                                    iface.reload.calls.reset();
+
+                                    $scope.profile.inlineVideo = true;
+
+                                    iface.emit('ended');
+                                });
+
+                                it('should not reload the video', function() {
+                                    expect(iface.reload).not.toHaveBeenCalled();
+                                });
+                            });
+
+                            describe('if the browser does not support inline video', function() {
+                                beforeEach(function() {
+                                    iface.reload.calls.reset();
+
+                                    $scope.profile.inlineVideo = false;
+
+                                    iface.emit('ended');
+                                });
+
+                                it('should reload the video', function() {
+                                    expect(iface.reload).toHaveBeenCalled();
+                                });
+                            });
                         });
 
                         describe('when the video pauses', function() {

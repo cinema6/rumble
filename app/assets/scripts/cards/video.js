@@ -126,6 +126,10 @@ function( angular ) {
                     .on('ended', function() {
                         _data.modules.post.active = true;
 
+                        if (!profile.inlineVideo) {
+                            player.reload();
+                        }
+
                         if (!$scope.hasModule('post') && !$scope.hasModule('ballot')) {
                             $scope.$emit('<mr-card>:contentEnd', $scope.config);
                         }
