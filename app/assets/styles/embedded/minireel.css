@@ -406,6 +406,13 @@
                 .mr-player iframe {
                     width:100%; height:100%; position:absolute;
                 }
+                .player--vast,
+                .player--vast video {
+                    position:absolute;
+                    top:0; left:0;
+                    width:100%; height:100%;
+                    background:#000;
+                }
                 .mr-player--fly-away {
                     left:-500%;
                 }
@@ -461,6 +468,7 @@
                     font-size:0.8125rem;/*13px*/
                 }
             }
+
             
 
 
