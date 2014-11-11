@@ -1,36 +1,46 @@
 <article class="card__group">
     <ballot-vote-module 
         class="ballot__group playerHeight c6-fade"
-        ng-if="Ctrl.hasModule('ballot')"
+        ng-if="hasModule('ballot')"
         active="config._data.modules.ballot.ballotActive && active"
         vote="config._data.modules.ballot.vote"
         card-id="{{config.id}}"
         ballot="config.ballot"
-        on-dismiss="Ctrl.dismissBallot()">
+        on-dismiss="Ctrl.closeBallot()">
     </ballot-vote-module>
-    <ballot-results-module ng-if="Ctrl.hasModule('ballot')"
+    <ballot-results-module ng-if="hasModule('ballot')"
         class="ballot__group results-module playerHeight"
         active="config._data.modules.ballot.resultsActive && active"
         vote="config._data.modules.ballot.vote"
         card-id="{{config.id}}"
         fetch-when="onDeck || active"
-        on-dismiss="Ctrl.dismissBallotResults()">
+        on-dismiss="Ctrl.closeBallotResults()">
     </ballot-results-module>
     <post-module ng-if="hasModule('post')"
-        active="Ctrl.postModuleActive"
-        on-replay="Ctrl.playVideo()"
-        on-dismiss="Ctrl.postModuleActive = false"
+        active="config._data.modules.post.active"
+        on-replay="Ctrl.player.play()"
+        on-dismiss="config._data.modules.post.active = false"
         sponsor-href="{{config.links.Website}}">
     </post-module>
     <div class="player__group playerHeight">
-        <button ng-if="Ctrl.enablePlayButton" ng-show="Ctrl.showPlay" 
-        ng-click="Ctrl.playVideo()" class="player__playBtn">
+        <button ng-if="Ctrl.enablePlay" ng-show="Ctrl.showPlay" 
+        ng-click="Ctrl.player.play()" class="player__playBtn">
             <div class="player__playIcon">
                 <span class="ir">Play Video</span>
             </div>
         </button>
         <div class="js-playerBox player" 
-        ng-class="{'ui--offscreen': Ctrl.flyAway}"><!-- actual player will be inserted into this container --></div>
+            ng-class="{'ui--offscreen': Ctrl.flyAway}"
+            ng-switch="config.type">
+            <youtube-player ng-switch-when="youtube" id="{{config.id}}-player" videoid="{{config.data.videoid}}" start="{{config.data.start}}" end="{{config.data.end}}"></youtube-player>
+            <vimeo-player ng-switch-when="vimeo" id="{{config.id}}-player" videoid="{{config.data.videoid}}" start="{{config.data.start}}" end="{{config.data.end}}"></vimeo-player>
+            <dailymotion-player ng-switch-when="dailymotion" id="{{config.id}}-player" videoid="{{config.data.videoid}}"></dailymotion-player>
+            <span ng-switch-when="adUnit"><ng-switch on="Ctrl.adType">
+                <vpaid-player ng-switch-when="vpaid" videoid="{{config.id}}-player" ad-tag="{{Ctrl.adTag}}"></vpaid-player>
+                <vast-player ng-switch-when="vast" videoid="{{config.id}}-player" ad-tag="{{Ctrl.adTag}}"></vast-player>
+            </ng-switch></span>
+            <embedded-player ng-switch-when="embedded" code="{{config.data.code}}"></embedded-player>
+        </div>
         <div class="player__thumbnail" ng-show="Ctrl.flyAway" 
         ng-style="{'background-image':config.thumbs.large ? 'url(' + config.thumbs.large + ')' : ''}">&nbsp;</div>
     </div>
@@ -44,7 +54,7 @@
             {{config.title}}
             <span ng-show="!!config.source" ng-if="!config.data.hideSource"
             class="card__attributes tk--copy">
-                via&nbsp;<a ng-href="{{Ctrl.videoUrl}}" target="_blank" class="textLink" 
+                via&nbsp;<a ng-href="{{config.webHref}}" target="_blank" class="textLink" 
                 title="{{config.source}}">{{config.source}}</a>
             </span>
         </h1>
