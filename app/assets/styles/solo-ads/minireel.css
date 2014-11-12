@@ -427,6 +427,7 @@
 
     .brandProfile__group {
         margin:0;
+        width:calc(100% - 10em);
     }
 
 
@@ -457,7 +458,7 @@
         .brand__actions {
             margin:0;
             position:absolute;
-            top:0.375em; right:0;
+            top:0; right:0;
             width:10em;
         }
             .brand__goBtn {
