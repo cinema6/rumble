@@ -1,9 +1,8 @@
-<ul class="slides__list" ng-repeat="deck in DeckCtrl.decks"
+<ul class="cards__list" ng-repeat="deck in DeckCtrl.decks"
 ng-class="{
-    hidden : !deck.active,
-    'slides__list--noAds' : !RumbleCtrl.moduleActive('displayAd')
+    hidden : !deck.active
 }">
-    <li class="slides__item" ng-repeat="item in (deck.cards | deck:deck.index:1)"
+    <li class="cards__item" ng-repeat="item in (deck.cards | deck:deck.index:1)"
         ng-class="{
             hidden : ($index !== deck.index || !deck.active)
         }">
