@@ -4,7 +4,7 @@
 * *[v1.5.2.rc1]*
   * [FIX]: for solo templates, fixed button positioning of sponsor action button
   * Updated c6ui library to v3.3.0
-* *[v1.5.2.rc1]*
+* *[/v1.5.2.rc1]*
 
 ## v1.5.1
 * *[v1.5.1.rc1]*
