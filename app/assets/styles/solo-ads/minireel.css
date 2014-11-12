@@ -347,6 +347,13 @@
                 .player--fly-away {
                     left:-500%;
                 }
+                .player--vast,
+                .player--vast video {
+                    position:absolute;
+                    top:0; left:0;
+                    width:100%; height:100%;
+                    background:#000;
+                }
             .player__thumbnail {
                 background:50% 50% / 112% auto no-repeat;
             }
@@ -420,6 +427,7 @@
 
     .brandProfile__group {
         margin:0;
+        width:calc(100% - 10em);
     }
 
 
@@ -450,7 +458,7 @@
         .brand__actions {
             margin:0;
             position:absolute;
-            top:0.375em; right:0;
+            top:0; right:0;
             width:10em;
         }
             .brand__goBtn {

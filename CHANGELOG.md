@@ -1,5 +1,13 @@
 # MiniReel Player
 
+## v1.5.1
+* *[v1.5.2.rc1]*
+  * [FIX]: for solo templates, fixed button positioning of sponsor action button
+
+* *[v1.5.1.rc1]*
+  * [FIX]: Fixed an issue where the vast player did not fill the content area
+* *[/v1.5.1.rc1]*
+
 ## v1.5.0
 * *[v1.5.0.rc6]*
   * [FIX]: Ensure Ad Skip countdown doesn't cover card text and features below video
