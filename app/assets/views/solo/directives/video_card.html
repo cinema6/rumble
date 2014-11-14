@@ -1,11 +1,11 @@
-<article class="slide__group">
+<article class="card__group">
     <post-module ng-if="hasModule('post')"
         active="config._data.modules.post.active"
         on-replay="Ctrl.player.play()"
         on-dismiss="config._data.modules.post.active = false"
         sponsor-href="{{config.links.Website}}">
     </post-module>
-    <div class="playerBox player__height">
+    <div class="playerSpace player__height">
         <div class="player__group">
             <button ng-if="Ctrl.enablePlay" ng-show="Ctrl.showPlay" ng-click="Ctrl.player.play()" class="player__play-btn">
                 <div class="player__play-icon">
@@ -15,14 +15,14 @@
             <div ng-class="{'ui--offscreen': Ctrl.flyAway}"
                 class="player js-playerBox"
                 ng-switch="config.type">
-                <youtube-player ng-switch-when="youtube" id="{{config.id}}-player" videoid="{{config.data.videoid}}" start="{{config.data.start}}" end="{{config.data.end}}"></youtube-player>
-                <vimeo-player ng-switch-when="vimeo" id="{{config.id}}-player" videoid="{{config.data.videoid}}" start="{{config.data.start}}" end="{{config.data.end}}"></vimeo-player>
-                <dailymotion-player ng-switch-when="dailymotion" id="{{config.id}}-player" videoid="{{config.data.videoid}}"></dailymotion-player>
+                <youtube-player class="playerBox" ng-switch-when="youtube" id="{{config.id}}-player" videoid="{{config.data.videoid}}" start="{{config.data.start}}" end="{{config.data.end}}"></youtube-player>
+                <vimeo-player class="playerBox" ng-switch-when="vimeo" id="{{config.id}}-player" videoid="{{config.data.videoid}}" start="{{config.data.start}}" end="{{config.data.end}}"></vimeo-player>
+                <dailymotion-player class="playerBox" ng-switch-when="dailymotion" id="{{config.id}}-player" videoid="{{config.data.videoid}}"></dailymotion-player>
                 <span ng-switch-when="adUnit"><ng-switch on="Ctrl.adType">
-                    <vpaid-player ng-switch-when="vpaid" videoid="{{config.id}}-player" ad-tag="{{Ctrl.adTag}}"></vpaid-player>
-                    <vast-player class="player--vast" ng-switch-when="vast" videoid="{{config.id}}-player" ad-tag="{{Ctrl.adTag}}"></vast-player>
+                    <vpaid-player class="playerBox" ng-switch-when="vpaid" videoid="{{config.id}}-player" ad-tag="{{Ctrl.adTag}}"></vpaid-player>
+                    <vast-player class="playerBox" ng-switch-when="vast" videoid="{{config.id}}-player" ad-tag="{{Ctrl.adTag}}"></vast-player>
                 </ng-switch></span>
-                <embedded-player ng-switch-when="embedded" code="{{config.data.code}}"></embedded-player>
+                <embedded-player class="playerBox" ng-switch-when="embedded" code="{{config.data.code}}"></embedded-player>
             </div>
             <div ng-show="Ctrl.flyAway" class="player__thumbnail"
                 ng-style="{'background-image':config.thumbs.large ? 'url(' + config.thumbs.large + ')' : ''}">

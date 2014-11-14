@@ -254,10 +254,10 @@
     }
 
 
-    .ui--offscreen {
+    .MiniReel__group .ui--offscreen {
         left:-5000%;
         position: absolute;
-        height:100%; width:100%;
+        width:100%; height:100%;
     }
 
 
@@ -537,12 +537,13 @@
             position:absolute; width:100%; height:100%;
         }
             .player iframe {
-                width:100%; height:100%; position:absolute;
+                width:100%; height:100%; 
+                position:absolute;
+                border:0;
             }
 
-            .player--vast,
-            .player--vast video,
             .playerBox,
+            .playerBox video,
             .playerBox object {
                 position:absolute;
                 top:0; left:0;
