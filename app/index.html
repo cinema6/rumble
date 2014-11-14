@@ -21,8 +21,8 @@
             })(window,document,'script','//www.google-analytics.com/analytics.js','c6Tracker');
         </script>
     </head>
-    <body>
-        <div ng-if="!!app.data.mode" class="c6-minireel">
+    <body style="margin:16px;">
+        <div ng-if="!!app.data.mode" class="c6-minireel" style="max-width:640px; margin:0 auto;">
             <ng-include src="'experience.html' | asset:'views'" ng-controller="RumbleController as RumbleCtrl"></ng-include>
         </div>
         <div id="adtechPlacement" style="display:none;"></div>

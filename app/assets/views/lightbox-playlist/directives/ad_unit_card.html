@@ -62,10 +62,11 @@
             ng-switch="config.params.action.type" 
             c6-alias="config.params.action as action">
                 <a ng-switch-when="text" title="{{action.label}}"
+                target="_blank"
                 ng-href="{{config.links.Action}}" class="textLink">
                     {{action.label}}
                 </a>
-                <a ng-switch-when="button" ng-href="{{config.links.Action}}" 
+                <a ng-switch-when="button" ng-href="{{config.links.Action}}" target="_blank"
                 class="sponsor__goBtn btnPrimary" title="{{action.label}}">
                     <span class="btn__label tk--action">{{action.label}}</span>
                 </a>

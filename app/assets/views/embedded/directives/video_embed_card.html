@@ -1,6 +1,6 @@
-<article class="slide__group">
+<article class="card__group">
     <ballot-vote-module 
-        class="ballot-module player__height"
+        class="ballot__group player__height c6-fade"
         ng-if="Ctrl.hasModule('ballot')"
         active="config._data.modules.ballot.ballotActive && active"
         vote="config._data.modules.ballot.vote"
@@ -9,7 +9,7 @@
         on-dismiss="Ctrl.dismissBallot()">
     </ballot-vote-module>
     <ballot-results-module ng-if="Ctrl.hasModule('ballot')"
-        class="results-module player__height"
+        class="ballot__group player__height c6-fade"
         active="config._data.modules.ballot.resultsActive && active"
         vote="config._data.modules.ballot.vote"
         card-id="{{config.id}}"
@@ -18,13 +18,14 @@
     </ballot-results-module>
 
     <div class="player__group player__height">
-        <button ng-if="Ctrl.enablePlayButton" ng-show="Ctrl.showPlay" ng-click="Ctrl.playVideo()" class="player__play-btn">
-            <div class="player__play-icon">
+        <button ng-if="Ctrl.enablePlayButton" ng-show="Ctrl.showPlay" ng-click="Ctrl.playVideo()" 
+        class="player__playBtn">
+            <div class="player__playIcon">
                 <span class="ir">Play Video</span>
             </div>
         </button>
-        <div ng-class="{'mr-player--fly-away': Ctrl.flyAway}" class="mr-player js-playerBox"><!-- actual player will be inserted into this container --></div>
-        <div ng-show="Ctrl.flyAway" class="player__thumbnail c6-height-limiter"
+        <div ng-class="{'ui--offscreen': Ctrl.flyAway}" class="player js-playerBox"><!-- actual player will be inserted into this container --></div>
+        <div ng-show="Ctrl.flyAway" class="player__thumbnail"
             ng-style="{'background-image':config.thumbs.large ? 'url(' + config.thumbs.large + ')' : ''}">
             <span class="ir"><img ng-src="{{config.thumbs.large}}"></span>
         </div>
@@ -33,7 +34,12 @@
     <div class="card__copy" c6-alias="!!(config.collateral.logo || config.social.length > 0 || config.params.sponsor) as hasSponsorship">
         <h1 ng-if="!hasSponsorship" class="card__title tk--hdr">
             {{config.title}}
-            <span ng-if="!config.data.hideSource" ng-show="!!config.source" class="card__attributes">via <a ng-href="{{Ctrl.videoUrl}}" target="_blank" title="{{config.source}}">{{config.source}}</a></span>
+            <span ng-if="!config.data.hideSource" 
+            ng-show="!!config.source" 
+            class="card__attributes tk--copy">via&nbsp;<a 
+            ng-href="{{Ctrl.videoUrl}}" target="_blank" 
+            class="textLink"
+            title="{{config.source}}">{{config.source}}</a></span>
         </h1>
 
         <div class="sponsorProfile__group clearfix" ng-if="hasSponsorship">
@@ -43,7 +49,7 @@
             <div class="sponsorProfile__copy">
                 <h1 class="card__title tk--hdr">
                     {{config.title}}
-                    <span ng-if="!!config.params.sponsor" class="card__attributes sponsorProfile__tag">
+                    <span ng-if="!!config.params.sponsor" class="card__attributes sponsorProfile__tag tk--copy">
                         Sponsored by 
                         <a ng-href="{{config.links.Website}}" title="{{config.params.sponsor}}">{{config.params.sponsor}}</a>
                     </span>

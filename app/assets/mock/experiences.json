@@ -8,7 +8,7 @@
         "data": {
             "placementId": "3220650",
             "election": "e-d0e407bb69675b",
-            "mode": "full",
+            "mode": "embedded",
             "branding": "digitaljournal2",
             "collateral": {
                 "splash": "/collateral/experiences/rumble/splash-6thumb.jpg",
@@ -277,7 +277,7 @@
         "summary": "",
         "data": {
             "title": "JCVD FTW",
-            "mode": "solo-ads",
+            "mode": "embedded",
             "deck": [
                 {
                     "id": "rc-6b35f48684d1ef",

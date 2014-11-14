@@ -1,12 +1,12 @@
-<article class="slide__group">
+<article class="card__group">
     <div class="player__group player__height">
         <button ng-if="Ctrl.enablePlay" ng-show="Ctrl.showPlay" 
-        ng-click="Ctrl.player.play()" class="player__play-btn">
-            <div class="player__play-icon">
+        ng-click="Ctrl.player.play()" class="player__playBtn">
+            <div class="player__playIcon">
                 <span class="ir">Play Video</span>
             </div>
         </button>
-        <div ng-class="{'mr-player--fly-away': Ctrl.flyAway}" class="mr-player" ng-switch="Ctrl.adType">
+        <div ng-class="{'ui--offscreen': Ctrl.flyAway}" class="player" ng-switch="Ctrl.adType">
             <vpaid-player ng-switch-when="vpaid" ad-tag="{{Ctrl.adTag}}" videoid="{{config.id}}"></vpaid-player>
             <vast-player ng-switch-when="vast" ad-tag="{{Ctrl.adTag}}" videoid="{{config.id}}" controls></vast-player>
         </div>

@@ -301,6 +301,7 @@
         position: relative;
         width:100%; height: 0;
         min-height:20em;
+        overflow: hidden;
     }
 
         .MiniReel__closeBtn,
@@ -476,7 +477,7 @@
             line-height: 1;
         }
         .card__desc {
-            margin:0.75rem 0 0;
+            margin:0.875rem 0 0;
             font-size:0.875em;
             line-height:1.5;
         }
@@ -1139,12 +1140,13 @@
     .actionsModal__group {
         position:absolute; z-index: 2;
         top:0; left:0; right:19em; bottom:0;
+        overflow: hidden;
     }
     .actionsModal__list {
         position:absolute; z-index: 2;
         top:50%; left:50%;
-        width:32.5em;
-        margin:-1.5em 0 0 -16.25em;
+        width:36em;
+        margin:-1.5em 0 0 -18em;
         padding:0;
         text-align: center;
         list-style: none;
@@ -1152,7 +1154,7 @@
         .actionsModal__item {
             position:relative;
             display: inline-block;
-            margin:0 0.5em;
+            margin:0 0.5em 1.5em;
         }
         .actionsModal__btn {
             padding:0 1em 0 4em;

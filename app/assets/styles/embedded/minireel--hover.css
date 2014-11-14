@@ -10,6 +10,14 @@
         background-color:#fff;
     }
 
+    .ballot__btn:hover:before {
+        background-color:#d94040;
+    }
+
+    .ballot__btn1:hover:before {
+        background-color:#1789cb;
+    }
+
 
 
 
@@ -24,6 +32,10 @@
         color:#d94040;
     }
 
+    .ballot__btn1:hover .ballot__btnLabel {
+        color:#1789cb;
+    }
+
 
 
 
@@ -31,7 +43,9 @@
 /*  ================================================
     border transitions
     ================================================ */
-
+    .textLink:hover {
+        border-bottom:1px dotted #d94040;
+    }
 
 
 
