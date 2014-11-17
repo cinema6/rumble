@@ -169,6 +169,7 @@
             text-shadow: 0 1px 1px rgba(0,0,0,0.44);
             display:table-cell;
             vertical-align: middle;
+            line-height:1rem;
         }
 
         .btnPrimary[disabled],
@@ -385,6 +386,7 @@
             z-index: 0;
             width:100%; height:100%;
             border:1px solid #ccc;
+            border-top:0;
         }
         .cards__item.hidden,
         .cards__list.hidden {
@@ -420,8 +422,9 @@
                 .player iframe {
                     width:100%; height:100%; position:absolute;
                 }
-                .player--vast,
-                .player--vast video {
+                .playerBox,
+                .playerBox object,
+                .playerBox video {
                     position:absolute;
                     top:0; left:0;
                     width:100%; height:100%;
@@ -448,9 +451,9 @@
             }
             .card__title {
                 color:#000;
-                font-size:1.9375em;
-                line-height:1.1;
-                margin:1px 0 0 0;
+                font-size:1.375em;
+                line-height:1.5rem;
+                margin:0.625rem 0 0 0;
             }
             .card__attributes {
                 color:#999;
@@ -458,7 +461,7 @@
                 line-height: 1;
             }
             .card__desc {
-                margin:0.25rem 0 0;
+                margin:0.3125rem 0 0;
                 font-size:0.875em;
                 line-height:1.25rem;
             }
@@ -477,52 +480,102 @@
 
 
 /*  ================================================
+    text only card classes
+    ================================================ */
+    .textOnly__imgBox {
+        height:12em;
+        position: relative;
+    }
+        .textOnly__imgBox:before {
+            content:'';
+            background:#d94040;
+            opacity:0.7;
+            position: absolute;
+            z-index: 1;
+            width:100%; height:100%;
+        }
+
+        .textOnly__title {
+            color:#fff;
+            font-size:1.5em;
+            line-height:1.75rem;
+            margin:0;
+            font-weight:normal;
+            position:absolute;
+            z-index: 2;
+            bottom:1.5em; left:2em; right:2em;
+        }
+        .textOnly__copy {
+            padding:1em 2.375em;
+            margin:1em 0.625em 0 0.625em;
+            height:16em;
+            overflow-y:auto;
+        }
+
+        .textOnly__goBtn {
+            padding:0.5em 2em;
+            margin:1.1875em 0 0 0;
+        }
+
+
+
+
+
+/*  ================================================
     sponsored card styles
     ================================================ */
-    .sponsorProfile__group {
-        margin:0.5em 0;
+    .card__copyBox {
+        position:relative;
+    }
+        .card__copy--hasSponsor {
+            width:calc(100% - 13.125em);
+            margin:0 0 0 4.125em;
+        }
+            .text--low .card__copy--hasSponsor {
+                height:5rem;
+            }
+            .text--low .player__height--hasSponsor {
+                height:calc(100% - 8.875rem);
+            }
+    
+    .sponsorProfile__imgBox {
+        width:3em; height:3em;
+        border:1px solid #ddd;
+        margin:0;
+        display: block;
+        text-decoration: none;
+        position:absolute;
+        top:0.625em; left:0.625em;
+    }
+        .sponsorProfile__img {
+            width:3em; height:3em;
+            display: block;
+        }
+
+
+    .sponsorProfile__tag {
+        font-weight:normal;
+    }
+    
+        .sponsorProfile__link {
+            border:0;
+        }
+
+    .sponsorProfile__copy {
+        margin-right:3.5em;
     }
 
 
-        .sponsorProfile__imgBox {
-            width:3em; height:3em;
-            float:left;
-            border:1px solid #ddd;
-            margin:0 0.5em 0 0;
-            display: block;
-            text-decoration: none;
+    .sponsor__actions {
+        position:absolute;
+        right:0.625em; top:0.625em;
+        width:8em;
+    }
+        .sponsor__goBtn {
+            padding:0.5em 0.25em;
+            border-radius:3px;
+            width:100%;
         }
-            .sponsorProfile__img {
-                width:3em; height:3em;
-                display: block;
-            }
-
-
-        .sponsorProfile__copy {
-            margin:-0.5em 0 0 3.5em;
-        }
-
-            .sponsorProfile__tag {
-                font-weight:normal;
-            }
-            
-            .sponsorProfile__link {
-                border:0;
-            }
-
-
-        .sponsor__actions {
-            margin:1em 0;
-            display: none;
-        }
-            .sponsor__goBtn {
-                background:#d94040; 
-                color:#fff; font-weight:bold;
-                margin:0 0 1em 0; padding:0.75em 0.5em;
-                border:0; border-radius:3px;
-                display: inline-block;
-                text-align: center; line-height:1;
-            }
 
 
 
@@ -697,6 +750,7 @@
     .adVideo__videoHolder {
         position:relative;
         width:100%; height:100%;
+        min-width:300px; min-height:150px;
         text-align: center;
         background: #000;
     }
@@ -740,102 +794,157 @@
             .more-reels__desc {
                 margin: -0.5em 0 0 0;/*8px*/ font-size:0.8125rem;/*13px*/ 
                 color:#c2c2c2; line-height:1.69; height: 4.875rem;/*78px*/
-            } 
-
-
-/*  ==========================================================================
-    recap card classes
-    ========================================================================== */
-    .recap__group {
-        margin:0 0.375rem; 
-        position:relative;
-        height:100%;
-    }
-        .recap__intro {
-            font-size:0.875rem; color:#929292; font-weight:300; text-align: left;
-            margin:0; padding: 0.125rem 0 0.4375rem 0;
-        }
-            .recap__list {
-                width:100%;
-                position: absolute; top:1.9375em; bottom:3.625em;
-                overflow-y:auto; overflow-x:hidden;
-                margin:0; padding:0; list-style: none;
-                border-top:1px dotted #565656;
-                border-bottom:1px dotted #565656;
             }
-                .recap__item {
-                    position:relative;
-                    padding:0.75em 0 0.75em 0; border-bottom:1px dotted #565656;
-                    -moz-box-sizing: border-box; box-sizing: border-box; 
-                    cursor:pointer;
-                }
-                    .recap__item:last-child {
-                        border-bottom:0;
-                    }
-                    .recap__imgBtn {
-                        width:27%; height:0; display:block;
-                        border:0; margin:0; padding:0 0 18% 0;
-                        font-size:1rem;
-                        background:url('../../img/default_square.jpg') 50% 50% / cover no-repeat;
-                        float:left;
-                        position:relative;
-                        cursor:pointer;
-                    }
-                        .recap__imgBtn--ad:before {
-                            content:'Ad';
-                            position: absolute;
-                            top:2px; left:2px;
-                            background:#000; color:#fff;
-                            padding:0 2px;
-                            font-size:0.625rem; font-weight:bold;
-                            z-index: 1;
-                        }
-                        .recap__imgBox {
-                            display: block;
-                            position:absolute; top:0; left:0; bottom:0; right:0;
-                            background: 50% 50% / auto 136% no-repeat;
-                        }
-                    .recap__copyBox {
-                        float:right;
-                        width:71.3%;
-                    }
-                        .recap__copyBox .card__title-h1 {
-                            font-size:1.125em;
-                            margin:0.25em 0; padding:0;
-                            color:#333;
-                        }
-                        .recap__ballotInfo {
-                            color:#999; font-size:0.875em;
-                        }
-                            .recap__ballotQuestion {
-                                font-size:1em; font-weight:normal;
-                                margin:0;
-                            }
-                                .recap__ballotQuestion strong {
-                                    color:#333; font-style:italic;
-                                }
-                            .recap__ballotResults {
-                                margin:0;
-                            }
-                            .recap__ballotA {
-                                color:#8ac12a;
-                            }
-                            .recap__ballotB {
-                                color:#19cbe6;
-                            } 
 
 
-/*  ==========================================================================
-    Splash Screen classes
-    ========================================================================== */
-    .splash__group {
-        position:absolute; z-index: 2; top:0; right:0; left:0; bottom:0;
-        background:#000; 
+
+
+
+/*  ================================================
+    Display Ad Card classes
+    ================================================ */
+    .displayAdCard__group {
+        text-align: center;
+        height:19.5em;
+        position:absolute;
+        top:50%; left:0; right:0;
+        margin:-12.75em 0 0 0;
     }
+
+        .displayAdBrand__tagline {
+            font-size:0.875em;
+            line-height: 1;
+            color:#999;
+            margin:0 0 0.25rem;
+        }
+            .displayAdBrand__taglineLink {
+                font-weight:bold;
+            }
+
+
+        .displayAdBrand__linksBox {
+            margin:0.125em 0 0 0;
+        }
+            .displayAdBrand__link {
+                padding:0 0.5em;
+                font-size:0.75em;
+                display: inline-block;
+            }
+                .displayAdBrand__linkLabel {
+                    vertical-align: middle;
+                }
+                .displayAdBrand__linkLabel {
+                    margin-left:0.25em;
+                }
+
+    /*  display ad module classes
+        ================================================ */
+        .displayAd__label {
+            font-size:0.625em;
+            color:#999;
+            text-align: center;
+            width:100%;
+            display: block;
+        }
+
+        .displayAd__box {
+            width:18.75em; height:15.625em;
+            margin:0 auto;
+        }
+            .displayAd__box iframe {
+                width:100%; height:100%;
+                border:0;
+            }
+
+
+
+
+
+/*  ================================================
+    recap card classes
+    ================================================ */
+    .recap__list {
+        width:100%;
+        position: absolute; 
+        top:0; bottom:4em;
+        overflow-y:auto; overflow-x:hidden;
+        margin:0; padding:0; list-style: none;
+        border-bottom:2px solid #333;
+        counter-reset: recap;
+    }
+        .recap__item {
+            position:relative;
+            padding:1em 0; 
+            margin:0 1px 0 0;
+            border-bottom:1px solid #ddd;
+            cursor:pointer;
+        }
+            .recap__item:last-child {
+                border-bottom:0;
+            }
+
+
+            .recap__imgBox {
+                width:8em; height:5em;
+                background:url('../../img/default_square.jpg') 50% 50% / cover no-repeat;
+                float:left;
+                margin:0 1em 0 3em;
+            }
+                .recap__imgBox:before {
+                    counter-increment: recap;
+                    content:counter(recap);
+                    display:block;
+                    width:2em;
+                    font-size:0.75em;
+                    text-align: right;
+                    color:#6c6c6c;
+                    margin:7px 0 0 0;
+                    position: absolute;
+                    left:0.5rem;
+                }
+                .recap__item--ad .recap__imgBox:after {
+                    content:'Ad';
+                    position: absolute;
+                    top:1.8em; left:5em;
+                    background:#000; color:#fff;
+                    padding:0 2px;
+                    font-size:0.625rem; font-weight:bold;
+                }
+
+                .recap__img {
+                    width:8em; height:5em;
+                    display: block;
+                    background: 50% 50% / cover no-repeat;
+                }
+
+
+            .recap__copyBox {
+                float:left;
+                width:calc(100% - 13em);
+            }
+                .card__title--recapCard {
+                    margin:0;
+                }
+                .card__desc--recapCard {
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    margin-top:0.25rem;
+                }
+
+            .sponsorProfile__imgBox--recapCard {
+                left:auto; top:1em; right:1em;
+            }
+
+
+/*  ================================================
+    Splash Screen classes
+    ================================================ */
     .splash__start {
-        position:absolute; top:0; left: 0; bottom:0; right:0;
+        position:absolute; z-index: 20;
+        top:0; left: 0; bottom:0; right:0;
         border:0; margin:0; padding:0;
-        background:none;
+        background:#000;
         width:100%; height:100%;
         cursor:pointer; 
         color:#fff; text-align: center; font-weight:bold;
