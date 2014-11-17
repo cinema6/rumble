@@ -14,9 +14,10 @@
                 </div>
             </button>
             <div ng-class="{'ui--offscreen': Ctrl.flyAway}" class="player js-playerBox" ng-switch="Ctrl.adType">
-                <vpaid-player ng-switch-when="vpaid" ad-tag="{{Ctrl.adTag}}" videoid="{{config.id}}"></vpaid-player>
+                <vpaid-player ng-switch-when="vpaid" ad-tag="{{Ctrl.adTag}}" 
+                class="playerBox" videoid="{{config.id}}"></vpaid-player>
                 <vast-player ng-switch-when="vast" ad-tag="{{Ctrl.adTag}}" 
-                class="player--vast" videoid="{{config.id}}" controls></vast-player>
+                class="playerBox" videoid="{{config.id}}" controls></vast-player>
             </div>
             <div ng-show="Ctrl.flyAway" class="player__thumbnail"
                 ng-style="{'background-image':config.thumbs.large ? 'url(' + config.thumbs.large + ')' : ''}">
