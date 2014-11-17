@@ -324,6 +324,36 @@ define(['app', 'minireel', 'c6uilib', 'angular'], function(appModule, minireelMo
                                         autoplay: null
                                     }
                                 },
+                                {
+                                    id: 'rc-fa90ca8024631a',
+                                    type: 'embedded',
+                                    title: '49ers, Bucs Medical Staffs Checked by DEA',
+                                    note: 'Federal drug enforcement agents showed up unannounced Sunday to check at least two visiting NFL teams\' medical staffs as part of an investigation into former players\' claims that teams mishandled prescription drugs.',
+                                    placementId: null,
+                                    thumbs: {},
+                                    data: {
+                                        skip: false,
+                                        autoadvance: true,
+                                        autoplay: null,
+                                        service: 'aol',
+                                        videoid: '49ers--bucs-medical-staffs-checked-by-dea-518518161'
+                                    }
+                                },
+                                {
+                                    id: 'rc-2cd95fe1ff1603',
+                                    type: 'embedded',
+                                    title: 'Raw: Video Captures MH17 Crash Aftermath',
+                                    note: 'New video shows the aftermath of the Malaysian Airlines crash after it was shot down in rebel-held territory in eastern Ukraine.',
+                                    placementId: null,
+                                    thumbs: {},
+                                    data: {
+                                        skip: false,
+                                        autoadvance: true,
+                                        autoplay: null,
+                                        service: 'yahoo',
+                                        videoid: 'raw-video-captures-mh17-crash-172602605'
+                                    }
+                                }
                             ]
                         };
 
@@ -616,7 +646,7 @@ define(['app', 'minireel', 'c6uilib', 'angular'], function(appModule, minireelMo
                     });
 
                     describe('webHref', function() {
-                        var youtube, vimeo, dailymotion, others;
+                        var youtube, vimeo, dailymotion, aol, yahoo, others;
 
                         beforeEach(function() {
                             youtube = result.filter(function(card) {
@@ -628,8 +658,14 @@ define(['app', 'minireel', 'c6uilib', 'angular'], function(appModule, minireelMo
                             dailymotion = result.filter(function(card) {
                                 return card.type === 'dailymotion';
                             });
+                            aol = result.filter(function(card) {
+                                return card.data.service === 'aol';
+                            });
+                            yahoo = result.filter(function(card) {
+                                return card.data.service === 'yahoo';
+                            });
                             others = result.filter(function(card) {
-                                return !(/^(youtube|vimeo|dailymotion)$/).test(card.type);
+                                return !(/^(youtube|vimeo|dailymotion|embedded)$/).test(card.type);
                             });
                         });
 
@@ -648,6 +684,18 @@ define(['app', 'minireel', 'c6uilib', 'angular'], function(appModule, minireelMo
                         it('should set a webHref for the dailymotion cards', function() {
                             dailymotion.forEach(function(card) {
                                 expect(card.webHref).toBe('http://www.dailymotion.com/video/' + card.data.videoid);
+                            });
+                        });
+
+                        it('should set a webHref for the aol cards', function() {
+                            aol.forEach(function(card) {
+                                expect(card.webHref).toBe('http://on.aol.com/video/' + card.data.videoid);
+                            });
+                        });
+
+                        it('should set a webHref for the yahoo cards', function() {
+                            yahoo.forEach(function(card) {
+                                expect(card.webHref).toBe('https://screen.yahoo.com/' + card.data.videoid + '.html');
                             });
                         });
 

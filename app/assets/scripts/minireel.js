@@ -177,6 +177,17 @@ function( angular , c6Defines  , tracker ,
                         return 'http://vimeo.com/' + card.data.videoid;
                     case 'dailymotion':
                         return 'http://www.dailymotion.com/video/' + card.data.videoid;
+                    case 'embedded':
+                        return (function() {
+                            switch (card.data.service) {
+                            case 'aol':
+                                return 'http://on.aol.com/video/' + card.data.videoid;
+                            case 'yahoo':
+                                return 'https://screen.yahoo.com/' + card.data.videoid + '.html';
+                            default:
+                                return null;
+                            }
+                        }());
                     default:
                         return null;
                     }
