@@ -2,17 +2,41 @@
     <div class="adSkip__group--sponsored c6-fade" ng-show="!nav.enabled">
         <p class="adSkip__message">Skip in <strong>{{nav.wait}}</strong></p>
     </div>
+    <ballot-vote-module 
+        class="ballot__group player__height"
+        ng-if="hasModule('ballot')"
+        active="config._data.modules.ballot.ballotActive && active"
+        vote="config._data.modules.ballot.vote"
+        card-id="{{config.id}}"
+        ballot="config.ballot"
+        on-dismiss="Ctrl.closeBallot()">
+    </ballot-vote-module>
+    <ballot-results-module ng-if="hasModule('ballot')"
+        class="ballot__group player__height"
+        active="config._data.modules.ballot.resultsActive && active"
+        vote="config._data.modules.ballot.vote"
+        card-id="{{config.id}}"
+        fetch-when="onDeck || active"
+        on-dismiss="Ctrl.closeBallotResults()">
+    </ballot-results-module>
+
     <div class="player__group player__height">
-        <button ng-if="Ctrl.enablePlay" ng-show="Ctrl.showPlay" 
-        ng-click="Ctrl.player.play()" class="player__playBtn">
+        <button ng-if="Ctrl.enablePlay" ng-show="Ctrl.showPlay" ng-click="Ctrl.player.play()" class="player__playBtn">
             <div class="player__playIcon">
                 <span class="ir">Play Video</span>
             </div>
         </button>
-        <div ng-class="{'ui--offscreen': Ctrl.flyAway}" class="js-playerBox player" ng-switch="Ctrl.adType">
-            <vpaid-player ng-switch-when="vpaid" ad-tag="{{Ctrl.adTag}}" videoid="{{config.id}}"></vpaid-player>
-            <vast-player ng-switch-when="vast" ad-tag="{{Ctrl.adTag}}" 
-            class="player--vast" videoid="{{config.id}}" controls></vast-player>
+        <div class="js-playerBox player"
+            ng-class="{'ui--offscreen': Ctrl.flyAway}"
+            ng-switch="config.type">
+            <youtube-player class="playerBox" ng-switch-when="youtube" id="{{config.id}}-player" videoid="{{config.data.videoid}}" start="{{config.data.start}}" end="{{config.data.end}}"></youtube-player>
+            <vimeo-player class="playerBox" ng-switch-when="vimeo" id="{{config.id}}-player" videoid="{{config.data.videoid}}" start="{{config.data.start}}" end="{{config.data.end}}"></vimeo-player>
+            <dailymotion-player class="playerBox" ng-switch-when="dailymotion" id="{{config.id}}-player" videoid="{{config.data.videoid}}"></dailymotion-player>
+            <span ng-switch-when="adUnit"><ng-switch on="Ctrl.adType">
+                <vpaid-player ng-switch-when="vpaid" videoid="{{config.id}}-player" ad-tag="{{Ctrl.adTag}}"></vpaid-player>
+                <vast-player class="playerBox" ng-switch-when="vast" videoid="{{config.id}}-player" ad-tag="{{Ctrl.adTag}}"></vast-player>
+            </ng-switch></span>
+            <embedded-player class="playerBox" ng-switch-when="embedded" code="{{config.data.code}}"></embedded-player>
         </div>
         <div ng-show="Ctrl.flyAway" class="player__thumbnail"
         ng-style="{'background-image':config.thumbs.large ? 'url(' + config.thumbs.large + ')' : ''}">
@@ -26,11 +50,10 @@
             <span ng-show="!!config.source" 
             class="card__attributes tk--copy">
                 via 
-                <a ng-href="{{Ctrl.videoUrl}}" target="_blank" class="textLink" 
+                <a ng-href="{{config.webHref}}" target="_blank" class="textLink" 
                 title="{{config.source}}">{{config.source}}</a>
             </span>
         </h1>
-
         <div class="sponsorProfile__group clearfix" ng-if="config.collateral.logo || config.social.length > 0 || config.params.sponsor">
             <a ng-if="!!config.collateral.logo" ng-href="{{config.links.Website}}" title="Sponsor link" class="sponsorProfile__imgBox" target="_blank">
                 <img ng-src="{{config.collateral.logo}}" class="sponsorProfile__img">

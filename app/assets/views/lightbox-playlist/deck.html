@@ -1,12 +1,12 @@
 <ul ng-repeat="deck in DeckCtrl.decks"
     class="cards__list"
     ng-class="{
-        'ui-offscreen' : !deck.active
+        'ui--offscreen' : !deck.active
     }">
     <li class="cards__item js-cardItem"
         ng-repeat="item in (deck.cards | deck:deck.index:1)"
         ng-class="{
-            'ui-offscreen' : ($index !== deck.index || !deck.active)
+            'ui--offscreen' : ($index !== deck.index || !deck.active)
         }">
         <mr-card
             x-number="{{tocCards.indexOf(item) + 1}}"

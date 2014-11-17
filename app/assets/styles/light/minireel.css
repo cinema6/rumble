@@ -270,16 +270,16 @@
 /*  ==========================================================================
     Mini Reel Cards classes
     ========================================================================== */
-    .slides__list, .slides__item,
-    .slide__group {
+    .cards__list, .cards__item,
+    .card__group {
         margin:0; padding:0; list-style:none;
         position:absolute; top:0; bottom:0; left:0; right:0;
     }
-        .slides__item.hidden,
-        .slides__list.hidden {
+        .cards__item.hidden,
+        .cards__list.hidden {
             height:0; overflow:hidden;
         }
-        .slides__item.ng-animate {
+        .cards__item.ng-animate {
             top: 0;
         }
         .player__group {
@@ -304,12 +304,15 @@
             }
                 .mr-player iframe {
                     width:100%; height:100%; position:absolute;
+                    border:0;
                 }
                 .mr-player--fly-away {
                     left:-500%;
                 }
-                .player--vast,
-                .player--vast video {
+
+                .playerBox,
+                .playerBox video,
+                .playerBox object {
                     position:absolute;
                     top:0; left:0;
                     width:100%; height:100%;

@@ -1,5 +1,9 @@
 # MiniReel Player
 
+## v1.6.0
+* *[v1.6.0.rc1]*
+  * [FIX]: consolidated player styles to work with single video card directive
+
 ## v1.5.2
 * *[v1.5.2.rc2]*
   * Updated c6ui library to v3.3.1

@@ -11,7 +11,8 @@ define(['app', 'minireel', 'c6uilib', 'angular'], function(appModule, minireelMo
             $q;
 
         var VideoThumbService,
-            c6ImagePreloader;
+            c6ImagePreloader,
+            c6AppData;
 
         beforeEach(function() {
             module(c6uilibModule.name, function($provide) {
@@ -32,7 +33,16 @@ define(['app', 'minireel', 'c6uilib', 'angular'], function(appModule, minireelMo
                         })
                 });
             });
-            module(appModule.name);
+            module(appModule.name, function($provide) {
+                $provide.value('c6AppData', {
+                    experience: {
+                        id: 'e-f1d70de8336974',
+                        data: {
+                            title: 'My Awesome MiniReel'
+                        }
+                    }
+                });
+            });
 
             inject(function($injector) {
                 MiniReelService = $injector.get('MiniReelService');
@@ -42,6 +52,7 @@ define(['app', 'minireel', 'c6uilib', 'angular'], function(appModule, minireelMo
 
                 VideoThumbService = $injector.get('VideoThumbService');
                 c6ImagePreloader = $injector.get('c6ImagePreloader');
+                c6AppData = $injector.get('c6AppData');
             });
         });
 
@@ -51,6 +62,71 @@ define(['app', 'minireel', 'c6uilib', 'angular'], function(appModule, minireelMo
 
         describe('@public', function() {
             describe('methods: ', function() {
+                describe('getTrackingData(card, index, params)', function() {
+                    var card, params,
+                        result;
+
+                    beforeEach(function() {
+                        card = {
+                            id: 'rc-dec185bad0c8ee',
+                            title: 'The Very Best Video'
+                        };
+
+                        params = {
+                            action: 'foo',
+                            label: 'bar'
+                        };
+
+                        result = MiniReelService.getTrackingData(card, 3, params);
+                    });
+
+                    it('should return something containing the params', function() {
+                        expect(result).toEqual(jasmine.objectContaining(params));
+                    });
+
+                    it('should return something containing additional data', function() {
+                        expect(result).toEqual(jasmine.objectContaining({
+                            page: '/mr/' + c6AppData.experience.id + '/' + card.id,
+                            title: c6AppData.experience.data.title + ' - ' + card.title,
+                            slideIndex: 3,
+                            slideId: card.id,
+                            slideTitle: card.title
+                        }));
+                    });
+
+                    describe('if no params are provided', function() {
+                        beforeEach(function() {
+                            result = MiniReelService.getTrackingData(card, 2);
+                        });
+
+                        it('should still work', function() {
+                            expect(result).toEqual({
+                                page: '/mr/' + c6AppData.experience.id + '/' + card.id,
+                                title: c6AppData.experience.data.title + ' - ' + card.title,
+                                slideIndex: 2,
+                                slideId: card.id,
+                                slideTitle: card.title
+                            });
+                        });
+                    });
+
+                    describe('if no card is provided', function() {
+                        beforeEach(function() {
+                            result = MiniReelService.getTrackingData(null, -1);
+                        });
+
+                        it('should return data for the MiniReel', function() {
+                            expect(result).toEqual({
+                                page: '/mr/' + c6AppData.experience.id + '/',
+                                title: c6AppData.experience.data.title,
+                                slideIndex: -1,
+                                slideId: 'null',
+                                slideTitle: 'null'
+                            });
+                        });
+                    });
+                });
+
                 describe('createSocialLinks(links)', function() {
                     var links, result;
 
@@ -248,6 +324,36 @@ define(['app', 'minireel', 'c6uilib', 'angular'], function(appModule, minireelMo
                                         autoplay: null
                                     }
                                 },
+                                {
+                                    id: 'rc-fa90ca8024631a',
+                                    type: 'embedded',
+                                    title: '49ers, Bucs Medical Staffs Checked by DEA',
+                                    note: 'Federal drug enforcement agents showed up unannounced Sunday to check at least two visiting NFL teams\' medical staffs as part of an investigation into former players\' claims that teams mishandled prescription drugs.',
+                                    placementId: null,
+                                    thumbs: {},
+                                    data: {
+                                        skip: false,
+                                        autoadvance: true,
+                                        autoplay: null,
+                                        service: 'aol',
+                                        videoid: '49ers--bucs-medical-staffs-checked-by-dea-518518161'
+                                    }
+                                },
+                                {
+                                    id: 'rc-2cd95fe1ff1603',
+                                    type: 'embedded',
+                                    title: 'Raw: Video Captures MH17 Crash Aftermath',
+                                    note: 'New video shows the aftermath of the Malaysian Airlines crash after it was shot down in rebel-held territory in eastern Ukraine.',
+                                    placementId: null,
+                                    thumbs: {},
+                                    data: {
+                                        skip: false,
+                                        autoadvance: true,
+                                        autoplay: null,
+                                        service: 'yahoo',
+                                        videoid: 'raw-video-captures-mh17-crash-172602605'
+                                    }
+                                }
                             ]
                         };
 
@@ -540,7 +646,7 @@ define(['app', 'minireel', 'c6uilib', 'angular'], function(appModule, minireelMo
                     });
 
                     describe('webHref', function() {
-                        var youtube, vimeo, dailymotion, others;
+                        var youtube, vimeo, dailymotion, aol, yahoo, others;
 
                         beforeEach(function() {
                             youtube = result.filter(function(card) {
@@ -552,8 +658,14 @@ define(['app', 'minireel', 'c6uilib', 'angular'], function(appModule, minireelMo
                             dailymotion = result.filter(function(card) {
                                 return card.type === 'dailymotion';
                             });
+                            aol = result.filter(function(card) {
+                                return card.data.service === 'aol';
+                            });
+                            yahoo = result.filter(function(card) {
+                                return card.data.service === 'yahoo';
+                            });
                             others = result.filter(function(card) {
-                                return !(/^(youtube|vimeo|dailymotion)$/).test(card.type);
+                                return !(/^(youtube|vimeo|dailymotion|embedded)$/).test(card.type);
                             });
                         });
 
@@ -572,6 +684,18 @@ define(['app', 'minireel', 'c6uilib', 'angular'], function(appModule, minireelMo
                         it('should set a webHref for the dailymotion cards', function() {
                             dailymotion.forEach(function(card) {
                                 expect(card.webHref).toBe('http://www.dailymotion.com/video/' + card.data.videoid);
+                            });
+                        });
+
+                        it('should set a webHref for the aol cards', function() {
+                            aol.forEach(function(card) {
+                                expect(card.webHref).toBe('http://on.aol.com/video/' + card.data.videoid);
+                            });
+                        });
+
+                        it('should set a webHref for the yahoo cards', function() {
+                            yahoo.forEach(function(card) {
+                                expect(card.webHref).toBe('https://screen.yahoo.com/' + card.data.videoid + '.html');
                             });
                         });
 

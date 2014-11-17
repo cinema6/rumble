@@ -117,10 +117,10 @@
     }
 
     .slideNav__btn:hover .slideNav__icon--prev {
-        left:16%;
+        left:35%;
     }
     .slideNav__btn:hover .slideNav__icon--next {
-        right:16%; left:auto;
+        right:35%; left:auto;
     }
 
 
@@ -130,6 +130,16 @@
     .slideNav__btn[disabled]:hover .slideNav__icon--next {
         right:50%; left:auto;
     }
+
+    .slideNav__btn--small:hover .slideNav__icon--prev,
+    .slideNav__btn--med:hover .slideNav__icon--prev {
+        left:16%;
+    }
+    .slideNav__btn--small:hover .slideNav__icon--next,
+    .slideNav__btn--med:hover .slideNav__icon--next {
+        right:16%; left:auto;
+    }
+
     .slideNav__btn--small[disabled]:hover .slideNav__icon--prev {
         left:25%;
     }
@@ -139,10 +149,12 @@
     @media screen and (min-width:75rem) and (min-height:45rem) {
         /*  w: 1200px ++
         /   h: 720px ++ */
-        .slideNav__btn[disabled]:hover .slideNav__icon--prev {
+        .slideNav__btn--small[disabled]:hover .slideNav__icon--prev,
+        .slideNav__btn--med[disabled]:hover .slideNav__icon--prev {
             left:25%;
         }
-        .slideNav__btn[disabled]:hover .slideNav__icon--next {
+        .slideNav__btn--small[disabled]:hover .slideNav__icon--next,
+        .slideNav__btn--med[disabled]:hover .slideNav__icon--next {
             right:25%; left:auto;
         }
     }
