@@ -1,5 +1,9 @@
 # MiniReel Player
 
+## v1.6.0
+* *[v1.6.0.rc1]*
+  * [FIX]: consolidated player styles to work with single video card directive
+
 ## v1.5.2
 * *[v1.5.2.rc1]*
   * [FIX]: for solo templates, fixed button positioning of sponsor action button

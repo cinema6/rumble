@@ -214,6 +214,17 @@
         right:12.5%;
     }
 
+    @media screen and (min-width:106.0625rem) and (min-height:45rem) {
+        /*  w: 1697px ++ 
+        /   h: 720px ++ */
+        .pager__btn[disabled]:hover .pager__btnIcon--prev {
+            left:18.5%;
+        }
+        .pager__btn[disabled]:hover .pager__btnIcon--next {
+            right:18.5%;
+        }
+    }
+
 
 
 

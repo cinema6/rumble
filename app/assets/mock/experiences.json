@@ -343,6 +343,54 @@
         }
     },
     {
+        "id": "e-29cedac9c69877",
+        "uri": "rumble",
+        "appUriPrefix": "<%= settings.appUrl %>",
+        "appUri": "rumble",
+        "title": "JCVD FTW",
+        "subtitle": "",
+        "summary": "",
+        "data": {
+            "title": "JCVD FTW",
+            "mode": "solo",
+            "deck": [
+                {
+                    "id": "rc-6b35f48684d1ef",
+                    "type": "youtube",
+                    "title": "JCVD FTW",
+                    "note": "And a mind to master the most epic of splits.",
+                    "modules": ["post"],
+                    "links": {
+                        "Action": "https://portal.cinema6.com/#/apps/minireel/studio/dashboard?filter=all&limit=50&page=1",
+                        "Website": "http://cinema6.com/",
+                        "Facebook": "https://www.facebook.com/Cinema6Video",
+                        "Twitter": "https://twitter.com/Cinema6Video",
+                        "YouTube": "http://www.youtube.com/channel/UCSszI_zUkVVA24WVuTYpHTQ",
+                        "Vimeo": "https://vimeo.com/user27205886"
+                    },
+                    "params": {
+                        "sponsor": "Cinema6",
+                        "ad": true,
+                        "action": {
+                            "label": "Learn More",
+                            "type": "button"
+                        }
+                    },
+                    "collateral": {
+                        "logo": "http://cinema6.com/assets/img/c6-logo@2x.png"
+                    },
+                    "data": {
+                        "videoid": "owGykVbfgUE",
+                        "hideSource" : true,
+                        "rel": 0,
+                        "skip": 6,
+                        "modestbranding": 1
+                    }
+                }
+            ]
+        }
+    },
+    {
         "id": "e-dde721e25274a7",
         "uri": "gopro",
         "appUriPrefix": "<%= settings.appUrl %>",
