@@ -1062,7 +1062,7 @@
         .playlist__disabler {
             background:#fff; background:rgba(255,255,255,0.85);
             position:absolute; z-index: 1;
-            top:0; bottom:-2px;
+            top:0.5em; bottom:-2px;
             width:100%;
         }
 

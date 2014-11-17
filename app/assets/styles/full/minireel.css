@@ -743,6 +743,9 @@
             }
             .slideNav__label {
                 width:5.625rem;
+                margin:1.5rem 0 0 0;
+                position:absolute;
+                top:50%; left:0; right:0;
             }
 
 
@@ -753,19 +756,21 @@
             width:0.75rem;
             height:1.25rem;
             margin:-0.625rem 0 0 0;
-            left:25%;
+            left:16%;
         }
             .slideNav__btn--small .slideNav__icon--next {
                 margin:-0.625rem 0 0 0;
-                left:auto; right:25%;
+                left:auto; right:16%;
             }
         .slideNav__btn--small .slideNav__label--prev {
             padding:0 18% 0 0;
-            text-align: right; 
+            text-align: right;
+            position:static;
         }
         .slideNav__btn--small .slideNav__label--next {
             padding:0 0 0 20%; 
             text-align: left;
+            position:static;
         }
 
 
