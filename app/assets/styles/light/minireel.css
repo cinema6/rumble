@@ -484,6 +484,7 @@
     .textOnly__imgBox {
         height:12em;
         position: relative;
+        background: 50% 50% / cover no-repeat;
     }
         .textOnly__imgBox:before {
             content:'';
@@ -507,8 +508,9 @@
         .textOnly__copy {
             padding:1em 2.375em;
             margin:1em 0.625em 0 0.625em;
-            height:16em;
             overflow-y:auto;
+            position:absolute;
+            top:12em; bottom:4em;
         }
 
         .textOnly__goBtn {
