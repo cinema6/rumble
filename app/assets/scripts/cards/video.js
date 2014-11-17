@@ -4,9 +4,11 @@ function( angular ) {
 
     return angular.module('c6.rumble.cards.video', [])
         .controller('VideoCardController', ['$scope','c6ImagePreloader','compileAdTag',
-                                             '$interval','c6AppData',
-        function                            ( $scope , c6ImagePreloader , compileAdTag ,
-                                              $interval , c6AppData ) {
+                                            '$interval','c6AppData','trackerService',
+                                            'MiniReelService',
+        function                           ( $scope , c6ImagePreloader , compileAdTag ,
+                                             $interval , c6AppData , trackerService ,
+                                             MiniReelService ) {
             var VideoCardCtrl = this,
                 behaviors = c6AppData.behaviors,
                 config = $scope.config,
@@ -17,7 +19,8 @@ function( angular ) {
                     companion: null,
                     tracking: {
                         clickFired: false,
-                        countFired: false
+                        countFired: false,
+                        quartiles: [false, false, false, false]
                     },
                     modules: {
                         ballot: {
@@ -29,7 +32,8 @@ function( angular ) {
                             active: false
                         }
                     }
-                });
+                }),
+                tracker = trackerService('c6mr');
 
             function closeBallot() {
                 ['closeBallot', 'closeBallotResults'].forEach(function(method) {
@@ -107,6 +111,34 @@ function( angular ) {
                     closeBallot();
                 }
 
+                function trackVideoEvent(event, nonInteractive, label) {
+                    tracker.trackEvent(MiniReelService.getTrackingData(config, $scope.number - 1, {
+                        category: 'Video',
+                        action: event,
+                        label: label || config.webHref,
+                        videoSource: config.source || config.type,
+                        videoDuration: player.duration,
+                        nonInteraction: (+ !!nonInteractive)
+                    }));
+                }
+
+                function trackVideoPlayback() {
+                    var quartiles = _data.tracking.quartiles,
+                        duration = player.duration,
+                        currentTime = Math.min(player.currentTime, duration),
+                        percent = (Math.round((currentTime / duration) * 100) / 100),
+                        quartile = (function() {
+                            if (percent >= 0.95) { return 3; }
+
+                            return Math.floor(percent * 4) - 1;
+                        }());
+
+                    if (quartile > -1 && !quartiles[quartile]) {
+                        trackVideoEvent('Quartile ' + (quartile + 1));
+                        quartiles[quartile] = true;
+                    }
+                }
+
                 player
                     .once('companionsReady', function() {
                         var companions = player.getCompanions(300, 250);
@@ -116,6 +148,8 @@ function( angular ) {
                     .on('play', function() {
                         _data.modules.post.active = false;
                         closeBallot();
+
+                        trackVideoEvent('Play', config.data.autoplay);
                     })
                     .on('pause', function() {
                         var ballot = _data.modules.ballot,
@@ -126,7 +160,10 @@ function( angular ) {
                         } else {
                             ballot.ballotActive = true;
                         }
+
+                        trackVideoEvent('Pause');
                     })
+                    .on('timeupdate', trackVideoPlayback)
                     .on('ended', function() {
                         _data.modules.post.active = true;
 
@@ -137,10 +174,22 @@ function( angular ) {
                         if (!$scope.hasModule('post') && !$scope.hasModule('ballot')) {
                             $scope.$emit('<mr-card>:contentEnd', $scope.config);
                         }
+
+                        trackVideoEvent('End');
                     })
                     .once('play', function() {
                         _data.hasPlayed = true;
                     });
+
+
+                $scope.$on('<ballot-vote-module>:vote', function($event, vote) {
+                    VideoCardCtrl.closeBallot();
+                    _data.modules.ballot.resultsActive = true;
+
+                    if (vote > -1) {
+                        trackVideoEvent('Vote', false, config.ballot.choices[vote]);
+                    }
+                });
 
                 $scope.$watch('onDeck', function(onDeck) {
                     if (onDeck) {
@@ -250,11 +299,6 @@ function( angular ) {
                 '<embedded-player>:init'
             ].forEach(function($event) {
                 $scope.$on($event, playerInit);
-            });
-
-            $scope.$on('<ballot-vote-module>:vote', function() {
-                VideoCardCtrl.closeBallot();
-                _data.modules.ballot.resultsActive = true;
             });
         }])
 

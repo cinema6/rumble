@@ -1,4 +1,4 @@
-define(['minireel', 'services'], function(minireelModule, servicesModule) {
+define(['app', 'services', 'tracker'], function(appModule, servicesModule, trackerModule) {
     'use strict';
 
     describe('VideoCardController', function() {
@@ -8,12 +8,15 @@ define(['minireel', 'services'], function(minireelModule, servicesModule) {
             $interval,
             c6EventEmitter,
             compileAdTag,
+            trackerService,
+            MiniReelService,
             VideoCardCtrl;
 
         var ModuleService,
             c6ImagePreloader,
             c6AppData,
-            adTag;
+            adTag,
+            tracker;
 
 
         function instantiate() {
@@ -48,7 +51,15 @@ define(['minireel', 'services'], function(minireelModule, servicesModule) {
                 });
             });
 
-            module(minireelModule.name, function($provide) {
+            module(trackerModule.name, function($provide) {
+                $provide.decorator('trackerService', function($delegate) {
+                    return jasmine.createSpy('trackerService()').and.callFake(function() {
+                        return (tracker = $delegate.apply(null, arguments));
+                    });
+                });
+            });
+
+            module(appModule.name, function($provide) {
                 $provide.value('c6AppData', {
                     mode: null,
                     profile: {
@@ -56,6 +67,7 @@ define(['minireel', 'services'], function(minireelModule, servicesModule) {
                         touch: false
                     },
                     experience: {
+                        id: 'e-f1d70de8336974',
                         data: {
                             title: 'Foo'
                         }
@@ -79,13 +91,26 @@ define(['minireel', 'services'], function(minireelModule, servicesModule) {
                 c6ImagePreloader = $injector.get('c6ImagePreloader');
                 spyOn(c6ImagePreloader, 'load');
                 c6AppData = $injector.get('c6AppData');
+                MiniReelService = $injector.get('MiniReelService');
+                trackerService = $injector.get('trackerService');
 
                 $scope = $rootScope.$new();
                 $scope.hasModule = function(module) {
                     return $scope.config.modules.indexOf(module) > -1;
                 };
                 $scope.config = {
+                    id: 'rc-dec185bad0c8ee',
+                    title: 'I LOVE This Video!',
                     modules: ['displayAd'],
+                    webHref: 'https://www.youtube.com/watch?v=NLBVBuZ1D-w',
+                    source: 'YouTube',
+                    type: 'youtube',
+                    ballot: {
+                        choices: [
+                            'Too Funny',
+                            'Too Far'
+                        ]
+                    },
                     data: {
                         autoplay: false,
                         vast: 'http://u-ads.adap.tv/a/h/DCQzzI0K2rv1k0TZythPvTfWmlP8j6NQnxBMIgFJa80=?cb={cachebreaker}&pageUrl=mutantplayground.com&eov=eov',
@@ -100,8 +125,10 @@ define(['minireel', 'services'], function(minireelModule, servicesModule) {
                     autoplay: true,
                     touch: false
                 };
+                $scope.number = '3';
                 spyOn($scope, '$emit').and.callThrough();
                 instantiate();
+                spyOn(tracker, 'trackEvent');
             });
         });
 
@@ -131,7 +158,8 @@ define(['minireel', 'services'], function(minireelModule, servicesModule) {
                         companion: null,
                         tracking: {
                             clickFired: false,
-                            countFired: false
+                            countFired: false,
+                            quartiles: [false, false, false, false]
                         },
                         modules: {
                             ballot: {
@@ -631,23 +659,6 @@ define(['minireel', 'services'], function(minireelModule, servicesModule) {
         });
 
         describe('$events', function() {
-            describe('<ballot-vote-module>:vote', function() {
-                beforeEach(function() {
-                    spyOn(VideoCardCtrl, 'closeBallot').and.callThrough();
-                    $scope.config._data.modules.ballot.resultsActive = false;
-
-                    $scope.$emit('<ballot-vote-module>:vote', 0);
-                });
-
-                it('should close the ballot', function() {
-                    expect(VideoCardCtrl.closeBallot).toHaveBeenCalled();
-                });
-
-                it('should show the results', function() {
-                    expect($scope.config._data.modules.ballot.resultsActive).toBe(true);
-                });
-            });
-
             [
                 '<vast-player>:init',
                 '<vpaid-player>:init',
@@ -680,6 +691,214 @@ define(['minireel', 'services'], function(minireelModule, servicesModule) {
 
                         it('should out the player on the controller', function() {
                             expect(VideoCardCtrl.player).toBe(iface);
+                        });
+
+                        describe('<ballot-vote-module>:vote', function() {
+                            beforeEach(function() {
+                                spyOn(VideoCardCtrl, 'closeBallot').and.callThrough();
+                                $scope.config._data.modules.ballot.resultsActive = false;
+
+                                $scope.$emit('<ballot-vote-module>:vote', 0);
+                            });
+
+                            it('should close the ballot', function() {
+                                expect(VideoCardCtrl.closeBallot).toHaveBeenCalled();
+                            });
+
+                            it('should show the results', function() {
+                                expect($scope.config._data.modules.ballot.resultsActive).toBe(true);
+                            });
+                        });
+
+                        describe('video tracking', function() {
+                            function timeupdate(time) {
+                                iface.currentTime = time;
+                                iface.emit('timeupdate');
+                            }
+
+                            function trackingData(action) {
+                                return MiniReelService.getTrackingData($scope.config, $scope.number - 1, {
+                                    category: 'Video',
+                                    action: action,
+                                    label: $scope.config.webHref,
+                                    videoSource: $scope.config.source,
+                                    videoDuration: iface.duration,
+                                    nonInteraction: 0
+                                });
+                            }
+
+                            beforeEach(function() {
+                                iface.duration = 100;
+                                iface.currentTime = 0;
+                            });
+
+                            it('should use the correct tracker', function() {
+                                expect(trackerService).toHaveBeenCalledWith('c6mr');
+                            });
+
+                            describe('if the video has no duration', function() {
+                                beforeEach(function() {
+                                    iface.duration = 0;
+
+                                    [0, 1].forEach(timeupdate);
+                                });
+
+                                it('should not send any events', function() {
+                                    expect(tracker.trackEvent).not.toHaveBeenCalled();
+                                });
+                            });
+
+                            describe('when the video has not been played 25%', function() {
+                                beforeEach(function() {
+                                    [0, 1, 2, 4, 7.3, 24.4].forEach(timeupdate);
+                                });
+
+                                it('should not track any events', function() {
+                                    expect(tracker.trackEvent).not.toHaveBeenCalled();
+                                });
+                            });
+
+                            describe('when the video has been played at least 25%', function() {
+                                beforeEach(function() {
+                                    [24.5, 26, 27].forEach(timeupdate);
+                                });
+
+                                it('should track a single video event for the first quartile', function() {
+                                    expect(tracker.trackEvent).toHaveBeenCalledWith(trackingData('Quartile 1'));
+                                    expect(tracker.trackEvent.calls.count()).toBe(1);
+                                });
+                            });
+
+                            describe('when the video has been played at least 50%', function() {
+                                beforeEach(function() {
+                                    [49.7, 51, 54, 56].forEach(timeupdate);
+                                });
+
+                                it('should track a single video event for the second quartile', function() {
+                                    expect(tracker.trackEvent).toHaveBeenCalledWith(trackingData('Quartile 2'));
+                                    expect(tracker.trackEvent.calls.count()).toBe(1);
+                                });
+                            });
+
+                            describe('when the video has been played at least 75%', function() {
+                                beforeEach(function() {
+                                    [74.7, 75, 76, 78, 83].forEach(timeupdate);
+                                });
+
+                                it('should track a single video event for the third quartile', function() {
+                                    expect(tracker.trackEvent).toHaveBeenCalledWith(trackingData('Quartile 3'));
+                                    expect(tracker.trackEvent.calls.count()).toBe(1);
+                                });
+                            });
+
+                            describe('when the video has been played at least 95%', function() {
+                                beforeEach(function() {
+                                    [94.5, 95, 96, 101].forEach(timeupdate);
+                                });
+
+                                it('should track a single video event for the fourth quartile', function() {
+                                    expect(tracker.trackEvent).toHaveBeenCalledWith(trackingData('Quartile 4'));
+                                    expect(tracker.trackEvent.calls.count()).toBe(1);
+                                });
+                            });
+
+                            describe('when the video plays', function() {
+                                beforeEach(function() {
+                                    expect(tracker.trackEvent).not.toHaveBeenCalled();
+                                });
+
+                                describe('if the card is autoplay', function() {
+                                    beforeEach(function() {
+                                        $scope.config.data.autoplay = true;
+
+                                        iface.emit('play');
+                                    });
+
+                                    it('should track a non-interaction event', function() {
+                                        expect(tracker.trackEvent).toHaveBeenCalledWith((function() {
+                                            var data = trackingData('Play');
+
+                                            data.nonInteraction = 1;
+
+                                            return data;
+                                        }()));
+                                    });
+                                });
+
+                                describe('if the card is not autoplay', function() {
+                                    beforeEach(function() {
+                                        $scope.config.data.autoplay = false;
+
+                                        iface.emit('play');
+                                    });
+
+                                    it('should track an event', function() {
+                                        expect(tracker.trackEvent).toHaveBeenCalledWith(trackingData('Play'));
+                                    });
+                                });
+                            });
+
+                            describe('when the video pauses', function() {
+                                beforeEach(function() {
+                                    expect(tracker.trackEvent).not.toHaveBeenCalled();
+                                    delete $scope.config.source;
+                                    $scope.config.type = 'adUnit';
+
+                                    iface.emit('pause');
+                                });
+
+                                it('should track an event', function() {
+                                    expect(tracker.trackEvent).toHaveBeenCalledWith((function() {
+                                        var data = trackingData('Pause');
+
+                                        data.videoSource = $scope.config.type;
+
+                                        return data;
+                                    }()));
+                                });
+                            });
+
+                            describe('when the video ends', function() {
+                                beforeEach(function() {
+                                    expect(tracker.trackEvent).not.toHaveBeenCalled();
+
+                                    iface.emit('ended');
+                                });
+
+                                it('should track an event', function() {
+                                    expect(tracker.trackEvent).toHaveBeenCalledWith(trackingData('End'));
+                                });
+                            });
+
+                            describe('when the user votes', function() {
+                                beforeEach(function() {
+                                    expect(tracker.trackEvent).not.toHaveBeenCalled();
+
+                                    $scope.$emit('<ballot-vote-module>:vote', 1);
+                                });
+
+                                it('should track an event', function() {
+                                    expect(tracker.trackEvent).toHaveBeenCalledWith((function() {
+                                        var data = trackingData('Vote');
+
+                                        data.label = $scope.config.ballot.choices[1];
+
+                                        return data;
+                                    }()));
+                                });
+
+                                describe('if the user passes on voting', function() {
+                                    beforeEach(function() {
+                                        tracker.trackEvent.calls.reset();
+
+                                        $scope.$emit('<ballot-vote-module>:vote', -1);
+                                    });
+
+                                    it('should not track an event', function() {
+                                        expect(tracker.trackEvent).not.toHaveBeenCalled();
+                                    });
+                                });
+                            });
                         });
 
                         describe('when the video ends', function() {
@@ -1270,19 +1489,19 @@ define(['minireel', 'services'], function(minireelModule, servicesModule) {
 
                 it('should set up a timeupdate handler', function() {
                     iface.emit('ready');
-                    expect(iface.listeners('timeupdate')).toEqual([jasmine.any(Function)]);
+                    expect(iface.listeners('timeupdate')).toEqual([jasmine.any(Function), jasmine.any(Function)]);
                 });
 
                 it('should not set up a timeupdate handler if the countUrl has been fired', function() {
                     $scope.config._data.tracking.countFired = true;
                     iface.emit('ready');
-                    expect(iface.listeners('timeupdate')).toEqual([]);
+                    expect(iface.listeners('timeupdate')).toEqual([jasmine.any(Function)]);
                 });
 
                 it('should not set up a timeupdate handler if there is no minViewTime', function() {
                     $scope.config.campaign = { countUrl: 'count.me' };
                     iface.emit('ready');
-                    expect(iface.listeners('timeupdate')).toEqual([]);
+                    expect(iface.listeners('timeupdate')).toEqual([jasmine.any(Function)]);
                 });
 
                 describe('sets up a timeupdate handler that', function() {
@@ -1298,7 +1517,7 @@ define(['minireel', 'services'], function(minireelModule, servicesModule) {
                                 expect(c6ImagePreloader.load).not.toHaveBeenCalled();
                             } else {
                                 expect(c6ImagePreloader.load).toHaveBeenCalledWith(['count.me']);
-                                expect(iface.listeners('timeupdate')).toEqual([]);
+                                expect(iface.listeners('timeupdate')).toEqual([jasmine.any(Function)]);
                                 expect($scope.config._data.tracking.countFired).toBe(true);
                             }
                         }
@@ -1333,7 +1552,7 @@ define(['minireel', 'services'], function(minireelModule, servicesModule) {
                                 }
                             } else {
                                 expect(c6ImagePreloader.load).toHaveBeenCalledWith(['count.me']);
-                                expect(iface.listeners('timeupdate')).toEqual([]);
+                                expect(iface.listeners('timeupdate')).toEqual([jasmine.any(Function)]);
                                 expect($scope.config._data.tracking.countFired).toBe(true);
                             }
                         }
