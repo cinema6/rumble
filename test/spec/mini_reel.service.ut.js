@@ -11,7 +11,8 @@ define(['app', 'minireel', 'c6uilib', 'angular'], function(appModule, minireelMo
             $q;
 
         var VideoThumbService,
-            c6ImagePreloader;
+            c6ImagePreloader,
+            c6AppData;
 
         beforeEach(function() {
             module(c6uilibModule.name, function($provide) {
@@ -32,7 +33,16 @@ define(['app', 'minireel', 'c6uilib', 'angular'], function(appModule, minireelMo
                         })
                 });
             });
-            module(appModule.name);
+            module(appModule.name, function($provide) {
+                $provide.value('c6AppData', {
+                    experience: {
+                        id: 'e-f1d70de8336974',
+                        data: {
+                            title: 'My Awesome MiniReel'
+                        }
+                    }
+                });
+            });
 
             inject(function($injector) {
                 MiniReelService = $injector.get('MiniReelService');
@@ -42,6 +52,7 @@ define(['app', 'minireel', 'c6uilib', 'angular'], function(appModule, minireelMo
 
                 VideoThumbService = $injector.get('VideoThumbService');
                 c6ImagePreloader = $injector.get('c6ImagePreloader');
+                c6AppData = $injector.get('c6AppData');
             });
         });
 
@@ -51,6 +62,71 @@ define(['app', 'minireel', 'c6uilib', 'angular'], function(appModule, minireelMo
 
         describe('@public', function() {
             describe('methods: ', function() {
+                describe('getTrackingData(card, index, params)', function() {
+                    var card, params,
+                        result;
+
+                    beforeEach(function() {
+                        card = {
+                            id: 'rc-dec185bad0c8ee',
+                            title: 'The Very Best Video'
+                        };
+
+                        params = {
+                            action: 'foo',
+                            label: 'bar'
+                        };
+
+                        result = MiniReelService.getTrackingData(card, 3, params);
+                    });
+
+                    it('should return something containing the params', function() {
+                        expect(result).toEqual(jasmine.objectContaining(params));
+                    });
+
+                    it('should return something containing additional data', function() {
+                        expect(result).toEqual(jasmine.objectContaining({
+                            page: '/mr/' + c6AppData.experience.id + '/' + card.id,
+                            title: c6AppData.experience.data.title + ' - ' + card.title,
+                            slideIndex: 3,
+                            slideId: card.id,
+                            slideTitle: card.title
+                        }));
+                    });
+
+                    describe('if no params are provided', function() {
+                        beforeEach(function() {
+                            result = MiniReelService.getTrackingData(card, 2);
+                        });
+
+                        it('should still work', function() {
+                            expect(result).toEqual({
+                                page: '/mr/' + c6AppData.experience.id + '/' + card.id,
+                                title: c6AppData.experience.data.title + ' - ' + card.title,
+                                slideIndex: 2,
+                                slideId: card.id,
+                                slideTitle: card.title
+                            });
+                        });
+                    });
+
+                    describe('if no card is provided', function() {
+                        beforeEach(function() {
+                            result = MiniReelService.getTrackingData(null, -1);
+                        });
+
+                        it('should return data for the MiniReel', function() {
+                            expect(result).toEqual({
+                                page: '/mr/' + c6AppData.experience.id + '/',
+                                title: c6AppData.experience.data.title,
+                                slideIndex: -1,
+                                slideId: 'null',
+                                slideTitle: 'null'
+                            });
+                        });
+                    });
+                });
+
                 describe('createSocialLinks(links)', function() {
                     var links, result;
 

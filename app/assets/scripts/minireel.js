@@ -10,7 +10,9 @@ function( angular , c6Defines  , tracker ,
     'use strict';
 
     var forEach = angular.forEach,
-        isDefined = angular.isDefined;
+        isDefined = angular.isDefined,
+        extend = angular.extend,
+        copy = angular.copy;
 
     return angular.module('c6.rumble.minireel', [
         tracker.name,
@@ -87,14 +89,30 @@ function( angular , c6Defines  , tracker ,
         };
     }])
     .service('MiniReelService', ['InflectorService','VideoThumbService','$q',
-                                 'c6ImagePreloader','envrootFilter',
+                                 'c6ImagePreloader','envrootFilter','$injector',
     function                    ( InflectorService , VideoThumbService , $q ,
-                                  c6ImagePreloader , envrootFilter ) {
+                                  c6ImagePreloader , envrootFilter , $injector ) {
         var MiniReelService = this;
 
         function isSet(value) {
             return isDefined(value) && value !== null;
         }
+
+        this.getTrackingData = function(card, index, params) {
+            var experience = $injector.get('c6AppData').experience;
+
+            function ifCard(fn) {
+                return card ? fn() : '';
+            }
+
+            return extend(copy(params || {}), {
+                page: '/mr/' + experience.id + '/' + ifCard(function() { return card.id; }),
+                title: experience.data.title + ifCard(function() { return ' - ' + card.title; }),
+                slideIndex: index,
+                slideId: ifCard(function() { return card.id; }) || 'null',
+                slideTitle: ifCard(function() { return card.title; }) || 'null'
+            });
+        };
 
         this.createSocialLinks = function(links) {
             var social = ['Facebook', 'Pinterest', 'Twitter', 'YouTube', 'Vimeo'];
@@ -599,6 +617,10 @@ function( angular , c6Defines  , tracker ,
             return (card || null) && (card.ad && !card.sponsored);
         }
 
+        function getTrackingData(params) {
+            return MiniReelService.getTrackingData($scope.currentCard, $scope.currentIndex, params);
+        }
+
         $log = $log.context('RumbleCtrl');
 
         $scope.deviceProfile    = appData.profile;
@@ -683,16 +705,6 @@ function( angular , c6Defines  , tracker ,
             enabled: true,
             wait: null
         };
-
-        $scope.$on('<ballot-vote-module>:vote', function(event,vote){
-            var label;
-            if ($scope.currentCard) {
-                if (($scope.currentCard.ballot) && ($scope.currentCard.ballot.choices)){
-                    label = $scope.currentCard.ballot.choices[vote];
-                }
-                self.trackVideoEvent($scope.currentCard.player,'Vote',label);
-            }
-        });
 
         $scope.$on('playerAdd',function(event,player){
             $log.log('Player added: %1 - %2',player.getType(),player.getVideoId());
@@ -854,7 +866,7 @@ function( angular , c6Defines  , tracker ,
         };
 
         this.trackNavEvent = function(action,label){
-            tracker.trackEvent(this.getTrackingData({
+            tracker.trackEvent(getTrackingData({
                 category : 'Navigation',
                 action   : action,
                 label    : label
@@ -862,7 +874,7 @@ function( angular , c6Defines  , tracker ,
         };
 
         this.trackVideoEvent = function(player,eventName,eventLabel){
-            var currentCard = $scope.currentCard, nonInteraction = 0;
+            var currentCard = $scope.currentCard;
             if ((!currentCard) || (!currentCard.player)){
                 return;
             }
@@ -871,32 +883,13 @@ function( angular , c6Defines  , tracker ,
                 return;
             }
 
-            if (currentCard.type === 'ad'){
-                tracker.trackEvent(this.getTrackingData({
-                    category        : 'Ad',
-                    action          : eventName,
-                    label           : eventLabel || 'ad',
-                    videoSource     : 'ad',
-                    videoDuration   : Math.round(player.duration),
-                    nonInteraction  : 1
-                }));
-                return;
-            }
-
-            // We report the video plays on autoplay MR's as
-            // nonInteraction events.  This is particularly important
-            // on the first slide as it will impact bounce rates
-            if ( (appData.experience.data.autoplay) && (eventName === 'Play') ){
-                nonInteraction = 1;
-            }
-
-            tracker.trackEvent(this.getTrackingData({
-                category        : 'Video',
+            tracker.trackEvent(getTrackingData({
+                category        : 'Ad',
                 action          : eventName,
-                label           : eventLabel || player.webHref,
-                videoSource     : player.source || player.type,
+                label           : eventLabel || 'ad',
+                videoSource     : 'ad',
                 videoDuration   : Math.round(player.duration),
-                nonInteraction  : nonInteraction
+                nonInteraction  : 1
             }));
         };
 
@@ -944,25 +937,6 @@ function( angular , c6Defines  , tracker ,
                 this.trackVideoEvent( currentCard.player,'Quartile ' + (quartile + 1));
                 currentCard.tracking.quartiles[quartile] = true;
             }
-        };
-        
-        this.getTrackingData = function(params){
-            params = params || {};
-            params.page  = '/mr/' + appData.experience.id + '/';
-            params.title = appData.experience.data.title;
-           
-            params.slideIndex = $scope.currentIndex;
-            if ($scope.currentCard){
-                params.page  += $scope.currentCard.id;
-                params.title += ' - ' + $scope.currentCard.title;
-                params.slideId = $scope.currentCard.id;
-                params.slideTitle = $scope.currentCard.title;
-            } else {
-                params.slideId = 'null';
-                params.slideTitle = 'null';
-            }
-
-            return params;
         };
 
         this.setPosition = function(i){
@@ -1059,10 +1033,10 @@ function( angular , c6Defines  , tracker ,
 
             if ((i === 0) &&  (visited === false) ){
                 // On the first card for the first time, reset the GA session.
-                tracker.trackPage(self.getTrackingData({ sessionControl : 'start' }));
+                tracker.trackPage(getTrackingData({ sessionControl : 'start' }));
             } else
             if (i >= 0) {
-                tracker.trackPage(self.getTrackingData());
+                tracker.trackPage(getTrackingData());
             }
         });
 
