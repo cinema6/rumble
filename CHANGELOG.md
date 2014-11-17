@@ -5,6 +5,10 @@
   * [FIX]: consolidated player styles to work with single video card directive
 
 ## v1.5.2
+* *[v1.5.2.rc2]*
+  * Updated c6ui library to v3.3.1
+* *[/v1.5.2.rc2]*
+
 * *[v1.5.2.rc1]*
   * [FIX]: for solo templates, fixed button positioning of sponsor action button
   * Updated c6ui library to v3.3.0
