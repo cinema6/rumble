@@ -600,7 +600,7 @@
         }
         .card__desc {
             margin:0.375rem 0 0;
-            font-size:0.8125rem;/*13px*/ 
+            font-size:0.875em;/*14px*/ 
             line-height:1.125rem;
         }
         @media screen and (min-width:75rem) and (max-width:106rem) and (min-height:45rem) {
@@ -624,7 +624,7 @@
                 line-height:1.75rem;
             }
             .card__attributes {
-                font-size:0.875em;
+                font-size:0.875rem;
             }
             .card__desc {
                 font-size:0.875em;

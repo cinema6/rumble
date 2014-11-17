@@ -1,5 +1,11 @@
 # MiniReel Player
 
+## v1.6.0
+* *[v1.6.0.rc1]*
+  * [FIX]: Media Queries optimized for small (inch) screens
+  * [FEATURE]: new embedded templates added
+
+
 ## v1.5.2
 * *[v1.5.2.rc2]*
   * Updated c6ui library to v3.3.1

@@ -136,6 +136,16 @@
     .slideNav__btn--small[disabled]:hover .slideNav__icon--next {
         right:25%; left:auto;
     }
+    @media screen and (max-width:74.9375rem), screen and (max-height:44.9375rem) {
+        /*  w: 1199px ++
+        /   h: 719px ++ */
+        .slideNav__btn--med:hover .slideNav__icon--prev {
+            left:40%;
+        }
+        .slideNav__btn--med:hover .slideNav__icon--next {
+            right:40%; left:auto;
+        }
+    }
     @media screen and (min-width:75rem) and (min-height:45rem) {
         /*  w: 1200px ++
         /   h: 720px ++ */
