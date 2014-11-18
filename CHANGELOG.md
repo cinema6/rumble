@@ -3,6 +3,8 @@
 ## v1.6.0
 * *[v1.6.0.rc1]*
   * [FIX]: consolidated player styles to work with single video card directive
+  * [FIX]: Post module is enabled on a video card whenever video is paused
+  * [FIX]: Allow for overriding an election ID when saving a vote
 
 ## v1.5.2
 * *[v1.5.2.rc2]*
