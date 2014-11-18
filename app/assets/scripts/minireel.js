@@ -355,12 +355,12 @@ function( angular , c6Defines  , tracker ,
                 .then(getBallot);
         };
 
-        this.vote = function(id, choiceIndex) {
+        this.vote = function(id, choiceIndex, electionIdOverride) {
             function process() {
                 return true;
             }
 
-            if (!electionId) {
+            if (!electionId && !electionIdOverride) {
                 return fail();
             }
 
@@ -374,7 +374,7 @@ function( angular , c6Defines  , tracker ,
             }
 
             return $http.post(c6UrlMaker('public/vote', 'api'), {
-                election: electionId,
+                election: electionIdOverride || electionId,
                 ballotItem: id,
                 vote: choiceIndex
             }).then(process);

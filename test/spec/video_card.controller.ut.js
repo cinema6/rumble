@@ -976,6 +976,12 @@ define(['app', 'services', 'tracker'], function(appModule, servicesModule, track
                                 });
                             });
 
+                            it('should enable the postModule', function() {
+                                expect($scope.config._data.modules.post.active).toBe(false);
+                                iface.emit('pause');
+                                expect($scope.config._data.modules.post.active).toBe(true);
+                            });
+
                             describe('if the user has not voted', function() {
                                 beforeEach(function() {
                                     $scope.config._data.modules.ballot.vote = null;
