@@ -142,6 +142,16 @@
     .slideNav__btn[disabled]:hover .slideNav__icon--next {
         right:50%; left:auto;
     }
+
+    .slideNav__btn--small:hover .slideNav__icon--prev,
+    .slideNav__btn--med:hover .slideNav__icon--prev {
+        left:16%;
+    }
+    .slideNav__btn--small:hover .slideNav__icon--next,
+    .slideNav__btn--med:hover .slideNav__icon--next {
+        right:16%; left:auto;
+    }
+
     .slideNav__btn--small[disabled]:hover .slideNav__icon--prev {
         left:16%;
     }

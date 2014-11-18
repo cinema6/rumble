@@ -165,7 +165,9 @@ define(['c6uilib', 'services', 'app', 'angular'], function(c6uilibModule, servic
                         .and.returnValue({})
                 });
             });
-            module(appModule.name);
+            module(appModule.name, function($provide) {
+                $provide.value('c6AppData', appData);
+            });
 
             inject(function($injector) {
                 $timeout    = $injector.get('$timeout');
@@ -655,40 +657,15 @@ define(['c6uilib', 'services', 'app', 'angular'], function(c6uilibModule, servic
             });
         });
 
-        describe('getTrackingData', function(){
-            it('returns base experience page if $scope.currentCard not set',function(){
-                $scope.currentCard = null;
-                expect(RumbleCtrl.getTrackingData()).toEqual({
-                    page :  '/mr/e-722bd3c4942331/',
-                    title : 'my title',
-                    slideIndex : -1,
-                    slideId : 'null',
-                    slideTitle : 'null'
-                });
-            });
-
-            it('returns current card url if $scope.currentCard is set',function(){
-                $scope.currentIndex = 0;
-                $scope.currentCard  = deck[0];
-                expect(RumbleCtrl.getTrackingData()).toEqual({
-                    page :  '/mr/e-722bd3c4942331/vid1',
-                    title : 'my title - vid1 caption',
-                    slideIndex : 0,
-                    slideId : 'vid1',
-                    slideTitle : 'vid1 caption'
-                });
-            });
-        });
-
         describe('trackNavEvent',function(){
             beforeEach(function(){
-                spyOn(RumbleCtrl,'getTrackingData');
+                spyOn(MiniReelService,'getTrackingData');
             });
 
             it('tracks actions and labels',function(){
                 RumbleCtrl.trackNavEvent('a1','b2');
-                expect(RumbleCtrl.getTrackingData)
-                    .toHaveBeenCalledWith({
+                expect(MiniReelService.getTrackingData)
+                    .toHaveBeenCalledWith($scope.currentCard, $scope.currentIndex, {
                         category : 'Navigation',
                         action   : 'a1',
                         label    : 'b2'
@@ -710,7 +687,7 @@ define(['c6uilib', 'services', 'app', 'angular'], function(c6uilibModule, servic
                     type : 'video',
                     player : player
                 };
-                spyOn(RumbleCtrl,'getTrackingData');
+                spyOn(MiniReelService,'getTrackingData');
             });
 
             it('does nothing if there is no currentCard',function(){
@@ -744,7 +721,7 @@ define(['c6uilib', 'services', 'app', 'angular'], function(c6uilibModule, servic
                 
                 RumbleCtrl.trackVideoEvent(player,'Play');
                 expect(trackerSpy.trackEvent).toHaveBeenCalled();
-                expect(RumbleCtrl.getTrackingData).toHaveBeenCalledWith({
+                expect(MiniReelService.getTrackingData).toHaveBeenCalledWith($scope.currentCard, $scope.currentIndex, {
                     category : 'Ad',
                     action   : 'Play',
                     label    : 'ad',
@@ -766,81 +743,13 @@ define(['c6uilib', 'services', 'app', 'angular'], function(c6uilibModule, servic
                 
                 RumbleCtrl.trackVideoEvent(player,'Play','fooey');
                 expect(trackerSpy.trackEvent).toHaveBeenCalled();
-                expect(RumbleCtrl.getTrackingData).toHaveBeenCalledWith({
+                expect(MiniReelService.getTrackingData).toHaveBeenCalledWith($scope.currentCard, $scope.currentIndex, {
                     category : 'Ad',
                     action   : 'Play',
                     label    : 'fooey',
                     videoSource : 'ad',
                     videoDuration : 22,
                     nonInteraction : 1
-                });
-            });
-
-            it('tracks as video if player is playing a video', function(){
-                RumbleCtrl.trackVideoEvent(player,'Play');
-                expect(trackerSpy.trackEvent).toHaveBeenCalled();
-                expect(RumbleCtrl.getTrackingData).toHaveBeenCalledWith({
-                    category : 'Video',
-                    action   : 'Play',
-                    label    : 'www.hotsauce.com/xyz',
-                    videoSource : 'Hot Sauce',
-                    videoDuration : 33,
-                    nonInteraction : 0
-                });
-            });
-            
-            it('tracks as nonInteraction if autoplay', function(){
-                appData.experience.data.autoplay = true;
-                RumbleCtrl.trackVideoEvent(player,'Play');
-                expect(trackerSpy.trackEvent).toHaveBeenCalled();
-                expect(RumbleCtrl.getTrackingData).toHaveBeenCalledWith({
-                    category : 'Video',
-                    action   : 'Play',
-                    label    : 'www.hotsauce.com/xyz',
-                    videoSource : 'Hot Sauce',
-                    videoDuration : 33,
-                    nonInteraction : 1
-                });
-            });
-            
-            it('tracks as interaction if autoplay but not Play', function(){
-                appData.experience.data.autoplay = true;
-                RumbleCtrl.trackVideoEvent(player,'Quartile1');
-                expect(trackerSpy.trackEvent).toHaveBeenCalled();
-                expect(RumbleCtrl.getTrackingData).toHaveBeenCalledWith({
-                    category : 'Video',
-                    action   : 'Quartile1',
-                    label    : 'www.hotsauce.com/xyz',
-                    videoSource : 'Hot Sauce',
-                    videoDuration : 33,
-                    nonInteraction : 0
-                });
-            });
-            
-            it('tracks as video if player is playing a video with label', function(){
-                RumbleCtrl.trackVideoEvent(player,'Play','booger');
-                expect(trackerSpy.trackEvent).toHaveBeenCalled();
-                expect(RumbleCtrl.getTrackingData).toHaveBeenCalledWith({
-                    category : 'Video',
-                    action   : 'Play',
-                    label    : 'booger',
-                    videoSource : 'Hot Sauce',
-                    videoDuration : 33,
-                    nonInteraction : 0
-                });
-            });
-
-            it('tracks as video if player is playing a video no source', function(){
-                delete player.source;
-                RumbleCtrl.trackVideoEvent(player,'Play','booger');
-                expect(trackerSpy.trackEvent).toHaveBeenCalled();
-                expect(RumbleCtrl.getTrackingData).toHaveBeenCalledWith({
-                    category : 'Video',
-                    action   : 'Play',
-                    label    : 'booger',
-                    videoSource : 'hotsauce',
-                    videoDuration : 33,
-                    nonInteraction : 0
                 });
             });
         });

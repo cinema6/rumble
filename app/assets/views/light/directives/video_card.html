@@ -1,17 +1,32 @@
 <article class="card__group">
+    <ballot-vote-module 
+        class="ballot__group player__height c6-fade"
+        ng-if="hasModule('ballot')"
+        active="config._data.modules.ballot.ballotActive && active"
+        vote="config._data.modules.ballot.vote"
+        card-id="{{config.id}}"
+        ballot="config.ballot"
+        on-dismiss="Ctrl.closeBallot()">
+    </ballot-vote-module>
+    <ballot-results-module ng-if="hasModule('ballot')"
+        class="ballot__group player__height c6-fade"
+        active="config._data.modules.ballot.resultsActive && active"
+        vote="config._data.modules.ballot.vote"
+        card-id="{{config.id}}"
+        fetch-when="onDeck || active"
+        on-dismiss="Ctrl.closeBallotResults()">
+    </ballot-results-module>
+
     <div class="player__group player__height"
     ng-class="{'player__height--hasSponsor' : !!(config.collateral.logo || config.social.length > 0 || config.params.sponsor)}">
-        <button ng-if="Ctrl.enablePlay" ng-show="Ctrl.showPlay" 
-        ng-click="Ctrl.player.play()" class="player__playBtn">
+        <button ng-if="Ctrl.enablePlay" ng-show="Ctrl.showPlay" ng-click="Ctrl.player.play()" 
+        class="player__playBtn">
             <div class="player__playIcon">
                 <span class="ir">Play Video</span>
             </div>
         </button>
-        <div ng-class="{'ui--offscreen': Ctrl.flyAway}" class="player" ng-switch="Ctrl.adType">
-            <vpaid-player class="playerBox" ng-switch-when="vpaid" ad-tag="{{Ctrl.adTag}}" videoid="{{config.id}}"></vpaid-player>
-            <vast-player class="playerBox" ng-switch-when="vast" ad-tag="{{Ctrl.adTag}}" videoid="{{config.id}}" controls></vast-player>
-        </div>
-        <div ng-show="Ctrl.flyAway" class="player__thumbnail c6-height-limiter"
+        <div ng-class="{'ui--offscreen': Ctrl.flyAway}" class="player js-playerBox"><!-- actual player will be inserted into this container --></div>
+        <div ng-show="Ctrl.flyAway" class="player__thumbnail"
             ng-style="{'background-image':config.thumbs.large ? 'url(' + config.thumbs.large + ')' : ''}">
             <span class="ir"><img ng-src="{{config.thumbs.large}}"></span>
         </div>
@@ -21,7 +36,6 @@
         <a ng-if="!!config.collateral.logo" ng-href="{{config.links.Website}}" target="_blank" title="{{config.params.sponsor}}" class="sponsorProfile__imgBox">
             <img ng-src="{{config.collateral.logo}}" class="sponsorProfile__img" alt="{{config.params.sponsor}}">
         </a>
-
         <div class="card__copy"
         ng-class="{'card__copy--hasSponsor' : hasSponsorship}">
             <h1 class="card__title tk--hdr">
@@ -29,7 +43,7 @@
                 <span ng-if="!config.data.hideSource" 
                 ng-show="!!config.source" 
                 class="card__attributes tk--copy">via&nbsp;<a 
-                ng-href="{{Ctrl.videoUrl}}" target="_blank" 
+                ng-href="{{config.webHref}}" target="_blank" 
                 class="textLink"
                 title="{{config.source}}">{{config.source}}</a></span>
                 <span ng-if="!!config.params.sponsor" class="card__attributes sponsorProfile__tag tk--copy">
@@ -66,6 +80,6 @@
                 <span class="btn__label tk--action">{{action.label}}</span>
             </a>
         </div>
-        
+
     </div>
 </article>

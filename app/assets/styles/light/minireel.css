@@ -420,6 +420,7 @@
             }
                 .player iframe {
                     width:100%; height:100%; position:absolute;
+                    border:0;
                 }
                 .playerBox,
                 .playerBox object,
@@ -428,9 +429,6 @@
                     top:0; left:0;
                     width:100%; height:100%;
                     background:#000;
-                }
-                .player--fly-away {
-                    left:-500%;
                 }
             .player__thumbnail {
                 background:50% 50% / 112% auto no-repeat;

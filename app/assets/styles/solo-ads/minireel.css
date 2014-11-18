@@ -295,23 +295,23 @@
         position:absolute;
         top:1.5em; left:1.5em; right:1.5em; bottom:1.5em;
     }
-    .slides__list, .slides__item,
-    .slide__group {
+    .cards__list, .cards__item,
+    .card__group {
         margin:0; padding:0; list-style:none;
     }
-    .slides__list {
+    .cards__list {
         position: absolute;
         top:0; right:0; bottom:0; left:0;
         overflow: hidden;
     }
-        .slides__item.hidden,
-        .slides__list.hidden {
+        .cards__item.hidden,
+        .cards__list.hidden {
             height:0; overflow:hidden;
         }
-        .slides__item.ng-animate {
+        .cards__item.ng-animate {
             top: 0;
         }
-        .slide__group {
+        .card__group {
             position:absolute;
             width:100%; height:100%;
         }
@@ -344,10 +344,9 @@
             }
                 .player iframe {
                     width:100%; height:100%; position:absolute;
+                    border:0;
                 }
-                .player--fly-away {
-                    left:-500%;
-                }
+
                 .playerBox,
                 .playerBox object,
                 .playerBox video {
@@ -368,7 +367,7 @@
             -webkit-transition:height 0.25s; 
             transition:height 0.25s;
         }
-            .slides__list--noAds .card__copy {
+            .cards__list--noAds .card__copy {
                 bottom:0;
             }
 
@@ -423,7 +422,7 @@
 /*  ================================================
     branded MR styles
     ================================================ */
-    .MiniReel--brandedMR .slides__list {
+    .MiniReel--brandedMR .cards__list {
         top:4.125em;
     }
 

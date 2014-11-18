@@ -44,6 +44,10 @@ function( angular , angularAnimate , angularSanitize , c6uilib , c6log , c6Defin
         .config(['VPAIDServiceProvider', function(VPAIDServiceProvider) {
             VPAIDServiceProvider.swfUrl(c6Defines.kProtocol + '//lib.cinema6.com/c6ui/v3.1.0-0-g58b71cd/videos/swf/player.swf');
         }])
+        .config(['YouTubeDataServiceProvider',
+        function( YouTubeDataServiceProvider ) {
+            YouTubeDataServiceProvider.apiKey('AIzaSyBYOutFJ1yBx8MAYy5OgtTvslvBiFk8wok');
+        }])
         .config(['RumbleVASTServiceProvider','RumbleVPAIDServiceProvider',
         function( RumbleVASTServiceProvider , RumbleVPAIDServiceProvider ) {
             RumbleVASTServiceProvider.adTags({

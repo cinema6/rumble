@@ -66,6 +66,7 @@ function( angular , services ) {
 
             this.pass = function() {
                 $scope.vote = -1;
+                $scope.$emit('<ballot-vote-module>:vote', -1);
             };
         }])
 

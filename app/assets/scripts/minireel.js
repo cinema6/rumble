@@ -1,30 +1,29 @@
 define (['angular','c6_defines','tracker',
-         'cards/ad','cards/dailymotion','cards/recap','cards/vast','cards/vimeo','cards/vpaid',
-         'cards/youtube','cards/text','cards/display_ad','cards/ad_unit',
+         'cards/ad','cards/recap','cards/vast','cards/vpaid','cards/text','cards/display_ad',
+         'cards/video',
          'modules/ballot','modules/companion_ad','modules/display_ad','modules/post'],
 function( angular , c6Defines  , tracker ,
-          adCard   , dailymotionCard   , recapCard   , vastCard   , vimeoCard   , vpaidCard   ,
-          youtubeCard   , textCard   , displayAdCard    , adUnitCard     ,
+          adCard   , recapCard   , vastCard    , vpaidCard  , textCard   , displayAdCard    ,
+          videoCard   ,
           ballotModule   , companionAdModule    , displayAdModule    , postModule   ) {
 
     'use strict';
 
     var forEach = angular.forEach,
-        isDefined = angular.isDefined;
+        isDefined = angular.isDefined,
+        extend = angular.extend,
+        copy = angular.copy;
 
     return angular.module('c6.rumble.minireel', [
         tracker.name,
         // Cards
         adCard.name,
-        dailymotionCard.name,
         recapCard.name,
         vastCard.name,
-        vimeoCard.name,
         vpaidCard.name,
-        youtubeCard.name,
         textCard.name,
         displayAdCard.name,
-        adUnitCard.name,
+        videoCard.name,
         // Modules
         ballotModule.name,
         companionAdModule.name,
@@ -90,14 +89,30 @@ function( angular , c6Defines  , tracker ,
         };
     }])
     .service('MiniReelService', ['InflectorService','VideoThumbService','$q',
-                                 'c6ImagePreloader','envrootFilter',
+                                 'c6ImagePreloader','envrootFilter','$injector',
     function                    ( InflectorService , VideoThumbService , $q ,
-                                  c6ImagePreloader , envrootFilter ) {
+                                  c6ImagePreloader , envrootFilter , $injector ) {
         var MiniReelService = this;
 
         function isSet(value) {
             return isDefined(value) && value !== null;
         }
+
+        this.getTrackingData = function(card, index, params) {
+            var experience = $injector.get('c6AppData').experience;
+
+            function ifCard(fn) {
+                return card ? fn() : '';
+            }
+
+            return extend(copy(params || {}), {
+                page: '/mr/' + experience.id + '/' + ifCard(function() { return card.id; }),
+                title: experience.data.title + ifCard(function() { return ' - ' + card.title; }),
+                slideIndex: index,
+                slideId: ifCard(function() { return card.id; }) || 'null',
+                slideTitle: ifCard(function() { return card.title; }) || 'null'
+            });
+        };
 
         this.createSocialLinks = function(links) {
             var social = ['Facebook', 'Pinterest', 'Twitter', 'YouTube', 'Vimeo'];
@@ -162,6 +177,17 @@ function( angular , c6Defines  , tracker ,
                         return 'http://vimeo.com/' + card.data.videoid;
                     case 'dailymotion':
                         return 'http://www.dailymotion.com/video/' + card.data.videoid;
+                    case 'embedded':
+                        return (function() {
+                            switch (card.data.service) {
+                            case 'aol':
+                                return 'http://on.aol.com/video/' + card.data.videoid;
+                            case 'yahoo':
+                                return 'https://screen.yahoo.com/' + card.data.videoid + '.html';
+                            default:
+                                return null;
+                            }
+                        }());
                     default:
                         return null;
                     }
@@ -602,6 +628,10 @@ function( angular , c6Defines  , tracker ,
             return (card || null) && (card.ad && !card.sponsored);
         }
 
+        function getTrackingData(params) {
+            return MiniReelService.getTrackingData($scope.currentCard, $scope.currentIndex, params);
+        }
+
         $log = $log.context('RumbleCtrl');
 
         $scope.deviceProfile    = appData.profile;
@@ -686,16 +716,6 @@ function( angular , c6Defines  , tracker ,
             enabled: true,
             wait: null
         };
-
-        $scope.$on('<ballot-vote-module>:vote', function(event,vote){
-            var label;
-            if ($scope.currentCard) {
-                if (($scope.currentCard.ballot) && ($scope.currentCard.ballot.choices)){
-                    label = $scope.currentCard.ballot.choices[vote];
-                }
-                self.trackVideoEvent($scope.currentCard.player,'Vote',label);
-            }
-        });
 
         $scope.$on('playerAdd',function(event,player){
             $log.log('Player added: %1 - %2',player.getType(),player.getVideoId());
@@ -857,7 +877,7 @@ function( angular , c6Defines  , tracker ,
         };
 
         this.trackNavEvent = function(action,label){
-            tracker.trackEvent(this.getTrackingData({
+            tracker.trackEvent(getTrackingData({
                 category : 'Navigation',
                 action   : action,
                 label    : label
@@ -865,7 +885,7 @@ function( angular , c6Defines  , tracker ,
         };
 
         this.trackVideoEvent = function(player,eventName,eventLabel){
-            var currentCard = $scope.currentCard, nonInteraction = 0;
+            var currentCard = $scope.currentCard;
             if ((!currentCard) || (!currentCard.player)){
                 return;
             }
@@ -874,32 +894,13 @@ function( angular , c6Defines  , tracker ,
                 return;
             }
 
-            if (currentCard.type === 'ad'){
-                tracker.trackEvent(this.getTrackingData({
-                    category        : 'Ad',
-                    action          : eventName,
-                    label           : eventLabel || 'ad',
-                    videoSource     : 'ad',
-                    videoDuration   : Math.round(player.duration),
-                    nonInteraction  : 1
-                }));
-                return;
-            }
-
-            // We report the video plays on autoplay MR's as
-            // nonInteraction events.  This is particularly important
-            // on the first slide as it will impact bounce rates
-            if ( (appData.experience.data.autoplay) && (eventName === 'Play') ){
-                nonInteraction = 1;
-            }
-
-            tracker.trackEvent(this.getTrackingData({
-                category        : 'Video',
+            tracker.trackEvent(getTrackingData({
+                category        : 'Ad',
                 action          : eventName,
-                label           : eventLabel || player.webHref,
-                videoSource     : player.source || player.type,
+                label           : eventLabel || 'ad',
+                videoSource     : 'ad',
                 videoDuration   : Math.round(player.duration),
-                nonInteraction  : nonInteraction
+                nonInteraction  : 1
             }));
         };
 
@@ -947,25 +948,6 @@ function( angular , c6Defines  , tracker ,
                 this.trackVideoEvent( currentCard.player,'Quartile ' + (quartile + 1));
                 currentCard.tracking.quartiles[quartile] = true;
             }
-        };
-        
-        this.getTrackingData = function(params){
-            params = params || {};
-            params.page  = '/mr/' + appData.experience.id + '/';
-            params.title = appData.experience.data.title;
-           
-            params.slideIndex = $scope.currentIndex;
-            if ($scope.currentCard){
-                params.page  += $scope.currentCard.id;
-                params.title += ' - ' + $scope.currentCard.title;
-                params.slideId = $scope.currentCard.id;
-                params.slideTitle = $scope.currentCard.title;
-            } else {
-                params.slideId = 'null';
-                params.slideTitle = 'null';
-            }
-
-            return params;
         };
 
         this.setPosition = function(i){
@@ -1062,10 +1044,10 @@ function( angular , c6Defines  , tracker ,
 
             if ((i === 0) &&  (visited === false) ){
                 // On the first card for the first time, reset the GA session.
-                tracker.trackPage(self.getTrackingData({ sessionControl : 'start' }));
+                tracker.trackPage(getTrackingData({ sessionControl : 'start' }));
             } else
             if (i >= 0) {
-                tracker.trackPage(self.getTrackingData());
+                tracker.trackPage(getTrackingData());
             }
         });
 
@@ -1284,294 +1266,23 @@ function( angular , c6Defines  , tracker ,
             }
         };
     }])
-    .controller('VideoEmbedCardController', ['$scope','ModuleService','EventService','c6AppData','c6ImagePreloader','$interval',
-    function                                ( $scope , ModuleService , EventService , c6AppData , c6ImagePreloader , $interval ) {
-        var self = this,
-            config = $scope.config,
-            profile = $scope.profile,
-            _data = config._data = config._data || {
-                playerEvents: {},
-                textMode: true,
-                tracking: {
-                    clickFired: false,
-                    countFired: false
-                },
-                modules: {
-                    ballot: {
-                        ballotActive: false,
-                        resultsActive: false,
-                        vote: null
-                    },
-                    displayAd: {
-                        active: false
-                    }
-                }
-            },
-            lastTime = null,
-            elapsedTime = 0,
-            player = null,
-            shouldPlay = false,
-            ballotTargetPlays = 0,
-            resultsTargetPlays = 0;
 
-        Object.defineProperties(this, {
-            flyAway: {
-                get: function() {
-                    var ballot = $scope.config._data.modules.ballot,
-                        behaviors = c6AppData.behaviors;
-
-                    if (!$scope.active) { return true; }
-
-                            /* If we have a ballot:  If the ballot is being show.   If the results are a modal and they're being shown. */
-                    return (this.hasModule('ballot') && (ballot.ballotActive || (ballot.resultsActive && !behaviors.inlineVoteResults))) ||
-                        /* If there is a separate view for text, and if that mode is active: */
-                        (behaviors.separateTextView && _data.textMode) ||
-                        /* If this is a click-to-play minireel, it hasn't been played yet and the play button is enabled */
-                        (!config.data.autoplay && !(_data.playerEvents.play || {}).emitCount && this.enablePlayButton) ||
-                        /* If the post module is present and it is being shown */
-                        ($scope.hasModule('post') && this.postModuleActive);
-                }
-            },
-            showPlay: {
-                get: function() {
-                    return !!player && player.paused;
-                }
-            }
-        });
-
-        this.enablePlayButton = (config.type !== 'dailymotion') &&
-            !profile.touch &&
-            !config.data.autoplay;
-
-        this.videoUrl = null;
-
-        this.experienceTitle = c6AppData.experience.data.title;
-
-        this.postModuleActive = false;
-
-        this.hasModule = ModuleService.hasModule.bind(ModuleService, config.modules);
-
-        this.playVideo = function() {
-            player.play();
-        };
-
-        this.dismissBallot = function() {
-            ballotTargetPlays = _data.playerEvents.play.emitCount;
-        };
-
-        this.dismissBallotResults = function() {
-            resultsTargetPlays = _data.playerEvents.play.emitCount;
-        };
-
-        this.showText = function() {
-            player.pause();
-            _data.textMode = true;
-        };
-
-        this.hideText = function() {
-            if (profile.autoplay) {
-                player.play();
-            }
-
-            _data.textMode = false;
-        };
-
-        $scope.$on('playerAdd', function(event, iface) {
-            player = iface;
-
-            _data.playerEvents = EventService.trackEvents(iface, ['play']);
-
-            Object.defineProperties(_data.modules.ballot, {
-                ballotActive: {
-                    configurable: true,
-                    get: function() {
-                        var playing = (!iface.paused && !iface.ended),
-                            voted = angular.isNumber(_data.modules.ballot.vote),
-                            hasPlayed = _data.playerEvents.play.emitCount > ballotTargetPlays;
-
-                        return !voted && !playing && hasPlayed;
-                    }
-                },
-                resultsActive: {
-                    get: function() {
-                        var playing = (!iface.paused && !iface.ended),
-                            voted = angular.isNumber(this.vote),
-                            hasPlayed = _data.playerEvents.play.emitCount > resultsTargetPlays;
-
-                        if (c6AppData.behaviors.inlineVoteResults) {
-                            return voted;
-                        }
-
-                        return voted && !playing && hasPlayed;
-                    }
-                }
-            });
-
-            iface
-                .once('ready', function() {
-                    self.videoUrl = player.webHref;
-                    if (shouldPlay){
-                        iface.play();
-                    }
-                })
-                .once('play', function() {
-                    _data.modules.displayAd.active = true;
-                })
-                .on('play', function() {
-                    self.postModuleActive = false;
-                })
-                .on('ended', function() {
-                    self.postModuleActive = true;
-
-                    if (!self.hasModule('ballot') && !self.hasModule('post')) {
-                        $scope.$emit('<mr-card>:contentEnd', config.meta || config);
-                    }
-                });
-                
-            // If it's a sponsored card, set up handlers to fire AdCount and Click pixels
-            if (config.campaign) {
-                // Fire the Click pixel after the first play
-                if (config.campaign.clickUrl && !_data.tracking.clickFired) {
-                    iface.once('play', function() {
-                        _data.tracking.clickFired = true;
-                        c6ImagePreloader.load([config.campaign.clickUrl]);
-                    });
-                }
-                
-                // Fire the AdCount pixel after minViewTime, by tracking the elapsed time
-                if (config.campaign.countUrl && config.campaign.minViewTime &&
-                                                !_data.tracking.countFired) {
-                    iface.on('timeupdate', function fireMinViewPixel() {
-                        if (lastTime === null) {
-                            lastTime = iface.currentTime;
-                            return;
-                        }
-
-                        // if diff > 1 sec, it's probably a skip, and don't increment elapsed
-                        if (Math.abs(iface.currentTime - lastTime) <= 1) {
-                            elapsedTime += iface.currentTime - lastTime;
-                        }
-                        lastTime = iface.currentTime;
-                        
-                        if (elapsedTime >= config.campaign.minViewTime && !_data.tracking.countFired) {
-                            _data.tracking.countFired = true;
-                            c6ImagePreloader.load([config.campaign.countUrl]);
-                            iface.removeListener('timeupdate', fireMinViewPixel);
-                        }
-                    });
-                }
-            }
-
-            $scope.$watch('active', function(active, wasActive) {
-                if ((active === wasActive) && (wasActive === false)){ return; }
-
-                if (active) {
-                    if (_data.playerEvents.play.emitCount < 1) {
-                        $scope.$emit('<mr-card>:init', function(navController) {
-                            var skip = config.data.skip || iface.duration,
-                                canSkipAnyTime = skip === true;
-
-                            function handleTimeUpdate() {
-                                var remaining = Math.max(
-                                    skip - iface.currentTime,
-                                    0
-                                );
-
-                                navController.tick(remaining);
-
-                                if (!remaining) {
-                                    navController.enabled(true);
-                                    iface.removeListener('timeupdate', handleTimeUpdate);
-                                }
-                            }
-
-                            if (canSkipAnyTime) { return; }
-
-                            navController.tick(skip)
-                                .enabled(false);
-
-                            if (config.data.skip === false) {
-                                return iface.on('timeupdate', handleTimeUpdate)
-                                    .once('ended', function() {
-                                        navController.enabled(true);
-                                        iface.removeListener('timeupdate', handleTimeUpdate);
-                                    });
-                            }
-
-                            $interval(function() {
-                                navController.tick(--skip);
-
-                                if (!skip) {
-                                    navController.enabled(true);
-                                }
-                            }, 1000, skip);
-                        });
-                    }
-
-                    if (c6AppData.behaviors.canAutoplay &&
-                        c6AppData.profile.autoplay &&
-                        config.data.autoplay) {
-
-                        shouldPlay = true;
-                        iface.play();
-                    }
-
-                    self.dismissBallot();
-                    self.dismissBallotResults();
-                } else {
-                    if (_data.modules.ballot.ballotActive) {
-                        _data.modules.ballot.vote = -1;
-                    }
-
-                    shouldPlay = false;
-                    iface.pause();
-                }
-            });
-
-        });
-
-        $scope.$watch('onDeck', function(onDeck) {
-            if (onDeck && config.thumbs) {
-                c6ImagePreloader.load([config.thumbs.large]);
-            }
-        });
-
-        $scope.$watch('config._data.modules.ballot.vote', function(vote, prevVote) {
-            if (vote === prevVote) { return; }
-
-            self.showText();
-        });
-
-        $scope.$watch('config._data.textMode', function(textMode, wasTextMode) {
-            if (textMode === wasTextMode) { return; }
-
-            self.dismissBallot();
-        });
-    }])
     .directive('mrCard',['$log','$compile','$window','c6UserAgent','InflectorService','c6AppData',
     function            ( $log , $compile , $window , c6UserAgent , InflectorService , c6AppData ){
         $log = $log.context('<mr-card>');
         function fnLink(scope,$element){
-            var canTwerk = false,/*(function() {
-                    if ((c6UserAgent.app.name !== 'chrome') &&
-                        (c6UserAgent.app.name !== 'firefox') &&
-                        (c6UserAgent.app.name !== 'safari')) {
-
-                        $log.warn('Twerking not supported on ' + c6UserAgent.app.name);
-                        return false;
-                    }
-
-                    if (!scope.profile.multiPlayer || !scope.profile.autoplay){
-                        $log.warn('Item cannot be twerked, device not multiplayer or autoplayable.');
-                        return false;
-                    }
-
-                    return true;
-                }()),*/
-                type = scope.config.type,
-                data = scope.config.data;
-
-            var dasherize = InflectorService.dasherize.bind(InflectorService);
+            var type = (function() {
+                switch (scope.config.type) {
+                case 'youtube':
+                case 'vimeo':
+                case 'dailymotion':
+                case 'adUnit':
+                case 'embedded':
+                    return 'video';
+                default:
+                    return InflectorService.dasherize(scope.config.type);
+                }
+            }() + '-card');
 
             $log.info('link:',scope);
 
@@ -1581,36 +1292,7 @@ function( angular , c6Defines  , tracker ,
                 return scope.config.modules.indexOf(module) > -1;
             };
 
-            var inner = '<' + dasherize(type) + '-card';
-            for (var key in data){
-                if ((key !== 'type') && (data.hasOwnProperty(key))){
-                    inner += ' ' + key.toLowerCase() + '="' + data[key] + '"';
-                }
-            }
-
-            if (!scope.profile.inlineVideo){
-                $log.info('Will need to regenerate the player');
-                inner += ' regenerate="1"';
-            }
-
-            if (canTwerk) {
-                $log.info('DAYUM! ' + c6UserAgent.app.name + ' can tweeeerrrrrk!');
-                inner += ' twerk="1"';
-            }
-
-            if (scope.profile.autoplay){
-                $log.info(c6UserAgent.app.name + ' can autoplay videos.');
-                inner += ' autoplay="1"';
-            }
-
-            if (scope.profile.device === 'phone') {
-                $log.info(c6UserAgent.device.name + ' is a phone. Using embeded controls.');
-                inner += ' controls="1"';
-            }
-
-            inner += '></'  + dasherize(type) + '-card' + '>';
-
-            $element.append($compile(inner)(scope));
+            $element.append($compile(['<', type, '></', type, '>'].join(''))(scope));
         }
 
         return {
@@ -1629,6 +1311,4 @@ function( angular , c6Defines  , tracker ,
         };
 
     }]);
-
-
 });

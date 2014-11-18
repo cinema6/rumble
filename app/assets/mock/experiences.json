@@ -62,6 +62,33 @@
             },
             "deck": [
                 {
+                    "id": "rc-977210e130cd35",
+                    "type": "embedded",
+                    "title": "Lara Logan On Self-Quarantine",
+                    "modules": [],
+                    "thumbs": {
+                        "small": "http://pthumbnails.5min.com/10370139/518506904_6_o.jpg",
+                        "large": "http://pthumbnails.5min.com/10370139/518506904_6_o.jpg"
+                    },
+                    "data": {
+                        "code": "<div style='text-align:center'><script type='text/javascript' src='http://pshared.5min.com/Scripts/PlayerSeed.js?sid=281&width=560&height=450&playList=518509224'>< /script><br/></div>"
+                    }
+                },
+                {
+                    "id": "rc-1ec69e57e7a980",
+                    "type": "embedded",
+                    "title": "300 Feet Above Victoria Falls",
+                    "note": "Balancing on a one-inch wide webbing in dizzy heights right in front of the world-famous Victoria Falls in Zimbabwe, Africa is an extraordinary dream that has come true for two professional slackliners.",
+                    "modules": [],
+                    "thumbs": {
+                        "small": "https://s1.yimg.com/lo/api/res/1.2/INPwYYxTYmuafvsoqS3tWA--/YXBwaWQ9eXZpZGVvZmVlZHM7Zmk9ZmlsbDtoPTM2MDt3PTY0MA--/http://media.zenfs.com/en-US/video/video.outsidetv.com/32ac7771db94259e4f20549cf03da447",
+                        "large": "https://s1.yimg.com/lo/api/res/1.2/INPwYYxTYmuafvsoqS3tWA--/YXBwaWQ9eXZpZGVvZmVlZHM7Zmk9ZmlsbDtoPTM2MDt3PTY0MA--/http://media.zenfs.com/en-US/video/video.outsidetv.com/32ac7771db94259e4f20549cf03da447"
+                    },
+                    "data": {
+                        "code": "<iframe src=\"https://screen.yahoo.com/300-feet-above-victoria-falls-200833109.html?format=embed\" width=\"100%\" height=\"100%\"></iframe>"
+                    }
+                },
+                {
                     "id": "rc-22119a8cf9f755",
                     "type": "youtube",
                     "title": "Epic Sax Guy",
@@ -278,6 +305,54 @@
         "data": {
             "title": "JCVD FTW",
             "mode": "light",
+            "deck": [
+                {
+                    "id": "rc-6b35f48684d1ef",
+                    "type": "youtube",
+                    "title": "JCVD FTW",
+                    "note": "And a mind to master the most epic of splits.",
+                    "modules": ["post"],
+                    "links": {
+                        "Action": "https://portal.cinema6.com/#/apps/minireel/studio/dashboard?filter=all&limit=50&page=1",
+                        "Website": "http://cinema6.com/",
+                        "Facebook": "https://www.facebook.com/Cinema6Video",
+                        "Twitter": "https://twitter.com/Cinema6Video",
+                        "YouTube": "http://www.youtube.com/channel/UCSszI_zUkVVA24WVuTYpHTQ",
+                        "Vimeo": "https://vimeo.com/user27205886"
+                    },
+                    "params": {
+                        "sponsor": "Cinema6",
+                        "ad": true,
+                        "action": {
+                            "label": "Learn More",
+                            "type": "button"
+                        }
+                    },
+                    "collateral": {
+                        "logo": "http://cinema6.com/assets/img/c6-logo@2x.png"
+                    },
+                    "data": {
+                        "videoid": "owGykVbfgUE",
+                        "hideSource" : true,
+                        "rel": 0,
+                        "skip": 6,
+                        "modestbranding": 1
+                    }
+                }
+            ]
+        }
+    },
+    {
+        "id": "e-29cedac9c69877",
+        "uri": "rumble",
+        "appUriPrefix": "<%= settings.appUrl %>",
+        "appUri": "rumble",
+        "title": "JCVD FTW",
+        "subtitle": "",
+        "summary": "",
+        "data": {
+            "title": "JCVD FTW",
+            "mode": "solo",
             "deck": [
                 {
                     "id": "rc-6b35f48684d1ef",
