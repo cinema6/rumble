@@ -3,16 +3,16 @@ function( angular ) {
     'use strict';
 
     return angular.module('c6.rumble.cards.ad', [])
-        .controller('AdCardController', ['$scope','c6AppData','adTags','trackerService',
-                                         '$interval','$rootScope','MiniReelService','compileAdTag',
-        function                        ( $scope , c6AppData , adTags , trackerService ,
-                                          $interval , $rootScope , MiniReelService , compileAdTag ) {
+        .controller('AdCardController', ['$scope','c6AppData','adTags','$interval','$rootScope',
+                                         'MiniReelService','compileAdTag',
+        function                        ( $scope , c6AppData , adTags , $interval , $rootScope ,
+                                          MiniReelService , compileAdTag ) {
             var AdCardCtrl = this,
-                config = $scope.config,
                 profile = $scope.profile,
+                config = $scope.config,
                 data = config.data,
                 _data = config._data || (config._data = {
-                    hasPlayed: !data.autoplay,
+                    hasPlayed: false,
                     companion: null,
                     tracking: {
                         clickFired: false,
@@ -21,7 +21,6 @@ function( angular ) {
                     }
                 }),
                 shouldGoForward = false;
-                // tracker = trackerService('c6mr');
 
             function goForward() {
                 AdCardCtrl.player.pause();
@@ -180,14 +179,14 @@ function( angular ) {
             Object.defineProperties(this, {
                 showPlay: {
                     get: function() {
-                        return !!AdCardCtrl.player && AdCardCtrl.player.paused && _data.hasPlayed;
+                        return !!AdCardCtrl.player && AdCardCtrl.player.paused && (_data.hasPlayed || !data.autoplay);
                     }
                 }
             });
 
+            this.player = null;
             this.adType = profile.flash ? 'vpaid' : 'vast';
             this.adTag = compileAdTag(adTags[this.adType][data.source]);
-            this.enablePlayButton = profile.touch;
 
             [
                 '<vast-player>:init',

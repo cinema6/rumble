@@ -6,7 +6,7 @@
                 <vast-player class="playerBox" ng-switch-when="vast" videoid="{{config.id}}-player" ad-tag="{{Ctrl.adTag}}"></vast-player>
             </ng-switch>
         </div>
-        <button style="z-index:2;" ng-if="Ctrl.enablePlayButton" ng-show="Ctrl.showPlay" ng-click="Ctrl.player.play()" class="player__playBtn">
+        <button style="z-index:2;" ng-show="Ctrl.showPlay" ng-click="Ctrl.player.play()" class="player__playBtn">
             <div class="player__playIcon">
                 <span class="ir">Play Video</span>
             </div>
