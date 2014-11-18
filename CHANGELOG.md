@@ -1,7 +1,8 @@
 # MiniReel Player
 
-## v1.6.0
 * *[v1.6.0.rc1]*
+  * [FIX]: Media Queries optimized for small (13 inch) screens
+  * [FEATURE]: new embedded templates added
   * [FIX]: consolidated player styles to work with single video card directive
   * [FIX]: Post module is enabled on a video card whenever video is paused
   * [FIX]: Allow for overriding an election ID when saving a vote

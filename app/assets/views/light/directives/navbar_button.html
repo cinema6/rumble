@@ -1,16 +1,10 @@
-<button class="pages__page" ng-disabled="disableWhen()" ng-click="onSelect();" type="button" 
-	title="Video {{index + 1}} : {{card.title}}"
-	ng-class="{
-		'pages__page--active': active,
-		'pages__page--ad' : card.params.ad
-	}">
-	<span class="pages__current-indicator">
-		<span class="ir">Current Page</span>
-	</span>
-	<span class="pages__label">{{index + 1}}</span>
-	<span class="pages__fader">&nbsp;</span>
-	<span class="pages__preview-img"
-        ng-style="{ backgroundImage: thumb }">
-        <span class="ir">Video {{index + 1}} : {{card.title}}</span>
-    </span>
+<button class="page__btn" ng-disabled="disableWhen()" 
+ng-click="onSelect();" type="button" 
+title="Video {{index + 1}} : {{card.title}}"
+ng-class="{
+    'page__btn--active': active,
+    'page__btn--ad' : card.params.ad
+}">
+    <span class="page__previewImg"
+    ng-style="{ backgroundImage: thumb }">&nbsp;</span>
 </button>
