@@ -1,0 +1,25 @@
+<div class="card__group">
+    <div
+    class="player__group playerHeight">
+        <h1 class="videoAd__label">Advertisement</h1>
+        <div class="js-playerBox player">
+            <ng-switch on="Ctrl.adType">
+                <vpaid-player ng-switch-when="vpaid" videoid="{{config.id}}-player" ad-tag="{{Ctrl.adTag}}"></vpaid-player>
+                <vast-player class="playerBox" ng-switch-when="vast" videoid="{{config.id}}-player" ad-tag="{{Ctrl.adTag}}"></vast-player>
+            </ng-switch>
+        </div>
+        <button style="z-index:2;" ng-if="Ctrl.enablePlayButton"
+        ng-show="Ctrl.showPlay" ng-click="Ctrl.player.play()"
+        class="player__playBtn">
+            <div class="player__playIcon">
+                <span class="ir">Play Video</span>
+            </div>
+        </button>
+    </div>
+    <section class="companionAd__group">
+        <companion-ad-module active="true"
+            ad-src="{{config.displayAd}}"
+            companion="config._data.companion">
+        </companion-ad-module>
+    </section>
+</div>
