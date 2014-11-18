@@ -161,6 +161,8 @@ function( angular ) {
                             ballot.ballotActive = true;
                         }
 
+                        _data.modules.post.active = true;
+
                         trackVideoEvent('Pause');
                     })
                     .on('timeupdate', trackVideoPlayback)
