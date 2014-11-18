@@ -1,123 +1,151 @@
-/*  ==========================================================================
-    .pager__group classes
-    ========================================================================== */
-    .pages__fader, 
-    .pages__current-indicator {
-        -webkit-transition: opacity 0.5s ease; 
-        -moz-transition: opacity 0.5s ease; 
-        -o-transition: opacity 0.5s ease; 
-        transition: opacity 0.5s ease;
-    }
-    .pager__btn, .pager__btn:hover {
-        -webkit-transition: background 0.4s ease; 
-        -moz-transition: background 0.4s ease; 
-        -o-transition: background 0.4s ease; 
-        transition: background 0.4s ease;
-    }
-    .pager__icon-path, 
-    .pager__btn:hover .pager__icon-path {
-        -webkit-transition: fill 0.4s ease; 
-        -moz-transition: fill 0.4s ease; 
-        -o-transition: fill 0.4s ease; 
-        transition: fill 0.4s ease;
-}
-    .pager__btn, .pager__icon-path {
-        -webkit-transition-delay: 0.1s;
-        -moz-transition-delay: 0.1s;
-        -o-transition-delay: 0.1s;
-        transition-delay: 0.1s;
-    }
-        .pages__page:hover .pages__fader {
-            opacity:0;
-        }
-        .pager__btn:hover {
-            -webkit-transition-delay: 0;
-            -moz-transition-delay: 0;
-            -o-transition-delay: 0;
-            transition-delay: 0;
-            background:#fff no-repeat 50% 50%;
-        }
-            .pager__label {
-                -webkit-transition: color 0.4s ease; 
-                -moz-transition: color 0.4s ease; 
-                -o-transition: color 0.4s ease; 
-                transition: color 0.4s ease;
-            }
-            .pager__btn:hover .pager__label {
-                color:#d94040;
-            }
-            .pager__btn:hover .pager__icon-path {
-                -webkit-transition-delay: 0;
-                -moz-transition-delay: 0;
-                -o-transition-delay: 0;
-                transition-delay: 0;
-                fill: #d94040;
-            }
-        .pager__btn--disabled:hover {
-            background:#d94040 no-repeat 50% 50%;
-        }
-            .pager__btn--disabled:hover .pager__label {
-                color:#1b1b1b;
-            }
-            .pager__btn--disabled:hover .pager__icon-path {
-                fill: #1b1b1b;
-            }
-
-    .pages__preview-img {
-        transition: background 0.5s ease;
-    }
-    .pages__page:hover .pages__preview-img {
-        background-size:150%;
+/*  ================================================
+    background transitions
+    ================================================ */
+    .btnPrimary,
+    .player__playBtn,
+    .recap__item,
+    .ballot__btn:before {
+        -webkit-transition:background 0.3s; 
+        transition:background 0.3s;
     }
 
-/*  ==========================================================================
-    .ui-navbar classes
-    ========================================================================== */    
-    .ui-control__preview-img {
-        -webkit-transition:opacity 0.5s; transition:opacity 0.5s;
+    .btnPrimary:hover {
+        background-color:#fff;
     }
-        .ui-nav__prev:hover .ui-control__preview-img, 
-        .ui-nav__next:hover .ui-control__preview-img {
-            opacity:0.76;
-        }
-    .ui-navbar__page {
-        -webkit-transition:background 0.5s; transition:background 0.5s;
+    .recap__item:hover {
+        background-color:#eee;
     }
-        .ui-navbar__page:hover {
-            background:#4c4c4c;
-        }
-        .ui-navbar__page .ui-control__preview-img--active {
-            opacity:1;
-        }
-        .ui-navbar__page:hover .ui-control__preview-img {
-            opacity:1;
-        }
+
+    .ballot__btn:hover:before,
+    .player__playBtn:hover {
+        background-color:#d94040;
+    }
+
+    .ballot__btn1:hover:before {
+        background-color:#1789cb;
+    }
+
+
 
 
 /*  ================================================
-    sponsored card styles
+    color transitions
+    ================================================ */
+    .btnLabel {
+        -webkit-transition:color 0.3s; transition:color 0.3s;
+    }
+
+    .btnPrimary:hover .btn__label {
+        color:#d94040;
+    }
+
+    .ballot__btn1:hover .ballot__btnLabel {
+        color:#1789cb;
+    }
+
+
+
+
+
+/*  ================================================
+    border transitions
     ================================================ */
     .sponsorProfile__imgBox {
-        -webkit-transition:border 0.5s;
-        transition:border 0.5s;
+        -webkit-transition: border 0.3s ease; 
+        transition: border 0.3s ease;
     }
+
     .sponsorProfile__imgBox:hover {
-        border:1px solid #d94040;
+        border-color:#d94040;
     }
-    .sponsorProfile__link:hover {
-        border:0;
+    .textLink:hover {
+        border-bottom:1px dotted #d94040;
     }
-    .sponsor__goBtn:hover {
-        color:#fff;
+    .recap__item:hover {
+        border-left:3px solid #d94040;
     }
 
 
-/*  ==========================================================================
-    Splash Screen classes
-    ========================================================================== */
-    .splash__bar {
-        -webkit-transition: background 0.2s ease; 
-        -moz-transition: background 0.2s ease; 
-        -o-transition: background 0.2s ease; 
-        transition: background 0.2s ease;
+
+
+/*  ================================================
+    fill transitions
+    ================================================ */
+    .pager__btnIconPath {
+        -webkit-transition:fill 0.3s; transition:fill 0.3s;
+    }
+
+    .pager__btn:hover .pager__btnIconPath {
+        fill:#d94040;
+    }
+    .pager__btn[disabled]:hover .pager__btnIconPath {
+        fill:#fff;
+    }
+
+
+
+
+
+
+/*  ================================================
+    opacity transitions
+    ================================================ */
+    .textOnly__imgBox:after {
+        -webkit-transition:opacity 0.3s; transition:opacity 0.3s;
+    }
+
+    .textOnly__imgBox:hover:after {
+        opacity:0.5;
+    }
+
+    .page__previewImg:hover:before {
+        opacity:0;
+    }
+
+
+
+/*  ================================================
+    position transitions
+    ================================================ */
+    .pager__btnIcon {
+        -webkit-transition:left 0.2s, right 0.2s, top 0.2s, bottom 0.2s; 
+        transition:left 0.2s, right 0.2s, top 0.2s, bottom 0.2s; 
+    }
+
+    .pager__btn:hover .pager__btnIcon--prev {
+        left:8%;
+    }
+    .pager__btn:hover .pager__btnIcon--next {
+        right:8%;
+    }
+    .pager__btn[disabled]:hover .pager__btnIcon--prev {
+        left:12.5%;
+    }
+    .pager__btn[disabled]:hover .pager__btnIcon--next {
+        right:12.5%;
+    }
+
+
+
+
+/*  ================================================
+    transform transitions
+    ================================================ */
+    .page__btn:hover .page__previewImg {
+        -webkit-transform: scale(1.25);
+        transform: scale(1.25);
+    }
+        .page__btn--active:hover .page__previewImg {
+            -webkit-transform: scale(1.12);
+            transform: scale(1.12);
+        }
+
+
+
+
+/*  ================================================
+    misc transitions
+    ================================================ */
+    .btnPrimary:hover .btn__label {
+        text-shadow: none;
     }

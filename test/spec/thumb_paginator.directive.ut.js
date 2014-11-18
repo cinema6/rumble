@@ -192,8 +192,8 @@ define(['app'], function(appModule) {
                     '</ul>'
                 ].join('\n'));
 
-                expect($pager.find('.pager__prev').width()).toBe(61);
-                expect($pager.find('.pager__next').width()).toBe(61);
+                expect($pager.find('.pager__btn--prev').width()).toBe(61);
+                expect($pager.find('.pager__btn--next').width()).toBe(61);
             });
 
             it('should take the minimum width of the buttons into account', function() {
@@ -205,8 +205,8 @@ define(['app'], function(appModule) {
                     '</ul>'
                 ].join('\n'));
 
-                expect($pager.find('.pager__prev').width()).toBe(61);
-                expect($pager.find('.pager__next').width()).toBe(61);
+                expect($pager.find('.pager__btn--prev').width()).toBe(61);
+                expect($pager.find('.pager__btn--next').width()).toBe(61);
             });
 
             it('should re-fetch the minimum width of the buttons when the window resizes', function() {
@@ -222,8 +222,8 @@ define(['app'], function(appModule) {
                 $($window).trigger('resize');
                 $timeout.flush();
 
-                expect($pager.find('.pager__prev').width()).toBe(111);
-                expect($pager.find('.pager__next').width()).toBe(111);
+                expect($pager.find('.pager__btn--prev').width()).toBe(111);
+                expect($pager.find('.pager__btn--next').width()).toBe(111);
             });
 
             it('should update the width of the thumbnails when the window resizes', function() {
@@ -239,8 +239,8 @@ define(['app'], function(appModule) {
                 $($window).trigger('resize');
                 $timeout.flush();
 
-                expect($pager.find('.pager__prev').width()).toBe(73);
-                expect($pager.find('.pager__next').width()).toBe(73);
+                expect($pager.find('.pager__btn--prev').width()).toBe(73);
+                expect($pager.find('.pager__btn--next').width()).toBe(73);
             });
 
             it('should not impose a width if all the buttons fit on one page', function() {
@@ -252,8 +252,8 @@ define(['app'], function(appModule) {
                     '</ul>'
                 ].join('\n'));
 
-                expect($pager.find('.pager__prev').prop('style').width).toBe('');
-                expect($pager.find('.pager__next').prop('style').width).toBe('');
+                expect($pager.find('.pager__btn--prev').prop('style').width).toBe('');
+                expect($pager.find('.pager__btn--next').prop('style').width).toBe('');
                 expect($pager.find('.pages__group').prop('style').left).not.toBe('');
                 expect($pager.find('.pages__group').prop('style').right).not.toBe('');
             });
@@ -307,27 +307,27 @@ define(['app'], function(appModule) {
                 var $scroller = $pager.find('.pages__scroller'),
                     style = $scroller.prop('style');
 
-                expect(style.left).toBe('0%');
+                expect(style['-webkit-transform']).toBe('translateX(0%)');
 
                 $scope.$apply(function() {
                     $scope.activeIndex = 4;
                 });
-                expect(style.left).toBe('0%');
+                expect(style['-webkit-transform']).toBe('translateX(0%)');
 
                 $scope.$apply(function() {
                     $scope.activeIndex = 6;
                 });
-                expect(style.left).toBe('-100%');
+                expect(style['-webkit-transform']).toBe('translateX(-100%)');
 
                 $scope.$apply(function() {
                     $scope.activeIndex = -1;
                 });
-                expect(style.left).toBe('-100%');
+                expect(style['-webkit-transform']).toBe('translateX(-100%)');
 
                 $scope.$apply(function() {
                     $scope.activeIndex = 4;
                 });
-                expect(style.left).toBe('0%');
+                expect(style['-webkit-transform']).toBe('translateX(0%)');
             });
         });
 
