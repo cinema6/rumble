@@ -1,15 +1,17 @@
 <div class="recap__group">
     <ul class="recap__list">
-        <li class="recap__item card card-shadow clearfix" ng-repeat="card in Ctrl.deck">
+        <li class="recap__item card__group clearfix" ng-repeat="card in Ctrl.deck">
             <button class="recap__imgBtn" type="button" 
             ng-click="Ctrl.jumpTo(card)"
             ng-class="{'recap__imgBtn--ad':card.params.ad}">
                 <span class="recap__imgBox" style="background-image:url({{card.thumbs.large}});">&nbsp;</span>
             </button>
             <div class="recap__copyBox">
-                <h1 class="card__title-h1 tk--hdr" ng-click="Ctrl.jumpTo(card)">{{card.title}}</h1>
-                <p ng-if="!card.data.hideSource" ng-show="!!card.source" class="card__attributes">via <a ng-href="{{card.webHref}}" target="_blank" title="{{card.source}}">{{card.source}}</a></p>
-                <p ng-if="!!card.params.sponsor" class="card__attributes card__attributes--sponsor">sponsored by  
+                <h1 class="recap-item__title tk--hdr" 
+                ng-click="Ctrl.jumpTo(card)">{{card.title}}</h1>
+                <p ng-if="!card.data.hideSource" ng-show="!!card.source" 
+                class="recap-item__attributes">via <a ng-href="{{card.webHref}}" target="_blank" title="{{card.source}}">{{card.source}}</a></p>
+                <p ng-if="!!card.params.sponsor" class="recap-item__attributes">sponsored by  
                     <a ng-href="{{card.links.Website}}"
                         target="_blank" 
                         title="{{card.params.sponsor}}"
@@ -17,35 +19,7 @@
                         {{card.params.sponsor}}
                     </a>
                 </p>
-                <div class="recap__ballotInfo" ng-show="card.hasModule('ballot')">
-                    <h3 class="results__title recap__ballotQuestion">Questionnaire: <strong>{{card.ballot.prompt}}</strong></h3>
-                    <p class="recap__ballotResults">
-                        <span class="recap__ballotA">
-                            {{card.ballot.choices[0]}} <strong>{{card.ballot.results[0].votes | percent}}</strong>
-                        </span> &nbsp;|&nbsp;
-                        <span class="recap__ballotB">
-                            {{card.ballot.choices[1]}} <strong>{{card.ballot.results[1].votes | percent}}</strong>
-                        </span>
-                    </p>
-                </div>
             </div>
         </li>
     </ul>
 </div>
-
-<!--<div class="more-reels__group">
-    <header>
-        <h3 class="more-reels__intro">{{config.data.message}}</h3>
-    </header>
-    <ul class="more-reels__list">
-        <li class="more-reels__item card card-shadow" ng-repeat="this in Ctrl.miniReels">
-            <article>
-                <h1 class="more-reels__title tk--hdr">{{this.title}}</h1>
-                <div class="more-reels__preview">
-                    <span class="ir"><img src="http://lorempixel.com/800/400/" class="more-reels__preview-img"></span>
-                </div>
-                <div class="more-reels__copy">{{this.summary}}</div>
-            </article>
-        </li>
-    </ul>
-</div>-->

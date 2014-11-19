@@ -2,11 +2,13 @@
     background transitions
     ================================================ */
     .btnPrimary,
+    .ballot__btn:before,
     .actionsModal__btn:after {
         -webkit-transition:background 0.3s; 
         transition:background 0.3s;
     }
 
+    .ballot__btn:hover:before,
     .actionsModal__btn:hover:after {
         background-color:#d94040;
     }

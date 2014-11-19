@@ -3,8 +3,8 @@
 
     <ul class="results__list">
         <li class="results__item results__item{{$index}}" ng-repeat="choice in Ctrl.ballot">
-            <p class="results__option">{{choice.name}}</p>
-            <p class="results__tally">{{choice.votes | percent}}</p>
+            <p class="results__option tk--action">{{choice.name}}</p>
+            <p class="results__tally tk--action">{{choice.votes | percent}}</p>
         </li>
     </ul>
     <div class="results__meter">
