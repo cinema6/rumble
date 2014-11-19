@@ -1,4 +1,4 @@
-define(['app', 'services'], function(appModule, servicesModule) {
+define(['app', 'tracker', 'services'], function(appModule, trackerModule, servicesModule) {
     'use strict';
 
     describe('AdCardController', function() {
@@ -8,13 +8,15 @@ define(['app', 'services'], function(appModule, servicesModule) {
             $interval,
             c6EventEmitter,
             compileAdTag,
+            trackerService,
+            VideoTrackerService,
             MiniReelService,
             AdCardCtrl;
 
-        var ModuleService,
-            c6AppData,
+        var c6AppData,
             adTag,
-            adTags;
+            adTags,
+            tracker;
 
 
         function instantiate() {
@@ -49,6 +51,14 @@ define(['app', 'services'], function(appModule, servicesModule) {
                 });
             });
 
+            module(trackerModule.name, function($provide) {
+                $provide.decorator('trackerService', function($delegate) {
+                    return jasmine.createSpy('trackerService()').and.callFake(function() {
+                        return (tracker = $delegate.apply(null, arguments));
+                    });
+                });
+            });
+
             module(appModule.name, function($provide) {
                 $provide.value('c6AppData', {
                     mode: null,
@@ -75,6 +85,8 @@ define(['app', 'services'], function(appModule, servicesModule) {
                 $interval = $injector.get('$interval');
                 c6EventEmitter = $injector.get('c6EventEmitter');
                 compileAdTag = $injector.get('compileAdTag');
+                trackerService = $injector.get('trackerService');
+                VideoTrackerService = $injector.get('VideoTrackerService');
 
                 c6AppData = $injector.get('c6AppData');
                 MiniReelService = $injector.get('MiniReelService');
@@ -99,6 +111,7 @@ define(['app', 'services'], function(appModule, servicesModule) {
                 spyOn($scope, '$emit').and.callThrough();
                 spyOn($rootScope, '$broadcast').and.callThrough();
                 instantiate();
+                spyOn(tracker, 'trackEvent');
             });
         });
 
@@ -125,12 +138,7 @@ define(['app', 'services'], function(appModule, servicesModule) {
                 it('should create some data', function() {
                     expect($scope.config._data).toEqual({
                         hasPlayed: false,
-                        companion: null,
-                        tracking: {
-                            clickFired: false,
-                            countFired: false,
-                            quartiles: [false, false, false, false]
-                        }
+                        companion: null
                     });
                 });
             });
@@ -166,7 +174,7 @@ define(['app', 'services'], function(appModule, servicesModule) {
                     it('should be the vast tag', function() {
                         $scope.profile.flash = false;
                         instantiate();
-                        expect(compileAdTag).toHaveBeenCalledWith(adTags['vast']['cinema6']);
+                        expect(compileAdTag).toHaveBeenCalledWith(adTags.vast.cinema6);
                         expect(AdCardCtrl.adTag).toBe(adTag);
                     });
                 });
@@ -175,7 +183,7 @@ define(['app', 'services'], function(appModule, servicesModule) {
                     it('should be vpaid', function() {
                         $scope.profile.flash = true;
                         instantiate();
-                        expect(compileAdTag).toHaveBeenCalledWith(adTags['vpaid']['cinema6']);
+                        expect(compileAdTag).toHaveBeenCalledWith(adTags.vpaid.cinema6);
                         expect(AdCardCtrl.adTag).toBe(adTag);
                     });
                 });
@@ -271,6 +279,8 @@ define(['app', 'services'], function(appModule, servicesModule) {
 
                     describe('when the iface is ready', function() {
                         beforeEach(function() {
+                            spyOn(VideoTrackerService, 'trackQuartiles').and.callThrough();
+
                             $scope.$apply(function() {
                                 iface.emit('ready');
                             });
@@ -278,6 +288,83 @@ define(['app', 'services'], function(appModule, servicesModule) {
 
                         it('should put the player on the controller', function() {
                             expect(AdCardCtrl.player).toBe(iface);
+                        });
+
+                        describe('video tracking', function() {
+                            function trackingData(action) {
+                                return MiniReelService.getTrackingData($scope.config, 'null', {
+                                    category: 'Ad',
+                                    action: action,
+                                    label: 'ad',
+                                    videoSource: 'ad',
+                                    videoDuration: iface.duration,
+                                    nonInteraction: 1
+                                });
+                            }
+
+                            beforeEach(function() {
+                                iface.duration = 100;
+                                iface.currentTime = 0;
+                            });
+
+                            it('should use the correct tracker', function() {
+                                expect(trackerService).toHaveBeenCalledWith('c6mr');
+                            });
+
+                            describe('quartiles', function() {
+                                var callback;
+
+                                beforeEach(function() {
+                                    callback = VideoTrackerService.trackQuartiles.calls.mostRecent().args[2];
+                                });
+
+                                it('should track the quartiles', function() {
+                                    expect(VideoTrackerService.trackQuartiles).toHaveBeenCalledWith($scope.config.id, iface, jasmine.any(Function));
+                                });
+
+                                it('should track an event for each quartile', function() {
+                                    [1, 2, 3, 4].forEach(function(quartile) {
+                                        callback(quartile);
+                                        expect(tracker.trackEvent).toHaveBeenCalledWith(trackingData('Quartile ' + quartile));
+                                    });
+                                });
+                            });
+
+                            describe('when the video plays', function() {
+                                beforeEach(function() {
+                                    expect(tracker.trackEvent).not.toHaveBeenCalled();
+
+                                    iface.emit('play');
+                                });
+
+                                it('should track an event', function() {
+                                    expect(tracker.trackEvent).toHaveBeenCalledWith(trackingData('Play'));
+                                });
+                            });
+
+                            describe('when the video pauses', function() {
+                                beforeEach(function() {
+                                    expect(tracker.trackEvent).not.toHaveBeenCalled();
+
+                                    iface.emit('pause');
+                                });
+
+                                it('should track an event', function() {
+                                    expect(tracker.trackEvent).toHaveBeenCalledWith(trackingData('Pause'));
+                                });
+                            });
+
+                            describe('when the video ends', function() {
+                                beforeEach(function() {
+                                    expect(tracker.trackEvent).not.toHaveBeenCalled();
+
+                                    iface.emit('ended');
+                                });
+
+                                it('should track an event', function() {
+                                    expect(tracker.trackEvent).toHaveBeenCalledWith(trackingData('End'));
+                                });
+                            });
                         });
 
                         describe('when the video ends', function() {
