@@ -3,6 +3,33 @@ function( angular , c6uilib , adtech , c6Defines  ) {
     'use strict';
 
     return angular.module('c6.rumble.services', [c6uilib.name])
+        .service('VideoTrackerService', [function() {
+            var quartilesCache = {};
+
+            this.trackQuartiles = function(id, player, cb) {
+                var quartiles = quartilesCache[id] ||
+                    (quartilesCache[id] = [false, false, false, false]);
+
+                function trackVideoPlayback() {
+                    var duration = player.duration,
+                        currentTime = Math.min(player.currentTime, duration),
+                        percent = (Math.round((currentTime / duration) * 100) / 100),
+                        quartile = (function() {
+                            if (percent >= 0.95) { return 3; }
+
+                            return Math.floor(percent * 4) - 1;
+                        }());
+
+                    if (quartile > -1 && !quartiles[quartile]) {
+                        cb(quartile + 1);
+                        quartiles[quartile] = true;
+                    }
+                }
+
+                player.on('timeupdate', trackVideoPlayback);
+            };
+        }])
+
         .service('VideoThumbService', ['$http','$q','c6UrlMaker',
         function                      ( $http , $q , c6UrlMaker ) {
             var _private = {};

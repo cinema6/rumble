@@ -4,22 +4,20 @@ function( angular ) {
 
     return angular.module('c6.rumble.cards.ad', [])
         .controller('AdCardController', ['$scope','c6AppData','adTags','$interval','$rootScope',
-                                         'MiniReelService','compileAdTag',
+                                         'MiniReelService','compileAdTag','trackerService',
+                                         'VideoTrackerService',
         function                        ( $scope , c6AppData , adTags , $interval , $rootScope ,
-                                          MiniReelService , compileAdTag ) {
+                                          MiniReelService , compileAdTag , trackerService ,
+                                          VideoTrackerService ) {
             var AdCardCtrl = this,
                 profile = $scope.profile,
                 config = $scope.config,
                 data = config.data,
                 _data = config._data || (config._data = {
                     hasPlayed: false,
-                    companion: null,
-                    tracking: {
-                        clickFired: false,
-                        countFired: false,
-                        quartiles: [false, false, false, false]
-                    }
+                    companion: null
                 }),
+                tracker = trackerService('c6mr'),
                 shouldGoForward = false;
 
             function goForward() {
@@ -86,6 +84,17 @@ function( angular ) {
                     player.pause();
                 }
 
+                function trackVideoEvent(event) {
+                    tracker.trackEvent(MiniReelService.getTrackingData(config, 'null', {
+                        category: 'Ad',
+                        action: event,
+                        label: 'ad',
+                        videoSource: 'ad',
+                        videoDuration: player.duration,
+                        nonInteraction: 1
+                    }));
+                }
+
                 player
                     .once('companionsReady', function() {
                         var companions = player.getCompanions(300, 250);
@@ -94,6 +103,11 @@ function( angular ) {
                     })
                     .on('play', function() {
                         _data.hasPlayed = true;
+
+                        trackVideoEvent('Play');
+                    })
+                    .on('pause', function() {
+                        trackVideoEvent('Pause');
                     })
                     .on('ended', function() {
                         if ($scope.active) {
@@ -101,6 +115,8 @@ function( angular ) {
                         } else {
                             shouldGoForward = true;
                         }
+
+                        trackVideoEvent('End');
                     })
                     .on('error', function() {
                         if ($scope.active) {
@@ -109,6 +125,10 @@ function( angular ) {
                             shouldGoForward = true;
                         }
                     });
+
+                VideoTrackerService.trackQuartiles(config.id, player, function(quartile) {
+                    trackVideoEvent('Quartile ' + quartile);
+                });
 
                 $scope.$watch('onDeck', function(onDeck) {
                     if (onDeck) {
