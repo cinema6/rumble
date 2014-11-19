@@ -1,9 +1,9 @@
 define (['angular','c6_defines','tracker',
-         'cards/ad','cards/recap','cards/vast','cards/vpaid','cards/text','cards/display_ad',
+         'cards/ad','cards/recap','cards/text','cards/display_ad',
          'cards/video',
          'modules/ballot','modules/companion_ad','modules/display_ad','modules/post'],
 function( angular , c6Defines  , tracker ,
-          adCard   , recapCard   , vastCard    , vpaidCard  , textCard   , displayAdCard    ,
+          adCard   , recapCard   , textCard   , displayAdCard    ,
           videoCard   ,
           ballotModule   , companionAdModule    , displayAdModule    , postModule   ) {
 
@@ -19,8 +19,6 @@ function( angular , c6Defines  , tracker ,
         // Cards
         adCard.name,
         recapCard.name,
-        vastCard.name,
-        vpaidCard.name,
         textCard.name,
         displayAdCard.name,
         videoCard.name,
