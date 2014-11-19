@@ -471,7 +471,7 @@ define(['app', 'minireel', 'c6uilib', 'angular'], function(appModule, minireelMo
                         }
 
                         function isVideo(card) {
-                            return (/^(youtube|vimeo|dailymotion|adUnit)$/).test(card.type);
+                            return (/^(youtube|vimeo|dailymotion|adUnit|embedded)$/).test(card.type);
                         }
 
                         function isSet(object, prop) {
