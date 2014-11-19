@@ -37,8 +37,7 @@ function( angular ) {
                 AdCardCtrl.player = player;
 
                 function controlNav(NavController) {
-                    var canSkipAnytime = data.skip === true,
-                        mustWatchEntireVideo = data.skip === false;
+                    var canSkipAnytime = data.skip === true;
 
                     function tickNav() {
                         var remaining = Math.max((data.skip || player.duration) - player.currentTime, 0);
@@ -56,21 +55,11 @@ function( angular ) {
                     NavController.enabled(false)
                         .tick(data.skip || player.duration);
 
-                    if (mustWatchEntireVideo) {
-                        return player.on('timeupdate', tickNav)
-                            .once('ended', function() {
-                                NavController.enabled(true);
-                                player.removeListener('timeupdate', tickNav);
-                            });
-                    }
-
-                    $interval(function() {
-                        NavController.tick(--data.skip);
-
-                        if (!data.skip) {
+                    return player.on('timeupdate', tickNav)
+                        .once('ended', function() {
                             NavController.enabled(true);
-                        }
-                    }, 1000, data.skip);
+                            player.removeListener('timeupdate', tickNav);
+                        });
                 }
 
                 function prepareCard() {
@@ -78,10 +67,6 @@ function( angular ) {
                 }
 
                 function activateCard() {
-                    if (c6AppData.experience.data.mode === 'lightbox') {
-                        $rootScope.$broadcast('resize');
-                    }
-
                     if (config.meta) {
                         config.meta._data = _data;
                     }

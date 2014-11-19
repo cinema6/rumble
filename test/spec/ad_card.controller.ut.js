@@ -381,18 +381,6 @@ define(['app', 'services'], function(appModule, servicesModule) {
 
                             describe('active', function() {
                                 describe('when true', function() {
-                                    describe('if the mode is lightbox', function() {
-                                        it('should broadcast resize event', function() {
-                                            c6AppData.experience.data.mode = 'lightbox';
-
-                                            $scope.$apply(function() {
-                                                $scope.active = true;
-                                            });
-
-                                            expect($rootScope.$broadcast).toHaveBeenCalledWith('resize');
-                                        });
-                                    });
-
                                     describe('if the card has meta data', function() {
                                         it('should put the _data on it', function() {
                                             $scope.config.meta = {};
@@ -586,36 +574,30 @@ define(['app', 'services'], function(appModule, servicesModule) {
                                                     expect(NavController.tick).toHaveBeenCalledWith($scope.config.data.skip);
                                                 });
 
-                                                it('should ignore timeupdates', function() {
-                                                    NavController.tick.calls.reset();
+                                                describe('as timeupdates are fired', function() {
+                                                    it('should tick the nav', function() {
+                                                        timeupdate(1);
+                                                        expect(NavController.tick).toHaveBeenCalledWith(5);
 
-                                                    timeupdate(1);
-                                                    expect(NavController.tick).not.toHaveBeenCalled();
+                                                        timeupdate(2);
+                                                        expect(NavController.tick).toHaveBeenCalledWith(4);
+                                                    });
                                                 });
 
-                                                it('should count down using a $interval', function() {
-                                                    $interval.flush(1000);
-                                                    expect(NavController.tick).toHaveBeenCalledWith(6);
-
-                                                    $interval.flush(1000);
-                                                    expect(NavController.tick).toHaveBeenCalledWith(5);
-
-                                                    $interval.flush(1000);
-                                                    expect(NavController.tick).toHaveBeenCalledWith(4);
-                                                });
-
-                                                describe('after the interval counts down', function() {
+                                                describe('when the video ends', function() {
                                                     beforeEach(function() {
-                                                        $interval.flush(6000);
+                                                        expect(NavController.enabled).not.toHaveBeenCalledWith(true);
+
+                                                        iface.emit('ended');
                                                     });
 
                                                     it('should enable the nav', function() {
                                                         expect(NavController.enabled).toHaveBeenCalledWith(true);
                                                     });
 
-                                                    it('should not tick the nav anymore', function() {
+                                                    it('should stop listening for timeupdates', function() {
                                                         NavController.tick.calls.reset();
-                                                        $interval.flush(1000);
+                                                        timeupdate(6);
 
                                                         expect(NavController.tick).not.toHaveBeenCalled();
                                                     });
