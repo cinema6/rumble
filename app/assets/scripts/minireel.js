@@ -227,8 +227,6 @@ function( angular , c6Defines  , tracker ,
                     .forEach(function(fn) {
                         return fn(video);
                     });
-
-                video.player = null;
             });
 
             return playlist;
@@ -388,7 +386,6 @@ function( angular , c6Defines  , tracker ,
             election = appData.experience.data.election,
             c = c6Computed($scope),
             tracker = trackerService('c6mr'),
-            cancelTrackVideo = null,
             ballotMap = {},
             navController = null,
             MasterDeckCtrl;
@@ -715,37 +712,6 @@ function( angular , c6Defines  , tracker ,
             wait: null
         };
 
-        $scope.$on('playerAdd',function(event,player){
-            $log.log('Player added: %1 - %2',player.getType(),player.getVideoId());
-            var card = self.findCardByVideo(player.getType(),player.getVideoId());
-
-            if (!card){
-                $log.error('Unable to locate item for player.');
-                return;
-            }
-
-            card.player = player;
-
-            player.once('ready',function(){
-                $log.log('Player ready: %1 - %2',player.getType(),player.getVideoId());
-            });
-
-            player.on('play', function(){
-                self.startVideoTracking();
-                self.trackVideoEvent(player,'Play');
-            });
-            
-            player.on('pause', function(){
-                self.stopVideoTracking();
-                self.trackVideoEvent(player,'Pause');
-            });
-            
-            player.on('ended', function(){
-                self.stopVideoTracking();
-                self.trackVideoEvent(player,'End');
-            });
-        });
-
         $scope.$on('<mr-card>:contentEnd', function(event, card) {
             if ($scope.currentCard === card && card.data.autoadvance) {
                 self.goForward();
@@ -839,113 +805,12 @@ function( angular , c6Defines  , tracker ,
             return modules.indexOf(module) > -1;
         };
 
-        this.findCardByVideo = function(videoType,videoId){
-            var result;
-            $scope.deck.some(function(item){
-                if (item.type !== videoType){
-                    return false;
-                }
-
-                if (item.data.videoid !== videoId){
-                    return false;
-                }
-
-                result = item;
-                return true;
-            });
-
-            return result;
-        };
-
-        this.startVideoTracking = function(){
-            if (cancelTrackVideo === null) {
-                $log.info('Start video tracking');
-                cancelTrackVideo = $interval(function(){
-                    self.trackVideoProgress();
-                }, 1000);
-            }
-        };
-
-        this.stopVideoTracking = function(){
-            if (cancelTrackVideo !== null){
-                $log.info('Stop video tracking');
-                $interval.cancel(cancelTrackVideo);
-                cancelTrackVideo = null;
-            }
-        };
-
         this.trackNavEvent = function(action,label){
             tracker.trackEvent(getTrackingData({
                 category : 'Navigation',
                 action   : action,
                 label    : label
             }));
-        };
-
-        this.trackVideoEvent = function(player,eventName,eventLabel){
-            var currentCard = $scope.currentCard;
-            if ((!currentCard) || (!currentCard.player)){
-                return;
-            }
-
-            if (player !== currentCard.player){
-                return;
-            }
-
-            tracker.trackEvent(getTrackingData({
-                category        : 'Ad',
-                action          : eventName,
-                label           : eventLabel || 'ad',
-                videoSource     : 'ad',
-                videoDuration   : Math.round(player.duration),
-                nonInteraction  : 1
-            }));
-        };
-
-        this.trackVideoProgress = function(){
-            var currentCard = $scope.currentCard, playedPct, currentTime, duration, quartile;
-            if ((!currentCard) || (!currentCard.player)){
-                return;
-            }
-
-            if (!currentCard.tracking){
-                currentCard.tracking = {
-                    quartiles : [ false, false, false, false ]
-                };
-            }
-
-            currentTime = currentCard.player.currentTime;
-            duration    = currentCard.player.duration;
-
-            if (currentTime >= duration){
-                playedPct = 1;
-            } else
-            if (!duration){
-                playedPct = 0;
-            } else {
-                playedPct = (Math.round(( currentTime / duration) * 100) / 100);
-            }
-
-            quartile = (function(pct){
-                if (pct >= 0.95) {
-                    return 3;
-                } else
-                if (pct >= 0.75){
-                    return 2;
-                } else
-                if (pct >= 0.5){
-                    return 1;
-                } else
-                if (pct >= 0.25){
-                    return 0;
-                }
-                return -1;
-            }(playedPct));
-
-            if ((quartile >= 0) && (!currentCard.tracking.quartiles[quartile])) {
-                this.trackVideoEvent( currentCard.player,'Quartile ' + (quartile + 1));
-                currentCard.tracking.quartiles[quartile] = true;
-            }
         };
 
         this.setPosition = function(i){
