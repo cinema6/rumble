@@ -1,7 +1,7 @@
 define(['app', 'services'], function(appModule, servicesModule) {
     'use strict';
 
-    ddescribe('AdCardController', function() {
+    describe('AdCardController', function() {
         var $rootScope,
             $scope,
             $controller,
@@ -76,16 +76,11 @@ define(['app', 'services'], function(appModule, servicesModule) {
                 c6EventEmitter = $injector.get('c6EventEmitter');
                 compileAdTag = $injector.get('compileAdTag');
 
-                ModuleService = $injector.get('ModuleService');
-                spyOn(ModuleService, 'hasModule').and.callThrough();
                 c6AppData = $injector.get('c6AppData');
                 MiniReelService = $injector.get('MiniReelService');
                 adTags = $injector.get('adTags');
 
                 $scope = $rootScope.$new();
-                $scope.hasModule = function(module) {
-                    return $scope.config.modules.indexOf(module) > -1;
-                };
                 $scope.config = {
                     id: 'rc-dec185bad0c8ee',
                     modules: ['displayAd'],
@@ -101,8 +96,8 @@ define(['app', 'services'], function(appModule, servicesModule) {
                     autoplay: true,
                     touch: false
                 };
-                $scope.number = '3';
                 spyOn($scope, '$emit').and.callThrough();
+                spyOn($rootScope, '$broadcast').and.callThrough();
                 instantiate();
             });
         });
@@ -281,52 +276,36 @@ define(['app', 'services'], function(appModule, servicesModule) {
                             });
                         });
 
-                        it('should out the player on the controller', function() {
+                        it('should put the player on the controller', function() {
                             expect(AdCardCtrl.player).toBe(iface);
                         });
 
                         describe('when the video ends', function() {
                             beforeEach(function() {
                                 expect($scope.$emit).not.toHaveBeenCalledWith('<mr-card>:contentEnd', jasmine.any(Object));
+                            });
 
+                            it('should not go to next card if card is not active, but should go to next card when card does become active', function() {
                                 iface.emit('ended');
+                                expect($scope.$emit).not.toHaveBeenCalledWith('<mr-card>:contentEnd', jasmine.any(Object));
+                                $scope.$apply(function() {
+                                    $scope.active = true;
+                                });
+                                expect($scope.$emit).toHaveBeenCalledWith('<mr-card>:contentEnd', jasmine.any(Object));
                             });
 
-                            describe('if the browser supports inline video', function() {
-                                beforeEach(function() {
-                                    iface.reload.calls.reset();
-
-                                    $scope.profile.inlineVideo = true;
-
-                                    iface.emit('ended');
-                                });
-
-                                it('should not reload the video', function() {
-                                    expect(iface.reload).not.toHaveBeenCalled();
-                                });
+                            it('should go to next card if card is active', function() {
+                                $scope.active = true;
+                                iface.emit('ended');
+                                expect($scope.$emit).toHaveBeenCalledWith('<mr-card>:contentEnd', jasmine.any(Object));
                             });
-
-                            describe('if the browser does not support inline video', function() {
-                                beforeEach(function() {
-                                    iface.reload.calls.reset();
-
-                                    $scope.profile.inlineVideo = false;
-
-                                    iface.emit('ended');
-                                });
-
-                                it('should reload the video', function() {
-                                    expect(iface.reload).toHaveBeenCalled();
-                                });
-                            });
-                        });
-
-                        describe('when the video pauses', function() {
-
                         });
 
                         describe('when the video plays', function() {
-
+                            it('should update the _data object', function() {
+                                iface.emit('play');
+                                expect($scope.config._data.hasPlayed).toBe(true);
+                            });
                         });
 
                         describe('when the companions are ready', function() {
@@ -402,6 +381,42 @@ define(['app', 'services'], function(appModule, servicesModule) {
 
                             describe('active', function() {
                                 describe('when true', function() {
+                                    describe('if the mode is lightbox', function() {
+                                        it('should broadcast resize event', function() {
+                                            c6AppData.experience.data.mode = 'lightbox';
+
+                                            $scope.$apply(function() {
+                                                $scope.active = true;
+                                            });
+
+                                            expect($rootScope.$broadcast).toHaveBeenCalledWith('resize');
+                                        });
+                                    });
+
+                                    describe('if the card has meta data', function() {
+                                        it('should put the _data on it', function() {
+                                            $scope.config.meta = {};
+
+                                            $scope.$apply(function() {
+                                                $scope.active = true;
+                                            });
+
+                                            expect($scope.config.meta._data).toEqual($scope.config._data);
+                                        });
+                                    });
+
+                                    describe('if the ad has already ended or has an error', function() {
+                                        it('should go to the next card', function() {
+                                            iface.emit('error');
+
+                                            $scope.$apply(function() {
+                                                $scope.active = true;
+                                            });
+
+                                            expect($scope.$emit).toHaveBeenCalledWith('<mr-card>:contentEnd', jasmine.any(Object));
+                                        });
+                                    });
+
                                     describe('if the card should be autoplayed', function() {
                                         beforeEach(function() {
                                             $scope.config.data.autoplay = true;
@@ -459,24 +474,6 @@ define(['app', 'services'], function(appModule, servicesModule) {
 
                                         it('should $emit "<mr-card>:init"', function() {
                                             expect($scope.$emit).toHaveBeenCalledWith('<mr-card>:init', jasmine.any(Function));
-                                        });
-
-                                        describe('if the video has already been played', function() {
-                                            beforeEach(function() {
-                                                $scope.$apply(function() {
-                                                    $scope.active = false;
-                                                });
-                                                $scope.$emit.calls.reset();
-
-                                                iface.emit('play');
-                                                $scope.$apply(function() {
-                                                    $scope.active = true;
-                                                });
-                                            });
-
-                                            it('should not $emit an event', function() {
-                                                expect($scope.$emit).not.toHaveBeenCalled();
-                                            });
                                         });
 
                                         describe('when passed a nav controller', function() {
@@ -639,52 +636,8 @@ define(['app', 'services'], function(appModule, servicesModule) {
                                         });
                                     });
 
-                                    [true, false].forEach(function(bool) {
-                                        describe('if the card\'s autoplay property is ' + bool, function() {
-                                            beforeEach(function() {
-                                                iface.pause.calls.reset();
-
-                                                $scope.$apply(function() {
-                                                    $scope.active = true;
-                                                });
-
-                                                $scope.config.data.autoplay = bool;
-
-                                                expect(iface.pause).not.toHaveBeenCalled();
-                                                $scope.$apply(function() {
-                                                    $scope.active = false;
-                                                });
-                                            });
-
-                                            it('should not play the video', function() {
-                                                expect(iface.play).not.toHaveBeenCalled();
-                                            });
-
-                                            it('should pause the video', function() {
-                                                expect(iface.pause).toHaveBeenCalled();
-                                            });
-
-                                            it('should not calls reload()', function() {
-                                                expect(iface.reload).not.toHaveBeenCalled();
-                                            });
-
-                                            describe('if the pause method returns an error', function() {
-                                                beforeEach(function() {
-                                                    iface.pause.and.returnValue(new Error('I suck.'));
-
-                                                    $scope.$apply(function() {
-                                                        $scope.active = true;
-                                                    });
-                                                    $scope.$apply(function() {
-                                                        $scope.active = false;
-                                                    });
-                                                });
-
-                                                it('should call reload', function() {
-                                                    expect(iface.reload).toHaveBeenCalled();
-                                                });
-                                            });
-                                        });
+                                    it('should pause the video', function() {
+                                        expect(iface.pause).toHaveBeenCalled();
                                     });
                                 });
                             });

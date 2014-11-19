@@ -98,37 +98,7 @@ function( angular ) {
                 }
 
                 function deactivateCard() {
-                    if (player.pause() instanceof Error) {
-                        // player.reload();
-                    }
-                }
-
-                function trackVideoEvent(/*event, nonInteractive, label*/) {
-                    // tracker.trackEvent(MiniReelService.getTrackingData(config, $scope.number - 1, {
-                    //     category: 'Ad',
-                    //     action: event,
-                    //     label: label || config.webHref,
-                    //     videoSource: config.source || config.type,
-                    //     videoDuration: player.duration,
-                    //     nonInteraction: (+ !!nonInteractive)
-                    // }));
-                }
-
-                function trackVideoPlayback() {
-                    // var quartiles = _data.tracking.quartiles,
-                    //     duration = player.duration,
-                    //     currentTime = Math.min(player.currentTime, duration),
-                    //     percent = (Math.round((currentTime / duration) * 100) / 100),
-                    //     quartile = (function() {
-                    //         if (percent >= 0.95) { return 3; }
-
-                    //         return Math.floor(percent * 4) - 1;
-                    //     }());
-
-                    // if (quartile > -1 && !quartiles[quartile]) {
-                    //     trackVideoEvent('Quartile ' + (quartile + 1));
-                    //     quartiles[quartile] = true;
-                    // }
+                    player.pause();
                 }
 
                 player
@@ -139,19 +109,13 @@ function( angular ) {
                     })
                     .on('play', function() {
                         _data.hasPlayed = true;
-                        trackVideoEvent('Play', config.data.autoplay);
                     })
-                    .on('pause', function() {
-                        trackVideoEvent('Pause');
-                    })
-                    .on('timeupdate', trackVideoPlayback)
                     .on('ended', function() {
                         if ($scope.active) {
                             goForward();
                         } else {
                             shouldGoForward = true;
                         }
-                        trackVideoEvent('End');
                     })
                     .on('error', function() {
                         if ($scope.active) {
