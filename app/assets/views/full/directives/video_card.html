@@ -2,8 +2,14 @@
     <div class="adSkip__group--sponsored c6-fade" ng-show="!nav.enabled">
         <p class="adSkip__message">Skip in <strong>{{nav.wait}}</strong></p>
     </div>
+    <post-module ng-if="hasModule('post')"
+        active="config._data.modules.post.active"
+        on-replay="Ctrl.player.play()"
+        on-dismiss="config._data.modules.post.active = false"
+        sponsor-href="{{config.links.Website}}">
+    </post-module>
     <ballot-vote-module 
-        class="ballot__group player__height"
+        class="ballot__group player__height c6-fade"
         ng-if="hasModule('ballot')"
         active="config._data.modules.ballot.ballotActive && active"
         vote="config._data.modules.ballot.vote"
@@ -12,7 +18,7 @@
         on-dismiss="Ctrl.closeBallot()">
     </ballot-vote-module>
     <ballot-results-module ng-if="hasModule('ballot')"
-        class="ballot__group player__height"
+        class="ballot__group player__height c6-fade"
         active="config._data.modules.ballot.resultsActive && active"
         vote="config._data.modules.ballot.vote"
         card-id="{{config.id}}"

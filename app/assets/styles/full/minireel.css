@@ -174,6 +174,10 @@
             .uiIconsBe__dark--replay:before {
                 background-position:-1rem -7rem;
             }
+            .uiIconsBe--link:before {
+                background-position:-3rem -9rem;
+                width:1.25rem;
+            }
 
 
     .overlay {
@@ -560,7 +564,8 @@
             background:50% 50% / 112% auto no-repeat;
         }
 
-        .player__playBtn {
+        .player__playBtn,
+        .player__playBtn:focus {
             width: 6em;
             height: 6em;
             padding: 0;
@@ -1231,6 +1236,7 @@
                 font-size:0.875em;
                 vertical-align: middle;
                 line-height: 1;
+                margin-left:2px;
             }
 
 
@@ -1247,98 +1253,62 @@
             }
 
 
-/*  ==========================================================================
-    .results__group
-    ========================================================================== */
-    .results-module {
-        position: absolute; width:100%;
-        z-index: 2; left:0; top:0; opacity: 1;
-        -webkit-transition: opacity 1s 0.15s;
-        transition: opacity 1s 0.15s;
+
+
+/*  ================================================
+    actionsModal__group styles
+    ================================================ */
+    .actionsModal__group {
+        position:absolute; z-index: 2;
+        top:0; left:0; right:0; bottom:0;
+        overflow: hidden;
     }
-        .results-module.ng-hide {
-            opacity:0;
-        }
-        .results-module.ng-hide-remove, 
-        .results-module.ng-hide-add {
-            display: block;
-        }
-    .results__group {
-        position: absolute; height: 100%; padding: 0 10% 0;
-        z-index: 2; left:0; right: 0; top:0; background-color: rgba(0,0,0,0.8);
+    .actionsModal__list {
+        position:absolute; z-index: 2;
+        top:50%; left:50%;
+        width:36em;
+        margin:-1.5em 0 0 -18em;
+        padding:0;
+        text-align: center;
+        list-style: none;
     }
-        .results__title {
-            color:#fff; font-size: 1.25em;/*20px*/ font-weight:normal; 
-            text-align: center; line-height: 1.4; margin-top: 26%;
+        .actionsModal__item {
+            position:relative;
+            display: inline-block;
+            margin:0 0.5em 1.5em;
         }
-        .results__list {
-            margin:0; padding:0; list-style:none;
-        }
-            .results__item {
-                display:inline-block; width:50%;
-            }
-                .results__item1 {
-                    text-align: right;
-                }
-                .results__option {
-                    font-weight:400; font-style:italic; font-size:1em; line-height: 1.5;
-                    margin:0;
-                }
-                .results__tally {
-                    font-weight:900; font-style: italic; font-size:1.375em;/*22px*/ line-height: 1;
-                    margin:0 0 0.7273em;/*16px*/ 
-                }
-                    .results__item0 .results__option, .results__item0 .results__tally {
-                        color:#8ac12a;
-                    }
-                    .results__item1 .results__option, .results__item1 .results__tally {
-                        color:#19cbe6;
-                    }
-        .results__meter {
-            background:#19cbe6;
-            height:1.75em;/*28px*/ width:100%;
-            overflow: hidden;
-        }
-            .results__bar1 {
-                height:1.75em; background:#8ac12a; border-right:1px solid #000;
-            }
-        .results__watch-again {
-            display: block; margin: 3em auto 0; cursor: pointer; width: 10em;
+        .actionsModal__btn {
+            padding:0 1em 0 4em;
+            height:3em;
+            text-align: center;
         }
 
-        .results__close {
-            width: 1.25rem;/*20px*/ height: 1.25rem;/*20px*/ position: absolute;
-            padding: 0; border: 0; top: 0; right: 0; font-size: 1em; margin: 1em;
-            background-position: 0 -9.35rem; cursor: pointer;
-        }
+            .actionsModal__btn:before {
+                position:absolute;
+                top:1em; left:1em;
+                z-index: 3;
+                content:'';
+            }
+            .actionsModal__btn:after {
+                content:'';
+                position: absolute;
+                top:0; left:0;
+                z-index: 2;
+                width:3rem; height:3rem;
+                background-color:rgba(0,0,0,0.2);
+                display: block;
+            }
 
-    @media screen and (max-width: 33.75rem) {
-        /*540px*/
-        .results__title {
-            font-size: 1em; margin-top: 20%;
-        }
-        .results__meter {
-            height: 1.25em;
-        }
-            .results__option {
-                font-size: 0.875em;
+        @media screen and (max-width:33rem) {
+            /*max 528px*/
+            .actionsModal__list {
+                margin:-3.75em 0 0 -7.125em;
+                width:14.25em;
             }
-            .results__tally {
-                font-size: 1em;
+            .actionsModal__item {
+                margin:0 0 1.5em 0;
             }
-        .results__watch-again {
-            font-size: 0.875em;
         }
-    }
-    @media screen and (max-width: 25rem) {
-        /*400px*/
-        .results__title {
-            margin-top: 15%;
-        }
-        .results__watch-again {
-            margin: 1.5em auto 0;
-        }
-    }
 
 
 
@@ -1434,26 +1404,6 @@
                 border:0; margin:0;
                 width:100%; height:100%;
             }
-
-/*  ==========================================================================
-    More Reels card classes
-    ========================================================================== */
-    .more-reels__intro {
-        font-size:0.875rem; color:#6c6c6c; font-weight:300; text-align: center;
-        background: #1b1b1b; margin:0; padding: 0.125rem 0 0.4375rem 0;
-    }
-        .more-reels__preview {
-            background:url('../../img/more-reels__preview.jpg') 50% 50% / cover no-repeat; 
-            border:0; margin:0; padding:0; 
-            position: absolute; width:100%; height:100%;
-        }
-            .more-reels__preview-img {
-                width:100%;
-            }
-            .more-reels__desc {
-                margin: -0.5em 0 0 0;/*8px*/ font-size:0.8125rem;/*13px*/ 
-                color:#c2c2c2; line-height:1.69; height: 4.875rem;/*78px*/
-            } 
 
 
 

@@ -1,9 +1,9 @@
-<ul class="mr-cards__list"
+<ul class="cards__list"
     ng-repeat="deck in DeckCtrl.decks"
     ng-class="{
         squished : !deck.active
     }">
-    <li class="mr-cards__item slides__item"
+    <li class="cards__item"
         ng-repeat="item in (deck.cards | deck:deck.index:1)"
         ng-class="{
             squished : ($index !== deck.index || !deck.active)

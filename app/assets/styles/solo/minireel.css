@@ -322,7 +322,8 @@
             background:black url('../../img/default_square.jpg') 50% 50% / cover no-repeat;
         }
             
-            .player__playBtn {
+            .player__playBtn,
+            .player__playBtn:focus {
                 width: 6em;
                 height: 6em;
                 padding: 0;

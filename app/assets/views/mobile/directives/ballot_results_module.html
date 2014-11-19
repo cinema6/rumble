@@ -1,13 +1,13 @@
-<section class="mr-results__group">
-    <h2 class="mr-results__title">Voting Results:</h2>
+<section class="results__group">
+    <h2 class="results__title">Voting Results:</h2>
 
-    <ul class="mr-results__list">
-        <li class="mr-results__item mr-results__item{{$index}}" ng-repeat="choice in Ctrl.ballot">
-            <p class="mr-results__option">{{choice.name}}</p>
-            <p class="mr-results__tally">{{choice.votes | percent}}</p>
+    <ul class="results__list">
+        <li class="results__item results__item{{$index}}" ng-repeat="choice in Ctrl.ballot">
+            <p class="results__option">{{choice.name}}</p>
+            <p class="results__tally">{{choice.votes | percent}}</p>
         </li>
     </ul>
-    <div class="mr-results__meter">
-        <div class="mr-results__bar1" ng-style="{width: (Ctrl.ballot[0].votes | percent)}">&nbsp;</div>
+    <div class="results__meter">
+        <div class="results__bar1" ng-style="{width: (Ctrl.ballot[0].votes | percent)}">&nbsp;</div>
     </div>
 </section>

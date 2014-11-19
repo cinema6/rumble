@@ -1,24 +1,15 @@
-/*  ================================================
+/*  ==========================================================================
     global styles
-    ================================================ */
-    /*  apply a natural box layout model to all elements, 
-        but allowing components to change */
-        html {
-          box-sizing: border-box;
-        }
-        *, *:before, *:after {
-          box-sizing: inherit;
-        }
-    body {
-        font-size: 16px; 
-        font-family: 'Open Sans', Arial, Helvetica, sans-serif; 
-        font-weight:normal; 
-        color:#545454; 
-        line-height: 1.5;
-
-        background:#fff; 
-        margin:0;
+    ========================================================================== */
+    html {
+        -webkit-text-size-adjust: 100%;
     }
+    body {
+        font-family: 'Open Sans', Arial, Helvetica, sans-serif; 
+        font-weight:300; color:#545454; line-height: 1.5;
+        background:transparent; margin:0;
+    }
+    
     ::-moz-selection {
         background: #e900a4; text-shadow: none; color:#fff;
     }
@@ -41,17 +32,13 @@
         cursor:pointer;
         background:none;
     }
-
-/*  ================================================
-    c6 copy classes : general type and color styles
-    ================================================ */        
+        
+/*  ==========================================================================
+    c6-copy classes : general type & color styles
+    ========================================================================== */
     .tk--hdr {
         font-family: 'Roboto Condensed', 'Open Sans', Arial, Helvetica, sans-serif; 
         font-weight:300;
-    }
-    .tk--action {
-        font-family: 'Roboto Condensed', 'Open Sans', Arial, Helvetica, sans-serif; 
-        font-weight:700;
     }
     .tk--copy {
         font-family: 'Open Sans', Arial, Helvetica, sans-serif;
@@ -77,10 +64,13 @@
     .tk--pinterest {
         color:#cb2027;
     }
+    .comments__post-btn {
+        background:#d94040;
+    }
 
-/*  ================================================
-    helper classes
-    ================================================ */
+/*  ==========================================================================
+    Helper classes
+    ========================================================================== */
     .ir {
         background-color: transparent;
         border: 0; width:0; height:0;
@@ -97,162 +87,37 @@
     .hidden {
         visibility: hidden;
     }
-    .sprite,
-    .spriteAf:after,
-    .spriteBe:before {
+    .sprite__social,
+    .sprite__socialAf:after,
+    .sprite__socialBe:before {
         background:url('../../img/sprite--alpha@2x.png') 0 0 / 18.75rem 18.75rem no-repeat;
     }
-
-
-        .sprite--close {
-            width:1rem; height:1rem;
-            background-position:-5rem -9rem;
-            display: inline-block;
-        }
-
-        .socialIconsBe:before,
-        .uiIconsBe:before {
-            content:'';
-            width:1rem; height:1rem;
-            display: inline-block;
-            vertical-align: middle;
-        }
-
-            .socialIconsBe--youtube:before {
-                background-position:-1rem -3rem;
-            }
-            .socialIconsBe--vimeo:before {
-                background-position: -3rem -3rem;
-            }
-            .socialIconsBe--facebook:before {
-                background-position: -5rem -3rem;
-            }
-            .socialIconsBe--twitter:before {
-                background-position: -7rem -3rem;
-            }
-            .socialIconsBe--pinterest:before {
-                background-position: -9rem -3rem;
-            }
-
-
-
-            .uiIconsBe--replay:before {
-                background-position:-1rem -9rem;
-            }
-            .uiIconsBe__dark--replay:before {
-                background-position:-1rem -7rem;
-            }
-            .uiIconsBe--link:before {
-                background-position:-3rem -9rem;
-                width:1.25rem;
-            }
-
-
-    .overlay {
-        background:rgb(0,0,0); background:rgba(0,0,0,0.8);
-        position:absolute; z-index: 1;
-        left:0;
-        width:100%; height:100%; 
+    .sprite {
+        background-image:url('../../img/sprite.svg'); background-repeat:no-repeat; background-size:18.75em 18.75em;
     }
-        .overlay__closeBtn {
-            width:1.125em; height:1.125em;
-            position: absolute;
-            top:1em; right:1em;
-        }
-
-
-    .textLink {
-        border:0;
-    }
-
-
-    .btnPrimary,
-    .btnPrimary:focus {
-        background:#d94040;
-        line-height: 1;
-        text-align: center;
-        font-size: 1rem;
-        display:inline-table;
-        position:relative;
-    }
-        .btnPrimary .btn__label {
-            font-size:0.875em;
-            line-height: 1rem;
-            color:#fff;
-            font-weight:bold;
-            text-transform:uppercase;
-            text-shadow: 0 1px 1px rgba(0,0,0,0.44);
-            display: table-cell;
-            vertical-align: middle;
-        }
-
-
-        .btnPrimary[disabled],
-        .btnPrimary[disabled]:active,
-        .btnPrimary[disabled]:focus {
-            background:none;
-            opacity:0.25;
-        }
-            .btnPrimary[disabled] .btn__label,
-            .btnPrimary[disabled]:active .btn__label,
-            .btnPrimary[disabled]:focus .btn__label {
-                text-shadow:none;
-                color:#fff;
-            }
-
-    .btnSecondary,
-    .btnSecondary:active,
-    .btnSecondary:focus {
-        background:transparent;
-        line-height: 1;
-        text-align: center;
-        font-size: 1rem;
-        display:inline-table;
-    }
-        .btnSecondary .btn__label {
-            font-size:0.875em;
-            line-height: 1rem;
-            color:#fff;
-            font-weight:normal;
-            display: table-cell;
-            vertical-align: middle;
-        }
-
-        .btnSecondary .btn__label,
-        .btnSecondary:active .btn__label,
-        .btnSecondary:hover .btn__label {
-            text-shadow:none;
-            color:#fff;
-        }
-
-
-
-    /* activator state - when you tap on something, it lights up*/
-    .btnPrimary:after,
-    .btnSecondary:after {
+    .socialIconsBe:before,
+    .uiIconsBe:before {
         content:'';
-        background:#00aeff;
-        position:absolute; z-index: 2;
-        top:0; left:0; right:0; bottom:0;
-        opacity:0;
+        width:1rem; height:1rem;
+        display: inline-block;
+        vertical-align: middle;
     }
-        .btnPrimary:active:after,
-        .btnSecondary:active:after {
-            opacity:0.5;
+
+        .socialIconsBe--youtube:before {
+            background-position:-1rem -3rem;
         }
-
-
-
-
-    .MiniReel__group .ui--offscreen {
-        left:-5000%;
-        position: absolute;
-        width:100%; height:100%;
-    }
-
-
-
-
+        .socialIconsBe--vimeo:before {
+            background-position: -3rem -3rem;
+        }
+        .socialIconsBe--facebook:before {
+            background-position: -5rem -3rem;
+        }
+        .socialIconsBe--twitter:before {
+            background-position: -7rem -3rem;
+        }
+        .socialIconsBe--pinterest:before {
+            background-position: -9rem -3rem;
+        }
     .condensed {
         width:100%; display: block;
         white-space: nowrap;
@@ -260,7 +125,7 @@
     }
     .container {
         background:#dddddd; padding:3em 0.375em 4em 0.375em;
-        overflow-x:auto; overflow-y: auto; -webkit-overflow-scrolling: touch;
+        overflow-x:auto; overflow-y: scroll; -webkit-overflow-scrolling: touch;
         position: fixed; top:0; bottom:0; left:0; right:0;
     }
         .container--solo {
@@ -285,7 +150,7 @@
     }
 
     @media screen and (orientation: portrait) {
-        .portrait, .navBar__group, .headerBar__group {
+        .portrait, .ui-control--portrait, .ui-context--portrait {
             display:block;
         }
         .landscape, .ui-nav-left--landscape, .ui-nav-right--landscape {
@@ -297,7 +162,7 @@
         .landscape, .ui-nav-left--landscape, .ui-nav-right--landscape {
             display:block;
         }
-        .portrait, .navBar__group, .headerBar__group {
+        .portrait, .ui-control--portrait, .ui-context--portrait {
             display:none;
         }
         .container {
@@ -305,9 +170,9 @@
         }
     }
 
-/*  ================================================
-    animation classes
-    ================================================ */
+/*  ==========================================================================
+    Animation classes
+    ========================================================================== */
     .c6-toc-slide.ng-hide-remove {
         animation: slide-out 0.7s !important; 
         -webkit-animation: slide-out 0.7s !important;
@@ -338,19 +203,19 @@
         -webkit-animation: slide-right-enter 0.25s 0.3s backwards;
     }
             
-    .headerBar__group {
+    .c6-slide-bar--top {
         animation: slide-top-enter 0.25s 0.3s backwards; 
         -webkit-animation: slide-top-enter 0.25s 0.3s backwards;
     }
-        .headerBar__group.ng-hide-remove {
+        .c6-slide-bar--top.ng-hide-remove {
             animation: slide-top-enter 0.25s 0.3s backwards !important; 
             -webkit-animation: slide-top-enter 0.25s 0.3s backwards !important;
         }
-        .headerBar__group.ng-hide-add {
+        .c6-slide-bar--top.ng-hide-add {
             animation: slide-top-leave 0.25s 0.2s backwards; 
             -webkit-animation: slide-top-leave  0.25s 0.2s backwards;
     }
-    .navBar__group {
+    .c6-slide-bar--bottom {
         animation: slide-bottom-enter 0.25s 0.3s backwards; 
         -webkit-animation: slide-bottom-enter 0.25s 0.3s backwards;
     }
@@ -394,7 +259,7 @@
                 -webkit-transform: translateY(100%);
             }
         }
-        .headerBar__group.ng-hide-add, .headerBar__group.ng-hide-remove {
+        .c6-slide-bar--top.ng-hide-add, .c6-slide-bar--top.ng-hide-remove {
             display:block !important;
         }
             @keyframes slide-bottom-enter {
@@ -534,168 +399,6 @@
     }
 
 
-
-
-
-/*  ================================================
-    nav bar styles : portrait view
-    ================================================ */
-    .headerBar__group {
-        position:fixed; z-index: 10000;
-        top:0;
-        height:2.5em;/*40px*/ width:100%; 
-        background:#000;
-    }
-
-        .counterText {
-            margin:0.5em 0 0 0;
-            font-size:1em;
-            color:#999;
-            text-align: center;
-        }
-
-        .MiniReel__closeBtn {
-            position:absolute;
-            top:0; right:0;
-            width:4.5em; height:2.5em;
-        }
-            .MiniReel__closeBtn .btn__label {
-                width:2.625em;
-                text-align: right;
-                font-size:1em;
-            }
-            .MiniReel__closeBtn .sprite--close {
-                position: absolute;
-                top:50%; right:0.5em;
-                margin:-0.5em 0 0 0;
-            }
-
-
-    .navBar__group {
-        position:fixed; bottom:0; z-index: 10000;
-        height:3.75em;/*60px*/ width:100%;
-        background:#000;
-    }
-
-        .pager__btn,
-        .pager__btn:focus,
-        .pager__btn:active {
-            width:40%; height:3.75em; 
-            position:absolute;
-            background:#d94040;
-        }
-
-            .pager__btn--prev {
-                left:0;
-            }
-            .pager__btn--next {
-                right:0;
-            }
-
-            .pager__btnIcon {
-                position:absolute; z-index: 2;
-                top:50%; left:16%;
-                width:1.125rem; height:1.875rem;
-                margin:-0.9375rem 0 0 0;
-            }
-                .pager__btnIcon--next {
-                    left:auto; right:16%;
-                }
-                    .pager__btnIconPath {
-                        fill: #fff;
-                    }
-
-            .pager__btn .pager__label {
-                position: absolute; z-index: 2;
-                top:50%;
-                font-size:1.25em;
-                line-height: 1;
-                margin:-0.5em 0 0 0;
-            }
-                .pager__label--prev {
-                    right:18%;
-                }
-                .pager__label--next {
-                    left:20%;
-                }
-
-            .pager__previewImg {
-                position:absolute;
-                z-index: 1;
-                top:0; left:0;
-                width:100%; height:100%;
-                background: 50% 50% / 135% no-repeat;
-                opacity:0.35;
-            }
-
-
-
-
-/*  ================================================
-    publisher styles
-    ================================================ */
-
-    /* this is the container for publisher logos. by default it is 
-    hidden. override this via external publisher css file*/
-    .publisherProfile__logoBox {
-        width:8em;/*128px*/ height:2.375em;/*38px*/ 
-        background: 50% 50% / contain no-repeat;
-        position:absolute; z-index: 1;
-        top:1px; left:1px;
-        display: none;
-    }
-
-
-
-
-
-/*  ================================================
-    branded MR classes
-    ================================================ */    
-    .brandProfile__logoBox {
-        position: absolute;
-        z-index: 2;
-        top:1px; left:1px;
-    }
-        .brandProfile__logoBox,
-        .brandProfile__logo {
-            width:2.375em; height:2.375em;
-            display: block;
-        }
-
-    .brandedMR__tagline {
-        font-size:0.75em;
-        line-height: 1;
-    }
-        .brandedMR__taglineBrand {
-            border:0;
-        }
-
-    .brandProfile__linksBox {
-        text-align: center;
-        width:100%;
-        margin:-0.75em 0 0.5em 0;
-    }
-        .brandProfile__link {
-            padding:0 0.5em;
-            font-size:0.75em; 
-            line-height: 1;
-            display: inline-block;
-            color:#fff;
-            border:0;
-        }
-
-
-
-
-
-
-
-
-
-
-
-
 /*  ==========================================================================
     ui-icons classes
     ========================================================================== */
@@ -747,6 +450,11 @@
 /*  ==========================================================================
     Navigation classes
     ========================================================================== */
+    .ui-control--portrait {
+        position:fixed; bottom:0; z-index: 10000;
+        height:3.75em;/*60px*/ width:100%;
+        background:#2a2a2a;
+    }
         .ui-control__prev, .ui-control__next, .ui-control__view-list, .ui-context__close, 
         .ui-control__preview-img, .ui-control__label, .ui-control__activator, .ui-context__label, .ui-nav__prev, .ui-nav__next, .ui-nav__view-list, .ui-nav__close {
             width:100%; height:100%; display:block; 
@@ -815,6 +523,16 @@
            background:#fff; opacity:0; left:0; top:0;
         }
 
+    .ui-context--portrait {
+        position:fixed; top:0; z-index: 10000;
+        height:2.5em;/*40px*/ width:100%; 
+        background:#2a2a2a;
+    }
+        .publisher__branding-logo {
+            display: none; width:2.5em;/*40px*/ height:2.5em;/*40px*/ margin:0 0 0 0.4375em; /*0 0 0 7px*/ border:0; padding:0; font-size:1em;
+            background:transparent 50% 50% no-repeat; background-size:contain;
+            position:absolute; top:0; left:0; cursor:pointer;
+        }
         .ui-context__label {
             top:0.929em;/*13px*/ z-index: 10; color:#fff; font-weight:300; width:auto; height:0; line-height: 1; font-size:0.875em;/*14px*/
         }
@@ -993,7 +711,39 @@
 
 
 
+/*  ================================================
+    branded MR classes
+    ================================================ */
+    .brandedMR__tagline {
+        font-size:0.75em;
+        line-height: 1;
+    }
+        .brandedMR__taglineBrand {
+            border:0;
+        }
 
+    .brandProfile__logoBox {
+        display: block; width:2.5em;/*40px*/ height:2.5em;/*40px*/ margin:0 0 0 0.4375em; /*0 0 0 7px*/ border:0; padding:0; font-size:1em;
+        position:absolute; top:0; left:0; cursor:pointer;
+    }
+        .brandProfile__logo {
+            display: block;
+            width:2.5em; height:2.5em;
+        }
+
+    .brandProfile__linksBox {
+        text-align: center;
+        width:100%;
+        margin:-0.75em 0 0.5em 0;
+    }
+        .brandProfile__link {
+            padding:0 0.5em;
+            font-size:0.75em; 
+            line-height: 1;
+            display: inline-block;
+            color:#fff;
+            border:0;
+        }
 
 
 

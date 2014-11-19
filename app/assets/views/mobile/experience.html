@@ -1,4 +1,6 @@
-<div ng-hide="currentIndex < 0 || deck.length < 2" ng-class="app.data.experience.data.theme">
+<div ng-hide="currentIndex < 0 || deck.length < 2" 
+class="MiniReel__group {{app.data.experience.data.theme}}"
+ng-class="{'MiniReel__group--brandedMR': !!minireel.params.sponsor}">
     <div ng-hide="showTOC" class="ui-nav-left--landscape c6-slide-bar--left css-promote">
         <div class="publisher__branding-logo">&nbsp;</div>
         <a ng-if="!!minireel.collateral.logo"
@@ -50,8 +52,8 @@
         </h2>
     </div><!--.ui-nav-right--landscape-->
 
-    <div ng-hide="showTOC" class="ui-context--portrait c6-slide-bar--top css-promote">
-        <div class="publisher__branding-logo">&nbsp;</div>
+    <div ng-hide="showTOC" class="headerBar__group css-promote">
+        <div class="publisherProfile__logoBox">&nbsp;</div>
         <a ng-if="!!minireel.collateral.logo"
             href="{{minireel.links.Website}}"
             title="{{minireel.params.sponsor}}"
@@ -61,50 +63,66 @@
                 alt="{{minireel.params.sponsor}}"
                 ng-src="{{minireel.collateral.logo}}">
         </a>
-        <button ng-click="RumbleCtrl.setPosition(-1);" ng-if="!app.data.standalone" class="ui-context__close" title="Close" type="button">
-            <span class="ui-context__label ui-context__label-close">
+        <button ng-click="RumbleCtrl.setPosition(-1);" ng-if="!app.data.standalone" 
+        class="btnSecondary MiniReel__closeBtn clearfix" title="Close" type="button">
+            <span class="btn__label tk--action">
                 Close
             </span>
-            <span class="sprite ui-icon__close">&nbsp;</span>
-            <span class="ui-control__activator">&nbsp;</span>
+            <span class="sprite sprite--close">&nbsp;</span>
         </button>
-        <mr-paginator length="tocCards.length" current="tocIndex" class="ui-context__paginator"></mr-paginator>
-    </div><!--.ui-context-->
+        <p class="counterText">
+            {{tocIndex + 1}} of {{tocCards.length}}
+        </p>
+        <!--<mr-paginator length="tocCards.length" current="tocIndex" class="ui-context__paginator"></mr-paginator>-->
+    </div><!--.headerBar__group-->
 
-    <div class="ui-control--portrait c6-slide-bar--bottom  css-promote">
-        <button ng-hide="showTOC" class="ui-control__prev" title="Previous Video" type="button" c6-touch="RumbleCtrl.goBack('portrait')" ng-disabled="!nav.enabled || (app.data.standalone && tocIndex < 1)">
-            <span class="ui-control__label ui-control__label-prev">
+    <div class="navBar__group css-promote">
+        <button ng-hide="showTOC" title="Previous Video" type="button" 
+        class="btnPrimary pager__btn pager__btn--prev" c6-touch="RumbleCtrl.goBack('portrait')"
+        ng-disabled="!nav.enabled || (app.data.standalone && tocIndex < 1)">
+            <svg class="pager__btnIcon pager__btnIcon--prev" version="1.1" 
+            xmlns="http://www.w3.org/2000/svg" xml:space="preserve"
+            xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+            viewBox="0 0 27.213 45.941" enable-background="new 0 0 27.213 45.941">
+                <path class="pager__btnIconPath pager__btnIconPath--prev" 
+                fill-rule="evenodd" clip-rule="evenodd" 
+                d="M22.971,0L0,22.971l22.971,22.97l4.243-4.243L8.485,22.971L27.213,4.243L22.971,0z"/>
+            </svg>
+            <span class="btn__label pager__label pager__label--prev tk--action">
                 Prev
             </span>
-            <span class="ui-control__preview-img" 
-                ng-style="{'background-image': prevThumb && 'url(' + prevThumb + ')'}">
-                &nbsp;
-            </span>
-            <span class="sprite ui-icon__prev">&nbsp;</span>
-            <span class="ui-control__activator">&nbsp;</span>
+            <span class="pager__previewImg" 
+            ng-style="{'background-image': prevThumb && 'url(' + prevThumb + ')'}">&nbsp;</span>
         </button>
         <button ng-class="{'ui-control__view-list--open': showTOC}" class="ui-control__view-list" c6-touch="showTOC = !showTOC;" title="View List Pane" type="button" ng-disabled="!nav.enabled">
             <span class="ir">List Pane</span>
             <span class="sprite ui-icon__list">&nbsp;</span>
             <span class="ui-control__activator">&nbsp;</span>
         </button>
-        <button ng-hide="showTOC" ng-class="{'ui-control__next--disabled': atTail || !nav.enabled}" class="ui-control__next" title="Next Video" type="button" c6-touch="RumbleCtrl.goForward('portrait')" ng-disabled="atTail || !nav.enabled">
-            <span class="ui-control__label ui-control__label-next">
+        <button ng-hide="showTOC" title="Next Video" type="button" 
+        class="btnPrimary pager__btn pager__btn--next" c6-touch="RumbleCtrl.goForward('portrait')"
+        ng-disabled="atTail || !nav.enabled">
+            <svg class="pager__btnIcon pager__btnIcon--next" version="1.1" 
+            xmlns="http://www.w3.org/2000/svg" xml:space="preserve"
+            xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+            viewBox="0 0 27.213 45.941" enable-background="new 0 0 27.213 45.941">
+                <path class="pager__btnIconPath pager__btnIconPath--next" 
+                fill-rule="evenodd" clip-rule="evenodd" 
+                d="M4.243,0l22.971,22.971L4.243,45.941L0,41.699l18.728-18.728L0,4.243L4.243,0z"/>
+            </svg>
+            <span class="btn__label pager__label pager__label--next tk--action">
                 Next
             </span>
-            <span class="ui-control__preview-img" 
-                ng-style="{'background-image': nextThumb && 'url(' + nextThumb + ')'}">
-                &nbsp;
-            </span>
+            <span class="pager__previewImg" 
+            ng-style="{'background-image': nextThumb && 'url(' + nextThumb + ')'}">&nbsp;</span>
             <span class="sprite ui-icon__next">&nbsp;</span>
-            <span class="ui-control__activator">&nbsp;</span>
         </button>
     </div><!--.ui-control-->
 </div><!-- end of the ng-hide div-->
 
-<article class="mr-container {{app.data.experience.data.theme}}" 
-ng-class="{'mr-container--solo' : deck.length < 2}" c6-alias="app.data.experience.data as minireel">
-    <h3 class="mr-title tk--hdr">
+<article class="container {{app.data.experience.data.theme}}" 
+ng-class="{'container--solo' : deck.length < 2}" c6-alias="app.data.experience.data as minireel">
+    <h3 class="title tk--hdr">
         <span ng-if="!!minireel.params.sponsor" class="brandedMR__tagline tk--copy">
             <a ng-href="{{minireel.links.Website}}"
                 target="_blank"
@@ -130,7 +148,7 @@ ng-class="{'mr-container--solo' : deck.length < 2}" c6-alias="app.data.experienc
         </div>
     </ng-switch>
     <table-of-contents ng-show="showTOC"
-        class="mr-toc__group c6-toc-slide css-promote"
+        class="toc__group c6-toc-slide css-promote"
         cards="tocCards"
         on-select="RumbleCtrl.jumpTo(card)"
         on-exit="showTOC = false">
