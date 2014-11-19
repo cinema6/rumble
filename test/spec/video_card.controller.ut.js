@@ -9,6 +9,7 @@ define(['app', 'services', 'tracker'], function(appModule, servicesModule, track
             c6EventEmitter,
             compileAdTag,
             trackerService,
+            VideoTrackerService,
             MiniReelService,
             VideoCardCtrl;
 
@@ -93,6 +94,7 @@ define(['app', 'services', 'tracker'], function(appModule, servicesModule, track
                 c6AppData = $injector.get('c6AppData');
                 MiniReelService = $injector.get('MiniReelService');
                 trackerService = $injector.get('trackerService');
+                VideoTrackerService = $injector.get('VideoTrackerService');
 
                 $scope = $rootScope.$new();
                 $scope.hasModule = function(module) {
@@ -158,8 +160,7 @@ define(['app', 'services', 'tracker'], function(appModule, servicesModule, track
                         companion: null,
                         tracking: {
                             clickFired: false,
-                            countFired: false,
-                            quartiles: [false, false, false, false]
+                            countFired: false
                         },
                         modules: {
                             ballot: {
@@ -684,6 +685,8 @@ define(['app', 'services', 'tracker'], function(appModule, servicesModule, track
 
                     describe('when the iface is ready', function() {
                         beforeEach(function() {
+                            spyOn(VideoTrackerService, 'trackQuartiles').and.callThrough();
+
                             $scope.$apply(function() {
                                 iface.emit('ready');
                             });
@@ -711,11 +714,6 @@ define(['app', 'services', 'tracker'], function(appModule, servicesModule, track
                         });
 
                         describe('video tracking', function() {
-                            function timeupdate(time) {
-                                iface.currentTime = time;
-                                iface.emit('timeupdate');
-                            }
-
                             function trackingData(action) {
                                 return MiniReelService.getTrackingData($scope.config, $scope.number - 1, {
                                     category: 'Video',
@@ -736,69 +734,22 @@ define(['app', 'services', 'tracker'], function(appModule, servicesModule, track
                                 expect(trackerService).toHaveBeenCalledWith('c6mr');
                             });
 
-                            describe('if the video has no duration', function() {
+                            describe('quartiles', function() {
+                                var callback;
+
                                 beforeEach(function() {
-                                    iface.duration = 0;
-
-                                    [0, 1].forEach(timeupdate);
+                                    callback = VideoTrackerService.trackQuartiles.calls.mostRecent().args[2];
                                 });
 
-                                it('should not send any events', function() {
-                                    expect(tracker.trackEvent).not.toHaveBeenCalled();
-                                });
-                            });
-
-                            describe('when the video has not been played 25%', function() {
-                                beforeEach(function() {
-                                    [0, 1, 2, 4, 7.3, 24.4].forEach(timeupdate);
+                                it('should track the quartiles', function() {
+                                    expect(VideoTrackerService.trackQuartiles).toHaveBeenCalledWith($scope.config.id, iface, jasmine.any(Function));
                                 });
 
-                                it('should not track any events', function() {
-                                    expect(tracker.trackEvent).not.toHaveBeenCalled();
-                                });
-                            });
-
-                            describe('when the video has been played at least 25%', function() {
-                                beforeEach(function() {
-                                    [24.5, 26, 27].forEach(timeupdate);
-                                });
-
-                                it('should track a single video event for the first quartile', function() {
-                                    expect(tracker.trackEvent).toHaveBeenCalledWith(trackingData('Quartile 1'));
-                                    expect(tracker.trackEvent.calls.count()).toBe(1);
-                                });
-                            });
-
-                            describe('when the video has been played at least 50%', function() {
-                                beforeEach(function() {
-                                    [49.7, 51, 54, 56].forEach(timeupdate);
-                                });
-
-                                it('should track a single video event for the second quartile', function() {
-                                    expect(tracker.trackEvent).toHaveBeenCalledWith(trackingData('Quartile 2'));
-                                    expect(tracker.trackEvent.calls.count()).toBe(1);
-                                });
-                            });
-
-                            describe('when the video has been played at least 75%', function() {
-                                beforeEach(function() {
-                                    [74.7, 75, 76, 78, 83].forEach(timeupdate);
-                                });
-
-                                it('should track a single video event for the third quartile', function() {
-                                    expect(tracker.trackEvent).toHaveBeenCalledWith(trackingData('Quartile 3'));
-                                    expect(tracker.trackEvent.calls.count()).toBe(1);
-                                });
-                            });
-
-                            describe('when the video has been played at least 95%', function() {
-                                beforeEach(function() {
-                                    [94.5, 95, 96, 101].forEach(timeupdate);
-                                });
-
-                                it('should track a single video event for the fourth quartile', function() {
-                                    expect(tracker.trackEvent).toHaveBeenCalledWith(trackingData('Quartile 4'));
-                                    expect(tracker.trackEvent.calls.count()).toBe(1);
+                                it('should track an event for each quartile', function() {
+                                    [1, 2, 3, 4].forEach(function(quartile) {
+                                        callback(quartile);
+                                        expect(tracker.trackEvent).toHaveBeenCalledWith(trackingData('Quartile ' + quartile));
+                                    });
                                 });
                             });
 

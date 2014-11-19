@@ -5,10 +5,10 @@ function( angular ) {
     return angular.module('c6.rumble.cards.video', [])
         .controller('VideoCardController', ['$scope','c6ImagePreloader','compileAdTag',
                                             '$interval','c6AppData','trackerService',
-                                            'MiniReelService',
+                                            'MiniReelService','VideoTrackerService',
         function                           ( $scope , c6ImagePreloader , compileAdTag ,
                                              $interval , c6AppData , trackerService ,
-                                             MiniReelService ) {
+                                             MiniReelService , VideoTrackerService ) {
             var VideoCardCtrl = this,
                 behaviors = c6AppData.behaviors,
                 config = $scope.config,
@@ -19,8 +19,7 @@ function( angular ) {
                     companion: null,
                     tracking: {
                         clickFired: false,
-                        countFired: false,
-                        quartiles: [false, false, false, false]
+                        countFired: false
                     },
                     modules: {
                         ballot: {
@@ -122,23 +121,6 @@ function( angular ) {
                     }));
                 }
 
-                function trackVideoPlayback() {
-                    var quartiles = _data.tracking.quartiles,
-                        duration = player.duration,
-                        currentTime = Math.min(player.currentTime, duration),
-                        percent = (Math.round((currentTime / duration) * 100) / 100),
-                        quartile = (function() {
-                            if (percent >= 0.95) { return 3; }
-
-                            return Math.floor(percent * 4) - 1;
-                        }());
-
-                    if (quartile > -1 && !quartiles[quartile]) {
-                        trackVideoEvent('Quartile ' + (quartile + 1));
-                        quartiles[quartile] = true;
-                    }
-                }
-
                 player
                     .once('companionsReady', function() {
                         var companions = player.getCompanions(300, 250);
@@ -165,7 +147,6 @@ function( angular ) {
 
                         trackVideoEvent('Pause');
                     })
-                    .on('timeupdate', trackVideoPlayback)
                     .on('ended', function() {
                         _data.modules.post.active = true;
 
@@ -183,6 +164,9 @@ function( angular ) {
                         _data.hasPlayed = true;
                     });
 
+                VideoTrackerService.trackQuartiles(config.id, player, function(quartile) {
+                    trackVideoEvent('Quartile ' + quartile);
+                });
 
                 $scope.$on('<ballot-vote-module>:vote', function($event, vote) {
                     VideoCardCtrl.closeBallot();

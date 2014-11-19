@@ -48,21 +48,20 @@ function( angular , angularAnimate , angularSanitize , c6uilib , c6log , c6Defin
         function( YouTubeDataServiceProvider ) {
             YouTubeDataServiceProvider.apiKey('AIzaSyBYOutFJ1yBx8MAYy5OgtTvslvBiFk8wok');
         }])
-        .config(['RumbleVASTServiceProvider','RumbleVPAIDServiceProvider',
-        function( RumbleVASTServiceProvider , RumbleVPAIDServiceProvider ) {
-            RumbleVASTServiceProvider.adTags({
+        .constant('adTags', {
+            vast: {
                 cinema6: 'http://u-ads.adap.tv/a/h/DCQzzI0K2rv1k0TZythPvTfWmlP8j6NQnxBMIgFJa80=?cb={cachebreaker}&pageUrl={pageUrl}&eov=eov',
                 publisher: 'http://u-ads.adap.tv/a/h/DCQzzI0K2runZ1YEc6FP2ey+WPdagwFmdz7a2uK_A_c=?cb={cachebreaker}&pageUrl={pageUrl}&eov=eov',
                 'cinema6-publisher': 'http://u-ads.adap.tv/a/h/DCQzzI0K2rv1k0TZythPvadnVgRzoU_Z7L5Y91qDAWYoGast41+eSw==?cb={cachebreaker}&pageUrl={pageUrl}&eov=eov',
                 'publisher-cinema6': 'http://u-ads.adap.tv/a/h/DCQzzI0K2runZ1YEc6FP2fCQPSbU6FwIZz5J5C0Fsw29iCueyXx8iw==?cb={cachebreaker}&pageUrl={pageUrl}&eov=eov'
-            });
-            RumbleVPAIDServiceProvider.adTags({
+            },
+            vpaid: {
                 cinema6: 'http://u-ads.adap.tv/a/h/DCQzzI0K2rv1k0TZythPvYyD60pQS_90o8grI6Qm2PI=?cb={cachebreaker}&pageUrl={pageUrl}&eov=eov',
                 publisher: 'http://u-ads.adap.tv/a/h/DCQzzI0K2runZ1YEc6FP2T65tHqs_Nwo9+XmsX4pnb4=?cb={cachebreaker}&pageUrl={pageUrl}&eov=eov',
                 'cinema6-publisher': 'http://u-ads.adap.tv/a/h/DCQzzI0K2rv1k0TZythPvadnVgRzoU_ZPrm0eqz83CjfbcCg1uJO3w==?cb={cachebreaker}&pageUrl={pageUrl}&eov=eov',
                 'publisher-cinema6': 'http://u-ads.adap.tv/a/h/DCQzzI0K2runZ1YEc6FP2fCQPSbU6FwIdK4EW3jlLzbnPQftO7fDdA==?cb={cachebreaker}&pageUrl={pageUrl}&eov=eov'
-            });
-        }])
+            }
+        })
         .filter('percent',function(){
             return function(input){
                 return Math.round(isNaN(input) ? 0 : (input * 100)) + '%';

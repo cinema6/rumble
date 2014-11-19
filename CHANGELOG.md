@@ -6,6 +6,7 @@
   * [FIX]: consolidated player styles to work with single video card directive
   * [FIX]: Post module is enabled on a video card whenever video is paused
   * [FIX]: Allow for overriding an election ID when saving a vote
+  * [FIX]: Removed VAST and VPAID cards and replaced with a single Ad Card directive
 
 ## v1.5.2
 * *[v1.5.2.rc2]*
