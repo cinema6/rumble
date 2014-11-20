@@ -169,7 +169,8 @@ define(['app', 'services', 'tracker'], function(appModule, servicesModule, track
                                 vote: null
                             },
                             post: {
-                                active: false
+                                active: false,
+                                ballot: $scope.config.ballot
                             }
                         }
                     });
@@ -713,6 +714,48 @@ define(['app', 'services', 'tracker'], function(appModule, servicesModule, track
                             });
                         });
 
+                        describe('<post-module>:vote', function() {
+                            beforeEach(function() {
+                                expect($scope.config._data.modules.post.ballot).toEqual(jasmine.any(Object));
+                                $scope.config._data.modules.post.active = true;
+
+                                $scope.$emit('<post-module>:vote', 0);
+                                $scope.$emit.calls.reset();
+                            });
+
+                            it('should close the post module', function() {
+                                expect($scope.config._data.modules.post.active).toBe(false);
+                            });
+
+                            it('should nullify the ballot', function() {
+                                expect($scope.config._data.modules.post.ballot).toBeNull();
+                            });
+
+                            describe('if the video is not ended', function() {
+                                beforeEach(function() {
+                                    iface.ended = false;
+
+                                    $scope.$emit('<post-module>:vote', 1);
+                                });
+
+                                it('should not $emit any events', function() {
+                                    expect($scope.$emit).not.toHaveBeenCalledWith('<mr-card>:contentEnd', $scope.config);
+                                });
+                            });
+
+                            describe('if the video is ended', function() {
+                                beforeEach(function() {
+                                    iface.ended = true;
+
+                                    $scope.$emit('<post-module>:vote', 1);
+                                });
+
+                                it('should $emit the <mr-card>:contentEnd event', function() {
+                                    expect($scope.$emit).toHaveBeenCalledWith('<mr-card>:contentEnd', $scope.config);
+                                });
+                            });
+                        });
+
                         describe('video tracking', function() {
                             function trackingData(action) {
                                 return MiniReelService.getTrackingData($scope.config, $scope.number - 1, {
@@ -821,7 +864,7 @@ define(['app', 'services', 'tracker'], function(appModule, servicesModule, track
                                 });
                             });
 
-                            describe('when the user votes', function() {
+                            describe('when the user votes with the ballot module', function() {
                                 beforeEach(function() {
                                     expect(tracker.trackEvent).not.toHaveBeenCalled();
 
@@ -847,6 +890,30 @@ define(['app', 'services', 'tracker'], function(appModule, servicesModule, track
 
                                     it('should not track an event', function() {
                                         expect(tracker.trackEvent).not.toHaveBeenCalled();
+                                    });
+                                });
+                            });
+
+                            describe('when the user votes with the ballot module', function() {
+                                beforeEach(function() {
+                                    expect(tracker.trackEvent).not.toHaveBeenCalled();
+                                    $scope.config.ballot = {
+                                        prompt: 'Was it the best thing ever?',
+                                        choices: ['YES', 'NO']
+                                    };
+                                });
+
+                                it('should track an event', function() {
+                                    $scope.config.ballot.choices.forEach(function(choice, index) {
+                                        $scope.$emit('<post-module>:vote', index);
+
+                                        expect(tracker.trackEvent).toHaveBeenCalledWith((function() {
+                                            var data = trackingData('Vote');
+
+                                            data.label = choice;
+
+                                            return data;
+                                        }()));
                                     });
                                 });
                             });
