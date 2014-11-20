@@ -1,6 +1,15 @@
 # MiniReel Player
 
 ## v1.6.0 (November 20, 2014)
+* *[v1.6.0.rc2]*
+  * [FIX]: Fix for an issue that caused sponsored card surveys not to be
+    persisted in the database
+  * [FIX]: Fix for an issue that caused video sources not to appear in
+    the mobile table of contents
+  * [FIX]: Fix for an issue where YouTube videos would play in the
+    background
+* *[/v1.6.0.rc2]*
+
 * *[v1.6.0.rc1]*
   * [FIX]: Media Queries optimized for small (13 inch) screens
   * [FEATURE]: new embedded templates added

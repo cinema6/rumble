@@ -9,8 +9,9 @@
             <div class="toc-item__details">
                 <h1 class="toc-item__title tk--hdr">{{card.title}}</h1>
                 <p ng-if="!card.data.hideSource" ng-show="!!card.source" class="toc-item__attributes">via&nbsp;<a 
-                    ng-href="{{config.webHref}}" target="_blank"
-                    title="{{config.source}}">{{config.source}}</a></p>
+                    ng-href="{{card.webHref}}" target="_blank"
+                    title="{{card.source}}"
+                    ng-click="$event.stopPropagation()">{{card.source}}</a></p>
                 <p ng-if="!!card.params.sponsor"
                     class="toc-item__attributes toc-item__attributes--sponsor">
                     Sponsored by <a ng-href="{{card.links.Website}}"
