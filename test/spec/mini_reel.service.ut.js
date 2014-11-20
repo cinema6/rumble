@@ -403,12 +403,6 @@ define(['app', 'minireel', 'c6uilib', 'angular'], function(appModule, minireelMo
                         expect(result).toBe(angular.copy.calls.mostRecent().result);
                     });
 
-                    it('should give each video a player', function() {
-                        result.forEach(function(video) {
-                            expect(video.player).toBeNull();
-                        });
-                    });
-
                     describe('social', function() {
                         it('should create an array of social links from the links hash', function() {
                             expect(result[0].social).toEqual([]);
@@ -471,7 +465,7 @@ define(['app', 'minireel', 'c6uilib', 'angular'], function(appModule, minireelMo
                         }
 
                         function isVideo(card) {
-                            return (/^(youtube|vimeo|dailymotion|adUnit)$/).test(card.type);
+                            return (/^(youtube|vimeo|dailymotion|adUnit|embedded)$/).test(card.type);
                         }
 
                         function isSet(object, prop) {

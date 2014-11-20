@@ -27,9 +27,6 @@
         }
     },
     "build": {
-        "cards/vpaid": {
-            "blacklist": ["mobile", "solo", "solo-ads"]
-        },
         "cards/ad": {
             "blacklist": ["solo", "solo-ads"]
         },
@@ -40,9 +37,6 @@
             "blacklist": ["solo", "solo-ads"]
         },
         "cards/text": {
-            "blacklist": ["solo", "solo-ads"]
-        },
-        "cards/vast": {
             "blacklist": ["solo", "solo-ads"]
         },
         "modules/ballot": {
