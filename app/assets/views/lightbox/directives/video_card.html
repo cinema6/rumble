@@ -5,7 +5,7 @@
         active="config._data.modules.ballot.ballotActive && active"
         vote="config._data.modules.ballot.vote"
         card-id="{{config.id}}"
-        ballot="config.ballot"
+        ballot="config._data.modules.post.ballot"
         on-dismiss="Ctrl.closeBallot()">
     </ballot-vote-module>
     <ballot-results-module ng-if="hasModule('ballot')"
