@@ -6,7 +6,9 @@
     persisted in the database
   * [FIX]: Fix for an issue that caused video sources not to appear in
     the mobile table of contents
-  * [FIX]: Updated offscreen styles to use 100% width and height
+  * [FIX]: Fix for an issue where YouTube videos would play in the
+    background
+* *[/v1.6.0.rc2]*
 
 * *[v1.6.0.rc1]*
   * [FIX]: Media Queries optimized for small (13 inch) screens
