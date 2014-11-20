@@ -27,7 +27,7 @@ function( angular ) {
             this.vote = function(index) {
                 $log.info('Submitting vote for card %1: %2', $scope.cardId, $scope.ballot.choices[index]);
 
-                BallotService.vote($scope.cardId, index, $scope.ballot.electionId)
+                BallotService.vote($scope.cardId, index, $scope.ballot.election)
                     .catch(function(error) {
                         $log.error(error);
                     });

@@ -68,7 +68,7 @@ define(['minireel','modules/post'], function(minireelModule, postModule) {
 
                     describe('when the card has a custom election ID', function() {
                         it('should pass it as third parameter to BallotService.vote()', function() {
-                            $scope.ballot.electionId = 'el-1234567';
+                            $scope.ballot.election = 'el-1234567';
                             PostModuleCtrl.vote(1);
 
                             expect(BallotService.vote).toHaveBeenCalledWith($scope.cardId, 1, 'el-1234567');
