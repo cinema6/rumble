@@ -14,7 +14,8 @@ function( angular ) {
                     onReplay: '&',
                     sponsorHref: '@',
                     onDismiss: '&',
-                    ballot: '='
+                    ballot: '=',
+                    cardId: '@'
                 },
                 templateUrl: assetFilter('directives/post_module.html', 'views')
             };
