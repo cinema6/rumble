@@ -4,7 +4,8 @@
     .btnPrimary,
     .player__playBtn,
     .recap__item,
-    .ballot__btn:before {
+    .ballot__btn:before,
+    .actionsModal__btn:after {
         -webkit-transition:background 0.3s; 
         transition:background 0.3s;
     }
@@ -17,7 +18,8 @@
     }
 
     .ballot__btn:hover:before,
-    .player__playBtn:hover {
+    .player__playBtn:hover,
+    .actionsModal__btn:hover:after {
         background-color:#d94040;
     }
 
@@ -58,7 +60,8 @@
     .sponsorProfile__imgBox:hover {
         border-color:#d94040;
     }
-    .textLink:hover {
+    .textLink:hover,
+    a:hover .textLink {
         border-bottom:1px dotted #d94040;
     }
     .recap__item:hover {
@@ -131,7 +134,17 @@
 /*  ================================================
     transform transitions
     ================================================ */
-    .page__btn:hover .page__previewImg {
+    .ballot__textLink:before,
+    .sprite--close,
+    .actionsModal__btn:before {
+        -webkit-transition: -webkit-transform 0.3s; 
+        transition: 0.3s transform;
+    }
+
+    .sprite--close:hover,
+    .ballot__textLink:hover:before,
+    .page__btn:hover .page__previewImg,
+    .actionsModal__btn:hover:before {
         -webkit-transform: scale(1.25);
         transform: scale(1.25);
     }

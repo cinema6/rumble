@@ -1,13 +1,11 @@
-<article>
-    <div class="mr-card mr-card-shadow">
-        <div class="clearfix">
-            <div class="mr-card__title">
-                <h1 class="mr-card__title-h1 tk--hdr">{{config.title}}</h1>
-            </div>
-            <div class="mr-player__thumbnail" ng-style="{'background-image':config.thumbs.large ? 'url(' + config.thumbs.large + ')' : ''}">
-                <span class="ir"><img ng-src="{{config.thumbs.large}}"></span>
-            </div>
-            <div class="mr-card__copy" ng-bind-html="config.note"></div>
+<div class="card__group">
+    <div class="clearfix">
+        <h1 class="card__title tk--hdr">
+            {{config.title}}
+        </h1>
+        <div class="player__thumbnail" ng-style="{'background-image':config.thumbs.large ? 'url(' + config.thumbs.large + ')' : ''}">
+            <span class="ir"><img ng-src="{{config.thumbs.large}}"></span>
         </div>
-    </div><!--.mr-card-->
-</article>
+        <div class="card__desc" ng-bind-html="config.note"></div>
+    </div>
+</div><!--.card__group-->

@@ -1,5 +1,33 @@
-<div class="actionsModal__group player__height" ng-show="active">
-    <ul class="actionsModal__list">
+<div class="actionsModal__group player__height c6-fade" ng-show="active">
+    <section class="ballot__box" ng-show="!!ballot">
+        <span class="ballot__intro">Please answer the following:</span>
+        <h2 class="ballot__title tk--hdr">{{ballot.prompt}}</h2>
+        <ul class="ballot__list">
+            <li class="ballot__item ballot__item{{$index}}" ng-repeat="choice in ballot.choices">
+                <button class="ballot__btn btnPrimary ballot__btn{{$index}}"
+                ng-click="Ctrl.vote($index)"
+                type="button" title="{{choice}}">
+                    <span class="ballot__btnLabel btn__label tk--action">{{choice}}</span>
+                </button>
+            </li>
+        </ul>
+
+        <div class="ballot__textLinks">
+            <a ng-click="onReplay()" title="Watch Video Again"
+                class="ballot__textLink ballot__textLink--replay spriteBe uiIconsBe uiIconsBe--replay">
+                <span class="textLink__label textLink">Watch Video Again</span>
+            </a>
+            <a ng-if="!!sponsorHref"
+                ng-href="{{sponsorHref}}"
+                title="Visit Sponsor Site"
+                target="_blank"
+                class="ballot__textLink ballot__textLink--link spriteBe uiIconsBe uiIconsBe--link">
+                <span class="textLink__label textLink">Visit Sponsor Site</span>
+            </a>
+        </div>
+    </section>
+
+    <ul class="actionsModal__list" ng-show="!ballot">
         <li class="actionsModal__item">
             <button class="btnPrimary actionsModal__btn
             spriteBe uiIconsBe uiIconsBe--replay"

@@ -28,7 +28,8 @@ function( angular ) {
                             vote: null
                         },
                         post: {
-                            active: false
+                            active: false,
+                            ballot: config.ballot
                         }
                     }
                 }),
@@ -174,6 +175,19 @@ function( angular ) {
 
                     if (vote > -1) {
                         trackVideoEvent('Vote', false, config.ballot.choices[vote]);
+                    }
+                });
+
+                $scope.$on('<post-module>:vote', function($event, vote) {
+                    var post = _data.modules.post;
+
+                    post.active = false;
+                    post.ballot = null;
+
+                    trackVideoEvent('Vote', false, config.ballot.choices[vote]);
+
+                    if (player.ended) {
+                        $scope.$emit('<mr-card>:contentEnd', $scope.config);
                     }
                 });
 

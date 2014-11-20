@@ -7,14 +7,16 @@
     .ballot__btn:before,
     .recap__item,
     .playlist__item,
-    .player__playBtn {
+    .player__playBtn,
+    .actionsModal__btn:after {
         -webkit-transition:background 0.3s; transition:background 0.3s;
     }
 
     .MiniReel__closeBtn:hover,
     .playlist__item.playlist__item--current:hover,
     .player__playBtn:hover,
-    .ballot__btn:hover:before {
+    .ballot__btn:hover:before,
+    .actionsModal__btn:hover:after {
         background-color:#d94040;
     }
 
@@ -112,6 +114,7 @@
         border-left:3px solid #d94040;
     }
     .textLink:hover,
+    a:hover .textLink,
     .displayAdBrand__link:hover .displayAdBrand__linkLabel {
         border-bottom:1px dotted #d94040;
     }
@@ -211,12 +214,17 @@
 /*  ================================================
     transform transitions
     ================================================ */
-    .someClass {
-        -webkit-transition: -webkit-transform 0.3s ease; 
-        transition: transform 0.3s ease;
+    .ballot__textLink:before,
+    .sprite--close,
+    .actionsModal__btn:before {
+        -webkit-transition: -webkit-transform 0.3s; 
+        transition: transform 0.3s;
     }
 
-    .page__btn:hover .page__previewImg {
+    .sprite--close:hover,
+    .ballot__textLink:hover:before,
+    .page__btn:hover .page__previewImg,
+    .actionsModal__btn:hover:before {
         -webkit-transform: scale(1.25);
         transform: scale(1.25);
     }
