@@ -109,6 +109,7 @@
         border-left:3px solid #d94040;
     }
     .textLink:hover,
+    a:hover .textLink,
     .displayAdBrand__link:hover .displayAdBrand__linkLabel {
         border-bottom:1px dotted #d94040;
     }
@@ -232,10 +233,15 @@
 /*  ================================================
     transform transitions
     ================================================ */
+    .ballot__textLink:before,
+    .sprite--close,
     .actionsModal__btn:before {
-        -webkit-transition: -webkit-transform 0.3s ease; 
+        -webkit-transition: -webkit-transform 0.3s; 
         transition: 0.3s transform;
     }
+
+    .sprite--close:hover,
+    .ballot__textLink:hover:before,
     .page__btn:hover .page__previewImg,
     .actionsModal__btn:hover:before {
         -webkit-transform: scale(1.25);

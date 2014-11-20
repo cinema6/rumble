@@ -13,7 +13,8 @@ function( angular ) {
                 scope: {
                     cards: '=',
                     onSelect: '&',
-                    onExit: '&'
+                    onExit: '&',
+                    title: '@'
                 }
             };
         }])

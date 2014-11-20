@@ -1,5 +1,13 @@
+<post-module ng-if="hasModule('post')"
+    active="config._data.modules.post.active"
+    on-replay="Ctrl.player.play()"
+    on-dismiss="config._data.modules.post.active = false"
+    card-id="{{config.id}}"
+    ballot="config._data.modules.post.ballot"
+    sponsor-href="{{config.links.Website}}">
+</post-module>
 <ballot-vote-module 
-    class="mr-ballot-module ballot-module"
+    class="ballot__group player__height c6-fade"
     ng-if="hasModule('ballot')"
     active="config._data.modules.ballot.ballotActive && active"
     vote="config._data.modules.ballot.vote"
@@ -7,71 +15,77 @@
     ballot="config.ballot"
     on-dismiss="Ctrl.closeBallot()">
 </ballot-vote-module>
-<post-module ng-if="hasModule('post')"
-    active="config._data.modules.post.active"
-    on-replay="Ctrl.player.play()"
-    on-dismiss="config._data.modules.post.active = false"
-    sponsor-href="{{config.links.Website}}">
-</post-module>
-<article>
-    <div class="mr-card mr-card-shadow">
-        <div class="clearfix">
-            <div class="mr-card__title">
-                <h1 class="mr-card__title-h1 tk--hdr">{{config.title}}</h1>
-                <p ng-if="!config.data.hideSource" class="mr-card__attributes">via <a ng-href="{{config.webHref}}" target="_blank" title="YouTube">{{config.source}}</a></p>
-            </div>
-            <div ng-class="{'mr-player--fly-away': Ctrl.flyAway}"
-                class="mr-player js-playerBox"
-                ng-switch="config.type">
-                <youtube-player ng-switch-when="youtube" id="{{config.id}}-player" videoid="{{config.data.videoid}}" start="{{config.data.start}}" end="{{config.data.end}}"></youtube-player>
-                <vimeo-player ng-switch-when="vimeo" id="{{config.id}}-player" videoid="{{config.data.videoid}}" start="{{config.data.start}}" end="{{config.data.end}}"></vimeo-player>
-                <dailymotion-player ng-switch-when="dailymotion" id="{{config.id}}-player" videoid="{{config.data.videoid}}"></dailymotion-player>
-                <span ng-switch-when="adUnit"><ng-switch on="Ctrl.adType">
-                    <vpaid-player ng-switch-when="vpaid" videoid="{{config.id}}-player" ad-tag="{{Ctrl.adTag}}"></vpaid-player>
-                    <vast-player ng-switch-when="vast" videoid="{{config.id}}-player" ad-tag="{{Ctrl.adTag}}"></vast-player>
-                </ng-switch></span>
-                <embedded-player ng-switch-when="embedded" code="{{config.data.code}}"></embedded-player>
-            </div>
-            <div ng-show="Ctrl.flyAway" c6-touch="Ctrl.player.play()" class="mr-player__thumbnail" 
-                ng-style="{'background-image':config.thumbs.large ? 'url(' + config.thumbs.large + ')' : ''}">
-                <span class="ir"><img ng-src="{{config.thumbs.large}}"></span>
-            </div>
-            <ballot-results-module ng-if="hasModule('ballot')"
-                active="config._data.modules.ballot.resultsActive && active"
-                vote="config._data.modules.ballot.vote"
-                card-id="{{config.id}}"
-                fetch-when="onDeck || active"
-                on-dismiss="Ctrl.closeBallotResults()">
-            </ballot-results-module>
 
-            <div class="mr-sponsorProfile__group clearfix" ng-if="!!(config.collateral.logo || config.social.length > 0 || config.params.sponsor)">
-                <a ng-if="!!config.collateral.logo" ng-href="{{config.links.Website}}" target="_blank" title="Sponsor link" class="mr-sponsorProfile__imgBox">
-                    <img ng-src="{{config.collateral.logo}}" class="mr-sponsorProfile__img">
+<section class="card__group clearfix">
+    <h1 class="card__title tk--hdr">
+        {{config.title}}
+        <span ng-if="!config.data.hideSource" class="card__attributes tk--copy">
+            via&nbsp;<a ng-href="{{config.webHref}}" target="_blank" class="textLink" 
+            title="{{config.source}}">{{config.source}}</a>
+        </span>
+    </h1>
+    
+    <div ng-class="{'player--fly-away': Ctrl.flyAway}"
+        class="player js-playerBox"
+        ng-switch="config.type">
+        <youtube-player ng-switch-when="youtube" id="{{config.id}}-player" 
+        videoid="{{config.data.videoid}}" class="playerBox"
+        start="{{config.data.start}}" end="{{config.data.end}}"></youtube-player>
+        <vimeo-player ng-switch-when="vimeo" id="{{config.id}}-player"
+        videoid="{{config.data.videoid}}" class="playerBox"
+        start="{{config.data.start}}" end="{{config.data.end}}"></vimeo-player>
+        <dailymotion-player ng-switch-when="dailymotion" id="{{config.id}}-player"
+        class="playerBox" videoid="{{config.data.videoid}}"></dailymotion-player>
+        <span ng-switch-when="adUnit"><ng-switch on="Ctrl.adType">
+            <vpaid-player ng-switch-when="vpaid" videoid="{{config.id}}-player"
+            class="playerBox" ad-tag="{{Ctrl.adTag}}"></vpaid-player>
+            <vast-player ng-switch-when="vast" videoid="{{config.id}}-player"
+            class="playerBox" ad-tag="{{Ctrl.adTag}}"></vast-player>
+        </ng-switch></span>
+        <embedded-player ng-switch-when="embedded" class="playerBox"
+        code="{{config.data.code}}"></embedded-player>
+    </div>
+    <div ng-show="Ctrl.flyAway" c6-touch="Ctrl.player.play()" class="player__thumbnail" 
+        ng-style="{'background-image':config.thumbs.large ? 'url(' + config.thumbs.large + ')' : ''}">
+        <span class="ir"><img ng-src="{{config.thumbs.large}}"></span>
+    </div>
+    <ballot-results-module ng-if="hasModule('ballot')"
+        active="config._data.modules.ballot.resultsActive && active"
+        vote="config._data.modules.ballot.vote"
+        card-id="{{config.id}}"
+        fetch-when="onDeck || active"
+        on-dismiss="Ctrl.closeBallotResults()">
+    </ballot-results-module>
+
+    <div class="sponsorProfile__group clearfix" ng-if="!!(config.collateral.logo || config.social.length > 0 || config.params.sponsor)">
+        <a ng-if="!!config.collateral.logo" ng-href="{{config.links.Website}}" target="_blank" title="Sponsor link" class="sponsorProfile__imgBox">
+            <img ng-src="{{config.collateral.logo}}" class="sponsorProfile__img">
+        </a>
+        <div class="sponsorProfile__copy" ng-if="!!(config.params.sponsor || config.social.length > 0)">
+            <p class="sponsorProfile__tag" ng-if="!!config.params.sponsor">
+                Sponsored by 
+                <a ng-href="{{config.links.Website}}" target="_blank" title="{{config.params.sponsor}}">{{config.params.sponsor}}</a>
+            </p>
+            <div class="sponsorProfile__links" ng-if="config.social.length > 0">
+                <a ng-repeat="link in config.social"
+                    ng-href="{{link.href}}"
+                    target="_blank"
+                    title="{{link.label}}"
+                    class="sponsorProfile__link spriteBe socialIconsBe socialIconsBe--{{link.type}}">
+                    <span class="ir">{{link.label}}</span>
                 </a>
-                <div class="mr-sponsorProfile__copy" ng-if="!!(config.params.sponsor || config.social.length > 0)">
-                    <p class="mr-sponsorProfile__tag" ng-if="!!config.params.sponsor">
-                        Sponsored by 
-                        <a ng-href="{{config.links.Website}}" target="_blank" title="{{config.params.sponsor}}">{{config.params.sponsor}}</a>
-                    </p>
-                    <div class="mr-sponsorProfile__links" ng-if="config.social.length > 0">
-                        <a ng-repeat="link in config.social"
-                            ng-href="{{link.href}}"
-                            target="_blank"
-                            title="{{link.label}}"
-                            class="mr-sponsorProfile__link sprite__socialBe socialIconsBe socialIconsBe--{{link.type}}">
-                            <span class="ir">{{link.label}}</span>
-                        </a>
-                    </div>
-                </div>
             </div>
-
-            <div class="mr-card__copy sponsor__actions" ng-if="!!config.links.Action" ng-switch="config.params.action.type" c6-alias="config.params.action as action">
-                <a ng-switch-when="text" ng-href="{{config.links.Action}}" target="_blank">{{action.label}}</a>
-                <a ng-switch-when="button" ng-href="{{config.links.Action}}" target="_blank" class="mr-sponsor__goBtn" title="{{action.label}}">{{action.label}}</a>
-            </div>
-            
-            <div class="mr-card__copy" ng-bind-html="config.note"></div>
         </div>
-        
-    </div><!--.mr-card-->
-</article>
+    </div>
+
+    <div class="card__desc sponsor__actions" ng-if="!!config.links.Action" ng-switch="config.params.action.type" c6-alias="config.params.action as action">
+        <a ng-switch-when="text" ng-href="{{config.links.Action}}" target="_blank">{{action.label}}</a>
+        <a ng-switch-when="button" ng-href="{{config.links.Action}}" 
+        target="_blank" class="btnPrimary sponsor__goBtn" title="{{action.label}}">
+            <span class="btn__label">{{action.label}}</span>
+        </a>
+    </div>
+    
+    <div class="card__desc" ng-bind-html="config.note"></div>
+    
+</section><!--.card__group-->

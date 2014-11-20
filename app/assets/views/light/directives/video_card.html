@@ -1,4 +1,12 @@
 <article class="card__group">
+    <post-module ng-if="hasModule('post')"
+        active="config._data.modules.post.active"
+        on-replay="Ctrl.player.play()"
+        on-dismiss="config._data.modules.post.active = false"
+        card-id="{{config.id}}"
+        ballot="config._data.modules.post.ballot"
+        sponsor-href="{{config.links.Website}}">
+    </post-module>
     <ballot-vote-module 
         class="ballot__group player__height c6-fade"
         ng-if="hasModule('ballot')"

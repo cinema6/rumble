@@ -2,11 +2,13 @@
     background transitions
     ================================================ */
     .btnPrimary,
+    .ballot__btn:before,
     .actionsModal__btn:after {
         -webkit-transition:background 0.3s; 
         transition:background 0.3s;
     }
 
+    .ballot__btn:hover:before,
     .actionsModal__btn:hover:after {
         background-color:#d94040;
     }
@@ -47,6 +49,7 @@
     }
 
     .textLink:hover,
+    a:hover .textLink,
     .brandProfile__link:hover .brandProfile__linkLabel {
         border-bottom:1px dotted #d94040;
     }
@@ -57,10 +60,15 @@
 /*  ================================================
     transform transitions
     ================================================ */
+    .ballot__textLink:before,
+    .sprite--close,
     .actionsModal__btn:before {
-        -webkit-transition: -webkit-transform 0.3s ease; 
+        -webkit-transition: -webkit-transform 0.3s; 
         transition: 0.3s transform;
     }
+
+    .sprite--close:hover,
+    .ballot__textLink:hover:before,
     .actionsModal__btn:hover:before {
         -webkit-transform: scale(1.25);
         transform: scale(1.25);

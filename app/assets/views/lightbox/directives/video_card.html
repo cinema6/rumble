@@ -5,7 +5,7 @@
         active="config._data.modules.ballot.ballotActive && active"
         vote="config._data.modules.ballot.vote"
         card-id="{{config.id}}"
-        ballot="config.ballot"
+        ballot="config._data.modules.post.ballot"
         on-dismiss="Ctrl.closeBallot()">
     </ballot-vote-module>
     <ballot-results-module ng-if="hasModule('ballot')"
@@ -20,6 +20,8 @@
         active="config._data.modules.post.active"
         on-replay="Ctrl.player.play()"
         on-dismiss="config._data.modules.post.active = false"
+        card-id="{{config.id}}"
+        ballot="config.ballot"
         sponsor-href="{{config.links.Website}}">
     </post-module>
     <div class="player__group playerHeight">

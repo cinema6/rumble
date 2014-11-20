@@ -130,6 +130,10 @@
             .uiIconsBe__dark--replay:before {
                 background-position:-1rem -7rem;
             }
+            .uiIconsBe--link:before {
+                background-position:-3rem -9rem;
+                width:1.25rem;
+            }
 
 
     .overlay {
@@ -400,7 +404,8 @@
             background:black url('../../img/default_square.jpg') 50% 50% / cover no-repeat;
         }
             
-            .player__playBtn {
+            .player__playBtn,
+            .player__playBtn:focus {
                 width: 6em;
                 height: 6em;
                 padding: 0;
@@ -703,6 +708,7 @@
                 font-size:0.875em;
                 vertical-align: middle;
                 line-height: 1;
+                margin-left:2px;
             }
 
 
@@ -717,6 +723,65 @@
             .ballot__result1 {
                 background:#1789cb;
             }
+
+
+
+
+
+/*  ================================================
+    actionsModal__group styles
+    ================================================ */
+    .actionsModal__group {
+        position:absolute; z-index: 2;
+        top:0; left:0; right:0; bottom:0;
+        overflow: hidden;
+    }
+    .actionsModal__list {
+        position:absolute; z-index: 2;
+        top:50%; left:50%;
+        width:36em;
+        margin:-1.5em 0 0 -18em;
+        padding:0;
+        text-align: center;
+        list-style: none;
+    }
+        .actionsModal__item {
+            position:relative;
+            display: inline-block;
+            margin:0 0.5em 1.5em;
+        }
+        .actionsModal__btn {
+            padding:0 1em 0 4em;
+            height:3em;
+            text-align: center;
+        }
+
+            .actionsModal__btn:before {
+                position:absolute;
+                top:1em; left:1em;
+                z-index: 3;
+                content:'';
+            }
+            .actionsModal__btn:after {
+                content:'';
+                position: absolute;
+                top:0; left:0;
+                z-index: 2;
+                width:3rem; height:3rem;
+                background-color:rgba(0,0,0,0.2);
+                display: block;
+            }
+
+        @media screen and (max-width:33rem) {
+            /*max 528px*/
+            .actionsModal__list {
+                margin:-3.75em 0 0 -7.125em;
+                width:14.25em;
+            }
+            .actionsModal__item {
+                margin:0 0 1.5em 0;
+            }
+        }
 
 
 
