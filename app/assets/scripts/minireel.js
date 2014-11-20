@@ -450,6 +450,7 @@ function( angular , c6Defines  , tracker ,
             function AdCard(config) {
                 this.id = 'rc-advertisement' + (++adId);
                 this.type = 'ad';
+                this.title = 'Advertisement';
                 this.ad = true;
                 this.modules = [];
                 this.data = {

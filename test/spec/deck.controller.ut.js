@@ -12,6 +12,7 @@ define(['app','minireel'], function(appModule, minireelModule) {
         function AdCard(id) {
             this.id = 'rc-advertisement' + id;
             this.type = 'ad';
+            this.title = 'Advertisement';
             this.ad = true;
             this.modules = ['displayAd'];
             this.data = {
