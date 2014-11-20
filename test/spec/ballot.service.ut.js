@@ -366,7 +366,7 @@ define(['app'], function(appModule) {
                     });
                 });
 
-                describe('vote(id, name)', function() {
+                describe('vote(id, name, idOverride)', function() {
                     var success, failure;
 
                     beforeEach(function(){
@@ -432,6 +432,35 @@ define(['app'], function(appModule) {
                             }).respond(200, 'OK');
                             
                             BallotService.vote('rc-22119a8cf9f755', 1)
+                                .then(success, failure);
+                        });
+
+                        it('should post the vote to the api', function() {
+                            $httpBackend.flush();
+                        });
+
+                        it('should resolve with "true"', function() {
+                            $httpBackend.flush();
+                            expect(success).toHaveBeenCalledWith(true);
+                        });
+                    });
+
+                    describe('overriding the electionID', function() {
+                        beforeEach(function() {
+                            $httpBackend.expectGET('http://portal.cinema6.com/api/public/election/' + elData.id)
+                                .respond(200, elData);
+
+                            BallotService.init(elData.id,ballotMap);
+                            BallotService.getElection();
+                            $httpBackend.flush();
+
+                            $httpBackend.expectPOST('http://portal.cinema6.com/api/public/vote', {
+                                election: 'e-123-override',
+                                ballotItem: 'rc-22119a8cf9f755',
+                                vote: 1
+                            }).respond(200, 'OK');
+
+                            BallotService.vote('rc-22119a8cf9f755', 1, 'e-123-override')
                                 .then(success, failure);
                         });
 

@@ -6,6 +6,8 @@
         active="config._data.modules.post.active"
         on-replay="Ctrl.player.play()"
         on-dismiss="config._data.modules.post.active = false"
+        card-id="{{config.id}}"
+        ballot="config.ballot"
         sponsor-href="{{config.links.Website}}">
     </post-module>
     <ballot-vote-module 
