@@ -510,20 +510,6 @@ define(['app', 'tracker', 'services'], function(appModule, trackerModule, servic
                                                 expect(iface.play).toHaveBeenCalled();
                                             });
                                         });
-
-                                        describe('if the device can\'t be autoplayed', function() {
-                                            beforeEach(function() {
-                                                c6AppData.profile.autoplay = false;
-
-                                                $scope.$apply(function() {
-                                                    $scope.active = true;
-                                                });
-                                            });
-
-                                            it('should not play the video', function() {
-                                                expect(iface.play).not.toHaveBeenCalled();
-                                            });
-                                        });
                                     });
 
                                     describe('if the card should not be autoplayed', function() {

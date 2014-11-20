@@ -3,10 +3,10 @@ function( angular ) {
     'use strict';
 
     return angular.module('c6.rumble.cards.ad', [])
-        .controller('AdCardController', ['$scope','c6AppData','adTags','$interval','$rootScope',
+        .controller('AdCardController', ['$scope','adTags','$interval','$rootScope',
                                          'MiniReelService','compileAdTag','trackerService',
                                          'VideoTrackerService',
-        function                        ( $scope , c6AppData , adTags , $interval , $rootScope ,
+        function                        ( $scope , adTags , $interval , $rootScope ,
                                           MiniReelService , compileAdTag , trackerService ,
                                           VideoTrackerService ) {
             var AdCardCtrl = this,
@@ -73,7 +73,7 @@ function( angular ) {
                         return goForward();
                     }
 
-                    if (data.autoplay && c6AppData.profile.autoplay) {
+                    if (data.autoplay) {
                         player.play();
                     }
 
