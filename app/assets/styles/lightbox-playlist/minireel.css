@@ -382,8 +382,6 @@
         }
 
 
-
-
         .titleBar__title {
             margin:0;
             font-size:1em;
@@ -394,6 +392,7 @@
             text-overflow: ellipsis;
             white-space: nowrap;
             overflow: hidden;
+            height:1.5em;
         }
 
             .titleBar__titleText {
@@ -1407,6 +1406,7 @@
     }
         .experience__group--brandedMR .titleBar__title {
             width:calc(100% - 3.5em);
+            height:3em;
             margin:0 0 0 0.5rem;
         }
             .brandedMR__tagline {
