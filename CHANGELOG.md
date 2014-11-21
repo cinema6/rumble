@@ -1,5 +1,10 @@
 # MiniReel Player
 
+## v1.6.1 (November 21, 2014)
+* *[v1.6.1.rc1]*
+  * [FIX]: CSS hacks for AOL mobile player added
+* *[/v1.6.1.rc1]*
+
 ## v1.6.0 (November 20, 2014)
 * *[v1.6.0.rc2]*
   * [FIX]: Fix for an issue that caused sponsored card surveys not to be
