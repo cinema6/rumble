@@ -1,6 +1,10 @@
 # MiniReel Player
 
 ## v1.6.1 (November 21, 2014)
+* *[v1.6.1.rc2]*
+  * [FIX]: fix for lightbox templates where MR titles were being cut off just below the baseline
+* *[/v1.6.1.rc2]*
+
 * *[v1.6.1.rc1]*
   * [FIX]: CSS hacks for AOL mobile player added
 * *[/v1.6.1.rc1]*
