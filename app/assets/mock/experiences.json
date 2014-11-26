@@ -8,7 +8,7 @@
         "data": {
             "placementId": "3220650",
             "election": "e-d0e407bb69675b",
-            "mode": "light",
+            "mode": "lightbox",
             "branding": "digitaljournal2",
             "collateral": {
                 "splash": "/collateral/experiences/rumble/splash-6thumb.jpg",
@@ -107,6 +107,21 @@
                         "modestbranding": 1
                     },
                     "conversationId": "rcv-f9efca48d85143"
+                },
+                {
+                    "id": "rc-6b4e9a0c45e441",
+                    "type": "rumble",
+                    "title": "Toddler performs Michael Jackson dance at talent show",
+                    "note": "Watch as 6-year-old Willie performs a flawless dance routine set to Michael Jackson's hit song, \"Smooth Criminal\", during the Coolidge Elementary School talent show. Now that's impressive!",
+                    "modules": [],
+                    "thumbs": {
+                        "small": "https://i.rmbl.ws/s8/6/K/K/f/t/a.4472.1.jpg",
+                        "large": "https://i.rmbl.ws/s8/6/K/K/f/t/a.4472.1.jpg"
+                    },
+                    "data": {
+                        "siteid": "v2z8ro-willie-perfoming-at-school-talent-show",
+                        "videoid": "8.2z8ro"
+                    }
                 },
                 {
                     "id": "rc-977210e130cd35",
