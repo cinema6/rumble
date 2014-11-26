@@ -353,6 +353,21 @@ define(['app', 'minireel', 'c6uilib', 'angular'], function(appModule, minireelMo
                                         service: 'yahoo',
                                         videoid: 'raw-video-captures-mh17-crash-172602605'
                                     }
+                                },
+                                {
+                                    id: 'rc-6b4e9a0c45e441',
+                                    type: 'rumble',
+                                    title: 'Toddler performs Michael Jackson dance at talent show',
+                                    note: 'Watch as 6-year-old Willie performs a flawless dance routine set to Michael Jackson\'s hit song, "Smooth Criminal", during the Coolidge Elementary School talent show. Now that\'s impressive!',
+                                    placementId: null,
+                                    thumbs: {},
+                                    data: {
+                                        skip: false,
+                                        autoadvance: true,
+                                        autoplay: null,
+                                        videoid: '8.2z8ro',
+                                        siteid: 'v2z8ro-willie-perfoming-at-school-talent-show'
+                                    }
                                 }
                             ]
                         };
@@ -465,7 +480,7 @@ define(['app', 'minireel', 'c6uilib', 'angular'], function(appModule, minireelMo
                         }
 
                         function isVideo(card) {
-                            return (/^(youtube|vimeo|dailymotion|adUnit|embedded)$/).test(card.type);
+                            return (/^(youtube|vimeo|dailymotion|adUnit|embedded|rumble)$/).test(card.type);
                         }
 
                         function isSet(object, prop) {
@@ -640,7 +655,7 @@ define(['app', 'minireel', 'c6uilib', 'angular'], function(appModule, minireelMo
                     });
 
                     describe('webHref', function() {
-                        var youtube, vimeo, dailymotion, aol, yahoo, others;
+                        var youtube, vimeo, dailymotion, rumble, aol, yahoo, others;
 
                         beforeEach(function() {
                             youtube = result.filter(function(card) {
@@ -652,6 +667,9 @@ define(['app', 'minireel', 'c6uilib', 'angular'], function(appModule, minireelMo
                             dailymotion = result.filter(function(card) {
                                 return card.type === 'dailymotion';
                             });
+                            rumble = result.filter(function(card) {
+                                return card.type === 'rumble';
+                            });
                             aol = result.filter(function(card) {
                                 return card.data.service === 'aol';
                             });
@@ -659,7 +677,7 @@ define(['app', 'minireel', 'c6uilib', 'angular'], function(appModule, minireelMo
                                 return card.data.service === 'yahoo';
                             });
                             others = result.filter(function(card) {
-                                return !(/^(youtube|vimeo|dailymotion|embedded)$/).test(card.type);
+                                return !(/^(youtube|vimeo|dailymotion|embedded|rumble)$/).test(card.type);
                             });
                         });
 
@@ -678,6 +696,12 @@ define(['app', 'minireel', 'c6uilib', 'angular'], function(appModule, minireelMo
                         it('should set a webHref for the dailymotion cards', function() {
                             dailymotion.forEach(function(card) {
                                 expect(card.webHref).toBe('http://www.dailymotion.com/video/' + card.data.videoid);
+                            });
+                        });
+
+                        it('should set a webHref for the rumble cards', function() {
+                            rumble.forEach(function(card) {
+                                expect(card.webHref).toBe('https://rumble.com/' + card.data.siteid + '.html');
                             });
                         });
 

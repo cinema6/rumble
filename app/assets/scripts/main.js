@@ -31,8 +31,8 @@
             angularAnimate: libUrl('angular/v1.2.12-0-g5cc5cc1/angular-animate.min'),
             angularSanitize: libUrl('angular/v1.2.12-0-g5cc5cc1/angular-sanitize.min'),
             angularTouch: libUrl('angular/v1.2.12-0-g5cc5cc1/angular-touch.min'),
-            c6uilib: libUrl('c6ui/v3.3.3-0-g33abd1f/c6uilib.min'),
-            c6log: libUrl('c6ui/v3.3.3-0-g33abd1f/c6log.min'),
+            c6uilib: libUrl('c6ui/v3.4.0-0-ge552883/c6uilib.min'),
+            c6log: libUrl('c6ui/v3.4.0-0-ge552883/c6log.min'),
             adtech: [
                 protocol + '//aka-cdn.adtechus.com/dt/common/DAC',
                 'backup/shmadshteck'

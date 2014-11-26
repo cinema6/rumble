@@ -296,6 +296,7 @@ function( angular ) {
                 '<youtube-player>:init',
                 '<vimeo-player>:init',
                 '<dailymotion-player>:init',
+                '<rumble-player>:init',
                 '<embedded-player>:init'
             ].forEach(function($event) {
                 $scope.$on($event, playerInit);

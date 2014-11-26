@@ -175,6 +175,8 @@ function( angular , c6Defines  , tracker ,
                         return 'http://vimeo.com/' + card.data.videoid;
                     case 'dailymotion':
                         return 'http://www.dailymotion.com/video/' + card.data.videoid;
+                    case 'rumble':
+                        return 'https://rumble.com/' + card.data.siteid + '.html';
                     case 'embedded':
                         return (function() {
                             switch (card.data.service) {
@@ -203,7 +205,9 @@ function( angular , c6Defines  , tracker ,
             }
 
             function setVideoDefaults(card) {
-                if (!(/^(youtube|vimeo|dailymotion|adUnit|embedded)$/).test(card.type)) { return; }
+                if (!(/^(youtube|vimeo|dailymotion|adUnit|embedded|rumble)$/).test(card.type)) {
+                    return;
+                }
 
                 [
                     {
@@ -1142,6 +1146,7 @@ function( angular , c6Defines  , tracker ,
                 case 'dailymotion':
                 case 'adUnit':
                 case 'embedded':
+                case 'rumble':
                     return 'video';
                 default:
                     return InflectorService.dasherize(scope.config.type);
