@@ -236,8 +236,8 @@ function( angular , c6Defines  , tracker ,
             return playlist;
         };
     }])
-    .service('BallotService', ['$http','$cacheFactory','$q','c6UrlMaker',
-    function                  ( $http , $cacheFactory , $q , c6UrlMaker ) {
+    .service('BallotService', ['$http','$cacheFactory','$q','c6UrlMaker','trackerService',
+    function                  ( $http , $cacheFactory , $q , c6UrlMaker , trackerService ) {
         var service = this,
             electionId = null,
             ballotMap  = null,
@@ -357,6 +357,11 @@ function( angular , c6Defines  , tracker ,
 
         this.vote = function(id, choiceIndex, electionIdOverride) {
             function process() {
+                trackerService('c6mr').trackEvent(
+                    'Survey',
+                    (electionIdOverride || electionId),
+                    id + '|' + (isNaN(choiceIndex) ? choiceIndex : parseInt(choiceIndex,10))
+                );
                 return true;
             }
 
@@ -372,7 +377,7 @@ function( angular , c6Defines  , tracker ,
                     }
                 }());
             }
-
+            
             return $http.post(c6UrlMaker('public/vote', 'api'), {
                 election: electionIdOverride || electionId,
                 ballotItem: id,
