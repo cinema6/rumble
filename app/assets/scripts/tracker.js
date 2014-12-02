@@ -111,10 +111,10 @@ function( angular , c6Defines  ) {
                 } else {
                     props.eventCategory = args[0];
                     props.eventAction   = args[1];
-                    if (args[2]){
+                    if ((args[2] !== undefined) && (args[2] !== null)){
                         props.eventLabel   = args[2];
                     }
-                    if (args[3]){
+                    if ((args[3] !== undefined) && (args[3] !== null)){
                         props.eventValue  = args[3];
                     }
                 }
