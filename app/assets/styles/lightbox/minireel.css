@@ -294,7 +294,6 @@
             width:80%;
             /* MR min width threshold to trigger scrollbars */
             min-width:600px;
-            -webkit-transition:width 0.3s; transition:width 0.3s;
         }
         @media screen and (max-height:700px) {
             .experience {

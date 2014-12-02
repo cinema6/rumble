@@ -3,6 +3,8 @@
 * *[v1.7.0.rc1]*
   * [FIX]: lightbox templates media queries updated for small screens
   * [FEATURE]: Added support for Rumble videos
+  * [FIX]: lightbox template - removed css transitions on width property
+  * [FEATURE]: Added GA event tracking to voteing
 
 ## v1.6.1 (November 21, 2014)
 * *[v1.6.1.rc2]*
