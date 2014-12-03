@@ -43,7 +43,7 @@
             <vpaid-player ng-switch-when="vpaid" videoid="{{config.id}}-player"
             class="playerBox" ad-tag="{{Ctrl.adTag}}"></vpaid-player>
             <vast-player ng-switch-when="vast" videoid="{{config.id}}-player"
-            class="playerBox" ad-tag="{{Ctrl.adTag}}"></vast-player>
+            class="playerBox" ad-tag="{{Ctrl.adTag}}" controls></vast-player>
         </ng-switch></span>
         <embedded-player ng-switch-when="embedded" class="playerBox"
         code="{{config.data.code}}"></embedded-player>
