@@ -40,7 +40,7 @@
             <youtube-player class="playerBox" ng-switch-when="youtube" id="{{config.id}}-player" videoid="{{config.data.videoid}}" start="{{config.data.start}}" end="{{config.data.end}}"></youtube-player>
             <vimeo-player class="playerBox" ng-switch-when="vimeo" id="{{config.id}}-player" videoid="{{config.data.videoid}}" start="{{config.data.start}}" end="{{config.data.end}}"></vimeo-player>
             <dailymotion-player class="playerBox" ng-switch-when="dailymotion" id="{{config.id}}-player" videoid="{{config.data.videoid}}"></dailymotion-player>
-            <rumble-player class="playerBox" ng-switch-when="rumble" id="{{config.id}}-player" videoid="{{config.data.videoid}}"></rumble-player>
+            <rumble-player class="playerBox" ng-switch-when="rumble" id="{{config.id}}-player" videoid="{{config.data.videoid}}" start="{{config.data.start}}" end="{{config.data.end}}"></rumble-player>
             <span ng-switch-when="adUnit"><ng-switch on="Ctrl.adType">
                 <vpaid-player ng-switch-when="vpaid" videoid="{{config.id}}-player" ad-tag="{{Ctrl.adTag}}"></vpaid-player>
                 <vast-player class="playerBox" ng-switch-when="vast" videoid="{{config.id}}-player" ad-tag="{{Ctrl.adTag}}"></vast-player>
