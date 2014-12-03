@@ -1,5 +1,10 @@
 # MiniReel Player
 
+## v1.7.2 (December 3, 2014)
+* *[v1.7.2.rc1]*
+  * [FIX]: Update c6ui
+* *[/v1.7.2.rc1]*
+
 ## v1.7.1 (December 3, 2014)
 * *[v1.7.1.rc1]*
   * [FIX]: Enable native video controls on vast player in all video card templates
