@@ -1,5 +1,10 @@
 # MiniReel Player
 
+## v1.7.1 (December 3, 2014)
+* *[v1.7.1.rc1]*
+  * [FIX]: Enable native video controls on vast player in all video card templates
+* *[/v1.7.1.rc1]*
+
 ## v1.7.0 (December 3, 2014)
 * *[v1.7.0.rc1]*
   * [FIX]: lightbox templates media queries updated for small screens
