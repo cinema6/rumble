@@ -82,7 +82,11 @@ function( angular ) {
                 }
 
                 function prepareCard() {
-                    player.load();
+                    // Because of an iOS < 8 bug, we don't want to load the video unless it is NOT
+                    // on the first card.
+                    if (($scope.number - 1) > 0 || profile.autoplay) {
+                        player.load();
+                    }
 
                     if (config.thumbs) {
                         c6ImagePreloader.load([config.thumbs.large]);

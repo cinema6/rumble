@@ -1109,6 +1109,44 @@ define(['app', 'services', 'tracker'], function(appModule, servicesModule, track
                                         expect(iface.load).toHaveBeenCalled();
                                     });
 
+                                    describe('if the card is the first one in the MR', function() {
+                                        beforeEach(function() {
+                                            $scope.$apply(function() {
+                                                 $scope.onDeck = false;
+                                            });
+                                            iface.load.calls.reset();
+                                            $scope.number = '1';
+                                        });
+
+                                        describe('if the device can autoplay', function() {
+                                            beforeEach(function() {
+                                                $scope.profile.autoplay = true;
+
+                                                $scope.$apply(function() {
+                                                    $scope.onDeck = true;
+                                                });
+                                            });
+
+                                            it('should load the video', function() {
+                                                expect(iface.load).toHaveBeenCalled();
+                                            });
+                                        });
+
+                                        describe('if the device cannot autoplay', function() {
+                                            beforeEach(function() {
+                                                $scope.profile.autoplay = false;
+
+                                                $scope.$apply(function() {
+                                                    $scope.onDeck = true;
+                                                });
+                                            });
+
+                                            it('should not load the video', function() {
+                                                expect(iface.load).not.toHaveBeenCalled();
+                                            });
+                                        });
+                                    });
+
                                     describe('if there are no thumbs', function() {
                                         beforeEach(function() {
                                             $scope.config.thumbs = null;
