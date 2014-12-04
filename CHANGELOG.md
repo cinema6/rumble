@@ -1,5 +1,15 @@
 # MiniReel Player
 
+## v1.7.3 (December 4, 2014)
+* *[v1.7.3.rc1]*
+  * [FIX]: Fix for an issue that caused rendering issues and strange
+    behavior on iOS < 8 if the first card was a VAST AdUnit
+  * [FIX]: Fix for an issue that caused the "complete" pixel to be fired
+    too many times by VAST videos on mobile devices
+  * [FEATURE]: Made it possible to send the "minViewTime" billing pixel
+    after a video (no matter its duration) has been completely played
+* *[/v1.7.3.rc1]*
+
 ## v1.7.2 (December 3, 2014)
 * *[v1.7.2.rc1]*
   * [FIX]: Update c6ui

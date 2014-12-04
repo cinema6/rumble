@@ -82,7 +82,11 @@ function( angular ) {
                 }
 
                 function prepareCard() {
-                    player.load();
+                    // Because of an iOS < 8 bug, we don't want to load the video unless it is NOT
+                    // on the first card.
+                    if (($scope.number - 1) > 0 || profile.autoplay) {
+                        player.load();
+                    }
 
                     if (config.thumbs) {
                         c6ImagePreloader.load([config.thumbs.large]);
@@ -152,7 +156,9 @@ function( angular ) {
                         _data.modules.post.active = true;
 
                         if (!profile.inlineVideo) {
-                            player.reload();
+                            if (player.minimize() instanceof Error) {
+                                player.reload();
+                            }
                         }
 
                         if (!$scope.hasModule('post') && !$scope.hasModule('ballot')) {
@@ -216,13 +222,29 @@ function( angular ) {
                     }
 
                     (function() {
-                        var lastTime = null,
+                        var campaign = config.campaign,
+                            tracking = _data.tracking,
+                            lastTime = null,
                             elapsedTime = 0;
 
                         // Fire the AdCount pixel after minViewTime, by tracking the elapsed time
-                        if (config.campaign.countUrl && config.campaign.minViewTime &&
-                                                        !_data.tracking.countFired) {
+                        if (campaign.countUrl && campaign.minViewTime && !tracking.countFired) {
                             player.on('timeupdate', function fireMinViewPixel() {
+                                var minViewTime = campaign.minViewTime;
+
+                                function firePixel() {
+                                    tracking.countFired = true;
+                                    c6ImagePreloader.load([campaign.countUrl]);
+                                    player.removeListener('timeupdate', fireMinViewPixel);
+                                }
+
+                                if (minViewTime < 0) {
+                                    if (player.currentTime >= (player.duration - 1) && !tracking.countFired) {
+                                        firePixel();
+                                    }
+                                    return;
+                                }
+
                                 if (lastTime === null) {
                                     lastTime = player.currentTime;
                                     return;
@@ -234,10 +256,8 @@ function( angular ) {
                                 }
                                 lastTime = player.currentTime;
 
-                                if (elapsedTime >= config.campaign.minViewTime && !_data.tracking.countFired) {
-                                    _data.tracking.countFired = true;
-                                    c6ImagePreloader.load([config.campaign.countUrl]);
-                                    player.removeListener('timeupdate', fireMinViewPixel);
+                                if (elapsedTime >= minViewTime && !tracking.countFired) {
+                                    firePixel();
                                 }
                             });
                         }

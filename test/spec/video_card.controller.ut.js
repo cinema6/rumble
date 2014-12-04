@@ -33,6 +33,7 @@ define(['app', 'services', 'tracker'], function(appModule, servicesModule, track
             this.reload = jasmine.createSpy('iface.reload()');
             this.getCompanions = jasmine.createSpy('iface.getCompanions()')
                 .and.returnValue(null);
+            this.minimize = jasmine.createSpy('iface.minimize()');
 
             this.paused = true;
             this.currentTime = 0;
@@ -968,22 +969,35 @@ define(['app', 'services', 'tracker'], function(appModule, servicesModule, track
                                     iface.emit('ended');
                                 });
 
-                                it('should not reload the video', function() {
+                                it('should not minimize the video', function() {
                                     expect(iface.reload).not.toHaveBeenCalled();
                                 });
                             });
 
                             describe('if the browser does not support inline video', function() {
                                 beforeEach(function() {
-                                    iface.reload.calls.reset();
+                                    iface.minimize.calls.reset();
 
                                     $scope.profile.inlineVideo = false;
 
                                     iface.emit('ended');
                                 });
 
-                                it('should reload the video', function() {
-                                    expect(iface.reload).toHaveBeenCalled();
+                                it('should minimize the video', function() {
+                                    expect(iface.minimize).toHaveBeenCalled();
+                                });
+
+                                describe('if minimize() returns an error', function() {
+                                    beforeEach(function() {
+                                        iface.reload.calls.reset();
+                                        iface.minimize.and.returnValue(new Error());
+
+                                        iface.emit('ended');
+                                    });
+
+                                    it('should reload the video', function() {
+                                        expect(iface.reload).toHaveBeenCalled();
+                                    });
                                 });
                             });
                         });
@@ -1107,6 +1121,44 @@ define(['app', 'services', 'tracker'], function(appModule, servicesModule, track
 
                                     it('should load the video', function() {
                                         expect(iface.load).toHaveBeenCalled();
+                                    });
+
+                                    describe('if the card is the first one in the MR', function() {
+                                        beforeEach(function() {
+                                            $scope.$apply(function() {
+                                                 $scope.onDeck = false;
+                                            });
+                                            iface.load.calls.reset();
+                                            $scope.number = '1';
+                                        });
+
+                                        describe('if the device can autoplay', function() {
+                                            beforeEach(function() {
+                                                $scope.profile.autoplay = true;
+
+                                                $scope.$apply(function() {
+                                                    $scope.onDeck = true;
+                                                });
+                                            });
+
+                                            it('should load the video', function() {
+                                                expect(iface.load).toHaveBeenCalled();
+                                            });
+                                        });
+
+                                        describe('if the device cannot autoplay', function() {
+                                            beforeEach(function() {
+                                                $scope.profile.autoplay = false;
+
+                                                $scope.$apply(function() {
+                                                    $scope.onDeck = true;
+                                                });
+                                            });
+
+                                            it('should not load the video', function() {
+                                                expect(iface.load).not.toHaveBeenCalled();
+                                            });
+                                        });
                                     });
 
                                     describe('if there are no thumbs', function() {
@@ -1532,6 +1584,62 @@ define(['app', 'services', 'tracker'], function(appModule, servicesModule, track
                 describe('sets up a timeupdate handler that', function() {
                     beforeEach(function() {
                         iface.emit('ready');
+                    });
+
+                    describe(', if the the minViewTime is < 0', function() {
+                        beforeEach(function() {
+                            c6ImagePreloader.load.calls.reset();
+                            iface.duration = 60;
+                            $scope.config.campaign.minViewTime = -1;
+                        });
+
+                        describe('and the currentTime is < one second from the end of the video,', function() {
+                            beforeEach(function() {
+                                [1, 4, 7, 9, 33, 54, 58.999].forEach(function(time) {
+                                    iface.currentTime = time;
+                                    iface.emit('timeupdate');
+                                });
+                            });
+
+                            it('should not fire the AdCount pixel', function() {
+                                expect(c6ImagePreloader.load).not.toHaveBeenCalled();
+                            });
+                        });
+
+                        describe('and the currentTime is one second from the end of the video,', function() {
+                            beforeEach(function() {
+                                iface.currentTime = 59;
+                                iface.emit('timeupdate');
+                            });
+
+                            it('should fire the AdCount pixel', function() {
+                                expect(c6ImagePreloader.load).toHaveBeenCalledWith(['count.me']);
+                            });
+                        });
+
+                        describe('and the currentTime is greater than one second from the end of the video,', function() {
+                            beforeEach(function() {
+                                iface.currentTime = 59.3;
+                                iface.emit('timeupdate');
+                            });
+
+                            it('should fire the AdCount pixel', function() {
+                                expect(c6ImagePreloader.load).toHaveBeenCalledWith(['count.me']);
+                            });
+
+                            describe('and the pixel has already been fired,', function() {
+                                beforeEach(function() {
+                                    c6ImagePreloader.load.calls.reset();
+
+                                    iface.currentTime = 59.5;
+                                    iface.emit('timeupdate');
+                                });
+
+                                it('does not fire the pixel again', function() {
+                                    expect(c6ImagePreloader.load).not.toHaveBeenCalled();
+                                });
+                            });
+                        });
                     });
 
                     it('should fire the AdCount pixel after minViewTime', function() {
