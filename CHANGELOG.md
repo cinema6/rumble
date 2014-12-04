@@ -1,6 +1,11 @@
 # MiniReel Player
 
 ## v1.7.3 (December 4, 2014)
+* *[v1.7.3.rc2]*
+  * [FIX]: Fix for an issue that caused a phantom play button to appear
+    in MiniReels with Vimeo videos running on an iPhone with iOS < 8
+* *[/v1.7.3.rc2]*
+
 * *[v1.7.3.rc1]*
   * [FIX]: Fix for an issue that caused rendering issues and strange
     behavior on iOS < 8 if the first card was a VAST AdUnit
