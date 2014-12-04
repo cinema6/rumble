@@ -1586,6 +1586,62 @@ define(['app', 'services', 'tracker'], function(appModule, servicesModule, track
                         iface.emit('ready');
                     });
 
+                    describe(', if the the minViewTime is < 0', function() {
+                        beforeEach(function() {
+                            c6ImagePreloader.load.calls.reset();
+                            iface.duration = 60;
+                            $scope.config.campaign.minViewTime = -1;
+                        });
+
+                        describe('and the currentTime is < one second from the end of the video,', function() {
+                            beforeEach(function() {
+                                [1, 4, 7, 9, 33, 54, 58.999].forEach(function(time) {
+                                    iface.currentTime = time;
+                                    iface.emit('timeupdate');
+                                });
+                            });
+
+                            it('should not fire the AdCount pixel', function() {
+                                expect(c6ImagePreloader.load).not.toHaveBeenCalled();
+                            });
+                        });
+
+                        describe('and the currentTime is one second from the end of the video,', function() {
+                            beforeEach(function() {
+                                iface.currentTime = 59;
+                                iface.emit('timeupdate');
+                            });
+
+                            it('should fire the AdCount pixel', function() {
+                                expect(c6ImagePreloader.load).toHaveBeenCalledWith(['count.me']);
+                            });
+                        });
+
+                        describe('and the currentTime is greater than one second from the end of the video,', function() {
+                            beforeEach(function() {
+                                iface.currentTime = 59.3;
+                                iface.emit('timeupdate');
+                            });
+
+                            it('should fire the AdCount pixel', function() {
+                                expect(c6ImagePreloader.load).toHaveBeenCalledWith(['count.me']);
+                            });
+
+                            describe('and the pixel has already been fired,', function() {
+                                beforeEach(function() {
+                                    c6ImagePreloader.load.calls.reset();
+
+                                    iface.currentTime = 59.5;
+                                    iface.emit('timeupdate');
+                                });
+
+                                it('does not fire the pixel again', function() {
+                                    expect(c6ImagePreloader.load).not.toHaveBeenCalled();
+                                });
+                            });
+                        });
+                    });
+
                     it('should fire the AdCount pixel after minViewTime', function() {
                         for (var i = 0; i < 6; i++) {
                             iface.currentTime = i;
