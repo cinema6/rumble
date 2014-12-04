@@ -156,7 +156,9 @@ function( angular ) {
                         _data.modules.post.active = true;
 
                         if (!profile.inlineVideo) {
-                            player.reload();
+                            if (player.minimize() instanceof Error) {
+                                player.reload();
+                            }
                         }
 
                         if (!$scope.hasModule('post') && !$scope.hasModule('ballot')) {

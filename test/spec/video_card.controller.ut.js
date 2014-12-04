@@ -33,6 +33,7 @@ define(['app', 'services', 'tracker'], function(appModule, servicesModule, track
             this.reload = jasmine.createSpy('iface.reload()');
             this.getCompanions = jasmine.createSpy('iface.getCompanions()')
                 .and.returnValue(null);
+            this.minimize = jasmine.createSpy('iface.minimize()');
 
             this.paused = true;
             this.currentTime = 0;
@@ -968,22 +969,35 @@ define(['app', 'services', 'tracker'], function(appModule, servicesModule, track
                                     iface.emit('ended');
                                 });
 
-                                it('should not reload the video', function() {
+                                it('should not minimize the video', function() {
                                     expect(iface.reload).not.toHaveBeenCalled();
                                 });
                             });
 
                             describe('if the browser does not support inline video', function() {
                                 beforeEach(function() {
-                                    iface.reload.calls.reset();
+                                    iface.minimize.calls.reset();
 
                                     $scope.profile.inlineVideo = false;
 
                                     iface.emit('ended');
                                 });
 
-                                it('should reload the video', function() {
-                                    expect(iface.reload).toHaveBeenCalled();
+                                it('should minimize the video', function() {
+                                    expect(iface.minimize).toHaveBeenCalled();
+                                });
+
+                                describe('if minimize() returns an error', function() {
+                                    beforeEach(function() {
+                                        iface.reload.calls.reset();
+                                        iface.minimize.and.returnValue(new Error());
+
+                                        iface.emit('ended');
+                                    });
+
+                                    it('should reload the video', function() {
+                                        expect(iface.reload).toHaveBeenCalled();
+                                    });
                                 });
                             });
                         });
