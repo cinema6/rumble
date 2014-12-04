@@ -763,7 +763,9 @@
         background:black url('../../img/default_square.jpg') 50% 50% / cover no-repeat;
     }
         .player--fly-away {
-            position: fixed; top: 40000em; padding: 0px;
+            left:-5000%;
+            position: absolute;
+            width:100% !important; height:100% !important;
         }
         .playerBox,
         .playerBox iframe,
