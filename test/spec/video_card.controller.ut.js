@@ -1527,6 +1527,7 @@ define(['app', 'services', 'tracker'], function(appModule, servicesModule, track
             var iface;
             beforeEach(function() {
                 iface = new Player();
+                iface.duration = 60;
                 $scope.$apply(function() {
                     $scope.$emit('<vast-player>:init', iface);
                 });
@@ -1589,8 +1590,20 @@ define(['app', 'services', 'tracker'], function(appModule, servicesModule, track
                     describe(', if the the minViewTime is < 0', function() {
                         beforeEach(function() {
                             c6ImagePreloader.load.calls.reset();
-                            iface.duration = 60;
                             $scope.config.campaign.minViewTime = -1;
+                        });
+
+                        describe('and the player duration is 0', function() {
+                            beforeEach(function() {
+                                iface.duration = 0;
+                            });
+
+                            it('should never fire the AdCount pixel', function() {
+                                iface.currentTime = 0.122;
+                                iface.emit('timeupdate');
+
+                                expect(c6ImagePreloader.load).not.toHaveBeenCalled();
+                            });
                         });
 
                         describe('and the currentTime is < one second from the end of the video,', function() {

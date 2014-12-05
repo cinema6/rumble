@@ -232,6 +232,8 @@ function( angular ) {
                             player.on('timeupdate', function fireMinViewPixel() {
                                 var minViewTime = campaign.minViewTime;
 
+                                if (!player.duration) { return; }
+
                                 function firePixel() {
                                     tracking.countFired = true;
                                     c6ImagePreloader.load([campaign.countUrl]);
