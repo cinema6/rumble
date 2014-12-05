@@ -1,8 +1,10 @@
 # MiniReel Player
 
-* *[v1.8.0.rc1]*
-  * [FIX]: fixed rendering of post modules in mobile screens so that they fit on screen
-
+## v1.7.4 (December 5, 2014)
+* *[v1.7.4.rc1]*
+  * [FIX]: In Mobile, fixed issue of video playing when off screen
+  * [FIX]: In Mobile, fixed post modules appearing on wrong cards
+  * [FIX]: In Mobile, fixed rendering of post modules so that they fit on screen
 
 ## v1.7.3 (December 4, 2014)
 * *[v1.7.3.rc2]*

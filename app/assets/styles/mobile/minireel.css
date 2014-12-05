@@ -254,9 +254,7 @@
 
 
     .MiniReel__group .ui--offscreen {
-        left:-5000%;
-        position: absolute;
-        width:100% !important; height:100% !important;
+        height:0; overflow:hidden;
     }
     
     .css-promote {
@@ -731,9 +729,6 @@
     .cards__list, .cards__item {
         margin:0; padding:0; list-style:none;
     }
-        .cards__item.squished {
-            height:0; overflow:hidden;
-        }
         
     .card__group {
         background:#fff; 
@@ -764,14 +759,9 @@
         }
     .player, .player__thumbnail {
         padding:0 0 54%; margin:0;
-        width:100%; height:0; position:relative;
+        width:100%; height:100%; position:relative;
         background:black url('../../img/default_square.jpg') 50% 50% / cover no-repeat;
     }
-        .player--fly-away {
-            left:-5000%;
-            position: absolute;
-            width:100% !important; height:100% !important;
-        }
         .playerBox,
         .playerBox iframe,
         .playerBox video,
@@ -784,6 +774,10 @@
             top:0; left:0;
             border:0;
             background:#000;
+        }
+        .player--fly-away {
+            margin-left:-5000%;
+            float:left;
         }
     .player__thumbnail {
         background:50% 50% / cover no-repeat;
@@ -888,7 +882,7 @@
         .ballot__textLinks {
             text-align: center;
             position: absolute;
-            bottom:-2.25em;
+            top:105%;
             width:100%;
         }
         .ballot__textLink {

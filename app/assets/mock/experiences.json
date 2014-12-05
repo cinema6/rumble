@@ -48,6 +48,17 @@
                     ]
                 }
             ],
+            "adConfig" : {
+                "video": {
+                    "firstPlacement": -1,
+                    "frequency": 0,
+                    "waterfall": "cinema6",
+                    "skip": 6
+                },
+                "display": {
+                    "waterfall": "cinema6"
+                }
+            },
             "autoplay": true,
             "links": {
                 "Action": "https://portal.cinema6.com/#/apps/minireel/studio/dashboard?filter=all&limit=50&page=1",
