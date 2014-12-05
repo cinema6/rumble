@@ -1,5 +1,9 @@
 # MiniReel Player
 
+* *[v1.8.0.rc1]*
+  * [FIX]: fixed rendering of post modules in mobile screens so that they fit on screen
+
+
 ## v1.7.3 (December 4, 2014)
 * *[v1.7.3.rc2]*
   * [FIX]: Fix for an issue that caused a phantom play button to appear
