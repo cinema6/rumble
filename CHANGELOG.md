@@ -1,6 +1,11 @@
 # MiniReel Player
 
 ## v1.7.4 (December 5, 2014)
+* *[v1.7.4.rc2]*
+  * [FIX]: Fix for an issue that could maybe cause the AdCount pixel
+    used for billing to be fired too many times
+* *[/v1.7.4.rc2]*
+
 * *[v1.7.4.rc1]*
   * [FIX]: In Mobile, fixed issue of video playing when off screen
   * [FIX]: In Mobile, fixed post modules appearing on wrong cards
