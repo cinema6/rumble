@@ -1,5 +1,5 @@
 <post-module ng-if="hasModule('post')"
-    active="config._data.modules.post.active"
+    active="config._data.modules.post.active && active"
     on-replay="Ctrl.player.play()"
     on-dismiss="config._data.modules.post.active = false"
     card-id="{{config.id}}"
