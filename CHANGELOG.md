@@ -1,5 +1,10 @@
 # MiniReel Player
 
+## v1.7.5 (December 8, 2014)
+* *[v1.7.5.rc1]*
+  * The first card in a MR is no longer loaded before the MR is launched
+* *[/v1.7.5.rc1]*
+
 ## v1.7.4 (December 5, 2014)
 * *[v1.7.4.rc2]*
   * [FIX]: Fix for an issue that could maybe cause the AdCount pixel
