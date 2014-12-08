@@ -568,7 +568,9 @@
                     .ballot__btn1:before {
                         content:'B';
                     }
-                .ballot__btn1 {
+                .ballot__btn1,
+                .ballot__btn1:active,
+                .ballot__btn1:focus {
                     background:#1789cb;
                     border-color:#1789cb;
                 }

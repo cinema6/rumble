@@ -1,5 +1,9 @@
 # MiniReel Player
 
+* *[v1.8.0.rc1]
+  * [FIX]: Fixed styling issue where clicking on blue ballot buttons would show 
+          a red border
+
 ## v1.7.5 (December 8, 2014)
 * *[v1.7.5.rc1]*
   * The first card in a MR is no longer loaded before the MR is launched
