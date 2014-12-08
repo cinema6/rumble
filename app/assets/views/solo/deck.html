@@ -2,7 +2,7 @@
 ng-class="{
     hidden : !deck.active
 }">
-    <li class="cards__item" ng-repeat="item in (deck.cards | deck:deck.index:1)"
+    <li class="cards__item" ng-repeat="item in (deck.cards | deck:deck.index:RumbleCtrl.cardLoadBuffer)"
         ng-class="{
             hidden : ($index !== deck.index || !deck.active),
             'text--med': item.title.length + item.note.length <= 200,

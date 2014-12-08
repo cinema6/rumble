@@ -4,7 +4,7 @@ ng-class="{
     'cards__list--fullWidth' : currentCard.type === 'recap',
     'cards__list--noAds' : (!RumbleCtrl.moduleActive('displayAd') && !currentCard._data.companion)
 }">
-    <li class="cards__item" ng-repeat="item in (deck.cards | deck:deck.index:1)"
+    <li class="cards__item" ng-repeat="item in (deck.cards | deck:deck.index:RumbleCtrl.cardLoadBuffer)"
         ng-class="{
             'ui--offscreen' : ($index !== deck.index || !deck.active),
             'text--low': item.title.length + item.note.length <= 100,

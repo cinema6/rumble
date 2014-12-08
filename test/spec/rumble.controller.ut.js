@@ -640,6 +640,29 @@ define(['c6uilib', 'services', 'app', 'angular'], function(c6uilibModule, servic
             });
         });
 
+        describe('RumbleCtrl.cardLoadBuffer', function() {
+            describe('if the currentIndex is -1', function() {
+                beforeEach(function() {
+                    $scope.currentIndex = -1;
+                });
+
+                it('should be 0', function() {
+                    expect(RumbleCtrl.cardLoadBuffer).toBe(0);
+                });
+            });
+
+            describe('if the currentIndex is greater than -1', function() {
+                it('should be 1', function() {
+                    function test(index) {
+                        $scope.currentIndex = index;
+                        expect(RumbleCtrl.cardLoadBuffer).toBe(1);
+                    }
+
+                    [0, 1, 2, 3, 4, 5].forEach(test);
+                });
+            });
+        });
+
         describe('jumpTo(card)', function() {
             beforeEach(function() {
                 spyOn(RumbleCtrl, 'setPosition');
