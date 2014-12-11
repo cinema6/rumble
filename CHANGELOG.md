@@ -1,5 +1,9 @@
 # MiniReel Player
 
+* *[v1.8.0.rc1]*
+  * [FEATURE]: Added support for for autoplaying HTML5 ad units on the
+    first slide in mobile
+
 ## v1.7.5 (December 8, 2014)
 * *[v1.7.5.rc1]*
   * The first card in a MR is no longer loaded before the MR is launched
