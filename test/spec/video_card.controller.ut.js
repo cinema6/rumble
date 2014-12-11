@@ -1132,32 +1132,8 @@ define(['app', 'services', 'tracker'], function(appModule, servicesModule, track
                                             $scope.number = '1';
                                         });
 
-                                        describe('if the device can autoplay', function() {
-                                            beforeEach(function() {
-                                                $scope.profile.autoplay = true;
-
-                                                $scope.$apply(function() {
-                                                    $scope.onDeck = true;
-                                                });
-                                            });
-
-                                            it('should load the video', function() {
-                                                expect(iface.load).toHaveBeenCalled();
-                                            });
-                                        });
-
-                                        describe('if the device cannot autoplay', function() {
-                                            beforeEach(function() {
-                                                $scope.profile.autoplay = false;
-
-                                                $scope.$apply(function() {
-                                                    $scope.onDeck = true;
-                                                });
-                                            });
-
-                                            it('should not load the video', function() {
-                                                expect(iface.load).not.toHaveBeenCalled();
-                                            });
+                                        it('should not load the video', function() {
+                                            expect(iface.load).not.toHaveBeenCalled();
                                         });
                                     });
 
@@ -1202,34 +1178,13 @@ define(['app', 'services', 'tracker'], function(appModule, servicesModule, track
                                     describe('if the card should be autoplayed', function() {
                                         beforeEach(function() {
                                             $scope.config.data.autoplay = true;
-                                        });
-
-                                        describe('if the device can be autoplayed', function() {
-                                            beforeEach(function() {
-                                                c6AppData.profile.autoplay = true;
-
-                                                $scope.$apply(function() {
-                                                    $scope.active = true;
-                                                });
-                                            });
-
-                                            it('should play the video', function() {
-                                                expect(iface.play).toHaveBeenCalled();
+                                            $scope.$apply(function() {
+                                                $scope.active = true;
                                             });
                                         });
 
-                                        describe('if the device can\'t be autoplayed', function() {
-                                            beforeEach(function() {
-                                                c6AppData.profile.autoplay = false;
-
-                                                $scope.$apply(function() {
-                                                    $scope.active = true;
-                                                });
-                                            });
-
-                                            it('should not play the video', function() {
-                                                expect(iface.play).not.toHaveBeenCalled();
-                                            });
+                                        it('should play the video', function() {
+                                            expect(iface.play).toHaveBeenCalled();
                                         });
                                     });
 

@@ -12,7 +12,8 @@ function( angular , c6Defines  , tracker ,
     var forEach = angular.forEach,
         isDefined = angular.isDefined,
         extend = angular.extend,
-        copy = angular.copy;
+        copy = angular.copy,
+        identity = angular.identity;
 
     return angular.module('c6.rumble.minireel', [
         tracker.name,
@@ -130,6 +131,7 @@ function( angular , c6Defines  , tracker ,
 
         this.createDeck = function(data) {
             var playlist = angular.copy(data.deck),
+                profile = $injector.get('c6AppData').profile,
                 autoplay = isSet(data.autoplay) ? data.autoplay : true,
                 autoadvance = isSet(data.autoadvance) ? data.autoadvance : true;
 
@@ -212,7 +214,10 @@ function( angular , c6Defines  , tracker ,
                 [
                     {
                         prop: 'autoplay',
-                        default: autoplay
+                        default: autoplay,
+                        process: profile.autoplay ? identity : function(value) {
+                            return card.type !== 'adUnit' ? false : value;
+                        }
                     },
                     {
                         prop: 'skip',
@@ -221,8 +226,8 @@ function( angular , c6Defines  , tracker ,
                 ].forEach(function(config) {
                     var prop = config.prop;
 
-                    card.data[prop] = isSet(card.data[prop]) ?
-                        card.data[prop] : config.default;
+                    card.data[prop] = (config.process || identity)(isSet(card.data[prop]) ?
+                        card.data[prop] : config.default);
                 });
             }
 

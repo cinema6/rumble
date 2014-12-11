@@ -40,6 +40,9 @@ define(['app', 'minireel', 'c6uilib', 'angular'], function(appModule, minireelMo
                         data: {
                             title: 'My Awesome MiniReel'
                         }
+                    },
+                    profile: {
+                        autoplay: true
                     }
                 });
             });
@@ -411,6 +414,22 @@ define(['app', 'minireel', 'c6uilib', 'angular'], function(appModule, minireelMo
                         });
 
                         result = MiniReelService.createDeck(mrData);
+                    });
+
+                    describe('if on a device that can\'t autoplay', function() {
+                        beforeEach(function() {
+                            c6AppData.profile.autoplay = false;
+
+                            result = MiniReelService.createDeck(mrData);
+                        });
+
+                        it('should make every card except adUnit cards not autoplay', function() {
+                            [1, 3, 4, 5, 9, 10, 11].forEach(function(index) {
+                                expect(result[index].data.autoplay).toBe(false);
+                            });
+
+                            expect(result[8].data.autoplay).toBe(true);
+                        });
                     });
 
                     it('should return a copy of the deck', function() {
