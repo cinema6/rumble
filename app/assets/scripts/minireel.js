@@ -1157,19 +1157,32 @@ function( angular , c6Defines  , tracker ,
     function            ( $log , $compile , $window , c6UserAgent , InflectorService , c6AppData ){
         $log = $log.context('<mr-card>');
         function fnLink(scope,$element){
-            var type = (function() {
-                switch (scope.config.type) {
-                case 'youtube':
-                case 'vimeo':
-                case 'dailymotion':
-                case 'adUnit':
-                case 'embedded':
-                case 'rumble':
-                    return 'video';
-                default:
-                    return InflectorService.dasherize(scope.config.type);
-                }
-            }() + '-card');
+            var index = scope.number - 1,
+                type = (function() {
+                    switch (scope.config.type) {
+                    case 'youtube':
+                    case 'vimeo':
+                    case 'dailymotion':
+                    case 'adUnit':
+                    case 'embedded':
+                    case 'rumble':
+                        return 'video';
+                    default:
+                        return InflectorService.dasherize(scope.config.type);
+                    }
+                }() + '-card');
+
+            /* If the first card in the deck is VAST card, make its video available globally. */
+            if (index === 0) {
+                scope.$on('<vast-player>:init', function($event, video) {
+                    video.once('ready', function() {
+                        c6Defines.html5Videos.push($element[0].querySelector('vast-player video'));
+                    });
+                });
+                scope.$on('$destroy', function() {
+                    c6Defines.html5Videos.length = 0;
+                });
+            }
 
             $log.info('link:',scope);
 

@@ -70,6 +70,7 @@ function( version ) {
             return '';
         }
     }()));
+    c6Default('html5Videos', []);
 
     return c6;
 });
