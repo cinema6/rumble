@@ -1,8 +1,10 @@
 # MiniReel Player
 
-* *[v1.8.0.rc1]
+* *[v1.8.0.rc1]*
   * [FIX]: Fixed styling issue where clicking on blue ballot buttons would show 
-          a red border
+    a red border
+  * [FEATURE]: Added support for for autoplaying HTML5 ad units on the
+    first slide in mobile
 
 ## v1.7.5 (December 8, 2014)
 * *[v1.7.5.rc1]*

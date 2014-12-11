@@ -82,9 +82,9 @@ function( angular ) {
                 }
 
                 function prepareCard() {
-                    // Because of an iOS < 8 bug, we don't want to load the video unless it is NOT
+                    // Because of $$$, we don't want to load the video unless it is NOT
                     // on the first card.
-                    if (($scope.number - 1) > 0 || profile.autoplay) {
+                    if (($scope.number - 1) > 0) {
                         player.load();
                     }
 
@@ -94,7 +94,7 @@ function( angular ) {
                 }
 
                 function activateCard() {
-                    if (data.autoplay && c6AppData.profile.autoplay) {
+                    if (data.autoplay) {
                         player.play();
                     }
 
