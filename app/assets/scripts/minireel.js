@@ -727,14 +727,6 @@ function( angular , c6Defines  , tracker ,
             wait: null
         };
 
-        Object.defineProperties(this, {
-            cardLoadBuffer: {
-                get: function() {
-                    return ($scope.currentIndex > -1) ? 1 : 0;
-                }
-            }
-        });
-
         $scope.$on('<mr-card>:contentEnd', function(event, card) {
             if ($scope.currentCard === card && card.data.autoadvance) {
                 self.goForward();

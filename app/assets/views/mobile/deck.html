@@ -4,7 +4,7 @@
         'ui--offscreen' : !deck.active
     }">
     <li class="cards__item"
-        ng-repeat="item in (deck.cards | deck:deck.index:RumbleCtrl.cardLoadBuffer)"
+        ng-repeat="item in (deck.cards | deck:deck.index:1)"
         ng-class="{
             'ui--offscreen' : ($index !== deck.index || !deck.active)
         }">
