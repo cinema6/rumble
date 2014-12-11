@@ -12,7 +12,8 @@ function( angular , c6Defines  , tracker ,
     var forEach = angular.forEach,
         isDefined = angular.isDefined,
         extend = angular.extend,
-        copy = angular.copy;
+        copy = angular.copy,
+        identity = angular.identity;
 
     return angular.module('c6.rumble.minireel', [
         tracker.name,
@@ -130,6 +131,7 @@ function( angular , c6Defines  , tracker ,
 
         this.createDeck = function(data) {
             var playlist = angular.copy(data.deck),
+                profile = $injector.get('c6AppData').profile,
                 autoplay = isSet(data.autoplay) ? data.autoplay : true,
                 autoadvance = isSet(data.autoadvance) ? data.autoadvance : true;
 
@@ -212,7 +214,10 @@ function( angular , c6Defines  , tracker ,
                 [
                     {
                         prop: 'autoplay',
-                        default: autoplay
+                        default: autoplay,
+                        process: profile.autoplay ? identity : function(value) {
+                            return card.type !== 'adUnit' ? false : value;
+                        }
                     },
                     {
                         prop: 'skip',
@@ -221,8 +226,8 @@ function( angular , c6Defines  , tracker ,
                 ].forEach(function(config) {
                     var prop = config.prop;
 
-                    card.data[prop] = isSet(card.data[prop]) ?
-                        card.data[prop] : config.default;
+                    card.data[prop] = (config.process || identity)(isSet(card.data[prop]) ?
+                        card.data[prop] : config.default);
                 });
             }
 
@@ -722,14 +727,6 @@ function( angular , c6Defines  , tracker ,
             wait: null
         };
 
-        Object.defineProperties(this, {
-            cardLoadBuffer: {
-                get: function() {
-                    return ($scope.currentIndex > -1) ? 1 : 0;
-                }
-            }
-        });
-
         $scope.$on('<mr-card>:contentEnd', function(event, card) {
             if ($scope.currentCard === card && card.data.autoadvance) {
                 self.goForward();
@@ -1152,19 +1149,32 @@ function( angular , c6Defines  , tracker ,
     function            ( $log , $compile , $window , c6UserAgent , InflectorService , c6AppData ){
         $log = $log.context('<mr-card>');
         function fnLink(scope,$element){
-            var type = (function() {
-                switch (scope.config.type) {
-                case 'youtube':
-                case 'vimeo':
-                case 'dailymotion':
-                case 'adUnit':
-                case 'embedded':
-                case 'rumble':
-                    return 'video';
-                default:
-                    return InflectorService.dasherize(scope.config.type);
-                }
-            }() + '-card');
+            var index = scope.number - 1,
+                type = (function() {
+                    switch (scope.config.type) {
+                    case 'youtube':
+                    case 'vimeo':
+                    case 'dailymotion':
+                    case 'adUnit':
+                    case 'embedded':
+                    case 'rumble':
+                        return 'video';
+                    default:
+                        return InflectorService.dasherize(scope.config.type);
+                    }
+                }() + '-card');
+
+            /* If the first card in the deck is VAST card, make its video available globally. */
+            if (index === 0) {
+                scope.$on('<vast-player>:init', function($event, video) {
+                    video.once('ready', function() {
+                        c6Defines.html5Videos.push($element[0].querySelector('vast-player video'));
+                    });
+                });
+                scope.$on('$destroy', function() {
+                    c6Defines.html5Videos.length = 0;
+                });
+            }
 
             $log.info('link:',scope);
 
