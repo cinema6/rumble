@@ -1,6 +1,11 @@
 # MiniReel Player
 
 ## v1.8.0 (December 11, 2014)
+* *[v1.8.0.rc2]*
+  * [FIX]: Fix for an issue that could cause autoplaying HTML5 ad units
+    to start playing after the MiniReel has been closed on mobile
+* *[/v1.8.0.rc2]*
+
 * *[v1.8.0.rc1]*
   * [FIX]: Fixed styling issue where clicking on blue ballot buttons would show 
     a red border
