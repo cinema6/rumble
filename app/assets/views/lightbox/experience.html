@@ -58,12 +58,12 @@
             on-next="RumbleCtrl.goForward('thumb')"
             countdown="nav.wait">
             <ul class="pages__list">
-                <li thumb-paginator-item ng-repeat="this in tocCards" class="pages__item">
+                <li thumb-paginator-item ng-repeat="$this in tocCards" class="pages__item">
                     <navbar-button index="$index"
                         current-index="tocIndex"
-                        card="this"
+                        card="$this"
                         class="pages__navBtn"
-                        on-select="RumbleCtrl.goTo(deck.indexOf(this),'thumb');"
+                        on-select="RumbleCtrl.goTo(deck.indexOf($this),'thumb');"
                         disable-when="!nav.enabled">
                     </navbar-button>
                 </li>

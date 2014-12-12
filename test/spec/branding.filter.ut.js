@@ -26,6 +26,10 @@ define(['app'], function(appModule) {
             expect(branding).toEqual(jasmine.any(Function));
         });
 
+        it('should be marked as $stateful', function() {
+            expect(branding.$stateful).toBe(true);
+        });
+
         describe('if a falsy url is passed in', function() {
             it('should return null', function() {
                 expect(branding(undefined, 'assets')).toBeNull();

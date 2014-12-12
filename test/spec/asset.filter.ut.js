@@ -26,6 +26,10 @@ define(['app'], function(appModule) {
             expect(asset).toEqual(jasmine.any(Function));
         });
 
+        it('should be $stateful', function() {
+            expect(asset.$stateful).toBe(true);
+        });
+
         describe('if a falsy url is passed in', function() {
             it('should return null', function() {
                 expect(asset(undefined, 'assets')).toBeNull();

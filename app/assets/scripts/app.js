@@ -162,15 +162,18 @@ function( angular , angularAnimate , angularSanitize , c6uilib , c6log , c6Defin
         }])
         .filter('asset', ['c6AppData',
         function         ( c6AppData ) {
-            return function(url, base) {
+            function assetFilter(url, base) {
                 var mode = c6AppData.mode;
 
                 return mode && (base + '/' + mode + '/' + url);
-            };
+            }
+            assetFilter.$stateful = true;
+
+            return assetFilter;
         }])
         .filter('branding', ['c6AppData','c6UrlMaker',
         function            ( c6AppData , c6UrlMaker ) {
-            return function(url, base) {
+            function brandingFilter(url, base) {
                 var mode = c6AppData.mode,
                     experience = c6AppData.experience,
                     branding = (experience && experience.data.branding) || null;
@@ -180,7 +183,10 @@ function( angular , angularAnimate , angularSanitize , c6uilib , c6log , c6Defin
                         'branding/' + branding + '/' + base + '/' + mode + '/' + url,
                         'collateral'
                     );
-            };
+            }
+            brandingFilter.$stateful = true;
+
+            return brandingFilter;
         }])
         .factory('c6AppData', ['cinema6','$http','c6UrlMaker','$q','MiniReelService',
         function              ( cinema6 , $http , c6UrlMaker , $q , MiniReelService ) {
