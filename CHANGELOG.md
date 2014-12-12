@@ -1,5 +1,10 @@
 # MiniReel Player
 
+## v1.9.0 (December 11, 2014)
+* *[v1.9.0.rc1]*
+  * [FEATURE]: Light templates (embedded) now support branding
+* *[/v1.9.0.rc1]*
+
 ## v1.8.0 (December 11, 2014)
 * *[v1.8.0.rc2]*
   * [FIX]: Fix for an issue that could cause autoplaying HTML5 ad units
