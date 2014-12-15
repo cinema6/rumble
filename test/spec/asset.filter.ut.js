@@ -31,6 +31,10 @@ define(['app'], function(appModule) {
         });
 
         describe('if a falsy url is passed in', function() {
+            beforeEach(function() {
+                c6AppData.mode = 'light';
+            });
+
             it('should return null', function() {
                 expect(asset(undefined, 'assets')).toBeNull();
             });
@@ -41,9 +45,9 @@ define(['app'], function(appModule) {
                 c6AppData.mode = null;
             });
 
-            it('should be null', function() {
-                expect(asset('directives/test.html', 'assets')).toBeNull();
-                expect(asset('minireel.css', 'styles')).toBeNull();
+            it('should be undefined', function() {
+                expect(asset('directives/test.html', 'assets')).toBeUndefined();
+                expect(asset('minireel.css', 'styles')).toBeUndefined();
             });
         });
 

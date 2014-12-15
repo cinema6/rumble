@@ -165,7 +165,7 @@ function( angular , angularAnimate , angularSanitize , c6uilib , c6log , c6Defin
             function assetFilter(url, base) {
                 var mode = c6AppData.mode;
 
-                return mode && (base + '/' + mode + '/' + url);
+                return (mode || undefined) && (url || null) && (base + '/' + mode + '/' + url);
             }
             assetFilter.$stateful = true;
 
@@ -178,7 +178,7 @@ function( angular , angularAnimate , angularSanitize , c6uilib , c6log , c6Defin
                     experience = c6AppData.experience,
                     branding = (experience && experience.data.branding) || null;
 
-                return mode && branding &&
+                return (mode || undefined) && branding && (url || null) &&
                     c6UrlMaker(
                         'branding/' + branding + '/' + base + '/' + mode + '/' + url,
                         'collateral'

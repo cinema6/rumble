@@ -31,6 +31,15 @@ define(['app'], function(appModule) {
         });
 
         describe('if a falsy url is passed in', function() {
+            beforeEach(function() {
+                c6AppData.mode = 'full';
+                c6AppData.experience = {
+                    data: {
+                        branding: 'urbantimes'
+                    }
+                };
+            });
+
             it('should return null', function() {
                 expect(branding(undefined, 'assets')).toBeNull();
             });
@@ -46,9 +55,9 @@ define(['app'], function(appModule) {
                 };
             });
 
-            it('should be null', function() {
-                expect(branding('directives/test.html', 'assets')).toBeNull();
-                expect(branding('minireel.css', 'styles')).toBeNull();
+            it('should be undefined', function() {
+                expect(branding('directives/test.html', 'assets')).toBeUndefined();
+                expect(branding('minireel.css', 'styles')).toBeUndefined();
             });
         });
 
