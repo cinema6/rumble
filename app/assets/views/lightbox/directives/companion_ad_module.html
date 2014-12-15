@@ -1,8 +1,8 @@
 <div ng-show="active" class="displayAd__group">
     <span class="displayAd__label">Advertisement</span>
-    <div ng-switch="adType" ng-show="active">
-        <div class="displayAd__box" ng-switch-when="iframe"><iframe ng-src="{{fileURI}}" scrolling="no"></iframe></div>
-        <div class="displayAd__box" ng-switch-when="image"><img ng-src="{{fileURI}}" /></div>
-        <div class="displayAd__box" ng-switch-when="html" ng-bind-html="fileURI"></div>
+    <div ng-switch="::adType" ng-show="active">
+        <div class="displayAd__box" ng-switch-when="iframe"><iframe ng-src="{{::fileURI}}" scrolling="no"></iframe></div>
+        <div class="displayAd__box" ng-switch-when="image"><img ng-src="{{::fileURI}}" /></div>
+        <div class="displayAd__box" ng-switch-when="html" ng-bind-html="::fileURI"></div>
     </div>
 </div>

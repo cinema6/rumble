@@ -1,10 +1,10 @@
 <button class="page__btn" ng-disabled="disableWhen()" 
 ng-click="onSelect();" type="button" 
-title="Video {{index + 1}} : {{card.title}}"
+title="Video {{::(index + 1)}} : {{::card.title}}"
 ng-class="{
     'page__btn--active': active,
     'page__btn--ad' : card.params.ad
 }">
     <span class="page__previewImg"
-    ng-style="{ backgroundImage: thumb }">&nbsp;</span>
+    ng-style="::({ backgroundImage: thumb })">&nbsp;</span>
 </button>

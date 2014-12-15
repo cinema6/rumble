@@ -1,12 +1,12 @@
 <section class="ballot__box">
     <span class="ballot__intro">Please answer the following:</span>
-    <h2 class="ballot__title tk--hdr">{{ballot.prompt}}</h2>
+    <h2 class="ballot__title tk--hdr">{{::ballot.prompt}}</h2>
     <ul class="ballot__list">
-        <li class="ballot__item ballot__item{{$index}}" ng-repeat="choice in ballot.choices">
-            <button class="ballot__btn btnPrimary ballot__btn{{$index}}"
+        <li class="ballot__item ballot__item{{::$index}}" ng-repeat="choice in ::ballot.choices">
+            <button class="ballot__btn btnPrimary ballot__btn{{::$index}}"
             ng-click="Ctrl.vote($index)"
-            type="button" title="{{choice}}">
-                <span class="ballot__btnLabel btn__label tk--action">{{choice}}</span>
+            type="button" title="{{::choice}}">
+                <span class="ballot__btnLabel btn__label tk--action">{{::choice}}</span>
             </button>
         </li>
     </ul>

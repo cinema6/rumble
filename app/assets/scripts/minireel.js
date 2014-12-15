@@ -943,6 +943,7 @@ function( angular , c6Defines  , tracker ,
             return deck.map(function(card, index) {
                 return (index >= first && index <= last) ?
                     card : (noopCards[index] || (noopCards[index] = {
+                        id: card.id + '-noop',
                         type: 'noop'
                     }));
             });

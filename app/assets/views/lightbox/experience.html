@@ -1,10 +1,10 @@
-<div class="experience__group {{app.data.experience.data.theme}}"
+<div class="experience__group {{::app.data.experience.data.theme}}"
     c6-alias="app.data.experience.data as minireel"
-    ng-class=" {
+    ng-class="::{
         'experience__group--brandedMR': !!minireel.params.sponsor,
         'experience__group--soloMR': minireel.deck.length < 2
     }">
-    <div class="experience" c6-alias="minireel.deck.length < 2 as isSolo">
+    <div class="experience" c6-alias="::(minireel.deck.length < 2) as isSolo">
             
         <div class="MiniReel__group">
 
@@ -14,35 +14,35 @@
             
             <div class="titleBar__group clearfix">
                 <div class="titleBar__disabler" ng-show="!nav.enabled">&nbsp;</div>
-                <a ng-if="!!minireel.collateral.logo"
-                    ng-href="{{minireel.links.Website}}"
-                    title="{{minireel.params.sponsor}}"
+                <a ng-if="::!!minireel.collateral.logo"
+                    ng-href="{{::minireel.links.Website}}"
+                    title="{{::minireel.params.sponsor}}"
                     target="_blank"
                     class="brandProfile__logoBox">
                     <img class="brandProfile__logo"
-                        alt="{{minireel.params.sponsor}}"
-                        ng-src="{{minireel.collateral.logo}}">
+                        alt="{{::minireel.params.sponsor}}"
+                        ng-src="{{::minireel.collateral.logo}}">
                 </a>
-                <h1 class="titleBar__title" ng-if="!isSolo">
-                    <span ng-if="!!minireel.params.sponsor" class="brandedMR__tagline">
-                        <a ng-href="{{minireel.links.Website}}"
+                <h1 class="titleBar__title" ng-if="::!isSolo">
+                    <span ng-if="::!!minireel.params.sponsor" class="brandedMR__tagline">
+                        <a ng-href="{{::minireel.links.Website}}"
                             target="_blank"
-                            title="{{minireel.params.sponsor}}"
+                            title="{{::minireel.params.sponsor}}"
                             class="brandedMR__taglineBrand textLink">
-                            {{minireel.params.sponsor}}
+                            {{::minireel.params.sponsor}}
                         </a>
                         Presents
                     </span>
                     <span ng-click="RumbleCtrl.jumpTo(tocCards[0])"
                         class="titleBar__titleText tk--hdr">
-                        {{minireel.title}}
+                        {{::minireel.title}}
                     </span>
                 </h1>
                 <div class="publisherProfile__logoBox">&nbsp;</div>
             </div>
 
             <article class="cards__group">
-                <ng-include src="'deck.html' | asset:'views'" ng-controller="DeckController as DeckCtrl"></ng-include> <!--this brings in the video player-->
+                <ng-include src="::('deck.html' | asset:'views')" ng-controller="DeckController as DeckCtrl"></ng-include> <!--this brings in the video player-->
             </article>
 
             <thumb-paginator active="tocIndex"
@@ -72,20 +72,20 @@
             
         </div><!--.MiniReel__group-->
 
-        <div ng-if="minireel.social.length > 0 || !!minireel.links.Website" class="brandProfile__linksBox">
-            <a ng-if="!!minireel.links.Website"
-                ng-href="{{minireel.links.Website}}"
-                title="{{minireel.params.sponsor}} &mdash; Official Website"
+        <div ng-if="::(minireel.social.length > 0 || !!minireel.links.Website)" class="brandProfile__linksBox">
+            <a ng-if="::(!!minireel.links.Website)"
+                ng-href="{{::minireel.links.Website}}"
+                title="{{::minireel.params.sponsor}} &mdash; Official Website"
                 target="_blank"
                 class="brandProfile__link">
-                <span class="brandProfile__linkLabel">{{minireel.params.sponsor}} Website</span>
+                <span class="brandProfile__linkLabel">{{::minireel.params.sponsor}} Website</span>
             </a>
-            <a ng-repeat="link in minireel.social"
-                ng-href="{{link.href}}"
-                title="{{link.label}}"
+            <a ng-repeat="link in ::(minireel.social)"
+                ng-href="{{::link.href}}"
+                title="{{::link.label}}"
                 target="_blank"
-                class="brandProfile__link tk--{{link.type}} spriteBe socialIconsBe socialIconsBe__light--{{link.type}}">
-                <span class="brandProfile__linkLabel">{{link.label}}</span>
+                class="brandProfile__link tk--{{::link.type}} spriteBe socialIconsBe socialIconsBe__light--{{::link.type}}">
+                <span class="brandProfile__linkLabel">{{::link.label}}</span>
             </a>
         </div>
 
@@ -94,10 +94,10 @@
 
 <div class="overlay">&nbsp;</div>
 
-<article id="card" class="container" ng-class="app.data.experience.data.theme">
+<article id="card" class="container" ng-class="::app.data.experience.data.theme">
     <ng-switch on="app.state">
         <div class="splash-screen" ng-switch-when="splash">
-            <ng-include ng-if="app.data.version < 1" src="'splash.html' | asset:'views'"></ng-include>
+            <ng-include ng-if="::(app.data.version < 1)" src="::('splash.html' | asset:'views')"></ng-include>
         </div>
     </ng-switch>
 </article>

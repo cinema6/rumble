@@ -1,13 +1,13 @@
 <div class="actionsModal__group player__height c6-fade" ng-show="active">
-    <section class="ballot__box" ng-show="!!ballot">
+    <section class="ballot__box" ng-if="!!ballot">
         <span class="ballot__intro">Please answer the following:</span>
-        <h2 class="ballot__title tk--hdr">{{ballot.prompt}}</h2>
+        <h2 class="ballot__title tk--hdr">{{::ballot.prompt}}</h2>
         <ul class="ballot__list">
-            <li class="ballot__item ballot__item{{$index}}" ng-repeat="choice in ballot.choices">
+            <li class="ballot__item ballot__item{{::$index}}" ng-repeat="choice in ::ballot.choices">
                 <button class="ballot__btn btnPrimary ballot__btn{{$index}}"
                 ng-click="Ctrl.vote($index)"
-                type="button" title="{{choice}}">
-                    <span class="ballot__btnLabel btn__label tk--action">{{choice}}</span>
+                type="button" title="{{::choice}}">
+                    <span class="ballot__btnLabel btn__label tk--action">{{::choice}}</span>
                 </button>
             </li>
         </ul>
@@ -17,8 +17,8 @@
                 class="ballot__textLink ballot__textLink--replay spriteBe uiIconsBe uiIconsBe--replay">
                 <span class="textLink__label textLink">Watch Video Again</span>
             </a>
-            <a ng-if="!!sponsorHref"
-                ng-href="{{sponsorHref}}"
+            <a ng-if="::!!sponsorHref"
+                ng-href="{{::sponsorHref}}"
                 title="Visit Sponsor Site"
                 target="_blank"
                 class="ballot__textLink ballot__textLink--link spriteBe uiIconsBe uiIconsBe--link">
@@ -27,7 +27,7 @@
         </div>
     </section>
 
-    <ul class="actionsModal__list" ng-show="!ballot">
+    <ul class="actionsModal__list" ng-if="!ballot">
         <li class="actionsModal__item">
             <button class="btnPrimary actionsModal__btn
             spriteBe uiIconsBe uiIconsBe--replay"
@@ -37,11 +37,11 @@
             </button>
         </li>
         <li class="actionsModal__item">
-            <a ng-if="!!sponsorHref"
+            <a ng-if="::!!sponsorHref"
             class="btnPrimary actionsModal__btn
             spriteBe uiIconsBe uiIconsBe--link"
             type="button" title="Visit Sponsor Site"
-            ng-href="{{sponsorHref}}" type="button"
+            ng-href="{{::sponsorHref}}" type="button"
             target="_blank">
                 <span class="actionsModal__btnLabel btn__label tk--action">Visit Sponsor Site</span>
             </a>

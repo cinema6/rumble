@@ -4,15 +4,15 @@
         'ui--offscreen' : !deck.active
     }">
     <li class="cards__item js-cardItem"
-        ng-repeat="item in (deck.cards | deck:deck.index:1)"
+        ng-repeat="item in (deck.cards | deck:deck.index:1) track by item.id"
         ng-class="{
             'ui--offscreen' : ($index !== deck.index || !deck.active)
         }">
         <mr-card
-            x-number="{{tocCards.indexOf(item) + 1}}"
-            x-total="{{tocCards.length}}"
-            x-config="item"
-            x-profile="deviceProfile"
+            x-number="{{::(tocCards.indexOf(item) + 1)}}"
+            x-total="{{::tocCards.length}}"
+            x-config="::item"
+            x-profile="::deviceProfile"
             x-active="($index === deck.index) && deck.active"
             x-on-deck="($index === (deck.index + 1))">
         </mr-card>
@@ -21,7 +21,7 @@
 
 <button ng-click="RumbleCtrl.goBack('nav')"
 ng-show="nav.enabled"
-ng-if="!isSolo"
+ng-if="::!isSolo"
 class="btnSecondary nav__btn nav__btn--prev c6-fade"
 ng-class="{
     'nav__btn--condensed'   : currentCard.type === 'recap',

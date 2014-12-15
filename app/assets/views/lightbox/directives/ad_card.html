@@ -4,8 +4,8 @@
         <h1 class="videoAd__label">Advertisement</h1>
         <div class="js-playerBox player">
             <ng-switch on="Ctrl.adType">
-                <vpaid-player ng-switch-when="vpaid" videoid="{{config.id}}-player" ad-tag="{{Ctrl.adTag}}"></vpaid-player>
-                <vast-player class="playerBox" ng-switch-when="vast" videoid="{{config.id}}-player" ad-tag="{{Ctrl.adTag}}"></vast-player>
+                <vpaid-player ng-switch-when="vpaid" videoid="{{::config.id}}-player" ad-tag="{{::Ctrl.adTag}}"></vpaid-player>
+                <vast-player class="playerBox" ng-switch-when="vast" videoid="{{::config.id}}-player" ad-tag="{{::Ctrl.adTag}}"></vast-player>
             </ng-switch>
         </div>
         <button style="z-index:2;" ng-show="Ctrl.showPlay" ng-click="Ctrl.player.play()"
@@ -16,7 +16,7 @@
         </button>
     </div>
     <section class="companionAd__group">
-        <companion-ad-module active="true"
+        <companion-ad-module active="::true"
             ad-src="{{config.displayAd}}"
             companion="config._data.companion">
         </companion-ad-module>
