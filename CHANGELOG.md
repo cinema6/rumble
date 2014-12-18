@@ -1,5 +1,6 @@
 # MiniReel Player
 
+## v1.9.0 (December 18, 2014)
 * *[v1.9.0.rc1]*
   * [FEATURE]: Light templates (embedded) now support branding
   * Started sending error events to GA when scripts fail to load
@@ -9,6 +10,7 @@
   * The native video play button is now used in click-to-play videos
   * Allow cards to disable navigation on mobile
   * Added additional GA event tracking for debugging purposes
+* *[v1.9.0.rc1]*
 
 ## v1.8.1 (December 17, 2014)
 * *[v1.8.1.rc1]*
