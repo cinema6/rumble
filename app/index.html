@@ -28,5 +28,25 @@
         <div id="adtechPlacement" style="display:none;"></div>
         <!--C6ENV-->
         <script src="https://lib.cinema6.com/require/2.1.5/require.min.js" data-main="scripts/main"></script>
+        <script>
+            function stringifyError(error) {
+                return JSON.stringify(Object.getOwnPropertyNames(error)
+                    .reduce(function(result, prop) {
+                        if (!(error[prop] instanceof Event)) {
+                            result[prop] = error[prop];
+                        }
+                        return result;
+                    }, {}));
+            }
+
+            requirejs.onError = function(error) {
+                window.c6Tracker('create', 'UA-44457821-2', 'auto');
+                window.c6Tracker('send', 'event', {
+                    'eventCategory' : 'Error',
+                    'eventAction'   : 'Player.Bootstrap',
+                    'eventLabel'    : stringifyError(error)
+                });
+            };
+        </script>
     </body>
 </html>
