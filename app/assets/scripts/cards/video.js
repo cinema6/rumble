@@ -238,7 +238,10 @@ function( angular ) {
 
                                 function firePixel() {
                                     tracking.countFired = true;
+
                                     c6ImagePreloader.load([campaign.countUrl]);
+                                    trackVideoEvent('AdCount', true);
+
                                     player.removeListener('timeupdate', fireMinViewPixel);
                                 }
 

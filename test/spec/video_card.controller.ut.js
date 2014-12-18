@@ -1569,6 +1569,17 @@ define(['app', 'services', 'tracker'], function(appModule, servicesModule, track
                                 expect(c6ImagePreloader.load).toHaveBeenCalledWith(['count.me']);
                             });
 
+                            it('should fire a GA event', function() {
+                                expect(tracker.trackEvent).toHaveBeenCalledWith(MiniReelService.getTrackingData($scope.config, $scope.number - 1, {
+                                    category: 'Video',
+                                    action: 'AdCount',
+                                    label: $scope.config.webHref,
+                                    videoSource: $scope.config.source,
+                                    videoDuration: iface.duration,
+                                    nonInteraction: 1
+                                }));
+                            });
+
                             describe('and the pixel has already been fired,', function() {
                                 beforeEach(function() {
                                     c6ImagePreloader.load.calls.reset();
