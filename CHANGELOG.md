@@ -1,9 +1,8 @@
 # MiniReel Player
 
-## v1.9.0
 * *[v1.9.0.rc1]*
   * [FEATURE]: Light templates (embedded) now support branding
-* *[/v1.9.0.rc1]*
+  * Started sending error events to GA when scripts fail to load
 
 ## v1.8.1 (December 17, 2014)
 * *[v1.8.1.rc1]*
