@@ -37,8 +37,8 @@
                 angularSanitize: libUrl('angular/v1.2.12-0-g5cc5cc1/angular-sanitize'),
                 angularTouch: libUrl('angular/v1.2.12-0-g5cc5cc1/angular-touch'),
                 angularMocks: libUrl('angular/v1.2.12-0-g5cc5cc1/angular-mocks'),
-                c6uilib: libUrl('c6ui/v3.5.2-0-gdeb0d7b/c6uilib'),
-                c6log: libUrl('c6ui/v3.5.2-0-gdeb0d7b/c6log'),
+                c6uilib: libUrl('c6ui/v3.5.3-0-g2a25573/c6uilib'),
+                c6log: libUrl('c6ui/v3.5.3-0-g2a25573/c6log'),
                 adtech: 'http://aka-cdn.adtechus.com/dt/common/DAC',
                 templates   : '/base/.tmp/templates'
             },

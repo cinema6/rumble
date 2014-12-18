@@ -3,6 +3,8 @@
 * *[v1.9.0.rc1]*
   * [FEATURE]: Light templates (embedded) now support branding
   * Started sending error events to GA when scripts fail to load
+  * Allow cards to disable navigation on mobile
+  * Added additional GA event tracking for debugging purposes
 
 ## v1.8.1 (December 17, 2014)
 * *[v1.8.1.rc1]*

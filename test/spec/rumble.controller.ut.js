@@ -1418,17 +1418,6 @@ define(['c6uilib', 'services', 'app', 'angular'], function(c6uilibModule, servic
 
                     describe('methods', function() {
                         describe('enabled(bool)', function() {
-                            describe('on a device that does not allow inline video', function() {
-                                beforeEach(function() {
-                                    appData.profile.inlineVideo = false;
-                                });
-
-                                it('should not do anything', function() {
-                                    expect(navController.enabled(false)).toBe(navController);
-                                    expect($scope.nav.enabled).toBe(true);
-                                });
-                            });
-
                             it('should be chainable', function() {
                                 expect(navController.enabled()).toBe(navController);
                             });
