@@ -329,16 +329,6 @@ define(['app', 'services', 'tracker'], function(appModule, servicesModule, track
                                         expect(VideoCardCtrl.showPlay).toBe(false);
                                     });
                                 });
-
-                                describe('if the card is not configured to autoplay', function() {
-                                    beforeEach(function() {
-                                        $scope.config.data.autoplay = false;
-                                    });
-
-                                    it('should be ' + bool, function() {
-                                        expect(VideoCardCtrl.showPlay).toBe(bool);
-                                    });
-                                });
                             });
 
                             describe('if the player has played', function() {
@@ -348,6 +338,26 @@ define(['app', 'services', 'tracker'], function(appModule, servicesModule, track
 
                                 it('should be ' + bool, function() {
                                     expect(VideoCardCtrl.showPlay).toBe(bool);
+                                });
+
+                                describe('if the player is reinstantiated', function() {
+                                    beforeEach(function() {
+                                        $scope.$apply(function() {
+                                            VideoCardCtrl = $controller('VideoCardController', {
+                                                $scope: $scope
+                                            });
+                                        });
+                                        $scope.$apply(function() {
+                                            $scope.$emit('<vpaid-player>:init', player);
+                                        });
+                                        $scope.$apply(function() {
+                                            player.emit('ready');
+                                        });
+                                    });
+
+                                    it('should be false', function() {
+                                        expect(VideoCardCtrl.showPlay).toBe(false);
+                                    });
                                 });
                             });
                         });
@@ -549,42 +559,6 @@ define(['app', 'services', 'tracker'], function(appModule, servicesModule, track
                                                 expect(VideoCardCtrl.flyAway).toBe(true);
                                             });
                                         });
-                                    });
-                                });
-                            });
-                        });
-                    });
-                });
-
-                [true, false].forEach(function(autoplay) {
-                    describe('if config.data.autoplay is ' + autoplay, function() {
-                        beforeEach(function() {
-                            $scope.config.data.autoplay = autoplay;
-                        });
-
-                        [true, false].forEach(function(enablePlay) {
-                            describe('if enablePlay is ' + enablePlay, function() {
-                                beforeEach(function() {
-                                    VideoCardCtrl.enablePlay = enablePlay;
-                                });
-
-                                describe('if the video has played', function() {
-                                    beforeEach(function() {
-                                        var player = new Player();
-
-                                        $scope.$emit('<vpaid-player>:init', player);
-                                        player.emit('ready');
-                                        player.emit('play');
-                                    });
-
-                                    it('should be false', function() {
-                                        expect(VideoCardCtrl.flyAway).toBe(false);
-                                    });
-                                });
-
-                                describe('if the video has not played', function() {
-                                    it('should be ' + (!autoplay && enablePlay), function() {
-                                        expect(VideoCardCtrl.flyAway).toBe(!autoplay && enablePlay);
                                     });
                                 });
                             });
