@@ -1,5 +1,48 @@
-<div class="MiniReel__group" ng-class="app.data.experience.data.theme">
+<div class="MiniReel__group {{app.data.experience.data.theme}}"
+c6-alias="app.data.experience.data as minireel"
+ng-class=" {
+    'MiniReel__group--brandedMR': !!minireel.params.sponsor
+}">
     
+    <div class="titleBar__group" 
+    ng-if="!!minireel.params.sponsor || minireel.social.length > 0 || !!minireel.collateral.logo">
+        <div class="titleBar__disabler" ng-show="!nav.enabled">&nbsp;</div>
+        <a ng-if="!!minireel.collateral.logo"
+            ng-href="{{minireel.links.Website}}"
+            title="{{minireel.params.sponsor}}"
+            target="_blank"
+            class="brandProfile__logoBox">
+            <img class="brandProfile__logo"
+                alt="{{minireel.params.sponsor}}"
+                ng-src="{{minireel.collateral.logo}}">
+        </a>
+        <h1 class="titleBar__title">
+            <span ng-if="!!minireel.params.sponsor" class="brandedMR__tagline">
+                <a ng-href="{{minireel.links.Website}}"
+                    target="_blank"
+                    title="{{minireel.params.sponsor}}"
+                    class="brandedMR__taglineBrand textLink">
+                    {{minireel.params.sponsor}}
+                </a>
+                Presents
+            </span>
+            <span ng-click="RumbleCtrl.jumpTo(tocCards[0])"
+                class="titleBar__titleText tk--hdr">
+                {{minireel.title}}
+            </span>
+        </h1>
+
+        <div class="brandProfile__linksBox" ng-if="minireel.social.length > 0">
+            <a ng-repeat="link in minireel.social"
+                ng-href="{{link.href}}"
+                title="{{link.label}}" target="_blank"
+                class="brandProfile__link spriteBe socialIconsBe socialIconsBe--{{link.type}}">
+                <span class="ir">{{link.label}}</span>
+            </a>
+        </div>
+
+    </div>
+
     <ng-include ng-controller="DeckController as DeckCtrl" src="'deck.html' | asset:'views'"></ng-include>
     
     <thumb-paginator active="tocIndex"
