@@ -28,7 +28,8 @@ define(['app','c6uilib','angular'], function(appModule, c6uilibModule, angular) 
         beforeEach(function() {
             trackerSpy = {
                 create  : jasmine.createSpy('tracker.create'),
-                set     : jasmine.createSpy('tracker.set')
+                set     : jasmine.createSpy('tracker.set'),
+                trackEvent: jasmine.createSpy('tracker.trackEvent')
             };
             trackerServiceSpy = jasmine.createSpy('trackerService').and.returnValue(trackerSpy);
 
@@ -203,6 +204,15 @@ define(['app','c6uilib','angular'], function(appModule, c6uilibModule, angular) 
         });
 
         describe('google analytics initialization',function(){
+            beforeEach(function() {
+                $scope.app.data.experience = {
+                    id: 'e-c7da97f33a54fa',
+                    data: {
+                        title: 'The BEST MR EVER!'
+                    }
+                };
+            });
+
             it('app will look for initAnalytics',function(){
                 expect(cinema6.init).toHaveBeenCalled();
                 expect(session.on.calls.argsFor(0)[0]).toEqual('initAnalytics');
@@ -211,6 +221,7 @@ define(['app','c6uilib','angular'], function(appModule, c6uilibModule, angular) 
             it('will use initAnalytics cb to init ga',function(){
                 var cb = session.on.calls.argsFor(0)[1];
                 $window.location.hostname = 'test';
+
                 cb({
                     accountId : 'abc',
                     clientId  : '123'
@@ -225,6 +236,15 @@ define(['app','c6uilib','angular'], function(appModule, c6uilibModule, angular) 
 
                 expect(trackerSpy.set).toHaveBeenCalledWith({
                     'checkProtocolTask': angular.noop
+                });
+
+                expect(trackerSpy.trackEvent).toHaveBeenCalledWith({
+                    eventCategory: 'Debug',
+                    eventAction: 'Init',
+                    eventLabel : $scope.app.data.experience.data.title,
+                    page : '/' + $scope.app.data.experience.id,
+                    nonInteraction: 1,
+                    dimension11: c6Defines.kHref
                 });
             });
 

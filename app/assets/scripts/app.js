@@ -341,6 +341,14 @@ function( angular , angularAnimate , angularSanitize , c6uilib , c6log , c6Defin
                     }
                 }
                 tracker.set(trackerProps);
+                tracker.trackEvent({
+                    eventCategory: 'Debug',
+                    eventAction: 'Init',
+                    eventLabel : app.data.experience.data.title,
+                    page : '/' + app.data.experience.id,
+                    nonInteraction: 1,
+                    dimension11: c6Defines.kHref
+                });
                 $scope.$broadcast('analyticsReady');
             });
 
