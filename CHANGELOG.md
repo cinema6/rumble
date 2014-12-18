@@ -3,6 +3,10 @@
 * *[v1.9.0.rc1]*
   * [FEATURE]: Light templates (embedded) now support branding
   * Started sending error events to GA when scripts fail to load
+  * [FIX]: Fix for an issue where skipping to a video far away would
+    cause the play button to flash if that video had been played
+    previously
+  * The native video play button is now used in click-to-play videos
 
 ## v1.8.1 (December 17, 2014)
 * *[v1.8.1.rc1]*

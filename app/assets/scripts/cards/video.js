@@ -14,6 +14,7 @@ function( angular ) {
                 config = $scope.config,
                 profile = $scope.profile,
                 data = config.data,
+                hasPlayed = false,
                 _data = config._data || (config._data = {
                     hasPlayed: false,
                     companion: null,
@@ -169,6 +170,7 @@ function( angular ) {
                     })
                     .once('play', function() {
                         _data.hasPlayed = true;
+                        hasPlayed = true;
                     });
 
                 VideoTrackerService.trackQuartiles(config.id, player, function(quartile) {
@@ -280,7 +282,7 @@ function( angular ) {
             Object.defineProperties(this, {
                 showPlay: {
                     get: function() {
-                        return !!this.player && (_data.hasPlayed || !data.autoplay) && this.player.paused;
+                        return !!this.player && hasPlayed && this.player.paused;
                     }
                 },
                 flyAway: {
@@ -298,8 +300,6 @@ function( angular ) {
                                         ballotModule.ballotActive ||
                                             (ballotModule.resultsActive && !behaviors.inlineVoteResults)
                                     )
-                            ) || (
-                                !data.autoplay && !_data.hasPlayed && this.enablePlay
                             );
                     }
                 }
