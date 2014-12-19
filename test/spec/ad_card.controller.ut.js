@@ -379,12 +379,14 @@ define(['app', 'tracker', 'services'], function(appModule, trackerModule, servic
                                     $scope.active = true;
                                 });
                                 expect($scope.$emit).toHaveBeenCalledWith('<mr-card>:contentEnd', jasmine.any(Object));
+                                expect(iface.pause).not.toHaveBeenCalled();
                             });
 
                             it('should go to next card if card is active', function() {
                                 $scope.active = true;
                                 iface.emit('ended');
                                 expect($scope.$emit).toHaveBeenCalledWith('<mr-card>:contentEnd', jasmine.any(Object));
+                                expect(iface.pause).not.toHaveBeenCalled();
                             });
                         });
 
