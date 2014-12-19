@@ -1,5 +1,12 @@
 # MiniReel Player
 
+## v1.9.1 (December 19, 2014)
+* *[v1.9.1.rc1]*
+  * [FIX]: Stop telling VPAID player to pause when error is detected,
+    the VPAID player directive handles it internally
+  * [FIX]: Update c6ui: v3.5.4
+* *[v1.9.1.rc1]*
+
 ## v1.9.0 (December 18, 2014)
 * *[v1.9.0.rc1]*
   * [FEATURE]: Light templates (embedded) now support branding
