@@ -23,7 +23,7 @@
                 <rumble-player class="playerBox" ng-switch-when="rumble" id="{{config.id}}-player" videoid="{{config.data.videoid}}" start="{{config.data.start}}" end="{{config.data.end}}"></rumble-player>
                 <span ng-switch-when="adUnit"><ng-switch on="Ctrl.adType">
                     <vpaid-player class="playerBox" ng-switch-when="vpaid" videoid="{{config.id}}-player" ad-tag="{{Ctrl.adTag}}"></vpaid-player>
-                    <vast-player class="playerBox" ng-switch-when="vast" videoid="{{config.id}}-player" ad-tag="{{Ctrl.adTag}}" controls></vast-player>
+                    <vast-player class="playerBox" ng-switch-when="vast" videoid="{{config.id}}-player" ad-tag="{{Ctrl.adTag}}"></vast-player>
                 </ng-switch></span>
                 <embedded-player class="playerBox" ng-switch-when="embedded" code="{{config.data.code}}"></embedded-player>
             </div>
@@ -35,20 +35,20 @@
     </div>
 
     <div class="card__copyBox">
-        
+
         <a ng-if="!!config.collateral.logo" ng-href="{{config.links.Website}}" target="_blank" title="{{config.source}}" class="brandProfile__logoBox">
             <img ng-src="{{config.collateral.logo}}" class="brandProfile__logo">
         </a>
 
         <div ng-if="!!config.params.action" ng-switch="config.params.action.type"
         c6-alias="config.params.action as action" class="brand__actions">
-            <a ng-switch-when="text" ng-href="{{config.links.Action}}" 
-            target="_blank" class="textLink" 
+            <a ng-switch-when="text" ng-href="{{config.links.Action}}"
+            target="_blank" class="textLink"
             title="{{action.label}}">
                 {{action.label}}
             </a>
-            <a ng-switch-when="button" ng-href="{{config.links.Action}}" 
-            target="_blank" class="brand__goBtn btnPrimary" 
+            <a ng-switch-when="button" ng-href="{{config.links.Action}}"
+            target="_blank" class="brand__goBtn btnPrimary"
             title="{{action.label}}">
                 <span class="btn__label">{{action.label}}</span>
             </a>
@@ -58,7 +58,7 @@
             <h1 class="card__title tk--hdr">
                 {{config.title}}
                 <span ng-show="!!config.source" class="card__attributes">
-                    via&nbsp;<a ng-href="{{config.webHref}}" 
+                    via&nbsp;<a ng-href="{{config.webHref}}"
                     target="_blank" class="textLink" title="{{config.source}}">
                         {{config.source}}
                     </a>
