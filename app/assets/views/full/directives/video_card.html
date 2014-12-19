@@ -10,7 +10,7 @@
         ballot="config._data.modules.post.ballot"
         sponsor-href="{{config.links.Website}}">
     </post-module>
-    <ballot-vote-module 
+    <ballot-vote-module
         class="ballot__group player__height c6-fade"
         ng-if="hasModule('ballot')"
         active="config._data.modules.ballot.ballotActive && active"
@@ -43,7 +43,7 @@
             <rumble-player class="playerBox" ng-switch-when="rumble" id="{{config.id}}-player" videoid="{{config.data.videoid}}" start="{{config.data.start}}" end="{{config.data.end}}"></rumble-player>
             <span ng-switch-when="adUnit"><ng-switch on="Ctrl.adType">
                 <vpaid-player ng-switch-when="vpaid" videoid="{{config.id}}-player" ad-tag="{{Ctrl.adTag}}"></vpaid-player>
-                <vast-player class="playerBox" ng-switch-when="vast" videoid="{{config.id}}-player" ad-tag="{{Ctrl.adTag}}" controls></vast-player>
+                <vast-player class="playerBox" ng-switch-when="vast" videoid="{{config.id}}-player" ad-tag="{{Ctrl.adTag}}"></vast-player>
             </ng-switch></span>
             <embedded-player class="playerBox" ng-switch-when="embedded" code="{{config.data.code}}"></embedded-player>
         </div>
@@ -56,9 +56,9 @@
     <div class="card__copy" ng-class="{'card__copy--sponsored' : config.collateral.logo || config.social.length > 0 || config.params.sponsor}">
         <h1 class="card__title tk--hdr" ng-if="!config.data.hideSource">
             {{config.title}}
-            <span ng-show="!!config.source" 
+            <span ng-show="!!config.source"
             class="card__attributes tk--copy">
-                via&nbsp;<a ng-href="{{config.webHref}}" target="_blank" class="textLink" 
+                via&nbsp;<a ng-href="{{config.webHref}}" target="_blank" class="textLink"
                 title="{{config.source}}">{{config.source}}</a>
             </span>
         </h1>
@@ -66,14 +66,14 @@
             <a ng-if="!!config.collateral.logo" ng-href="{{config.links.Website}}" title="Sponsor link" class="sponsorProfile__imgBox" target="_blank">
                 <img ng-src="{{config.collateral.logo}}" class="sponsorProfile__img">
             </a>
-            <div class="sponsorProfile__copy" 
+            <div class="sponsorProfile__copy"
             ng-class="{'sponsorProfile__copy--hasActions' : config.params.action}"
             ng-if="config.params.sponsor || config.social.length > 0">
                 <h1 class="card__title tk--hdr">
                     {{config.title}}
                 </h1>
                 <div class="card__attributes sponsorProfile__tag" ng-if="config.params.sponsor">
-                    Sponsored by 
+                    Sponsored by
                     <a ng-href="{{config.links.Website}}" class="textLink"
                     title="{{config.params.sponsor}}" target="_blank">
                         {{config.params.sponsor}}
@@ -90,7 +90,7 @@
                 </div>
             </div>
             <div class="card__desc sponsor__actions" ng-if="!!config.params.action" ng-switch="config.params.action.type" c6-alias="config.params.action as action">
-                <a ng-href="{{config.links.Action}}" target="_blank" 
+                <a ng-href="{{config.links.Action}}" target="_blank"
                 ng-switch-when="text" class="textLink">
                     {{action.label}}
                 </a>
