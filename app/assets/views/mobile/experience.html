@@ -73,6 +73,11 @@ ng-class="{'MiniReel__group--brandedMR': !!minireel.params.sponsor}">
             <span class="sprite sprite--close">&nbsp;</span>
         </button>
 
+        <p class="nav__counter nav__counter--landscape" ng-show="!nav.enabled">
+            <span>Skip in</span><br>
+            <strong>{{nav.wait}}</strong>
+        </p>
+
     </div><!--.navBarRight__group-->
 
     <div ng-hide="showTOC" class="headerBar__group css-promote">
@@ -101,6 +106,9 @@ ng-class="{'MiniReel__group--brandedMR': !!minireel.params.sponsor}">
     </div><!--.headerBar__group-->
 
     <div class="navBar__group css-promote">
+        <div class="adSkip__group c6-fade" ng-show="!nav.enabled">
+            <p class="adSkip__message"><strong>Skip in {{nav.wait}}</strong></p>
+        </div>
         <button ng-hide="showTOC" title="Previous Video" type="button" 
         class="btnPrimary pager__btn pager__btn--prev" c6-touch="RumbleCtrl.goBack('portrait')"
         ng-disabled="!nav.enabled || (app.data.standalone && tocIndex < 1)">

@@ -2,6 +2,7 @@
 
 * *[v1.9.2.rc1]*
   * Remove controls from vast player
+  * [FEATURE]: Add countdown controls to mobile player
 
 ## v1.9.1 (December 19, 2014)
 * *[v1.9.1.rc1]*

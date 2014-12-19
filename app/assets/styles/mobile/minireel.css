@@ -538,6 +538,18 @@
         background:#d94040;
     }
 
+        .adSkip__group {
+            position:absolute;
+            z-index: 5;
+            top:0; left:0; right:0; bottom:0;
+            background:#d94040;
+            color:#fff; 
+            text-align: center;
+        }
+            .adSkip__message {
+                margin:1em 0 0 0;
+            }
+
         .MiniReel__tocBtn {
             position:absolute;
             left:40%; right:40%;
