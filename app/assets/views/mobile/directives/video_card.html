@@ -6,7 +6,7 @@
     ballot="config._data.modules.post.ballot"
     sponsor-href="{{config.links.Website}}">
 </post-module>
-<ballot-vote-module 
+<ballot-vote-module
     class="ballot__group player__height c6-fade"
     ng-if="hasModule('ballot')"
     active="config._data.modules.ballot.ballotActive && active"
@@ -20,15 +20,15 @@
     <h1 class="card__title tk--hdr">
         {{config.title}}
         <span ng-if="!config.data.hideSource" class="card__attributes tk--copy">
-            via&nbsp;<a ng-href="{{config.webHref}}" target="_blank" class="textLink" 
+            via&nbsp;<a ng-href="{{config.webHref}}" target="_blank" class="textLink"
             title="{{config.source}}">{{config.source}}</a>
         </span>
     </h1>
-    
+
     <div ng-class="{'player--fly-away': Ctrl.flyAway}"
         class="player js-playerBox"
         ng-switch="config.type">
-        <youtube-player ng-switch-when="youtube" id="{{config.id}}-player" 
+        <youtube-player ng-switch-when="youtube" id="{{config.id}}-player"
         videoid="{{config.data.videoid}}" class="playerBox"
         start="{{config.data.start}}" end="{{config.data.end}}"></youtube-player>
         <vimeo-player ng-switch-when="vimeo" id="{{config.id}}-player"
@@ -43,12 +43,12 @@
             <vpaid-player ng-switch-when="vpaid" videoid="{{config.id}}-player"
             class="playerBox" ad-tag="{{Ctrl.adTag}}"></vpaid-player>
             <vast-player ng-switch-when="vast" videoid="{{config.id}}-player"
-            class="playerBox" ad-tag="{{Ctrl.adTag}}" controls></vast-player>
+            class="playerBox" ad-tag="{{Ctrl.adTag}}"></vast-player>
         </ng-switch></span>
         <embedded-player ng-switch-when="embedded" class="playerBox"
         code="{{config.data.code}}"></embedded-player>
     </div>
-    <div ng-show="Ctrl.flyAway" c6-touch="Ctrl.player.play()" class="player__thumbnail" 
+    <div ng-show="Ctrl.flyAway" c6-touch="Ctrl.player.play()" class="player__thumbnail"
         ng-style="{'background-image':config.thumbs.large ? 'url(' + config.thumbs.large + ')' : ''}">
         <span class="ir"><img ng-src="{{config.thumbs.large}}"></span>
     </div>
@@ -66,7 +66,7 @@
         </a>
         <div class="sponsorProfile__copy" ng-if="!!(config.params.sponsor || config.social.length > 0)">
             <p class="sponsorProfile__tag" ng-if="!!config.params.sponsor">
-                Sponsored by 
+                Sponsored by
                 <a ng-href="{{config.links.Website}}" target="_blank" title="{{config.params.sponsor}}">{{config.params.sponsor}}</a>
             </p>
             <div class="sponsorProfile__links" ng-if="config.social.length > 0">
@@ -83,12 +83,12 @@
 
     <div class="card__desc sponsor__actions" ng-if="!!config.links.Action" ng-switch="config.params.action.type" c6-alias="config.params.action as action">
         <a ng-switch-when="text" ng-href="{{config.links.Action}}" target="_blank">{{action.label}}</a>
-        <a ng-switch-when="button" ng-href="{{config.links.Action}}" 
+        <a ng-switch-when="button" ng-href="{{config.links.Action}}"
         target="_blank" class="btnPrimary sponsor__goBtn" title="{{action.label}}">
             <span class="btn__label">{{action.label}}</span>
         </a>
     </div>
-    
+
     <div class="card__desc" ng-bind-html="config.note"></div>
-    
+
 </section><!--.card__group-->

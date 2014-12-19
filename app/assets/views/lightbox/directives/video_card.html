@@ -1,5 +1,5 @@
 <article class="card__group">
-    <ballot-vote-module 
+    <ballot-vote-module
         class="ballot__group playerHeight c6-fade"
         ng-if="hasModule('ballot')"
         active="config._data.modules.ballot.ballotActive && active"
@@ -25,13 +25,13 @@
         sponsor-href="{{config.links.Website}}">
     </post-module>
     <div class="player__group playerHeight">
-        <button ng-if="Ctrl.enablePlay" ng-show="Ctrl.showPlay" 
+        <button ng-if="Ctrl.enablePlay" ng-show="Ctrl.showPlay"
         ng-click="Ctrl.player.play()" class="player__playBtn">
             <div class="player__playIcon">
                 <span class="ir">Play Video</span>
             </div>
         </button>
-        <div class="js-playerBox player" 
+        <div class="js-playerBox player"
             ng-class="{'ui--offscreen': Ctrl.flyAway}"
             ng-switch="config.type">
             <youtube-player class="playerBox" ng-switch-when="youtube" id="{{config.id}}-player" videoid="{{config.data.videoid}}" start="{{config.data.start}}" end="{{config.data.end}}"></youtube-player>
@@ -40,11 +40,11 @@
             <rumble-player class="playerBox" ng-switch-when="rumble" id="{{config.id}}-player" videoid="{{config.data.videoid}}" start="{{config.data.start}}" end="{{config.data.end}}"></rumble-player>
             <span ng-switch-when="adUnit"><ng-switch on="Ctrl.adType">
                 <vpaid-player class="playerBox" ng-switch-when="vpaid" videoid="{{config.id}}-player" ad-tag="{{Ctrl.adTag}}"></vpaid-player>
-                <vast-player class="playerBox" ng-switch-when="vast" videoid="{{config.id}}-player" ad-tag="{{Ctrl.adTag}}" controls></vast-player>
+                <vast-player class="playerBox" ng-switch-when="vast" videoid="{{config.id}}-player" ad-tag="{{Ctrl.adTag}}"></vast-player>
             </ng-switch></span>
             <embedded-player class="playerBox" ng-switch-when="embedded" code="{{config.data.code}}"></embedded-player>
         </div>
-        <div class="player__thumbnail" ng-show="Ctrl.flyAway" 
+        <div class="player__thumbnail" ng-show="Ctrl.flyAway"
         ng-style="{'background-image':config.thumbs.large ? 'url(' + config.thumbs.large + ')' : ''}">&nbsp;</div>
     </div>
 
@@ -57,21 +57,21 @@
             {{config.title}}
             <span ng-show="!!config.source" ng-if="!config.data.hideSource"
             class="card__attributes tk--copy">
-                via&nbsp;<a ng-href="{{config.webHref}}" target="_blank" class="textLink" 
+                via&nbsp;<a ng-href="{{config.webHref}}" target="_blank" class="textLink"
                 title="{{config.source}}">{{config.source}}</a>
             </span>
         </h1>
 
         <div class="sponsorProfile__group clearfix" ng-if="!!(config.collateral.logo || config.social.length > 0 || config.params.sponsor)">
-            <a ng-if="!!config.collateral.logo" ng-href="{{config.links.Website}}" 
+            <a ng-if="!!config.collateral.logo" ng-href="{{config.links.Website}}"
             target="_blank" title="{{link.label}}" class="sponsorProfile__imgBox">
                 <img ng-src="{{config.collateral.logo}}" class="sponsorProfile__img">
             </a>
             <div class="sponsorProfile__copy" ng-if="!!(config.params.sponsor || config.social.length > 0)">
-                <div class="card__attributes sponsorProfile__tag" 
+                <div class="card__attributes sponsorProfile__tag"
                 ng-if="!!config.params.sponsor">
-                    Sponsored by 
-                    <a ng-href="{{config.links.Website}}" target="_blank" 
+                    Sponsored by
+                    <a ng-href="{{config.links.Website}}" target="_blank"
                     title="{{config.params.sponsor}}" class="textLink">{{config.params.sponsor}}</a>
                 </div>
                 <div class="sponsorProfile__links" ng-if="config.social.length > 0">
@@ -87,12 +87,12 @@
         </div>
 
         <div class="card__desc" ng-bind-html="config.note"></div>
-        
-        <div class="card__desc sponsor__actions" ng-if="!!config.links.Action" 
-        ng-switch="config.params.action.type" 
+
+        <div class="card__desc sponsor__actions" ng-if="!!config.links.Action"
+        ng-switch="config.params.action.type"
         c6-alias="config.params.action as action">
             <a ng-switch-when="text" title="{{action.label}}"
-            ng-href="{{config.links.Action}}" 
+            ng-href="{{config.links.Action}}"
             target="_blank"
             class="textLink">
                 {{action.label}}
