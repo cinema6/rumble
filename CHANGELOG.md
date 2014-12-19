@@ -1,5 +1,8 @@
 # MiniReel Player
 
+* *[v1.9.2.rc1]*
+  * Remove controls from vast player
+
 ## v1.9.1 (December 19, 2014)
 * *[v1.9.1.rc1]*
   * [FIX]: Stop telling VPAID player to pause when error is detected,
@@ -31,7 +34,7 @@
 * *[/v1.8.0.rc2]*
 
 * *[v1.8.0.rc1]*
-  * [FIX]: Fixed styling issue where clicking on blue ballot buttons would show 
+  * [FIX]: Fixed styling issue where clicking on blue ballot buttons would show
     a red border
   * [FEATURE]: Added support for for autoplaying HTML5 ad units on the
     first slide in mobile
@@ -172,7 +175,7 @@
 * *[/v1.4.0.rc2]*
 
 * *[v1.4.0.rc1]*
-  * [FEATURE]: Solo player templates and styles, with and without ads, added. 
+  * [FEATURE]: Solo player templates and styles, with and without ads, added.
     Solo players are MRs with a single video card.
   * [FEATURE]: Allow for display ads, card autoplaying, and card
     autoadvancing to be overridden on a card-by-card basis
@@ -184,7 +187,7 @@
 ## v1.3.0 (October 16, 2014)
 * *[v1.3.0.rc1]*
   * [FEATURE]: Full page player with ads styles added
-  * [FEATURE]: Removed cover image from text only cards 
+  * [FEATURE]: Removed cover image from text only cards
   * [FEATURE]: Custom templates can now be specified for a MiniReel card
 * *[/v1.3.0.rc1]*
 
@@ -220,7 +223,7 @@
   * [FIX]: Fix for an issue that could cause a custom splash image not
     to appear when previewing a MiniReel from the MiniReel Studio
   * [PERFORMANCE]: Removed code that is no longer being used, further
-    optimized the mobile build to increase load speeds, reduced the 
+    optimized the mobile build to increase load speeds, reduced the
     amount of library code being downloaded
 * *[/Beta25.rc1]*
 
@@ -298,7 +301,7 @@
   * [FIX]: Lightbox-ads player headers now span full width of modal
   * [FIX]: Lightbox-ads Ad placement now correctly re-aligns with media queries
   * [FIX]: Light text ad player is now vertically taller to minimize unused space.
-  * [THEME]: Digital Journal created 
+  * [THEME]: Digital Journal created
   * [FIX]: Light text player ad doesn't render when there is no height value for container box. Fixed via min-height.
   * [FIX]: Uses existing ad cards if they're included in the experience and uses dynamic/relative ad cards when they're not
 * *[/Beta19.rc4]*
