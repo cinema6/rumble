@@ -21,7 +21,6 @@ function( angular ) {
                 shouldGoForward = false;
 
             function goForward() {
-                AdCardCtrl.player.pause();
                 $scope.$emit('<mr-card>:contentEnd', config.meta || config);
             }
 
