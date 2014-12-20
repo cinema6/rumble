@@ -1,5 +1,12 @@
 # MiniReel Player
 
+## v1.9.4 (December 19, 2014)
+* *[v1.9.4.rc1]*
+  * [FIX]: Fix for an issue that caused a never-ending negative skip
+    countdown to happen on a video with a skip timer if the user returns
+    to that video having never initally played it.
+* *[/v1.9.4.rc1]*
+
 ## v1.9.3 (December 19, 2014)
 * *[v1.9.3.rc1]*
   * Disabled clickthrough on VAST video (non-preroll) cards
