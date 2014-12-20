@@ -1348,6 +1348,30 @@ define(['app', 'services', 'tracker'], function(appModule, servicesModule, track
 
                                                         expect(NavController.tick).not.toHaveBeenCalled();
                                                     });
+
+                                                    describe('going back the card', function() {
+                                                        beforeEach(function() {
+                                                            NavController.enabled.calls.reset();
+                                                            NavController.tick.calls.reset();
+
+                                                            $scope.$apply(function() {
+                                                                $scope.active = false;
+                                                            });
+                                                            $scope.$apply(function() {
+                                                                $scope.active = true;
+                                                            });
+                                                            $scope.$emit.calls.mostRecent().args[1](NavController);
+                                                            $interval.flush(3000);
+                                                        });
+
+                                                        it('should not disable the nav', function() {
+                                                            expect(NavController.enabled).not.toHaveBeenCalledWith(false);
+                                                        });
+
+                                                        it('should not tick the nav', function() {
+                                                            expect(NavController.tick).not.toHaveBeenCalledWith(jasmine.any(Number));
+                                                        });
+                                                    });
                                                 });
                                             });
                                         });

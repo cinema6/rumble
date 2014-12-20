@@ -46,7 +46,7 @@ function( angular ) {
                 VideoCardCtrl.player = player;
 
                 function controlNav(NavController) {
-                    var canSkipAnytime = data.skip === true,
+                    var canSkipAnytime = data.skip === true || data.skip === 0,
                         mustWatchEntireVideo = data.skip === false;
 
                     function tickNav() {
