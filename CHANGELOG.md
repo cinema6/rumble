@@ -1,5 +1,10 @@
 # MiniReel Player
 
+## v1.9.3 (December 19, 2014)
+* *[v1.9.3.rc1]*
+  * Disabled clickthrough on VAST video (non-preroll) cards
+* *[/v1.9.3.rc1]*
+
 ## v1.9.2 (December 19, 2014)
 * *[v1.9.2.rc1]*
   * [FIX]: Remove controls from vast player
