@@ -1,5 +1,10 @@
 # MiniReel Player
 
+## v1.9.5 (December 20, 2014)
+* *[v1.9.5.rc1]*
+  * Update c6ui: v3.5.6
+* *[/v1.9.5.rc1]*
+
 ## v1.9.4 (December 19, 2014)
 * *[v1.9.4.rc1]*
   * [FIX]: Fix for an issue that caused a never-ending negative skip
