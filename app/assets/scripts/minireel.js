@@ -222,6 +222,10 @@ function( angular , c6Defines  , tracker ,
                     {
                         prop: 'skip',
                         default: true
+                    },
+                    {
+                        prop: 'controls',
+                        default: true
                     }
                 ].forEach(function(config) {
                     var prop = config.prop;
