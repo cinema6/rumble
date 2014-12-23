@@ -3,6 +3,12 @@
 * *[v1.10.0.rc1]*
   * [FEATURE]: Added support for optional controls via card data
 
+## v1.9.6 (December 22, 2014)
+* *[v1.9.6.rc1]*
+  * [FEATURE]: Events are sent to GA if the VAST/VPAID/YouTube player
+    encounters an error
+* *[/v1.9.6.rc1]*
+
 ## v1.9.5 (December 20, 2014)
 * *[v1.9.5.rc1]*
   * Update c6ui: v3.5.6

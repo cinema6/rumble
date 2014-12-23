@@ -39,6 +39,7 @@ define(['app', 'services', 'tracker'], function(appModule, servicesModule, track
             this.currentTime = 0;
             this.duration = 0;
             this.ended = false;
+            this.error = null;
 
             c6EventEmitter(this);
         }
@@ -768,6 +769,46 @@ define(['app', 'services', 'tracker'], function(appModule, servicesModule, track
                                     [1, 2, 3, 4].forEach(function(quartile) {
                                         callback(quartile);
                                         expect(tracker.trackEvent).toHaveBeenCalledWith(trackingData('Quartile ' + quartile));
+                                    });
+                                });
+                            });
+
+                            describe('when the video has an error', function() {
+                                describe('if there is an error object', function() {
+                                    beforeEach(function() {
+                                        iface.error = new Error(
+                                            'Everything blew up!'
+                                        );
+                                        iface.emit('error');
+                                    });
+
+                                    it('should send a video error event to GA', function() {
+                                        expect(tracker.trackEvent).toHaveBeenCalledWith((function() {
+                                            var data = trackingData('Error');
+
+                                            data.nonInteraction = 1;
+                                            data.label = iface.error.message;
+
+                                            return data;
+                                        }()));
+                                    });
+                                });
+
+                                describe('if there is no error object', function() {
+                                    beforeEach(function() {
+                                        delete iface.error;
+                                        iface.emit('error');
+                                    });
+
+                                    it('should send a generic video error event to GA', function() {
+                                        expect(tracker.trackEvent).toHaveBeenCalledWith((function() {
+                                            var data = trackingData('Error');
+
+                                            data.nonInteraction = 1;
+                                            data.label = 'An unknown error occurred.';
+
+                                            return data;
+                                        }()));
                                     });
                                 });
                             });
