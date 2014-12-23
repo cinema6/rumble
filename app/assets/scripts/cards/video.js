@@ -4,11 +4,11 @@ function( angular ) {
 
     return angular.module('c6.rumble.cards.video', [])
         .controller('VideoCardController', ['$scope','c6ImagePreloader','compileAdTag',
-                                            '$interval','c6AppData','trackerService',
-                                            'MiniReelService','VideoTrackerService',
+                                            '$interval','c6AppData','trackerService','$q',
+                                            'MiniReelService','VideoTrackerService','$timeout',
         function                           ( $scope , c6ImagePreloader , compileAdTag ,
-                                             $interval , c6AppData , trackerService ,
-                                             MiniReelService , VideoTrackerService ) {
+                                             $interval , c6AppData , trackerService , $q ,
+                                             MiniReelService , VideoTrackerService , $timeout ) {
             var VideoCardCtrl = this,
                 behaviors = c6AppData.behaviors,
                 config = $scope.config,
@@ -35,6 +35,20 @@ function( angular ) {
                     }
                 }),
                 tracker = trackerService('c6mr');
+
+            function waitForPlay(player) {
+                var deferred = $q.defer();
+
+                $timeout(function() {
+                    deferred.reject('Video play timed out.');
+                }, 5000);
+
+                player.once('play', function() {
+                    deferred.resolve(player);
+                });
+
+                return deferred.promise;
+            }
 
             function closeBallot() {
                 ['closeBallot', 'closeBallotResults'].forEach(function(method) {
@@ -96,6 +110,10 @@ function( angular ) {
 
                 function activateCard() {
                     if (data.autoplay) {
+                        waitForPlay(player).catch(function(error) {
+                            trackVideoEvent('Error', true, error);
+                        });
+
                         player.play();
                     }
 
