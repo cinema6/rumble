@@ -33,18 +33,8 @@
                 <span class="ir">Play Video</span>
             </div>
         </button>
-        <div ng-class="{'ui--offscreen': Ctrl.flyAway}"
-        class="player js-playerBox"
-        ng-switch="config.type">
-            <youtube-player class="playerBox" ng-switch-when="youtube" id="{{config.id}}-player" videoid="{{config.data.videoid}}" start="{{config.data.start}}" end="{{config.data.end}}"></youtube-player>
-            <vimeo-player class="playerBox" ng-switch-when="vimeo" id="{{config.id}}-player" videoid="{{config.data.videoid}}" start="{{config.data.start}}" end="{{config.data.end}}"></vimeo-player>
-            <dailymotion-player class="playerBox" ng-switch-when="dailymotion" id="{{config.id}}-player" videoid="{{config.data.videoid}}"></dailymotion-player>
-            <rumble-player class="playerBox" ng-switch-when="rumble" id="{{config.id}}-player" videoid="{{config.data.videoid}}" start="{{config.data.start}}" end="{{config.data.end}}"></rumble-player>
-            <span ng-switch-when="adUnit"><ng-switch on="Ctrl.adType">
-                <vpaid-player ng-switch-when="vpaid" videoid="{{config.id}}-player" ad-tag="{{Ctrl.adTag}}"></vpaid-player>
-                <vast-player class="playerBox" ng-switch-when="vast" videoid="{{config.id}}-player" ad-tag="{{Ctrl.adTag}}" disable-clickthrough></vast-player>
-            </ng-switch></span>
-            <embedded-player class="playerBox" ng-switch-when="embedded" code="{{config.data.code}}"></embedded-player>
+        <div ng-class="{'ui--offscreen': Ctrl.flyAway}" class="player js-playerBox">
+            <mr-video-player config="config" class="playerBox" id="{{config.id}}-player" start="{{config.data.start}}" end="{{config.data.end}}"></mr-video-player>
         </div>
         <div ng-show="Ctrl.flyAway" class="player__thumbnail"
             ng-style="{'background-image':config.thumbs.large ? 'url(' + config.thumbs.large + ')' : ''}">
