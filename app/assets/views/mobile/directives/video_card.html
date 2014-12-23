@@ -30,12 +30,12 @@
         ng-switch="config.type">
         <youtube-player ng-switch-when="youtube" id="{{config.id}}-player"
         videoid="{{config.data.videoid}}" class="playerBox"
-        start="{{config.data.start}}" end="{{config.data.end}}"></youtube-player>
+        start="{{config.data.start}}" end="{{config.data.end}}" controls></youtube-player>
         <vimeo-player ng-switch-when="vimeo" id="{{config.id}}-player"
         videoid="{{config.data.videoid}}" class="playerBox"
         start="{{config.data.start}}" end="{{config.data.end}}"></vimeo-player>
         <dailymotion-player class="playerBox" ng-switch-when="dailymotion"
-        id="{{config.id}}-player" videoid="{{config.data.videoid}}"></dailymotion-player>
+        id="{{config.id}}-player" videoid="{{config.data.videoid}}" controls></dailymotion-player>
         <rumble-player class="playerBox" ng-switch-when="rumble"
         id="{{config.id}}-player" videoid="{{config.data.videoid}}"
         start="{{config.data.start}}" end="{{config.data.end}}"></rumble-player>
