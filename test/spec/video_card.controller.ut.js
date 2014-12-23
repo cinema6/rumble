@@ -1,7 +1,7 @@
 define(['app', 'services', 'tracker'], function(appModule, servicesModule, trackerModule) {
     'use strict';
 
-    ddescribe('VideoCardController', function() {
+    describe('VideoCardController', function() {
         var $rootScope,
             $scope,
             $controller,
