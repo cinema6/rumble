@@ -29,6 +29,7 @@
             baseUrl: '/base/' + appDir + '/assets/scripts',
             paths: {
                 async: 'lib/async',
+                speed: 'lib/speed',
                 youtube: 'lib/youtube',
                 modernizr: libUrl('modernizr/modernizr.custom.71747'),
                 jquery: libUrl('jquery/2.0.3-0-gf576d00/jquery'),
