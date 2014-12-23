@@ -1,5 +1,11 @@
 # MiniReel Player
 
+## v1.9.7 (December 23, 2014)
+* *[v1.9.7.rc1]*
+  * [FEATURE]: An error event is sent to GA if a video takes a long time
+    to start playing
+* *[/v1.9.7.rc1]*
+
 ## v1.9.6 (December 22, 2014)
 * *[v1.9.6.rc1]*
   * [FEATURE]: Events are sent to GA if the VAST/VPAID/YouTube player
