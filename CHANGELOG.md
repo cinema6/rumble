@@ -1,5 +1,8 @@
 # MiniReel Player
 
+* *[v1.10.0.rc1]*
+  * [FEATURE]: Added support for optional controls via card data
+
 ## v1.9.5 (December 20, 2014)
 * *[v1.9.5.rc1]*
   * Update c6ui: v3.5.6
