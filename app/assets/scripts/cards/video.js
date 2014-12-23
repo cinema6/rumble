@@ -168,6 +168,15 @@ function( angular ) {
 
                         trackVideoEvent('End');
                     })
+                    .on('error', function() {
+                        var error = player.error;
+
+                        trackVideoEvent(
+                            'Error',
+                            true,
+                            (error && error.message) || 'An unknown error occurred.'
+                        );
+                    })
                     .once('play', function() {
                         _data.hasPlayed = true;
                         hasPlayed = true;
