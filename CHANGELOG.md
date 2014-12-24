@@ -1,6 +1,11 @@
 # MiniReel Player
 
 ## v1.9.7 (December 23, 2014)
+* *[v1.9.7.rc2]*
+  * [FEATURE]: Added GA Video events when a player is ready, and when
+    the player attempts to autoplay the video
+* *[/v1.9.7.rc2]*
+
 * *[v1.9.7.rc1]*
   * [FEATURE]: An error event is sent to GA if a video takes a long time
     to start playing
