@@ -6,6 +6,7 @@ define(['app', 'services', 'tracker'], function(appModule, servicesModule, track
             $scope,
             $controller,
             $interval,
+            $timeout,
             c6EventEmitter,
             compileAdTag,
             trackerService,
@@ -86,6 +87,7 @@ define(['app', 'services', 'tracker'], function(appModule, servicesModule, track
                 $rootScope = $injector.get('$rootScope');
                 $controller = $injector.get('$controller');
                 $interval = $injector.get('$interval');
+                $timeout = $injector.get('$timeout');
                 c6EventEmitter = $injector.get('c6EventEmitter');
                 compileAdTag = $injector.get('compileAdTag');
 
@@ -1098,6 +1100,38 @@ define(['app', 'services', 'tracker'], function(appModule, servicesModule, track
 
                                         it('should play the video', function() {
                                             expect(iface.play).toHaveBeenCalled();
+                                        });
+
+                                        describe('if the video does not start playing', function() {
+                                            beforeEach(function() {
+                                                $timeout.flush();
+                                            });
+
+                                            it('should send an error to GA', function() {
+                                                expect(tracker.trackEvent).toHaveBeenCalledWith(MiniReelService.getTrackingData($scope.config, $scope.number - 1, {
+                                                    category: 'Video',
+                                                    action: 'Error',
+                                                    label: 'Video play timed out.',
+                                                    videoSource: $scope.config.source,
+                                                    videoDuration: iface.duration,
+                                                    nonInteraction: 1
+                                                }));
+                                            });
+                                        });
+
+                                        describe('if the video does start playing', function() {
+                                            beforeEach(function() {
+                                                $scope.$apply(function() {
+                                                    iface.emit('play');
+                                                });
+                                                $timeout.flush();
+                                            });
+
+                                            it('should not track an event', function() {
+                                                expect(tracker.trackEvent).not.toHaveBeenCalledWith(jasmine.objectContaining({
+                                                    action: 'Error'
+                                                }));
+                                            });
                                         });
                                     });
 
