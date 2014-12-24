@@ -57,8 +57,6 @@ function( angular ) {
             }
 
             function playerReady(player) {
-                VideoCardCtrl.player = player;
-
                 function controlNav(NavController) {
                     var canSkipAnytime = data.skip === true || data.skip === 0,
                         mustWatchEntireVideo = data.skip === false;
@@ -114,6 +112,7 @@ function( angular ) {
                             trackVideoEvent('Error', true, error);
                         });
 
+                        trackVideoEvent('AutoPlayAttempt', true);
                         player.play();
                     }
 
@@ -144,6 +143,10 @@ function( angular ) {
                         nonInteraction: (+ !!nonInteractive)
                     }));
                 }
+
+                trackVideoEvent('Ready', true);
+
+                VideoCardCtrl.player = player;
 
                 player
                     .once('companionsReady', function() {

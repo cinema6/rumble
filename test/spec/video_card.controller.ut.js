@@ -750,10 +750,35 @@ define(['app', 'services', 'tracker'], function(appModule, servicesModule, track
                             beforeEach(function() {
                                 iface.duration = 100;
                                 iface.currentTime = 0;
+
+                                tracker.trackEvent.calls.reset();
                             });
 
                             it('should use the correct tracker', function() {
                                 expect(trackerService).toHaveBeenCalledWith('c6mr');
+                            });
+
+                            describe('when the player is ready', function() {
+                                beforeEach(function() {
+                                    tracker.trackEvent.calls.reset();
+
+                                    instantiate();
+                                    expect(tracker.trackEvent).not.toHaveBeenCalled();
+                                    $scope.$emit($event, iface);
+                                    expect(tracker.trackEvent).not.toHaveBeenCalled();
+
+                                    iface.emit('ready');
+                                });
+
+                                it('should track an event in GA', function() {
+                                    expect(tracker.trackEvent).toHaveBeenCalledWith((function() {
+                                        var data = trackingData('Ready');
+
+                                        data.nonInteraction = 1;
+
+                                        return data;
+                                    }()));
+                                });
                             });
 
                             describe('quartiles', function() {
@@ -1202,6 +1227,17 @@ define(['app', 'services', 'tracker'], function(appModule, servicesModule, track
 
                                         it('should play the video', function() {
                                             expect(iface.play).toHaveBeenCalled();
+                                        });
+
+                                        it('should track an event', function() {
+                                            expect(tracker.trackEvent).toHaveBeenCalledWith(MiniReelService.getTrackingData($scope.config, $scope.number - 1, {
+                                                category: 'Video',
+                                                action: 'AutoPlayAttempt',
+                                                label: $scope.config.webHref,
+                                                videoSource: $scope.config.source,
+                                                videoDuration: iface.duration,
+                                                nonInteraction: 1
+                                            }));
                                         });
 
                                         describe('if the video does not start playing', function() {
