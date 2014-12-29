@@ -1,4 +1,4 @@
-define(['c6uilib', 'services', 'app', 'angular'], function(c6uilibModule, servicesModule, appModule, angular) {
+define(['c6uilib', 'services', 'app', 'angular', 'speed'], function(c6uilibModule, servicesModule, appModule, angular, speed) {
     'use strict';
 
     describe('RumbleController', function() {
@@ -29,7 +29,8 @@ define(['c6uilib', 'services', 'app', 'angular'], function(c6uilibModule, servic
                 alias       : jasmine.createSpy('tracker.alias'),
                 set         : jasmine.createSpy('tracker.set'),
                 trackPage   : jasmine.createSpy('tracker.trackPage'),
-                trackEvent  : jasmine.createSpy('tracker.trackEvent')
+                trackEvent  : jasmine.createSpy('tracker.trackEvent'),
+                trackTiming : jasmine.createSpy('tracker.trackTiming')
             };
             trackerServiceSpy = jasmine.createSpy('trackerService').and.returnValue(trackerSpy);
 
@@ -323,6 +324,15 @@ define(['c6uilib', 'services', 'app', 'angular'], function(c6uilibModule, servic
                     slideTitle : 'null'
                 });
                 */
+            });
+
+            it('should send up timing data to GA', function() {
+                expect(trackerSpy.trackTiming).toHaveBeenCalledWith(MiniReelService.getTrackingData(null, -1, {
+                    timingCategory: 'API',
+                    timingVar: 'downloadSpeed',
+                    timingLabel: 'c6ui',
+                    timingValue: speed.average().time
+                }));
             });
         });
 

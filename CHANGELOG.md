@@ -1,5 +1,11 @@
 # MiniReel Player
 
+* *[v1.10.0.rc1]*
+  * [FEATURE]: Added GA timing event for how long it takes c6ui to
+    download
+  * [FEATURE]: Add GA timing event for how long it takes a video to
+    start playing (after being autoplayed.)
+
 ## v1.9.7 (December 23, 2014)
 * *[v1.9.7.rc2]*
   * [FEATURE]: Added GA Video events when a player is ready, and when
