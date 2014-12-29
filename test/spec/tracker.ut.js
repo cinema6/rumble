@@ -300,6 +300,73 @@ define(['tracker'], function(trackerModule) {
                             });
                     });
                 });
+                
+                describe('trackTiming',function(){
+                    var tracker;
+                    beforeEach(function(){
+                        tracker = new TrackerContext('tt');
+                    });
+
+                    it('works with category, var and value params',function(){
+                        tracker.trackTiming('cat1','action1',400);
+                        expect($window._c6_)
+                            .toHaveBeenCalledWith('tt.send',{
+                                hitType         : 'timing',
+                                timingCategory  : 'cat1',
+                                timingVar       : 'action1',
+                                timingValue     : 400
+                            });
+                    });
+
+                    it('works with category, var, value and label params',function(){
+                        tracker.trackTiming('cat1','action1',276,'label1');
+                        expect($window._c6_)
+                            .toHaveBeenCalledWith('tt.send',{
+                                hitType         : 'timing',
+                                timingCategory   : 'cat1',
+                                timingVar        : 'action1',
+                                timingValue      : 276,
+                                timingLabel      : 'label1'
+                            });
+                    });
+
+                    it('works with a timing object', function(){
+                        tracker.trackTiming({
+                            timingCategory : 'cat1',
+                            timingVar   : 'action1',
+                            timingValue : 42
+                        });
+                        expect($window._c6_)
+                            .toHaveBeenCalledWith('tt.send',{
+                                hitType         : 'timing',
+                                timingCategory   : 'cat1',
+                                timingVar     : 'action1',
+                                timingValue   : 42
+                            });
+                    });
+
+                    it('works with a timing object using aliases', function(){
+                        tracker.alias('category','timingCategory');
+                        tracker.alias('tvar','timingVar');
+                        tracker.alias('tval','timingValue');
+                        tracker.alias('customProp','dimension1');
+                        tracker.trackTiming({
+                            category : 'cat1',
+                            tvar   : 'action1',
+                            tval   : 33,
+                            customProp : 'val1'
+                        });
+                        expect($window._c6_)
+                            .toHaveBeenCalledWith('tt.send',{
+                                hitType         : 'timing',
+                                timingCategory  : 'cat1',
+                                timingVar       : 'action1',
+                                timingValue     : 33,
+                                dimension1      : 'val1'
+                            });
+                    });
+                });
+
             });
             describe('service',function(){
                 it('returns a default context if none passed',function(){
