@@ -32,7 +32,7 @@
                 speed: 'lib/speed',
                 youtube: 'lib/youtube',
                 modernizr: libUrl('modernizr/modernizr.custom.71747'),
-                jquery: libUrl('jquery/2.0.3-0-gf576d00/jquery'),
+                jquery: libUrl('jquery/2.0.3-0-gf576d00/jquery.js?cb=' + Date.now()),
                 angular: libUrl('angular/v1.2.12-0-g5cc5cc1/angular'),
                 angularAnimate: libUrl('angular/v1.2.12-0-g5cc5cc1/angular-animate'),
                 angularSanitize: libUrl('angular/v1.2.12-0-g5cc5cc1/angular-sanitize'),
@@ -75,7 +75,15 @@
                 adtech: {
                     exports: 'ADTECH'
                 }
-            }
+            },
+
+            config: {
+                speed: {
+                    jquery: 236.4
+                }
+            },
+
+            deps: ['speed!jquery']
         });
 
         require(['c6_defines', 'angularMocks'], function(c6Defines) {
