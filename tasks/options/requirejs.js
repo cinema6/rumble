@@ -15,6 +15,7 @@ module.exports = {
                 version: '../../../.tmp/version',
                 async: 'lib/async',
                 youtube: 'lib/youtube',
+                speed: 'lib/speed',
                 modernizr: 'empty:',
                 jquery: 'empty:',
                 angular: 'empty:',
