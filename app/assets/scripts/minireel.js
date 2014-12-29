@@ -1,8 +1,8 @@
-define (['angular','c6_defines','tracker',
+define (['angular','speed','c6_defines','tracker',
          'cards/ad','cards/recap','cards/text','cards/display_ad',
          'cards/video',
          'modules/ballot','modules/companion_ad','modules/display_ad','modules/post'],
-function( angular , c6Defines  , tracker ,
+function( angular , speed , c6Defines  , tracker ,
           adCard   , recapCard   , textCard   , displayAdCard    ,
           videoCard   ,
           ballotModule   , companionAdModule    , displayAdModule    , postModule   ) {
@@ -904,6 +904,13 @@ function( angular , c6Defines  , tracker ,
                 'href'       : c6Defines.kHref,
                 'slideCount' : $scope.deck.length
             });
+
+            tracker.trackTiming(MiniReelService.getTrackingData(null, -1, {
+                timingCategory: 'API',
+                timingVar: 'downloadSpeed',
+                timingLabel: 'c6ui',
+                timingValue: speed.average().time
+            }));
         });
 
         $scope.$on('shouldStart', function() {

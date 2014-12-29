@@ -123,6 +123,28 @@ function( angular , c6Defines  ) {
                 return this;
             };
 
+            TrackerContext.prototype.trackTiming = function(){
+                var args = Array.prototype.slice.call(arguments,0), props = {}, k;
+                if (angular.isObject(args[0])){
+                    args = args[0];
+                    for (k in args){
+                        props[this.alias(k)] = args[k];
+                    }
+                } else {
+                    props.timingCategory = args[0];
+                    props.timingVar   = args[1];
+                    if ((args[2] !== undefined) && (args[2] !== null)){
+                        props.timingValue  = args[2];
+                    }
+                    if ((args[3] !== undefined) && (args[3] !== null)){
+                        props.timingLabel = args[3];
+                    }
+                }
+                props.hitType = 'timing';
+                $window[api].call(null,this.methodContext('send'),props);
+                return this;
+            };
+
             _private.TrackerContext = TrackerContext;
             _private.contexts = {};
 
