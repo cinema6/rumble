@@ -18,7 +18,8 @@ define(['app', 'services', 'tracker'], function(appModule, servicesModule, track
             c6ImagePreloader,
             c6AppData,
             adTag,
-            tracker;
+            tracker,
+            baseTime = new Date();
 
 
         function instantiate() {
@@ -46,6 +47,8 @@ define(['app', 'services', 'tracker'], function(appModule, servicesModule, track
         }
 
         beforeEach(function() {
+            jasmine.clock().install().mockDate(baseTime);
+
             module(servicesModule.name, function($provide) {
                 $provide.decorator('compileAdTag', function($delegate) {
                     return jasmine.createSpy('compileAdTag()')
@@ -135,7 +138,12 @@ define(['app', 'services', 'tracker'], function(appModule, servicesModule, track
                 spyOn($scope, '$emit').and.callThrough();
                 instantiate();
                 spyOn(tracker, 'trackEvent');
+                spyOn(tracker, 'trackTiming');
             });
+        });
+
+        afterEach(function() {
+            jasmine.clock().uninstall();
         });
 
         it('should exist', function() {
@@ -740,7 +748,7 @@ define(['app', 'services', 'tracker'], function(appModule, servicesModule, track
                                 return MiniReelService.getTrackingData($scope.config, $scope.number - 1, {
                                     category: 'Video',
                                     action: action,
-                                    label: $scope.config.webHref,
+                                    label: $scope.config.webHref || 'null',
                                     videoSource: $scope.config.source,
                                     videoDuration: iface.duration,
                                     nonInteraction: 0
@@ -848,6 +856,7 @@ define(['app', 'services', 'tracker'], function(appModule, servicesModule, track
                                 describe('if the card is autoplay', function() {
                                     beforeEach(function() {
                                         $scope.config.data.autoplay = true;
+                                        $scope.config.webHref = null;
 
                                         iface.emit('play');
                                     });
@@ -1259,6 +1268,7 @@ define(['app', 'services', 'tracker'], function(appModule, servicesModule, track
 
                                         describe('if the video does start playing', function() {
                                             beforeEach(function() {
+                                                jasmine.clock().tick(3000);
                                                 $scope.$apply(function() {
                                                     iface.emit('play');
                                                 });
@@ -1268,6 +1278,15 @@ define(['app', 'services', 'tracker'], function(appModule, servicesModule, track
                                             it('should not track an event', function() {
                                                 expect(tracker.trackEvent).not.toHaveBeenCalledWith(jasmine.objectContaining({
                                                     action: 'Error'
+                                                }));
+                                            });
+
+                                            it('should send a timing to GA', function() {
+                                                expect(tracker.trackTiming).toHaveBeenCalledWith(MiniReelService.getTrackingData($scope.config, $scope.number - 1, {
+                                                    timingCategory: 'Video',
+                                                    timingVar: 'playDelay',
+                                                    timingLabel: 'null',
+                                                    timingValue: 3000
                                                 }));
                                             });
                                         });

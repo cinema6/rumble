@@ -36,12 +36,14 @@ function( angular ) {
                 }),
                 tracker = trackerService('c6mr');
 
-            function waitForPlay(player) {
+            function waitForPlay(player, timeout) {
                 var deferred = $q.defer();
 
-                $timeout(function() {
-                    deferred.reject('Video play timed out.');
-                }, 5000);
+                if (timeout) {
+                    $timeout(function() {
+                        deferred.reject('Video play timed out.');
+                    }, timeout);
+                }
 
                 player.once('play', function() {
                     deferred.resolve(player);
@@ -54,6 +56,19 @@ function( angular ) {
                 ['closeBallot', 'closeBallotResults'].forEach(function(method) {
                     this[method]();
                 }, VideoCardCtrl);
+            }
+
+            function trackPlayTiming(player) {
+                var start = Date.now();
+
+                waitForPlay(player).then(function() {
+                    tracker.trackTiming(MiniReelService.getTrackingData(config, $scope.number - 1, {
+                        timingCategory: 'Video',
+                        timingVar: 'playDelay',
+                        timingLabel: 'null',
+                        timingValue: Date.now() - start
+                    }));
+                });
             }
 
             function playerReady(player) {
@@ -108,12 +123,13 @@ function( angular ) {
 
                 function activateCard() {
                     if (data.autoplay) {
-                        waitForPlay(player).catch(function(error) {
+                        waitForPlay(player, 5000).catch(function(error) {
                             trackVideoEvent('Error', true, error);
                         });
 
                         trackVideoEvent('AutoPlayAttempt', true);
                         player.play();
+                        trackPlayTiming(player);
                     }
 
                     if (!_data.hasPlayed) {
@@ -137,7 +153,7 @@ function( angular ) {
                     tracker.trackEvent(MiniReelService.getTrackingData(config, $scope.number - 1, {
                         category: 'Video',
                         action: event,
-                        label: label || config.webHref,
+                        label: label || config.webHref || 'null',
                         videoSource: config.source || config.type,
                         videoDuration: player.duration,
                         nonInteraction: (+ !!nonInteractive)
