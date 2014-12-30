@@ -1,5 +1,11 @@
 # MiniReel Player
 
+## v1.10.1 (December 30, 2014)
+* *[v1.10.1.rc1]*
+  * [FIX]: Fix for an issue that could cause VAST videos not to autoplay
+    in UIWebViews on iOS 7
+* *[/v1.10.1.rc1]*
+
 ## v1.10.0 (December 29, 2014)
 * *[v1.10.0.rc1]*
   * [FEATURE]: Added GA timing event for how long it takes c6ui to
