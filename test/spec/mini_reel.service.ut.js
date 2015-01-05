@@ -207,6 +207,7 @@ define(['app', 'minireel', 'c6uilib', 'angular'], function(appModule, minireelMo
                                     placementId: null,
                                     data: {
                                         autoadvance: false,
+                                        controls: true,
                                         skip: 6,
                                         videoid: 'jofNR_WkoCE',
                                         start: 10,
@@ -245,6 +246,7 @@ define(['app', 'minireel', 'c6uilib', 'angular'], function(appModule, minireelMo
                                     data: {
                                         skip: null,
                                         autoadvance: null,
+                                        controls: false,
                                         autoplay: false,
                                         videoid: 'x18b09a',
                                         related: 0
@@ -322,6 +324,7 @@ define(['app', 'minireel', 'c6uilib', 'angular'], function(appModule, minireelMo
                                     placementId: null,
                                     thumbs: {},
                                     data: {
+                                        controls: true,
                                         skip: false,
                                         autoadvance: true,
                                         autoplay: null
@@ -641,6 +644,35 @@ define(['app', 'minireel', 'c6uilib', 'angular'], function(appModule, minireelMo
                             it('should be true if the value is not set', function() {
                                 indicesOfSkiplessCards.forEach(function(index) {
                                     expect(result[index].data.skip).toBe(true);
+                                });
+                            });
+                        });
+
+                        describe('controls', function() {
+                            var indicesOfControlsCards,
+                                indicesOfControlslessCards;
+
+                            beforeEach(function() {
+                                indicesOfControlslessCards = indicesWhere(function(card) {
+                                    return isVideo(card) && !isSet(card.data, 'controls');
+                                });
+                                expect(indicesOfControlslessCards.length).toBeGreaterThan(0);
+
+                                indicesOfControlsCards = indicesWhere(function(card, index) {
+                                    return indicesOfControlslessCards.indexOf(index) < 0;
+                                });
+                                expect(indicesOfControlsCards.length).toBeGreaterThan(0);
+                            });
+
+                            it('should not change the value if set', function() {
+                                indicesOfControlsCards.forEach(function(index) {
+                                    expect(result[index].data.controls).toBe(mrData.deck[index].data.controls);
+                                });
+                            });
+
+                            it('should be true if the value is not set', function() {
+                                indicesOfControlslessCards.forEach(function(index) {
+                                    expect(result[index].data.controls).toBe(true);
                                 });
                             });
                         });

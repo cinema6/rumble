@@ -3,12 +3,12 @@ function( angular ) {
     'use strict';
 
     return angular.module('c6.rumble.cards.video', [])
-        .controller('VideoCardController', ['$scope','c6ImagePreloader','compileAdTag',
-                                            '$interval','c6AppData','trackerService','$q',
-                                            'MiniReelService','VideoTrackerService','$timeout',
-        function                           ( $scope , c6ImagePreloader , compileAdTag ,
-                                             $interval , c6AppData , trackerService , $q ,
-                                             MiniReelService , VideoTrackerService , $timeout ) {
+        .controller('VideoCardController', ['$scope','c6ImagePreloader','$interval','c6AppData',
+                                            'trackerService','$q','MiniReelService',
+                                            'VideoTrackerService','$timeout',
+        function                           ( $scope , c6ImagePreloader , $interval , c6AppData ,
+                                             trackerService , $q , MiniReelService ,
+                                             VideoTrackerService , $timeout ) {
             var VideoCardCtrl = this,
                 behaviors = c6AppData.behaviors,
                 config = $scope.config,
@@ -325,8 +325,6 @@ function( angular ) {
             }
 
             this.player = null;
-            this.adType = (profile.flash && !!data.vpaid) ? 'vpaid' : 'vast';
-            this.adTag = compileAdTag(data[this.adType]) || null;
             this.enablePlay = !profile.touch && !(/^(dailymotion|embedded)$/).test(config.type);
             Object.defineProperties(this, {
                 showPlay: {

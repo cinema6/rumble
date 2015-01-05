@@ -222,6 +222,10 @@ function( angular , speed , c6Defines  , tracker ,
                     {
                         prop: 'skip',
                         default: true
+                    },
+                    {
+                        prop: 'controls',
+                        default: true
                     }
                 ].forEach(function(config) {
                     var prop = config.prop;
@@ -1145,6 +1149,105 @@ function( angular , speed , c6Defines  , tracker ,
                     return !!((this.currentIndex === this.index) || this.hover);
                 }, ['currentIndex', 'index', 'hover']);
             }
+        };
+    }])
+
+    .directive('mrVideoPlayer', ['$compile','compileAdTag','c6AppData',
+    function                    ( $compile , compileAdTag , c6AppData ) {
+        function compile($element, attrs) {
+            var attribues = Object.keys(attrs.$attr)
+                .map(function(attr) {
+                    return {
+                        name: attr,
+                        value: attrs[attr]
+                    };
+                });
+
+            return function link(scope, $element) {
+                function createPlayer(config) {
+                    var tagName = (function() {
+                        switch (config.type) {
+                        case 'adUnit':
+                            return config.data.vpaid && c6AppData.profile.flash ?
+                                'vpaid-player' : 'vast-player';
+                        default:
+                            return config.type + '-player';
+                        }
+                    }()),
+                        typeDefaults = (function() {
+                            switch (tagName) {
+                            case 'vpaid-player':
+                                return [
+                                    {
+                                        name: 'ad-tag',
+                                        value: compileAdTag(config.data.vpaid)
+                                    },
+                                    {
+                                        name: 'videoid',
+                                        value: config.id + '-player'
+                                    }
+                                ];
+                            case 'vast-player':
+                                return [
+                                    {
+                                        name: 'ad-tag',
+                                        value: compileAdTag(config.data.vast)
+                                    },
+                                    {
+                                        name: 'videoid',
+                                        value: config.id + '-player'
+                                    }
+                                ];
+                            default:
+                                return [
+                                    {
+                                        name: 'videoid',
+                                        value: config.data.videoid
+                                    },
+                                    {
+                                        name: 'code',
+                                        value: config.data.code,
+                                        predicate: function() {
+                                            return !!config.data.code;
+                                        }
+                                    }
+                                ];
+                            }
+                        }());
+
+                    $element.html(
+                        '<' + tagName + '></' + tagName + '>'
+                    );
+                    [
+                        {
+                            name: 'controls',
+                            value: 'controls',
+                            predicate: function() {
+                                return config.data.controls;
+                            }
+                        }
+                    ].concat(typeDefaults).filter(function(attribute) {
+                        return (attribute.predicate || function() { return true; })();
+                    }).concat(attribues).forEach(function(attribute) {
+                        this.attr(attribute.name, attribute.value);
+                    }, $element.contents());
+                    $compile($element.contents())(scope.$parent);
+                }
+
+                scope.$watch('config.type', function(type) {
+                    if (!type) { return; }
+
+                    createPlayer(scope.config);
+                });
+            };
+        }
+
+        return {
+            restrict: 'E',
+            scope: {
+                config: '='
+            },
+            compile: compile
         };
     }])
 

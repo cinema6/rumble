@@ -25,28 +25,8 @@
         </span>
     </h1>
 
-    <div ng-class="{'player--fly-away': Ctrl.flyAway}"
-        class="player js-playerBox"
-        ng-switch="config.type">
-        <youtube-player ng-switch-when="youtube" id="{{config.id}}-player"
-        videoid="{{config.data.videoid}}" class="playerBox"
-        start="{{config.data.start}}" end="{{config.data.end}}" controls></youtube-player>
-        <vimeo-player ng-switch-when="vimeo" id="{{config.id}}-player"
-        videoid="{{config.data.videoid}}" class="playerBox"
-        start="{{config.data.start}}" end="{{config.data.end}}"></vimeo-player>
-        <dailymotion-player class="playerBox" ng-switch-when="dailymotion"
-        id="{{config.id}}-player" videoid="{{config.data.videoid}}" controls></dailymotion-player>
-        <rumble-player class="playerBox" ng-switch-when="rumble"
-        id="{{config.id}}-player" videoid="{{config.data.videoid}}"
-        start="{{config.data.start}}" end="{{config.data.end}}"></rumble-player>
-        <span ng-switch-when="adUnit"><ng-switch on="Ctrl.adType">
-            <vpaid-player ng-switch-when="vpaid" videoid="{{config.id}}-player"
-            class="playerBox" ad-tag="{{Ctrl.adTag}}"></vpaid-player>
-            <vast-player ng-switch-when="vast" videoid="{{config.id}}-player"
-            class="playerBox" ad-tag="{{Ctrl.adTag}}" disable-clickthrough></vast-player>
-        </ng-switch></span>
-        <embedded-player ng-switch-when="embedded" class="playerBox"
-        code="{{config.data.code}}"></embedded-player>
+    <div ng-class="{'player--fly-away': Ctrl.flyAway}" class="player js-playerBox">
+        <mr-video-player config="config" class="playerBox" id="{{config.id}}-player" start="{{config.data.start}}" end="{{config.data.end}}"></mr-video-player>
     </div>
     <div ng-show="Ctrl.flyAway" c6-touch="Ctrl.player.play()" class="player__thumbnail"
         ng-style="{'background-image':config.thumbs.large ? 'url(' + config.thumbs.large + ')' : ''}">
