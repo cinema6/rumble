@@ -321,8 +321,8 @@ function( angular , angularAnimate , angularSanitize , c6uilib , c6log , c6Defin
             session = cinema6.init();
 
             session.on('initAnalytics',function(cfg){
-                $log.info('Init analytics with accountId: %1, clientId: %2',
-                    cfg.accountId, cfg.clientId);
+                $log.info('initAnalytics with :',cfg);
+                c6AppData.analyticsConfig = cfg;
                 var trackerProps = {
                     'checkProtocolTask' : angular.noop
                 };
@@ -341,15 +341,16 @@ function( angular , angularAnimate , angularSanitize , c6uilib , c6log , c6Defin
                     }
                 }
                 tracker.set(trackerProps);
-                tracker.trackEvent({
-                    eventCategory: 'Debug',
-                    eventAction: 'Init',
-                    eventLabel : app.data.experience.data.title,
-                    page : '/' + app.data.experience.id,
-                    nonInteraction: 1,
-                    dimension11: c6Defines.kHref
-                });
-                $scope.$broadcast('analyticsReady');
+                
+                //tracker.trackEvent({
+                //    eventCategory: 'Debug',
+                //    eventAction: 'Init',
+                //    eventLabel : app.data.experience.data.title,
+                //    page : tracker.makePagePath(),
+                //    nonInteraction: 1,
+                //    dimension11: c6Defines.kHref
+                //});
+                $scope.$broadcast('analyticsReady',cfg);
             });
 
             session.on('mrPreview:updateMode', function() {

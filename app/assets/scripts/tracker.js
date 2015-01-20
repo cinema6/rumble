@@ -21,6 +21,7 @@ function( angular , c6Defines  ) {
                 this.created = false;
                 this.ctxName = (ctxName === '_default') ? '' : ctxName;
                 this.aliases = {};
+                this.makePagePath = angular.noop;
             }
 
             TrackerContext.prototype.alias = function(){
