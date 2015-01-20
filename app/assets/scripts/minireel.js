@@ -98,18 +98,32 @@ function( angular , speed , c6Defines  , tracker ,
         }
 
         this.getTrackingData = function(card, index, params) {
-            var experience = $injector.get('c6AppData').experience;
+            var experience = $injector.get('c6AppData').experience,
+                cfg = $injector.get('c6AppData').analyticsConfig;
+            
+            function makePagePath(c,i){
+                var r='/mr/'+experience.id+(c?'/'+c:'')+'/',p,q={},qf=[];
+                if (cfg) {
+                    q.cx = cfg.context;
+                    q.ct = cfg.container;
+                    q.gp = cfg.group;
+                }
+                if (i > -1){
+                    q.ix = i;
+                }
+                for (p in q){ if(q[p]!==undefined){qf.push(p + '=' + q[p]);} }
+                if (qf.length){ r += '?' + qf.join('&'); }
+                return r;
+            }
 
             function ifCard(fn) {
                 return card ? fn() : '';
             }
 
             return extend(copy(params || {}), {
-                page: '/mr/' + experience.id + '/' + ifCard(function() { return card.id; }),
-                title: experience.data.title + ifCard(function() { return ' - ' + card.title; }),
-                slideIndex: index,
-                slideId: ifCard(function() { return card.id; }) || 'null',
-                slideTitle: ifCard(function() { return card.title; }) || 'null'
+                page: makePagePath(ifCard(function(){return card.id;}),index),
+                title: experience.data.title + ifCard(function(){return ' - ' + card.title; }),
+                slideIndex: index
             });
         };
 
@@ -884,23 +898,13 @@ function( angular , speed , c6Defines  , tracker ,
                 'category'      : 'eventCategory',
                 'action'        : 'eventAction',
                 'label'         : 'eventLabel',
-                'expMode'       : 'dimension1',
-                'expId'         : 'dimension2',
-                'expTitle'      : 'dimension3',
-                'expVersion'    : 'dimension10',
                 'href'          : 'dimension11',
                 'slideCount'    : 'dimension4',
-                'slideId'       : 'dimension5',
-                'slideTitle'    : 'dimension6',
                 'slideIndex'    : 'dimension7',
                 'videoDuration' : 'dimension8',
                 'videoSource'   : 'dimension9'
             });
             tracker.set({
-                'expMode'    : appData.mode,
-                'expId'      : appData.experience.id,
-                'expVersion' : appData.experience.versionId,
-                'expTitle'   : appData.experience.data.title,
                 'href'       : c6Defines.kHref,
                 'slideCount' : $scope.deck.length
             });

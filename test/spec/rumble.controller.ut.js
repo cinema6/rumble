@@ -295,35 +295,16 @@ define(['c6uilib', 'services', 'app', 'angular', 'speed'], function(c6uilibModul
                     'category'      : 'eventCategory',
                     'action'        : 'eventAction',
                     'label'         : 'eventLabel',
-                    'expMode'       : 'dimension1',
-                    'expId'         : 'dimension2',
-                    'expTitle'      : 'dimension3',
-                    'expVersion'    : 'dimension10',
                     'href'          : 'dimension11',
                     'slideCount'    : 'dimension4',
-                    'slideId'       : 'dimension5',
-                    'slideTitle'    : 'dimension6',
                     'slideIndex'    : 'dimension7',
                     'videoDuration' : 'dimension8',
                     'videoSource'   : 'dimension9'
                 });
                 expect(trackerSpy.set).toHaveBeenCalledWith({
-                    'expMode'  : 'testMode',
-                    'expId'    : 'e-722bd3c4942331',
-                    'expVersion' : 'xyz',
-                    'expTitle' : 'my title',
                     'slideCount' : 6,
                     'href'       : jasmine.any(String)
                 });
-                /*
-                expect(trackerSpy.trackPage).toHaveBeenCalledWith({
-                    page : '/mr/e-722bd3c4942331/',
-                    title : 'my title',
-                    slideIndex : -1,
-                    slideId : 'null',
-                    slideTitle : 'null'
-                });
-                */
             });
 
             it('should send up timing data to GA', function() {
@@ -1061,11 +1042,9 @@ define(['c6uilib', 'services', 'app', 'angular', 'speed'], function(c6uilibModul
                 expect($scope.$emit.calls.count()).toBe(3); // positionWillChange, positionDidChange, reelMove
                 expect(trackerSpy.trackPage.calls.count()).toEqual(1);
                 expect(trackerSpy.trackPage).toHaveBeenCalledWith({
-                    page : '/mr/e-722bd3c4942331/ad1',
+                    page : '/mr/e-722bd3c4942331/ad1/?ix=1',
                     title : 'my title - ad',
-                    slideIndex : 1, 
-                    slideId : 'ad1', 
-                    slideTitle : 'ad'
+                    slideIndex : 1
                 }); 
             });
 
@@ -1081,21 +1060,18 @@ define(['c6uilib', 'services', 'app', 'angular', 'speed'], function(c6uilibModul
                 expect(trackerSpy.trackPage.calls.count()).toEqual(1);
                 expect(trackerSpy.trackEvent.calls.count()).toEqual(1);
                 expect(trackerSpy.trackPage).toHaveBeenCalledWith({
-                    page : '/mr/e-722bd3c4942331/ad1',
+                    page : '/mr/e-722bd3c4942331/ad1/?ix=1',
                     title : 'my title - ad',
-                    slideIndex : 1,
-                    slideId : 'ad1',
-                    slideTitle : 'ad'
+                    slideIndex : 1
                 }); 
                 expect(trackerSpy.trackEvent).toHaveBeenCalledWith({
                     category : 'Navigation',
                     action   : 'Next',
                     label    : 'test',
-                    page     : '/mr/e-722bd3c4942331/ad1', 
+                    page     : '/mr/e-722bd3c4942331/ad1/?ix=1', 
                     title    : 'my title - ad',
-                    slideIndex : 1,
-                    slideId: 'ad1',
-                    slideTitle : 'ad'                    }); 
+                    slideIndex : 1
+               }); 
             });
 
 
@@ -1115,21 +1091,17 @@ define(['c6uilib', 'services', 'app', 'angular', 'speed'], function(c6uilibModul
                 expect(trackerSpy.trackPage.calls.count()).toEqual(1);
                 expect(trackerSpy.trackEvent.calls.count()).toEqual(1);
                 expect(trackerSpy.trackPage).toHaveBeenCalledWith({
-                    page : '/mr/e-722bd3c4942331/ad1',
+                    page : '/mr/e-722bd3c4942331/ad1/?ix=1',
                     title : 'my title - ad',
-                    slideIndex : 1,
-                    slideId : 'ad1',
-                    slideTitle : 'ad'
+                    slideIndex : 1
                 }); 
                 expect(trackerSpy.trackEvent).toHaveBeenCalledWith({
                     category : 'Navigation',
                     action   : 'Previous',
                     label    : 'auto',
-                    page     : '/mr/e-722bd3c4942331/ad1', 
+                    page     : '/mr/e-722bd3c4942331/ad1/?ix=1', 
                     title    : 'my title - ad',
-                    slideIndex : 1,
-                    slideId: 'ad1',
-                    slideTitle : 'ad'
+                    slideIndex : 1
                 }); 
             });
 
@@ -1153,22 +1125,17 @@ define(['c6uilib', 'services', 'app', 'angular', 'speed'], function(c6uilibModul
                 expect(trackerSpy.trackPage.calls.count()).toEqual(1);
                 expect(trackerSpy.trackEvent.calls.count()).toEqual(1);
                 expect(trackerSpy.trackPage).toHaveBeenCalledWith({
-                    page : '/mr/e-722bd3c4942331/ad1',
+                    page : '/mr/e-722bd3c4942331/ad1/?ix=1',
                     title : 'my title - ad',
-                    slideIndex : 1,
-                    slideId : 'ad1',
-                    slideTitle : 'ad'
+                    slideIndex : 1
                 }); 
                 expect(trackerSpy.trackEvent).toHaveBeenCalledWith({
                     category : 'Navigation',
                     action   : 'Previous',
                     label    : 'test',
-                    page     : '/mr/e-722bd3c4942331/ad1', 
+                    page     : '/mr/e-722bd3c4942331/ad1/?ix=1', 
                     title    : 'my title - ad',
-                    slideIndex : 1,
-                    slideId: 'ad1',
-                    slideTitle : 'ad'
-
+                    slideIndex : 1
                 }); 
             });
 
@@ -1192,21 +1159,17 @@ define(['c6uilib', 'services', 'app', 'angular', 'speed'], function(c6uilibModul
                 expect(trackerSpy.trackPage.calls.count()).toEqual(1);
                 expect(trackerSpy.trackEvent.calls.count()).toEqual(1);
                 expect(trackerSpy.trackPage).toHaveBeenCalledWith({
-                    page : '/mr/e-722bd3c4942331/vid2',
+                    page : '/mr/e-722bd3c4942331/vid2/?ix=2',
                     title : 'my title - vid2 caption',
-                    slideIndex : 2,
-                    slideId : 'vid2',
-                    slideTitle : 'vid2 caption'
+                    slideIndex : 2
                 }); 
                 expect(trackerSpy.trackEvent).toHaveBeenCalledWith({
                     category : 'Navigation',
                     action   : 'Skip',
                     label    : 'auto',
-                    page     : '/mr/e-722bd3c4942331/vid2', 
+                    page     : '/mr/e-722bd3c4942331/vid2/?ix=2', 
                     title    : 'my title - vid2 caption',
-                    slideIndex : 2,
-                    slideId: 'vid2',
-                    slideTitle : 'vid2 caption'
+                    slideIndex : 2
                 }); 
             });
 
@@ -1226,21 +1189,17 @@ define(['c6uilib', 'services', 'app', 'angular', 'speed'], function(c6uilibModul
                 expect(trackerSpy.trackPage.calls.count()).toEqual(1);
                 expect(trackerSpy.trackEvent.calls.count()).toEqual(1);
                 expect(trackerSpy.trackPage).toHaveBeenCalledWith({
-                    page : '/mr/e-722bd3c4942331/vid2',
+                    page : '/mr/e-722bd3c4942331/vid2/?ix=2',
                     title : 'my title - vid2 caption',
-                    slideIndex : 2,
-                    slideId : 'vid2',
-                    slideTitle : 'vid2 caption'
+                    slideIndex : 2
                 }); 
                 expect(trackerSpy.trackEvent).toHaveBeenCalledWith({
                     category : 'Navigation',
                     action   : 'Skip',
                     label    : 'test',
-                    page     : '/mr/e-722bd3c4942331/vid2', 
+                    page     : '/mr/e-722bd3c4942331/vid2/?ix=2', 
                     title    : 'my title - vid2 caption',
-                    slideIndex : 2,
-                    slideId: 'vid2',
-                    slideTitle : 'vid2 caption'
+                    slideIndex : 2
                 }); 
             });
 
@@ -1275,11 +1234,9 @@ define(['c6uilib', 'services', 'app', 'angular', 'speed'], function(c6uilibModul
 
                 it('sends a pageview for the first slide',function(){
                     expect(trackerSpy.trackPage).toHaveBeenCalledWith({
-                        page : '/mr/e-722bd3c4942331/vid1',
+                        page : '/mr/e-722bd3c4942331/vid1/?ix=0',
                         title : 'my title - vid1 caption',
                         slideIndex : 0,
-                        slideId : 'vid1',
-                        slideTitle : 'vid1 caption',
                         sessionControl: 'start'
                     });
                 });

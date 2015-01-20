@@ -40,6 +40,8 @@
                         }),
                         c6Sandbox({
                             gaAccountId : 'UA-44457821-2',
+                            gaContainer   : 'c6-sandbox',
+                            gaContext     : 'embed',
                             landingContentDir: grunt.template.process('<%= settings.collateralDir %>'),
                             experiences: grunt.config.process(
                                 grunt.file.readJSON(
