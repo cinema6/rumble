@@ -400,12 +400,6 @@ define(['app'], function(appModule) {
                                 .then(success, failure);
                             $httpBackend.flush();
                             expect(success).toHaveBeenCalledWith(true);
-                            expect($win.c6Tracker).toHaveBeenCalledWith('c6mr.send',{
-                                eventCategory : 'Survey',
-                                eventAction   : 'e-80fcd03196b3d2',
-                                eventLabel    : 'rc-22119a8cf9f755|Painful',
-                                hitType       : 'event'
-                            });
                         });
                         
                         it('should work when ballotMap and election data have different labels', function() {
@@ -424,12 +418,6 @@ define(['app'], function(appModule) {
                                 .then(success, failure);
                             $httpBackend.flush();
                             expect(success).toHaveBeenCalledWith(true);
-                            expect($win.c6Tracker).toHaveBeenCalledWith('c6mr.send',{
-                                eventCategory : 'Survey',
-                                eventAction   : 'e-80fcd03196b3d2',
-                                eventLabel    : 'rc-22119a8cf9f755|Painful',
-                                hitType       : 'event'
-                            });
                         });
                     });
                     
@@ -467,12 +455,6 @@ define(['app'], function(appModule) {
                             BallotService.vote('rc-22119a8cf9f755', 1)
                                 .then(success, failure);
                             $httpBackend.flush();
-                            expect($win.c6Tracker).toHaveBeenCalledWith('c6mr.send',{
-                                eventCategory : 'Survey',
-                                eventAction   : 'e-38fb0b1af9b047',
-                                eventLabel    : 'rc-22119a8cf9f755|1',
-                                hitType       : 'event'
-                            });
                         });
                     });
 
@@ -510,12 +492,6 @@ define(['app'], function(appModule) {
                             BallotService.vote('rc-22119a8cf9f755', 1, 'e-123-override')
                                 .then(success, failure);
                             $httpBackend.flush();
-                            expect($win.c6Tracker).toHaveBeenCalledWith('c6mr.send',{
-                                eventCategory : 'Survey',
-                                eventAction   : 'e-123-override',
-                                eventLabel    : 'rc-22119a8cf9f755|1',
-                                hitType       : 'event'
-                            });
                         });
                     });
                 });

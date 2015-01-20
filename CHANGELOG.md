@@ -1,5 +1,9 @@
 # MiniReel Player
 
+* *[v1.11.1.rc1]*
+  * [FEATURE]: Adding context,container,group to ga reporting
+  * [FIX]: Removing unnecessary duplicate GA reports for votes (#631).
+
 ## v1.10.1 (December 30, 2014)
 * *[v1.10.1.rc1]*
   * [FIX]: Fix for an issue that could cause VAST videos not to autoplay
