@@ -3,6 +3,8 @@
 * *[v1.11.0.rc1]*
   * Changed video quartile tracking logic so skipping to a quartile will
     result in all previous quartiles being fired
+  * [FEATURE]: Adding context,container,group to ga reporting
+  * [FIX]: Removing unnecessary duplicate GA reports for votes (#631).
   * [FIX]: Fix for an issue that caused videos not to play in a
     UIWebView running on a device with iOS 7 (or less)
 

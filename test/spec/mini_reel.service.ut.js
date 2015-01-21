@@ -65,7 +65,7 @@ define(['app', 'minireel', 'c6uilib', 'angular'], function(appModule, minireelMo
 
         describe('@public', function() {
             describe('methods: ', function() {
-                describe('getTrackingData(card, index, params)', function() {
+                fdescribe('getTrackingData(card, index, params)', function() {
                     var card, params,
                         result;
 
@@ -119,6 +119,20 @@ define(['app', 'minireel', 'c6uilib', 'angular'], function(appModule, minireelMo
                                 page: '/mr/' + c6AppData.experience.id + '/',
                                 title: c6AppData.experience.data.title,
                                 slideIndex: -1
+                            });
+                        });
+                    });
+
+                    describe('if card is provided without id', function() {
+                        beforeEach(function() {
+                            result = MiniReelService.getTrackingData({}, 0);
+                        });
+
+                        it('should return data for the MiniReel', function() {
+                            expect(result).toEqual({
+                                page: '/mr/' + c6AppData.experience.id + '/',
+                                title: c6AppData.experience.data.title,
+                                slideIndex: 0 
                             });
                         });
                     });

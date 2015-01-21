@@ -108,7 +108,7 @@ function( angular , speed , c6Defines  , tracker ,
                     q.ct = cfg.container;
                     q.gp = cfg.group;
                 }
-                if (i > -1){
+                if ((i > -1) && (card && card.id !== undefined)){
                     q.ix = i;
                 }
                 for (p in q){ if(q[p]!==undefined){qf.push(p + '=' + q[p]);} }
@@ -117,7 +117,7 @@ function( angular , speed , c6Defines  , tracker ,
             }
 
             function ifCard(fn) {
-                return card ? fn() : '';
+                return (card && card.id !== undefined) ? fn() : '';
             }
 
             return extend(copy(params || {}), {
@@ -259,8 +259,8 @@ function( angular , speed , c6Defines  , tracker ,
             return playlist;
         };
     }])
-    .service('BallotService', ['$http','$cacheFactory','$q','c6UrlMaker','trackerService',
-    function                  ( $http , $cacheFactory , $q , c6UrlMaker , trackerService ) {
+    .service('BallotService', ['$http','$cacheFactory','$q','c6UrlMaker',
+    function                  ( $http , $cacheFactory , $q , c6UrlMaker  ) {
         var service = this,
             electionId = null,
             ballotMap  = null,
@@ -380,11 +380,6 @@ function( angular , speed , c6Defines  , tracker ,
 
         this.vote = function(id, choiceIndex, electionIdOverride) {
             function process() {
-                trackerService('c6mr').trackEvent(
-                    'Survey',
-                    (electionIdOverride || electionId),
-                    id + '|' + (isNaN(choiceIndex) ? choiceIndex : parseInt(choiceIndex,10))
-                );
                 return true;
             }
 
