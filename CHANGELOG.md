@@ -1,5 +1,9 @@
 # MiniReel Player
 
+* *[v1.11.0.rc1]*
+  * [FIX]: Fix for an issue that caused videos not to play in a
+    UIWebView running on a device with iOS 7 (or less)
+
 ## v1.10.1 (December 30, 2014)
 * *[v1.10.1.rc1]*
   * [FIX]: Fix for an issue that could cause VAST videos not to autoplay

@@ -2,7 +2,7 @@
     ng-class="{
         'ui--offscreen' : !deck.active
     }">
-    <li class="cards__item" ng-repeat="item in (deck.cards | deck:deck.index:1)"
+    <li class="cards__item" ng-repeat="item in (deck.cards | deck:deck.index:cardBuffer)"
         ng-class="{ 
             'ui--offscreen' : ($index !== deck.index || !deck.active),
             'text--low': item.title.length + item.note.length <= 100,

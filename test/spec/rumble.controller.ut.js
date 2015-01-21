@@ -209,13 +209,6 @@ define(['c6uilib', 'services', 'app', 'angular', 'speed'], function(c6uilibModul
                 });
                 spyOn(mockPlayer, 'on').and.callThrough();
 
-                $scope      = $rootScope.$new();
-
-                $scope.app = {
-                    data: appData
-                };
-                $scope.AppCtrl = {};
-
                 spyOn(cinema6, 'getSession').and.callFake(function() {
                     sessionDeferred = $q.defer();
                     return sessionDeferred.promise;
@@ -224,6 +217,13 @@ define(['c6uilib', 'services', 'app', 'angular', 'speed'], function(c6uilibModul
                 spyOn(BallotService, 'getElection');
 
                 initController = function() {
+                    $scope = $rootScope.$new();
+
+                    $scope.app = {
+                        data: appData
+                    };
+                    $scope.AppCtrl = {};
+
                     RumbleCtrl = $controller('RumbleController', {
                         $scope  : $scope,
                         $log    : $log,
@@ -360,6 +360,52 @@ define(['c6uilib', 'services', 'app', 'angular', 'speed'], function(c6uilibModul
                     it('should return false', function() {
                         expect(RumbleCtrl.moduleActive('ballot')).toBe(false);
                     });
+                });
+            });
+        });
+
+        describe('$scope.cardBuffer', function() {
+            describe('on iOS', function() {
+                beforeEach(function() {
+                    spyOn(c6UserAgent.device, 'isIOS').and.returnValue(true);
+                });
+
+                ['7.1', '6.2'].forEach(function(version) {
+                    describe(version, function() {
+                        beforeEach(function() {
+                            c6UserAgent.app.version = version;
+                            initController();
+                        });
+
+                        it('should be 0', function() {
+                            expect($scope.cardBuffer).toBe(0);
+                        });
+                    });
+                });
+
+                ['8.0', '8.1'].forEach(function(version) {
+                    describe(version, function() {
+                        beforeEach(function() {
+                            c6UserAgent.app.version = version;
+                            initController();
+                        });
+
+                        it('should be 1', function() {
+                            expect($scope.cardBuffer).toBe(1);
+                        });
+                    });
+                });
+            });
+
+            describe('on not iOS', function() {
+                beforeEach(function() {
+                    spyOn(c6UserAgent.device, 'isIOS').and.returnValue(false);
+                    c6UserAgent.app.version = '6.3';
+                    initController();
+                });
+
+                it('should be 1', function() {
+                    expect($scope.cardBuffer).toBe(1);
                 });
             });
         });
@@ -760,6 +806,7 @@ define(['c6uilib', 'services', 'app', 'angular', 'speed'], function(c6uilibModul
 
                 it('should only happen once if frequency is set to 0', function() {
                     compileCtrlWithDynamicAds(1, 0);
+                    spyOn($scope, '$broadcast');
 
                     RumbleCtrl.setPosition(0);
                     expect($scope.$broadcast).toHaveBeenCalledWith('adOnDeck',jasmine.any(Object));
@@ -775,6 +822,7 @@ define(['c6uilib', 'services', 'app', 'angular', 'speed'], function(c6uilibModul
 
                 it('should not occur if firstPLacement is set to -1', function() {
                     compileCtrlWithDynamicAds(-1, 2);
+                    spyOn($scope, '$broadcast');
 
                     RumbleCtrl.setPosition(0);
                     RumbleCtrl.setPosition(1); // shows ad
@@ -870,6 +918,7 @@ define(['c6uilib', 'services', 'app', 'angular', 'speed'], function(c6uilibModul
 
                     it('should not happen if firstPlacement is set to -1', function() {
                         compileCtrlWithDynamicAds(-1, 3);
+                        spyOn($scope, '$broadcast');
 
                         RumbleCtrl.setPosition(0);
                         expect($scope.currentCard.ad).not.toBe(true);
@@ -888,6 +937,7 @@ define(['c6uilib', 'services', 'app', 'angular', 'speed'], function(c6uilibModul
 
                     it('should only happen once if frequency is set to 0', function() {
                         compileCtrlWithDynamicAds(1, 0);
+                        spyOn($scope, '$broadcast');
 
                         RumbleCtrl.setPosition(0);
                         RumbleCtrl.setPosition(1);
@@ -1300,6 +1350,7 @@ define(['c6uilib', 'services', 'app', 'angular', 'speed'], function(c6uilibModul
             describe('deckControllerReady', function() {
                 it('should broadcast adOnDeck if first card should be an ad', function() {
                     compileCtrlWithDynamicAds(0, 3);
+                    spyOn($scope, '$broadcast');
 
                     $scope.$emit('deckControllerReady');
 
@@ -1310,6 +1361,7 @@ define(['c6uilib', 'services', 'app', 'angular', 'speed'], function(c6uilibModul
 
                 it('should not broadcast adOnDeck if first card is not an ad', function() {
                     compileCtrlWithDynamicAds(1, 3);
+                    spyOn($scope, '$broadcast');
 
                     $scope.$emit('deckControllerReady');
 
