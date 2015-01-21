@@ -1197,6 +1197,17 @@
         "appUri": "rumble",
         "title": "The 15 Most Amazing GoPro Videos Ever Recorded",
         "data": {
+            "adConfig": {
+                "video": {
+                    "firstPlacement": 1,
+                    "frequency": 3,
+                    "waterfall": "cinema6",
+                    "skip": 6
+                },
+                "display": {
+                    "waterfall": "cinema6"
+                }
+            },
             "election": "e-5fd1f0451a0eb8",
             "title": "The 15 Most Amazing GoPro Videos Ever Recorded",
             "mode": "lightbox",
@@ -1375,19 +1386,6 @@
                         "modestbranding": 1
                     },
                     "displayAd": "http://2.bp.blogspot.com/-TlM_3FT89Y0/UMzLr7kVykI/AAAAAAAACjs/lKrdhgp6OQg/s1600/brad-turner.jpg"
-                },
-                {
-                    "id": "rc-392f3546f0cfc3",
-                    "type": "ad",
-                    "ad": true,
-                    "modules": [
-                        "displayAd"
-                    ],
-                    "data": {
-                        "autoplay": true,
-                        "skip": false,
-                        "source": "publisher"
-                    }
                 },
                 {
                     "id": "rc-77d0ea2794cc6b",
