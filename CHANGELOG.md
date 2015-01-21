@@ -1,5 +1,9 @@
 # MiniReel Player
 
+* *[v1.10.2.rc1]*
+  * [FIX]: Fix for an issue where dynamic ad cards weren't tracked
+    correctly in GA.
+
 ## v1.10.1 (December 30, 2014)
 * *[v1.10.1.rc1]*
   * [FIX]: Fix for an issue that could cause VAST videos not to autoplay
