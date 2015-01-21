@@ -3,6 +3,8 @@
 * *[v1.11.0.rc1]*
   * Changed video quartile tracking logic so skipping to a quartile will
     result in all previous quartiles being fired
+  * [FIX]: Fix for an issue that caused videos not to play in a
+    UIWebView running on a device with iOS 7 (or less)
 
 ## v1.10.1 (December 30, 2014)
 * *[v1.10.1.rc1]*
