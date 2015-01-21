@@ -421,6 +421,7 @@ function( angular , speed , c6Defines  , tracker ,
             var index = null,
                 self = this,
                 adId = 0,
+                currentAd,
                 adController,
                 enableDynamicAds = checkForStaticAds();
 
@@ -479,6 +480,7 @@ function( angular , speed , c6Defines  , tracker ,
                 this.type = 'ad';
                 this.title = 'Advertisement';
                 this.ad = true;
+                this.dynamic = true;
                 this.modules = [];
                 this.data = {
                     autoplay: true,
@@ -543,14 +545,7 @@ function( angular , speed , c6Defines  , tracker ,
             };
 
             this.showAd = function() {
-                $scope.deck.splice(index, 0, {
-                    ad: true,
-                    dynamic: true,
-                    type: 'ad',
-                    data: {
-                        autoadvance: true
-                    }
-                });
+                $scope.deck.splice(index, 0, currentAd);
                 adController.adCount++;
             };
 
@@ -559,7 +554,7 @@ function( angular , speed , c6Defines  , tracker ,
             };
 
             this.adOnDeck = function() {
-                $scope.$broadcast('adOnDeck', new AdCard(self.videoAdConfig));
+                $scope.$broadcast('adOnDeck', currentAd = new AdCard(self.videoAdConfig));
             };
 
             $scope.$watch('deck', function() {

@@ -7,6 +7,8 @@
   * [FIX]: Removing unnecessary duplicate GA reports for votes (#631).
   * [FIX]: Fix for an issue that caused videos not to play in a
     UIWebView running on a device with iOS 7 (or less)
+  * [FIX]: Fix for an issue where dynamic ad cards weren't tracked
+    correctly in GA.
 
 ## v1.10.1 (December 30, 2014)
 * *[v1.10.1.rc1]*

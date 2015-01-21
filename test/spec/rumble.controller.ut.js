@@ -916,6 +916,27 @@ define(['c6uilib', 'services', 'app', 'angular', 'speed'], function(c6uilibModul
                         i = function() { return $scope.currentIndex; };
                     });
 
+                    it('should be a valid card object', function() {
+                        compileCtrlWithDynamicAds(1, 0);
+
+                        RumbleCtrl.setPosition(0);
+                        RumbleCtrl.setPosition(1);
+                        expect($scope.currentCard).toEqual(jasmine.objectContaining({
+                            id: 'rc-advertisement1',
+                            type: 'ad',
+                            title: 'Advertisement',
+                            ad: true,
+                            dynamic: true,
+                            modules: [],
+                            data: {
+                                autoplay: true,
+                                autoadvance: true,
+                                skip: 6,
+                                source: 'cinema6'
+                            }
+                        }));
+                    });
+
                     it('should not happen if firstPlacement is set to -1', function() {
                         compileCtrlWithDynamicAds(-1, 3);
                         spyOn($scope, '$broadcast');
