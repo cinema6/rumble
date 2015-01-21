@@ -108,7 +108,7 @@ function( angular , speed , c6Defines  , tracker ,
                     q.ct = cfg.container;
                     q.gp = cfg.group;
                 }
-                if (i > -1){
+                if ((i > -1) && (card && card.id !== undefined)){
                     q.ix = i;
                 }
                 for (p in q){ if(q[p]!==undefined){qf.push(p + '=' + q[p]);} }
@@ -117,7 +117,7 @@ function( angular , speed , c6Defines  , tracker ,
             }
 
             function ifCard(fn) {
-                return card ? fn() : '';
+                return (card && card.id !== undefined) ? fn() : '';
             }
 
             return extend(copy(params || {}), {
