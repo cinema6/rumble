@@ -65,7 +65,7 @@ define(['app', 'minireel', 'c6uilib', 'angular'], function(appModule, minireelMo
 
         describe('@public', function() {
             describe('methods: ', function() {
-                fdescribe('getTrackingData(card, index, params)', function() {
+                describe('getTrackingData(card, index, params)', function() {
                     var card, params,
                         result;
 
