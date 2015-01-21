@@ -1,6 +1,8 @@
 # MiniReel Player
 
-* *[v1.10.2.rc1]*
+* *[v1.11.0.rc1]*
+  * [FIX]: Fix for an issue that caused videos not to play in a
+    UIWebView running on a device with iOS 7 (or less)
   * [FIX]: Fix for an issue where dynamic ad cards weren't tracked
     correctly in GA.
 
