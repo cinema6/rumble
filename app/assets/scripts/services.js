@@ -20,10 +20,12 @@ function( angular , c6uilib , adtech , c6Defines  ) {
                             return Math.floor(percent * 4) - 1;
                         }());
 
-                    if (quartile > -1 && !quartiles[quartile]) {
-                        cb(quartile + 1);
-                        quartiles[quartile] = true;
-                    }
+                    quartiles.slice(0, quartile + 1).forEach(function(hasFired, quartile) {
+                        if (!hasFired) {
+                            cb(quartile + 1);
+                            quartiles[quartile] = true;
+                        }
+                    });
                 }
 
                 player.on('timeupdate', trackVideoPlayback);

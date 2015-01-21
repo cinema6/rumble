@@ -92,8 +92,9 @@ define(['services'], function(servicesModule) {
                     });
 
                     it('should track a single video event for the second quartile', function() {
+                        expect(cb).toHaveBeenCalledWith(1);
                         expect(cb).toHaveBeenCalledWith(2);
-                        expect(cb.calls.count()).toBe(1);
+                        expect(cb.calls.count()).toBe(2);
                     });
                 });
 
@@ -103,8 +104,10 @@ define(['services'], function(servicesModule) {
                     });
 
                     it('should track a single video event for the third quartile', function() {
+                        expect(cb).toHaveBeenCalledWith(1);
+                        expect(cb).toHaveBeenCalledWith(2);
                         expect(cb).toHaveBeenCalledWith(3);
-                        expect(cb.calls.count()).toBe(1);
+                        expect(cb.calls.count()).toBe(3);
                     });
                 });
 
@@ -114,8 +117,11 @@ define(['services'], function(servicesModule) {
                     });
 
                     it('should track a single video event for the fourth quartile', function() {
+                        expect(cb).toHaveBeenCalledWith(1);
+                        expect(cb).toHaveBeenCalledWith(2);
+                        expect(cb).toHaveBeenCalledWith(3);
                         expect(cb).toHaveBeenCalledWith(4);
-                        expect(cb.calls.count()).toBe(1);
+                        expect(cb.calls.count()).toBe(4);
                     });
                 });
 

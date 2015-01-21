@@ -1,5 +1,9 @@
 # MiniReel Player
 
+* *[v1.11.0.rc1]*
+  * Changed video quartile tracking logic so skipping to a quartile will
+    result in all previous quartiles being fired
+
 ## v1.10.1 (December 30, 2014)
 * *[v1.10.1.rc1]*
   * [FIX]: Fix for an issue that could cause VAST videos not to autoplay
