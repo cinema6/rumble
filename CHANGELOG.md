@@ -1,8 +1,10 @@
 # MiniReel Player
 
-* *[v1.11.1.rc1]*
+* *[v1.11.0.rc1]*
   * [FEATURE]: Adding context,container,group to ga reporting
   * [FIX]: Removing unnecessary duplicate GA reports for votes (#631).
+  * [FIX]: Fix for an issue that caused videos not to play in a
+    UIWebView running on a device with iOS 7 (or less)
 
 ## v1.10.1 (December 30, 2014)
 * *[v1.10.1.rc1]*

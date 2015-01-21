@@ -4,7 +4,7 @@
         'ui--offscreen' : !deck.active
     }">
     <li class="cards__item js-cardItem"
-        ng-repeat="item in (deck.cards | deck:deck.index:1)"
+        ng-repeat="item in (deck.cards | deck:deck.index:cardBuffer)"
         ng-class="{
             'ui--offscreen' : ($index !== deck.index || !deck.active)
         }">

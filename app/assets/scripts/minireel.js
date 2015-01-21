@@ -403,9 +403,9 @@ function( angular , speed , c6Defines  , tracker ,
             }).then(process);
         };
     }])
-    .controller('RumbleController',['$log','$scope','$interval','BallotService',
+    .controller('RumbleController',['$log','$scope','$interval','BallotService','c6UserAgent',
                                     'c6Computed','cinema6','MiniReelService','trackerService',
-    function                       ( $log , $scope , $interval, BallotService ,
+    function                       ( $log , $scope , $interval , BallotService , c6UserAgent ,
                                      c6Computed , cinema6 , MiniReelService , trackerService ) {
         var self = this,
             appData = $scope.app.data,
@@ -735,6 +735,10 @@ function( angular , speed , c6Defines  , tracker ,
             enabled: true,
             wait: null
         };
+        $scope.cardBuffer = (
+            c6UserAgent.device.isIOS() &&
+            parseFloat(c6UserAgent.app.version) < 8
+        ) ? 0 : 1;
 
         $scope.$on('<mr-card>:contentEnd', function(event, card) {
             if ($scope.currentCard === card && card.data.autoadvance) {
