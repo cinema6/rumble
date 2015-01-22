@@ -1,6 +1,10 @@
 # MiniReel Player
 
-## v1.11.0 (January 21, 2015)
+## v1.11.0 (January 22, 2015)
+* *[v1.11.0.rc2]*
+  * Changed VAST-only ad tags to fix a Safari redirect error
+* *[/v1.11.0.rc2]*
+
 * *[v1.11.0.rc1]*
   * Changed video quartile tracking logic so skipping to a quartile will
     result in all previous quartiles being fired
