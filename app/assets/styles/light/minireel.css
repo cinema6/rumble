@@ -219,10 +219,11 @@
     MiniReel classes
     ================================================ */    
     .MiniReel__group {
-        padding:62.5% 0 8.875em 0;
+        padding:0;
         border-top:2px solid #1b1b1b;
-        position:relative;
+        position:absolute;
         background:#fff;
+        width:100%; height:100%;
     }
 
 
