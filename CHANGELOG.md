@@ -1,5 +1,10 @@
 # MiniReel Player
 
+## v1.12.0
+* *[v1.12.0.rc1]*
+  * fixed css to auto-resize MR iframe inside of container div
+
+
 ## v1.11.0 (January 22, 2015)
 * *[v1.11.0.rc2]*
   * Changed VAST-only ad tags to fix a Safari redirect error
