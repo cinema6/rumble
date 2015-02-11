@@ -10,6 +10,7 @@ define(['c6uilib', 'services', 'app', 'angular', 'speed'], function(c6uilibModul
             $controller,
             c6UserAgent,
             c6EventEmitter,
+            c6ImagePreloader,
             RumbleCtrl,
             BallotService,
             deck,
@@ -182,6 +183,7 @@ define(['c6uilib', 'services', 'app', 'angular', 'speed'], function(c6uilibModul
                 BallotService = $injector.get('BallotService');
                 ControlsService = $injector.get('ControlsService');
                 MiniReelService = $injector.get('MiniReelService');
+                c6ImagePreloader = $injector.get('c6ImagePreloader');
 
                 spyOn(MiniReelService, 'createDeck')
                     .and.callFake(function(data) {
@@ -1292,6 +1294,60 @@ define(['c6uilib', 'services', 'app', 'angular', 'speed'], function(c6uilibModul
         });
 
         describe('starting the mini reel', function() {
+            beforeEach(function() {
+                spyOn(c6ImagePreloader, 'load');
+            });
+
+            describe('if the minireel has a campaign', function() {
+                beforeEach(function() {
+                    appData.experience.data.campaign = {};
+                });
+
+                describe('if there are launchUrls', function() {
+                    beforeEach(function() {
+                        appData.experience.data.campaign.launchUrls = ['hello-world.foo'];
+                        RumbleCtrl.start();
+                    });
+
+                    it('should fire them', function() {
+                        expect(c6ImagePreloader.load).toHaveBeenCalledWith(['hello-world.foo']);
+                    });
+
+                    describe('if the minireel is launched again', function() {
+                        beforeEach(function() {
+                            c6ImagePreloader.load.calls.reset();
+                            RumbleCtrl.start();
+                        });
+
+                        it('should not fire the pixels again', function() {
+                            expect(c6ImagePreloader.load).not.toHaveBeenCalled();
+                        });
+                    });
+                });
+
+                describe('if there are no launchUrls', function() {
+                    beforeEach(function() {
+                        delete appData.experience.data.campaign.launchUrls;
+                        RumbleCtrl.start();
+                    });
+
+                    it('should not fire anything', function() {
+                        expect(c6ImagePreloader.load).not.toHaveBeenCalled();
+                    });
+                });
+            });
+
+            describe('if the minireel has no campaign', function() {
+                beforeEach(function() {
+                    delete appData.experience.data.campaign;
+                    RumbleCtrl.start();
+                });
+
+                it('should not fire anything', function() {
+                    expect(c6ImagePreloader.load).not.toHaveBeenCalled();
+                });
+            });
+
             describe('google analytics',function(){
                 beforeEach(function(){
                     trackerSpy.trackPage.calls.reset();

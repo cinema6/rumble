@@ -249,8 +249,24 @@ function( angular , speed , c6Defines  , tracker ,
                 });
             }
 
+            function setCampaign(card) {
+                var campaign = card.campaign;
+
+                if (!campaign) { return; }
+
+                if (!campaign.clickUrls && campaign.clickUrl) {
+                    campaign.clickUrls = [campaign.clickUrl];
+                    delete campaign.clickUrl;
+                }
+
+                if (!campaign.countUrls && campaign.countUrl) {
+                    campaign.countUrls = [campaign.countUrl];
+                    delete campaign.countUrl;
+                }
+            }
+
             angular.forEach(playlist, function(video) {
-                [fetchThumb, setWebHref, setDefaults, setVideoDefaults, setSocial]
+                [fetchThumb, setWebHref, setDefaults, setVideoDefaults, setSocial, setCampaign]
                     .forEach(function(fn) {
                         return fn(video);
                     });
@@ -405,8 +421,10 @@ function( angular , speed , c6Defines  , tracker ,
     }])
     .controller('RumbleController',['$log','$scope','$interval','BallotService','c6UserAgent',
                                     'c6Computed','cinema6','MiniReelService','trackerService',
+                                    'c6ImagePreloader',
     function                       ( $log , $scope , $interval , BallotService , c6UserAgent ,
-                                     c6Computed , cinema6 , MiniReelService , trackerService ) {
+                                     c6Computed , cinema6 , MiniReelService , trackerService ,
+                                     c6ImagePreloader ) {
         var self = this,
             appData = $scope.app.data,
             experience = appData.experience,
@@ -860,7 +878,15 @@ function( angular , speed , c6Defines  , tracker ,
         };
 
         this.start = function() {
+            var campaign = experience.data.campaign;
+
             self.setPosition(0);
+
+            if (campaign && campaign.launchUrls) {
+                c6ImagePreloader.load(campaign.launchUrls);
+                delete campaign.launchUrls;
+            }
+
             if (appData.behaviors.fullscreen) {
                 cinema6.fullscreen(true);
             }
