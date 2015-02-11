@@ -421,8 +421,10 @@ function( angular , speed , c6Defines  , tracker ,
     }])
     .controller('RumbleController',['$log','$scope','$interval','BallotService','c6UserAgent',
                                     'c6Computed','cinema6','MiniReelService','trackerService',
+                                    'c6ImagePreloader',
     function                       ( $log , $scope , $interval , BallotService , c6UserAgent ,
-                                     c6Computed , cinema6 , MiniReelService , trackerService ) {
+                                     c6Computed , cinema6 , MiniReelService , trackerService ,
+                                     c6ImagePreloader ) {
         var self = this,
             appData = $scope.app.data,
             experience = appData.experience,
@@ -876,7 +878,15 @@ function( angular , speed , c6Defines  , tracker ,
         };
 
         this.start = function() {
+            var campaign = experience.data.campaign;
+
             self.setPosition(0);
+
+            if (campaign && campaign.launchUrls) {
+                c6ImagePreloader.load(campaign.launchUrls);
+                delete campaign.launchUrls;
+            }
+
             if (appData.behaviors.fullscreen) {
                 cinema6.fullscreen(true);
             }

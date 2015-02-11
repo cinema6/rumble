@@ -2,6 +2,8 @@
 
 * *[v1.13.0.rc1]*
   * [FEATURE]: Add ability to fire multiple campaign-tracking pixels
+  * [FEATURE]: Add ability to fire tracking pixels when a minireel
+    launches
 
 ## v1.12.0 (February 3, 2015)
 * *[v1.12.0.rc1]*
