@@ -44,6 +44,9 @@ define(['app', 'minireel', 'c6uilib', 'angular'], function(appModule, minireelMo
                     },
                     profile: {
                         autoplay: true
+                    },
+                    behaviors: {
+                        showsCompanionWithVideoAd: true
                     }
                 });
             });
@@ -243,7 +246,8 @@ define(['app', 'minireel', 'c6uilib', 'angular'], function(appModule, minireelMo
                                     title: 'This is the MiniReel',
                                     note: 'Hello somebody',
                                     thumbs: {},
-                                    data: {}
+                                    data: {},
+                                    modules: [],
                                 },
                                 {
                                     id: 'rc-22119a8cf9f755',
@@ -256,6 +260,7 @@ define(['app', 'minireel', 'c6uilib', 'angular'], function(appModule, minireelMo
                                         clickUrl: 'click-me.jpg',
                                         countUrl: 'count-me.jpg'
                                     },
+                                    modules: ['ballot', 'displayAd'],
                                     data: {
                                         autoadvance: false,
                                         controls: true,
@@ -272,9 +277,7 @@ define(['app', 'minireel', 'c6uilib', 'angular'], function(appModule, minireelMo
                                     id: 'rc-2d46a04b21b073',
                                     type: 'vast',
                                     ad: true,
-                                    modules: [
-                                        'displayAd'
-                                    ],
+                                    modules: [],
                                     placementId: null,
                                     data: {
                                         autoplay: true
@@ -288,6 +291,7 @@ define(['app', 'minireel', 'c6uilib', 'angular'], function(appModule, minireelMo
                                     note: 'Psychotic glamour',
                                     voting: [ 200, 50, 10 ],
                                     placementId: '3948thfguf43',
+                                    modules: ['displayAd'],
                                     links: {
                                         'Action': 'foo.html',
                                         'Website': 'bar.html',
@@ -322,6 +326,7 @@ define(['app', 'minireel', 'c6uilib', 'angular'], function(appModule, minireelMo
                                         'Pinterest': 'pinit.html'
                                     },
                                     campaign: {},
+                                    modules: ['displayAd'],
                                     data: {
                                         skip: true,
                                         autoplay: true,
@@ -342,6 +347,7 @@ define(['app', 'minireel', 'c6uilib', 'angular'], function(appModule, minireelMo
                                         small: 'matt-smith--small.jpg',
                                         large: 'matt-smith--large.jpg'
                                     },
+                                    modules: ['displayAd'],
                                     data: {
                                         skip: false,
                                         autoadvance: true,
@@ -362,6 +368,7 @@ define(['app', 'minireel', 'c6uilib', 'angular'], function(appModule, minireelMo
                                         large: 'http://upload.wikimedia.org/wikipedia/en/8/8c/Ubisoft.png'
                                     },
                                     placementId: '98fun3u4',
+                                    modules: [],
                                     data: {}
                                 },
                                 {
@@ -369,6 +376,7 @@ define(['app', 'minireel', 'c6uilib', 'angular'], function(appModule, minireelMo
                                     type: 'recap',
                                     title: 'Recap',
                                     note: null,
+                                    modules: [],
                                     data: {}
                                 },
                                 {
@@ -379,6 +387,7 @@ define(['app', 'minireel', 'c6uilib', 'angular'], function(appModule, minireelMo
                                     voting: [ 400, 50, 10 ],
                                     placementId: null,
                                     thumbs: {},
+                                    modules: ['displayAd'],
                                     data: {
                                         controls: true,
                                         skip: false,
@@ -393,6 +402,7 @@ define(['app', 'minireel', 'c6uilib', 'angular'], function(appModule, minireelMo
                                     note: 'Federal drug enforcement agents showed up unannounced Sunday to check at least two visiting NFL teams\' medical staffs as part of an investigation into former players\' claims that teams mishandled prescription drugs.',
                                     placementId: null,
                                     thumbs: {},
+                                    modules: ['displayAd'],
                                     data: {
                                         skip: false,
                                         autoadvance: true,
@@ -408,6 +418,7 @@ define(['app', 'minireel', 'c6uilib', 'angular'], function(appModule, minireelMo
                                     note: 'New video shows the aftermath of the Malaysian Airlines crash after it was shot down in rebel-held territory in eastern Ukraine.',
                                     placementId: null,
                                     thumbs: {},
+                                    modules: ['displayAd'],
                                     data: {
                                         skip: false,
                                         autoadvance: true,
@@ -423,6 +434,7 @@ define(['app', 'minireel', 'c6uilib', 'angular'], function(appModule, minireelMo
                                     note: 'Watch as 6-year-old Willie performs a flawless dance routine set to Michael Jackson\'s hit song, "Smooth Criminal", during the Coolidge Elementary School talent show. Now that\'s impressive!',
                                     placementId: null,
                                     thumbs: {},
+                                    modules: ['displayAd'],
                                     data: {
                                         skip: false,
                                         autoadvance: true,
@@ -858,6 +870,53 @@ define(['app', 'minireel', 'c6uilib', 'angular'], function(appModule, minireelMo
                         it('should set webHref to null for other cards', function() {
                             others.forEach(function(card) {
                                 expect(card.webHref).toBeNull();
+                            });
+                        });
+                    });
+
+                    describe('modules', function() {
+                        describe('if the mode showsCompanionWithVideoAd', function() {
+                            beforeEach(function() {
+                                c6AppData.behaviors.showsCompanionWithVideoAd = true;
+                                result = MiniReelService.createDeck(mrData);
+                            });
+
+                            it('should not do anything to the modules', function() {
+                                result.forEach(function(card, index) {
+                                    var orig = mrData.deck[index];
+
+                                    expect(card.modules).toEqual(orig.modules);
+                                });
+                            });
+                        });
+
+                        describe('if the device !showsCompanionWithVideoAd', function() {
+                            var cardsWithPlacement, cardsWithoutPlacement;
+
+                            beforeEach(function() {
+                                c6AppData.behaviors.showsCompanionWithVideoAd = false;
+                                result = MiniReelService.createDeck(mrData);
+
+                                cardsWithPlacement = result.filter(function(card, index) {
+                                    return !!mrData.deck[index].placementId;
+                                });
+                                cardsWithoutPlacement = result.filter(function(card) {
+                                    return cardsWithPlacement.indexOf(card) < 0;
+                                });
+                            });
+
+                            it('should remove the displayAd module from all cards that inherited their placementId', function() {
+                                cardsWithoutPlacement.forEach(function(card) {
+                                    expect(card.modules).not.toContain('displayAd');
+                                });
+                            });
+
+                            it('should keep the displayAd module from all cards that did not inherit their placementId', function() {
+                                cardsWithPlacement.forEach(function(card) {
+                                    var orig = mrData.deck[result.indexOf(card)];
+
+                                    expect(card.modules).toEqual(orig.modules);
+                                });
                             });
                         });
                     });
