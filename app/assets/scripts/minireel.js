@@ -249,8 +249,24 @@ function( angular , speed , c6Defines  , tracker ,
                 });
             }
 
+            function setCampaign(card) {
+                var campaign = card.campaign;
+
+                if (!campaign) { return; }
+
+                if (!campaign.clickUrls && campaign.clickUrl) {
+                    campaign.clickUrls = [campaign.clickUrl];
+                    delete campaign.clickUrl;
+                }
+
+                if (!campaign.countUrls && campaign.countUrl) {
+                    campaign.countUrls = [campaign.countUrl];
+                    delete campaign.countUrl;
+                }
+            }
+
             angular.forEach(playlist, function(video) {
-                [fetchThumb, setWebHref, setDefaults, setVideoDefaults, setSocial]
+                [fetchThumb, setWebHref, setDefaults, setVideoDefaults, setSocial, setCampaign]
                     .forEach(function(fn) {
                         return fn(video);
                     });

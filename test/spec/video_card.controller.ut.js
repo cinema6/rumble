@@ -1514,17 +1514,17 @@ define(['app', 'services', 'tracker'], function(appModule, servicesModule, track
                 });
             });
 
-            describe('with a clickUrl', function() {
+            describe('with clickUrls', function() {
                 beforeEach(function() {
                     $scope.$apply(function() {
-                        $scope.config.campaign = { clickUrl: 'click.me' };
+                        $scope.config.campaign = { clickUrls: ['click.me', 'click.me2'] };
                     });
                 });
 
                 it('should setup a one-time handler for the play event', function() {
                     iface.emit('ready');
                     iface.emit('play');
-                    expect(c6ImagePreloader.load).toHaveBeenCalledWith(['click.me']);
+                    expect(c6ImagePreloader.load).toHaveBeenCalledWith($scope.config.campaign.clickUrls);
                     expect($scope.config._data.tracking.clickFired).toBe(true);
                     iface.emit('play');
                     expect(c6ImagePreloader.load.calls.count()).toBe(1);
@@ -1542,7 +1542,7 @@ define(['app', 'services', 'tracker'], function(appModule, servicesModule, track
             describe('with a countUrl', function() {
                 beforeEach(function() {
                     $scope.$apply(function() {
-                        $scope.config.campaign = { countUrl: 'count.me', minViewTime: 5 };
+                        $scope.config.campaign = { countUrls: ['count.me', 'count.me2'], minViewTime: 5 };
                     });
                 });
 
@@ -1558,7 +1558,7 @@ define(['app', 'services', 'tracker'], function(appModule, servicesModule, track
                 });
 
                 it('should not set up a timeupdate handler if there is no minViewTime', function() {
-                    $scope.config.campaign = { countUrl: 'count.me' };
+                    $scope.config.campaign = { countUrls: ['count.me'] };
                     iface.emit('ready');
                     expect(iface.listeners('timeupdate')).toEqual([jasmine.any(Function)]);
                 });
@@ -1607,7 +1607,7 @@ define(['app', 'services', 'tracker'], function(appModule, servicesModule, track
                             });
 
                             it('should fire the AdCount pixel', function() {
-                                expect(c6ImagePreloader.load).toHaveBeenCalledWith(['count.me']);
+                                expect(c6ImagePreloader.load).toHaveBeenCalledWith($scope.config.campaign.countUrls);
                             });
                         });
 
@@ -1618,7 +1618,7 @@ define(['app', 'services', 'tracker'], function(appModule, servicesModule, track
                             });
 
                             it('should fire the AdCount pixel', function() {
-                                expect(c6ImagePreloader.load).toHaveBeenCalledWith(['count.me']);
+                                expect(c6ImagePreloader.load).toHaveBeenCalledWith($scope.config.campaign.countUrls);
                             });
 
                             it('should fire a GA event', function() {
@@ -1654,7 +1654,7 @@ define(['app', 'services', 'tracker'], function(appModule, servicesModule, track
                             if (i < 5) {
                                 expect(c6ImagePreloader.load).not.toHaveBeenCalled();
                             } else {
-                                expect(c6ImagePreloader.load).toHaveBeenCalledWith(['count.me']);
+                                expect(c6ImagePreloader.load).toHaveBeenCalledWith($scope.config.campaign.countUrls);
                                 expect(iface.listeners('timeupdate')).toEqual([jasmine.any(Function)]);
                                 expect($scope.config._data.tracking.countFired).toBe(true);
                             }
@@ -1689,7 +1689,7 @@ define(['app', 'services', 'tracker'], function(appModule, servicesModule, track
                                     iface.emit('timeupdate');
                                 }
                             } else {
-                                expect(c6ImagePreloader.load).toHaveBeenCalledWith(['count.me']);
+                                expect(c6ImagePreloader.load).toHaveBeenCalledWith($scope.config.campaign.countUrls);
                                 expect(iface.listeners('timeupdate')).toEqual([jasmine.any(Function)]);
                                 expect($scope.config._data.tracking.countFired).toBe(true);
                             }

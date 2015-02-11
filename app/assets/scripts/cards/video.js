@@ -262,10 +262,10 @@ function( angular ) {
                 // If it's a sponsored card, set up handlers to fire AdCount and Click pixels
                 if (config.campaign) {
                     // Fire the Click pixel after the first play
-                    if (config.campaign.clickUrl && !_data.tracking.clickFired) {
+                    if (config.campaign.clickUrls && !_data.tracking.clickFired) {
                         player.once('play', function() {
                             _data.tracking.clickFired = true;
-                            c6ImagePreloader.load([config.campaign.clickUrl]);
+                            c6ImagePreloader.load(config.campaign.clickUrls);
                         });
                     }
 
@@ -276,7 +276,7 @@ function( angular ) {
                             elapsedTime = 0;
 
                         // Fire the AdCount pixel after minViewTime, by tracking the elapsed time
-                        if (campaign.countUrl && campaign.minViewTime && !tracking.countFired) {
+                        if (campaign.countUrls && campaign.minViewTime && !tracking.countFired) {
                             player.on('timeupdate', function fireMinViewPixel() {
                                 var minViewTime = campaign.minViewTime;
 
@@ -285,7 +285,7 @@ function( angular ) {
                                 function firePixel() {
                                     tracking.countFired = true;
 
-                                    c6ImagePreloader.load([campaign.countUrl]);
+                                    c6ImagePreloader.load(campaign.countUrls);
                                     trackVideoEvent('AdCount', true);
 
                                     player.removeListener('timeupdate', fireMinViewPixel);

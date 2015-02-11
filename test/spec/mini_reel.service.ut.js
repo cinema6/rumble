@@ -251,6 +251,10 @@ define(['app', 'minireel', 'c6uilib', 'angular'], function(appModule, minireelMo
                                     note: 'Thought so',
                                     voting: [ 100, 50, 10 ],
                                     placementId: null,
+                                    campaign: {
+                                        clickUrl: 'click-me.jpg',
+                                        countUrl: 'count-me.jpg'
+                                    },
                                     data: {
                                         autoadvance: false,
                                         controls: true,
@@ -289,6 +293,10 @@ define(['app', 'minireel', 'c6uilib', 'angular'], function(appModule, minireelMo
                                         'Facebook': 'fb.html',
                                         'Twitter': 'twitter.html'
                                     },
+                                    campaign: {
+                                        clickUrls: ['click-me.jpg'],
+                                        countUrls: ['count-me.jpg']
+                                    },
                                     data: {
                                         skip: null,
                                         autoadvance: null,
@@ -312,6 +320,7 @@ define(['app', 'minireel', 'c6uilib', 'angular'], function(appModule, minireelMo
                                         'Vimeo': 'vimeo.html',
                                         'Pinterest': 'pinit.html'
                                     },
+                                    campaign: {},
                                     data: {
                                         skip: true,
                                         autoplay: true,
@@ -463,6 +472,37 @@ define(['app', 'minireel', 'c6uilib', 'angular'], function(appModule, minireelMo
                         });
 
                         result = MiniReelService.createDeck(mrData);
+                    });
+
+                    describe('if the card has a single clickUrl and countUrl', function() {
+                        it('should convert them to clickUrls and countUrls', function() {
+                            var card = result[1];
+                            var orig = mrData.deck[1];
+
+                            expect(card.campaign.clickUrls).toEqual([orig.campaign.clickUrl]);
+                            expect(card.campaign.countUrls).toEqual([orig.campaign.countUrl]);
+                            expect(card.campaign.clickUrl).not.toBeDefined();
+                            expect(card.campaign.countUrl).not.toBeDefined();
+                        });
+                    });
+
+                    describe('if the card has clickUrls and countUrls', function() {
+                        it('should leave them alone', function() {
+                            var card = result[3];
+                            var orig = mrData.deck[3];
+
+                            expect(card.campaign.clickUrls).toEqual(orig.campaign.clickUrls);
+                            expect(card.campaign.countUrls).toEqual(orig.campaign.countUrls);
+                        });
+                    });
+
+                    describe('if the card has no campaign information', function() {
+                        it('should do nothing', function() {
+                            var card = result[4];
+                            var orig = mrData.deck[4];
+
+                            expect(card.campaign).toEqual(orig.campaign);
+                        });
                     });
 
                     describe('if on a device that can\'t autoplay', function() {
