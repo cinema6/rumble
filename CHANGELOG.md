@@ -6,6 +6,7 @@
     launches
   * [FIX]: Fix for an issue where the skip disabler would briefly
     display "Skip in null"
+  * [FEATURE]: Add ability to extract data from branding A/B tests
 
 ## v1.12.0 (February 3, 2015)
 * *[v1.12.0.rc1]*

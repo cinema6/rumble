@@ -111,6 +111,7 @@ function( angular , speed , c6Defines  , tracker ,
                 if ((i > -1) && (card && card.id !== undefined)){
                     q.ix = i;
                 }
+                q.bd = experience.data.branding;
                 for (p in q){ if(q[p]!==undefined){qf.push(p + '=' + q[p]);} }
                 if (qf.length){ r += '?' + qf.join('&'); }
                 return r;
