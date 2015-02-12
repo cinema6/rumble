@@ -38,6 +38,7 @@ define(['app', 'minireel', 'c6uilib', 'angular'], function(appModule, minireelMo
                     experience: {
                         id: 'e-f1d70de8336974',
                         data: {
+                            branding: 'urbantimes',
                             title: 'My Awesome MiniReel'
                         }
                     },
@@ -89,7 +90,7 @@ define(['app', 'minireel', 'c6uilib', 'angular'], function(appModule, minireelMo
 
                     it('should return something containing additional data', function() {
                         expect(result).toEqual(jasmine.objectContaining({
-                            page: '/mr/' + c6AppData.experience.id + '/' + card.id + '/?ix=3',
+                            page: '/mr/' + c6AppData.experience.id + '/' + card.id + '/?ix=3&bd=urbantimes',
                             title: c6AppData.experience.data.title + ' - ' + card.title,
                             slideIndex: 3
                         }));
@@ -102,7 +103,7 @@ define(['app', 'minireel', 'c6uilib', 'angular'], function(appModule, minireelMo
 
                         it('should still work', function() {
                             expect(result).toEqual({
-                                page: '/mr/' + c6AppData.experience.id + '/'+card.id+'/?ix=2',
+                                page: '/mr/' + c6AppData.experience.id + '/'+card.id+'/?ix=2&bd=urbantimes',
                                 title: c6AppData.experience.data.title + ' - ' + card.title,
                                 slideIndex: 2
                             });
@@ -116,7 +117,7 @@ define(['app', 'minireel', 'c6uilib', 'angular'], function(appModule, minireelMo
 
                         it('should return data for the MiniReel', function() {
                             expect(result).toEqual({
-                                page: '/mr/' + c6AppData.experience.id + '/',
+                                page: '/mr/' + c6AppData.experience.id + '/?bd=urbantimes',
                                 title: c6AppData.experience.data.title,
                                 slideIndex: -1
                             });
@@ -130,7 +131,7 @@ define(['app', 'minireel', 'c6uilib', 'angular'], function(appModule, minireelMo
 
                         it('should return data for the MiniReel', function() {
                             expect(result).toEqual({
-                                page: '/mr/' + c6AppData.experience.id + '/',
+                                page: '/mr/' + c6AppData.experience.id + '/?bd=urbantimes',
                                 title: c6AppData.experience.data.title,
                                 slideIndex: 0 
                             });
@@ -148,14 +149,14 @@ define(['app', 'minireel', 'c6uilib', 'angular'], function(appModule, minireelMo
                         it('should use all if set',function(){
                             expect(MiniReelService.getTrackingData(card,1))
                                 .toEqual(jasmine.objectContaining({
-                                    page: '/mr/'+c6AppData.experience.id+'/'+card.id+'/?cx=howard1&ct=cont1&gp=grp1&ix=1',
+                                    page: '/mr/'+c6AppData.experience.id+'/'+card.id+'/?cx=howard1&ct=cont1&gp=grp1&ix=1&bd=urbantimes',
                                 }));
                         });
                         it('should use container if set',function(){
                             delete c6AppData.analyticsConfig.group;
                             expect(MiniReelService.getTrackingData(card,1))
                                 .toEqual(jasmine.objectContaining({
-                                    page: '/mr/'+c6AppData.experience.id+'/'+card.id+'/?cx=howard1&ct=cont1&ix=1',
+                                    page: '/mr/'+c6AppData.experience.id+'/'+card.id+'/?cx=howard1&ct=cont1&ix=1&bd=urbantimes',
                                 }));
                         });
                         it('should use context if set',function(){
@@ -163,14 +164,14 @@ define(['app', 'minireel', 'c6uilib', 'angular'], function(appModule, minireelMo
                             delete c6AppData.analyticsConfig.container;
                             expect(MiniReelService.getTrackingData(card,1))
                                 .toEqual(jasmine.objectContaining({
-                                    page: '/mr/'+c6AppData.experience.id+'/'+card.id+'/?cx=howard1&ix=1',
+                                    page: '/mr/'+c6AppData.experience.id+'/'+card.id+'/?cx=howard1&ix=1&bd=urbantimes',
                                 }));
                         });
 
                         it('should set context without card',function(){
                             expect(MiniReelService.getTrackingData())
                                 .toEqual(jasmine.objectContaining({
-                                    page: '/mr/'+c6AppData.experience.id+'/?cx=howard1&ct=cont1&gp=grp1',
+                                    page: '/mr/'+c6AppData.experience.id+'/?cx=howard1&ct=cont1&gp=grp1&bd=urbantimes',
                                 }));
                         });
                     });
