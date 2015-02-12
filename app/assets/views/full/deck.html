@@ -60,6 +60,6 @@ ng-hide="atTail || currentCard.type === 'text'">
     <span class="slideNav__label slideNav__label--next btn__label tk--action">Next</span>
 </button>
 
-<div class="adSkip__group c6-fade" ng-show="!nav.enabled && currentCard.type === 'ad'">
+<div class="adSkip__group c6-fade" ng-show="!nav.enabled && nav.wait && currentCard.type === 'ad'">
     <p class="adSkip__message">Skip in <strong>{{nav.wait}}</strong></p>
 </div>

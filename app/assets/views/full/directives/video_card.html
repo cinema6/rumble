@@ -1,5 +1,5 @@
 <article class="card__group">
-    <div class="adSkip__group--sponsored c6-fade" ng-show="!nav.enabled">
+    <div class="adSkip__group--sponsored c6-fade" ng-show="!nav.enabled && nav.wait">
         <p class="adSkip__message">Skip in <strong>{{nav.wait}}</strong></p>
     </div>
     <post-module ng-if="hasModule('post')"
