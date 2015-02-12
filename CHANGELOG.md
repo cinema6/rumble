@@ -4,6 +4,8 @@
   * [FEATURE]: Add ability to fire multiple campaign-tracking pixels
   * [FEATURE]: Add ability to fire tracking pixels when a minireel
     launches
+  * [FIX]: Fix for an issue where the skip disabler would briefly
+    display "Skip in null"
 
 ## v1.12.0 (February 3, 2015)
 * *[v1.12.0.rc1]*

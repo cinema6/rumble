@@ -73,7 +73,7 @@ ng-class="{'MiniReel__group--brandedMR': !!minireel.params.sponsor}">
             <span class="sprite sprite--close">&nbsp;</span>
         </button>
 
-        <p class="nav__counter nav__counter--landscape" ng-show="!nav.enabled">
+        <p class="nav__counter nav__counter--landscape" ng-show="!nav.enabled && nav.wait">
             <span>Skip in</span><br>
             <strong>{{nav.wait}}</strong>
         </p>
@@ -106,7 +106,7 @@ ng-class="{'MiniReel__group--brandedMR': !!minireel.params.sponsor}">
     </div><!--.headerBar__group-->
 
     <div class="navBar__group css-promote">
-        <div class="adSkip__group c6-fade" ng-show="!nav.enabled">
+        <div class="adSkip__group c6-fade" ng-show="!nav.enabled && nav.wait">
             <p class="adSkip__message"><strong>Skip in {{nav.wait}}</strong></p>
         </div>
         <button ng-hide="showTOC" title="Previous Video" type="button" 
