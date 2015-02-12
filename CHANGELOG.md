@@ -1,5 +1,6 @@
 # MiniReel Player
 
+## v1.13.0 (February 12, 2015)
 * *[v1.13.0.rc1]*
   * [FEATURE]: Add ability to fire multiple campaign-tracking pixels
   * [FEATURE]: Add ability to fire tracking pixels when a minireel
@@ -7,6 +8,7 @@
   * [FIX]: Fix for an issue where the skip disabler would briefly
     display "Skip in null"
   * [FEATURE]: Add ability to extract data from branding A/B tests
+* *[/v1.13.0.rc1]*
 
 ## v1.12.0 (February 3, 2015)
 * *[v1.12.0.rc1]*
