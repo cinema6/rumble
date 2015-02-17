@@ -15,6 +15,7 @@ function( angular ) {
                 profile = $scope.profile,
                 data = config.data,
                 hasPlayed = false,
+                hasModule = $scope.hasModule,
                 _data = config._data || (config._data = {
                     hasPlayed: false,
                     companion: null,
@@ -31,6 +32,9 @@ function( angular ) {
                         post: {
                             active: false,
                             ballot: config.ballot
+                        },
+                        displayAd: {
+                            active: behaviors.showsCompanionWithVideoAd
                         }
                     }
                 }),
@@ -174,6 +178,10 @@ function( angular ) {
                         _data.modules.post.active = false;
                         closeBallot();
 
+                        if (hasModule('displayAd')) {
+                            _data.modules.displayAd.active = behaviors.showsCompanionWithVideoAd;
+                        }
+
                         trackVideoEvent('Play', config.data.autoplay);
                     })
                     .on('pause', function() {
@@ -199,9 +207,15 @@ function( angular ) {
                             }
                         }
 
-                        if (!$scope.hasModule('post') && !$scope.hasModule('ballot')) {
+                        if (!(
+                            hasModule('post') ||
+                            hasModule('ballot') ||
+                            (hasModule('displayAd') && !behaviors.showsCompanionWithVideoAd)
+                        )) {
                             $scope.$emit('<mr-card>:contentEnd', $scope.config);
                         }
+
+                        _data.modules.displayAd.active = true;
 
                         trackVideoEvent('End');
                     })
@@ -336,17 +350,22 @@ function( angular ) {
                     get: function() {
                         var modules = _data.modules,
                             postModule = modules.post,
-                            ballotModule = modules.ballot;
+                            ballotModule = modules.ballot,
+                            displayAdModule = modules.displayAd;
 
                         return !$scope.active ||
                             (
-                                $scope.hasModule('post') && postModule.active
+                                hasModule('post') && postModule.active
                             ) || (
-                                $scope.hasModule('ballot') &&
+                                hasModule('ballot') &&
                                     (
                                         ballotModule.ballotActive ||
                                             (ballotModule.resultsActive && !behaviors.inlineVoteResults)
                                     )
+                            ) || (
+                                hasModule('displayAd') &&
+                                displayAdModule.active &&
+                                !behaviors.showsCompanionWithVideoAd
                             );
                     }
                 }

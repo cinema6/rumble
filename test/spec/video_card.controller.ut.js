@@ -81,7 +81,8 @@ define(['app', 'services', 'tracker'], function(appModule, servicesModule, track
                     },
                     behaviors: {
                         canAutoplay: true,
-                        separateTextView: false
+                        separateTextView: false,
+                        showsCompanionWithVideoAd: true
                     }
                 });
             });
@@ -183,8 +184,35 @@ define(['app', 'services', 'tracker'], function(appModule, servicesModule, track
                             post: {
                                 active: false,
                                 ballot: $scope.config.ballot
+                            },
+                            displayAd: {
+                                active: jasmine.any(Boolean)
                             }
                         }
+                    });
+                });
+
+                describe('if the mode showsCompanionWithVideoAd', function() {
+                    beforeEach(function() {
+                        c6AppData.behaviors.showsCompanionWithVideoAd = true;
+                        delete $scope.config._data;
+                        VideoCardCtrl = $controller('VideoCardController', { $scope: $scope });
+                    });
+
+                    it('should initialize the displayAd module as active', function() {
+                        expect($scope.config._data.modules.displayAd.active).toBe(true);
+                    });
+                });
+
+                describe('if the mode !showsCompanionWithVideoAd', function() {
+                    beforeEach(function() {
+                        c6AppData.behaviors.showsCompanionWithVideoAd = false;
+                        delete $scope.config._data;
+                        VideoCardCtrl = $controller('VideoCardController', { $scope: $scope });
+                    });
+
+                    it('should initialize the displayAd module as active', function() {
+                        expect($scope.config._data.modules.displayAd.active).toBe(false);
                     });
                 });
             });
@@ -288,6 +316,64 @@ define(['app', 'services', 'tracker'], function(appModule, servicesModule, track
                         $scope.$emit('<vpaid-player>:init', player);
                         player.emit('ready');
                         player.emit('play');
+                    });
+
+                    describe('if the displayAd module is present', function() {
+                        beforeEach(function() {
+                            $scope.modules = ['displayAd'];
+                        });
+
+                        describe('if the displayAd module is active', function() {
+                            beforeEach(function() {
+                                $scope.config._data.modules.displayAd.active = true;
+                            });
+
+                            describe('if the mode showsCompanionWithVideoAd', function() {
+                                beforeEach(function() {
+                                    c6AppData.behaviors.showsCompanionWithVideoAd = true;
+                                });
+
+                                it('should be false', function() {
+                                    expect(VideoCardCtrl.flyAway).toBe(false);
+                                });
+                            });
+
+                            describe('if the mode !showsCompanionWithVideoAd', function() {
+                                beforeEach(function() {
+                                    c6AppData.behaviors.showsCompanionWithVideoAd = false;
+                                });
+
+                                it('should be true', function() {
+                                    expect(VideoCardCtrl.flyAway).toBe(true);
+                                });
+                            });
+                        });
+
+                        describe('if the displayAdModule is not active', function() {
+                            beforeEach(function() {
+                                $scope.config._data.modules.displayAd.active = false;
+                            });
+
+                            describe('if the mode showsCompanionWithVideoAd', function() {
+                                beforeEach(function() {
+                                    c6AppData.behaviors.showsCompanionWithVideoAd = true;
+                                });
+
+                                it('should be false', function() {
+                                    expect(VideoCardCtrl.flyAway).toBe(false);
+                                });
+                            });
+
+                            describe('if the mode !showsCompanionWithVideoAd', function() {
+                                beforeEach(function() {
+                                    c6AppData.behaviors.showsCompanionWithVideoAd = false;
+                                });
+
+                                it('should be false', function() {
+                                    expect(VideoCardCtrl.flyAway).toBe(false);
+                                });
+                            });
+                        });
                     });
 
                     describe('if the post module is not present', function() {
@@ -905,6 +991,42 @@ define(['app', 'services', 'tracker'], function(appModule, servicesModule, track
                                 });
                             });
 
+                            describe('if the displayAd module is present', function() {
+                                beforeEach(function() {
+                                    $scope.config.modules = ['displayAd'];
+                                    $scope.$emit.calls.reset();
+                                });
+
+                                describe('if the mode showsCompanionWithVideoAd', function() {
+                                    beforeEach(function() {
+                                        c6AppData.behaviors.showsCompanionWithVideoAd = true;
+
+                                        iface.emit('ended');
+                                    });
+
+                                    it('should $emit the <mr-card>:contentEnd event', function() {
+                                        expect($scope.$emit).toHaveBeenCalledWith('<mr-card>:contentEnd', $scope.config);
+                                    });
+                                });
+
+                                describe('if the mode !showsCompanionWithVideoAd', function() {
+                                    beforeEach(function() {
+                                        c6AppData.behaviors.showsCompanionWithVideoAd = false;
+                                        $scope.config._data.modules.displayAd.active = false;
+
+                                        iface.emit('ended');
+                                    });
+
+                                    it('should not $emit the <mr-card>:contentEnd event', function() {
+                                        expect($scope.$emit).not.toHaveBeenCalled();
+                                    });
+
+                                    it('should make the displayAd module active', function() {
+                                        expect($scope.config._data.modules.displayAd.active).toBe(true);
+                                    });
+                                });
+                            });
+
                             it('should set $scope.config._data.modules.post.active to true', function() {
                                 expect($scope.config._data.modules.post.active).toBe(true);
                             });
@@ -993,6 +1115,7 @@ define(['app', 'services', 'tracker'], function(appModule, servicesModule, track
 
                         describe('when the video plays', function() {
                             beforeEach(function() {
+                                $scope.config._data.modules.displayAd.active = true;
                                 $scope.config._data.modules.post.active = true;
                                 ['closeBallot', 'closeBallotResults'].forEach(function(method) {
                                     spyOn(VideoCardCtrl, method).and.callThrough();
@@ -1005,9 +1128,43 @@ define(['app', 'services', 'tracker'], function(appModule, servicesModule, track
                                 expect($scope.config._data.modules.post.active).toBe(false);
                             });
 
+                            it('should not change the displayAd active state', function() {
+                                expect($scope.config._data.modules.displayAd.active).toBe(true);
+                            });
+
                             it('should close the ballot module', function() {
                                 expect(VideoCardCtrl.closeBallot).toHaveBeenCalled();
                                 expect(VideoCardCtrl.closeBallotResults).toHaveBeenCalled();
+                            });
+
+                            describe('if the displayAd module is present', function() {
+                                beforeEach(function() {
+                                    $scope.config.modules = ['displayAd'];
+                                });
+
+                                describe('if the mode showsCompanionWithVideoAd', function() {
+                                    beforeEach(function() {
+                                        c6AppData.behaviors.showsCompanionWithVideoAd = true;
+
+                                        iface.emit('play');
+                                    });
+
+                                    it('should not change the displayAd active state', function() {
+                                        expect($scope.config._data.modules.displayAd.active).toBe(true);
+                                    });
+                                });
+
+                                describe('if the mode showsCompanionWithVideoAd', function() {
+                                    beforeEach(function() {
+                                        c6AppData.behaviors.showsCompanionWithVideoAd = false;
+
+                                        iface.emit('play');
+                                    });
+
+                                    it('should deactivate the displayAd module', function() {
+                                        expect($scope.config._data.modules.displayAd.active).toBe(false);
+                                    });
+                                });
                             });
                         });
 

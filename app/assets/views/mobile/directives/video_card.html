@@ -28,10 +28,17 @@
     <div ng-class="{'player--fly-away': Ctrl.flyAway}" class="player js-playerBox">
         <mr-video-player config="config" class="playerBox" id="{{config.id}}-player" start="{{config.data.start}}" end="{{config.data.end}}"></mr-video-player>
     </div>
-    <div ng-show="Ctrl.flyAway" c6-touch="Ctrl.player.play()" class="player__thumbnail"
+    <div ng-show="Ctrl.flyAway && !config._data.modules.displayAd.active" c6-touch="Ctrl.player.play()" class="player__thumbnail"
         ng-style="{'background-image':config.thumbs.large ? 'url(' + config.thumbs.large + ')' : ''}">
         <span class="ir"><img ng-src="{{config.thumbs.large}}"></span>
     </div>
+
+    <display-ad-module ng-if="hasModule('displayAd')"
+        active="config._data.modules.displayAd.active"
+        class="displayAdCard__adModule"
+        config="config">
+    </display-ad-module>
+
     <ballot-results-module ng-if="hasModule('ballot')"
         active="config._data.modules.ballot.resultsActive && active"
         vote="config._data.modules.ballot.vote"

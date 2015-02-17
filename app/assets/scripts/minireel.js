@@ -146,7 +146,9 @@ function( angular , speed , c6Defines  , tracker ,
 
         this.createDeck = function(data) {
             var playlist = angular.copy(data.deck),
-                profile = $injector.get('c6AppData').profile,
+                c6AppData = $injector.get('c6AppData'),
+                profile = c6AppData.profile,
+                behaviors = c6AppData.behaviors,
                 autoplay = isSet(data.autoplay) ? data.autoplay : true,
                 autoadvance = isSet(data.autoadvance) ? data.autoadvance : true;
 
@@ -266,8 +268,18 @@ function( angular , speed , c6Defines  , tracker ,
                 }
             }
 
+            function filterModules(card) {
+                if (behaviors.showsCompanionWithVideoAd || !!card.placementId) {
+                    return;
+                }
+
+                card.modules = card.modules.filter(function(module) {
+                    return module !== 'displayAd';
+                });
+            }
+
             angular.forEach(playlist, function(video) {
-                [fetchThumb, setWebHref, setDefaults, setVideoDefaults, setSocial, setCampaign]
+                [fetchThumb, setWebHref, filterModules, setDefaults, setVideoDefaults, setSocial, setCampaign]
                     .forEach(function(fn) {
                         return fn(video);
                     });

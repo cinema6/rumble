@@ -787,28 +787,24 @@
             border:0;
             background:#000;
         }
-        .player--fly-away {
-            margin-left:-5000%;
-            float:left;
-        }
     .player__thumbnail {
         background:50% 50% / cover no-repeat;
         cursor: pointer;
     }
 
     @media screen and (orientation:landscape) {
-        .card__title {
-            width:23%; float:left; margin-right:0;
-            text-align: left;
-        }
         .player, .player__thumbnail {
-            width:70%; float:right; 
-            margin: 0 0.5em 0.5em 0.5em; 
+            width:70%; margin: 0 auto;
             padding:0 0 39.375%;
         }
         .cards__item.ng-animate {
             top: 0.375em; left: 4.125em; right: 4.125em;
         }
+    }
+
+    .player--fly-away {
+        margin-left:-5000%;
+        float:left;
     }
 
 
