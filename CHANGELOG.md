@@ -3,6 +3,8 @@
 * *[v1.14.0.rc1]*
   * [FEATURE]: Added support for display ads to sponsored cards running
     on mobile
+  * [FEATURE]: Added replay video button for display ads to sponsored cards running
+    on mobile
 
 ## v1.13.0 (February 12, 2015)
 * *[v1.13.0.rc1]*

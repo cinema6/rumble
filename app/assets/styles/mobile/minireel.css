@@ -208,6 +208,11 @@
                 text-shadow:none;
                 color:#fff;
             }
+        .btnPrimary--small {
+            padding:0.5em 1em;
+            border-radius:3px;
+            display: inline-block;
+        }
 
     .btnSecondary,
     .btnSecondary:active,

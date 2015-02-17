@@ -39,6 +39,14 @@
         config="config">
     </display-ad-module>
 
+    <p style="text-align:center;" 
+    ng-show="config._data.modules.displayAd.active">
+        <button type="button" class="btnPrimary btnPrimary--small" ng-click="Ctrl.player.play()"
+        title="Replay Video">
+            <span class="btn__label">Replay Video</span>
+        </button>
+    </p>
+
     <ballot-results-module ng-if="hasModule('ballot')"
         active="config._data.modules.ballot.resultsActive && active"
         vote="config._data.modules.ballot.vote"
