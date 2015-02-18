@@ -39,7 +39,7 @@
         config="config">
     </display-ad-module>
 
-    <p style="text-align:center;" 
+    <p style="text-align:center;" ng-if="hasModule('displayAd')"
     ng-show="config._data.modules.displayAd.active">
         <button type="button" class="btnPrimary btnPrimary--small" ng-click="Ctrl.player.play()"
         title="Replay Video">
