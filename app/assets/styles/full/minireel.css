@@ -267,6 +267,11 @@
         position: absolute;
         width:0; height:0;
     }
+    .MiniReel__group .ui--flyaway {
+        margin-left:-5000%;
+        position: static;
+        float:left;
+    }
 
 
 

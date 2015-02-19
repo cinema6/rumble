@@ -1,5 +1,9 @@
 # MiniReel Player
 
+* *[v1.15.0.rc1]*
+  * [FIX]: Fixed bug where solo player templates would occasionally play video
+    in the bg when user navigated to the recap card.
+
 ## v1.14.0 (February 18, 2015)
 * *[v1.14.0.rc2]*
   * [FIX]: Fix for an issue that caused the "Replay Video" button to
