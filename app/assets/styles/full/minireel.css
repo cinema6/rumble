@@ -265,7 +265,7 @@
     .MiniReel__group .ui--offscreen {
         left:-5000%;
         position: absolute;
-        width:100% !important; height:100% !important;
+        width:0; height:0;
     }
 
 
