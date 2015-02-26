@@ -1,8 +1,14 @@
 # MiniReel Player
 
+## v1.15.0 (February 26, 2015)
 * *[v1.15.0.rc1]*
   * [FIX]: Fixed bug where solo player templates would occasionally play video
     in the bg when user navigated to the recap card.
+  * [FIX]: Fix for an issue that could cause the player to not load on
+    slow internet connections
+  * [FIX]: Fix for an issue that could cause the player to never load a
+    sponsored VAST card on a slow internet connection
+* *[/v1.15.0.rc1]*
 
 ## v1.14.0 (February 18, 2015)
 * *[v1.14.0.rc2]*

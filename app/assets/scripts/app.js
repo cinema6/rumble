@@ -48,6 +48,10 @@ function( angular , angularAnimate , angularSanitize , c6uilib , c6log , c6Defin
         function( YouTubeDataServiceProvider ) {
             YouTubeDataServiceProvider.apiKey('AIzaSyBYOutFJ1yBx8MAYy5OgtTvslvBiFk8wok');
         }])
+        .config(['VASTServiceProvider',
+        function( VASTServiceProvider ) {
+            VASTServiceProvider.adTimeout(0);
+        }])
         .constant('adTags', {
             vast: {
                 cinema6: 'http://ads.adaptv.advertising.com//a/h/DCQzzI0K2rv1k0TZythPvTfWmlP8j6NQnxBMIgFJa80=?cb={cachebreaker}&pageUrl={pageUrl}&eov=eov',
