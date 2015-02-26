@@ -38,8 +38,8 @@
                 angularSanitize: libUrl('angular/v1.2.22-0-g93b0c2d/angular-sanitize'),
                 angularTouch: libUrl('angular/v1.2.22-0-g93b0c2d/angular-touch'),
                 angularMocks: libUrl('angular/v1.2.22-0-g93b0c2d/angular-mocks'),
-                c6uilib: libUrl('c6ui/v3.6.5-0-g1f59a0b/c6uilib'),
-                c6log: libUrl('c6ui/v3.6.5-0-g1f59a0b/c6log'),
+                c6uilib: libUrl('c6ui/v3.7.0-0-gfe2d995/c6uilib'),
+                c6log: libUrl('c6ui/v3.7.0-0-gfe2d995/c6log'),
                 adtech: 'http://aka-cdn.adtechus.com/dt/common/DAC',
                 templates   : '/base/.tmp/templates'
             },

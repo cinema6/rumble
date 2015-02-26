@@ -5,6 +5,8 @@
     in the bg when user navigated to the recap card.
   * [FIX]: Fix for an issue that could cause the player to not load on
     slow internet connections
+  * [FIX]: Fix for an issue that could cause the player to never load a
+    sponsored VAST card on a slow internet connection
 
 ## v1.14.0 (February 18, 2015)
 * *[v1.14.0.rc2]*
