@@ -40,6 +40,8 @@
             ]
         },
 
+        waitSeconds: 0,
+
         shim: {
             c6uilib: {
                 deps: ['angular']
