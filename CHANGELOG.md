@@ -1,5 +1,11 @@
 # MiniReel Player
 
+## v1.15.1 (March 9, 2015)
+* *[v1.15.1.rc1]*
+  * [FIX]: Fix for an issue that caused the Table of Contents animation
+    to appear broken
+* *[/v1.15.1.rc1]*
+
 ## v1.15.0 (February 26, 2015)
 * *[v1.15.0.rc1]*
   * [FIX]: Fixed bug where solo player templates would occasionally play video
