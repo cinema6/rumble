@@ -696,7 +696,7 @@
             display:block;
         }
         .landscapeOnly, .navBarLeft__group, .navBarRight__group {
-            display:none;
+            display:none !important;
         }
 
     }
@@ -705,7 +705,7 @@
             display:block;
         }
         .portraitOnly, .navBar__group, .headerBar__group {
-            display:none;
+            display:none !important;
         }
     }
 
